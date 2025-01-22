@@ -1,0 +1,20 @@
+{
+  "name": "composeApp",
+  "version": "1.0.0",
+  "summary": "A short description of composeApp.",
+  "homepage": "https://skyfit.world",
+  "license": {
+    "type": "MIT",
+    "file": "LICENSE"
+  },
+  "authors": {
+    "Mert Vurgun": "vurgunmert@outlook.com"
+  },
+  "source": {
+    "path": "."
+  },
+  "platforms": {
+    "ios": "17.0"
+  },
+  "source_files": "Sources/**/*.{swift,h,m}"
+}

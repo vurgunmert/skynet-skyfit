@@ -1,0 +1,8 @@
+# Project exclude paths
+/.gradle/
+/build/
+/composeApp/build/
+/composeApp/build/classes/kotlin/desktop/main/
+/composeApp/build/classes/kotlin/iosArm64/main/klib/
+/composeApp/build/classes/kotlin/iosX64/main/klib/
+/composeApp/build/classes/kotlin/wasmJs/main/

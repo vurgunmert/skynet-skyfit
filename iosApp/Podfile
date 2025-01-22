@@ -1,0 +1,13 @@
+platform :ios, '17.0'
+
+target 'iosApp' do
+  use_frameworks!
+
+  # Shared Kotlin Multiplatform framework
+  pod 'composeApp', :path => '../composeApp.podspec'
+
+  # Firebase pods
+  pod 'FirebaseAuth'
+  pod 'FirebaseFirestore'
+  pod 'FirebaseStorage'
+end
