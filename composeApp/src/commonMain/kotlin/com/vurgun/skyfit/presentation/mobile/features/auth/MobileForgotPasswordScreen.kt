@@ -5,6 +5,7 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -18,9 +19,9 @@ import com.vurgun.skyfit.presentation.shared.components.ButtonSize
 import com.vurgun.skyfit.presentation.shared.components.ButtonState
 import com.vurgun.skyfit.presentation.shared.components.ButtonVariant
 import com.vurgun.skyfit.presentation.shared.components.SkyFitButtonComponent
+import com.vurgun.skyfit.presentation.shared.components.SkyFitLogoComponent
 import com.vurgun.skyfit.presentation.shared.components.SkyFitScaffold
 import com.vurgun.skyfit.presentation.shared.components.SkyFitTextInputComponent
-import com.vurgun.skyfit.presentation.shared.features.auth.AuthLogoComponent
 import com.vurgun.skyfit.presentation.shared.navigation.SkyFitNavigationRoute
 import com.vurgun.skyfit.presentation.shared.navigation.jumpAndStay
 import com.vurgun.skyfit.presentation.shared.navigation.jumpAndTakeover
@@ -40,7 +41,7 @@ fun MobileForgotPasswordScreen(navigator: Navigator) {
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {
             Spacer(Modifier.height(36.dp))
-            AuthLogoComponent()
+            SkyFitLogoComponent()
             Spacer(Modifier.height(48.dp))
             MobileForgotPasswordScreenTitleComponent()
             Spacer(Modifier.height(48.dp))
@@ -73,7 +74,10 @@ private fun MobileForgotPasswordScreenInputComponent() {
 
 @Composable
 private fun MobileForgotPasswordScreenTitleComponent() {
-    Column {
+    Column(
+        modifier = Modifier.fillMaxSize().padding(horizontal = 24.dp),
+        horizontalAlignment = Alignment.CenterHorizontally,
+    ) {
         Text(
             text = "Şifremi Unuttum",
             style = SkyFitTypography.heading3

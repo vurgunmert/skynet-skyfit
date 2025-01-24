@@ -1,4 +1,4 @@
-package com.vurgun.skyfit.presentation.shared.features.auth
+package com.vurgun.skyfit.presentation.shared.components
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.size
@@ -10,7 +10,7 @@ import skyfit.composeapp.generated.resources.Res
 import skyfit.composeapp.generated.resources.logo_skyfit
 
 @Composable
-fun AuthLogoComponent() {
+fun SkyFitLogoComponent() {
     Image(
         painterResource(Res.drawable.logo_skyfit),
         null,

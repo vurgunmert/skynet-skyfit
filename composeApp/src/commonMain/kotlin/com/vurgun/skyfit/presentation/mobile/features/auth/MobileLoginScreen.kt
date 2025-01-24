@@ -25,7 +25,7 @@ import com.vurgun.skyfit.presentation.shared.components.ButtonVariant
 import com.vurgun.skyfit.presentation.shared.components.SkyFitButtonComponent
 import com.vurgun.skyfit.presentation.shared.components.SkyFitPasswordInputComponent
 import com.vurgun.skyfit.presentation.shared.components.SkyFitTextInputComponent
-import com.vurgun.skyfit.presentation.shared.features.auth.AuthLogoComponent
+import com.vurgun.skyfit.presentation.shared.components.SkyFitLogoComponent
 import com.vurgun.skyfit.presentation.shared.navigation.SkyFitNavigationRoute
 import com.vurgun.skyfit.presentation.shared.navigation.jumpAndStay
 import com.vurgun.skyfit.presentation.shared.navigation.jumpAndTakeover
@@ -47,7 +47,7 @@ fun MobileLoginScreen(navigator: Navigator) {
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {
             Spacer(Modifier.height(36.dp))
-            AuthLogoComponent()
+            SkyFitLogoComponent()
             Spacer(Modifier.height(48.dp))
             MobileLoginScreenTitle()
             Spacer(Modifier.height(48.dp))

@@ -4,31 +4,69 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import com.vurgun.skyfit.presentation.shared.components.SkyFitLogoComponent
 import com.vurgun.skyfit.presentation.shared.components.SkyFitScaffold
-import com.vurgun.skyfit.presentation.shared.features.onboarding.OnboardingLogoComponent
+import com.vurgun.skyfit.presentation.shared.components.SkyFitTextButton
 import com.vurgun.skyfit.presentation.shared.features.onboarding.OnboardingStepProgressComponent
 import com.vurgun.skyfit.presentation.shared.features.onboarding.OnboardingTitleGroupComponent
-import com.vurgun.skyfit.presentation.shared.features.onboarding.OnboardingUserTypeSelectorComponent
+import com.vurgun.skyfit.presentation.shared.navigation.SkyFitNavigationRoute
+import com.vurgun.skyfit.presentation.shared.navigation.jumpAndStay
+import com.vurgun.skyfit.presentation.shared.navigation.jumpAndTakeover
 import moe.tlaster.precompose.navigation.Navigator
 
 @Composable
-fun MobileOnboardingUserTypeSelectionScreen(navigator: Navigator) {
+fun MobileOnboardingUserTypeSelectionScreen(onSkip: () -> Unit,
+                                            onNext: () -> Unit) {
     SkyFitScaffold {
         Column(
             modifier = Modifier.fillMaxSize(),
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {
-            OnboardingStepProgressComponent()
+            OnboardingStepProgressComponent(totalSteps = 6, currentStep = 1)
             Spacer(Modifier.height(47.dp))
-            OnboardingLogoComponent()
+            SkyFitLogoComponent()
             Spacer(Modifier.height(56.dp))
-            OnboardingTitleGroupComponent()
+            OnboardingTitleGroupComponent(
+                title = "Skyfit’e Hoş Geldin!",
+                subtitle = "Uygulamaya nasıl devam etmek istersin"
+            )
             Spacer(Modifier.height(64.dp))
-            OnboardingUserTypeSelectorComponent()
+            MobileOnboardingUserTypeSelectionComponent(
+                onSelectUser = onNext,
+                onSelectTrainer = onNext,
+                onSelectFacility = onSkip
+            )
         }
+    }
+}
+
+@Composable
+private fun MobileOnboardingUserTypeSelectionComponent(onSelectUser: () -> Unit,
+                                                       onSelectTrainer: () -> Unit,
+                                                       onSelectFacility: () -> Unit) {
+    Column(
+        modifier = Modifier.fillMaxSize().padding(horizontal = 24.dp),
+        horizontalAlignment = Alignment.CenterHorizontally,
+    ) {
+
+        SkyFitTextButton(
+            text = "Kullanıcı",
+            onClick = onSelectUser
+        )
+        Spacer(Modifier.height(24.dp))
+        SkyFitTextButton(
+            text = "Antrenör",
+            onClick = onSelectTrainer
+        )
+        Spacer(Modifier.height(24.dp))
+        SkyFitTextButton(
+            text = "İşletme",
+            onClick = onSelectFacility
+        )
     }
 }
