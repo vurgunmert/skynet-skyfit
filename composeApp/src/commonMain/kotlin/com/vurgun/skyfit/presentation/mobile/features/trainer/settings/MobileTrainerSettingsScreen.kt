@@ -2,14 +2,23 @@ package com.vurgun.skyfit.presentation.mobile.features.trainer.settings
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material.Button
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import com.vurgun.skyfit.presentation.shared.components.ButtonSize
+import com.vurgun.skyfit.presentation.shared.components.ButtonState
+import com.vurgun.skyfit.presentation.shared.components.ButtonVariant
+import com.vurgun.skyfit.presentation.shared.components.MobileSettingsMenuItemComponent
+import com.vurgun.skyfit.presentation.shared.components.MobileSettingsMenuItemDividerComponent
+import com.vurgun.skyfit.presentation.shared.components.SkyFitButtonComponent
 import com.vurgun.skyfit.presentation.shared.components.SkyFitScaffold
+import com.vurgun.skyfit.presentation.shared.components.SkyFitScreenHeader
 import com.vurgun.skyfit.presentation.shared.features.common.TodoBox
 import com.vurgun.skyfit.presentation.shared.navigation.SkyFitNavigationRoute
 import com.vurgun.skyfit.presentation.shared.navigation.jumpAndTakeover
@@ -18,28 +27,39 @@ import moe.tlaster.precompose.navigation.Navigator
 @Composable
 fun MobileTrainerSettingsScreen(navigator: Navigator) {
 
-    SkyFitScaffold {
+    SkyFitScaffold(
+        topBar = {
+            SkyFitScreenHeader(title = "Ayarlar", onBackClick = { })
+        },
+        bottomBar = {
 
-        Column {
-            MobileTrainerSettingsScreenToolbarComponent()
-            Spacer(Modifier.height(24.dp))
-            MobileTrainerSettingsScreenOptionsComponent()
-            Spacer(Modifier.weight(1f))
-            MobileTrainerSettingsScreenSingOutActionsComponent()
+            SkyFitButtonComponent(
+                Modifier.fillMaxWidth().padding(24.dp), text = "Oturumu Kapat",
+                onClick = { },
+                variant = ButtonVariant.Primary,
+                size = ButtonSize.Large,
+                initialState = ButtonState.Rest
+            )
         }
+    ) {
+        MobileTrainerSettingsScreenOptionsComponent()
     }
 }
 
-
-@Composable
-private fun MobileTrainerSettingsScreenToolbarComponent() {
-    TodoBox("MobileTrainerSettingsScreenToolbarComponent", Modifier.size(430.dp, 40.dp))
-}
 @Composable
 private fun MobileTrainerSettingsScreenOptionsComponent() {
-    TodoBox("MobileTrainerSettingsScreenOptionsComponent", Modifier.size(430.dp, 480.dp))
-}
-@Composable
-private fun MobileTrainerSettingsScreenSingOutActionsComponent() {
-    TodoBox("MobileTrainerSettingsScreenSingOutActionsComponent", Modifier.size(430.dp, 230.dp))
+    Column(Modifier.fillMaxWidth().padding(top = 32.dp, start = 32.dp, end = 22.dp)) {
+
+        MobileSettingsMenuItemComponent("Hesap Ayarlari")
+        Spacer(Modifier.height(32.dp))
+        MobileSettingsMenuItemComponent("Ödeme Geçmişi")
+        Spacer(Modifier.height(32.dp))
+        MobileSettingsMenuItemDividerComponent()
+        Spacer(Modifier.height(32.dp))
+        MobileSettingsMenuItemComponent("Bildirimler")
+        Spacer(Modifier.height(32.dp))
+        MobileSettingsMenuItemDividerComponent()
+        Spacer(Modifier.height(32.dp))
+        MobileSettingsMenuItemComponent("Destek ve Yardim")
+    }
 }
