@@ -11,9 +11,11 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Icon
 import androidx.compose.material.Text
@@ -194,5 +196,124 @@ private fun VerticalDetailDivider() {
             .width(1.dp)
             .height(48.dp)
             .background(SkyFitColor.border.default)
+    )
+}
+
+@Composable
+fun ExerciseProfileCardItemComponent(
+    imageUrl: String,
+    name: String,
+    participants: List<String>,
+    extraParticipantsCount: Int,
+    rating: Double,
+    onClick: () -> Unit
+) {
+    Box(
+        modifier = Modifier
+            .size(186.dp, 278.dp)
+            .clickable { onClick() }
+    ) {
+        // Background Image
+        Image(
+            painter = painterResource(Res.drawable.logo_skyfit),
+            contentDescription = "Exercise Image",
+            modifier = Modifier
+                .fillMaxSize()
+                .clip(RoundedCornerShape(16.dp)),
+            contentScale = ContentScale.Crop
+        )
+
+        // Rating Star Box
+        RatingStarBox(rating, Modifier.align(Alignment.TopEnd).padding(8.dp))
+
+        // Bottom Details
+        Box(
+            Modifier
+                .align(Alignment.BottomStart)
+                .fillMaxWidth()
+                .height(96.dp)
+        ) {
+            // Background Blur
+            Box(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .background(Color(0xFF012E36).copy(alpha = 0.7f), RoundedCornerShape(16.dp))
+                    .blur(16.dp, edgeTreatment = BlurredEdgeTreatment.Unbounded)
+            )
+
+            Column(
+                Modifier
+                    .align(Alignment.BottomCenter)
+                    .fillMaxWidth()
+                    .background(
+                        SkyFitColor.background.fillTransparentSecondaryActive,
+                        shape = RoundedCornerShape(16.dp)
+                    )
+            ) {
+                // Exercise Name
+                Text(
+                    text = name,
+                    style = SkyFitTypography.bodyMediumSemibold,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 16.dp, vertical = 8.dp)
+                )
+                Spacer(Modifier.height(8.dp))
+
+                // Avatar List with Overlap
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Spacer(Modifier.height(4.dp))
+
+                    participants.take(4).forEachIndexed { index, avatarUrl ->
+                        AvatarImage(
+                            avatarUrl = avatarUrl,
+                            modifier = Modifier.offset(x = (-10 * index).dp)
+                        )
+                    }
+
+                    if (extraParticipantsCount > 0) {
+                        Box(
+                            modifier = Modifier
+                                .offset(x = (-10 * 4).dp)
+                                .size(32.dp)
+                                .background(SkyFitColor.background.surfaceActive, CircleShape),
+                            contentAlignment = Alignment.Center
+                        ) {
+                            Text(
+                                text = "+$extraParticipantsCount",
+                                style = SkyFitTypography.bodySmallMedium
+                            )
+                        }
+                    }
+
+
+                    Icon(
+                        painter = painterResource(Res.drawable.logo_skyfit),
+                        contentDescription = "Preview exercise",
+                        tint = SkyFitColor.icon.default,
+                        modifier = Modifier.size(24.dp)
+                    )
+                    Spacer(Modifier.height(4.dp))
+                }
+
+                Spacer(Modifier.height(16.dp))
+            }
+        }
+    }
+}
+
+@Composable
+fun AvatarImage(avatarUrl: String, modifier: Modifier = Modifier) {
+    Image(
+        painter = painterResource(Res.drawable.logo_skyfit), // Replace with actual image loading logic
+        contentDescription = "Avatar",
+        modifier = modifier
+            .size(32.dp)
+            .clip(RoundedCornerShape(16.dp))
+            .background(Color.Gray), // Placeholder background
+        contentScale = ContentScale.Crop
     )
 }

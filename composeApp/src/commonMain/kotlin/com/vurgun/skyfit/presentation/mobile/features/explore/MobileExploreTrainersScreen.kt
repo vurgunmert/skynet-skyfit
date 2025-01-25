@@ -42,13 +42,13 @@ fun MobileExploreTrainersScreen(rootNavigator: Navigator) {
         }
     ) {
         val trainers = listOf(
-            Trainer("url1", "Lucas Bennett", 1800, 13, 32, 4.8),
-            Trainer("url2", "Olivia Hayes", 1500, 10, 20, 4.5),
-            Trainer("url3", "Mason Reed", 2000, 15, 40, 4.9),
-            Trainer("url4", "Sophia Hill", 1700, 12, 28, 4.7),
-            Trainer("url5", "Emma Johnson", 1600, 11, 25, 4.6),
-            Trainer("url6", "James Smith", 1900, 14, 35, 4.8),
-            Trainer("url7", "Ava Brown", 1750, 13, 30, 4.7)
+            TrainerProfileCardItemViewData("url1", "Lucas Bennett", 1800, 13, 32, 4.8),
+            TrainerProfileCardItemViewData("url2", "Olivia Hayes", 1500, 10, 20, 4.5),
+            TrainerProfileCardItemViewData("url3", "Mason Reed", 2000, 15, 40, 4.9),
+            TrainerProfileCardItemViewData("url4", "Sophia Hill", 1700, 12, 28, 4.7),
+            TrainerProfileCardItemViewData("url5", "Emma Johnson", 1600, 11, 25, 4.6),
+            TrainerProfileCardItemViewData("url6", "James Smith", 1900, 14, 35, 4.8),
+            TrainerProfileCardItemViewData("url7", "Ava Brown", 1750, 13, 30, 4.7)
         )
 
         MobileExploreTrainersGridComponent(trainers = trainers)
@@ -56,8 +56,9 @@ fun MobileExploreTrainersScreen(rootNavigator: Navigator) {
 }
 
 @Composable
-private fun MobileExploreTrainersGridComponent(trainers: List<Trainer>) {
-    LazyVerticalGrid(        columns = GridCells.Fixed(2),
+private fun MobileExploreTrainersGridComponent(trainers: List<TrainerProfileCardItemViewData>) {
+    LazyVerticalGrid(
+        columns = GridCells.Fixed(2),
         modifier = Modifier
             .padding(horizontal = 16.dp, vertical = 8.dp),
         verticalArrangement = Arrangement.spacedBy(16.dp), // Vertical spacing
@@ -77,7 +78,7 @@ private fun MobileExploreTrainersGridComponent(trainers: List<Trainer>) {
     }
 }
 
-private data class Trainer(
+private data class TrainerProfileCardItemViewData(
     val imageUrl: String,
     val name: String,
     val followerCount: Int,
