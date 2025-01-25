@@ -21,10 +21,6 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import com.vurgun.skyfit.presentation.shared.components.ButtonSize
-import com.vurgun.skyfit.presentation.shared.components.ButtonState
-import com.vurgun.skyfit.presentation.shared.components.ButtonVariant
-import com.vurgun.skyfit.presentation.shared.components.SkyFitButtonComponent
 import com.vurgun.skyfit.presentation.shared.components.SkyFitScaffold
 import com.vurgun.skyfit.presentation.shared.components.SkyFitSelectableCardComponent
 import com.vurgun.skyfit.presentation.shared.features.onboarding.OnboardingActionGroupComponent

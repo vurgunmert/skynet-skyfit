@@ -33,7 +33,7 @@ import com.vurgun.skyfit.presentation.shared.resources.SkyFitTypography
 
 @Composable
 fun SkyFitButtonComponent(
-    modifier: Modifier = Modifier,
+    modifier: Modifier = Modifier.fillMaxWidth(),
     text: String,
     onClick: () -> Unit,
     variant: ButtonVariant = ButtonVariant.Primary,
@@ -69,7 +69,6 @@ fun SkyFitButtonComponent(
     Box(
         contentAlignment = Alignment.Center,
         modifier = modifier
-            .fillMaxWidth()
             .height(size.height)
             .border(width = if (borderColor != Color.Transparent) 1.dp else 0.dp, color = borderColor, shape = CircleShape)
             .background(backgroundColor, shape = CircleShape)
