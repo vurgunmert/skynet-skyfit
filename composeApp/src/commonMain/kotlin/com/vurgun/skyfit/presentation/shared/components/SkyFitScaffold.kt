@@ -6,7 +6,11 @@ import androidx.compose.runtime.Composable
 import com.vurgun.skyfit.presentation.shared.resources.SkyFitColor
 
 @Composable
-fun SkyFitScaffold(content: @Composable (PaddingValues) -> Unit) {
-    Scaffold(backgroundColor = SkyFitColor.background.default, content = content)
+fun SkyFitScaffold(
+    topBar: @Composable () -> Unit = {},
+    bottomBar: @Composable () -> Unit = {},
+    content: @Composable (PaddingValues) -> Unit,
+) {
+    Scaffold(backgroundColor = SkyFitColor.background.default, content = content, topBar = topBar, bottomBar = bottomBar)
 }
 
