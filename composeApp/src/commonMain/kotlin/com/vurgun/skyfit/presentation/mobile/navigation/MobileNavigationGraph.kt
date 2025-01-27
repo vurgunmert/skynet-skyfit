@@ -59,6 +59,7 @@ import com.vurgun.skyfit.presentation.mobile.features.user.exercises.MobileUserE
 import com.vurgun.skyfit.presentation.mobile.features.user.exercises.MobileUserExerciseInActionScreen
 import com.vurgun.skyfit.presentation.mobile.features.user.messages.MobileUserChatBotScreen
 import com.vurgun.skyfit.presentation.mobile.features.user.messages.MobileUserConversationsScreen
+import com.vurgun.skyfit.presentation.mobile.features.user.messages.MobileUserToBotChatScreen
 import com.vurgun.skyfit.presentation.mobile.features.user.messages.MobileUserToFacilityChatScreen
 import com.vurgun.skyfit.presentation.mobile.features.user.messages.MobileUserToGroupChatScreen
 import com.vurgun.skyfit.presentation.mobile.features.user.messages.MobileUserToUserChatScreen
@@ -89,7 +90,7 @@ fun MobileNavigationGraph() {
 
     NavHost(
         navigator = rootNavigator,
-        initialRoute = SkyFitNavigationRoute.DashboardExploreExercises.route
+        initialRoute = SkyFitNavigationRoute.UserActivityCalendarAdd.route
     ) {
 
         // Auth
@@ -142,7 +143,8 @@ fun MobileNavigationGraph() {
         //User - Notifications
         scene(SkyFitNavigationRoute.UserNotifications.route) { MobileUserNotificationsScreen(rootNavigator) }
         //User - Messages
-        scene(SkyFitNavigationRoute.UserChatBot.route) { MobileUserChatBotScreen(rootNavigator) }
+//        scene(SkyFitNavigationRoute.UserChatBot.route) { MobileUserChatBotScreen(rootNavigator) }
+        scene(SkyFitNavigationRoute.UserChatBot.route) { MobileUserToBotChatScreen(rootNavigator) }
         scene(SkyFitNavigationRoute.UserConversations.route) { MobileUserConversationsScreen(rootNavigator) }
         scene(SkyFitNavigationRoute.UserToUserChat.route) { MobileUserToUserChatScreen(rootNavigator) }
         scene(SkyFitNavigationRoute.UserToGroupChat.route) { MobileUserToGroupChatScreen(rootNavigator) }

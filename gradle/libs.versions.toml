@@ -20,6 +20,7 @@ koin = "4.1.0-Beta4"
 gitlive-firebase = "2.1.0"
 firebaseCommonKtx = "21.0.0"
 precompose = "1.7.0-alpha03"
+ktor = "3.0.3"
 
 [libraries]
 kotlin-test = { module = "org.jetbrains.kotlin:kotlin-test", version.ref = "kotlin" }
@@ -42,6 +43,17 @@ gitlive-firebase-auth = { group = "dev.gitlive", name = "firebase-auth", version
 kotlinx-serialization = { group = "org.jetbrains.kotlinx", name = "kotlinx-serialization-json", version.ref = "kotlinx-serialization" }
 firebase-common-ktx = { group = "com.google.firebase", name = "firebase-common-ktx", version.ref = "firebaseCommonKtx" }
 precompose = { group = "moe.tlaster", name = "precompose", version.ref = "precompose" }
+
+# Ktor Client Core
+ktor-client-core = { group = "io.ktor", name = "ktor-client-core", version.ref = "ktor" }
+# Ktor Client Engines
+ktor-client-okhttp = { group = "io.ktor", name = "ktor-client-okhttp", version.ref = "ktor" }
+ktor-client-darwin = { group = "io.ktor", name = "ktor-client-darwin", version.ref = "ktor" }
+ktor-client-cio = { group = "io.ktor", name = "ktor-client-cio", version.ref = "ktor" }
+ktor-client-js = { group = "io.ktor", name = " ktor-client-core-js", version.ref = "ktor" }
+# Ktor Client Plugins
+ktor-client-content-negotiation = { group = "io.ktor", name = "ktor-client-content-negotiation", version.ref = "ktor" }
+ktor-serialization-json = { group = "io.ktor", name = "ktor-serialization-kotlinx-json", version.ref = "ktor" }
 
 [plugins]
 androidApplication = { id = "com.android.application", version.ref = "agp" }

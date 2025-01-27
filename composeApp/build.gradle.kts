@@ -12,12 +12,14 @@ plugins {
 }
 
 kotlin {
+    // Android target configuration
     androidTarget {
         compilerOptions {
             jvmTarget.set(JvmTarget.JVM_11)
         }
     }
 
+    // iOS targets configuration
     listOf(
         iosX64(),
         iosArm64(),
@@ -30,8 +32,10 @@ kotlin {
         }
     }
 
+    // JVM target for desktop applications
     jvm("desktop")
 
+    // JavaScript (WASM) target configuration
     @OptIn(ExperimentalWasmDsl::class)
     wasmJs {
         moduleName = "composeApp"
@@ -53,33 +57,55 @@ kotlin {
     }
 
     sourceSets {
-        val desktopMain by getting
+        commonMain.dependencies {
+            // Compose Multiplatform libraries
+            api(compose.runtime)
+            api(compose.foundation)
+            api(compose.material)
+            api(compose.ui)
+            implementation(compose.animation)
+            implementation(compose.components.resources)
+            // AndroidX Lifecycle libraries
+            implementation(libs.androidx.lifecycle.viewmodel)
+            implementation(libs.androidx.lifecycle.runtime.compose)
+            // Koin for dependency injection
+            implementation(libs.koin.core)
+            implementation(libs.koin.compose)
+            implementation(libs.koin.compose.viewmodel)
+            // Firebase Authentication
+            implementation(libs.gitlive.firebase.auth)
+            // Kotlinx Serialization
+            implementation(libs.kotlinx.serialization)
+            // PreCompose for multiplatform navigation
+            api(libs.precompose)
+
+            // Ktor client core and content negotiation
+            implementation(libs.ktor.client.core)
+            implementation(libs.ktor.client.content.negotiation)
+            implementation(libs.ktor.serialization.json)
+        }
 
         androidMain.dependencies {
             implementation(compose.preview)
             implementation(libs.androidx.activity.compose)
             implementation(libs.gitlive.firebase.auth)
+            implementation(libs.ktor.client.okhttp)
         }
-        commonMain.dependencies {
-            api(compose.runtime)
-            api(compose.foundation)
-            api(compose.material)
-            api(compose.ui)
-            api(compose.animation)
-            implementation(compose.components.resources)
-            implementation(libs.androidx.lifecycle.viewmodel)
-            implementation(libs.androidx.lifecycle.runtime.compose)
-            implementation(libs.koin.core)
-            implementation(libs.koin.compose)
-            implementation(libs.koin.compose.viewmodel)
-            implementation(libs.gitlive.firebase.auth)
-            implementation(libs.kotlinx.serialization)
-            api(libs.precompose)
+
+        iosMain.dependencies {
+            implementation(libs.ktor.client.darwin)
         }
-        desktopMain.dependencies {
-            implementation(compose.desktop.currentOs)
-            implementation(libs.kotlinx.coroutines.swing)
+
+        // Desktop-specific source set
+        val desktopMain by getting {
+            dependencies {
+                implementation(compose.desktop.currentOs)
+                implementation(libs.kotlinx.coroutines.swing)
+                implementation(libs.ktor.client.cio)
+            }
         }
+
+        // JavaScript (WASM)-specific source set
         wasmJsMain.dependencies {
             implementation(libs.gitlive.firebase.auth)
         }

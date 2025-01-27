@@ -5,15 +5,21 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Scaffold
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import com.vurgun.skyfit.presentation.shared.components.calendar.SkyFitDailyActivityCanvas
+import com.vurgun.skyfit.presentation.shared.components.calendar.SkyFitDailyActivityItem
 import com.vurgun.skyfit.presentation.shared.features.common.TodoBox
 import com.vurgun.skyfit.presentation.shared.resources.SkyFitColor
+import com.vurgun.skyfit.utils.firstDigit
 import moe.tlaster.precompose.navigation.Navigator
 
 private enum class MobileUserActivityCalendarAddStep {
@@ -35,16 +41,17 @@ fun MobileUserActivityCalendarAddActivityScreen(navigator: Navigator) {
         }
     ) {
         Column(
-            modifier = Modifier.fillMaxSize().verticalScroll(rememberScrollState()),
+            modifier = Modifier.fillMaxSize(),
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {
 
-            when(step) {
+            when (step) {
                 MobileUserActivityCalendarAddStep.INTRODUCE -> {
                     MobileUserActivityCalendarAddActivityScreenInputComponent()
                     MobileUserActivityCalendarAddActivityScreenAddTimeActionComponent()
                     MobileUserActivityCalendarHourlyComponent()
                 }
+
                 MobileUserActivityCalendarAddStep.TIME -> {
                     MobileUserActivityCalendarAddActivityScreenTimerComponent()
                     MobileUserActivityCalendarAddActivityScreenSavedTimePeriodsComponent()
@@ -52,6 +59,7 @@ fun MobileUserActivityCalendarAddActivityScreen(navigator: Navigator) {
                     MobileUserActivityCalendarAddActivityScreenContinueActionsComponent()
                     Spacer(Modifier.height(48.dp))
                 }
+
                 MobileUserActivityCalendarAddStep.CONFIRM -> {
 
                     MobileUserActivityCalendarAddActivityScreenTimeHolderComponent()
@@ -92,8 +100,27 @@ private fun MobileUserActivityCalendarAddActivityScreenTimerComponent() {
 
 @Composable
 private fun MobileUserActivityCalendarAddActivityScreenSavedTimePeriodsComponent() {
-    TodoBox("MobileUserActivityCalendarAddActivityScreenSavedTimePeriodsComponent", Modifier.size(430.dp, 250.dp))
+    var activities by remember {
+        mutableStateOf(
+            listOf(
+                SkyFitDailyActivityItem(emoji = "🔥", name = "Yürüyüş", startHourMinutes = 900, startBlock = 2)
+            )
+        )
+    }
+    var selectedBlock by remember { mutableStateOf(2) }
+
+    SkyFitDailyActivityCanvas(
+        activities = activities,
+        selectedBlock = selectedBlock,
+        onActivityUpdate = { updatedActivity ->
+            activities = activities.map {
+                if (it.name == updatedActivity.name) updatedActivity else it
+            }
+            selectedBlock = updatedActivity.startBlock
+        }
+    )
 }
+
 
 @Composable
 private fun MobileUserActivityCalendarAddActivityScreenContinueActionsComponent() {
@@ -113,4 +140,9 @@ private fun MobileUserActivityCalendarAddActivityScreenTextHolderComponent() {
 @Composable
 private fun MobileUserActivityCalendarAddActivityScreenConfirmActionComponent() {
     TodoBox("MobileUserActivityCalendarAddActivityScreenContinueActionComponent", Modifier.size(430.dp, 80.dp))
+}
+
+@Composable
+fun ExampleScreen() {
+
 }
