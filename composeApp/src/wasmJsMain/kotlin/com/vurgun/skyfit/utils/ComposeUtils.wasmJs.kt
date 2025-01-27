@@ -6,5 +6,5 @@ import androidx.compose.runtime.mutableStateOf
 
 @Composable
 actual fun keyboardAsState(): State<KeyboardState> {
-    return mutableStateOf(KeyboardState.Closed)
+    return mutableStateOf(KeyboardState.Closed())
 }
