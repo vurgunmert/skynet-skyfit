@@ -7,7 +7,6 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.size
 import androidx.compose.material.Scaffold
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -15,11 +14,11 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import com.vurgun.skyfit.presentation.shared.components.calendar.SkyFitFourDigitClockComponent
 import com.vurgun.skyfit.presentation.shared.components.calendar.SkyFitDailyActivityCanvas
 import com.vurgun.skyfit.presentation.shared.components.calendar.SkyFitDailyActivityItem
 import com.vurgun.skyfit.presentation.shared.features.common.TodoBox
 import com.vurgun.skyfit.presentation.shared.resources.SkyFitColor
-import com.vurgun.skyfit.utils.firstDigit
 import moe.tlaster.precompose.navigation.Navigator
 
 private enum class MobileUserActivityCalendarAddStep {
@@ -32,7 +31,7 @@ private enum class MobileUserActivityCalendarAddStep {
 fun MobileUserActivityCalendarAddActivityScreen(navigator: Navigator) {
 
     val title = null ?: "Yeni aktivite" //TODO: logic
-    val step = MobileUserActivityCalendarAddStep.TIME //TODO: logic
+    val step = MobileUserActivityCalendarAddStep.CONFIRM //TODO: logic
 
     Scaffold(
         backgroundColor = SkyFitColor.background.default,
@@ -62,7 +61,7 @@ fun MobileUserActivityCalendarAddActivityScreen(navigator: Navigator) {
 
                 MobileUserActivityCalendarAddStep.CONFIRM -> {
 
-                    MobileUserActivityCalendarAddActivityScreenTimeHolderComponent()
+                    MobileUserActivityCalendarAddActivityScreenTimeHolderComponent(1, 30)
                     MobileUserActivityCalendarAddActivityScreenTextHolderComponent()
                     MobileUserActivityCalendarHourlyComponent()
                     MobileUserActivityCalendarAddActivityScreenConfirmActionComponent()
@@ -128,8 +127,19 @@ private fun MobileUserActivityCalendarAddActivityScreenContinueActionsComponent(
 }
 
 @Composable
-private fun MobileUserActivityCalendarAddActivityScreenTimeHolderComponent() {
-    TodoBox("MobileUserActivityCalendarAddActivityScreenTimeHolderComponent", Modifier.size(430.dp, 88.dp))
+private fun MobileUserActivityCalendarAddActivityScreenTimeHolderComponent(hour: Int, minute: Int) {
+    var hour by remember { mutableStateOf(hour) }
+    var minute by remember { mutableStateOf(minute) }
+
+    SkyFitFourDigitClockComponent(
+        hour = hour,
+        minute = minute,
+        clickable = false,
+        onTimeChange = { newHour, newMinute ->
+            hour = newHour
+            minute = newMinute
+        }
+    )
 }
 
 @Composable
