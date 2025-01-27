@@ -3,7 +3,10 @@ package com.vurgun.skyfit.presentation.mobile.features.user.profile
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Scaffold
@@ -14,9 +17,18 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import com.vurgun.skyfit.presentation.shared.components.ButtonSize
+import com.vurgun.skyfit.presentation.shared.components.ButtonState
+import com.vurgun.skyfit.presentation.shared.components.ButtonVariant
+import com.vurgun.skyfit.presentation.shared.components.SkyFitButtonComponent
 import com.vurgun.skyfit.presentation.shared.features.common.TodoBox
+import com.vurgun.skyfit.presentation.shared.navigation.SkyFitNavigationRoute
+import com.vurgun.skyfit.presentation.shared.navigation.jumpAndStay
 import com.vurgun.skyfit.presentation.shared.resources.SkyFitColor
 import moe.tlaster.precompose.navigation.Navigator
+import org.jetbrains.compose.resources.painterResource
+import skyfit.composeapp.generated.resources.Res
+import skyfit.composeapp.generated.resources.logo_skyfit
 
 @Composable
 fun MobileUserProfileScreen(navigator: Navigator) {
@@ -77,7 +89,9 @@ fun MobileUserProfileScreen(navigator: Navigator) {
             }
 
             if (exerciseHistory.isEmpty()) {
-                MobileUserProfileExerciseHistoryEmptyComponent()
+                MobileUserProfileScreenExploreExercisesComponent {
+                    navigator.jumpAndStay(SkyFitNavigationRoute.DashboardExploreExercises)
+                }
             } else {
                 MobileUserProfileExerciseHistoryComponent()
             }
@@ -151,8 +165,22 @@ private fun MobileUserProfileExerciseHistoryComponent() {
 }
 
 @Composable
-private fun MobileUserProfileExerciseHistoryEmptyComponent() {
-    TodoBox("MobileUserProfileExerciseHistoryEmptyComponent", Modifier.size(382.dp, 105.dp))
+private fun MobileUserProfileScreenExploreExercisesComponent(onClick: () -> Unit) {
+    Box(
+        Modifier
+            .fillMaxWidth()
+            .padding(vertical = 34.dp),
+        contentAlignment = Alignment.Center
+    ) {
+
+        SkyFitButtonComponent(
+            Modifier.wrapContentWidth(), text = "Antrenman Keşfet",
+            onClick = onClick,
+            variant = ButtonVariant.Primary,
+            size = ButtonSize.Medium,
+            initialState = ButtonState.Rest
+        )
+    }
 }
 
 @Composable
