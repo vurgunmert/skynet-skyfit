@@ -10,6 +10,7 @@ object SkyFitColor {
         val default = bg
         val inverse = Color(0xFFEBF9FF)  // bg-inverse
         val surface = Color(0xFF013B46)  // bg-surface
+        val surfaceSemiTransparent = Color(0xFF012E36).copy(alpha = 0.05f)  // bg-surface-hover
         val surfaceHover = Color(0xFF012E36)  // bg-surface-hover
         val surfaceActive = Color(0xFF01272F)  // bg-surface-active
         val surfaceSelected = Color(0xFF012127)  // bg-surface-selected

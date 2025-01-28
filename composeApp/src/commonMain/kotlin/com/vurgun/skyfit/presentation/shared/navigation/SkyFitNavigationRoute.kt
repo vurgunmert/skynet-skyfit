@@ -105,6 +105,7 @@ sealed class SkyFitNavigationRoute(
 
     // - Messages
     data object UserChatBot : SkyFitNavigationRoute("user/chat_bot", roles = listOf(Role.USER))
+    data object UserToBotChat : SkyFitNavigationRoute("user/conversations/toBot", roles = listOf(Role.USER))
     data object UserConversations : SkyFitNavigationRoute("user/conversations", roles = listOf(Role.USER))
     data object UserToUserChat : SkyFitNavigationRoute("user/conversations/toUser", roles = listOf(Role.USER))
     data object UserToGroupChat : SkyFitNavigationRoute("user/conversations/toGroup", roles = listOf(Role.USER))
