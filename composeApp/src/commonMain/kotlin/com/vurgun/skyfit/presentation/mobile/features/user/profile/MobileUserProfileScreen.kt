@@ -163,7 +163,7 @@ private fun MobileUserProfileDietGoalsEmptyComponent() {
 }
 
 @Composable
-private fun MobileUserProfileMeasurementsComponent(onClick: () -> Unit) {
+fun MobileUserProfileMeasurementsComponent(onClick: () -> Unit) {
     Row(
         Modifier.fillMaxWidth()
             .background(SkyFitColor.background.fillTransparent, shape = RoundedCornerShape(20.dp))
