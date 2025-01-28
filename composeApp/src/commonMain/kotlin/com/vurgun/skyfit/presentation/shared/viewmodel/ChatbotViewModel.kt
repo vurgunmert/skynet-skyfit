@@ -19,7 +19,8 @@ class ChatbotViewModel(private val useCase: ChatbotQueryUseCase) : ViewModel() {
     fun sendQuery(userInput: String) {
         viewModelScope.launch {
             // Add user message to the list
-            addMessage(ChatMessageItem(text = userInput, isUser = true))
+            addMessage(ChatMessageItem(content = userInput, time = "14:23", isUser = true))
+            addMessage(ChatMessageItem(content = "Hey Olivia. Can we get on a quick call?", time = "14:23", isUser = false))
 
             // Set loading state
             _isLoading.value = true
@@ -27,10 +28,10 @@ class ChatbotViewModel(private val useCase: ChatbotQueryUseCase) : ViewModel() {
             try {
                 // Query the chatbot and add the bot's response
                 val botResponse = useCase.queryChat(userInput)
-                addMessage(ChatMessageItem(text = botResponse, isUser = false))
+                addMessage(ChatMessageItem(content = botResponse, time = "14:23", isUser = false))
             } catch (e: Exception) {
                 // Add error message
-                addMessage(ChatMessageItem(text = "An error occurred: ${e.message}", isUser = false))
+                addMessage(ChatMessageItem(content = "An error occurred: ${e.message}", time = "14:23", isUser = false))
             } finally {
                 _isLoading.value = false
             }
@@ -38,6 +39,6 @@ class ChatbotViewModel(private val useCase: ChatbotQueryUseCase) : ViewModel() {
     }
 
     private fun addMessage(ChatMessageItem: ChatMessageItem) {
-        _messages.value = _messages.value + ChatMessageItem
+        _messages.value += ChatMessageItem
     }
 }

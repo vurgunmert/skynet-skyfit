@@ -2,6 +2,7 @@ package com.vurgun.skyfit.presentation.shared.components
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -33,13 +34,13 @@ import skyfit.composeapp.generated.resources.Res
 import skyfit.composeapp.generated.resources.logo_skyfit
 
 data class ChatMessageItem(
-    val text: String,
+    val content: String,
+    val time: String,
     val isUser: Boolean
 )
 
-
 @Composable
-fun SkyFitChatMessageBubble(chatMessage: ChatMessageItem, modifier: Modifier = Modifier.padding(start = 24.dp, end = 88.dp)) {
+fun SkyFitChatMessageBubble(chatMessage: ChatMessageItem, modifier: Modifier = Modifier) {
 
     val textColor = if (chatMessage.isUser) SkyFitColor.text.inverse else SkyFitColor.text.default
     val backgroundColor = if (chatMessage.isUser) SkyFitColor.border.secondaryButton else SkyFitColor.background.surfaceTertiary
@@ -48,33 +49,30 @@ fun SkyFitChatMessageBubble(chatMessage: ChatMessageItem, modifier: Modifier = M
     val responderShape = RoundedCornerShape(bottomStart = 0.dp, topStart = 16.dp, topEnd = 16.dp, bottomEnd = 16.dp)
 
     val senderShape = if (chatMessage.isUser) userShape else responderShape
-    val senderAlign = if (chatMessage.isUser) Alignment.CenterEnd else Alignment.CenterStart
+    val senderAlign = if (chatMessage.isUser) Alignment.TopEnd else Alignment.TopStart
+    val columnAlign = if (chatMessage.isUser) Alignment.End else Alignment.Start
 
-    Box(Modifier.fillMaxWidth().padding(horizontal = 16.dp)) {
+    Box(modifier.fillMaxWidth(), contentAlignment = senderAlign) {
 
-        Column(
-            modifier = modifier.fillMaxWidth().align(senderAlign),
-            horizontalAlignment = Alignment.End,
-        ) {
+        Column(horizontalAlignment = columnAlign) {
             Box(
                 modifier = Modifier.background(
                     color = backgroundColor,
                     shape = senderShape
-                )
-                    .padding(vertical = 16.dp, horizontal = 24.dp)
-            ) {
+                ).padding(vertical = 12.dp, horizontal = 22.dp)
 
+            ) {
                 Text(
-                    text = chatMessage.text,
+                    text = chatMessage.content,
                     style = SkyFitTypography.bodySmall,
                     color = textColor
                 )
             }
-            Spacer(Modifier.height(2.dp))
+            Spacer(Modifier.height(4.dp))
             Text(
-                text = chatMessage.text,
+                text = chatMessage.time,
                 style = SkyFitTypography.bodySmall,
-                color = textColor
+                color = SkyFitColor.text.secondary
             )
         }
     }
@@ -111,7 +109,10 @@ fun SkyFitChatMessageInputComponent(modifier: Modifier = Modifier, onSend: (Stri
                 cursorBrush = SolidColor(SkyFitColor.specialty.buttonBgRest),
             )
             Spacer(Modifier.width(8.dp))
-            SkyFitChatSendIconButton(Modifier, onClick = { onSend(userInput) })
+            SkyFitChatSendIconButton(Modifier, onClick = {
+                onSend(userInput)
+                userInput = ""
+            })
         }
     }
 }

@@ -33,7 +33,6 @@ fun MobileUserToUserChatScreen(navigator: Navigator) {
 
     val viewModel: SkyFitConversationViewModel = koinInject()
     val messages by viewModel.messages.collectAsState()
-    val isLoading by viewModel.isLoading.collectAsState()
     val keyboardState by keyboardAsState()
 
     Scaffold(
@@ -63,14 +62,4 @@ fun MobileUserToUserChatScreen(navigator: Navigator) {
 @Composable
 private fun MobileUserToUserChatScreenToolbarComponent() {
     TodoBox("MobileUserToUserChatScreenToolbarComponent", Modifier.size(430.dp, 80.dp))
-}
-
-@Composable
-private fun MobileUserToUserChatScreenMessagesComponent() {
-    TodoBox("MobileUserToUserChatScreenMessagesComponent", Modifier.size(430.dp, 208.dp))
-}
-
-@Composable
-private fun MobileUserToUserChatScreenInputComponent() {
-    TodoBox("MobileUserToUserChatScreenInputComponent", Modifier.size(430.dp, 24.dp))
 }
