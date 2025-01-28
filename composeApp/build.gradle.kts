@@ -65,6 +65,10 @@ kotlin {
             api(compose.ui)
             implementation(compose.animation)
             implementation(compose.components.resources)
+            // Coil for image loading
+            implementation(libs.coil.compose)
+            implementation(libs.coil.network.ktor)
+
             // AndroidX Lifecycle libraries
             implementation(libs.androidx.lifecycle.viewmodel)
             implementation(libs.androidx.lifecycle.runtime.compose)
@@ -107,7 +111,7 @@ kotlin {
 
         // JavaScript (WASM)-specific source set
         wasmJsMain.dependencies {
-            implementation(libs.gitlive.firebase.auth)
+//            implementation(libs.gitlive.firebase.auth)
         }
     }
 }

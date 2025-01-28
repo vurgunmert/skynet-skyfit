@@ -6,7 +6,7 @@ android-targetSdk = "34"
 androidx-activityCompose = "1.9.3"
 androidx-appcompat = "1.7.0"
 androidx-constraintlayout = "2.2.0"
-androidx-core-ktx = "1.15.0"
+androidx-core-ktx = "1.16.0-alpha01"
 androidx-espresso-core = "3.6.1"
 androidx-lifecycle = "2.8.4"
 androidx-material = "1.12.0"
@@ -21,6 +21,7 @@ gitlive-firebase = "2.1.0"
 firebaseCommonKtx = "21.0.0"
 precompose = "1.7.0-alpha03"
 ktor = "3.0.3"
+coil = "3.0.4"
 
 [libraries]
 kotlin-test = { module = "org.jetbrains.kotlin:kotlin-test", version.ref = "kotlin" }
@@ -43,6 +44,8 @@ gitlive-firebase-auth = { group = "dev.gitlive", name = "firebase-auth", version
 kotlinx-serialization = { group = "org.jetbrains.kotlinx", name = "kotlinx-serialization-json", version.ref = "kotlinx-serialization" }
 firebase-common-ktx = { group = "com.google.firebase", name = "firebase-common-ktx", version.ref = "firebaseCommonKtx" }
 precompose = { group = "moe.tlaster", name = "precompose", version.ref = "precompose" }
+coil-compose = { module = "io.coil-kt.coil3:coil-compose", version.ref = "coil" }
+coil-network-ktor = { module = "io.coil-kt.coil3:coil-network-ktor3", version.ref = "coil" }
 
 # Ktor Client Core
 ktor-client-core = { group = "io.ktor", name = "ktor-client-core", version.ref = "ktor" }
