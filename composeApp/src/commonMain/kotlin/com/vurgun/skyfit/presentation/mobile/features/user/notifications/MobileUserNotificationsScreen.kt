@@ -73,6 +73,13 @@ fun MobileUserNotificationsScreen(navigator: Navigator) {
                 MobileUserNotificationsScreenToolbarComponent()
                 MobileUserNotificationsScreenTabsComponent()
             }
+        },
+        bottomBar = {
+            if (allNotifications.isEmpty()) {
+                MobileUserNotificationsScreenSettingsActionComponent()
+            } else {
+                MobileUserNotificationsScreenDeleteAllActionComponent()
+            }
         }
     ) {
         if (allNotifications.isEmpty()) {
@@ -98,18 +105,8 @@ private fun MobileUserNotificationsScreenTabsComponent() {
 }
 
 @Composable
-private fun MobileUserNotificationsComponent() {
-    TodoBox("MobileUserNotificationsComponent", Modifier.size(430.dp, 640.dp))
-}
-
-@Composable
 private fun MobileUserNotificationsScreenDeleteAllActionComponent() {
     TodoBox("MobileUserNotificationsScreenDeleteAllActionComponent", Modifier.size(430.dp, 36.dp))
-}
-
-@Composable
-private fun MobileUserNotificationsEmptyComponent() {
-    TodoBox("MobileUserNotificationsEmptyComponent", Modifier.size(430.dp, 144.dp))
 }
 
 @Composable

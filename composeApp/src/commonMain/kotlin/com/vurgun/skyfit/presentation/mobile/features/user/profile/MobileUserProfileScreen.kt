@@ -1,15 +1,24 @@
 package com.vurgun.skyfit.presentation.mobile.features.user.profile
 
+import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.Icon
 import androidx.compose.material.Scaffold
+import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
@@ -25,6 +34,7 @@ import com.vurgun.skyfit.presentation.shared.features.common.TodoBox
 import com.vurgun.skyfit.presentation.shared.navigation.SkyFitNavigationRoute
 import com.vurgun.skyfit.presentation.shared.navigation.jumpAndStay
 import com.vurgun.skyfit.presentation.shared.resources.SkyFitColor
+import com.vurgun.skyfit.presentation.shared.resources.SkyFitTypography
 import moe.tlaster.precompose.navigation.Navigator
 import org.jetbrains.compose.resources.painterResource
 import skyfit.composeapp.generated.resources.Res
@@ -35,14 +45,14 @@ fun MobileUserProfileScreen(navigator: Navigator) {
 
     var appointments: List<Any> = emptyList()
     var dietGoals: List<Any> = emptyList()
-    var measurements: List<Any> = emptyList()
+    var showMeasurements: Boolean = true
     var exerciseHistory: List<Any> = emptyList()
     var photos: List<Any> = emptyList()
     var statistics: List<Any> = emptyList()
     var habits: List<Any> = emptyList()
     var posts: List<Any> = emptyList()
     val scrollState = rememberScrollState()
-    val showPosts: Boolean = true
+    val showPosts: Boolean = false
     val showInfoMini by remember {
         derivedStateOf { scrollState.value > 10 }
     }
@@ -80,8 +90,11 @@ fun MobileUserProfileScreen(navigator: Navigator) {
                 MobileUserProfileDietGoalsComponent()
             }
 
-            if (measurements.isNotEmpty()) {
-                MobileUserProfileMeasurementsComponent()
+            if (showMeasurements) {
+                Spacer(Modifier.height(16.dp))
+                MobileUserProfileMeasurementsComponent(onClick = {
+                    navigator.jumpAndStay(SkyFitNavigationRoute.UserMeasurements)
+                })
             }
 
             if (statistics.isNotEmpty()) {
@@ -150,8 +163,33 @@ private fun MobileUserProfileDietGoalsEmptyComponent() {
 }
 
 @Composable
-private fun MobileUserProfileMeasurementsComponent() {
-    TodoBox("MobileUserProfileMeasurementsComponent", Modifier.size(382.dp, 56.dp))
+private fun MobileUserProfileMeasurementsComponent(onClick: () -> Unit) {
+    Row(
+        Modifier.fillMaxWidth()
+            .background(SkyFitColor.background.fillTransparent, shape = RoundedCornerShape(20.dp))
+            .clickable(onClick = onClick)
+            .padding(16.dp),
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        Icon(
+            painter = painterResource(Res.drawable.logo_skyfit),
+            contentDescription = null,
+            modifier = Modifier.size(24.dp),
+            tint = SkyFitColor.icon.default
+        )
+        Spacer(Modifier.width(8.dp))
+        Text(
+            text = "Ölçümlerim",
+            style = SkyFitTypography.bodyMediumSemibold,
+            modifier = Modifier.weight(1f)
+        )
+        Icon(
+            painter = painterResource(Res.drawable.logo_skyfit),
+            contentDescription = null,
+            modifier = Modifier.size(24.dp),
+            tint = SkyFitColor.icon.default
+        )
+    }
 }
 
 @Composable
