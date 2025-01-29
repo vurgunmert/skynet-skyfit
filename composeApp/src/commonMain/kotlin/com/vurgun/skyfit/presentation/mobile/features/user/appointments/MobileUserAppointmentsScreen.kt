@@ -1,23 +1,24 @@
 package com.vurgun.skyfit.presentation.mobile.features.user.appointments
 
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.verticalScroll
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.material.Scaffold
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.vurgun.skyfit.presentation.shared.components.SkyFitBadgeTabBarComponent
 import com.vurgun.skyfit.presentation.shared.components.SkyFitScreenHeader
-import com.vurgun.skyfit.presentation.shared.features.common.TodoBox
 import com.vurgun.skyfit.presentation.shared.resources.SkyFitColor
 import com.vurgun.skyfit.presentation.shared.viewmodel.UserAppointmentsViewModel
 import moe.tlaster.precompose.navigation.Navigator
@@ -30,6 +31,12 @@ fun MobileUserAppointmentsScreen(navigator: Navigator) {
     val appointments by viewModel.appointments.collectAsState()
     var activeTab by remember { mutableStateOf(0) }
     val tabTitles by viewModel.tabTitles.collectAsState()
+    var showCancelDialog by remember { mutableStateOf(false) }
+    var showDeleteDialog by remember { mutableStateOf(false) }
+
+    LaunchedEffect(Unit) {
+        viewModel.loadData()
+    }
 
     Scaffold(
         backgroundColor = SkyFitColor.background.default,
@@ -42,27 +49,28 @@ fun MobileUserAppointmentsScreen(navigator: Navigator) {
                     selectedTabIndex = activeTab,
                     onTabSelected = { index -> activeTab = index },
                     deleteAllEnabled = appointments.size + appointments.size > 0,
-                    onDeleteAll = {  }
+                    onDeleteAll = { }
                 )
             }
         }
     ) {
-        Column(
-            modifier = Modifier.fillMaxSize().verticalScroll(rememberScrollState()),
-            horizontalAlignment = Alignment.CenterHorizontally,
+        LazyColumn(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(16.dp),
+            verticalArrangement = Arrangement.spacedBy(16.dp)
         ) {
-            MobileUserAppointmentsComponent()
-            MobileUserAppointmentsScreenCancelComponent()
+            items(appointments) {
+                AppointmentCardItemComponent(it, Modifier.fillMaxWidth())
+            }
         }
     }
-}
 
-@Composable
-private fun MobileUserAppointmentsComponent() {
-    TodoBox("MobileUserAppointmentsComponent", Modifier.size(430.dp, 488.dp))
-}
-
-@Composable
-private fun MobileUserAppointmentsScreenCancelComponent() {
-    TodoBox("MobileUserAppointmentsScreenCancelComponent", Modifier.size(382.dp, 172.dp))
+    AppointmentCancelDialog(
+        showDialog = showCancelDialog,
+        onDismiss = { showCancelDialog = false },
+        onConfirm = {
+            showCancelDialog = false
+        }
+    )
 }
