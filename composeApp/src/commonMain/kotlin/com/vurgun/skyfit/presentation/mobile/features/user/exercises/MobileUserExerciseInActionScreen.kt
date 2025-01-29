@@ -20,6 +20,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -27,6 +28,9 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentSize
+import androidx.compose.foundation.layout.wrapContentWidth
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Icon
@@ -45,14 +49,17 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.geometry.CornerRadius
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.drawscope.Stroke
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import coil3.compose.AsyncImage
 import com.vurgun.skyfit.presentation.shared.components.ButtonSize
 import com.vurgun.skyfit.presentation.shared.components.ButtonState
 import com.vurgun.skyfit.presentation.shared.components.ButtonVariant
@@ -70,7 +77,6 @@ import skyfit.composeapp.generated.resources.logo_skyfit
 private enum class MobileUserExerciseInActionScreenStep {
     SESSION,
     BREAK,
-    PROGRAM,
     TROPHY,
     COMPLETE
 }
@@ -79,14 +85,14 @@ private enum class MobileUserExerciseInActionScreenStep {
 fun MobileUserExerciseInActionScreen(navigator: Navigator) {
 
     val showToolbar: Boolean = true
-    var activePage by remember { mutableStateOf(MobileUserExerciseInActionScreenStep.SESSION) }
+    var activePage by remember { mutableStateOf(MobileUserExerciseInActionScreenStep.BREAK) }
 
     Box(Modifier.fillMaxSize()) {
         MobileUserExerciseInActionGraphicComponent()
 
         if (showToolbar) {
             MobileUserExerciseInActionScreenToolbarComponent(
-                onClickBack = {  },
+                onClickBack = { },
                 exerciseName = "Ip atlama",
                 exerciseRepeat = "15x4",
                 remainingTime = "00:12",
@@ -104,12 +110,10 @@ fun MobileUserExerciseInActionScreen(navigator: Navigator) {
 
                 MobileUserExerciseInActionScreenStep.BREAK -> {
                     Spacer(Modifier.height(18.dp))
-                    MobileUserExerciseInActionScreenBreakComponent()
-                }
-
-                MobileUserExerciseInActionScreenStep.PROGRAM -> {
-                    Spacer(Modifier.height(18.dp))
-                    MobileUserExerciseInActionScreenProgramComponent()
+                    MobileUserExerciseInActionScreenBreakComponent(
+                        onClickPause = {},
+                        onClickSkip = {}
+                    )
                 }
 
                 MobileUserExerciseInActionScreenStep.TROPHY -> {
@@ -138,7 +142,7 @@ fun MobileUserExerciseInActionScreen(navigator: Navigator) {
 
 @Composable
 private fun MobileUserExerciseInActionGraphicComponent() {
-    TodoBox("MobileUserExerciseInActionGraphicComponent", Modifier.fillMaxSize().background(Color.LightGray))
+    Box(Modifier.fillMaxSize().background(Color.LightGray))
 }
 
 
@@ -264,13 +268,172 @@ private fun MobileUserExerciseInActionScreenToolbarComponent(
 
 
 @Composable
-private fun MobileUserExerciseInActionScreenBreakComponent() {
-    TodoBox("MobileUserExerciseInActionScreenBreakComponent", Modifier.size(382.dp, 780.dp))
+private fun MobileUserExerciseInActionScreenBreakComponent(
+    onClickPause: () -> Unit,
+    onClickSkip: () -> Unit,
+) {
+    var showExerciseQueue by remember { mutableStateOf(false) }
+
+    if (showExerciseQueue) {
+        Box(
+            Modifier.padding(horizontal = 24.dp, vertical = 18.dp)
+                .fillMaxWidth()
+                .background(SkyFitColor.background.surfaceHover, RoundedCornerShape(20.dp))
+                .padding(32.dp),
+            contentAlignment = Alignment.Center
+        ) {
+            Column(Modifier.fillMaxWidth()) {
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Text(
+                        text = "Egzersizler",
+                        textAlign = TextAlign.Start,
+                        style = SkyFitTypography.heading6
+                    )
+                    Spacer(Modifier.weight(1f))
+                    Icon(
+                        painter = painterResource(Res.drawable.logo_skyfit),
+                        contentDescription = "Back",
+                        tint = SkyFitColor.text.default,
+                        modifier = Modifier.size(24.dp)
+                            .clickable(onClick = { showExerciseQueue = !showExerciseQueue })
+                    )
+                }
+                Spacer(Modifier.height(16.dp))
+                MobileUserExerciseQueueListComponent()
+            }
+        }
+    } else {
+        Box(
+            Modifier.padding(horizontal = 24.dp, vertical = 18.dp)
+                .fillMaxWidth()
+                .background(SkyFitColor.background.surfaceHover, RoundedCornerShape(20.dp))
+                .padding(32.dp),
+            contentAlignment = Alignment.Center
+        ) {
+            Column(
+                Modifier.align(Alignment.BottomCenter).fillMaxWidth(),
+                verticalArrangement = Arrangement.Center,
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+                Spacer(Modifier.height(64.dp))
+                Text(
+                    text = "00:09",
+                    textAlign = TextAlign.Center,
+                    style = SkyFitTypography.heading3
+                )
+
+                Spacer(Modifier.height(64.dp))
+                Row {
+                    SkyFitButtonComponent(
+                        Modifier.wrapContentWidth(), text = "Duraklat",
+                        onClick = onClickPause,
+                        variant = ButtonVariant.Secondary,
+                        size = ButtonSize.Large,
+                        initialState = ButtonState.Rest
+                    )
+                    Spacer(Modifier.width(16.dp))
+
+                    SkyFitButtonComponent(
+                        Modifier.wrapContentWidth(), text = "Atla",
+                        onClick = onClickSkip,
+                        variant = ButtonVariant.Primary,
+                        size = ButtonSize.Large,
+                        initialState = ButtonState.Rest
+                    )
+                }
+
+                Spacer(Modifier.height(64.dp))
+
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Text(
+                        text = "Siradaki",
+                        style = SkyFitTypography.bodyMediumSemibold
+                    )
+                    Spacer(Modifier.width(8.dp))
+                    Text(
+                        text = "5",
+                        style = SkyFitTypography.heading5,
+                        color = SkyFitColor.specialty.buttonBgRest
+                    )
+                    Text(
+                        text = "/15",
+                        style = SkyFitTypography.heading5
+                    )
+                    Spacer(Modifier.weight(1f))
+                    IconButton(
+                        onClick = { showExerciseQueue = !showExerciseQueue },
+                        modifier = Modifier.padding(start = 8.dp)
+                            .background(SkyFitColor.background.surfaceSecondaryActive, RoundedCornerShape(16.dp))
+                    ) {
+                        Icon(
+                            painter = painterResource(Res.drawable.logo_skyfit),
+                            contentDescription = "Back",
+                            tint = SkyFitColor.text.default,
+                            modifier = Modifier.size(24.dp)
+                        )
+                    }
+                }
+
+                Spacer(Modifier.height(8.dp))
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Text(
+                        text = "Arm Lift",
+                        style = SkyFitTypography.bodyMediumRegular
+                    )
+                    Spacer(Modifier.width(8.dp))
+                    Text(
+                        text = "x10",
+                        style = SkyFitTypography.bodyMediumSemibold
+                    )
+                }
+
+                Spacer(Modifier.height(8.dp))
+
+                AsyncImage(
+                    model = "https://opstudiohk.com/wp-content/uploads/2021/10/muscle-action.jpg",
+                    contentDescription = null,
+                    contentScale = ContentScale.Crop,
+                    modifier = Modifier
+                        .aspectRatio(1f)
+                        .clip(RoundedCornerShape(16.dp))
+                )
+            }
+        }
+    }
 }
 
 @Composable
-private fun MobileUserExerciseInActionScreenProgramComponent() {
-    TodoBox("MobileUserExerciseInActionScreenProgramComponent", Modifier.size(382.dp, 780.dp))
+private fun MobileUserExerciseQueueListComponent() {
+
+    var exercises = listOf(1, 2, 34, 5, 6, 7, 8, 3, 23, 4312, 41)
+
+    LazyColumn(
+        verticalArrangement = Arrangement.spacedBy(16.dp)
+    ) {
+        items(exercises) {
+            MobileUserExerciseQueueItemComponent()
+        }
+    }
+}
+
+@Composable
+private fun MobileUserExerciseQueueItemComponent() {
+    Box(
+        Modifier.fillMaxWidth()
+            .background(SkyFitColor.background.default, RoundedCornerShape(16.dp))
+            .padding(16.dp)
+    ) {
+        MobileExerciseWorkoutItemComponent()
+    }
 }
 
 @Composable
@@ -438,7 +601,11 @@ private fun MusicControlsPopup(
                     Icon(Icons.Filled.ArrowBack, contentDescription = "Previous", tint = Color.White)
                 }
                 IconButton(onClick = onPause) {
-                    Icon(if (isPlaying) Icons.Filled.Lock else Icons.Filled.PlayArrow, contentDescription = "Play/Pause", tint = Color.White)
+                    Icon(
+                        if (isPlaying) Icons.Filled.Lock else Icons.Filled.PlayArrow,
+                        contentDescription = "Play/Pause",
+                        tint = Color.White
+                    )
                 }
                 IconButton(onClick = onNext) {
                     Icon(Icons.Filled.KeyboardArrowUp, contentDescription = "Next", tint = Color.White)
@@ -447,3 +614,4 @@ private fun MusicControlsPopup(
         }
     }
 }
+
