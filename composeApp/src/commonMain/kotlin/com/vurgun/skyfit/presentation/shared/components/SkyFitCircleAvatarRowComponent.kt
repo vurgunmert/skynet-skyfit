@@ -46,7 +46,7 @@ fun SkyFitCircleAvatarRowComponent(
             horizontalArrangement = Arrangement.spacedBy(16.dp)
         ) {
             items(avatars) { avatar ->
-                UserAvatarCircle(
+                SkyFitAvatarCircle(
                     modifier = Modifier.size(60.dp),
                     avatar,
                     onClick = onClickRowItem
@@ -59,9 +59,10 @@ fun SkyFitCircleAvatarRowComponent(
 data class UserCircleAvatarItem(val imageUrl: String)
 
 @Composable
-private fun UserAvatarCircle(
+fun SkyFitAvatarCircle(
     modifier: Modifier,
-    item: UserCircleAvatarItem, onClick: () -> Unit
+    item: UserCircleAvatarItem,
+    onClick: () -> Unit
 ) {
 
     AsyncImage(

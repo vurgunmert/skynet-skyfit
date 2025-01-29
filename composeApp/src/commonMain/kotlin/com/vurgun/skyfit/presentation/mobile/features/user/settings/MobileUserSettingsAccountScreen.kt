@@ -10,6 +10,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import com.vurgun.skyfit.presentation.shared.components.SkyFitScreenHeader
 import com.vurgun.skyfit.presentation.shared.features.common.TodoBox
 import com.vurgun.skyfit.presentation.shared.resources.SkyFitColor
 import moe.tlaster.precompose.navigation.Navigator
@@ -22,7 +23,7 @@ fun MobileUserSettingsAccountScreen(navigator: Navigator) {
     Scaffold(
         backgroundColor = SkyFitColor.background.default,
         topBar = {
-            MobileUserSettingsAccountScreenToolbarComponent()
+            SkyFitScreenHeader("Hesap Ayarlari", onBackClick = { navigator.popBackStack() })
         },
         bottomBar = {
             if (showDeleteConfirm) {
@@ -39,12 +40,6 @@ fun MobileUserSettingsAccountScreen(navigator: Navigator) {
             MobileUserSettingsScreenInputComponent()
         }
     }
-}
-
-
-@Composable
-private fun MobileUserSettingsAccountScreenToolbarComponent() {
-    TodoBox("MobileUserSettingsAccountScreenToolbarComponent", Modifier.size(430.dp, 40.dp))
 }
 
 @Composable
