@@ -56,7 +56,10 @@ fun SkyFitCircleAvatarRowComponent(
     }
 }
 
-data class UserCircleAvatarItem(val imageUrl: String)
+data class UserCircleAvatarItem(
+    val imageUrl: String,
+    val name: String? = null
+)
 
 @Composable
 fun SkyFitAvatarCircle(

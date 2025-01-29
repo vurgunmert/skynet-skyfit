@@ -1,20 +1,17 @@
 package com.vurgun.skyfit.presentation.mobile.features.facility.settings
 
-import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.Button
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.material.Scaffold
-import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import com.vurgun.skyfit.presentation.shared.features.common.TodoBox
-import com.vurgun.skyfit.presentation.shared.navigation.SkyFitNavigationRoute
-import com.vurgun.skyfit.presentation.shared.navigation.jumpAndTakeover
+import com.vurgun.skyfit.presentation.shared.components.SettingsSwitchOptionItem
+import com.vurgun.skyfit.presentation.shared.components.SkyFitScreenHeader
+import com.vurgun.skyfit.presentation.shared.components.SkyFitSettingsSwitchOptionItemComponent
 import com.vurgun.skyfit.presentation.shared.resources.SkyFitColor
 import moe.tlaster.precompose.navigation.Navigator
 
@@ -24,25 +21,37 @@ fun MobileFacilitySettingsNotificationsScreen(navigator: Navigator) {
     Scaffold(
         backgroundColor = SkyFitColor.background.default,
         topBar = {
-            MobileFacilitySettingsNotificationsScreenToolbarComponent()
+            SkyFitScreenHeader("Bildirimler", onBackClick = { navigator.popBackStack() })
         }
     ) {
-        Column(
-            modifier = Modifier.fillMaxSize().verticalScroll(rememberScrollState()),
-            horizontalAlignment = Alignment.CenterHorizontally,
-        ) {
-            MobileFacilitySettingsNotificationsScreenOptionsComponent()
-        }
+        MobileFacilitySettingsNotificationsScreenOptionsComponent()
     }
-}
-
-
-@Composable
-private fun MobileFacilitySettingsNotificationsScreenToolbarComponent() {
-    TodoBox("MobileFacilitySettingsNotificationsScreenToolbarComponent", Modifier.size(430.dp, 40.dp))
 }
 
 @Composable
 private fun MobileFacilitySettingsNotificationsScreenOptionsComponent() {
-    TodoBox("MobileFacilitySettingsNotificationsScreenOptionsComponent", Modifier.size(398.dp, 600.dp))
+    var options = listOf(
+        SettingsSwitchOptionItem("Ders Hatırlatmaları", "Yaklaşan derslerin bir gün önceden bildirimini al", true),
+        SettingsSwitchOptionItem("Antrenör Güncellemeleri", "Antrenörlerin ders iptali veya değişiklik duyuruları.", false),
+        SettingsSwitchOptionItem("Günlük antrenman hatırlatıcıları", "", true),
+        SettingsSwitchOptionItem("Yeni meydan okumalar", "", false),
+        SettingsSwitchOptionItem("Antrenör Güncellemeleri", "Antrenörlerin ders iptali veya değişiklik duyuruları.", false),
+        SettingsSwitchOptionItem("Günlük antrenman hatırlatıcıları", "", true),
+        SettingsSwitchOptionItem("Yeni meydan okumalar", "", false),
+        SettingsSwitchOptionItem("Antrenör Güncellemeleri", "Antrenörlerin ders iptali veya değişiklik duyuruları.", false),
+        SettingsSwitchOptionItem("Günlük antrenman hatırlatıcıları", "", true),
+        SettingsSwitchOptionItem("Yeni meydan okumalar", "", false),
+        SettingsSwitchOptionItem("Antrenör Güncellemeleri", "Antrenörlerin ders iptali veya değişiklik duyuruları.", false),
+        SettingsSwitchOptionItem("Günlük antrenman hatırlatıcıları", "", true),
+        SettingsSwitchOptionItem("Yeni meydan okumalar", "", false)
+    )
+
+    LazyColumn(
+        modifier = Modifier.padding(start = 33.dp, top = 32.dp, end = 23.dp, bottom = 24.dp).fillMaxSize(),
+        verticalArrangement = Arrangement.spacedBy(16.dp)
+    ) {
+        items(options) {
+            SkyFitSettingsSwitchOptionItemComponent(it, onChangeEnable = { })
+        }
+    }
 }
