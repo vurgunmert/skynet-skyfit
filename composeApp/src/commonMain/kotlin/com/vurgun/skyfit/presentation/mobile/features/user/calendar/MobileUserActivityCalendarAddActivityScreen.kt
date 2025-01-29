@@ -1,15 +1,20 @@
 package com.vurgun.skyfit.presentation.mobile.features.user.calendar
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.material.Scaffold
+import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -17,17 +22,19 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.unit.dp
 import com.vurgun.skyfit.presentation.shared.components.ButtonSize
 import com.vurgun.skyfit.presentation.shared.components.ButtonState
 import com.vurgun.skyfit.presentation.shared.components.ButtonVariant
 import com.vurgun.skyfit.presentation.shared.components.SkyFitButtonComponent
 import com.vurgun.skyfit.presentation.shared.components.SkyFitScreenHeader
+import com.vurgun.skyfit.presentation.shared.components.SkyFitWheelPickerComponent
 import com.vurgun.skyfit.presentation.shared.components.calendar.SkyFitDailyActivityCanvas
 import com.vurgun.skyfit.presentation.shared.components.calendar.SkyFitDailyActivityItem
 import com.vurgun.skyfit.presentation.shared.components.calendar.SkyFitFourDigitClockComponent
-import com.vurgun.skyfit.presentation.shared.features.common.TodoBox
 import com.vurgun.skyfit.presentation.shared.resources.SkyFitColor
+import com.vurgun.skyfit.presentation.shared.resources.SkyFitTypography
 import moe.tlaster.precompose.navigation.Navigator
 import org.jetbrains.compose.resources.painterResource
 import skyfit.composeapp.generated.resources.Res
@@ -42,7 +49,8 @@ private enum class MobileUserActivityCalendarAddStep {
 @Composable
 fun MobileUserActivityCalendarAddActivityScreen(navigator: Navigator) {
 
-    val step = MobileUserActivityCalendarAddStep.ADDING //TODO: logic
+    val step = MobileUserActivityCalendarAddStep.CONFIRM
+    var activityName by remember { mutableStateOf("Yuruyus") }
 
     Scaffold(
         backgroundColor = SkyFitColor.background.default,
@@ -51,12 +59,7 @@ fun MobileUserActivityCalendarAddActivityScreen(navigator: Navigator) {
         },
         bottomBar = {
             when (step) {
-                MobileUserActivityCalendarAddStep.ADDING -> {
-                    MobileUserActivityCalendarAddActivityScreenAddTimeActionComponent(onClick = {
-
-                    })
-                }
-
+                MobileUserActivityCalendarAddStep.ADDING -> Unit
                 MobileUserActivityCalendarAddStep.TIMING -> Unit
                 MobileUserActivityCalendarAddStep.CONFIRM -> {
                     MobileUserActivityCalendarAddActivityScreenConfirmActionComponent(onClick = {
@@ -73,7 +76,14 @@ fun MobileUserActivityCalendarAddActivityScreen(navigator: Navigator) {
 
             when (step) {
                 MobileUserActivityCalendarAddStep.ADDING -> {
-                    MobileUserActivityCalendarAddActivityScreenInputComponent()
+                    MobileUserActivityCalendarAddActivityScreenInputComponent(
+                        activityName = activityName,
+                        editable = true,
+                        onNameChanged = { activityName = it }
+                    )
+                    MobileUserActivityCalendarAddActivityScreenAddTimeActionComponent(onClick = {
+
+                    })
                     MobileUserActivityCalendarHourlyComponent()
                 }
 
@@ -89,7 +99,8 @@ fun MobileUserActivityCalendarAddActivityScreen(navigator: Navigator) {
 
                 MobileUserActivityCalendarAddStep.CONFIRM -> {
                     MobileUserActivityCalendarAddActivityScreenTimeHolderComponent(1, 30)
-                    MobileUserActivityCalendarAddActivityScreenTextHolderComponent()
+                    MobileUserActivityCalendarAddActivityScreenTextHolderComponent(activityName)
+                    MobileUserActivityCalendarHourlyComponent()
 
                 }
             }
@@ -98,8 +109,39 @@ fun MobileUserActivityCalendarAddActivityScreen(navigator: Navigator) {
 }
 
 @Composable
-private fun MobileUserActivityCalendarAddActivityScreenInputComponent() {
-    TodoBox("MobileUserActivityCalendarAddActivityScreenInputComponent", Modifier.size(430.dp, 88.dp))
+private fun MobileUserActivityCalendarAddActivityScreenInputComponent(
+    activityName: String,
+    editable: Boolean = true,
+    onNameChanged: (String) -> Unit = {}
+) {
+
+    Box(Modifier.fillMaxWidth().padding(16.dp)) {
+
+        Column(Modifier.fillMaxWidth()) {
+            Text(
+                text = "Aktivite başlığı",
+                style = SkyFitTypography.bodySmallMedium
+            )
+            Spacer(Modifier.height(8.dp))
+
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(32.dp)
+                    .background(SkyFitColor.background.surfaceSecondary, shape = CircleShape),
+                contentAlignment = Alignment.Center
+            ) {
+                BasicTextField(
+                    modifier = Modifier.padding(horizontal = 8.dp).fillMaxWidth(),
+                    value = activityName,
+                    enabled = editable,
+                    onValueChange = onNameChanged,
+                    textStyle = SkyFitTypography.bodySmall.copy(color = SkyFitColor.text.secondary),
+                    cursorBrush = SolidColor(SkyFitColor.specialty.buttonBgRest),
+                )
+            }
+        }
+    }
 }
 
 @Composable
@@ -141,7 +183,29 @@ private fun MobileUserActivityCalendarHourlyComponent() {
 
 @Composable
 private fun MobileUserActivityCalendarAddActivityScreenTimerComponent() {
-    TodoBox("MobileUserActivityCalendarAddActivityScreenTimerComponent", Modifier.size(430.dp, 204.dp))
+    var selectedHour by remember { mutableStateOf(0) }
+    var selectedMinute by remember { mutableStateOf(1) }
+
+    Box(Modifier.fillMaxWidth().height(204.dp).padding(16.dp), contentAlignment = Alignment.Center) {
+
+        Row(
+            Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.Center,
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            HourPicker(
+                selected = selectedHour,
+                onSelected = { selectedHour = it }
+            )
+            Text("saat")
+            MinutePicker(
+                selected = selectedMinute,
+                onSelected = { selectedMinute = it }
+            )
+            Text("dakika")
+        }
+    }
+
 }
 
 @Composable
@@ -213,8 +277,11 @@ private fun MobileUserActivityCalendarAddActivityScreenTimeHolderComponent(hour:
 }
 
 @Composable
-private fun MobileUserActivityCalendarAddActivityScreenTextHolderComponent() {
-    TodoBox("MobileUserActivityCalendarAddActivityScreenTextHolderComponent", Modifier.size(430.dp, 88.dp))
+private fun MobileUserActivityCalendarAddActivityScreenTextHolderComponent(activityName: String) {
+    MobileUserActivityCalendarAddActivityScreenInputComponent(
+        activityName = activityName,
+        editable = false
+    )
 }
 
 @Composable
@@ -232,6 +299,39 @@ private fun MobileUserActivityCalendarAddActivityScreenConfirmActionComponent(on
 }
 
 @Composable
-fun ExampleScreen() {
+private fun MinutePicker(
+    selected: Int,
+    onSelected: (Int) -> Unit,
+    min: Int = 1,
+    max: Int = 59
+) {
+    val minutes = (min..max).toList()
 
+    SkyFitWheelPickerComponent(
+        items = minutes,
+        selectedItem = selected,
+        onItemSelected = onSelected,
+        itemText = { "$it" },
+        visibleItemCount = 5,
+        modifier = Modifier.width(32.dp)
+    )
+}
+
+@Composable
+private fun HourPicker(
+    selected: Int,
+    onSelected: (Int) -> Unit,
+    min: Int = 0,
+    max: Int = 23
+) {
+    val minutes = (min..max).toList()
+
+    SkyFitWheelPickerComponent(
+        items = minutes,
+        selectedItem = selected,
+        onItemSelected = onSelected,
+        itemText = { "$it" },
+        visibleItemCount = 5,
+        modifier = Modifier.width(32.dp)
+    )
 }

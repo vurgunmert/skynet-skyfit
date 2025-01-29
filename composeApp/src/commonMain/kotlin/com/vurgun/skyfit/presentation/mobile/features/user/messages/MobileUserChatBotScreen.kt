@@ -202,11 +202,6 @@ private fun MobileUserChatBotScreenActionGroupComponent(
 }
 
 @Composable
-private fun MobileUserChatBotScreenShortcutAction(modifier: Modifier) {
-    TodoBox("MobileUserChatBotScreenChatsComponent", modifier)
-}
-
-@Composable
 private fun MobileUserChatBotScreenChatHistoryItemComponent(text: String, onClick: () -> Unit) {
     Row(Modifier
         .fillMaxWidth()
