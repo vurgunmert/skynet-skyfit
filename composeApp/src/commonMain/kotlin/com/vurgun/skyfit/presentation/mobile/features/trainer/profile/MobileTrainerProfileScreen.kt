@@ -71,7 +71,7 @@ private fun MobileTrainerProfileBackgroundImageComponent() {
 }
 
 @Composable
-private fun MobileTrainerProfileInfoCardComponent() {
+private fun MobileTrainerProfileInfoCardComponent() { //todo
     TodoBox("MobileTrainerProfileInfoCardComponent", Modifier.size(398.dp, 230.dp))
 }
 

@@ -29,7 +29,7 @@ import org.jetbrains.compose.resources.painterResource
 import skyfit.composeapp.generated.resources.Res
 import skyfit.composeapp.generated.resources.logo_skyfit
 
-data class AppointmentCardComponentItem(
+data class AppointmentCardItem(
     val iconUrl: String,
     val title: String,
     val date: String,
@@ -45,7 +45,7 @@ data class AppointmentCardComponentItem(
 )
 
 @Composable
-fun AppointmentCardComponent(item: AppointmentCardComponentItem, modifier: Modifier) {
+fun AppointmentCardItemComponent(item: AppointmentCardItem, modifier: Modifier) {
 
     var notifyOnAvailability by remember { mutableStateOf(false) }
 
