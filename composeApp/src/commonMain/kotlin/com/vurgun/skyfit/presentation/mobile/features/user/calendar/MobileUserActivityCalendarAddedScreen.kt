@@ -30,7 +30,7 @@ import skyfit.composeapp.generated.resources.Res
 import skyfit.composeapp.generated.resources.logo_skyfit
 
 @Composable
-fun MobileUserActivityCalendarConfirmedScreen(navigator: Navigator) {
+fun MobileUserActivityCalendarAddedScreen(navigator: Navigator) {
 
     SkyFitScaffold {
         Column(
@@ -38,7 +38,7 @@ fun MobileUserActivityCalendarConfirmedScreen(navigator: Navigator) {
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {
             Spacer(Modifier.height(60.dp))
-            MobileUserActivityCalendarAddConfirmedComponent(
+            MobileUserActivityCalendarAddedComponent(
                 onClickCalendar = {},
                 onClickDashboard = {}
             )
@@ -47,7 +47,7 @@ fun MobileUserActivityCalendarConfirmedScreen(navigator: Navigator) {
 }
 
 @Composable
-private fun MobileUserActivityCalendarAddConfirmedComponent(onClickCalendar: () -> Unit,
+private fun MobileUserActivityCalendarAddedComponent(onClickCalendar: () -> Unit,
                                                             onClickDashboard: () -> Unit
 ) {
     val appointmentCardComponentItem = AppointmentCardComponentItem(

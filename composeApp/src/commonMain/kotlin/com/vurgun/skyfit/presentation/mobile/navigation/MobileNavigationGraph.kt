@@ -50,7 +50,7 @@ import com.vurgun.skyfit.presentation.mobile.features.trainer.settings.MobileTra
 import com.vurgun.skyfit.presentation.mobile.features.user.appointments.MobileUserAppointmentDetailScreen
 import com.vurgun.skyfit.presentation.mobile.features.user.appointments.MobileUserAppointmentsScreen
 import com.vurgun.skyfit.presentation.mobile.features.user.calendar.MobileUserActivityCalendarAddActivityScreen
-import com.vurgun.skyfit.presentation.mobile.features.user.calendar.MobileUserActivityCalendarConfirmedScreen
+import com.vurgun.skyfit.presentation.mobile.features.user.calendar.MobileUserActivityCalendarAddedScreen
 import com.vurgun.skyfit.presentation.mobile.features.user.calendar.MobileUserActivityCalendarPaymentScreen
 import com.vurgun.skyfit.presentation.mobile.features.user.calendar.MobileUserActivityCalendarScreen
 import com.vurgun.skyfit.presentation.mobile.features.user.calendar.MobileUserActivityCalendarSearchScreen
@@ -90,7 +90,7 @@ fun MobileNavigationGraph() {
 
     NavHost(
         navigator = rootNavigator,
-        initialRoute = SkyFitNavigationRoute.UserPhotoDiary.route
+        initialRoute = SkyFitNavigationRoute.UserActivityCalendarSearch.route
     ) {
 
         // Auth
@@ -133,7 +133,7 @@ fun MobileNavigationGraph() {
         scene(SkyFitNavigationRoute.UserActivityCalendarAdd.route) { MobileUserActivityCalendarAddActivityScreen(rootNavigator) }
         scene(SkyFitNavigationRoute.UserActivityCalendarSearch.route) { MobileUserActivityCalendarSearchScreen(rootNavigator) }
         scene(SkyFitNavigationRoute.UserActivityCalendarPayment.route) { MobileUserActivityCalendarPaymentScreen(rootNavigator) }
-        scene(SkyFitNavigationRoute.UserActivityCalendarConfirmed.route) { MobileUserActivityCalendarConfirmedScreen(rootNavigator) }
+        scene(SkyFitNavigationRoute.UserActivityCalendarConfirmed.route) { MobileUserActivityCalendarAddedScreen(rootNavigator) }
         //User - Appointments
         scene(SkyFitNavigationRoute.UserAppointments.route) { MobileUserAppointmentsScreen(rootNavigator) }
         scene(SkyFitNavigationRoute.UserAppointmentDetail.route) { MobileUserAppointmentDetailScreen(rootNavigator) }

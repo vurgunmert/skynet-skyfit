@@ -10,6 +10,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import com.vurgun.skyfit.presentation.shared.components.SkyFitScreenHeader
 import com.vurgun.skyfit.presentation.shared.features.common.TodoBox
 import com.vurgun.skyfit.presentation.shared.resources.SkyFitColor
 import moe.tlaster.precompose.navigation.Navigator
@@ -20,7 +21,7 @@ fun MobileUserActivityCalendarScreen(navigator: Navigator) {
     Scaffold(
         backgroundColor = SkyFitColor.background.default,
         topBar = {
-            MobileUserActivityCalendarScreenToolbarComponent()
+            SkyFitScreenHeader("Takvim", onBackClick = { navigator.popBackStack() })
         }
     ) {
         Column(
@@ -31,12 +32,6 @@ fun MobileUserActivityCalendarScreen(navigator: Navigator) {
             MobileUserActivityHourlyCalendarComponent()
         }
     }
-}
-
-
-@Composable
-private fun MobileUserActivityCalendarScreenToolbarComponent() {
-    TodoBox("MobileUserActivityCalendarScreenToolbarComponent", Modifier.size(430.dp, 40.dp))
 }
 
 @Composable

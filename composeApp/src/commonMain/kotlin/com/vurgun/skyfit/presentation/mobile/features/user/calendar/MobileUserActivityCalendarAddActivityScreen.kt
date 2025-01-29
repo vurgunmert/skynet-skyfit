@@ -3,15 +3,12 @@ package com.vurgun.skyfit.presentation.mobile.features.user.calendar
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
-import androidx.compose.material.Icon
 import androidx.compose.material.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -25,6 +22,7 @@ import com.vurgun.skyfit.presentation.shared.components.ButtonSize
 import com.vurgun.skyfit.presentation.shared.components.ButtonState
 import com.vurgun.skyfit.presentation.shared.components.ButtonVariant
 import com.vurgun.skyfit.presentation.shared.components.SkyFitButtonComponent
+import com.vurgun.skyfit.presentation.shared.components.SkyFitScreenHeader
 import com.vurgun.skyfit.presentation.shared.components.calendar.SkyFitDailyActivityCanvas
 import com.vurgun.skyfit.presentation.shared.components.calendar.SkyFitDailyActivityItem
 import com.vurgun.skyfit.presentation.shared.components.calendar.SkyFitFourDigitClockComponent
@@ -36,30 +34,30 @@ import skyfit.composeapp.generated.resources.Res
 import skyfit.composeapp.generated.resources.logo_skyfit
 
 private enum class MobileUserActivityCalendarAddStep {
-    INTRODUCE,
-    TIME,
+    ADDING,
+    TIMING,
     CONFIRM
 }
 
 @Composable
 fun MobileUserActivityCalendarAddActivityScreen(navigator: Navigator) {
 
-    val title = null ?: "Yeni aktivite" //TODO: logic
-    val step = MobileUserActivityCalendarAddStep.INTRODUCE //TODO: logic
+    val step = MobileUserActivityCalendarAddStep.ADDING //TODO: logic
 
     Scaffold(
         backgroundColor = SkyFitColor.background.default,
         topBar = {
-            MobileUserActivityCalendarAddActivityScreenToolbarComponent()
+            SkyFitScreenHeader("Yeni Aktivite", onBackClick = { navigator.popBackStack() })
         },
         bottomBar = {
-            when(step) {
-                MobileUserActivityCalendarAddStep.INTRODUCE -> {
+            when (step) {
+                MobileUserActivityCalendarAddStep.ADDING -> {
                     MobileUserActivityCalendarAddActivityScreenAddTimeActionComponent(onClick = {
 
                     })
                 }
-                MobileUserActivityCalendarAddStep.TIME -> Unit
+
+                MobileUserActivityCalendarAddStep.TIMING -> Unit
                 MobileUserActivityCalendarAddStep.CONFIRM -> {
                     MobileUserActivityCalendarAddActivityScreenConfirmActionComponent(onClick = {
 
@@ -74,17 +72,19 @@ fun MobileUserActivityCalendarAddActivityScreen(navigator: Navigator) {
         ) {
 
             when (step) {
-                MobileUserActivityCalendarAddStep.INTRODUCE -> {
+                MobileUserActivityCalendarAddStep.ADDING -> {
                     MobileUserActivityCalendarAddActivityScreenInputComponent()
                     MobileUserActivityCalendarHourlyComponent()
                 }
 
-                MobileUserActivityCalendarAddStep.TIME -> {
+                MobileUserActivityCalendarAddStep.TIMING -> {
                     MobileUserActivityCalendarAddActivityScreenTimerComponent()
                     MobileUserActivityCalendarAddActivityScreenSavedTimePeriodsComponent()
                     Spacer(Modifier.weight(1f))
-                    MobileUserActivityCalendarAddActivityScreenContinueActionsComponent()
-                    Spacer(Modifier.height(48.dp))
+                    MobileUserActivityCalendarAddActivityScreenContinueActionsComponent(
+                        onClickContinue = {},
+                        onClickCancel = {}
+                    )
                 }
 
                 MobileUserActivityCalendarAddStep.CONFIRM -> {
@@ -95,12 +95,6 @@ fun MobileUserActivityCalendarAddActivityScreen(navigator: Navigator) {
             }
         }
     }
-}
-
-
-@Composable
-private fun MobileUserActivityCalendarAddActivityScreenToolbarComponent() {
-    TodoBox("MobileUserActivityCalendarAddActivityScreenToolbarComponent", Modifier.size(430.dp, 40.dp))
 }
 
 @Composable
@@ -175,8 +169,31 @@ private fun MobileUserActivityCalendarAddActivityScreenSavedTimePeriodsComponent
 
 
 @Composable
-private fun MobileUserActivityCalendarAddActivityScreenContinueActionsComponent() {
-    TodoBox("MobileUserActivityCalendarAddActivityScreenContinueActionComponent", Modifier.size(430.dp, 144.dp))
+private fun MobileUserActivityCalendarAddActivityScreenContinueActionsComponent(
+    onClickContinue: () -> Unit,
+    onClickCancel: () -> Unit
+) {
+    Column(
+        modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp),
+        horizontalAlignment = Alignment.CenterHorizontally,
+    ) {
+        SkyFitButtonComponent(
+            Modifier.fillMaxWidth(), text = "Devam Et",
+            onClick = onClickContinue,
+            variant = ButtonVariant.Primary,
+            size = ButtonSize.Large,
+            initialState = ButtonState.Rest
+        )
+        Spacer(Modifier.height(14.dp))
+        SkyFitButtonComponent(
+            Modifier.fillMaxWidth(), text = "İptal",
+            onClick = onClickCancel,
+            variant = ButtonVariant.Secondary,
+            size = ButtonSize.Large,
+            initialState = ButtonState.Rest
+        )
+        Spacer(Modifier.height(44.dp))
+    }
 }
 
 @Composable
