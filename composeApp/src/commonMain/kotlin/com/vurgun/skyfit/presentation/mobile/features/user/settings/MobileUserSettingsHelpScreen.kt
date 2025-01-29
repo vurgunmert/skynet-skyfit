@@ -4,7 +4,6 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Scaffold
@@ -15,7 +14,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.vurgun.skyfit.presentation.shared.components.MobileSettingsMenuItemComponent
 import com.vurgun.skyfit.presentation.shared.components.SkyFitScreenHeader
-import com.vurgun.skyfit.presentation.shared.features.common.TodoBox
 import com.vurgun.skyfit.presentation.shared.resources.SkyFitColor
 import com.vurgun.skyfit.presentation.shared.resources.SkyFitTypography
 import moe.tlaster.precompose.navigation.Navigator
@@ -47,9 +45,4 @@ fun MobileUserSettingsHelpScreen(navigator: Navigator) {
             MobileSettingsMenuItemComponent("Canlı Yardım")
         }
     }
-}
-
-@Composable
-private fun MobileUserSettingsHelpScreenOptionsComponent() {
-    TodoBox("MobileUserSettingsHelpScreenOptionsComponent", Modifier.size(382.dp, 288.dp))
 }
