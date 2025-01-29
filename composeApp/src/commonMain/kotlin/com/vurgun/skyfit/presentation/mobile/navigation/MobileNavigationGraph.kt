@@ -51,7 +51,7 @@ import com.vurgun.skyfit.presentation.mobile.features.user.appointments.MobileUs
 import com.vurgun.skyfit.presentation.mobile.features.user.appointments.MobileUserAppointmentsScreen
 import com.vurgun.skyfit.presentation.mobile.features.user.calendar.MobileUserActivityCalendarAddActivityScreen
 import com.vurgun.skyfit.presentation.mobile.features.user.calendar.MobileUserActivityCalendarAddedScreen
-import com.vurgun.skyfit.presentation.mobile.features.user.calendar.MobileUserActivityCalendarPaymentScreen
+import com.vurgun.skyfit.presentation.mobile.features.user.calendar.MobileUserActivityCalendarPaymentRequiredScreen
 import com.vurgun.skyfit.presentation.mobile.features.user.calendar.MobileUserActivityCalendarScreen
 import com.vurgun.skyfit.presentation.mobile.features.user.calendar.MobileUserActivityCalendarSearchScreen
 import com.vurgun.skyfit.presentation.mobile.features.user.exercises.MobileUserExerciseDetailScreen
@@ -67,6 +67,7 @@ import com.vurgun.skyfit.presentation.mobile.features.user.notifications.MobileU
 import com.vurgun.skyfit.presentation.mobile.features.user.nutrition.MobileUserMealDetailAddPhotoScreen
 import com.vurgun.skyfit.presentation.mobile.features.user.nutrition.MobileUserMealDetailAddScreen
 import com.vurgun.skyfit.presentation.mobile.features.user.nutrition.MobileUserMealDetailScreen
+import com.vurgun.skyfit.presentation.mobile.features.user.payment.MobileUserPaymentProcessScreen
 import com.vurgun.skyfit.presentation.mobile.features.user.profile.MobileUserBodyAnalysisScreen
 import com.vurgun.skyfit.presentation.mobile.features.user.profile.MobileUserMeasurementsScreen
 import com.vurgun.skyfit.presentation.mobile.features.user.profile.MobileUserPhotoDiaryScreen
@@ -90,7 +91,7 @@ fun MobileNavigationGraph() {
 
     NavHost(
         navigator = rootNavigator,
-        initialRoute = SkyFitNavigationRoute.UserExerciseInAction.route
+        initialRoute = SkyFitNavigationRoute.UserPaymentProcess.route
     ) {
 
         // Auth
@@ -132,7 +133,12 @@ fun MobileNavigationGraph() {
         scene(SkyFitNavigationRoute.UserActivityCalendar.route) { MobileUserActivityCalendarScreen(rootNavigator) }
         scene(SkyFitNavigationRoute.UserActivityCalendarAdd.route) { MobileUserActivityCalendarAddActivityScreen(rootNavigator) }
         scene(SkyFitNavigationRoute.UserActivityCalendarSearch.route) { MobileUserActivityCalendarSearchScreen(rootNavigator) }
-        scene(SkyFitNavigationRoute.UserActivityCalendarPayment.route) { MobileUserActivityCalendarPaymentScreen(rootNavigator) }
+        scene(SkyFitNavigationRoute.UserPaymentProcess.route) { MobileUserPaymentProcessScreen(rootNavigator) }
+        scene(SkyFitNavigationRoute.UserActivityCalendarPaymentRequired.route) {
+            MobileUserActivityCalendarPaymentRequiredScreen(
+                rootNavigator
+            )
+        }
         scene(SkyFitNavigationRoute.UserActivityCalendarConfirmed.route) { MobileUserActivityCalendarAddedScreen(rootNavigator) }
         //User - Appointments
         scene(SkyFitNavigationRoute.UserAppointments.route) { MobileUserAppointmentsScreen(rootNavigator) }

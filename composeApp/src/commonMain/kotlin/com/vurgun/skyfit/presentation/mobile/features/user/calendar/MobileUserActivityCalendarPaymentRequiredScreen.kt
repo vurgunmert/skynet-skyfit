@@ -23,61 +23,29 @@ import com.vurgun.skyfit.presentation.shared.components.ButtonState
 import com.vurgun.skyfit.presentation.shared.components.ButtonVariant
 import com.vurgun.skyfit.presentation.shared.components.SkyFitButtonComponent
 import com.vurgun.skyfit.presentation.shared.components.SkyFitScaffold
-import com.vurgun.skyfit.presentation.shared.features.common.TodoBox
 import com.vurgun.skyfit.presentation.shared.resources.SkyFitTypography
 import moe.tlaster.precompose.navigation.Navigator
 import org.jetbrains.compose.resources.painterResource
 import skyfit.composeapp.generated.resources.Res
 import skyfit.composeapp.generated.resources.logo_skyfit
 
-private enum class MobileUserActivityCalendarPaymentStep {
-    REQUIRED,
-    METHOD,
-    INPUT,
-    SUMMARY,
-    CONFIRMED
-}
 
 @Composable
-fun MobileUserActivityCalendarPaymentScreen(navigator: Navigator) {
-
-    val step = MobileUserActivityCalendarPaymentStep.REQUIRED //TODO: logic
-
+fun MobileUserActivityCalendarPaymentRequiredScreen(navigator: Navigator) {
     SkyFitScaffold {
         Column(
             modifier = Modifier.fillMaxSize().verticalScroll(rememberScrollState()),
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {
-            when (step) {
-                MobileUserActivityCalendarPaymentStep.REQUIRED -> {
-                    Spacer(Modifier.height(32.dp))
-                    MobileUserActivityCalendarPaymentRequiredComponent(
-                        onClickContinue = {},
-                        onClickCancel = {}
-                    )
-                }
-
-                MobileUserActivityCalendarPaymentStep.METHOD -> {
-
-                    MobileUserActivityCalendarPaymentMethodToolbarComponent()
-                    MobileUserActivityCalendarPaymentMethodComponent()
-                }
-
-                MobileUserActivityCalendarPaymentStep.INPUT -> {
-                    MobileUserActivityCalendarPaymentMethodInputComponent()
-                }
-
-                MobileUserActivityCalendarPaymentStep.SUMMARY -> {
-                    MobileUserActivityCalendarPaymentSummaryComponent()
-                }
-
-                MobileUserActivityCalendarPaymentStep.CONFIRMED -> {
-                    MobileUserActivityCalendarPaymentConfirmedComponent()
-                }
-            }
+            Spacer(Modifier.height(32.dp))
+            MobileUserActivityCalendarPaymentRequiredComponent(
+                onClickContinue = {},
+                onClickCancel = {}
+            )
         }
     }
 }
+
 
 @Composable
 private fun MobileUserActivityCalendarPaymentRequiredComponent(
@@ -137,29 +105,4 @@ private fun MobileUserActivityCalendarPaymentRequiredComponent(
             initialState = ButtonState.Rest
         )
     }
-}
-
-@Composable
-private fun MobileUserActivityCalendarPaymentMethodToolbarComponent() {
-    TodoBox("MobileUserActivityCalendarPaymentMethodToolbarComponent", Modifier.size(430.dp, 44.dp))
-}
-
-@Composable
-private fun MobileUserActivityCalendarPaymentMethodComponent() {
-    TodoBox("MobileUserActivityCalendarPaymentMethodComponent", Modifier.size(398.dp, 312.dp))
-}
-
-@Composable
-private fun MobileUserActivityCalendarPaymentMethodInputComponent() {
-    TodoBox("MobileUserActivityCalendarPaymentMethodInputComponent", Modifier.size(398.dp, 408.dp))
-}
-
-@Composable
-private fun MobileUserActivityCalendarPaymentSummaryComponent() {
-    TodoBox("MobileUserActivityCalendarPaymentSummaryComponent", Modifier.size(398.dp, 500.dp))
-}
-
-@Composable
-private fun MobileUserActivityCalendarPaymentConfirmedComponent() {
-    TodoBox("MobileUserActivityCalendarPaymentConfirmedComponent", Modifier.size(398.dp, 481.dp))
 }

@@ -74,6 +74,7 @@ sealed class SkyFitNavigationRoute(
     data object UserSocialMedia : SkyFitNavigationRoute("user/social/feeds")
     data object UserSocialMediaPostAdd : SkyFitNavigationRoute("user/social/new_post")
     data object UserTrophies : SkyFitNavigationRoute("user/trophies")
+    data object UserPaymentProcess : SkyFitNavigationRoute("user/payment/process")
 
     // - Exercises
     data object UserExerciseDetail :
@@ -87,7 +88,7 @@ sealed class SkyFitNavigationRoute(
     data object UserActivityCalendar : SkyFitNavigationRoute("user_activity_calendar")
     data object UserActivityCalendarAdd : SkyFitNavigationRoute("user_activity_calendar/add")
     data object UserActivityCalendarSearch : SkyFitNavigationRoute("user_activity_calendar/search")
-    data object UserActivityCalendarPayment : SkyFitNavigationRoute("user_activity_calendar/payment")
+    data object UserActivityCalendarPaymentRequired : SkyFitNavigationRoute("user_activity_calendar/payment/required")
     data object UserActivityCalendarConfirmed : SkyFitNavigationRoute("user_activity_calendar/confirmed")
 
     // - Appointments

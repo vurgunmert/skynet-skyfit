@@ -35,6 +35,7 @@ import androidx.compose.ui.unit.dp
 import com.vurgun.skyfit.data.network.models.SkyFitNotification
 import com.vurgun.skyfit.presentation.shared.components.NotificationItemSwipeDismissBackground
 import com.vurgun.skyfit.presentation.shared.components.SkyFitNotificationItem
+import com.vurgun.skyfit.presentation.shared.components.SkyFitScreenHeader
 import com.vurgun.skyfit.presentation.shared.features.common.TodoBox
 import com.vurgun.skyfit.presentation.shared.resources.SkyFitColor
 import com.vurgun.skyfit.presentation.shared.resources.SkyFitTypography
@@ -70,7 +71,7 @@ fun MobileUserNotificationsScreen(navigator: Navigator) {
         backgroundColor = SkyFitColor.background.default,
         topBar = {
             Column {
-                MobileUserNotificationsScreenToolbarComponent()
+                SkyFitScreenHeader("Bildirimler", onBackClick = { navigator.popBackStack() })
                 MobileUserNotificationsScreenTabsComponent()
             }
         },
@@ -92,11 +93,6 @@ fun MobileUserNotificationsScreen(navigator: Navigator) {
             }
         }
     }
-}
-
-@Composable
-private fun MobileUserNotificationsScreenToolbarComponent() {
-    TodoBox("MobileUserNotificationsScreenToolbarComponent", Modifier.size(430.dp, 40.dp))
 }
 
 @Composable

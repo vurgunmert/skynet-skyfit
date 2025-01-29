@@ -4,6 +4,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
 import androidx.compose.material.Text
@@ -32,12 +33,12 @@ fun SkyFitScreenHeader(
             onClick = onBackClick,
             modifier = Modifier
                 .align(Alignment.CenterStart)
-                .padding(start = 16.dp)
         ) {
             Icon(
                 painter = painterResource(Res.drawable.logo_skyfit),
                 contentDescription = "Back",
-                tint = SkyFitColor.text.default
+                tint = SkyFitColor.text.default,
+                modifier = Modifier.size(16.dp)
             )
         }
 

@@ -10,6 +10,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import com.vurgun.skyfit.presentation.shared.components.SkyFitScreenHeader
 import com.vurgun.skyfit.presentation.shared.features.common.TodoBox
 import com.vurgun.skyfit.presentation.shared.resources.SkyFitColor
 import moe.tlaster.precompose.navigation.Navigator
@@ -21,7 +22,7 @@ fun MobileUserAppointmentsScreen(navigator: Navigator) {
         backgroundColor = SkyFitColor.background.default,
         topBar = {
             Column {
-                MobileUserAppointmentsScreenToolbarComponent()
+                SkyFitScreenHeader("Randevularim", onBackClick = { navigator.popBackStack() })
                 MobileUserAppointmentsScreenTabsComponent()
             }
         }
@@ -34,11 +35,6 @@ fun MobileUserAppointmentsScreen(navigator: Navigator) {
             MobileUserAppointmentsScreenCancelComponent()
         }
     }
-}
-
-@Composable
-private fun MobileUserAppointmentsScreenToolbarComponent() {
-    TodoBox("MobileUserAppointmentsScreenToolbarComponent", Modifier.size(430.dp, 40.dp))
 }
 
 @Composable
