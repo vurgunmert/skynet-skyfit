@@ -80,6 +80,7 @@ kotlin {
             implementation(libs.gitlive.firebase.auth)
             // Kotlinx Serialization
             implementation(libs.kotlinx.serialization)
+            implementation(libs.kotlinx.datetime)
             // PreCompose for multiplatform navigation
             api(libs.precompose)
 
