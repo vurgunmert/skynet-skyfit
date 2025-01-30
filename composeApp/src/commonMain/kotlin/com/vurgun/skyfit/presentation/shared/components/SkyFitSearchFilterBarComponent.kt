@@ -28,14 +28,18 @@ import skyfit.composeapp.generated.resources.Res
 import skyfit.composeapp.generated.resources.logo_skyfit
 
 @Composable
-fun SkyFitSearchTextInputComponent(hint: String = "Ara") {
-    var searchQuery by remember { mutableStateOf("") }
-
+fun SkyFitSearchTextInputComponent(
+    hint: String = "Ara",
+    value: String = "",
+    onValueChange: (String) -> Unit = {},
+    modifier: Modifier = Modifier
+) {
     SkyFitTextInputComponent(
         hint = hint,
-        value = searchQuery,
-        onValueChange = { searchQuery = it },
-        leftIconPainter = painterResource(Res.drawable.logo_skyfit)
+        value = value,
+        onValueChange = { onValueChange.invoke(it) },
+        leftIconPainter = painterResource(Res.drawable.logo_skyfit),
+        modifier = modifier
     )
 }
 

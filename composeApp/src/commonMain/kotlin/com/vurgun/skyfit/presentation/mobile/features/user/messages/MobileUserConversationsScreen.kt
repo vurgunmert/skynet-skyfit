@@ -1,24 +1,46 @@
 package com.vurgun.skyfit.presentation.mobile.features.user.messages
 
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.verticalScroll
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Scaffold
+import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.dp
 import com.vurgun.skyfit.presentation.shared.components.SkyFitCircleAvatarRowComponent
+import com.vurgun.skyfit.presentation.shared.components.SkyFitNumberBadge
+import com.vurgun.skyfit.presentation.shared.components.SkyFitSearchTextInputComponent
 import com.vurgun.skyfit.presentation.shared.components.UserCircleAvatarItem
-import com.vurgun.skyfit.presentation.shared.features.common.TodoBox
 import com.vurgun.skyfit.presentation.shared.resources.SkyFitColor
+import com.vurgun.skyfit.presentation.shared.resources.SkyFitTypography
 import moe.tlaster.precompose.navigation.Navigator
+import org.jetbrains.compose.resources.painterResource
+import skyfit.composeapp.generated.resources.Res
+import skyfit.composeapp.generated.resources.logo_skyfit
 
 @Composable
 fun MobileUserConversationsScreen(navigator: Navigator) {
@@ -30,12 +52,11 @@ fun MobileUserConversationsScreen(navigator: Navigator) {
         topBar = {
             Column {
                 MobileUserConversationsScreenToolbarComponent()
-                MobileUserConversationsScreenActiveUsersComponent()
             }
         }
     ) {
         Column(
-            modifier = Modifier.fillMaxSize().verticalScroll(rememberScrollState()),
+            modifier = Modifier.fillMaxSize(),
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {
             MobileUserConversationsSearchComponent()
@@ -71,21 +92,118 @@ private fun MobileUserConversationsScreenToolbarComponent() {
 }
 
 @Composable
-private fun MobileUserConversationsScreenActiveUsersComponent() {
-    TodoBox("MobileUserConversationsScreenActiveUsersComponent", Modifier.size(430.dp, 116.dp))
-}
-
-@Composable
 private fun MobileUserConversationsSearchComponent() {
-    TodoBox("MobileUserConversationsSearchComponent", Modifier.size(430.dp, 88.dp))
+    var searchQuery by remember { mutableStateOf("") }
+
+    Column(Modifier.fillMaxWidth().padding(vertical = 8.dp, horizontal = 16.dp)) {
+        Text(
+            text = "Chat",
+            style = SkyFitTypography.heading4
+        )
+        Spacer(Modifier.height(8.dp))
+
+        SkyFitSearchTextInputComponent(
+            "Search...",
+            value = searchQuery,
+            onValueChange = { searchQuery = it },
+            modifier = Modifier.padding(horizontal = 16.dp)
+        )
+    }
 }
 
 @Composable
 private fun MobileUserConversationsEmptyComponent() {
-    TodoBox("MobileUserConversationsEmptyComponent", Modifier.size(398.dp, 128.dp))
+    Box(modifier = Modifier.padding(horizontal = 16.dp, vertical = 48.dp), contentAlignment = Alignment.Center) {
+        Text(
+            "Görünüşe göre henüz bir mesajınız yok. Başlamak için bir arkadaşınıza mesaj gönderin",
+            style = SkyFitTypography.bodySmall.copy(color = SkyFitColor.text.disabled)
+        )
+    }
 }
 
 @Composable
 private fun MobileUserConversationsComponent() {
-    TodoBox("MobileUserConversationsComponent", Modifier.size(430.dp, 420.dp))
+    var converstations = listOf(
+        UserConversationItem(),
+        UserConversationItem(),
+        UserConversationItem(),
+        UserConversationItem(),
+        UserConversationItem(),
+        UserConversationItem(),
+    )
+
+    LazyColumn(
+        modifier = Modifier.fillMaxSize()
+            .padding(horizontal = 16.dp, vertical = 8.dp),
+        verticalArrangement = Arrangement.spacedBy(8.dp)
+    ) {
+        items(converstations) {
+            MobileUserConversationItemComponent(it, onClick = {})
+        }
+    }
+}
+
+data class UserConversationItem(
+    val avatarUrl: String = "",
+    val title: String = "Julia Heosten",
+    val message: String = "It was amazing! Really helped me stretch out and relax. Have you tried yoga before?",
+    val time: String = "13:55",
+    val unreadCount: Int = 0
+)
+
+@Composable
+private fun MobileUserConversationItemComponent(
+    conversation: UserConversationItem,
+    onClick: () -> Unit
+) {
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .clickable(onClick = onClick)
+            .padding(16.dp),
+        horizontalArrangement = Arrangement.SpaceBetween
+    ) {
+
+        Image(
+            painter = painterResource(Res.drawable.logo_skyfit), // TODO: Avatar url or res
+            contentDescription = "Avatar",
+            modifier = Modifier
+                .size(36.dp)
+                .clip(CircleShape)
+                .background(Color.Gray),
+            contentScale = ContentScale.Crop
+        )
+
+        Spacer(Modifier.width(12.dp))
+
+        Column(
+            modifier = Modifier.weight(1f),
+            verticalArrangement = Arrangement.Center
+        ) {
+            Text(
+                text = conversation.title,
+                style = SkyFitTypography.bodyMediumMedium
+            )
+            Spacer(Modifier.height(8.dp))
+            Text(
+                text = conversation.message,
+                style = SkyFitTypography.bodySmall,
+                maxLines = 2
+            )
+        }
+
+        Spacer(Modifier.width(24.dp))
+
+        Column(verticalArrangement = Arrangement.Center) {
+            Text(
+                text = conversation.time,
+                style = MaterialTheme.typography.caption,
+                modifier = Modifier.padding(start = 16.dp)
+            )
+            if (conversation.unreadCount > 0) {
+                Spacer(Modifier.height(8.dp))
+                SkyFitNumberBadge(value = conversation.unreadCount)
+            }
+        }
+    }
 }

@@ -90,7 +90,7 @@ private fun TabItem(
             val badgeCount = extractBadgeCount(title)
             if (badgeCount > 0) {
                 Spacer(modifier = Modifier.width(4.dp))
-                Badge(count = badgeCount)
+                SkyFitNumberBadge(value = badgeCount)
             }
         }
         // Selected Indicator
@@ -107,7 +107,7 @@ private fun TabItem(
 }
 
 @Composable
-private fun Badge(count: Int) {
+fun SkyFitNumberBadge(value: Int) {
     Box(
         modifier = Modifier
             .size(20.dp)
@@ -116,7 +116,7 @@ private fun Badge(count: Int) {
         contentAlignment = Alignment.Center
     ) {
         Text(
-            text = count.toString(),
+            text = value.toString(),
             style = SkyFitTypography.bodySmall
         )
     }
