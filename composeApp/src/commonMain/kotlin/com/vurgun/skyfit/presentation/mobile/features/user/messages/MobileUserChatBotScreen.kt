@@ -5,6 +5,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -18,21 +19,25 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.Button
+import androidx.compose.material.ButtonDefaults
 import androidx.compose.material.Card
 import androidx.compose.material.Icon
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.dp
 import com.vurgun.skyfit.presentation.shared.components.SkyFitScaffold
 import com.vurgun.skyfit.presentation.shared.components.SkyFitScreenHeader
-import com.vurgun.skyfit.presentation.shared.features.common.TodoBox
 import com.vurgun.skyfit.presentation.shared.navigation.SkyFitNavigationRoute
 import com.vurgun.skyfit.presentation.shared.navigation.jumpAndStay
 import com.vurgun.skyfit.presentation.shared.resources.SkyFitColor
 import com.vurgun.skyfit.presentation.shared.resources.SkyFitTypography
+import com.vurgun.skyfit.presentation.shared.viewmodel.ChatBotOnboardingViewModel
 import com.vurgun.skyfit.presentation.shared.viewmodel.ChatbotViewModel
 import moe.tlaster.precompose.navigation.Navigator
 import org.jetbrains.compose.resources.DrawableResource
@@ -43,16 +48,12 @@ import skyfit.composeapp.generated.resources.background_chatbot
 import skyfit.composeapp.generated.resources.compose_multiplatform
 import skyfit.composeapp.generated.resources.logo_skyfit
 
-private enum class MobileUserChatBotScreenStep {
-    INTRO,
-    SHORTCUT
-}
-
 @Composable
 fun MobileUserChatBotScreen(navigator: Navigator) {
 
     val viewModel: ChatbotViewModel = koinInject()
-    val step = MobileUserChatBotScreenStep.SHORTCUT
+    val showIntro: Boolean = false
+
 
     SkyFitScaffold(
         topBar = {
@@ -63,43 +64,32 @@ fun MobileUserChatBotScreen(navigator: Navigator) {
 
             MobileUserChatBotScreenBackgroundComponent()
 
-            when (step) {
-                MobileUserChatBotScreenStep.INTRO -> {
-                    Column(
-                        modifier = Modifier.fillMaxSize(),
-                        horizontalAlignment = Alignment.CenterHorizontally,
-                    ) {
-                        MobileUserChatBotScreenLogoComponent()
+            Column(
+                modifier = Modifier.fillMaxSize(),
+                horizontalAlignment = Alignment.CenterHorizontally,
+                verticalArrangement = Arrangement.Bottom
+            ) {
+                MobileUserChatBotScreenLogoComponent(modifier = Modifier.fillMaxWidth(0.5f))
 
-                        Spacer(Modifier.weight(1f))
-
-                        MobileUserChatBotScreenIntroComponent()
-                    }
-                }
-
-                MobileUserChatBotScreenStep.SHORTCUT -> {
-                    Column(
-                        modifier = Modifier.fillMaxSize(),
-                        horizontalAlignment = Alignment.CenterHorizontally,
-                    ) {
-                        MobileUserChatBotScreenLogoComponent()
-
-                        MobileUserChatBotScreenActionGroupComponent(
-                            onClickShortcut = {
-                                navigator.jumpAndStay(SkyFitNavigationRoute.UserBodyAnalysis)
-                            },
-                            onClickChatHistory = {
-                                navigator.jumpAndStay(SkyFitNavigationRoute.UserToBotChat)
-                            },
-                            onClickChat = {
-                                navigator.jumpAndStay(SkyFitNavigationRoute.UserToBotChat)
-                            }
-                        )
-                    }
-
+                if (showIntro) {
+                    MobileUserChatBotScreenIntroComponent(
+                        title = "Takip ve Destek",
+                        currentPage = 2
+                    )
+                } else {
+                    MobileUserChatBotScreenActionGroupComponent(
+                        onClickShortcut = {
+                            navigator.jumpAndStay(SkyFitNavigationRoute.UserBodyAnalysis)
+                        },
+                        onClickChatHistory = {
+                            navigator.jumpAndStay(SkyFitNavigationRoute.UserToBotChat)
+                        },
+                        onClickChat = {
+                            navigator.jumpAndStay(SkyFitNavigationRoute.UserToBotChat)
+                        }
+                    )
                 }
             }
-
         }
     }
 }
@@ -115,18 +105,83 @@ private fun MobileUserChatBotScreenBackgroundComponent() {
 }
 
 @Composable
-private fun MobileUserChatBotScreenLogoComponent() {
-    Icon(
-        painter = painterResource(Res.drawable.logo_skyfit),
-        contentDescription = null,
-        modifier = Modifier.size(86.dp, 94.dp),
-        tint = SkyFitColor.icon.default
-    )
+private fun MobileUserChatBotScreenLogoComponent(modifier: Modifier = Modifier) {
+    BoxWithConstraints(
+        modifier = modifier.fillMaxWidth()
+    ) {
+        val iconSize = maxWidth * 0.4f // Adjust this percentage based on your preference
+
+        Icon(
+            painter = painterResource(Res.drawable.logo_skyfit),
+            contentDescription = null,
+            modifier = Modifier.size(iconSize), // Dynamic size
+            tint = SkyFitColor.icon.default
+        )
+    }
 }
 
 @Composable
-private fun MobileUserChatBotScreenIntroComponent() {
-    TodoBox("MobileUserChatBotScreenIntroComponent", Modifier.size(430.dp, 345.dp))
+private fun MobileUserChatBotScreenIntroComponent(title: String, currentPage: Int) {
+    val viewModel = ChatBotOnboardingViewModel(
+        onboardCompleted = {
+
+        }
+    )
+    val currentPage by viewModel.currentPage
+    val pageData = viewModel.currentPageData
+
+    Column(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(36.dp)
+    ) {
+
+        Text(
+            text = pageData.title,
+            color = Color.White,
+            style = SkyFitTypography.heading4
+        )
+        Text(
+            text = pageData.message,
+            color = Color.White,
+            style = SkyFitTypography.bodyLargeMedium,
+            modifier = Modifier.padding(top = 16.dp)
+        )
+
+        Spacer(Modifier.height(116.dp))
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.SpaceBetween,
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Row(
+                modifier = Modifier,
+                horizontalArrangement = Arrangement.spacedBy(8.dp)
+            ) {
+                (0 until viewModel.pages.size).forEach { index ->
+                    Box(
+                        modifier = Modifier
+                            .width(if (currentPage == index) 40.dp else 8.dp)
+                            .height(8.dp)
+                            .background(
+                                color = if (index == currentPage) Color.White else Color.Gray,
+                                shape = RoundedCornerShape(4.dp)
+                            )
+                    )
+                }
+            }
+
+            Button(
+                onClick = {
+                    viewModel.nextPage()
+                },
+                shape = RoundedCornerShape(8.dp),
+                colors = ButtonDefaults.buttonColors(backgroundColor = Color(0xFF42A5F5))
+            ) {
+                Text(text = pageData.buttonLabel, color = Color.White)
+            }
+        }
+    }
 }
 
 @Composable
