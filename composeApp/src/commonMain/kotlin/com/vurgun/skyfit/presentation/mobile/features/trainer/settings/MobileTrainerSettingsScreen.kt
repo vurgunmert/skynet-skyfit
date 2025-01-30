@@ -19,9 +19,6 @@ import com.vurgun.skyfit.presentation.shared.components.MobileSettingsMenuItemDi
 import com.vurgun.skyfit.presentation.shared.components.SkyFitButtonComponent
 import com.vurgun.skyfit.presentation.shared.components.SkyFitScaffold
 import com.vurgun.skyfit.presentation.shared.components.SkyFitScreenHeader
-import com.vurgun.skyfit.presentation.shared.features.common.TodoBox
-import com.vurgun.skyfit.presentation.shared.navigation.SkyFitNavigationRoute
-import com.vurgun.skyfit.presentation.shared.navigation.jumpAndTakeover
 import moe.tlaster.precompose.navigation.Navigator
 
 @Composable

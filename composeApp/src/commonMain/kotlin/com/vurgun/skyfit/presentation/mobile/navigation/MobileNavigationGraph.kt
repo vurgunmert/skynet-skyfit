@@ -90,7 +90,7 @@ fun MobileNavigationGraph() {
 
     NavHost(
         navigator = rootNavigator,
-        initialRoute = SkyFitNavigationRoute.UserActivityCalendarSearch.route
+        initialRoute = SkyFitNavigationRoute.UserActivityCalendar.route
     ) {
 
         // Auth

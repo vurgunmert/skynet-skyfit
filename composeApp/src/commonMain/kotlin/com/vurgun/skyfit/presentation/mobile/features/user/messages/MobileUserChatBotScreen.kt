@@ -24,12 +24,8 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.dp
-import coil3.compose.AsyncImage
-import coil3.compose.rememberAsyncImagePainter
 import com.vurgun.skyfit.presentation.shared.components.SkyFitScaffold
 import com.vurgun.skyfit.presentation.shared.components.SkyFitScreenHeader
 import com.vurgun.skyfit.presentation.shared.features.common.TodoBox
@@ -145,9 +141,11 @@ private fun MobileUserChatBotScreenActionGroupComponent(
         "Bana üst vücut kası yapmak için bir antrenman programı hazırla."
     )
 
-    Column(Modifier.fillMaxWidth()
-        .background(SkyFitColor.background.default.copy(0.72f), RoundedCornerShape(topStart = 24.dp, topEnd = 24.dp))
-        .padding(24.dp)) {
+    Column(
+        Modifier.fillMaxWidth()
+            .background(SkyFitColor.background.default.copy(0.72f), RoundedCornerShape(topStart = 24.dp, topEnd = 24.dp))
+            .padding(24.dp)
+    ) {
         Text(
             text = "Kısayollar",
             style = SkyFitTypography.heading4
@@ -203,11 +201,13 @@ private fun MobileUserChatBotScreenActionGroupComponent(
 
 @Composable
 private fun MobileUserChatBotScreenChatHistoryItemComponent(text: String, onClick: () -> Unit) {
-    Row(Modifier
-        .fillMaxWidth()
-        .background(SkyFitColor.background.fillTransparent, RoundedCornerShape(30.dp))
-        .clickable(onClick = onClick)
-        .padding(16.dp)) {
+    Row(
+        Modifier
+            .fillMaxWidth()
+            .background(SkyFitColor.background.fillTransparent, RoundedCornerShape(30.dp))
+            .clickable(onClick = onClick)
+            .padding(16.dp)
+    ) {
         Icon(
             painter = painterResource(Res.drawable.logo_skyfit),
             contentDescription = null,
