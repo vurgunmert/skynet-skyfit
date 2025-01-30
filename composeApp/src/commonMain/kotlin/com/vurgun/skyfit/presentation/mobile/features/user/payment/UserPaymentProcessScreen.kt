@@ -25,9 +25,14 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import com.vurgun.skyfit.presentation.mobile.features.user.calendar.MobileUserActivityCalendarAddedScreen
+import com.vurgun.skyfit.presentation.shared.components.ButtonSize
+import com.vurgun.skyfit.presentation.shared.components.ButtonState
+import com.vurgun.skyfit.presentation.shared.components.ButtonVariant
+import com.vurgun.skyfit.presentation.shared.components.SkyFitButtonComponent
 import com.vurgun.skyfit.presentation.shared.components.SkyFitScaffold
 import com.vurgun.skyfit.presentation.shared.components.SkyFitScreenHeader
-import com.vurgun.skyfit.presentation.shared.features.common.TodoBox
+import com.vurgun.skyfit.presentation.shared.components.SkyFitTextInputComponent
 import com.vurgun.skyfit.presentation.shared.resources.SkyFitColor
 import com.vurgun.skyfit.presentation.shared.resources.SkyFitTypography
 import moe.tlaster.precompose.navigation.Navigator
@@ -45,7 +50,7 @@ private enum class MobileUserPaymentProcessStep {
 @Composable
 fun MobileUserPaymentProcessScreen(navigator: Navigator) {
 
-    var paymentStep by remember { mutableStateOf(MobileUserPaymentProcessStep.METHOD) }
+    var paymentStep by remember { mutableStateOf(MobileUserPaymentProcessStep.INPUT) }
 
     SkyFitScaffold {
         Column(
@@ -65,16 +70,28 @@ fun MobileUserPaymentProcessScreen(navigator: Navigator) {
                     SkyFitScreenHeader("Odeme Yap", onBackClick = { paymentStep = MobileUserPaymentProcessStep.METHOD })
                     MobileUserPaymentStepProgressBar(paymentStep)
                     MobileUserActivityCalendarPaymentMethodInputComponent()
+                    Spacer(Modifier.weight(1f))
+                    MobilePaymentActionGroupComponent(
+                        primaryText = "Devam Et",
+                        onClickPrimary = {},
+                        onClickCancel = {}
+                    )
                 }
 
                 MobileUserPaymentProcessStep.SUMMARY -> {
                     SkyFitScreenHeader("Odeme Yap", onBackClick = { paymentStep = MobileUserPaymentProcessStep.INPUT })
                     MobileUserPaymentStepProgressBar(paymentStep)
                     MobileUserActivityCalendarPaymentSummaryComponent()
+                    Spacer(Modifier.weight(1f))
+                    MobilePaymentActionGroupComponent(
+                        primaryText = "Onaylat",
+                        onClickPrimary = {},
+                        onClickCancel = {}
+                    )
                 }
 
                 MobileUserPaymentProcessStep.CONFIRMED -> {
-                    MobileUserActivityCalendarPaymentConfirmedComponent()
+                    MobileUserActivityCalendarAddedScreen(navigator)
                 }
             }
         }
@@ -151,17 +168,99 @@ private fun MobileUserActivityCalendarPaymentMethodComponent(onClickMethod: () -
 
 @Composable
 private fun MobileUserActivityCalendarPaymentMethodInputComponent() {
-    TodoBox("MobileUserActivityCalendarPaymentMethodInputComponent", Modifier.size(398.dp, 408.dp))
+    var cardHolder by remember { mutableStateOf("") }
+    var cardNo by remember { mutableStateOf("") }
+    var expiryDate by remember { mutableStateOf("") }
+    var ccv by remember { mutableStateOf("") }
+
+    Column(
+        Modifier.fillMaxWidth().padding(16.dp),
+        horizontalAlignment = Alignment.Start
+    ) {
+        Text(
+            "Kart Bilgileri",
+            style = SkyFitTypography.bodyLargeSemibold
+        )
+
+        Spacer(Modifier.height(24.dp))
+        Text(
+            "Kart Üzerindeki İsim",
+            style = SkyFitTypography.bodyMediumSemibold
+        )
+        Spacer(Modifier.height(8.dp))
+        SkyFitTextInputComponent(
+            hint = "İsim ekle",
+            value = cardHolder,
+            onValueChange = { cardHolder = it }
+        )
+
+        Spacer(Modifier.height(24.dp))
+        Text(
+            "Kart Numarası",
+            style = SkyFitTypography.bodyMediumSemibold
+        )
+        Spacer(Modifier.height(8.dp))
+        SkyFitTextInputComponent(
+            hint = "Kart Numarası",
+            value = cardNo,
+            onValueChange = { cardNo = it }
+        )
+
+        Spacer(Modifier.height(24.dp))
+        Text(
+            "Son Kullanma Tarihi",
+            style = SkyFitTypography.bodyMediumSemibold
+        )
+        Spacer(Modifier.height(8.dp))
+        SkyFitTextInputComponent(
+            hint = "AA/YY",
+            value = expiryDate,
+            onValueChange = { expiryDate = it }
+        )
+
+        Spacer(Modifier.height(24.dp))
+        Text(
+            "CCV",
+            style = SkyFitTypography.bodyMediumSemibold
+        )
+        Spacer(Modifier.height(8.dp))
+        SkyFitTextInputComponent(
+            hint = "CCV ekle",
+            value = cardHolder,
+            onValueChange = { cardHolder = it }
+        )
+    }
 }
 
 @Composable
 private fun MobileUserActivityCalendarPaymentSummaryComponent() {
-    TodoBox("MobileUserActivityCalendarPaymentSummaryComponent", Modifier.size(398.dp, 500.dp))
-}
-
-@Composable
-private fun MobileUserActivityCalendarPaymentConfirmedComponent() {
-    TodoBox("MobileUserActivityCalendarPaymentConfirmedComponent", Modifier.size(398.dp, 481.dp))
+    Column(
+        Modifier.fillMaxWidth().padding(16.dp),
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+        Text(
+            "Ozet",
+            style = SkyFitTypography.bodyLargeSemibold
+        )
+        Spacer(Modifier.height(24.dp))
+        MobileClassSummaryItemComponent(
+            time = "",
+            trainer = "",
+            name = ""
+        )
+        Spacer(Modifier.height(24.dp))
+        MobilePaymentMethodSummaryItemComponent(
+            time = "",
+            detail = "",
+            expiry = "",
+        )
+        Spacer(Modifier.height(24.dp))
+        MobilePaymentSummaryItemComponent(
+            cost = "",
+            serviceCost = "",
+            totalCost = "",
+        )
+    }
 }
 
 @Composable
@@ -188,5 +287,205 @@ private fun MobileUserPaymentStepProgressBar(
                 .height(2.dp)
                 .background(SkyFitColor.specialty.buttonBgRest)
         )
+    }
+}
+
+
+@Composable
+private fun MobileClassSummaryItemComponent(
+    time: String,
+    trainer: String,
+    name: String
+) {
+    Box(
+        Modifier.fillMaxWidth()
+            .background(SkyFitColor.background.fillTransparentSecondary, RoundedCornerShape(16.dp))
+            .padding(16.dp)
+    ) {
+        Column {
+            Text(
+                text = "Ders Bilgileri",
+                style = SkyFitTypography.bodyMediumSemibold
+            )
+            Spacer(Modifier.height(16.dp))
+            Row {
+                Text(
+                    text = "Saat",
+                    style = SkyFitTypography.bodyMediumMedium,
+                    color = SkyFitColor.text.secondary
+                )
+                Spacer(Modifier.weight(1f))
+                Text(
+                    text = "08:00 - 09:00",
+                    style = SkyFitTypography.bodyMediumSemibold
+                )
+            }
+            Spacer(Modifier.height(16.dp))
+            Row {
+                Text(
+                    text = "Egitmen",
+                    style = SkyFitTypography.bodyMediumMedium,
+                    color = SkyFitColor.text.secondary
+                )
+                Spacer(Modifier.weight(1f))
+                Text(
+                    text = "Micheal Blake",
+                    style = SkyFitTypography.bodyMediumSemibold
+                )
+            }
+            Spacer(Modifier.height(16.dp))
+            Row {
+                Text(
+                    text = "Ders",
+                    style = SkyFitTypography.bodyMediumMedium,
+                    color = SkyFitColor.text.secondary
+                )
+                Spacer(Modifier.weight(1f))
+                Text(
+                    text = "Pilates",
+                    style = SkyFitTypography.bodyMediumSemibold
+                )
+            }
+        }
+    }
+}
+
+@Composable
+private fun MobilePaymentMethodSummaryItemComponent(
+    time: String,
+    detail: String,
+    expiry: String
+) {
+    Box(
+        Modifier.fillMaxWidth()
+            .background(SkyFitColor.background.fillTransparentSecondary, RoundedCornerShape(16.dp))
+            .padding(16.dp)
+    ) {
+        Column {
+            Text(
+                text = "Kart Bilgileri",
+                style = SkyFitTypography.bodyMediumSemibold
+            )
+            Spacer(Modifier.height(16.dp))
+            Row {
+                Text(
+                    text = "Kart Üzerindeki İsim",
+                    style = SkyFitTypography.bodyMediumMedium,
+                    color = SkyFitColor.text.secondary
+                )
+                Spacer(Modifier.weight(1f))
+                Text(
+                    text = "John Doe",
+                    style = SkyFitTypography.bodyMediumSemibold
+                )
+            }
+            Spacer(Modifier.height(16.dp))
+            Row {
+                Text(
+                    text = "Kart Numarası",
+                    style = SkyFitTypography.bodyMediumMedium,
+                    color = SkyFitColor.text.secondary
+                )
+                Spacer(Modifier.weight(1f))
+                Text(
+                    text = "1234 5678 9012 3456",
+                    style = SkyFitTypography.bodyMediumSemibold
+                )
+            }
+            Spacer(Modifier.height(16.dp))
+            Row {
+                Text(
+                    text = "Son Kulanma Tarihi",
+                    style = SkyFitTypography.bodyMediumMedium,
+                    color = SkyFitColor.text.secondary
+                )
+                Spacer(Modifier.weight(1f))
+                Text(
+                    text = "1112",
+                    style = SkyFitTypography.bodyMediumSemibold
+                )
+            }
+        }
+    }
+}
+
+
+@Composable
+private fun MobilePaymentSummaryItemComponent(
+    cost: String,
+    serviceCost: String,
+    totalCost: String
+) {
+    Box(
+        Modifier.fillMaxWidth()
+            .background(SkyFitColor.background.fillTransparentSecondary, RoundedCornerShape(16.dp))
+            .padding(8.dp)
+    ) {
+        Column {
+            Row {
+                Text(
+                    text = "Kurs Ücreti",
+                    style = SkyFitTypography.bodyMediumMedium,
+                    color = SkyFitColor.text.secondary
+                )
+                Spacer(Modifier.weight(1f))
+                Text(
+                    text = "₺300.00",
+                    style = SkyFitTypography.bodyMediumSemibold
+                )
+            }
+            Spacer(Modifier.height(8.dp))
+            Row {
+                Text(
+                    text = "Hizmet Bedeli",
+                    style = SkyFitTypography.bodyMediumMedium,
+                    color = SkyFitColor.text.secondary
+                )
+                Spacer(Modifier.weight(1f))
+                Text(
+                    text = "₺6.00",
+                    style = SkyFitTypography.bodyMediumSemibold
+                )
+            }
+            Spacer(Modifier.height(8.dp))
+            Row {
+                Text(
+                    text = "Toplam",
+                    style = SkyFitTypography.bodyMediumMedium,
+                    color = SkyFitColor.text.secondary
+                )
+                Spacer(Modifier.weight(1f))
+                Text(
+                    text = "₺306.00",
+                    style = SkyFitTypography.bodyMediumSemibold
+                )
+            }
+        }
+    }
+}
+
+@Composable
+private fun MobilePaymentActionGroupComponent(
+    primaryText: String,
+    onClickPrimary: () -> Unit,
+    onClickCancel: () -> Unit
+) {
+    Column(Modifier.fillMaxWidth().padding(16.dp)) {
+        SkyFitButtonComponent(
+            Modifier.fillMaxWidth(), text = primaryText,
+            onClick = onClickPrimary,
+            variant = ButtonVariant.Primary,
+            size = ButtonSize.Large,
+            initialState = ButtonState.Rest
+        )
+        Spacer(Modifier.height(14.dp))
+        SkyFitButtonComponent(
+            Modifier.fillMaxWidth(), text = "İptal",
+            onClick = onClickCancel,
+            variant = ButtonVariant.Secondary,
+            size = ButtonSize.Large,
+            initialState = ButtonState.Rest
+        )
+        Spacer(Modifier.height(44.dp))
     }
 }

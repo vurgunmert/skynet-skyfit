@@ -3,11 +3,14 @@ package com.vurgun.skyfit.presentation.mobile.features.user.appointments
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
@@ -18,29 +21,42 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.unit.dp
 import com.vurgun.skyfit.data.network.models.BookingStatus
+import com.vurgun.skyfit.presentation.shared.components.ButtonSize
+import com.vurgun.skyfit.presentation.shared.components.ButtonState
+import com.vurgun.skyfit.presentation.shared.components.ButtonVariant
+import com.vurgun.skyfit.presentation.shared.components.SkyFitButtonComponent
 import com.vurgun.skyfit.presentation.shared.components.SkyFitScaffold
-import com.vurgun.skyfit.presentation.shared.features.common.TodoBox
 import com.vurgun.skyfit.presentation.shared.resources.SkyFitColor
 import com.vurgun.skyfit.presentation.shared.resources.SkyFitTypography
+import com.vurgun.skyfit.presentation.shared.viewmodel.UserAppointmentDetailViewModel
 import moe.tlaster.precompose.navigation.Navigator
 import org.jetbrains.compose.resources.painterResource
+import org.koin.compose.koinInject
 import skyfit.composeapp.generated.resources.Res
 import skyfit.composeapp.generated.resources.logo_skyfit
 
 @Composable
 fun MobileUserAppointmentDetailScreen(navigator: Navigator) {
 
-    SkyFitScaffold {
-        Column {
+    val showCancel = true
+    val viewModel: UserAppointmentDetailViewModel = koinInject()
+
+    SkyFitScaffold(
+        topBar = {
             MobileUserAppointmentDetailScreenToolbarComponent(
                 title = "Fitness",
                 onClickBack = { navigator.popBackStack() },
-                status = BookingStatus.ABSENT
+                status = BookingStatus.PENDING
             )
+        }
+    ) {
+        Column(Modifier.fillMaxSize()) {
             MobileUserAppointmentDetailScreenInformationComponent()
-            MobileUserAppointmentDetailScreenNoteComponent()
+            MobileUserAppointmentDetailScreenNoteComponent(viewModel.trainerNote)
             Spacer(Modifier.weight(1f))
-            MobileUserAppointmentDetailScreenCancelActionComponent()
+            if (showCancel) {
+                MobileUserAppointmentDetailScreenCancelActionComponent(onClick = viewModel::cancelAppointment)
+            }
         }
     }
 }
@@ -76,17 +92,51 @@ private fun MobileUserAppointmentDetailScreenToolbarComponent(title: String, onC
 
 @Composable
 private fun MobileUserAppointmentDetailScreenInformationComponent() {
-    TodoBox("MobileUserAppointmentDetailScreenInformationComponent", Modifier.size(430.dp, 280.dp))
+    Column(Modifier.fillMaxWidth().padding(16.dp)) {
+        Row {
+            AppointmentDetailItemCard(Modifier.weight(1f))
+            Spacer(Modifier.width(16.dp))
+            AppointmentDetailItemCard(Modifier.weight(1f))
+        }
+        Spacer(Modifier.height(16.dp))
+        Row {
+            AppointmentDetailItemCard(Modifier.weight(1f))
+            Spacer(Modifier.width(16.dp))
+            AppointmentDetailItemCard(Modifier.weight(1f))
+        }
+    }
 }
 
 @Composable
-private fun MobileUserAppointmentDetailScreenNoteComponent() {
-    TodoBox("MobileUserAppointmentDetailScreenNoteComponent", Modifier.size(430.dp, 124.dp))
+private fun MobileUserAppointmentDetailScreenNoteComponent(note: String) {
+    Text(
+        text = "Eğitmenin Notu",
+        style = SkyFitTypography.bodyMediumSemibold,
+        modifier = Modifier.padding(top = 16.dp)
+    )
+    Text(
+        text = note,
+        style = SkyFitTypography.bodyMediumRegular,
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(top = 8.dp)
+            .background(
+                SkyFitColor.background.fillTransparent,
+                shape = RoundedCornerShape(8.dp)
+            )
+            .padding(16.dp)
+    )
 }
 
 @Composable
-private fun MobileUserAppointmentDetailScreenCancelActionComponent() {
-    TodoBox("MobileUserAppointmentDetailScreenCancelActionComponent", Modifier.size(430.dp, 80.dp))
+private fun MobileUserAppointmentDetailScreenCancelActionComponent(onClick: () -> Unit) {
+    SkyFitButtonComponent(
+        text = "İptal Et",
+        onClick = onClick,
+        variant = ButtonVariant.Secondary,
+        size = ButtonSize.Large,
+        initialState = ButtonState.Rest
+    )
 }
 
 @Composable
@@ -126,5 +176,38 @@ fun AppointmentStatusChip(status: BookingStatus, modifier: Modifier = Modifier) 
             style = SkyFitTypography.bodyMediumMedium,
             modifier = Modifier.align(Alignment.Center)
         )
+    }
+}
+
+@Composable
+private fun AppointmentDetailItemCard(modifier: Modifier) {
+    Box(
+        modifier
+            .background(SkyFitColor.background.surfaceSecondary, RoundedCornerShape(16.dp))
+    ) {
+
+        Column(Modifier.padding(12.dp)) {
+            Icon(
+                painter = painterResource(Res.drawable.logo_skyfit),
+                contentDescription = "Chip",
+                tint = SkyFitColor.icon.default,
+                modifier = Modifier.size(16.dp)
+            )
+            Spacer(Modifier.height(8.dp))
+            Text(
+                text = "Tarih - Saat",
+                style = SkyFitTypography.bodyMediumRegular
+            )
+            Spacer(Modifier.height(8.dp))
+            Text(
+                text = "30/11/2024",
+                style = SkyFitTypography.heading5
+            )
+            Spacer(Modifier.height(8.dp))
+            Text(
+                text = "07:00-08:00",
+                style = SkyFitTypography.heading5
+            )
+        }
     }
 }
