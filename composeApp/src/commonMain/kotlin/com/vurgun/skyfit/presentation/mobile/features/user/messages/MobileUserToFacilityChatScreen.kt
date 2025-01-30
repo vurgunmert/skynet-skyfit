@@ -33,7 +33,6 @@ import com.vurgun.skyfit.presentation.shared.components.SkyFitAvatarCircle
 import com.vurgun.skyfit.presentation.shared.components.SkyFitChatMessageBubble
 import com.vurgun.skyfit.presentation.shared.components.SkyFitChatMessageInputComponent
 import com.vurgun.skyfit.presentation.shared.components.UserCircleAvatarItem
-import com.vurgun.skyfit.presentation.shared.features.common.TodoBox
 import com.vurgun.skyfit.presentation.shared.resources.SkyFitColor
 import com.vurgun.skyfit.presentation.shared.resources.SkyFitTypography
 import com.vurgun.skyfit.presentation.shared.viewmodel.SkyFitConversationViewModel
@@ -153,14 +152,4 @@ private fun MobileUserToFacilityChatScreenToolbarComponent(
             )
         }
     }
-}
-
-@Composable
-private fun MobileUserToFacilityChatScreenMessagesComponent() {
-    TodoBox("MobileUserToFacilityChatScreenMessagesComponent", Modifier.size(430.dp, 208.dp))
-}
-
-@Composable
-private fun MobileUserToFacilityChatScreenInputComponent() {
-    TodoBox("MobileUserToFacilityChatScreenInputComponent", Modifier.size(430.dp, 24.dp))
 }
