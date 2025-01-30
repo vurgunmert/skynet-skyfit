@@ -1,6 +1,7 @@
 package com.vurgun.skyfit.presentation.mobile.features.user.calendar
 
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -12,24 +13,30 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentWidth
-import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.verticalScroll
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.lazy.items
 import androidx.compose.material.Divider
 import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import com.vurgun.skyfit.presentation.mobile.features.user.appointments.AppointmentCardItem
+import com.vurgun.skyfit.presentation.mobile.features.user.appointments.AppointmentCardItemComponent
 import com.vurgun.skyfit.presentation.shared.components.ButtonSize
 import com.vurgun.skyfit.presentation.shared.components.ButtonState
 import com.vurgun.skyfit.presentation.shared.components.ButtonVariant
 import com.vurgun.skyfit.presentation.shared.components.MobileSettingsMenuItemComponent
 import com.vurgun.skyfit.presentation.shared.components.SkyFitButtonComponent
 import com.vurgun.skyfit.presentation.shared.components.SkyFitSearchTextInputComponent
-import com.vurgun.skyfit.presentation.shared.features.common.TodoBox
 import com.vurgun.skyfit.presentation.shared.navigation.SkyFitNavigationRoute
 import com.vurgun.skyfit.presentation.shared.navigation.jumpAndStay
 import com.vurgun.skyfit.presentation.shared.resources.SkyFitColor
@@ -41,25 +48,45 @@ import skyfit.composeapp.generated.resources.logo_skyfit
 
 @Composable
 fun MobileUserActivityCalendarSearchScreen(navigator: Navigator) {
+    val appointmentCardItem = AppointmentCardItem(
+        iconUrl = "TODO()",
+        title = "Shoulders and Abs",
+        date = "30/11/2024",
+        hours = "08:00 - 09:00",
+        category = "Group Fitness",
+        location = "@ironstudio",
+        trainer = "Micheal Blake",
+        capacity = "2/5",
+        cost = "100",
+        note = "Try to arrive 5-10 minutes early to warm up and settle in before the class starts.",
+        isFull = null
+    )
+
+    val activityItems = listOf(appointmentCardItem, appointmentCardItem, appointmentCardItem, appointmentCardItem, appointmentCardItem)
 
     Scaffold(
         backgroundColor = SkyFitColor.background.default,
         topBar = {
-            MobileUserActivityCalendarSearchScreenToolbarComponent(
-                onClickBack = { navigator.popBackStack() },
-                onClickNew = { navigator.jumpAndStay(SkyFitNavigationRoute.UserActivityCalendarAdd) }
-            )
+            Column {
+                MobileUserActivityCalendarSearchScreenToolbarComponent(
+                    onClickBack = { navigator.popBackStack() },
+                    onClickNew = { navigator.jumpAndStay(SkyFitNavigationRoute.UserActivityCalendarAdd) }
+                )
+                MobileUserActivityCalendarSearchScreenSearchComponent()
+                MobileUserActivityCalendarSearchScreenFilterItemComponent()
+            }
         }
     ) {
         Column(
-            modifier = Modifier.fillMaxSize().verticalScroll(rememberScrollState()),
+            modifier = Modifier.fillMaxSize(),
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {
-            MobileUserActivityCalendarSearchScreenSearchComponent()
-            MobileUserActivityCalendarSearchScreenTabsComponent()
-            MobileUserActivityCalendarSearchFeaturedExercisesComponent() //todo
-            MobileUserActivityCalendarSearchPopularExercisesComponent()
-            MobileUserActivityCalendarSearchResultsComponent()
+            if (activityItems.isEmpty()) {
+                MobileUserActivityCalendarSearchFeaturedExercisesComponent()
+                MobileUserActivityCalendarSearchPopularExercisesComponent()
+            } else {
+                MobileUserActivityCalendarSearchResultsComponent(activityItems)
+            }
         }
     }
 }
@@ -111,15 +138,62 @@ private fun MobileUserActivityCalendarSearchScreenSearchComponent() {
     }
 }
 
+data class FilterItem(
+    val title: String,
+    val selected: Boolean = false
+)
+
 @Composable
-private fun MobileUserActivityCalendarSearchScreenTabsComponent() {
-    TodoBox("MobileUserActivityCalendarSearchScreenTabsComponent", Modifier.size(430.dp, 64.dp))
+private fun MobileUserActivityCalendarSearchScreenFilterItemComponent() {
+    var activityFilters by remember {
+        mutableStateOf(
+            listOf(
+                FilterItem(title = "Tumu", selected = true),
+                FilterItem(title = "Kosma", selected = true),
+                FilterItem(title = "Ip atlama", selected = false),
+                FilterItem(title = "Pilates", selected = false),
+                FilterItem(title = "Yoga", selected = false)
+            )
+        )
+    }
+
+    LazyRow {
+        items(activityFilters) { activityFilter ->
+            MobileUserActivityCalendarSearchScreenFilterComponent(
+                activityFilter,
+                onClick = {
+                    activityFilters = activityFilters.map { filter ->
+                        filter.copy(selected = filter.title == activityFilter.title)
+                    }
+                }
+            )
+        }
+    }
+}
+
+@Composable
+private fun MobileUserActivityCalendarSearchScreenFilterComponent(item: FilterItem, onClick: () -> Unit) {
+    if (item.selected) {
+        SkyFitButtonComponent(
+            Modifier.wrapContentWidth(), text = item.title,
+            onClick = onClick,
+            variant = ButtonVariant.Primary,
+            size = ButtonSize.Micro,
+            initialState = ButtonState.Rest
+        )
+    } else {
+        SkyFitButtonComponent(
+            Modifier.wrapContentWidth(), text = item.title,
+            onClick = onClick,
+            variant = ButtonVariant.Secondary,
+            size = ButtonSize.Micro,
+            initialState = ButtonState.Rest
+        )
+    }
 }
 
 @Composable
 private fun MobileUserActivityCalendarSearchFeaturedExercisesComponent() {
-    TodoBox("MobileUserActivityCalendarSearchFeaturedExercisesComponent", Modifier.size(430.dp, 203.dp))
-
     Column(Modifier.fillMaxWidth()) {
         Text(
             "En yeni",
@@ -147,13 +221,51 @@ private fun MobileUserActivityCalendarSearchFeaturedExercisesComponent() {
 
 @Composable
 private fun MobileUserActivityCalendarSearchPopularExercisesComponent() {
-    TodoBox("MobileUserActivityCalendarSearchPopularExercisesComponent", Modifier.size(430.dp, 258.dp))
+    Column(Modifier.fillMaxWidth()) {
+        Text(
+            "En popular",
+            style = SkyFitTypography.bodyMediumSemibold
+        )
+        Spacer(Modifier.height(16.dp))
+        MobileSettingsMenuItemComponent("Pilates")
+        Divider(
+            modifier = Modifier.fillMaxWidth().height(1.dp),
+            color = SkyFitColor.border.default
+        )
+        MobileSettingsMenuItemComponent("Kosma")
+        Divider(
+            modifier = Modifier.fillMaxWidth().height(1.dp),
+            color = SkyFitColor.border.default
+        )
+        MobileSettingsMenuItemComponent("Yuzme")
+        Divider(
+            modifier = Modifier.fillMaxWidth().height(1.dp),
+            color = SkyFitColor.border.default
+        )
+        Spacer(Modifier.height(16.dp))
+        MobileSettingsMenuItemComponent("Tirmanma")
+        Divider(
+            modifier = Modifier.fillMaxWidth().height(1.dp),
+            color = SkyFitColor.border.default
+        )
+        Spacer(Modifier.height(16.dp))
+    }
 }
 
 
 @Composable
-private fun MobileUserActivityCalendarSearchResultsComponent() {
-    TodoBox("MobileUserActivityCalendarSearchResultsComponent", Modifier.size(430.dp, 660.dp))
+private fun MobileUserActivityCalendarSearchResultsComponent(activityItems: List<AppointmentCardItem>) {
+
+    LazyColumn(
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(16.dp),
+        verticalArrangement = Arrangement.spacedBy(16.dp)
+    ) {
+        items(activityItems) {
+            AppointmentCardItemComponent(it, Modifier.fillMaxWidth())
+        }
+    }
 }
 
 @Composable
