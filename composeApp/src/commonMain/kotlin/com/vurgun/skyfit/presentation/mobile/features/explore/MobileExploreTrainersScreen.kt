@@ -78,7 +78,7 @@ private fun MobileExploreTrainersGridComponent(trainers: List<TrainerProfileCard
     }
 }
 
-private data class TrainerProfileCardItemViewData(
+data class TrainerProfileCardItemViewData(
     val imageUrl: String,
     val name: String,
     val followerCount: Int,

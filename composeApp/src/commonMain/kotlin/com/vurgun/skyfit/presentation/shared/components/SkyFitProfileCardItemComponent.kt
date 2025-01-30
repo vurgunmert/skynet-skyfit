@@ -103,7 +103,7 @@ private fun ProfileCardItemBox(
         )
 
         // Rating Star
-        RatingStarBox(rating, Modifier.align(Alignment.TopEnd).padding(8.dp))
+        RatingStarComponent(rating, Modifier.align(Alignment.TopEnd).padding(8.dp))
 
         // Details Box
         Box(
@@ -145,7 +145,7 @@ private fun ProfileCardItemBox(
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     details.forEachIndexed { index, detail ->
-                        VerticalDetailItem(title = detail.first, subtitle = detail.second)
+                        ProfileCardVerticalDetailItemComponent(title = detail.first, subtitle = detail.second)
                         if (index < details.lastIndex) VerticalDetailDivider()
                     }
                 }
@@ -155,7 +155,7 @@ private fun ProfileCardItemBox(
 }
 
 @Composable
-private fun VerticalDetailItem(title: String, subtitle: String) {
+fun ProfileCardVerticalDetailItemComponent(title: String, subtitle: String) {
     Column(
         modifier = Modifier.size(56.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
@@ -168,7 +168,7 @@ private fun VerticalDetailItem(title: String, subtitle: String) {
 }
 
 @Composable
-private fun RatingStarBox(rating: Double, modifier: Modifier = Modifier) {
+fun RatingStarComponent(rating: Double, modifier: Modifier = Modifier) {
     Row(
         modifier = modifier
             .background(Color.Black.copy(alpha = 0.7f), RoundedCornerShape(12.dp))
@@ -190,7 +190,7 @@ private fun RatingStarBox(rating: Double, modifier: Modifier = Modifier) {
 }
 
 @Composable
-private fun VerticalDetailDivider() {
+fun VerticalDetailDivider() {
     Box(
         modifier = Modifier
             .width(1.dp)
@@ -224,7 +224,7 @@ fun ExerciseProfileCardItemComponent(
         )
 
         // Rating Star Box
-        RatingStarBox(rating, Modifier.align(Alignment.TopEnd).padding(8.dp))
+        RatingStarComponent(rating, Modifier.align(Alignment.TopEnd).padding(8.dp))
 
         // Bottom Details
         Box(
