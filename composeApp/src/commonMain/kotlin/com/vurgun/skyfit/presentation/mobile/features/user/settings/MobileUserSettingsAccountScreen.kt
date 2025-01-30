@@ -36,6 +36,7 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import coil3.compose.AsyncImage
+import com.vurgun.skyfit.presentation.shared.components.SkyFitChipComponent
 import com.vurgun.skyfit.presentation.shared.components.ButtonSize
 import com.vurgun.skyfit.presentation.shared.components.ButtonState
 import com.vurgun.skyfit.presentation.shared.components.ButtonVariant
@@ -185,7 +186,7 @@ private fun MobileUserSettingsScreenInputComponent(viewModel: SkyFitUserAccountS
 
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
-private fun MobileUserSettingsActivityTagEditComponent(onClick: () -> Unit = {}) {
+fun MobileUserSettingsActivityTagEditComponent(onClick: () -> Unit = {}) {
     Column(Modifier.fillMaxWidth()) {
 
         Text("Profil Etiketleri", style = SkyFitTypography.bodySmallSemibold)
@@ -225,19 +226,18 @@ private fun MobileUserSettingsActivityTagEditComponent(onClick: () -> Unit = {})
             maxItemsInEachColumn = 3,
         ) {
             tagz.forEach {
-                ActivityTagChipComponent(text = it, onClick = {})
+                SkyFitChipComponent(text = it, onClick = {})
             }
         }
     }
 
-
 }
 
 @Composable
-private fun ActivityTagChipComponent(text: String, onClick: () -> Unit) {
+fun MobileUserSettingsActivityTagInputComponent(onClick: () -> Unit = {}) {
     SkyFitButtonComponent(
         Modifier.wrapContentWidth(),
-        text = text,
+        text = "Etiket başlığı örn: Pilates",
         onClick = onClick,
         variant = ButtonVariant.Secondary,
         size = ButtonSize.Micro,
@@ -246,23 +246,8 @@ private fun ActivityTagChipComponent(text: String, onClick: () -> Unit) {
     )
 }
 
-
 @Composable
-private fun MobileUserSettingsActivityTagInputComponent(onClick: () -> Unit = {}) {
-    SkyFitButtonComponent(
-        Modifier.wrapContentWidth(),
-        text = "Zorlu Antrenman",
-        onClick = onClick,
-        variant = ButtonVariant.Secondary,
-        size = ButtonSize.Micro,
-        initialState = ButtonState.Rest,
-        rightIconPainter = painterResource(Res.drawable.logo_skyfit)
-    )
-}
-
-
-@Composable
-private fun MobileUserSettingsScreenPhotoEditComponent(
+fun MobileUserSettingsScreenPhotoEditComponent(
     urlString: String?,
     label: String,
     onClick: () -> Unit
@@ -299,7 +284,7 @@ private fun MobileUserSettingsScreenPhotoEditComponent(
 }
 
 @Composable
-private fun MobileUserSettingsScreenSaveActionComponent(onClick: () -> Unit) {
+fun MobileUserSettingsScreenSaveActionComponent(onClick: () -> Unit) {
     SkyFitButtonComponent(
         Modifier.fillMaxWidth(), text = "Değişiklikleri Kaydet",
         onClick = onClick,
@@ -312,7 +297,7 @@ private fun MobileUserSettingsScreenSaveActionComponent(onClick: () -> Unit) {
 }
 
 @Composable
-private fun MobileUserSettingsScreenDeleteActionsComponent(
+fun MobileUserSettingsScreenDeleteActionsComponent(
     onDeleteClicked: () -> Unit,
     onCancelClicked: () -> Unit
 ) {

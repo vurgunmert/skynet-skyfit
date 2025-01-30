@@ -3,6 +3,7 @@ package com.vurgun.skyfit.presentation.configuration
 import com.vurgun.skyfit.presentation.shared.features.auth.SplashViewModel
 import com.vurgun.skyfit.presentation.shared.viewmodel.ChatbotViewModel
 import com.vurgun.skyfit.presentation.shared.viewmodel.SkyFitConversationViewModel
+import com.vurgun.skyfit.presentation.shared.viewmodel.SkyFitTrainerAccountSettingsViewModel
 import com.vurgun.skyfit.presentation.shared.viewmodel.SkyFitUserAccountSettingsViewModel
 import com.vurgun.skyfit.presentation.shared.viewmodel.UserAppointmentDetailViewModel
 import com.vurgun.skyfit.presentation.shared.viewmodel.UserAppointmentsViewModel
@@ -22,4 +23,5 @@ val presentationDependencyModule = module {
     viewModel { UserAppointmentsViewModel() }
     viewModel { UserAppointmentDetailViewModel() }
     viewModel { SkyFitUserAccountSettingsViewModel() }
+    viewModel { SkyFitTrainerAccountSettingsViewModel() }
 }
