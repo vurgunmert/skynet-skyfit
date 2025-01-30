@@ -75,7 +75,7 @@ fun MobileFacilityCalendarVisitedScreen(navigator: Navigator) {
 }
 
 @Composable
-private fun MobileFacilityCalendarVisitedScreenCalendarGridComponent() {
+fun MobileFacilityCalendarVisitedScreenCalendarGridComponent() {
     var selectedDate by remember { mutableStateOf(LocalDate.now()) }
 
     SkyFitCalendarGridComponent(
@@ -86,7 +86,7 @@ private fun MobileFacilityCalendarVisitedScreenCalendarGridComponent() {
 }
 
 @Composable
-private fun MobileFacilityCalendarVisitedScreenPrivateClassesComponent(items: List<SkyFitClassCalendarCardItem>) {
+fun MobileFacilityCalendarVisitedScreenPrivateClassesComponent(items: List<SkyFitClassCalendarCardItem>) {
     Box(
         Modifier
             .fillMaxWidth()
@@ -121,7 +121,7 @@ private fun MobileFacilityCalendarVisitedScreenPrivateClassesComponent(items: Li
 }
 
 @Composable
-private fun MobileFacilityCalendarVisitedScreenCreateActionComponent(onClick: () -> Unit) {
+fun MobileFacilityCalendarVisitedScreenCreateActionComponent(onClick: () -> Unit) {
     Box(Modifier.fillMaxWidth().padding(32.dp)) {
         SkyFitButtonComponent(
             Modifier.fillMaxWidth(), text = "Randevu Olustur",

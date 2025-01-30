@@ -23,7 +23,13 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import com.vurgun.skyfit.presentation.shared.components.ButtonSize
+import com.vurgun.skyfit.presentation.shared.components.ButtonState
+import com.vurgun.skyfit.presentation.shared.components.ButtonVariant
+import com.vurgun.skyfit.presentation.shared.components.SkyFitButtonComponent
 import com.vurgun.skyfit.presentation.shared.components.SkyFitScaffold
+import com.vurgun.skyfit.presentation.shared.navigation.SkyFitNavigationRoute
+import com.vurgun.skyfit.presentation.shared.navigation.jumpAndTakeover
 import com.vurgun.skyfit.presentation.shared.resources.SkyFitColor
 import com.vurgun.skyfit.presentation.shared.resources.SkyFitTypography
 import moe.tlaster.precompose.navigation.Navigator
@@ -59,7 +65,10 @@ fun MobileUserExerciseInActionCompletedScreen(navigator: Navigator) {
                     MobileUserExerciseInActionCompletedScreenRateItemComponent()
                     MobileUserExerciseInActionCompletedScreenRateItemComponent()
                 }
-                Spacer(Modifier.height(16.dp))
+                Spacer(Modifier.weight(1f))
+                MobileUserExerciseInActionCompletedScreenActionComponent(onClick = {
+                    navigator.jumpAndTakeover(SkyFitNavigationRoute.UserExerciseDetail, SkyFitNavigationRoute.Dashboard)
+                })
             }
         }
     }
@@ -118,9 +127,22 @@ private fun MobileUserExerciseInActionCompletedScreenRateItemComponent() {
             painter = painterResource(Res.drawable.logo_skyfit),
             contentDescription = "Chip",
             tint = SkyFitColor.icon.default,
-            modifier = Modifier.size(117.dp)
+            modifier = Modifier.size(96.dp)
         )
         Spacer(Modifier.height(8.dp))
         Text("Mükemmel", style = SkyFitTypography.bodyMediumRegular)
+    }
+}
+
+@Composable
+private fun MobileUserExerciseInActionCompletedScreenActionComponent(onClick: () -> Unit) {
+    Box(Modifier.fillMaxWidth().padding(32.dp)) {
+        SkyFitButtonComponent(
+            Modifier.fillMaxWidth(), text = "Tamamla",
+            onClick = onClick,
+            variant = ButtonVariant.Primary,
+            size = ButtonSize.Large,
+            initialState = ButtonState.Rest
+        )
     }
 }

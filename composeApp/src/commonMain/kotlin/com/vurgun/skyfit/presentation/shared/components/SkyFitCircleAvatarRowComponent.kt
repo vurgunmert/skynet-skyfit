@@ -65,7 +65,7 @@ data class UserCircleAvatarItem(
 fun SkyFitAvatarCircle(
     modifier: Modifier,
     item: UserCircleAvatarItem,
-    onClick: () -> Unit
+    onClick: () -> Unit = {}
 ) {
 
     AsyncImage(
