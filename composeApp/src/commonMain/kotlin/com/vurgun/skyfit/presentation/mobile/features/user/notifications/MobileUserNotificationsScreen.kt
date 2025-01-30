@@ -1,5 +1,6 @@
 package com.vurgun.skyfit.presentation.mobile.features.user.notifications
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -7,12 +8,9 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.DismissDirection
 import androidx.compose.material.DismissValue
 import androidx.compose.material.ExperimentalMaterialApi
@@ -33,10 +31,14 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.vurgun.skyfit.data.network.models.SkyFitNotification
+import com.vurgun.skyfit.presentation.shared.components.ButtonSize
+import com.vurgun.skyfit.presentation.shared.components.ButtonState
+import com.vurgun.skyfit.presentation.shared.components.ButtonVariant
 import com.vurgun.skyfit.presentation.shared.components.NotificationItemSwipeDismissBackground
+import com.vurgun.skyfit.presentation.shared.components.SkyFitBadgeTabBarComponent
+import com.vurgun.skyfit.presentation.shared.components.SkyFitButtonComponent
 import com.vurgun.skyfit.presentation.shared.components.SkyFitNotificationItem
 import com.vurgun.skyfit.presentation.shared.components.SkyFitScreenHeader
-import com.vurgun.skyfit.presentation.shared.features.common.TodoBox
 import com.vurgun.skyfit.presentation.shared.resources.SkyFitColor
 import com.vurgun.skyfit.presentation.shared.resources.SkyFitTypography
 import com.vurgun.skyfit.presentation.shared.viewmodel.UserNotificationsViewModel
@@ -56,7 +58,7 @@ fun MobileUserNotificationsScreen(navigator: Navigator) {
     val tabTitles by viewModel.tabTitles.collectAsState()
 
     val onSelectNotification: (SkyFitNotification) -> Unit = { notification ->
-        //TODO: navigate if has deeplink
+
     }
 
     val onDeleteNotification: (SkyFitNotification) -> Unit = { notification ->
@@ -72,14 +74,14 @@ fun MobileUserNotificationsScreen(navigator: Navigator) {
         topBar = {
             Column {
                 SkyFitScreenHeader("Bildirimler", onBackClick = { navigator.popBackStack() })
-                MobileUserNotificationsScreenTabsComponent()
+                SkyFitBadgeTabBarComponent(tabTitles, activeTab, onTabSelected = { activeTab = it })
             }
         },
         bottomBar = {
             if (allNotifications.isEmpty()) {
-                MobileUserNotificationsScreenSettingsActionComponent()
+                MobileUserNotificationsScreenSettingsActionComponent(onClick = {})
             } else {
-                MobileUserNotificationsScreenDeleteAllActionComponent()
+                MobileUserNotificationsScreenDeleteAllActionComponent(onClick = {})
             }
         }
     ) {
@@ -96,18 +98,30 @@ fun MobileUserNotificationsScreen(navigator: Navigator) {
 }
 
 @Composable
-private fun MobileUserNotificationsScreenTabsComponent() {
-    TodoBox("MobileUserNotificationsScreenTabsComponent", Modifier.size(430.dp, 52.dp))
+private fun MobileUserNotificationsScreenDeleteAllActionComponent(onClick: () -> Unit) {
+    Box(
+        Modifier.fillMaxWidth().padding(vertical = 8.dp, horizontal = 16.dp)
+            .clickable(onClick = onClick)
+    ) {
+
+        Text(
+            text = "Hepsini temizle",
+            style = SkyFitTypography.bodyMediumMedium.copy(color = SkyFitColor.text.linkInverse)
+        )
+    }
 }
 
 @Composable
-private fun MobileUserNotificationsScreenDeleteAllActionComponent() {
-    TodoBox("MobileUserNotificationsScreenDeleteAllActionComponent", Modifier.size(430.dp, 36.dp))
-}
-
-@Composable
-private fun MobileUserNotificationsScreenSettingsActionComponent() {
-    TodoBox("MobileUserNotificationsScreenSettingsActionComponent", Modifier.size(430.dp, 48.dp))
+private fun MobileUserNotificationsScreenSettingsActionComponent(onClick: () -> Unit) {
+    Box(Modifier.fillMaxWidth().padding(24.dp)) {
+        SkyFitButtonComponent(
+            text = "Bilidirim Ayarları",
+            onClick = onClick,
+            variant = ButtonVariant.Primary,
+            size = ButtonSize.Large,
+            initialState = ButtonState.Rest
+        )
+    }
 }
 
 @OptIn(ExperimentalMaterialApi::class)

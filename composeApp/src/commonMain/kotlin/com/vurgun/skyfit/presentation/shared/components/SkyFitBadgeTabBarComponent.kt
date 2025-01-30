@@ -32,8 +32,8 @@ fun SkyFitBadgeTabBarComponent(
     titles: List<String>,
     selectedTabIndex: Int,
     onTabSelected: (Int) -> Unit,
-    deleteAllEnabled: Boolean,
-    onDeleteAll: () -> Unit
+    deleteAllEnabled: Boolean = false,
+    onDeleteAll: () -> Unit = {}
 ) {
     Row(
         modifier = Modifier

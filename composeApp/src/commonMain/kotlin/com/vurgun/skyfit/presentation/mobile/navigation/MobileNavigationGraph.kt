@@ -17,7 +17,6 @@ import com.vurgun.skyfit.presentation.mobile.features.explore.MobileExploreCommu
 import com.vurgun.skyfit.presentation.mobile.features.explore.MobileExploreExercisesScreen
 import com.vurgun.skyfit.presentation.mobile.features.explore.MobileExploreFacilitiesScreen
 import com.vurgun.skyfit.presentation.mobile.features.explore.MobileExploreTrainersScreen
-import com.vurgun.skyfit.presentation.mobile.features.facility.appointments.MobileFacilityAppointmentDetailScreen
 import com.vurgun.skyfit.presentation.mobile.features.facility.calendar.MobileFacilityCalendarScreen
 import com.vurgun.skyfit.presentation.mobile.features.facility.calendar.MobileFacilityCalendarVisitedScreen
 import com.vurgun.skyfit.presentation.mobile.features.facility.classes.MobileFacilityClassAddScreen
@@ -91,7 +90,7 @@ fun MobileNavigationGraph() {
 
     NavHost(
         navigator = rootNavigator,
-        initialRoute = SkyFitNavigationRoute.UserAppointmentDetail.route
+        initialRoute = SkyFitNavigationRoute.UserSettingsAccount.route
     ) {
 
         // Auth
@@ -195,8 +194,6 @@ fun MobileNavigationGraph() {
         //Facility - Calendar
         scene(SkyFitNavigationRoute.FacilityCalendar.route) { MobileFacilityCalendarScreen(rootNavigator) }
         scene(SkyFitNavigationRoute.FacilityCalendarVisited.route) { MobileFacilityCalendarVisitedScreen(rootNavigator) }
-        //Facility - Appointments
-        scene(SkyFitNavigationRoute.FacilityAppointmentDetail.route) { MobileFacilityAppointmentDetailScreen(rootNavigator) }
         //Facility - Classes
         scene(SkyFitNavigationRoute.FacilityClasses.route) { MobileFacilityClassesScreen(rootNavigator) }
         scene(SkyFitNavigationRoute.FacilityClassesVisited.route) { MobileFacilityClassesVisitedScreen(rootNavigator) }
