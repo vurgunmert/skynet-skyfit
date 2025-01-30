@@ -30,6 +30,7 @@ import androidx.compose.ui.unit.dp
 import coil3.compose.AsyncImage
 import com.vurgun.skyfit.presentation.mobile.features.explore.TrainerProfileCardItemViewData
 import com.vurgun.skyfit.presentation.mobile.features.facility.profile.MobileFacilityProfileVisitedScreen.MobileFacilityProfileVisitedScreenInfoCardComponent
+import com.vurgun.skyfit.presentation.mobile.features.facility.profile.MobileFacilityProfileVisitedScreen.MobileFacilityProfileVisitedScreenPhotosComponent
 import com.vurgun.skyfit.presentation.mobile.features.facility.profile.MobileFacilityProfileVisitedScreen.MobileFacilityProfileVisitedScreenPrivateClassesComponent
 import com.vurgun.skyfit.presentation.mobile.features.facility.profile.MobileFacilityProfileVisitedScreen.MobileFacilityProfileVisitedScreenTrainersComponent
 import com.vurgun.skyfit.presentation.shared.components.ButtonSize
@@ -106,71 +107,71 @@ fun MobileFacilityProfileVisitedScreen(navigator: Navigator) {
     }
 }
 
-@Composable
-private fun MobileFacilityProfileVisitedScreenPhotosComponent() {
-    BoxWithConstraints(
-        modifier = Modifier
-            .padding(horizontal = 16.dp)
-            .fillMaxWidth()
-    ) {
-        val imageSize = maxWidth
-        val image2Size = maxWidth - 16.dp
-        val image3Size = maxWidth - 32.dp
 
-        AsyncImage(
-            model = "https://opstudiohk.com/wp-content/uploads/2021/10/muscle-action.jpg",
-            contentDescription = null,
-            contentScale = ContentScale.Crop,
+object MobileFacilityProfileVisitedScreen {
+
+    @Composable
+    fun MobileFacilityProfileVisitedScreenPhotosComponent() {
+        BoxWithConstraints(
             modifier = Modifier
-                .align(Alignment.TopCenter)
-                .size(image3Size)
-                .clip(RoundedCornerShape(16.dp))
-        )
-
-        AsyncImage(
-            model = "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRjzqP-xQyE7dn40gt74e0fHTWbmnEIjnMJiw&s",
-            contentDescription = null,
-            contentScale = ContentScale.Crop,
-            modifier = Modifier
-                .align(Alignment.TopCenter)
-                .padding(top = 8.dp)
-                .size(image2Size)
-                .clip(RoundedCornerShape(16.dp))
-        )
-
-        AsyncImage(
-            model = "https://gymstudiohome.com/assets/img/slide/1.jpg",
-            contentDescription = null,
-            contentScale = ContentScale.Crop,
-            modifier = Modifier
-                .align(Alignment.TopCenter)
-                .padding(top = 16.dp)
-                .size(imageSize)
-                .clip(RoundedCornerShape(16.dp))
-        )
-
-        Box(
-            Modifier.align(Alignment.BottomStart)
+                .padding(horizontal = 16.dp)
                 .fillMaxWidth()
-                .background(SkyFitColor.background.fillTransparentSecondary, RoundedCornerShape(16.dp))
-                .padding(16.dp)
         ) {
-            Column {
-                Text(
-                    text = "Salonu Kesfet",
-                    style = SkyFitTypography.heading4,
-                )
-                Text(
-                    text = "8 fotograf, 1 video", style = SkyFitTypography.bodyMediumRegular,
-                    color = SkyFitColor.text.secondary
-                )
+            val imageSize = maxWidth
+            val image2Size = maxWidth - 16.dp
+            val image3Size = maxWidth - 32.dp
+
+            AsyncImage(
+                model = "https://opstudiohk.com/wp-content/uploads/2021/10/muscle-action.jpg",
+                contentDescription = null,
+                contentScale = ContentScale.Crop,
+                modifier = Modifier
+                    .align(Alignment.TopCenter)
+                    .size(image3Size)
+                    .clip(RoundedCornerShape(16.dp))
+            )
+
+            AsyncImage(
+                model = "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRjzqP-xQyE7dn40gt74e0fHTWbmnEIjnMJiw&s",
+                contentDescription = null,
+                contentScale = ContentScale.Crop,
+                modifier = Modifier
+                    .align(Alignment.TopCenter)
+                    .padding(top = 8.dp)
+                    .size(image2Size)
+                    .clip(RoundedCornerShape(16.dp))
+            )
+
+            AsyncImage(
+                model = "https://gymstudiohome.com/assets/img/slide/1.jpg",
+                contentDescription = null,
+                contentScale = ContentScale.Crop,
+                modifier = Modifier
+                    .align(Alignment.TopCenter)
+                    .padding(top = 16.dp)
+                    .size(imageSize)
+                    .clip(RoundedCornerShape(16.dp))
+            )
+
+            Box(
+                Modifier.align(Alignment.BottomStart)
+                    .fillMaxWidth()
+                    .background(SkyFitColor.background.fillTransparentSecondary, RoundedCornerShape(16.dp))
+                    .padding(16.dp)
+            ) {
+                Column {
+                    Text(
+                        text = "Salonu Kesfet",
+                        style = SkyFitTypography.heading4,
+                    )
+                    Text(
+                        text = "8 fotograf, 1 video", style = SkyFitTypography.bodyMediumRegular,
+                        color = SkyFitColor.text.secondary
+                    )
+                }
             }
         }
     }
-}
-
-
-object MobileFacilityProfileVisitedScreen {
 
     @Composable
     fun MobileFacilityProfileVisitedScreenInfoCardComponent(
