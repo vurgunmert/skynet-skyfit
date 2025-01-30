@@ -9,7 +9,7 @@ import moe.tlaster.precompose.navigation.rememberNavigator
 @Composable
 fun MobileDashboardScreen(
     rootNavigator: Navigator,
-    initialRoute: SkyFitNavigationRoute = SkyFitNavigationRoute.DashboardSocial
+    initialRoute: SkyFitNavigationRoute = SkyFitNavigationRoute.DashboardNutrition
 ) {
     val dashboardNavigator = rememberNavigator()
 
