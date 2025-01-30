@@ -64,7 +64,7 @@ import com.vurgun.skyfit.presentation.shared.components.ButtonSize
 import com.vurgun.skyfit.presentation.shared.components.ButtonState
 import com.vurgun.skyfit.presentation.shared.components.ButtonVariant
 import com.vurgun.skyfit.presentation.shared.components.SkyFitButtonComponent
-import com.vurgun.skyfit.presentation.shared.features.common.TodoBox
+import com.vurgun.skyfit.presentation.shared.components.SkyFitIconButton
 import com.vurgun.skyfit.presentation.shared.navigation.SkyFitNavigationRoute
 import com.vurgun.skyfit.presentation.shared.navigation.jumpAndTakeover
 import com.vurgun.skyfit.presentation.shared.resources.SkyFitColor
@@ -85,7 +85,7 @@ private enum class MobileUserExerciseInActionScreenStep {
 fun MobileUserExerciseInActionScreen(navigator: Navigator) {
 
     val showToolbar: Boolean = true
-    var activePage by remember { mutableStateOf(MobileUserExerciseInActionScreenStep.BREAK) }
+    var activePage by remember { mutableStateOf(MobileUserExerciseInActionScreenStep.SESSION) }
 
     Box(Modifier.fillMaxSize()) {
         MobileUserExerciseInActionGraphicComponent()
@@ -488,7 +488,24 @@ private fun MobileUserExerciseInActionScreenTrophyComponent(
 
 @Composable
 private fun MobileUserExerciseInActionScreenActionsComponent() {
-    TodoBox("MobileUserExerciseInActionScreenActionsComponent", Modifier.size(382.dp, 95.dp))
+    Box(
+        Modifier
+            .padding(24.dp)
+            .fillMaxWidth()
+            .background(SkyFitColor.background.surfaceOpalTransparent, RoundedCornerShape(20.dp))
+            .padding(horizontal = 48.dp, vertical = 16.dp)
+    ) {
+
+        Row {
+            SkyFitIconButton(painterResource(Res.drawable.logo_skyfit))
+            Spacer(Modifier.weight(1f))
+            Box {
+                SkyFitIconButton(painterResource(Res.drawable.logo_skyfit))
+            }
+            Spacer(Modifier.weight(1f))
+            SkyFitIconButton(painterResource(Res.drawable.logo_skyfit))
+        }
+    }
 }
 
 @Composable
