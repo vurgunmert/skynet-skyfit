@@ -3,10 +3,12 @@ package com.vurgun.skyfit.presentation.shared.viewmodel
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.vurgun.skyfit.domain.usecase.ChatbotQueryUseCase
-import com.vurgun.skyfit.presentation.shared.components.ChatMessageItem
+import com.vurgun.skyfit.presentation.shared.features.social.ChatMessageItem
+import com.vurgun.skyfit.utils.now
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
+import kotlinx.datetime.LocalDate
 
 class ChatbotViewModel(private val useCase: ChatbotQueryUseCase) : ViewModel() {
 
@@ -18,9 +20,7 @@ class ChatbotViewModel(private val useCase: ChatbotQueryUseCase) : ViewModel() {
 
     fun sendQuery(userInput: String) {
         viewModelScope.launch {
-            // Add user message to the list
-            addMessage(ChatMessageItem(content = userInput, time = "14:23", isUser = true))
-            addMessage(ChatMessageItem(content = "Hey Olivia. Can we get on a quick call?", time = "14:23", isUser = false))
+            addMessage(ChatMessageItem(content = userInput, time = LocalDate.now().toString(), isUser = true))
 
             // Set loading state
             _isLoading.value = true

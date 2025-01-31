@@ -1,4 +1,4 @@
-package com.vurgun.skyfit.presentation.shared.components
+package com.vurgun.skyfit.presentation.shared.features.profile
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background

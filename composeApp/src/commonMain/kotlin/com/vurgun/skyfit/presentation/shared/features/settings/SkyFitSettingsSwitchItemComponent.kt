@@ -1,4 +1,4 @@
-package com.vurgun.skyfit.presentation.shared.components
+package com.vurgun.skyfit.presentation.shared.features.settings
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column

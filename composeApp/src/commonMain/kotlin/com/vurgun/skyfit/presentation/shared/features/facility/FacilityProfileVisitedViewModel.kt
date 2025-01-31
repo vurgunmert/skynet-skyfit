@@ -1,4 +1,4 @@
-package com.vurgun.skyfit.presentation.shared.features.profile
+package com.vurgun.skyfit.presentation.shared.features.facility
 
 import androidx.lifecycle.ViewModel
 import com.vurgun.skyfit.presentation.mobile.features.explore.TrainerProfileCardItemViewData

@@ -9,9 +9,9 @@ import androidx.compose.material.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import com.vurgun.skyfit.presentation.shared.components.SettingsSwitchOptionItem
+import com.vurgun.skyfit.presentation.shared.features.settings.SettingsSwitchOptionItem
 import com.vurgun.skyfit.presentation.shared.components.SkyFitScreenHeader
-import com.vurgun.skyfit.presentation.shared.components.SkyFitSettingsSwitchOptionItemComponent
+import com.vurgun.skyfit.presentation.shared.features.settings.SkyFitSettingsSwitchOptionItemComponent
 import com.vurgun.skyfit.presentation.shared.resources.SkyFitColor
 import moe.tlaster.precompose.navigation.Navigator
 

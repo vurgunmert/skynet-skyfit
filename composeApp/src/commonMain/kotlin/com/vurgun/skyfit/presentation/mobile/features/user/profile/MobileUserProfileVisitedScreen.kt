@@ -25,8 +25,8 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import com.vurgun.skyfit.presentation.shared.components.SkyFitPostCardItem
-import com.vurgun.skyfit.presentation.shared.components.SkyFitPostCardItemComponent
+import com.vurgun.skyfit.presentation.shared.features.social.SkyFitPostCardItem
+import com.vurgun.skyfit.presentation.shared.features.social.SkyFitPostCardItemComponent
 import com.vurgun.skyfit.presentation.shared.features.common.TodoBox
 import com.vurgun.skyfit.presentation.shared.resources.SkyFitColor
 import com.vurgun.skyfit.presentation.shared.resources.SkyFitTypography

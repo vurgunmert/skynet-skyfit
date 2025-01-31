@@ -20,8 +20,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.vurgun.skyfit.presentation.shared.components.SkyFitAvatarCircle
 import com.vurgun.skyfit.presentation.shared.components.SkyFitIconButton
-import com.vurgun.skyfit.presentation.shared.components.SkyFitPostCardItem
-import com.vurgun.skyfit.presentation.shared.components.SkyFitPostCardItemComponent
+import com.vurgun.skyfit.presentation.shared.features.social.SkyFitPostCardItem
+import com.vurgun.skyfit.presentation.shared.features.social.SkyFitPostCardItemComponent
 import com.vurgun.skyfit.presentation.shared.components.UserCircleAvatarItem
 import com.vurgun.skyfit.presentation.shared.navigation.SkyFitNavigationRoute
 import com.vurgun.skyfit.presentation.shared.navigation.jumpAndStay

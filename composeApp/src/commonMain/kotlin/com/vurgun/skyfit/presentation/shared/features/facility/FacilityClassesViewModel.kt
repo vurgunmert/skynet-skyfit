@@ -1,4 +1,4 @@
-package com.vurgun.skyfit.presentation.shared.features.profile
+package com.vurgun.skyfit.presentation.shared.features.facility
 
 import com.vurgun.skyfit.presentation.shared.features.calendar.SkyFitClassCalendarCardItem
 

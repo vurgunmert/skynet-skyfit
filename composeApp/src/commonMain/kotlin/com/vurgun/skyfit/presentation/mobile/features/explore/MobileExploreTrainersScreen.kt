@@ -20,7 +20,7 @@ import com.vurgun.skyfit.presentation.shared.components.SkyFitScaffold
 import com.vurgun.skyfit.presentation.shared.components.SkyFitScreenHeader
 import com.vurgun.skyfit.presentation.shared.components.SkyFitSearchFilterBarComponent
 import com.vurgun.skyfit.presentation.shared.components.SkyFitSearchTextInputComponent
-import com.vurgun.skyfit.presentation.shared.components.TrainerProfileCardItemBox
+import com.vurgun.skyfit.presentation.shared.features.profile.TrainerProfileCardItemBox
 import moe.tlaster.precompose.navigation.Navigator
 
 @Composable

@@ -34,7 +34,7 @@ import com.vurgun.skyfit.presentation.mobile.features.user.appointments.Appointm
 import com.vurgun.skyfit.presentation.shared.components.ButtonSize
 import com.vurgun.skyfit.presentation.shared.components.ButtonState
 import com.vurgun.skyfit.presentation.shared.components.ButtonVariant
-import com.vurgun.skyfit.presentation.shared.components.MobileSettingsMenuItemComponent
+import com.vurgun.skyfit.presentation.shared.features.settings.MobileSettingsMenuItemComponent
 import com.vurgun.skyfit.presentation.shared.components.SkyFitButtonComponent
 import com.vurgun.skyfit.presentation.shared.components.SkyFitSearchTextInputComponent
 import com.vurgun.skyfit.presentation.shared.navigation.SkyFitNavigationRoute

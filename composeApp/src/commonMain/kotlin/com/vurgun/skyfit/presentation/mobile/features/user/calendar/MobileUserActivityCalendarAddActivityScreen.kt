@@ -30,9 +30,9 @@ import com.vurgun.skyfit.presentation.shared.components.ButtonVariant
 import com.vurgun.skyfit.presentation.shared.components.SkyFitButtonComponent
 import com.vurgun.skyfit.presentation.shared.components.SkyFitScreenHeader
 import com.vurgun.skyfit.presentation.shared.components.SkyFitWheelPickerComponent
-import com.vurgun.skyfit.presentation.shared.components.calendar.SkyFitDailyActivityCanvas
-import com.vurgun.skyfit.presentation.shared.components.calendar.SkyFitDailyActivityItem
-import com.vurgun.skyfit.presentation.shared.components.calendar.SkyFitFourDigitClockComponent
+import com.vurgun.skyfit.presentation.shared.features.calendar.SkyFitDailyActivityCanvas
+import com.vurgun.skyfit.presentation.shared.features.calendar.SkyFitDailyActivityItem
+import com.vurgun.skyfit.presentation.shared.features.calendar.SkyFitFourDigitClockComponent
 import com.vurgun.skyfit.presentation.shared.resources.SkyFitColor
 import com.vurgun.skyfit.presentation.shared.resources.SkyFitTypography
 import moe.tlaster.precompose.navigation.Navigator

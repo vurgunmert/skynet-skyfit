@@ -24,7 +24,7 @@ import com.vurgun.skyfit.presentation.mobile.features.user.settings.MobileUserSe
 import com.vurgun.skyfit.presentation.mobile.features.user.settings.MobileUserSettingsScreenDeleteActionsComponent
 import com.vurgun.skyfit.presentation.mobile.features.user.settings.MobileUserSettingsScreenPhotoEditComponent
 import com.vurgun.skyfit.presentation.mobile.features.user.settings.MobileUserSettingsScreenSaveActionComponent
-import com.vurgun.skyfit.presentation.shared.components.MobileSettingsMenuItemComponent
+import com.vurgun.skyfit.presentation.shared.features.settings.MobileSettingsMenuItemComponent
 import com.vurgun.skyfit.presentation.shared.components.SkyFitScreenHeader
 import com.vurgun.skyfit.presentation.shared.components.SkyFitTextInputComponent
 import com.vurgun.skyfit.presentation.shared.resources.SkyFitColor

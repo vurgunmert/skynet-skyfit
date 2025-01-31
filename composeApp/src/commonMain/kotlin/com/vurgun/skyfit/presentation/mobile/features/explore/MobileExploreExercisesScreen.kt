@@ -16,7 +16,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import com.vurgun.skyfit.presentation.shared.components.ExerciseProfileCardItemComponent
+import com.vurgun.skyfit.presentation.shared.features.profile.ExerciseProfileCardItemComponent
 import com.vurgun.skyfit.presentation.shared.components.SkyFitScaffold
 import com.vurgun.skyfit.presentation.shared.components.SkyFitScreenHeader
 import com.vurgun.skyfit.presentation.shared.components.SkyFitSearchFilterBarComponent

@@ -30,8 +30,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.vurgun.skyfit.presentation.shared.components.SkyFitAvatarCircle
-import com.vurgun.skyfit.presentation.shared.components.SkyFitChatMessageBubble
-import com.vurgun.skyfit.presentation.shared.components.SkyFitChatMessageInputComponent
+import com.vurgun.skyfit.presentation.shared.features.social.SkyFitChatMessageBubble
+import com.vurgun.skyfit.presentation.shared.features.social.SkyFitChatMessageInputComponent
 import com.vurgun.skyfit.presentation.shared.components.UserCircleAvatarItem
 import com.vurgun.skyfit.presentation.shared.resources.SkyFitColor
 import com.vurgun.skyfit.presentation.shared.resources.SkyFitTypography

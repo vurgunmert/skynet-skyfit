@@ -14,8 +14,8 @@ import io.ktor.http.contentType
 class ChatbotRepository : ChatbotQueryUseCase {
 
     //TODO: Secure Keys
-    private val apiUrl = "https://ru1j9wqs.rcld.app/api/v1/prediction/9603f037-8395-4abf-8b87-a6c0f09fc96c"
-    private val apiKey = "ktO5bzN1-D3zVg9pgxOCMd3llg1Fl78AuttQhXQry-M"
+    private val apiUrl = "https://bgmh4dsb.rpcld.net/api/v1/prediction/d50d5475-79ac-4e41-8fc5-89f5315b64fe"
+    private val apiKey = "mB6vUWOdnUp6Lg9JwpQXMrwrQh6bIfIzydf-tgeygvY"
 
     override suspend fun queryChat(question: String): String {
         val response: ChatbotResponse = commonHttpClient.post(apiUrl) {
@@ -23,6 +23,6 @@ class ChatbotRepository : ChatbotQueryUseCase {
             header("Authorization", "Bearer $apiKey")
             setBody(ChatbotRequest(question))
         }.body()
-        return response.answer
+        return response.text.toString()
     }
 }

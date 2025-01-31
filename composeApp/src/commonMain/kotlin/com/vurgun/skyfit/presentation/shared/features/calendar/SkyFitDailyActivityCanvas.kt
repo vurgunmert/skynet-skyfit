@@ -1,4 +1,4 @@
-package com.vurgun.skyfit.presentation.shared.components.calendar
+package com.vurgun.skyfit.presentation.shared.features.calendar
 
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background

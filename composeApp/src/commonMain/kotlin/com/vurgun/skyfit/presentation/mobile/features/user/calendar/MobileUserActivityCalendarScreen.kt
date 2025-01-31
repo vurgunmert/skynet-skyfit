@@ -13,8 +13,8 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import com.vurgun.skyfit.presentation.shared.components.SkyFitScreenHeader
-import com.vurgun.skyfit.presentation.shared.components.calendar.SkyFitDailyActivityCanvas
-import com.vurgun.skyfit.presentation.shared.components.calendar.SkyFitDailyActivityItem
+import com.vurgun.skyfit.presentation.shared.features.calendar.SkyFitDailyActivityCanvas
+import com.vurgun.skyfit.presentation.shared.features.calendar.SkyFitDailyActivityItem
 import com.vurgun.skyfit.presentation.shared.features.calendar.SkyFitCalendarGridComponent
 import com.vurgun.skyfit.presentation.shared.resources.SkyFitColor
 import com.vurgun.skyfit.utils.now

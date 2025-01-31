@@ -1,4 +1,4 @@
-package com.vurgun.skyfit.presentation.shared.components
+package com.vurgun.skyfit.presentation.shared.features.social
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -24,11 +24,11 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.dp
 import coil3.compose.AsyncImage
-import com.vurgun.skyfit.presentation.shared.components.SkyFitPostCardItemComponent.InteractionRow
-import com.vurgun.skyfit.presentation.shared.components.SkyFitPostCardItemComponent.PostContent
-import com.vurgun.skyfit.presentation.shared.components.SkyFitPostCardItemComponent.PostImage
-import com.vurgun.skyfit.presentation.shared.components.SkyFitPostCardItemComponent.ProfileImage
-import com.vurgun.skyfit.presentation.shared.components.SkyFitPostCardItemComponent.UserInfoSection
+import com.vurgun.skyfit.presentation.shared.features.social.SkyFitPostCardItemComponent.InteractionRow
+import com.vurgun.skyfit.presentation.shared.features.social.SkyFitPostCardItemComponent.PostContent
+import com.vurgun.skyfit.presentation.shared.features.social.SkyFitPostCardItemComponent.PostImage
+import com.vurgun.skyfit.presentation.shared.features.social.SkyFitPostCardItemComponent.ProfileImage
+import com.vurgun.skyfit.presentation.shared.features.social.SkyFitPostCardItemComponent.UserInfoSection
 import com.vurgun.skyfit.presentation.shared.resources.SkyFitColor
 import com.vurgun.skyfit.presentation.shared.resources.SkyFitTypography
 import org.jetbrains.compose.resources.painterResource

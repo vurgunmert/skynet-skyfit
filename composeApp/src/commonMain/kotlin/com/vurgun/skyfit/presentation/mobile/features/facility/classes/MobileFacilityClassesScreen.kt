@@ -19,7 +19,7 @@ import androidx.compose.ui.unit.dp
 import com.vurgun.skyfit.presentation.shared.components.SkyFitScreenHeader
 import com.vurgun.skyfit.presentation.shared.features.calendar.SkyFitClassCalendarCardItem
 import com.vurgun.skyfit.presentation.shared.features.calendar.SkyFitClassCalendarCardItemComponent
-import com.vurgun.skyfit.presentation.shared.features.profile.FacilityClassesViewModel
+import com.vurgun.skyfit.presentation.shared.features.facility.FacilityClassesViewModel
 import com.vurgun.skyfit.presentation.shared.resources.SkyFitColor
 import com.vurgun.skyfit.presentation.shared.resources.SkyFitTypography
 import moe.tlaster.precompose.navigation.Navigator
