@@ -200,8 +200,6 @@ sealed class SkyFitNavigationRoute(
     // - Classes
     data object FacilityClasses : SkyFitNavigationRoute("facility_classes/owner", roles = listOf(Role.FACILITY_MANAGER))
     data object FacilityClassesVisited : SkyFitNavigationRoute("facility_classes/visitor", roles = listOf(Role.USER))
-    data object FacilityClassAdd :
-        SkyFitNavigationRoute("facility_class/add/{classId}", roles = listOf(Role.FACILITY_MANAGER), Param.CLASS_ID)
 
     data object FacilityClassEdit :
         SkyFitNavigationRoute("facility_class/edit/{classId}", roles = listOf(Role.FACILITY_MANAGER), Param.CLASS_ID)

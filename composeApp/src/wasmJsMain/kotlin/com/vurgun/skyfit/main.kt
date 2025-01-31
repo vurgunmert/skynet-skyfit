@@ -5,11 +5,11 @@ import androidx.compose.ui.window.ComposeViewport
 import com.vurgun.skyfit.construction.AppDependencyManager
 import com.vurgun.skyfit.construction.SkyFitHostScreen
 import kotlinx.browser.document
-import com.vurgun.skyfit.presentation.web.WebHostScreen
 
 @OptIn(ExperimentalComposeUiApi::class)
 fun main() {
     AppDependencyManager.loadSkyFitModules()
+    //TODO: Import & Initiate Firebase
 
     ComposeViewport(document.body!!) {
         SkyFitHostScreen {

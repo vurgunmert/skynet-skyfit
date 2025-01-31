@@ -25,12 +25,16 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import com.vurgun.skyfit.presentation.shared.components.SkyFitIconButton
 import com.vurgun.skyfit.presentation.shared.features.social.SkyFitPostCardItem
 import com.vurgun.skyfit.presentation.shared.features.social.SkyFitPostCardItemComponent
 import com.vurgun.skyfit.presentation.shared.features.common.TodoBox
 import com.vurgun.skyfit.presentation.shared.resources.SkyFitColor
 import com.vurgun.skyfit.presentation.shared.resources.SkyFitTypography
 import moe.tlaster.precompose.navigation.Navigator
+import org.jetbrains.compose.resources.painterResource
+import skyfit.composeapp.generated.resources.Res
+import skyfit.composeapp.generated.resources.logo_skyfit
 
 @Composable
 fun MobileUserProfileVisitedScreen(navigator: Navigator) {
@@ -65,7 +69,7 @@ fun MobileUserProfileVisitedScreen(navigator: Navigator) {
                     MobileVisitedProfileActionsComponent()
                 }
 
-                MobileUserProfileVisitedScreenToolbarComponent()
+                MobileUserProfileVisitedScreenToolbarComponent(onClickBack = { navigator.popBackStack() })
             }
         }
     ) {
@@ -109,8 +113,13 @@ fun MobileUserProfileVisitedScreen(navigator: Navigator) {
 }
 
 @Composable
-private fun MobileUserProfileVisitedScreenToolbarComponent() {
-    TodoBox("MobileUserProfileVisitedScreenToolbarComponent", Modifier.size(430.dp, 64.dp))
+private fun MobileUserProfileVisitedScreenToolbarComponent(onClickBack: () -> Unit) {
+    Box(Modifier.fillMaxWidth().padding(horizontal = 8.dp, vertical = 24.dp)) {
+        SkyFitIconButton(
+            painter = painterResource(Res.drawable.logo_skyfit),
+            modifier = Modifier.size(48.dp).clickable(onClick = onClickBack)
+        )
+    }
 }
 
 @Composable
@@ -129,21 +138,21 @@ private fun MobileUserProfileVisitedScreenInfoCardMiniComponent() {
 }
 
 @Composable
-fun MobileVisitedProfileActionsComponent() {
+fun MobileVisitedProfileActionsComponent(modifier: Modifier = Modifier.fillMaxWidth(),
+                                         onClickAbout: () -> Unit = {},
+                                         onClickPosts: () -> Unit = {}) {
     var aboutSelected by remember { mutableStateOf(true) } // Default to "Hakkımda"
 
     Row(
-        Modifier
-            .fillMaxWidth()
-            .background(SkyFitColor.background.default, RoundedCornerShape(20.dp))
+        modifier
+            .background(SkyFitColor.background.surfaceSecondary, RoundedCornerShape(20.dp))
             .padding(8.dp)
     ) {
-        // "Hakkımda" Button
         Box(
             modifier = Modifier
-                .weight(if (aboutSelected) 0.7f else 0.3f)
+                .weight(if (aboutSelected) 1f else 3f)
                 .background(if (aboutSelected) SkyFitColor.specialty.buttonBgRest else SkyFitColor.background.surfaceSecondary, RoundedCornerShape(12.dp))
-                .clickable(onClick = { aboutSelected = true })
+                .clickable(onClick = { aboutSelected = true; onClickAbout.invoke() })
                 .padding(vertical = 8.dp),
             contentAlignment = Alignment.Center
         ) {
@@ -154,12 +163,11 @@ fun MobileVisitedProfileActionsComponent() {
             )
         }
 
-        // "Paylaşımlar" Button
         Box(
             modifier = Modifier
-                .weight(if (!aboutSelected) 0.7f else 0.3f)
+                .weight(if (!aboutSelected) 3f else 1f)
                 .background(if (!aboutSelected) SkyFitColor.specialty.buttonBgRest else SkyFitColor.background.surfaceSecondary, RoundedCornerShape(12.dp))
-                .clickable(onClick = { aboutSelected = false })
+                .clickable(onClick = { aboutSelected = false; onClickPosts.invoke() })
                 .padding(vertical = 8.dp),
             contentAlignment = Alignment.Center
         ) {

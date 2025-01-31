@@ -1,6 +1,7 @@
 package com.vurgun.skyfit.presentation.mobile.features.facility.profile
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxWithConstraints
@@ -32,6 +33,7 @@ import com.vurgun.skyfit.presentation.mobile.features.explore.TrainerProfileCard
 import com.vurgun.skyfit.presentation.mobile.features.facility.profile.MobileFacilityProfileVisitedScreen.MobileFacilityProfileVisitedScreenInfoCardComponent
 import com.vurgun.skyfit.presentation.mobile.features.facility.profile.MobileFacilityProfileVisitedScreen.MobileFacilityProfileVisitedScreenPhotosComponent
 import com.vurgun.skyfit.presentation.mobile.features.facility.profile.MobileFacilityProfileVisitedScreen.MobileFacilityProfileVisitedScreenPrivateClassesComponent
+import com.vurgun.skyfit.presentation.mobile.features.facility.profile.MobileFacilityProfileVisitedScreen.MobileFacilityProfileVisitedScreenToolbarComponent
 import com.vurgun.skyfit.presentation.mobile.features.facility.profile.MobileFacilityProfileVisitedScreen.MobileFacilityProfileVisitedScreenTrainersComponent
 import com.vurgun.skyfit.presentation.shared.components.ButtonSize
 import com.vurgun.skyfit.presentation.shared.components.ButtonVariant
@@ -104,11 +106,23 @@ fun MobileFacilityProfileVisitedScreen(navigator: Navigator) {
                 MobileFacilityProfileVisitedScreenPrivateClassesComponent(privateClasses)
             }
         }
+
+        MobileFacilityProfileVisitedScreenToolbarComponent(onClickBack = { navigator.popBackStack() })
     }
 }
 
 
 object MobileFacilityProfileVisitedScreen {
+
+    @Composable
+    fun MobileFacilityProfileVisitedScreenToolbarComponent(onClickBack: () -> Unit) {
+        Box(Modifier.fillMaxWidth().padding(horizontal = 8.dp, vertical = 24.dp)) {
+            SkyFitIconButton(
+                painter = painterResource(Res.drawable.logo_skyfit),
+                modifier = Modifier.size(48.dp).clickable(onClick = onClickBack)
+            )
+        }
+    }
 
     @Composable
     fun MobileFacilityProfileVisitedScreenPhotosComponent() {

@@ -42,10 +42,10 @@ object SkyFitColor {
         val surfaceCritical = Color(0xFF8E1F0B)  // bg-surface-critical
         val surfaceCriticalHover = Color(0xFF5F1507)  // bg-surface-critical-hover
         val surfaceCriticalActive = Color(0xFF2F0A04)  // bg-surface-critical-active
-        val fillTransparent = Color(0xFFBCEFFF).copy(alpha = 0.03f)  // bg-fill-transparent
-        val fillTransparentHover = Color(0xFFBCEFFF).copy(alpha = 0.05f)  // bg-fill-transparent-hover
-        val fillTransparentActive = Color(0xFFBCEFFF).copy(alpha = 0.07f)  // bg-fill-transparent-active
-        val fillTransparentSecondary = Color(0xFFBCEFFF).copy(alpha = 0.06f)  // bg-fill-transparent-secondary
+        val fillTransparent = Color(0xFFBCEFFF).copy(alpha = 0.3f)  // bg-fill-transparent
+        val fillTransparentHover = Color(0xFFBCEFFF).copy(alpha = 0.5f)  // bg-fill-transparent-hover
+        val fillTransparentActive = Color(0xFFBCEFFF).copy(alpha = 0.7f)  // bg-fill-transparent-active
+        val fillTransparentSecondary = Color(0xFFBCEFFF).copy(alpha = 0.6f)  // bg-fill-transparent-secondary
         val fillTransparentSecondaryHover =
             Color(0xFFBCEFFF).copy(alpha = 0.07f)  // bg-fill-transparent-secondary-hover
         val fillTransparentSecondaryActive =

@@ -19,13 +19,10 @@ import com.vurgun.skyfit.presentation.mobile.features.explore.MobileExploreFacil
 import com.vurgun.skyfit.presentation.mobile.features.explore.MobileExploreTrainersScreen
 import com.vurgun.skyfit.presentation.mobile.features.facility.calendar.MobileFacilityCalendarScreen
 import com.vurgun.skyfit.presentation.mobile.features.facility.calendar.MobileFacilityCalendarVisitedScreen
-import com.vurgun.skyfit.presentation.mobile.features.facility.classes.MobileFacilityClassAddScreen
-import com.vurgun.skyfit.presentation.mobile.features.facility.classes.MobileFacilityClassDetailScreen
 import com.vurgun.skyfit.presentation.mobile.features.facility.classes.MobileFacilityClassDetailVisitedScreen
 import com.vurgun.skyfit.presentation.mobile.features.facility.classes.MobileFacilityClassEditCompletedScreen
 import com.vurgun.skyfit.presentation.mobile.features.facility.classes.MobileFacilityClassEditScreen
 import com.vurgun.skyfit.presentation.mobile.features.facility.classes.MobileFacilityClassesScreen
-import com.vurgun.skyfit.presentation.mobile.features.facility.classes.MobileFacilityClassesVisitedScreen
 import com.vurgun.skyfit.presentation.mobile.features.facility.profile.MobileFacilityPhotoDiaryScreen
 import com.vurgun.skyfit.presentation.mobile.features.facility.profile.MobileFacilityProfileScreen
 import com.vurgun.skyfit.presentation.mobile.features.facility.profile.MobileFacilityProfileVisitedScreen
@@ -91,7 +88,7 @@ fun MobileNavigationGraph() {
 
     NavHost(
         navigator = rootNavigator,
-        initialRoute = SkyFitNavigationRoute.FacilityClassEdit.route
+        initialRoute = SkyFitNavigationRoute.FacilityClassEditCompleted.route
     ) {
 
         // Auth
@@ -105,6 +102,7 @@ fun MobileNavigationGraph() {
         //General
         scene(SkyFitNavigationRoute.Onboarding.route) { MobileOnboardingScreen(rootNavigator) }
         scene(SkyFitNavigationRoute.Dashboard.route) { MobileDashboardScreen(rootNavigator) }
+        scene(SkyFitNavigationRoute.DashboardProfile.route) { MobileDashboardScreen(rootNavigator, SkyFitNavigationRoute.DashboardProfile) }
         scene(SkyFitNavigationRoute.DashboardNutrition.route) { MobileDashboardScreen(rootNavigator, SkyFitNavigationRoute.DashboardNutrition) }
 
         //Explore
@@ -199,11 +197,8 @@ fun MobileNavigationGraph() {
         scene(SkyFitNavigationRoute.FacilityCalendarVisited.route) { MobileFacilityCalendarVisitedScreen(rootNavigator) }
         //Facility - Classes
         scene(SkyFitNavigationRoute.FacilityClasses.route) { MobileFacilityClassesScreen(rootNavigator) }
-        scene(SkyFitNavigationRoute.FacilityClassesVisited.route) { MobileFacilityClassesVisitedScreen(rootNavigator) }
-        scene(SkyFitNavigationRoute.FacilityClassAdd.route) { MobileFacilityClassAddScreen(rootNavigator) }
         scene(SkyFitNavigationRoute.FacilityClassEdit.route) { MobileFacilityClassEditScreen(rootNavigator) }
         scene(SkyFitNavigationRoute.FacilityClassEditCompleted.route) { MobileFacilityClassEditCompletedScreen(rootNavigator) }
-        scene(SkyFitNavigationRoute.FacilityClassDetail.route) { MobileFacilityClassDetailScreen(rootNavigator) }
         scene(SkyFitNavigationRoute.FacilityClassDetailVisited.route) { MobileFacilityClassDetailVisitedScreen(rootNavigator) }
         //Facility - Settings
         scene(SkyFitNavigationRoute.FacilitySettings.route) { MobileFacilitySettingsScreen(rootNavigator) }
