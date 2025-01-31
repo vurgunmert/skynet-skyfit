@@ -39,7 +39,7 @@ fun MobileUserMealDetailScreen(rootNavigator: Navigator) {
     Scaffold(
         backgroundColor = SkyFitColor.background.default,
         topBar = {
-            SkyFitScreenHeader("Kahvalti", onBackClick = { rootNavigator.popBackStack() })
+            SkyFitScreenHeader("Kahvalti", onClickBack = { rootNavigator.popBackStack() })
         }
     ) {
         MobileUserMealDetailScreenFoodRecordsComponent()

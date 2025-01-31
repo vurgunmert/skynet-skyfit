@@ -27,7 +27,7 @@ fun MobileUserActivityCalendarScreen(navigator: Navigator) {
     Scaffold(
         backgroundColor = SkyFitColor.background.default,
         topBar = {
-            SkyFitScreenHeader("Takvim", onBackClick = { navigator.popBackStack() })
+            SkyFitScreenHeader("Takvim", onClickBack = { navigator.popBackStack() })
         }
     ) {
         Column(

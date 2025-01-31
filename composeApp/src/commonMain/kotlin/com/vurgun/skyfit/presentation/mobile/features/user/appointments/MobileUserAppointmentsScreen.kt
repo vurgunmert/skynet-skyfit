@@ -42,7 +42,7 @@ fun MobileUserAppointmentsScreen(navigator: Navigator) {
         backgroundColor = SkyFitColor.background.default,
         topBar = {
             Column {
-                SkyFitScreenHeader("Randevularim", onBackClick = { navigator.popBackStack() })
+                SkyFitScreenHeader("Randevularim", onClickBack = { navigator.popBackStack() })
 
                 SkyFitBadgeTabBarComponent(
                     titles = tabTitles,

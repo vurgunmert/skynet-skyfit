@@ -38,7 +38,7 @@ fun MobileUserPhotoDiaryScreen(navigator: Navigator) {
     Scaffold(
         backgroundColor = SkyFitColor.background.default,
         topBar = {
-            SkyFitScreenHeader("Fotograf Gunlugum", onBackClick = { navigator.popBackStack() })
+            SkyFitScreenHeader("Fotograf Gunlugum", onClickBack = { navigator.popBackStack() })
         }
     ) {
         Box(Modifier.fillMaxSize()) {

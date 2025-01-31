@@ -73,7 +73,7 @@ fun MobileUserNotificationsScreen(navigator: Navigator) {
         backgroundColor = SkyFitColor.background.default,
         topBar = {
             Column {
-                SkyFitScreenHeader("Bildirimler", onBackClick = { navigator.popBackStack() })
+                SkyFitScreenHeader("Bildirimler", onClickBack = { navigator.popBackStack() })
                 SkyFitBadgeTabBarComponent(tabTitles, activeTab, onTabSelected = { activeTab = it })
             }
         },

@@ -41,7 +41,7 @@ fun MobileUserMeasurementsScreen(navigator: Navigator) {
             Column {
                 SkyFitScreenHeader(
                     title = "Ölçümlerim",
-                    onBackClick = { navigator.popBackStack() }
+                    onClickBack = { navigator.popBackStack() }
                 )
                 Spacer(Modifier.height(8.dp))
                 MobileUserMeasurementsScreenSearchComponent()

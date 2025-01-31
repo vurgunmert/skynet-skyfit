@@ -79,7 +79,7 @@ private fun MobileUserMealDetailAddInputScreen(
     Scaffold(
         backgroundColor = SkyFitColor.background.default,
         topBar = {
-            SkyFitScreenHeader("Besin Ekle", onBackClick = onClickBack)
+            SkyFitScreenHeader("Besin Ekle", onClickBack = onClickBack)
         }
     ) {
         Column(

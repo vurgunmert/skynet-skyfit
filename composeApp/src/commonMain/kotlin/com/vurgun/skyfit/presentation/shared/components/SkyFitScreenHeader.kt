@@ -3,7 +3,6 @@ package com.vurgun.skyfit.presentation.shared.components
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
@@ -21,7 +20,7 @@ import skyfit.composeapp.generated.resources.logo_skyfit
 @Composable
 fun SkyFitScreenHeader(
     title: String,
-    onBackClick: () -> Unit,
+    onClickBack: () -> Unit,
     modifier: Modifier = Modifier
 ) {
     Box(
@@ -30,7 +29,7 @@ fun SkyFitScreenHeader(
             .height(40.dp)
     ) {
         IconButton(
-            onClick = onBackClick,
+            onClick = onClickBack,
             modifier = Modifier
                 .align(Alignment.CenterStart)
         ) {

@@ -23,7 +23,7 @@ fun MobileFacilitySettingsScreen(navigator: Navigator) {
 
     SkyFitScaffold(
         topBar = {
-            SkyFitScreenHeader(title = "Ayarlar", onBackClick = { })
+            SkyFitScreenHeader(title = "Ayarlar", onClickBack = { })
         },
         bottomBar = {
 

@@ -54,7 +54,7 @@ fun MobileFacilityCalendarVisitedScreen(navigator: Navigator) {
     Scaffold(
         backgroundColor = SkyFitColor.background.default,
         topBar = {
-            SkyFitScreenHeader("Randevu Al", onBackClick = { navigator.popBackStack() })
+            SkyFitScreenHeader("Randevu Al", onClickBack = { navigator.popBackStack() })
         },
         bottomBar = {
             if (showCreateAction) {

@@ -59,7 +59,7 @@ fun MobileUserPaymentProcessScreen(navigator: Navigator) {
         ) {
             when (paymentStep) {
                 MobileUserPaymentProcessStep.METHOD -> {
-                    SkyFitScreenHeader("Odeme Yap", onBackClick = { navigator.popBackStack() })
+                    SkyFitScreenHeader("Odeme Yap", onClickBack = { navigator.popBackStack() })
                     MobileUserPaymentStepProgressBar(paymentStep)
                     MobileUserActivityCalendarPaymentMethodComponent(
                         onClickMethod = { paymentStep = MobileUserPaymentProcessStep.INPUT }
@@ -67,7 +67,7 @@ fun MobileUserPaymentProcessScreen(navigator: Navigator) {
                 }
 
                 MobileUserPaymentProcessStep.INPUT -> {
-                    SkyFitScreenHeader("Odeme Yap", onBackClick = { paymentStep = MobileUserPaymentProcessStep.METHOD })
+                    SkyFitScreenHeader("Odeme Yap", onClickBack = { paymentStep = MobileUserPaymentProcessStep.METHOD })
                     MobileUserPaymentStepProgressBar(paymentStep)
                     MobileUserActivityCalendarPaymentMethodInputComponent()
                     Spacer(Modifier.weight(1f))
@@ -79,7 +79,7 @@ fun MobileUserPaymentProcessScreen(navigator: Navigator) {
                 }
 
                 MobileUserPaymentProcessStep.SUMMARY -> {
-                    SkyFitScreenHeader("Odeme Yap", onBackClick = { paymentStep = MobileUserPaymentProcessStep.INPUT })
+                    SkyFitScreenHeader("Odeme Yap", onClickBack = { paymentStep = MobileUserPaymentProcessStep.INPUT })
                     MobileUserPaymentStepProgressBar(paymentStep)
                     MobileUserActivityCalendarPaymentSummaryComponent()
                     Spacer(Modifier.weight(1f))

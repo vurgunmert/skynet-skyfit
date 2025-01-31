@@ -55,7 +55,7 @@ fun MobileUserActivityCalendarAddActivityScreen(navigator: Navigator) {
     Scaffold(
         backgroundColor = SkyFitColor.background.default,
         topBar = {
-            SkyFitScreenHeader("Yeni Aktivite", onBackClick = { navigator.popBackStack() })
+            SkyFitScreenHeader("Yeni Aktivite", onClickBack = { navigator.popBackStack() })
         },
         bottomBar = {
             when (step) {

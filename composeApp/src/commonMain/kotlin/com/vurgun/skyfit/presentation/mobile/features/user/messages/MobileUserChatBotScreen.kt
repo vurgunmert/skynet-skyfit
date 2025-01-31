@@ -57,7 +57,7 @@ fun MobileUserChatBotScreen(navigator: Navigator) {
 
     SkyFitScaffold(
         topBar = {
-            SkyFitScreenHeader("Chatbot", onBackClick = { navigator.popBackStack() })
+            SkyFitScreenHeader("Chatbot", onClickBack = { navigator.popBackStack() })
         }
     ) {
         Box(Modifier.fillMaxSize()) {

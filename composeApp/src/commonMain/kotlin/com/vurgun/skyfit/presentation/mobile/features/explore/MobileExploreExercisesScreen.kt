@@ -30,7 +30,7 @@ fun MobileExploreExercisesScreen(rootNavigator: Navigator) {
     SkyFitScaffold(
         topBar = {
             Column(Modifier.fillMaxWidth().padding(horizontal = 16.dp)) {
-                SkyFitScreenHeader("Popüler Antrenmanlar", onBackClick = {})
+                SkyFitScreenHeader("Popüler Antrenmanlar", onClickBack = {})
                 Spacer(Modifier.height(16.dp))
                 if (isSearchVisible) {
                     SkyFitSearchTextInputComponent()

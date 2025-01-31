@@ -318,9 +318,9 @@ object MobileFacilityProfileVisitedScreen {
                         style = SkyFitTypography.bodyLargeSemibold
                     )
                 }
-                Spacer(Modifier.height(16.dp))
 
                 privateClasses.forEach {
+                    Spacer(Modifier.height(16.dp))
                     SkyFitClassCalendarCardItemComponent(
                         item = it,
                         onClick = { }

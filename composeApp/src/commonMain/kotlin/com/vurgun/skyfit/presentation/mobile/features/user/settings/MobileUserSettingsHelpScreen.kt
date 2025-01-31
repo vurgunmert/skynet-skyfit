@@ -24,7 +24,7 @@ fun MobileUserSettingsHelpScreen(navigator: Navigator) {
     Scaffold(
         backgroundColor = SkyFitColor.background.default,
         topBar = {
-            SkyFitScreenHeader("Destek ve Yardım", onBackClick = { navigator.popBackStack() })
+            SkyFitScreenHeader("Destek ve Yardım", onClickBack = { navigator.popBackStack() })
         }
     ) {
         Column(

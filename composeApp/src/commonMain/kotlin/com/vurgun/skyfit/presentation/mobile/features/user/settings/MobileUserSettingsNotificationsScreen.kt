@@ -21,7 +21,7 @@ fun MobileUserSettingsNotificationsScreen(navigator: Navigator) {
     Scaffold(
         backgroundColor = SkyFitColor.background.default,
         topBar = {
-            SkyFitScreenHeader("Bildirimler", onBackClick = { navigator.popBackStack() })
+            SkyFitScreenHeader("Bildirimler", onClickBack = { navigator.popBackStack() })
         }
     ) {
         MobileUserSettingsNotificationsScreenOptionsComponent()

@@ -21,7 +21,7 @@ fun MobileUserSettingsPaymentHistoryScreen(navigator: Navigator) {
     Scaffold(
         backgroundColor = SkyFitColor.background.default,
         topBar = {
-            SkyFitScreenHeader("Ödeme Geçmişi", onBackClick = { navigator.popBackStack() })
+            SkyFitScreenHeader("Ödeme Geçmişi", onClickBack = { navigator.popBackStack() })
         }
     ) {
         MobileUserSettingsPaymentHistoriesComponent()

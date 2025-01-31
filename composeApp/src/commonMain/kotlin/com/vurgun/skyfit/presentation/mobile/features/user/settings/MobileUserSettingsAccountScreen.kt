@@ -64,7 +64,7 @@ fun MobileUserSettingsAccountScreen(navigator: Navigator) {
     Scaffold(
         backgroundColor = SkyFitColor.background.default,
         topBar = {
-            SkyFitScreenHeader("Hesap Ayarlari", onBackClick = { navigator.popBackStack() })
+            SkyFitScreenHeader("Hesap Ayarlari", onClickBack = { navigator.popBackStack() })
         },
         bottomBar = {
             if (showDeleteConfirm) {
