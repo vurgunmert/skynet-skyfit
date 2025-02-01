@@ -66,7 +66,8 @@ fun MobileTrainerSettingsAccountScreen(navigator: Navigator) {
     ) {
         Column(
             modifier = Modifier.fillMaxSize()
-                .padding(24.dp),
+                .padding(24.dp)
+                .verticalScroll(rememberScrollState()),
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {
             MobileTrainerSettingsAccountScreenInputComponent(viewModel)
@@ -95,63 +96,57 @@ private fun MobileTrainerSettingsAccountScreenInputComponent(viewModel: SkyFitTr
     val backgroundImageUrl by viewModel.backgroundImageUrl.collectAsState()
     val isAnyUpdated by viewModel.isAnyUpdated.collectAsState()
 
-    Column(
-        Modifier
-            .fillMaxSize()
-            .verticalScroll(rememberScrollState())
-    ) {
-        MobileUserSettingsScreenPhotoEditComponent("profileImageUrl", label = "Fotoğrafı Düzenle") {
+    MobileUserSettingsScreenPhotoEditComponent("profileImageUrl", label = "Fotoğrafı Düzenle") {
 
-        }
-        Spacer(Modifier.height(24.dp))
-        MobileUserSettingsScreenPhotoEditComponent("backgroundImageUrl", label = "Arkaplanı Düzenle") {
-
-        }
-
-        Spacer(Modifier.height(24.dp))
-        Text("Kullanici Adi", style = SkyFitTypography.bodySmallSemibold)
-        Spacer(Modifier.height(4.dp))
-        SkyFitTextInputComponent(
-            hint = "Ad Soyad *",
-            value = userName,
-            onValueChange = { },
-            leftIconPainter = painterResource(Res.drawable.logo_skyfit),
-            rightIconPainter = painterResource(Res.drawable.logo_skyfit)
-        )
-
-        Spacer(Modifier.height(24.dp))
-        Text("Ad Soyad *", style = SkyFitTypography.bodySmallSemibold)
-        Spacer(Modifier.height(4.dp))
-        SkyFitTextInputComponent(
-            hint = "Ad Soyad *",
-            value = userName,
-            onValueChange = { },
-            leftIconPainter = painterResource(Res.drawable.logo_skyfit),
-            rightIconPainter = painterResource(Res.drawable.logo_skyfit)
-        )
-
-        Spacer(Modifier.height(24.dp))
-        Text("Email *", style = SkyFitTypography.bodySmallSemibold)
-        Spacer(Modifier.height(4.dp))
-        SkyFitTextInputComponent(
-            hint = "Ad Soyad *",
-            value = userName,
-            onValueChange = { },
-            leftIconPainter = painterResource(Res.drawable.logo_skyfit),
-            rightIconPainter = painterResource(Res.drawable.logo_skyfit)
-        )
-
-        Spacer(Modifier.height(24.dp))
-        Text("Biyografi *", style = SkyFitTypography.bodySmallSemibold)
-        Spacer(Modifier.height(4.dp))
-        SkyFitTextInputComponent(
-            hint = "Ad Soyad *",
-            value = userName,
-            onValueChange = { },
-            leftIconPainter = painterResource(Res.drawable.logo_skyfit),
-            rightIconPainter = painterResource(Res.drawable.logo_skyfit)
-        )
-
-        MobileUserSettingsActivityTagEditComponent()
     }
+    Spacer(Modifier.height(24.dp))
+    MobileUserSettingsScreenPhotoEditComponent("backgroundImageUrl", label = "Arkaplanı Düzenle") {
+
+    }
+
+    Spacer(Modifier.height(24.dp))
+    Text("Kullanici Adi", style = SkyFitTypography.bodySmallSemibold)
+    Spacer(Modifier.height(4.dp))
+    SkyFitTextInputComponent(
+        hint = "Ad Soyad *",
+        value = userName,
+        onValueChange = { },
+        leftIconPainter = painterResource(Res.drawable.logo_skyfit),
+        rightIconPainter = painterResource(Res.drawable.logo_skyfit)
+    )
+
+    Spacer(Modifier.height(24.dp))
+    Text("Ad Soyad *", style = SkyFitTypography.bodySmallSemibold)
+    Spacer(Modifier.height(4.dp))
+    SkyFitTextInputComponent(
+        hint = "Ad Soyad *",
+        value = userName,
+        onValueChange = { },
+        leftIconPainter = painterResource(Res.drawable.logo_skyfit),
+        rightIconPainter = painterResource(Res.drawable.logo_skyfit)
+    )
+
+    Spacer(Modifier.height(24.dp))
+    Text("Email *", style = SkyFitTypography.bodySmallSemibold)
+    Spacer(Modifier.height(4.dp))
+    SkyFitTextInputComponent(
+        hint = "Ad Soyad *",
+        value = userName,
+        onValueChange = { },
+        leftIconPainter = painterResource(Res.drawable.logo_skyfit),
+        rightIconPainter = painterResource(Res.drawable.logo_skyfit)
+    )
+
+    Spacer(Modifier.height(24.dp))
+    Text("Biyografi *", style = SkyFitTypography.bodySmallSemibold)
+    Spacer(Modifier.height(4.dp))
+    SkyFitTextInputComponent(
+        hint = "Ad Soyad *",
+        value = userName,
+        onValueChange = { },
+        leftIconPainter = painterResource(Res.drawable.logo_skyfit),
+        rightIconPainter = painterResource(Res.drawable.logo_skyfit)
+    )
+
+    MobileUserSettingsActivityTagEditComponent()
 }

@@ -293,7 +293,6 @@ fun MobileUserSettingsScreenSaveActionComponent(onClick: () -> Unit) {
         initialState = ButtonState.Rest,
         leftIconPainter = painterResource(Res.drawable.logo_skyfit)
     )
-
 }
 
 @Composable
@@ -346,7 +345,7 @@ fun MobileUserSettingsScreenDeleteActionsComponent(
 }
 
 @Composable
-private fun SkyFitActivityTagLimitInfoComponent() {
+fun SkyFitActivityTagLimitInfoComponent() {
 
     Box(
         Modifier

@@ -26,6 +26,7 @@ import com.vurgun.skyfit.presentation.mobile.features.facility.classes.MobileFac
 import com.vurgun.skyfit.presentation.mobile.features.facility.profile.MobileFacilityPhotoDiaryScreen
 import com.vurgun.skyfit.presentation.mobile.features.facility.profile.MobileFacilityProfileScreen
 import com.vurgun.skyfit.presentation.mobile.features.facility.profile.MobileFacilityProfileVisitedScreen
+import com.vurgun.skyfit.presentation.mobile.features.facility.settings.MobileFacilitySettingsAccountScreen
 import com.vurgun.skyfit.presentation.mobile.features.facility.settings.MobileFacilitySettingsHelpScreen
 import com.vurgun.skyfit.presentation.mobile.features.facility.settings.MobileFacilitySettingsMembersScreen
 import com.vurgun.skyfit.presentation.mobile.features.facility.settings.MobileFacilitySettingsNotificationsScreen
@@ -88,7 +89,7 @@ fun MobileNavigationGraph() {
 
     NavHost(
         navigator = rootNavigator,
-        initialRoute = SkyFitNavigationRoute.FacilityClassEditCompleted.route
+        initialRoute = SkyFitNavigationRoute.FacilitySettingsAccount.route
     ) {
 
         // Auth
@@ -202,6 +203,7 @@ fun MobileNavigationGraph() {
         scene(SkyFitNavigationRoute.FacilityClassDetailVisited.route) { MobileFacilityClassDetailVisitedScreen(rootNavigator) }
         //Facility - Settings
         scene(SkyFitNavigationRoute.FacilitySettings.route) { MobileFacilitySettingsScreen(rootNavigator) }
+        scene(SkyFitNavigationRoute.FacilitySettingsAccount.route) { MobileFacilitySettingsAccountScreen(rootNavigator) }
         scene(SkyFitNavigationRoute.FacilitySettingsMembers.route) { MobileFacilitySettingsMembersScreen(rootNavigator) }
         scene(SkyFitNavigationRoute.FacilitySettingsTrainers.route) { MobileFacilitySettingsTrainersScreen(rootNavigator) }
         scene(SkyFitNavigationRoute.FacilitySettingsPaymentHistory.route) { MobileFacilitySettingsPaymentHistoryScreen(rootNavigator) }
