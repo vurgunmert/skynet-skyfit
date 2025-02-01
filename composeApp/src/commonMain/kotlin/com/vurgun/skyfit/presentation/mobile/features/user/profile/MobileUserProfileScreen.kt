@@ -99,7 +99,8 @@ fun MobileUserProfileScreen(navigator: Navigator) {
                                 ProfilePreferenceItem("Boy", "175"),
                                 ProfilePreferenceItem("Kilo", "175"),
                                 ProfilePreferenceItem("Vucut Tipi", "Ecto"),
-                            ))
+                            )
+                        )
                     } else {
                         MobileUserProfileInfoCardComponent(
                             name = "Dexter Moore",
@@ -145,7 +146,7 @@ private fun MobileUserProfileBackgroundImageComponent(height: Dp) {
 @Composable
 private fun MobileUserProfileAboutGroupComponent(scrollState: ScrollState, navigator: Navigator) {
     var appointments: List<Any> = emptyList()
-    var dietGoals: List<Any> = emptyList()
+    var dietGoals: List<Any> = listOf(1, 2, 3)
     var showMeasurements: Boolean = true
     var exerciseHistory: List<Any> = emptyList()
     var photos: List<Any> = emptyList()
@@ -160,10 +161,10 @@ private fun MobileUserProfileAboutGroupComponent(scrollState: ScrollState, navig
         if (appointments.isNotEmpty()) {
             MobileUserProfileAppointmentsComponent()
         }
-        if (dietGoals.isNotEmpty()) {
-            MobileUserProfileDietGoalsEmptyComponent()
+        if (dietGoals.isEmpty()) {
+            MobileUserProfileDietGoalsEmptyComponent(onClickAdd = { })
         } else {
-            MobileUserProfileDietGoalsComponent()
+            MobileUserProfileDietGoalsComponent(dietGoals)
         }
 
         if (showMeasurements) {
@@ -231,14 +232,107 @@ private fun MobileUserProfileAppointmentsComponent() {
     TodoBox("MobileUserProfileAppointmentsComponent", Modifier.size(398.dp, 352.dp))
 }
 
+
 @Composable
-private fun MobileUserProfileDietGoalsComponent() {
-    TodoBox("MobileUserProfileDietGoalsComponent", Modifier.size(382.dp, 392.dp))
+private fun MobileUserProfileDietGoalsComponent(records: List<Any>) {
+    Column(
+        Modifier
+            .padding(16.dp)
+            .fillMaxWidth()
+            .background(SkyFitColor.background.surfaceSecondary, RoundedCornerShape(16.dp))
+            .padding(16.dp)
+    ) {
+
+        Row(verticalAlignment = Alignment.CenterVertically) {
+            Icon(
+                painter = painterResource(Res.drawable.logo_skyfit),
+                modifier = Modifier.size(24.dp),
+                contentDescription = ""
+            )
+            Text(
+                text = "Diyet Listesi",
+                style = SkyFitTypography.bodyMediumSemibold
+            )
+        }
+        records.forEach {
+            Spacer(Modifier.height(16.dp))
+            MobileUserProfileDietGoalItemComponent()
+        }
+    }
 }
 
 @Composable
-private fun MobileUserProfileDietGoalsEmptyComponent() {
-    TodoBox("MobileUserProfileDietGoalsEmptyComponent", Modifier.size(382.dp, 390.dp))
+private fun MobileUserProfileDietGoalItemComponent() {
+    Row(
+        Modifier.fillMaxWidth()
+            .background(SkyFitColor.background.fillTransparentSecondary, RoundedCornerShape(16.dp))
+            .padding(12.dp),
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        Column(modifier = Modifier.weight(1f)) {
+            Text(
+                text = "Peynirli Salata",
+                style = SkyFitTypography.bodySmall
+            )
+            Spacer(Modifier.height(8.dp))
+            Text(
+                text = "7 gün sadece kahvaltıda",
+                style = SkyFitTypography.bodyMediumMedium.copy(color = SkyFitColor.text.default)
+            )
+            Spacer(Modifier.height(8.dp))
+            Text(
+                text = "234 kcal",
+                style = SkyFitTypography.bodyLarge.copy(color = SkyFitColor.text.default)
+            )
+        }
+        Spacer(Modifier.width(12.dp))
+        AsyncImage(
+            model = "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSJq8Cfy_pOdcJOYIQew3rWrnwwxfc8bZIarg&s",
+            contentDescription = null,
+            contentScale = ContentScale.Crop,
+            modifier = Modifier
+                .size(74.dp)
+                .clip(CircleShape)
+        )
+    }
+}
+
+@Composable
+private fun MobileUserProfileDietGoalsEmptyComponent(onClickAdd: () -> Unit) {
+    Column(
+        Modifier.fillMaxWidth()
+            .background(SkyFitColor.background.surfaceSemiTransparent)
+            .padding(16.dp)
+    ) {
+
+        Row(verticalAlignment = Alignment.CenterVertically) {
+            Icon(
+                painter = painterResource(Res.drawable.logo_skyfit),
+                modifier = Modifier.size(24.dp),
+                contentDescription = ""
+            )
+            Text(
+                text = "Diyet Listesi",
+                style = SkyFitTypography.bodyMediumSemibold
+            )
+        }
+
+        Box(
+            Modifier
+                .fillMaxWidth()
+                .padding(vertical = 96.dp),
+            contentAlignment = Alignment.Center
+        ) {
+
+            SkyFitButtonComponent(
+                Modifier.wrapContentWidth(), text = "Diyet Listesi Oluştur",
+                onClick = onClickAdd,
+                variant = ButtonVariant.Primary,
+                size = ButtonSize.Medium,
+                initialState = ButtonState.Rest
+            )
+        }
+    }
 }
 
 @Composable
@@ -384,7 +478,7 @@ private fun MobileUserProfileInfoCardComponent(
     Box(modifier = Modifier.fillMaxWidth()) {
         Box(
             modifier = Modifier
-                .padding(top = 120.dp)
+                .padding(top = 70.dp)
                 .padding(horizontal = 16.dp)
                 .width(398.dp)
                 .heightIn(max = 140.dp)
@@ -444,7 +538,6 @@ private fun MobileUserProfileInfoCardComponent(
             contentDescription = "Profile",
             contentScale = ContentScale.Crop,
             modifier = Modifier
-                .padding(top = 50.dp)
                 .size(100.dp)
                 .clip(RoundedCornerShape(20.dp))
                 .align(Alignment.TopCenter)

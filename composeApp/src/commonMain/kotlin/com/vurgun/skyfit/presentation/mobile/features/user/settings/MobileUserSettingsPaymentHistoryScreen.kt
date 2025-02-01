@@ -29,7 +29,7 @@ fun MobileUserSettingsPaymentHistoryScreen(navigator: Navigator) {
 }
 
 @Composable
-private fun MobileUserSettingsPaymentHistoriesComponent() {
+fun MobileUserSettingsPaymentHistoriesComponent() {
     var historyItems = listOf(
         PaymentHistoryItem(
             date = "29/10/2024 16:45",
