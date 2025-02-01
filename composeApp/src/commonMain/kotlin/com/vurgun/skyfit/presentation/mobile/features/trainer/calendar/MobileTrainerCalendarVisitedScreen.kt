@@ -23,7 +23,7 @@ import androidx.compose.ui.unit.dp
 import com.vurgun.skyfit.presentation.mobile.features.facility.calendar.MobileFacilityCalendarVisitedScreenCalendarGridComponent
 import com.vurgun.skyfit.presentation.mobile.features.facility.calendar.MobileFacilityCalendarVisitedScreenCreateActionComponent
 import com.vurgun.skyfit.presentation.mobile.features.facility.calendar.MobileFacilityCalendarVisitedScreenPrivateClassesComponent
-import com.vurgun.skyfit.presentation.shared.components.SkyFitAvatarCircle
+import com.vurgun.skyfit.presentation.shared.components.SkyFitCircularImageComponent
 import com.vurgun.skyfit.presentation.shared.components.SkyFitScreenHeader
 import com.vurgun.skyfit.presentation.shared.components.UserCircleAvatarItem
 import com.vurgun.skyfit.presentation.shared.features.calendar.FacilityCalendarVisitedViewModel
@@ -85,7 +85,7 @@ private fun MobileTrainerCalendarVisitedScreenInfoComponent() {
 
         Spacer(Modifier.height(16.dp))
         Row {
-            SkyFitAvatarCircle(
+            SkyFitCircularImageComponent(
                 modifier = Modifier.size(60.dp),
                 item = UserCircleAvatarItem("")
             )

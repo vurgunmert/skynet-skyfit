@@ -89,7 +89,7 @@ fun MobileNavigationGraph() {
 
     NavHost(
         navigator = rootNavigator,
-        initialRoute = SkyFitNavigationRoute.FacilitySettingsAccount.route
+        initialRoute = SkyFitNavigationRoute.FacilitySettingsMembers.route
     ) {
 
         // Auth

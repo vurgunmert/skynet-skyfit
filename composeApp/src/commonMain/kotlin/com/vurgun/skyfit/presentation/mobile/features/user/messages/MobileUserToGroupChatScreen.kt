@@ -28,7 +28,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import com.vurgun.skyfit.presentation.shared.components.SkyFitAvatarCircle
+import com.vurgun.skyfit.presentation.shared.components.SkyFitCircularImageComponent
 import com.vurgun.skyfit.presentation.shared.features.social.SkyFitChatMessageBubble
 import com.vurgun.skyfit.presentation.shared.features.social.SkyFitChatMessageInputComponent
 import com.vurgun.skyfit.presentation.shared.components.UserCircleAvatarItem
@@ -121,7 +121,7 @@ private fun MobileUserToGroupChatScreenToolbarComponent(
             modifier = Modifier.size(16.dp)
         )
 
-        SkyFitAvatarCircle(
+        SkyFitCircularImageComponent(
             modifier = Modifier.size(48.dp),
             item = facilityAvatar,
             onClick = { }

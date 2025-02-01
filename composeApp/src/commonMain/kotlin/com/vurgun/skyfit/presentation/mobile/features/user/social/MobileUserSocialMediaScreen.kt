@@ -18,7 +18,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import com.vurgun.skyfit.presentation.shared.components.SkyFitAvatarCircle
+import com.vurgun.skyfit.presentation.shared.components.SkyFitCircularImageComponent
 import com.vurgun.skyfit.presentation.shared.components.SkyFitIconButton
 import com.vurgun.skyfit.presentation.shared.features.social.SkyFitPostCardItem
 import com.vurgun.skyfit.presentation.shared.features.social.SkyFitPostCardItemComponent
@@ -95,7 +95,7 @@ fun MobileUserSocialMediaScreen(navigator: Navigator) {
 private fun MobileUserSocialAvatarItemComponent(item: UserCircleAvatarItem, onClick: () -> Unit) {
     Column(horizontalAlignment = Alignment.CenterHorizontally) {
         Box {
-            SkyFitAvatarCircle(
+            SkyFitCircularImageComponent(
                 Modifier.size(72.dp),
                 item = item,
                 onClick = onClick
@@ -113,7 +113,7 @@ private fun MobileUserSocialAvatarItemComponent(item: UserCircleAvatarItem, onCl
 @Composable
 private fun MobileSocialAvatarItemComponent(item: UserCircleAvatarItem, onClick: () -> Unit) {
     Column(horizontalAlignment = Alignment.CenterHorizontally) {
-        SkyFitAvatarCircle(
+        SkyFitCircularImageComponent(
             Modifier.size(72.dp),
             item = item,
             onClick = onClick
