@@ -89,7 +89,7 @@ fun MobileNavigationGraph() {
 
     NavHost(
         navigator = rootNavigator,
-        initialRoute = SkyFitNavigationRoute.UserProfile.route
+        initialRoute = SkyFitNavigationRoute.DashboardExplore.route
     ) {
 
         // Auth
@@ -104,6 +104,7 @@ fun MobileNavigationGraph() {
         scene(SkyFitNavigationRoute.Onboarding.route) { MobileOnboardingScreen(rootNavigator) }
         scene(SkyFitNavigationRoute.Dashboard.route) { MobileDashboardScreen(rootNavigator) }
         scene(SkyFitNavigationRoute.DashboardProfile.route) { MobileDashboardScreen(rootNavigator, SkyFitNavigationRoute.DashboardProfile) }
+        scene(SkyFitNavigationRoute.DashboardExplore.route) { MobileDashboardScreen(rootNavigator, SkyFitNavigationRoute.DashboardExplore) }
         scene(SkyFitNavigationRoute.DashboardNutrition.route) { MobileDashboardScreen(rootNavigator, SkyFitNavigationRoute.DashboardNutrition) }
 
         //Explore

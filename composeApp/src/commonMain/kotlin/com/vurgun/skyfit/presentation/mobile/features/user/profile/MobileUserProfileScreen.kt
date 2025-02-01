@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -19,6 +20,7 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListState
+import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.rememberScrollState
@@ -41,6 +43,7 @@ import androidx.compose.ui.draw.blur
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import coil3.compose.AsyncImage
@@ -148,7 +151,7 @@ private fun MobileUserProfileAboutGroupComponent(scrollState: ScrollState, navig
     var appointments: List<Any> = emptyList()
     var dietGoals: List<Any> = listOf(1, 2, 3)
     var showMeasurements: Boolean = true
-    var exerciseHistory: List<Any> = emptyList()
+    var exerciseHistory: List<Any> = listOf(1, 2, 3)
     var photos: List<Any> = emptyList()
     var statistics: List<Any> = emptyList()
     var habits: List<Any> = emptyList()
@@ -183,7 +186,7 @@ private fun MobileUserProfileAboutGroupComponent(scrollState: ScrollState, navig
                 navigator.jumpAndStay(SkyFitNavigationRoute.DashboardExploreExercises)
             }
         } else {
-            MobileUserProfileExerciseHistoryComponent()
+            MobileUserProfileExerciseHistoryComponent(exerciseHistory)
         }
 
         if (photos.isEmpty()) {
@@ -371,8 +374,57 @@ private fun MobileUserProfileStatisticsBarsComponent() {
 }
 
 @Composable
-private fun MobileUserProfileExerciseHistoryComponent() {
-    TodoBox("MobileUserProfileExerciseHistoryComponent", Modifier.size(382.dp, 162.dp))
+private fun MobileUserProfileExerciseHistoryComponent(exercises: List<Any>) {
+    Column(
+        Modifier.fillMaxWidth()
+            .background(SkyFitColor.background.surfaceSemiTransparent)
+            .padding(16.dp)
+    ) {
+
+        Row(verticalAlignment = Alignment.CenterVertically) {
+            Icon(
+                painter = painterResource(Res.drawable.logo_skyfit),
+                modifier = Modifier.size(24.dp),
+                contentDescription = ""
+            )
+            Text(
+                text = "Diyet Listesi",
+                style = SkyFitTypography.bodyMediumSemibold
+            )
+        }
+
+        LazyRow(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.spacedBy(16.dp)
+        ) {
+            items(exercises) {
+                MobileUserProfileExerciseHistoryItemComponent()
+            }
+        }
+    }
+}
+
+@Composable
+private fun MobileUserProfileExerciseHistoryItemComponent() {
+    Column(Modifier.width(52.dp)) {
+        Box(
+            Modifier.size(52.dp)
+                .background(SkyFitColor.background.fillTransparentSecondary, CircleShape),
+            contentAlignment = Alignment.Center
+        ) {
+            Icon(
+                painter = painterResource(Res.drawable.logo_skyfit),
+                modifier = Modifier.size(32.dp),
+                contentDescription = ""
+            )
+        }
+        Spacer(Modifier.height(8.dp))
+        Text(
+            text = "Şınav",
+            modifier = Modifier.fillMaxWidth(),
+            textAlign = TextAlign.Center
+        )
+    }
 }
 
 @Composable
