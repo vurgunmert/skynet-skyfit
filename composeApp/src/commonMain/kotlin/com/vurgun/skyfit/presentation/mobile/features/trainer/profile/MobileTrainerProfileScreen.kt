@@ -129,7 +129,7 @@ fun MobileTrainerProfileScreen(navigator: Navigator) {
 }
 
 @Composable
-private fun MobileTrainerProfileBackgroundImageComponent(height: Dp) {
+fun MobileTrainerProfileBackgroundImageComponent(height: Dp) {
     AsyncImage(
         model = "https://cdn.shopify.com/s/files/1/0599/3624/3866/t/57/assets/e69266f5f9de--field-street-fitness-6-4a2977.jpg?v=1682607953",
         contentDescription = null,
@@ -141,7 +141,7 @@ private fun MobileTrainerProfileBackgroundImageComponent(height: Dp) {
 }
 
 @Composable
-private fun MobileTrainerProfileInfoCardComponent(
+fun MobileTrainerProfileInfoCardComponent(
     name: String,
     social: String,
     imageUrl: String,
@@ -224,7 +224,7 @@ private fun MobileTrainerProfilePostInputComponent() {
 }
 
 @Composable
-private fun MobileTrainerProfilePostsComponent(
+fun MobileTrainerProfilePostsComponent(
     posts: List<SkyFitPostCardItem>,
     listState: LazyListState = rememberLazyListState()
 ) {
@@ -261,7 +261,7 @@ private fun MobileTrainerProfileActionsComponent(
 }
 
 @Composable
-private fun MobileTrainerProfileSpecialitiesComponent(specialities: List<Any>) {
+fun MobileTrainerProfileSpecialitiesComponent(specialities: List<Any>) {
     Column(
         Modifier.fillMaxWidth()
             .background(SkyFitColor.background.surfaceSemiTransparent)
@@ -342,7 +342,7 @@ private fun MobileTrainerProfileSpecialitiesEmptyComponent(onClickAdd: () -> Uni
 
 
 @Composable
-private fun MobileTrainerProfilePrivateClassesComponent(privateClasses: List<SkyFitClassCalendarCardItem>) {
+fun MobileTrainerProfilePrivateClassesComponent(privateClasses: List<SkyFitClassCalendarCardItem>) {
     MobileFacilityProfileVisitedScreenPrivateClassesComponent(privateClasses)
 }
 

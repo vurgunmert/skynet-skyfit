@@ -18,7 +18,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.vurgun.skyfit.presentation.shared.components.SkyFitScreenHeader
-import com.vurgun.skyfit.presentation.shared.features.common.TodoBox
+import com.vurgun.skyfit.presentation.shared.components.SkyFitSearchTextInputComponent
 import com.vurgun.skyfit.presentation.shared.resources.SkyFitColor
 import com.vurgun.skyfit.presentation.shared.resources.SkyFitTypography
 import moe.tlaster.precompose.navigation.Navigator
@@ -71,7 +71,7 @@ fun MobileUserMeasurementsScreen(navigator: Navigator) {
 
 @Composable
 private fun MobileUserMeasurementsScreenSearchComponent() {
-    TodoBox("MobileUserMeasurementsScreenSearchComponent", Modifier.size(382.dp, 44.dp))
+    SkyFitSearchTextInputComponent("Test Ara")
 }
 
 @Composable
