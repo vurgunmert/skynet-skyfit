@@ -667,7 +667,7 @@ private fun MobileUserProfileHabitItemComponent() {
 }
 
 @Composable
-private fun MobileUserProfilePostsInputComponent() {
+fun MobileUserProfilePostsInputComponent() {
     Row(
         Modifier.fillMaxWidth()
             .background(SkyFitColor.background.surfaceSecondary, RoundedCornerShape(16.dp))
@@ -697,7 +697,7 @@ private fun MobileUserProfilePostsInputComponent() {
 }
 
 @Composable
-private fun MobileUserProfilePostsComponent(
+fun MobileUserProfilePostsComponent(
     posts: List<SkyFitPostCardItem>,
     listState: LazyListState = rememberLazyListState()
 ) {
@@ -892,7 +892,7 @@ private fun MobileUserProfileInfoCardMiniComponent(
 }
 
 @Composable
-private fun ProfileCardPreferenceItem(title: String, subtitle: String) {
+fun ProfileCardPreferenceItem(title: String, subtitle: String) {
     Column {
         Row(verticalAlignment = Alignment.CenterVertically) {
             Icon(
@@ -909,7 +909,7 @@ private fun ProfileCardPreferenceItem(title: String, subtitle: String) {
 }
 
 @Composable
-private fun HeaderVerticalDivider() {
+fun HeaderVerticalDivider() {
     Box(
         modifier = Modifier
             .width(1.dp)
