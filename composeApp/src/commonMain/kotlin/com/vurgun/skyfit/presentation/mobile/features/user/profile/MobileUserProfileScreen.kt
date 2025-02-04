@@ -7,7 +7,6 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -31,7 +30,12 @@ import androidx.compose.material.Icon
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
 import androidx.compose.material.TextField
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Settings
+import androidx.compose.material.icons.filled.Star
+import androidx.compose.material.icons.filled.ThumbUp
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -42,17 +46,21 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.blur
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import coil3.compose.AsyncImage
+import com.vurgun.skyfit.presentation.mobile.features.user.appointments.AppointmentCardItem
+import com.vurgun.skyfit.presentation.mobile.features.user.appointments.AppointmentCardItemComponent
 import com.vurgun.skyfit.presentation.shared.components.ButtonSize
 import com.vurgun.skyfit.presentation.shared.components.ButtonState
 import com.vurgun.skyfit.presentation.shared.components.ButtonVariant
 import com.vurgun.skyfit.presentation.shared.components.SkyFitButtonComponent
 import com.vurgun.skyfit.presentation.shared.components.SkyFitIconButton
-import com.vurgun.skyfit.presentation.shared.features.common.TodoBox
 import com.vurgun.skyfit.presentation.shared.features.social.SkyFitPostCardItem
 import com.vurgun.skyfit.presentation.shared.features.social.SkyFitPostCardItemComponent
 import com.vurgun.skyfit.presentation.shared.features.user.SkyFitUserProfileViewModel
@@ -129,7 +137,7 @@ fun MobileUserProfileScreen(navigator: Navigator) {
         if (showPosts) {
             MobileUserProfilePostsComponent(posts = posts, listState = postListState)
         } else {
-            MobileUserProfileAboutGroupComponent(scrollState, navigator)
+            MobileUserProfileAboutGroupComponent(scrollState, navigator, viewModel)
         }
     }
 }
@@ -147,8 +155,11 @@ private fun MobileUserProfileBackgroundImageComponent(height: Dp) {
 }
 
 @Composable
-private fun MobileUserProfileAboutGroupComponent(scrollState: ScrollState, navigator: Navigator) {
-    var appointments: List<Any> = emptyList()
+private fun MobileUserProfileAboutGroupComponent(
+    scrollState: ScrollState,
+    navigator: Navigator,
+    viewModel: SkyFitUserProfileViewModel
+) {
     var dietGoals: List<Any> = listOf(1, 2, 3)
     var showMeasurements: Boolean = true
     var exerciseHistory: List<Any> = listOf(1, 2, 3)
@@ -156,13 +167,15 @@ private fun MobileUserProfileAboutGroupComponent(scrollState: ScrollState, navig
     var statistics: List<Any> = emptyList()
     var habits: List<Any> = emptyList()
     var posts: List<Any> = emptyList()
+    val appointments = viewModel.appointments.collectAsState()
+
 
     Column(
         modifier = Modifier.fillMaxSize().verticalScroll(scrollState),
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
-        if (appointments.isNotEmpty()) {
-            MobileUserProfileAppointmentsComponent()
+        if (appointments.value.isEmpty()) {
+            MobileUserProfileAppointmentsComponent(appointments.value)
         }
         if (dietGoals.isEmpty()) {
             MobileUserProfileDietGoalsEmptyComponent(onClickAdd = { })
@@ -190,13 +203,13 @@ private fun MobileUserProfileAboutGroupComponent(scrollState: ScrollState, navig
         }
 
         if (photos.isEmpty()) {
-            MobileUserProfilePhotoDiaryEmptyComponent()
+            MobileUserProfilePhotoDiaryEmptyComponent(onClickAdd = {})
         } else {
             MobileUserProfilePhotoDiaryComponent()
         }
 
         if (habits.isNotEmpty()) {
-            MobileUserProfileHabitsComponent()
+            MobileUserProfileHabitsComponent(habits)
         }
     }
 }
@@ -231,8 +244,17 @@ private fun MobileUserProfileActionsComponent(
 }
 
 @Composable
-private fun MobileUserProfileAppointmentsComponent() {
-    TodoBox("MobileUserProfileAppointmentsComponent", Modifier.size(398.dp, 352.dp))
+private fun MobileUserProfileAppointmentsComponent(appointments: List<AppointmentCardItem>) {
+    LazyColumn(
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(16.dp),
+        verticalArrangement = Arrangement.spacedBy(16.dp)
+    ) {
+        items(appointments) {
+            AppointmentCardItemComponent(it, Modifier.fillMaxWidth())
+        }
+    }
 }
 
 
@@ -370,8 +392,55 @@ private fun MobileUserProfileMeasurementsComponent(onClick: () -> Unit) {
 
 @Composable
 private fun MobileUserProfileStatisticsBarsComponent() {
-    TodoBox("MobileUserProfileStatisticsBarsComponent", Modifier.size(382.dp, 250.dp))
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(16.dp),
+        horizontalArrangement = Arrangement.SpaceBetween
+    ) {
+        StatisticCard(
+            title = "Kalori",
+            value = "452",
+            unit = "kcal",
+            color = Color(0xFFD0886D), // Adjusted color from screenshot
+            icon = Icons.Default.ThumbUp
+        )
+        StatisticCard(
+            title = "Zaman",
+            value = "02:30",
+            unit = "saat",
+            color = Color(0xFF63C5B6), // Adjusted color
+            icon = Icons.Default.Settings
+        )
+        StatisticCard(
+            title = "Mesafe",
+            value = "3.2",
+            unit = "km",
+            color = Color(0xFF9B5DE5), // Adjusted color
+            icon = Icons.Default.Star
+        )
+    }
 }
+
+@Composable
+fun StatisticCard(title: String, value: String, unit: String, color: Color, icon: ImageVector) {
+    Column(
+        modifier = Modifier
+            .width(100.dp)
+            .height(200.dp)
+            .clip(RoundedCornerShape(topStart = 50.dp, topEnd = 50.dp))
+            .background(color)
+            .padding(16.dp),
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.SpaceBetween
+    ) {
+        Icon(imageVector = icon, contentDescription = title, tint = Color.White, modifier = Modifier.size(24.dp))
+        Text(text = title, color = Color.White, fontSize = 14.sp)
+        Text(text = value, color = Color.Black, fontWeight = FontWeight.Bold, fontSize = 24.sp)
+        Text(text = unit, color = Color.Black, fontSize = 14.sp)
+    }
+}
+
 
 @Composable
 private fun MobileUserProfileExerciseHistoryComponent(exercises: List<Any>) {
@@ -388,7 +457,7 @@ private fun MobileUserProfileExerciseHistoryComponent(exercises: List<Any>) {
                 contentDescription = ""
             )
             Text(
-                text = "Diyet Listesi",
+                text = "Egzersiz Geçmişi",
                 style = SkyFitTypography.bodyMediumSemibold
             )
         }
@@ -448,17 +517,153 @@ private fun MobileUserProfileScreenExploreExercisesComponent(onClick: () -> Unit
 
 @Composable
 private fun MobileUserProfilePhotoDiaryComponent() {
-    TodoBox("MobileUserProfilePhotoDiaryComponent", Modifier.size(382.dp, 410.dp))
+    BoxWithConstraints(
+        modifier = Modifier
+            .padding(horizontal = 16.dp)
+            .fillMaxWidth()
+    ) {
+        val imageSize = maxWidth
+        val image2Size = maxWidth - 16.dp
+        val image3Size = maxWidth - 32.dp
+
+        AsyncImage(
+            model = "https://opstudiohk.com/wp-content/uploads/2021/10/muscle-action.jpg",
+            contentDescription = null,
+            contentScale = ContentScale.Crop,
+            modifier = Modifier
+                .align(Alignment.TopCenter)
+                .size(image3Size)
+                .clip(RoundedCornerShape(16.dp))
+        )
+
+        AsyncImage(
+            model = "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRjzqP-xQyE7dn40gt74e0fHTWbmnEIjnMJiw&s",
+            contentDescription = null,
+            contentScale = ContentScale.Crop,
+            modifier = Modifier
+                .align(Alignment.TopCenter)
+                .padding(top = 8.dp)
+                .size(image2Size)
+                .clip(RoundedCornerShape(16.dp))
+        )
+
+        AsyncImage(
+            model = "https://gymstudiohome.com/assets/img/slide/1.jpg",
+            contentDescription = null,
+            contentScale = ContentScale.Crop,
+            modifier = Modifier
+                .align(Alignment.TopCenter)
+                .padding(top = 16.dp)
+                .size(imageSize)
+                .clip(RoundedCornerShape(16.dp))
+        )
+
+        Box(
+            Modifier.align(Alignment.BottomStart)
+                .fillMaxWidth()
+                .background(SkyFitColor.background.fillTransparentSecondary, RoundedCornerShape(16.dp))
+                .padding(16.dp)
+        ) {
+            Column {
+                Text(
+                    text = "Fotoğraf Günlüğüm",
+                    style = SkyFitTypography.heading4,
+                )
+                Text(
+                    text = "Çarşamba, 28 Ağustos", style = SkyFitTypography.bodyMediumRegular,
+                    color = SkyFitColor.text.secondary
+                )
+            }
+        }
+    }
 }
 
 @Composable
-private fun MobileUserProfilePhotoDiaryEmptyComponent() {
-    TodoBox("MobileUserProfilePhotoDiaryEmptyComponent", Modifier.size(374.dp, 374.dp))
+private fun MobileUserProfilePhotoDiaryEmptyComponent(onClickAdd: () -> Unit) {
+    BoxWithConstraints(
+        modifier = Modifier
+            .padding(horizontal = 16.dp)
+            .fillMaxWidth()
+    ) {
+        val componentSize = maxWidth
+
+        Box(Modifier.size(componentSize), contentAlignment = Alignment.Center) {
+            SkyFitButtonComponent(
+                Modifier.wrapContentWidth(), text = "Fotoğraf Ekle",
+                onClick = onClickAdd,
+                variant = ButtonVariant.Secondary,
+                size = ButtonSize.Medium,
+                initialState = ButtonState.Rest,
+                leftIconPainter = painterResource(Res.drawable.logo_skyfit)
+            )
+        }
+
+        Box(
+            Modifier.align(Alignment.BottomStart)
+                .fillMaxWidth()
+                .background(SkyFitColor.background.fillTransparentSecondary, RoundedCornerShape(16.dp))
+                .padding(16.dp)
+        ) {
+            Text(
+                text = "Fotoğraf Günlüğüm",
+                style = SkyFitTypography.heading4,
+            )
+        }
+    }
 }
 
 @Composable
-private fun MobileUserProfileHabitsComponent() {
-    TodoBox("MobileUserProfileHabitsComponent", Modifier.size(382.dp, 162.dp))
+private fun MobileUserProfileHabitsComponent(habits: List<Any>) {
+    Column(
+        Modifier.fillMaxWidth()
+            .background(SkyFitColor.background.surfaceSemiTransparent)
+            .padding(16.dp)
+    ) {
+
+        Row(verticalAlignment = Alignment.CenterVertically) {
+            Icon(
+                painter = painterResource(Res.drawable.logo_skyfit),
+                modifier = Modifier.size(24.dp),
+                contentDescription = ""
+            )
+            Text(
+                text = "Alışkanlıklar",
+                style = SkyFitTypography.bodyMediumSemibold
+            )
+        }
+
+        LazyRow(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.spacedBy(16.dp)
+        ) {
+            items(habits) {
+                MobileUserProfileHabitItemComponent()
+            }
+        }
+    }
+}
+
+@Composable
+private fun MobileUserProfileHabitItemComponent() {
+    Column(Modifier.width(52.dp)) {
+        Box(
+            Modifier.size(52.dp)
+                .background(SkyFitColor.background.fillTransparentSecondary, CircleShape),
+            contentAlignment = Alignment.Center
+        ) {
+            Icon(
+                painter = painterResource(Res.drawable.logo_skyfit),
+                modifier = Modifier.size(32.dp),
+                contentDescription = ""
+            )
+        }
+        Spacer(Modifier.height(8.dp))
+        Text(
+            text = "Düzensiz Uyku",
+            modifier = Modifier.fillMaxWidth(),
+            textAlign = TextAlign.Center
+        )
+    }
 }
 
 @Composable

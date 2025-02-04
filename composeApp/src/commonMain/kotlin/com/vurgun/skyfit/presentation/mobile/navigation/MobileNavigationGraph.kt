@@ -89,7 +89,7 @@ fun MobileNavigationGraph() {
 
     NavHost(
         navigator = rootNavigator,
-        initialRoute = SkyFitNavigationRoute.DashboardExplore.route
+        initialRoute = SkyFitNavigationRoute.UserToBotChat.route
     ) {
 
         // Auth

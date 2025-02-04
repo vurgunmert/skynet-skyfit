@@ -1,8 +1,10 @@
 package com.vurgun.skyfit.presentation.mobile.features.dashboard
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -13,6 +15,8 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentWidth
+import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -29,17 +33,23 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.dp
 import coil3.compose.AsyncImage
+import com.vurgun.skyfit.presentation.mobile.features.explore.TrainerProfileCardItemViewData
 import com.vurgun.skyfit.presentation.shared.components.ButtonSize
 import com.vurgun.skyfit.presentation.shared.components.ButtonState
 import com.vurgun.skyfit.presentation.shared.components.ButtonVariant
 import com.vurgun.skyfit.presentation.shared.components.SkyFitButtonComponent
 import com.vurgun.skyfit.presentation.shared.features.common.TodoBox
+import com.vurgun.skyfit.presentation.shared.features.profile.TrainerProfileCardItemBox
 import com.vurgun.skyfit.presentation.shared.resources.SkyFitColor
 import com.vurgun.skyfit.presentation.shared.resources.SkyFitTypography
+import com.vurgun.skyfit.presentation.shared.viewmodel.DashboardExploreScreenViewModel
 import moe.tlaster.precompose.navigation.Navigator
 
 @Composable
 fun MobileDashboardExploreScreen(rootNavigator: Navigator) {
+
+    val viewModel = DashboardExploreScreenViewModel()
+    val trainers = viewModel.trainers
 
     Scaffold(
         backgroundColor = SkyFitColor.background.default,
@@ -57,7 +67,7 @@ fun MobileDashboardExploreScreen(rootNavigator: Navigator) {
                 .verticalScroll(rememberScrollState())
         ) {
             MobileDashboardExploreScreenFeaturedExercisesComponent()
-            MobileDashboardExploreScreenFeaturedTrainersComponent()
+            MobileDashboardExploreScreenFeaturedTrainersComponent(trainers)
             MobileDashboardExploreScreenFeaturedFacilitiesComponent()
             MobileDashboardExploreScreenFeaturedCommunitiesComponent()
             MobileDashboardExploreScreenFeaturedChallengesComponent()
@@ -81,8 +91,26 @@ private fun MobileDashboardExploreScreenFeaturedExercisesComponent() {
 }
 
 @Composable
-private fun MobileDashboardExploreScreenFeaturedTrainersComponent() {
-    TodoBox("MobileDashboardExploreScreenFeaturedTrainersComponent", Modifier.size(398.dp, 322.dp))
+private fun MobileDashboardExploreScreenFeaturedTrainersComponent(trainers: List<TrainerProfileCardItemViewData>) {
+    MobileDashboardExploreScreenTitleActionComponent("Pro Antrenörler")
+
+    LazyRow(
+        modifier = Modifier.fillMaxWidth(),
+        contentPadding = PaddingValues(start = 12.dp),
+        horizontalArrangement = Arrangement.spacedBy(16.dp) // Horizontal spacing
+    ) {
+        items(trainers) { trainer ->
+            TrainerProfileCardItemBox(
+                imageUrl = trainer.imageUrl,
+                name = trainer.name,
+                followerCount = trainer.followerCount,
+                classCount = trainer.classCount,
+                videoCount = trainer.videoCount,
+                rating = trainer.rating,
+                onClick = { /* Handle click */ }
+            )
+        }
+    }
 }
 
 @Composable
