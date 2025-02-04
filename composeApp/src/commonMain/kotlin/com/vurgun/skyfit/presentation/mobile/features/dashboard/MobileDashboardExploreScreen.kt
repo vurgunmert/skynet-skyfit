@@ -33,12 +33,15 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.dp
 import coil3.compose.AsyncImage
+import com.vurgun.skyfit.presentation.mobile.features.explore.FacilityProfileCardItemViewData
 import com.vurgun.skyfit.presentation.mobile.features.explore.TrainerProfileCardItemViewData
 import com.vurgun.skyfit.presentation.shared.components.ButtonSize
 import com.vurgun.skyfit.presentation.shared.components.ButtonState
 import com.vurgun.skyfit.presentation.shared.components.ButtonVariant
 import com.vurgun.skyfit.presentation.shared.components.SkyFitButtonComponent
-import com.vurgun.skyfit.presentation.shared.features.common.TodoBox
+import com.vurgun.skyfit.presentation.shared.components.SkyFitSearchFilterBarComponent
+import com.vurgun.skyfit.presentation.shared.components.SkyFitSearchTextInputComponent
+import com.vurgun.skyfit.presentation.shared.features.profile.FacilityProfileCardItemBox
 import com.vurgun.skyfit.presentation.shared.features.profile.TrainerProfileCardItemBox
 import com.vurgun.skyfit.presentation.shared.resources.SkyFitColor
 import com.vurgun.skyfit.presentation.shared.resources.SkyFitTypography
@@ -50,13 +53,16 @@ fun MobileDashboardExploreScreen(rootNavigator: Navigator) {
 
     val viewModel = DashboardExploreScreenViewModel()
     val trainers = viewModel.trainers
+    val facilities = viewModel.facilities
 
     Scaffold(
         backgroundColor = SkyFitColor.background.default,
         topBar = {
-            Column {
-                MobileDashboardExploreScreenSearchComponent()
-                MobileDashboardExploreScreenTabsComponent()
+            Column(Modifier.fillMaxWidth().padding(horizontal = 16.dp)) {
+                Spacer(Modifier.height(16.dp))
+                SkyFitSearchTextInputComponent()
+                Spacer(Modifier.height(16.dp))
+                SkyFitSearchFilterBarComponent(onEnableSearch = { })
             }
         }
     ) {
@@ -68,7 +74,7 @@ fun MobileDashboardExploreScreen(rootNavigator: Navigator) {
         ) {
             MobileDashboardExploreScreenFeaturedExercisesComponent()
             MobileDashboardExploreScreenFeaturedTrainersComponent(trainers)
-            MobileDashboardExploreScreenFeaturedFacilitiesComponent()
+            MobileDashboardExploreScreenFeaturedFacilitiesComponent(facilities)
             MobileDashboardExploreScreenFeaturedCommunitiesComponent()
             MobileDashboardExploreScreenFeaturedChallengesComponent()
         }
@@ -76,18 +82,43 @@ fun MobileDashboardExploreScreen(rootNavigator: Navigator) {
 }
 
 @Composable
-private fun MobileDashboardExploreScreenSearchComponent() {
-    TodoBox("MobileDashboardExploreScreenSearchComponent", Modifier.size(430.dp, 40.dp))
-}
-
-@Composable
-private fun MobileDashboardExploreScreenTabsComponent() {
-    TodoBox("MobileDashboardExploreScreenTabsComponent", Modifier.size(430.dp, 40.dp))
-}
-
-@Composable
 private fun MobileDashboardExploreScreenFeaturedExercisesComponent() {
-    TodoBox("MobileDashboardExploreScreenFeaturedExercisesComponent", Modifier.size(398.dp, 326.dp))
+
+    var exerciseItems = listOf(1, 2, 3, 4, 5)
+
+    MobileDashboardExploreScreenTitleActionComponent("Popüler Antrenmanlar")
+    Spacer(Modifier.height(12.dp))
+
+    LazyRow(
+        Modifier.fillMaxWidth(),
+        horizontalArrangement = Arrangement.spacedBy(16.dp)
+    ) {
+        items(exerciseItems) {
+            MobileDashboardExploreScreenFeaturedExerciseItemComponent()
+        }
+    }
+}
+
+@Composable
+private fun MobileDashboardExploreScreenFeaturedExerciseItemComponent() {
+    Box(Modifier.size(186.dp, 278.dp)) {
+        AsyncImage(
+            model = "https://cdn.shopify.com/s/files/1/0599/3624/3866/t/57/assets/e69266f5f9de--field-street-fitness-6-4a2977.jpg?v=1682607953",
+            contentDescription = null,
+            contentScale = ContentScale.Crop,
+            modifier = Modifier
+                .fillMaxSize()
+                .clip(RoundedCornerShape(16.dp))
+        )
+
+        Text(
+            "Dumbell Exercise",
+            style = SkyFitTypography.bodyLargeSemibold,
+            modifier = Modifier.align(Alignment.BottomStart)
+                .fillMaxWidth()
+                .padding(vertical = 16.dp, horizontal = 24.dp)
+        )
+    }
 }
 
 @Composable
@@ -114,8 +145,25 @@ private fun MobileDashboardExploreScreenFeaturedTrainersComponent(trainers: List
 }
 
 @Composable
-private fun MobileDashboardExploreScreenFeaturedFacilitiesComponent() {
-    TodoBox("MobileDashboardExploreScreenFeaturedFacilitiesComponent", Modifier.size(398.dp, 322.dp))
+private fun MobileDashboardExploreScreenFeaturedFacilitiesComponent(facilities: List<FacilityProfileCardItemViewData>) {
+    MobileDashboardExploreScreenTitleActionComponent("Popüler Tesisler")
+
+    LazyRow(
+        modifier = Modifier.fillMaxWidth(),
+        contentPadding = PaddingValues(start = 12.dp),
+        horizontalArrangement = Arrangement.spacedBy(16.dp) // Horizontal spacing
+    ) {
+        items(facilities) { trainer ->
+            FacilityProfileCardItemBox(
+                imageUrl = trainer.imageUrl,
+                name = trainer.name,
+                memberCount = trainer.memberCount,
+                trainerCount = trainer.trainerCount,
+                rating = trainer.rating ?: 0.0,
+                onClick = { /* Handle click */ }
+            )
+        }
+    }
 }
 
 @Composable

@@ -1,6 +1,7 @@
 package com.vurgun.skyfit.presentation.shared.viewmodel
 
 import androidx.lifecycle.ViewModel
+import com.vurgun.skyfit.presentation.mobile.features.explore.FacilityProfileCardItemViewData
 import com.vurgun.skyfit.presentation.mobile.features.explore.TrainerProfileCardItemViewData
 
 class DashboardExploreScreenViewModel : ViewModel() {
@@ -13,5 +14,15 @@ class DashboardExploreScreenViewModel : ViewModel() {
         TrainerProfileCardItemViewData("url5", "Emma Johnson", 1600, 11, 25, 4.6),
         TrainerProfileCardItemViewData("url6", "James Smith", 1900, 14, 35, 4.8),
         TrainerProfileCardItemViewData("url7", "Ava Brown", 1750, 13, 30, 4.7)
+    )
+
+    val facilities = listOf(
+        FacilityProfileCardItemViewData("", "ironstudio", 2500, 12, 3.5),
+        FacilityProfileCardItemViewData("", "ironstudio2", 2500, 12, 3.5),
+        FacilityProfileCardItemViewData("", "ironstudio3", 2500, 12, 3.5),
+        FacilityProfileCardItemViewData("", "ironstudio4", 2500, 12, 3.5),
+        FacilityProfileCardItemViewData("", "ironstudio5", 2500, 12, 3.5),
+        FacilityProfileCardItemViewData("", "ironstudio6", 2500, 12, 3.5),
+        FacilityProfileCardItemViewData("", "ironstudio7", 2500, 12, 3.5),
     )
 }
