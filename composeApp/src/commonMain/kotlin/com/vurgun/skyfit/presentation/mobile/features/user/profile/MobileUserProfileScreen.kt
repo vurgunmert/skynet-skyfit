@@ -143,7 +143,7 @@ fun MobileUserProfileScreen(navigator: Navigator) {
 }
 
 @Composable
-private fun MobileUserProfileBackgroundImageComponent(height: Dp) {
+fun MobileUserProfileBackgroundImageComponent(height: Dp) {
     AsyncImage(
         model = "https://cdn.shopify.com/s/files/1/0599/3624/3866/t/57/assets/e69266f5f9de--field-street-fitness-6-4a2977.jpg?v=1682607953",
         contentDescription = null,
@@ -155,7 +155,7 @@ private fun MobileUserProfileBackgroundImageComponent(height: Dp) {
 }
 
 @Composable
-private fun MobileUserProfileAboutGroupComponent(
+fun MobileUserProfileAboutGroupComponent(
     scrollState: ScrollState,
     navigator: Navigator,
     viewModel: SkyFitUserProfileViewModel
@@ -244,14 +244,14 @@ private fun MobileUserProfileActionsComponent(
 }
 
 @Composable
-private fun MobileUserProfileAppointmentsComponent(appointments: List<AppointmentCardItem>) {
-    LazyColumn(
+fun MobileUserProfileAppointmentsComponent(appointments: List<AppointmentCardItem>) {
+    Column(
         modifier = Modifier
-            .fillMaxSize()
+            .fillMaxWidth()
             .padding(16.dp),
         verticalArrangement = Arrangement.spacedBy(16.dp)
     ) {
-        items(appointments) {
+        appointments.take(3).forEach {
             AppointmentCardItemComponent(it, Modifier.fillMaxWidth())
         }
     }
@@ -259,7 +259,7 @@ private fun MobileUserProfileAppointmentsComponent(appointments: List<Appointmen
 
 
 @Composable
-private fun MobileUserProfileDietGoalsComponent(records: List<Any>) {
+fun MobileUserProfileDietGoalsComponent(records: List<Any>) {
     Column(
         Modifier
             .padding(16.dp)
@@ -361,7 +361,7 @@ private fun MobileUserProfileDietGoalsEmptyComponent(onClickAdd: () -> Unit) {
 }
 
 @Composable
-private fun MobileUserProfileMeasurementsComponent(onClick: () -> Unit) {
+fun MobileUserProfileMeasurementsComponent(onClick: () -> Unit) {
     Row(
         Modifier.fillMaxWidth()
             .background(SkyFitColor.background.fillTransparent, shape = RoundedCornerShape(20.dp))
@@ -391,7 +391,7 @@ private fun MobileUserProfileMeasurementsComponent(onClick: () -> Unit) {
 }
 
 @Composable
-private fun MobileUserProfileStatisticsBarsComponent() {
+fun MobileUserProfileStatisticsBarsComponent() {
     Row(
         modifier = Modifier
             .fillMaxWidth()
@@ -443,7 +443,7 @@ fun StatisticCard(title: String, value: String, unit: String, color: Color, icon
 
 
 @Composable
-private fun MobileUserProfileExerciseHistoryComponent(exercises: List<Any>) {
+fun MobileUserProfileExerciseHistoryComponent(exercises: List<Any>) {
     Column(
         Modifier.fillMaxWidth()
             .background(SkyFitColor.background.surfaceSemiTransparent)
@@ -516,7 +516,7 @@ private fun MobileUserProfileScreenExploreExercisesComponent(onClick: () -> Unit
 }
 
 @Composable
-private fun MobileUserProfilePhotoDiaryComponent() {
+fun MobileUserProfilePhotoDiaryComponent() {
     BoxWithConstraints(
         modifier = Modifier
             .padding(horizontal = 16.dp)
@@ -613,7 +613,7 @@ private fun MobileUserProfilePhotoDiaryEmptyComponent(onClickAdd: () -> Unit) {
 }
 
 @Composable
-private fun MobileUserProfileHabitsComponent(habits: List<Any>) {
+fun MobileUserProfileHabitsComponent(habits: List<Any>) {
     Column(
         Modifier.fillMaxWidth()
             .background(SkyFitColor.background.surfaceSemiTransparent)
@@ -725,7 +725,7 @@ data class ProfilePreferenceItem(val title: String, val subtitle: String)
 
 
 @Composable
-private fun MobileUserProfileInfoCardComponent(
+fun MobileUserProfileInfoCardComponent(
     name: String,
     social: String,
     imageUrl: String,
@@ -803,7 +803,7 @@ private fun MobileUserProfileInfoCardComponent(
 }
 
 @Composable
-private fun MobileUserProfileInfoCardMiniComponent(
+fun MobileUserProfileInfoCardMiniComponent(
     name: String,
     social: String,
     imageUrl: String,
