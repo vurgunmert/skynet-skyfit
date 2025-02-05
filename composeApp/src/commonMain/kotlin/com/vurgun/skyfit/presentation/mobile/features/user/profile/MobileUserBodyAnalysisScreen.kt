@@ -55,13 +55,16 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
 import coil3.compose.AsyncImage
+import com.preat.peekaboo.ui.camera.CameraMode
+import com.preat.peekaboo.ui.camera.PeekabooCamera
+import com.preat.peekaboo.ui.camera.PeekabooCameraState
+import com.preat.peekaboo.ui.camera.rememberPeekabooCameraState
 import com.vurgun.skyfit.presentation.shared.components.ButtonSize
 import com.vurgun.skyfit.presentation.shared.components.ButtonState
 import com.vurgun.skyfit.presentation.shared.components.ButtonVariant
 import com.vurgun.skyfit.presentation.shared.components.SkyFitButtonComponent
 import com.vurgun.skyfit.presentation.shared.components.SkyFitIconButton
 import com.vurgun.skyfit.presentation.shared.components.SkyFitScaffold
-import com.vurgun.skyfit.presentation.shared.features.common.TodoBox
 import com.vurgun.skyfit.presentation.shared.resources.SkyFitColor
 import com.vurgun.skyfit.presentation.shared.resources.SkyFitTypography
 import moe.tlaster.precompose.navigation.Navigator
@@ -87,23 +90,22 @@ private enum class MobileUserBodyAnalysisScreenStep {
 @Composable
 fun MobileUserBodyAnalysisScreen(navigator: Navigator) {
 
-    var showToolbar: Boolean = true
-    var showBottomBar: Boolean = true
-    var showGrid: Boolean = true
-    var showCameraPreview: Boolean = false
-    var step by remember { mutableStateOf(MobileUserBodyAnalysisScreenStep.ANALYSING) }
+    var showToolbar by remember { mutableStateOf(true) }
+    var showBottomBar by remember { mutableStateOf(true) }
+    var showGrid by remember { mutableStateOf(false) }
+    var showFrontCamera by remember { mutableStateOf(false) }
+    var showCameraPreview by remember { mutableStateOf(false) }
+    var step by remember { mutableStateOf(MobileUserBodyAnalysisScreenStep.POSTURE_FRONT) }
     var showCancelDialog by remember { mutableStateOf(false) }
+
+    val cameraState = rememberPeekabooCameraState(
+        initialCameraMode = CameraMode.Back,
+        onCapture = { /* Handle captured images */ }
+    )
+
 
     SkyFitScaffold {
         Box(Modifier.fillMaxSize()) {
-
-            if (showCameraPreview) {
-                MobileUserBodyAnalysisScreenCameraPreviewComponent()
-            }
-
-            if (showGrid) {
-                MobileUserBodyAnalysisScreenPostureGridComponent()
-            }
 
             when (step) {
                 MobileUserBodyAnalysisScreenStep.INFO -> {
@@ -148,12 +150,37 @@ fun MobileUserBodyAnalysisScreen(navigator: Navigator) {
                 }
             }
 
+            if (showGrid) {
+                MobileUserBodyAnalysisScreenPostureGridComponent()
+            }
+
+            if (showCameraPreview) {
+                MobileUserBodyAnalysisScreenCameraPreviewComponent(cameraState)
+            }
+
             if (showToolbar) {
                 MobileUserBodyAnalysisScreenToolbarComponent(Modifier.align(Alignment.TopStart))
             }
 
             if (showBottomBar) {
-                MobileUserBodyAnalysisScreenMediaActionsComponent(Modifier.align(Alignment.BottomCenter))
+                MobileUserBodyAnalysisScreenMediaActionsComponent(Modifier.align(Alignment.BottomCenter),
+                    onClickFlipCamera = {
+                        if (!showCameraPreview) {
+                            showCameraPreview = true
+                        } else {
+                            cameraState.toggleCamera()
+                        }
+                    },
+                    onClickCapture = {
+                        if (!showCameraPreview && cameraState.isCameraReady) {
+                            showCameraPreview = true
+                        } else {
+                            cameraState.capture()
+                        }
+                    },
+                    onClickPickImage = {
+                        showCameraPreview = false
+                    })
             }
         }
 
@@ -330,7 +357,12 @@ private fun PostureOptionItem(text: String, onClick: () -> Unit) {
 
 
 @Composable
-private fun MobileUserBodyAnalysisScreenMediaActionsComponent(modifier: Modifier) {
+private fun MobileUserBodyAnalysisScreenMediaActionsComponent(
+    modifier: Modifier,
+    onClickFlipCamera: () -> Unit,
+    onClickCapture: () -> Unit,
+    onClickPickImage: () -> Unit
+) {
     Row(
         modifier = modifier
             .wrapContentWidth()
@@ -338,12 +370,13 @@ private fun MobileUserBodyAnalysisScreenMediaActionsComponent(modifier: Modifier
             .padding(vertical = 24.dp, horizontal = 48.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
-
-        SkyFitIconButton(painter = painterResource(Res.drawable.logo_skyfit))
+        SkyFitIconButton(painter = painterResource(Res.drawable.logo_skyfit), onClick = {
+            onClickFlipCamera()
+        })
         Spacer(Modifier.width(48.dp))
-        SkyFitIconButton(painter = painterResource(Res.drawable.logo_skyfit))
+        SkyFitIconButton(painter = painterResource(Res.drawable.logo_skyfit), onClick = onClickCapture)
         Spacer(Modifier.width(48.dp))
-        SkyFitIconButton(painter = painterResource(Res.drawable.logo_skyfit))
+        SkyFitIconButton(painter = painterResource(Res.drawable.logo_skyfit), onClick = onClickPickImage)
     }
 }
 
@@ -466,8 +499,14 @@ private fun MobileUserBodyAnalysisScreenPostureRightGridComponent() {
 }
 
 @Composable
-private fun MobileUserBodyAnalysisScreenCameraPreviewComponent() {
-    TodoBox("MobileUserBodyAnalysisScreenCameraPreviewComponent", Modifier.fillMaxSize().background(Color.Red))
+private fun MobileUserBodyAnalysisScreenCameraPreviewComponent(cameraState: PeekabooCameraState) {
+    PeekabooCamera(
+        state = cameraState,
+        modifier = Modifier.fillMaxSize(),
+        permissionDeniedContent = {
+            // TODO: Custom permission UI content for permission denied scenario
+        },
+    )
 }
 
 @Composable

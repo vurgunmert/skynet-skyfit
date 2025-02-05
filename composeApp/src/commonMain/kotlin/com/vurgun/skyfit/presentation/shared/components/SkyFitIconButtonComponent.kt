@@ -17,9 +17,11 @@ import skyfit.composeapp.generated.resources.Res
 import skyfit.composeapp.generated.resources.logo_skyfit
 
 @Composable
-fun SkyFitIconButton(painter: Painter,
-                     modifier: Modifier = Modifier,
-                     onClick: () -> Unit = {}) {
+fun SkyFitIconButton(
+    painter: Painter = painterResource(Res.drawable.logo_skyfit),
+    modifier: Modifier = Modifier,
+    onClick: () -> Unit = {}
+) {
     Box(
         modifier
             .background(SkyFitColor.background.surfaceSecondary, shape = CircleShape)
@@ -27,7 +29,7 @@ fun SkyFitIconButton(painter: Painter,
         contentAlignment = Alignment.Center
     ) {
         Icon(
-            painter = painterResource(Res.drawable.logo_skyfit),
+            painter = painter,
             contentDescription = "Button",
             tint = SkyFitColor.icon.default,
             modifier = Modifier.size(16.dp)

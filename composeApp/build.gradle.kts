@@ -64,7 +64,27 @@ kotlin {
             api(compose.material)
             api(compose.ui)
             implementation(compose.animation)
-            implementation(compose.components.resources)
+            implementation(compose.components.  resources)
+
+            // Kotlinx
+            implementation(libs.kotlinx.serialization)
+            implementation(libs.kotlinx.datetime)
+
+            // Koin for dependency injection
+            implementation(libs.koin.core)
+            implementation(libs.koin.compose)
+            implementation(libs.koin.compose.viewmodel)
+
+            // Ktor client core and content negotiation
+            implementation(libs.ktor.client.core)
+            implementation(libs.ktor.client.content.negotiation)
+            implementation(libs.ktor.serialization.json)
+
+            // peekaboo for Camera work
+            implementation(libs.peekaboo.ui)
+            implementation(libs.peekaboo.image.picker)
+
+
             // Coil for image loading
             implementation(libs.coil.compose)
             implementation(libs.coil.network.ktor)
@@ -72,22 +92,12 @@ kotlin {
             // AndroidX Lifecycle libraries
             implementation(libs.androidx.lifecycle.viewmodel)
             implementation(libs.androidx.lifecycle.runtime.compose)
-            // Koin for dependency injection
-            implementation(libs.koin.core)
-            implementation(libs.koin.compose)
-            implementation(libs.koin.compose.viewmodel)
+
             // Firebase Authentication
             implementation(libs.gitlive.firebase.auth)
-            // Kotlinx Serialization
-            implementation(libs.kotlinx.serialization)
-            implementation(libs.kotlinx.datetime)
+
             // PreCompose for multiplatform navigation
             api(libs.precompose)
-
-            // Ktor client core and content negotiation
-            implementation(libs.ktor.client.core)
-            implementation(libs.ktor.client.content.negotiation)
-            implementation(libs.ktor.serialization.json)
         }
 
         androidMain.dependencies {

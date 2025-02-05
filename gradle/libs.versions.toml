@@ -23,6 +23,7 @@ firebaseCommonKtx = "21.0.0"
 precompose = "1.7.0-alpha03"
 ktor = "3.0.3"
 coil = "3.0.4"
+peekaboo = "0.5.2"
 
 [libraries]
 kotlin-test = { module = "org.jetbrains.kotlin:kotlin-test", version.ref = "kotlin" }
@@ -48,6 +49,8 @@ firebase-common-ktx = { group = "com.google.firebase", name = "firebase-common-k
 precompose = { group = "moe.tlaster", name = "precompose", version.ref = "precompose" }
 coil-compose = { module = "io.coil-kt.coil3:coil-compose", version.ref = "coil" }
 coil-network-ktor = { module = "io.coil-kt.coil3:coil-network-ktor3", version.ref = "coil" }
+peekaboo-ui = { module = "io.github.onseok:peekaboo-ui", version.ref = "peekaboo" }
+peekaboo-image-picker = { module = "io.github.onseok:peekaboo-image-picker", version.ref = "peekaboo" }
 
 # Ktor Client Core
 ktor-client-core = { group = "io.ktor", name = "ktor-client-core", version.ref = "ktor" }
