@@ -11,7 +11,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import com.vurgun.skyfit.presentation.mobile.features.dashboard.MobileDashboardHomeAIAssistantComponent
 import com.vurgun.skyfit.presentation.mobile.features.dashboard.MobileDashboardHomeCharacterProgressComponent
 import com.vurgun.skyfit.presentation.mobile.features.dashboard.MobileDashboardHomeToolbarComponent
 import com.vurgun.skyfit.presentation.mobile.features.dashboard.MobileDashboardHomeTrainerClassScheduleComponent
@@ -47,8 +46,6 @@ fun MobileTrainerHomeScreen(rootNavigator: Navigator) {
             MobileDashboardHomeTrainerStatisticsComponent()
 
             MobileDashboardHomeTrainerNoClassComponent()
-
-            MobileDashboardHomeAIAssistantComponent()
 
             MobileDashboardHomeTrainerClassScheduleComponent()
 

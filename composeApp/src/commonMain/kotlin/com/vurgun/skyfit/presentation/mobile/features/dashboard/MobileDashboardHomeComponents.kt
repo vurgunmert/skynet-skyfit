@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.offset
@@ -26,15 +27,22 @@ import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.Checkbox
+import androidx.compose.material.CheckboxDefaults
 import androidx.compose.material.Icon
+import androidx.compose.material.IconButton
 import androidx.compose.material.Text
+import androidx.compose.material.TextField
+import androidx.compose.material.TextFieldDefaults
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowDropDown
 import androidx.compose.material.icons.filled.Check
 import androidx.compose.material.icons.filled.DateRange
 import androidx.compose.material.icons.filled.Face
+import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material.icons.filled.Place
 import androidx.compose.material.icons.filled.PlayArrow
+import androidx.compose.material.icons.filled.Search
 import androidx.compose.material.icons.outlined.Call
 import androidx.compose.material.icons.outlined.DateRange
 import androidx.compose.material.icons.outlined.Face
@@ -59,7 +67,10 @@ import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil3.compose.AsyncImage
@@ -70,7 +81,6 @@ import com.vurgun.skyfit.presentation.shared.components.ButtonState
 import com.vurgun.skyfit.presentation.shared.components.ButtonVariant
 import com.vurgun.skyfit.presentation.shared.components.SkyFitButtonComponent
 import com.vurgun.skyfit.presentation.shared.features.calendar.SkyFitCalendarGridComponent
-import com.vurgun.skyfit.presentation.shared.features.common.TodoBox
 import com.vurgun.skyfit.presentation.shared.resources.SkyFitColor
 import com.vurgun.skyfit.presentation.shared.resources.SkyFitTypography
 import com.vurgun.skyfit.utils.now
@@ -969,49 +979,450 @@ private fun MobileDashboardHomeFeaturedTrainerCard(trainer: HomeFeaturedTrainer)
 
 private data class HomeFeaturedTrainer(val name: String, val imageUrl: String)
 
-
-@Composable
-fun MobileDashboardHomeTrophyProfileComponent() {
-    TodoBox("DashboardHomeFeaturedExercisesComponent", Modifier.size(98.dp, 112.dp))
-}
-
-@Composable
-fun MobileDashboardHomeTrophyGridComponent() {
-    TodoBox("DashboardHomeFeaturedExercisesComponent", Modifier.size(320.dp, 790.dp))
-}
-
 @Composable
 fun MobileDashboardHomeTrainerStatisticsComponent() {
-    TodoBox("DashboardHomeTrainerStatisticsComponent", Modifier.size(320.dp, 544.dp))
+    Column(
+        modifier = Modifier
+            .size(320.dp, 544.dp)
+            .background(Color.Black, RoundedCornerShape(12.dp))
+            .padding(16.dp)
+    ) {
+        MobileDashboardHomeTrainerStatisticsOverview()
+        Spacer(modifier = Modifier.height(16.dp))
+        MobileDashboardHomeTrainerGraph()
+    }
 }
+
+@Composable
+private fun MobileDashboardHomeTrainerStatisticsOverview() {
+    val stats = listOf(
+        HomeTrainerStat("Takipçi", "327", "+53%", true),
+        HomeTrainerStat("Aktif Dersler", "12", "0%", null),
+        HomeTrainerStat("SkyFit Kazancın", "₺3120", "+53%", true),
+        HomeTrainerStat("Profil Görüntülenmesi", "213", "-2%", false)
+    )
+
+    TrainerGridStatsLayout(stats)
+}
+
+@Composable
+private fun TrainerGridStatsLayout(stats: List<HomeTrainerStat>) {
+    Column {
+        Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
+            stats.subList(0, 2).forEach { MobileDashboardHomeStatCard(it) }
+        }
+        Spacer(modifier = Modifier.height(8.dp))
+        Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
+            stats.subList(2, 4).forEach { MobileDashboardHomeStatCard(it) }
+        }
+    }
+}
+
+@Composable
+private fun MobileDashboardHomeStatCard(stat: HomeTrainerStat) {
+    Column(
+        modifier = Modifier
+            .width(150.dp)
+            .height(80.dp)
+            .clip(RoundedCornerShape(12.dp))
+            .background(Color.DarkGray)
+            .padding(12.dp),
+        verticalArrangement = Arrangement.SpaceBetween
+    ) {
+        Text(text = stat.title, fontSize = 14.sp, color = Color.Gray)
+        Row(verticalAlignment = Alignment.CenterVertically) {
+            Text(text = stat.value, fontSize = 20.sp, color = Color.White, fontWeight = FontWeight.Bold)
+            stat.percentage?.let {
+                Spacer(modifier = Modifier.width(8.dp))
+                Box(
+                    modifier = Modifier
+                        .clip(RoundedCornerShape(6.dp))
+                        .background(if (stat.isPositive == true) Color.Green.copy(alpha = 0.2f) else Color.Red.copy(alpha = 0.2f))
+                        .padding(horizontal = 6.dp, vertical = 2.dp)
+                ) {
+                    Text(text = it, fontSize = 12.sp, color = if (stat.isPositive == true) Color.Green else Color.Red)
+                }
+            }
+        }
+    }
+}
+
+@Composable
+private fun MobileDashboardHomeTrainerGraph() {
+    Column {
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.SpaceBetween
+        ) {
+            Text(text = "Üye Değişimi Grafiği", fontSize = 14.sp, color = Color.White, fontWeight = FontWeight.Bold)
+            TimeFilterSelector()
+        }
+        Spacer(modifier = Modifier.height(8.dp))
+        MobileDashboardLineChart(
+            dataPoints = listOf(12, 7, 15, 20, 14, 8, 10),
+            labels = listOf("Pzts", "Sal", "Çar", "Per", "Cum", "Cmrts", "Paz")
+        )
+    }
+}
+
+@Composable
+private fun TimeFilterSelector() {
+    Row(horizontalArrangement = Arrangement.spacedBy(4.dp)) {
+        listOf("Y", "6A", "3A", "1A", "H").forEach { label ->
+            Box(
+                modifier = Modifier
+                    .clip(RoundedCornerShape(8.dp))
+                    .background(if (label == "H") Color.Cyan else Color.DarkGray)
+                    .padding(horizontal = 8.dp, vertical = 4.dp)
+            ) {
+                Text(text = label, fontSize = 12.sp, color = Color.White)
+            }
+        }
+    }
+}
+
+@Composable
+private fun MobileDashboardLineChart(dataPoints: List<Int>, labels: List<String>) {
+    Canvas(modifier = Modifier.fillMaxWidth().height(100.dp)) {
+        val maxValue = dataPoints.maxOrNull() ?: 1
+        val stepX = size.width / (dataPoints.size - 1)
+        val stepY = size.height / maxValue.toFloat()
+
+        val path = Path().apply {
+            moveTo(0f, size.height - (dataPoints[0] * stepY))
+            dataPoints.forEachIndexed { index, value ->
+                lineTo(index * stepX, size.height - (value * stepY))
+            }
+        }
+
+        drawPath(path, color = Color.Cyan, style = Stroke(width = 3.dp.toPx(), cap = StrokeCap.Round))
+    }
+
+    Row(
+        modifier = Modifier.fillMaxWidth(),
+        horizontalArrangement = Arrangement.SpaceBetween
+    ) {
+        labels.forEach { label ->
+            Text(text = label, fontSize = 12.sp, color = Color.Gray)
+        }
+    }
+}
+
+private data class HomeTrainerStat(val title: String, val value: String, val percentage: String?, val isPositive: Boolean?)
 
 @Composable
 fun MobileDashboardHomeTrainerNoClassComponent() {
-    TodoBox("DashboardHomeTrainerNoClassComponent", Modifier.size(320.dp, 232.dp))
+    Box(
+        modifier = Modifier
+            .size(320.dp, 232.dp)
+            .clip(RoundedCornerShape(12.dp))
+            .background(Color.Black)
+            .padding(16.dp)
+    ) {
+        Column(
+            modifier = Modifier.fillMaxSize(),
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.Center
+        ) {
+            Text(
+                text = "Oluşturulmuş dersiniz bulunmamakta",
+                fontSize = 16.sp,
+                color = Color.White,
+                fontWeight = FontWeight.Bold,
+                textAlign = TextAlign.Center
+            )
+
+            Spacer(modifier = Modifier.height(4.dp))
+
+            Text(
+                text = "Ders oluşturduğunuzda buradan görüntüleyebilirsiniz.",
+                fontSize = 14.sp,
+                color = Color.Gray,
+                textAlign = TextAlign.Center
+            )
+
+            Spacer(modifier = Modifier.height(16.dp))
+
+            SkyFitButtonComponent(
+                Modifier.wrapContentWidth(), text = "Etkinlik Oluştur",
+                onClick = { },
+                variant = ButtonVariant.Primary,
+                size = ButtonSize.Medium,
+                initialState = ButtonState.Rest
+            )
+        }
+
+        // Search & Filter Buttons (Top Right)
+        Row(
+            modifier = Modifier
+                .align(Alignment.TopEnd)
+                .padding(8.dp)
+        ) {
+            IconButton(onClick = { /* TODO: Open Search */ }) {
+                Icon(imageVector = Icons.Default.Search, contentDescription = "Search", tint = Color.Cyan)
+            }
+            IconButton(onClick = { /* TODO: Open Filters */ }) {
+                Icon(imageVector = Icons.Default.Menu, contentDescription = "Filter", tint = Color.Cyan)
+            }
+        }
+    }
 }
+
 
 @Composable
 fun MobileDashboardHomeTrainerClassScheduleComponent() {
-    TodoBox("DashboardHomeTrainerClassScheduleComponent", Modifier.size(400.dp, 684.dp))
+    val classList = listOf(
+        HomeTrainerClass("Kişisel Kuvvet Antrenmanı", Icons.Outlined.DateRange, "07:00-08:00", "22 Kasım"),
+        HomeTrainerClass("Pilates", Icons.Outlined.DateRange, "07:00-08:00", "22 Kasım"),
+        HomeTrainerClass("Core", Icons.Outlined.DateRange, "07:00-08:00", "22 Kasım"),
+        HomeTrainerClass("Kişisel Kuvvet Antrenmanı", Icons.Outlined.DateRange, "07:00-08:00", "22 Kasım"),
+        HomeTrainerClass("Skipping Rope", Icons.Outlined.DateRange, "07:00-08:00", "22 Kasım"),
+        HomeTrainerClass("Push-Ups", Icons.Outlined.DateRange, "07:00-08:00", "22 Kasım"),
+        HomeTrainerClass("Kişisel Kuvvet Antrenmanı", Icons.Outlined.DateRange, "07:00-08:00", "22 Kasım"),
+        HomeTrainerClass("Skipping Rope", Icons.Outlined.DateRange, "07:00-08:00", "22 Kasım"),
+        HomeTrainerClass("Push-Ups", Icons.Outlined.DateRange, "07:00-08:00", "22 Kasım")
+    )
+
+    Column(
+        modifier = Modifier
+            .size(400.dp, 684.dp)
+            .background(Color.Black, RoundedCornerShape(12.dp))
+            .padding(16.dp)
+    ) {
+        SearchAndFilterBar()
+        Spacer(modifier = Modifier.height(8.dp))
+        HomeClassScheduleTable(classList)
+    }
 }
 
 @Composable
-fun MobileDashboardHomeAIAssistantComponent() {
-    TodoBox("DashboardHomeAIAssistantComponent", Modifier.size(363.dp, 689.dp))
+private fun SearchAndFilterBar() {
+    Column {
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .clip(RoundedCornerShape(8.dp))
+                .background(Color.DarkGray)
+                .padding(horizontal = 12.dp, vertical = 8.dp),
+            horizontalArrangement = Arrangement.SpaceBetween,
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            TextField(
+                value = "",
+                onValueChange = {},
+                placeholder = { Text("Tabloda ara", color = Color.Gray) },
+                singleLine = true,
+                textStyle = TextStyle(color = Color.White),
+                modifier = Modifier.weight(1f),
+                colors = TextFieldDefaults.textFieldColors(
+                    cursorColor = Color.White
+                )
+            )
+
+            Icon(imageVector = Icons.Default.Search, contentDescription = "Search", tint = Color.Cyan)
+            Icon(imageVector = Icons.Default.Menu, contentDescription = "Filter", tint = Color.Cyan)
+        }
+
+        Spacer(modifier = Modifier.height(8.dp))
+
+        Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+            HomeScheduleFilterChip("Aktif")
+            HomeScheduleFilterChip("Pilates")
+            HomeScheduleFilterChip("07:00-08:00")
+            HomeScheduleFilterChip("22/11/2024")
+        }
+    }
 }
 
 @Composable
-fun MobileDashboardHomeAIAssistantHistoryComponent() {
-    TodoBox("MobileDashboardHomeAIAssistantHistoryComponent", Modifier.size(363.dp, 689.dp))
+private fun HomeScheduleFilterChip(label: String) {
+    Box(
+        modifier = Modifier
+            .clip(RoundedCornerShape(16.dp))
+            .background(Color.DarkGray)
+            .padding(horizontal = 12.dp, vertical = 6.dp)
+    ) {
+        Text(text = label, fontSize = 14.sp, color = Color.Cyan)
+    }
 }
+
+@Composable
+private fun HomeClassScheduleTable(classList: List<HomeTrainerClass>) {
+    LazyColumn(
+        modifier = Modifier.fillMaxWidth(),
+        verticalArrangement = Arrangement.spacedBy(8.dp)
+    ) {
+        item {
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .background(Color.DarkGray)
+                    .padding(8.dp),
+                horizontalArrangement = Arrangement.SpaceBetween
+            ) {
+                Checkbox(checked = false, onCheckedChange = {})
+                Text("Etkinliğin Adı", fontSize = 14.sp, color = Color.Gray)
+                Text("Saat", fontSize = 14.sp, color = Color.Gray)
+                Text("Tarih", fontSize = 14.sp, color = Color.Gray)
+            }
+        }
+
+        items(classList) { trainerClass ->
+            HomeClassScheduleRow(trainerClass)
+        }
+    }
+}
+
+@Composable
+private fun HomeClassScheduleRow(trainerClass: HomeTrainerClass) {
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .clip(RoundedCornerShape(8.dp))
+            .padding(8.dp),
+        horizontalArrangement = Arrangement.SpaceBetween,
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        Checkbox(
+            checked = false, onCheckedChange = {},
+            colors = CheckboxDefaults.colors(
+                checkmarkColor = SkyFitColor.specialty.buttonBgRest,
+                uncheckedColor = SkyFitColor.specialty.buttonBgDisabled
+            )
+        )
+
+        Row(
+            modifier = Modifier.weight(1f), // Allowing proper width distribution
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Icon(
+                imageVector = trainerClass.icon,
+                contentDescription = trainerClass.name,
+                tint = Color.White
+            )
+            Spacer(modifier = Modifier.width(8.dp))
+            Text(
+                text = trainerClass.name,
+                fontSize = 14.sp,
+                color = Color.White,
+                maxLines = 1, // Restrict to one line
+                overflow = TextOverflow.Ellipsis, // Add ellipsis when text overflows
+                modifier = Modifier.weight(1f) // Ensuring text can take available space
+            )
+        }
+
+        Text(
+            text = trainerClass.time,
+            fontSize = 14.sp,
+            color = Color.Gray,
+            softWrap = true,
+            modifier = Modifier.wrapContentWidth()
+        )
+
+        Text(
+            text = trainerClass.date,
+            fontSize = 14.sp,
+            color = Color.Gray,
+            softWrap = true,
+            modifier = Modifier.wrapContentWidth()
+        )
+    }
+}
+
+private data class HomeTrainerClass(val name: String, val icon: ImageVector, val time: String, val date: String)
+
 
 @Composable
 fun MobileDashboardHomeFacilityStatisticsComponent() {
-    TodoBox("MobileDashboardHomeFacilityStatisticsComponent", Modifier.size(320.dp, 544.dp))
+    Column(
+        modifier = Modifier
+            .size(320.dp, 544.dp)
+            .background(Color.Black, RoundedCornerShape(12.dp))
+            .padding(16.dp)
+    ) {
+        MobileDashboardHomeFacilityStatisticsOverview()
+        Spacer(modifier = Modifier.height(16.dp))
+        MobileDashboardHomeFacilityGraph()
+    }
 }
 
 @Composable
+private fun MobileDashboardHomeFacilityStatisticsOverview() {
+    val stats = listOf(
+        HomeFacilityStat("Aktif Üye", "327", "+53%", true),
+        HomeFacilityStat("Aktif Dersler", "12", "0%", null),
+        HomeFacilityStat("SkyFit Kazancın", "₺3120", "+53%", true),
+        HomeFacilityStat("Profil Görüntülenmesi", "213", "-2%", false)
+    )
+
+    FacilityGridStatsLayout(stats)
+}
+
+@Composable
+private fun FacilityGridStatsLayout(stats: List<HomeFacilityStat>) {
+    Column {
+        Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
+            stats.subList(0, 2).forEach { MobileDashboardHomeFacilityStatCard(it) }
+        }
+        Spacer(modifier = Modifier.height(8.dp))
+        Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
+            stats.subList(2, 4).forEach { MobileDashboardHomeFacilityStatCard(it) }
+        }
+    }
+}
+
+@Composable
+private fun MobileDashboardHomeFacilityStatCard(stat: HomeFacilityStat) {
+    Column(
+        modifier = Modifier
+            .width(150.dp)
+            .height(80.dp)
+            .clip(RoundedCornerShape(12.dp))
+            .background(Color.DarkGray)
+            .padding(12.dp),
+        verticalArrangement = Arrangement.SpaceBetween
+    ) {
+        Text(text = stat.title, fontSize = 14.sp, color = Color.Gray)
+        Row(verticalAlignment = Alignment.CenterVertically) {
+            Text(text = stat.value, fontSize = 20.sp, color = Color.White, fontWeight = FontWeight.Bold)
+            stat.percentage?.let {
+                Spacer(modifier = Modifier.width(8.dp))
+                Box(
+                    modifier = Modifier
+                        .clip(RoundedCornerShape(6.dp))
+                        .background(if (stat.isPositive == true) Color.Green.copy(alpha = 0.2f) else Color.Red.copy(alpha = 0.2f))
+                        .padding(horizontal = 6.dp, vertical = 2.dp)
+                ) {
+                    Text(text = it, fontSize = 12.sp, color = if (stat.isPositive == true) Color.Green else Color.Red)
+                }
+            }
+        }
+    }
+}
+
+@Composable
+private fun MobileDashboardHomeFacilityGraph() {
+    Column {
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.SpaceBetween
+        ) {
+            Text(text = "Üye Değişimi Grafiği", fontSize = 14.sp, color = Color.White, fontWeight = FontWeight.Bold)
+            TimeFilterSelector()
+        }
+        Spacer(modifier = Modifier.height(8.dp))
+        MobileDashboardLineChart(
+            dataPoints = listOf(12, 7, 15, 20, 14, 8, 10),
+            labels = listOf("Pzts", "Sal", "Çar", "Per", "Cum", "Cmrts", "Paz")
+        )
+    }
+}
+
+private data class HomeFacilityStat(val title: String, val value: String, val percentage: String?, val isPositive: Boolean?)
+
+
+@Composable
 fun MobileDashboardHomeFacilityNoClassComponent() {
-    TodoBox("MobileDashboardHomeFacilityNoClassComponent", Modifier.size(320.dp, 232.dp))
+    MobileDashboardHomeTrainerNoClassComponent()
 }
 

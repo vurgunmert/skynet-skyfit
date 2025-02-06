@@ -11,7 +11,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import com.vurgun.skyfit.presentation.mobile.features.dashboard.MobileDashboardHomeAIAssistantHistoryComponent
 import com.vurgun.skyfit.presentation.mobile.features.dashboard.MobileDashboardHomeFacilityNoClassComponent
 import com.vurgun.skyfit.presentation.mobile.features.dashboard.MobileDashboardHomeFacilityStatisticsComponent
 import com.vurgun.skyfit.presentation.mobile.features.dashboard.MobileDashboardHomeToolbarComponent
@@ -36,8 +35,6 @@ fun MobileFacilityHomeScreen(rootNavigator: Navigator) {
             MobileDashboardHomeFacilityStatisticsComponent()
 
             MobileDashboardHomeFacilityNoClassComponent()
-
-            MobileDashboardHomeAIAssistantHistoryComponent()
 
             MobileDashboardHomeUpcomingAppointmentsComponent()
 
