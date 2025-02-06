@@ -21,17 +21,20 @@ import com.vurgun.skyfit.presentation.shared.components.SkyFitScreenHeader
 import com.vurgun.skyfit.presentation.shared.components.SkyFitSearchFilterBarComponent
 import com.vurgun.skyfit.presentation.shared.components.SkyFitSearchTextInputComponent
 import com.vurgun.skyfit.presentation.shared.features.profile.TrainerProfileCardItemBox
+import com.vurgun.skyfit.presentation.shared.viewmodel.DashboardExploreScreenViewModel
 import moe.tlaster.precompose.navigation.Navigator
 
 @Composable
 fun MobileExploreTrainersScreen(rootNavigator: Navigator) {
 
+    val viewModel = DashboardExploreScreenViewModel()
+    val trainers = viewModel.trainers
     var isSearchVisible by remember { mutableStateOf(false) }
 
     SkyFitScaffold(
         topBar = {
             Column(Modifier.fillMaxWidth().padding(horizontal = 16.dp)) {
-                SkyFitScreenHeader("Pro Antrenorler", onClickBack = {})
+                SkyFitScreenHeader("Pro Antrenörler", onClickBack = {})
                 Spacer(Modifier.height(16.dp))
                 if (isSearchVisible) {
                     SkyFitSearchTextInputComponent()

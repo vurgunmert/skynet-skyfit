@@ -1,14 +1,46 @@
 package com.vurgun.skyfit.presentation.mobile.features.dashboard
 
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
+import androidx.compose.material.Icon
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.vurgun.skyfit.presentation.shared.features.common.TodoBox
+import com.vurgun.skyfit.presentation.shared.resources.SkyFitColor
+import org.jetbrains.compose.resources.painterResource
+import skyfit.composeapp.generated.resources.Res
+import skyfit.composeapp.generated.resources.logo_skyfit
 
 @Composable
-fun MobileDashboardHomeToolbarComponent() {
-    TodoBox("DashboardHomeToolbarComponent", Modifier.size(320.dp, 36.dp))
+fun MobileDashboardHomeToolbarComponent(onNotifications: () -> Unit = {},
+                                        onMessages: () -> Unit = {}) {
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(horizontal = 24.dp, vertical = 8.dp),
+        horizontalArrangement = Arrangement.End
+    ) {
+        Icon(
+            painter = painterResource(Res.drawable.logo_skyfit),
+            contentDescription = null,
+            tint = SkyFitColor.text.default,
+            modifier = Modifier.size(20.dp).clickable(onClick = onNotifications)
+        )
+        Spacer(Modifier.width(10.dp))
+        Icon(
+            painter = painterResource(Res.drawable.logo_skyfit),
+            contentDescription = null,
+            tint = SkyFitColor.text.default,
+            modifier = Modifier.size(20.dp).clickable(onClick = onMessages)
+        )
+    }
 }
 
 @Composable

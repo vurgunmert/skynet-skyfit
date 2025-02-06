@@ -89,7 +89,7 @@ fun MobileNavigationGraph() {
 
     NavHost(
         navigator = rootNavigator,
-        initialRoute = SkyFitNavigationRoute.UserBodyAnalysis.route
+        initialRoute = SkyFitNavigationRoute.DashboardExploreBlogArticleDetail.route
     ) {
 
         // Auth
@@ -105,7 +105,12 @@ fun MobileNavigationGraph() {
         scene(SkyFitNavigationRoute.Dashboard.route) { MobileDashboardScreen(rootNavigator) }
         scene(SkyFitNavigationRoute.DashboardProfile.route) { MobileDashboardScreen(rootNavigator, SkyFitNavigationRoute.DashboardProfile) }
         scene(SkyFitNavigationRoute.DashboardExplore.route) { MobileDashboardScreen(rootNavigator, SkyFitNavigationRoute.DashboardExplore) }
-        scene(SkyFitNavigationRoute.DashboardNutrition.route) { MobileDashboardScreen(rootNavigator, SkyFitNavigationRoute.DashboardNutrition) }
+        scene(SkyFitNavigationRoute.DashboardNutrition.route) {
+            MobileDashboardScreen(
+                rootNavigator,
+                SkyFitNavigationRoute.DashboardNutrition
+            )
+        }
 
         //Explore
         scene(SkyFitNavigationRoute.DashboardExploreTrainers.route) { MobileExploreTrainersScreen(rootNavigator) }

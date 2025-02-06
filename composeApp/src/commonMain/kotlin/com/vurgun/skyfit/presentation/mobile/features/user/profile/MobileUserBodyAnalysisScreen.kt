@@ -780,13 +780,11 @@ fun PostureAnalysisMuscleAnalysisSuggestedExercisesComponent() {
 
 @Composable
 fun ExerciseSuggestionCard(title: String, details: String) {
-    Card(
+    Box(
         modifier = Modifier
             .fillMaxWidth()
+            .background(SkyFitColor.background.surfaceSecondaryHover, RoundedCornerShape(12.dp))
             .padding(vertical = 6.dp),
-        shape = RoundedCornerShape(12.dp),
-        backgroundColor = Color(0xFF63C5B6), // Light turquoise color from screenshot
-        elevation = 2.dp
     ) {
         Row(
             modifier = Modifier
