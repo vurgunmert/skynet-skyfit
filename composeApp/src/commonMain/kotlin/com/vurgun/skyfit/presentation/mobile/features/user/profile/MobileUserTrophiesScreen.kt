@@ -100,7 +100,7 @@ private fun MobileUserTrophiesComponent() {
 }
 
 @Composable
-private fun MobileUserTrophyItemComponent() {
+fun MobileUserTrophyItemComponent() {
     Box(
         modifier = Modifier
             .size(72.dp, 98.dp)

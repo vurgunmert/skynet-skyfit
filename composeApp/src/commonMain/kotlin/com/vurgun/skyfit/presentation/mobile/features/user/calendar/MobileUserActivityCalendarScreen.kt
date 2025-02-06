@@ -52,13 +52,13 @@ private fun MobileUserActivityGridCalendarComponent() {
 }
 
 @Composable
-private fun MobileUserActivityHourlyCalendarComponent() {
+fun MobileUserActivityHourlyCalendarComponent() {
     var activities by remember {
         mutableStateOf(
             listOf(
                 SkyFitDailyActivityItem(emoji = "🔥", name = "Yürüyüş", startHourMinutes = 900, startBlock = 2),
-                SkyFitDailyActivityItem(emoji = "🔥", name = "Yürüyüş", startHourMinutes = 1200, startBlock = 4),
-                SkyFitDailyActivityItem(emoji = "🔥", name = "Yürüyüş", startHourMinutes = 1800, startBlock = 5)
+                SkyFitDailyActivityItem(emoji = "🔥", name = "Ogun Hazirligi", startHourMinutes = 1200, startBlock = 4),
+                SkyFitDailyActivityItem(emoji = "🔥", name = "Bacak Antrenmani", startHourMinutes = 1800, startBlock = 5)
             )
         )
     }

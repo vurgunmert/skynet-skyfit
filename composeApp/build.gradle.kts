@@ -156,7 +156,6 @@ android {
 
 dependencies {
     implementation(libs.firebase.common.ktx)
-    debugImplementation(compose.uiTooling)
 }
 
 compose.desktop {
