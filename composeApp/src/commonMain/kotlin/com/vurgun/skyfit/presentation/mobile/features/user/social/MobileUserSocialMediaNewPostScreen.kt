@@ -61,11 +61,11 @@ private fun MobileUserSocialMediaNewPostScreenToolbarComponent(onClickCancel: ()
         )
         Spacer(Modifier.weight(1f))
         SkyFitButtonComponent(
-            Modifier.fillMaxWidth(), text = "Paylaş",
+            modifier = Modifier.fillMaxWidth(), text = "Paylaş",
             onClick = onClickShare,
             variant = ButtonVariant.Primary,
             size = ButtonSize.Large,
-            initialState = ButtonState.Rest
+            state = ButtonState.Rest
         )
     }
 }

@@ -1,12 +1,16 @@
 package com.vurgun.skyfit.presentation.mobile.features.auth
 
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.imePadding
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.widthIn
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.ClickableText
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -20,14 +24,12 @@ import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
-import com.vurgun.skyfit.presentation.shared.components.ButtonSize
-import com.vurgun.skyfit.presentation.shared.components.ButtonState
-import com.vurgun.skyfit.presentation.shared.components.ButtonVariant
+import com.vurgun.skyfit.presentation.mobile.resources.MobileStyleGuide
 import com.vurgun.skyfit.presentation.shared.components.SkyFitButtonComponent
+import com.vurgun.skyfit.presentation.shared.components.SkyFitLogoComponent
 import com.vurgun.skyfit.presentation.shared.components.SkyFitPasswordInputComponent
 import com.vurgun.skyfit.presentation.shared.components.SkyFitScaffold
 import com.vurgun.skyfit.presentation.shared.components.SkyFitTextInputComponent
-import com.vurgun.skyfit.presentation.shared.components.SkyFitLogoComponent
 import com.vurgun.skyfit.presentation.shared.navigation.SkyFitNavigationRoute
 import com.vurgun.skyfit.presentation.shared.navigation.jumpAndTakeover
 import com.vurgun.skyfit.presentation.shared.resources.SkyFitColor
@@ -40,23 +42,29 @@ import skyfit.composeapp.generated.resources.logo_skyfit
 @Composable
 fun MobileRegisterScreen(navigator: Navigator) {
 
-    var saveEnabled = false
+    var isSaveButtonEnabled by remember { mutableStateOf(false) }
     var showTermsDialog by remember { mutableStateOf(false) }
     var showPrivacyDialog by remember { mutableStateOf(false) }
 
     SkyFitScaffold {
         Column(
-            modifier = Modifier.fillMaxSize(),
+            modifier = Modifier
+                .imePadding()
+                .widthIn(max = MobileStyleGuide.screenWithMax)
+                .fillMaxHeight()
+                .padding(MobileStyleGuide.padding24)
+                .verticalScroll(rememberScrollState()),
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {
-            Spacer(Modifier.height(36.dp))
             SkyFitLogoComponent()
-            Spacer(Modifier.height(48.dp))
+            Spacer(Modifier.height(36.dp))
             MobileRegisterScreenTitleComponent()
             Spacer(Modifier.height(48.dp))
-            MobileRegisterInputGroupComponent()
+            MobileRegisterInputGroupComponent(
+                onInputReadyState = { isSaveButtonEnabled = it }
+            )
             Spacer(Modifier.weight(1f))
-            MobileRegisterScreenActionComponent(enabled = saveEnabled) {
+            MobileRegisterScreenActionComponent(enabled = isSaveButtonEnabled) {
                 navigator.jumpAndTakeover(SkyFitNavigationRoute.Register, SkyFitNavigationRoute.Dashboard)
             }
             Spacer(Modifier.height(16.dp))
@@ -64,7 +72,6 @@ fun MobileRegisterScreen(navigator: Navigator) {
                 onPrivacyPolicyClick = { showPrivacyDialog = true },
                 onTermsOfServiceClick = { showTermsDialog = true }
             )
-            Spacer(Modifier.height(48.dp))
         }
 
         if (showTermsDialog) {
@@ -92,31 +99,67 @@ private fun MobileRegisterScreenTitleComponent() {
 }
 
 @Composable
-private fun ColumnScope.MobileRegisterInputGroupComponent() {
+private fun MobileRegisterInputGroupComponent(onInputReadyState: (Boolean) -> Unit) {
 
     var username by remember { mutableStateOf("") }
     var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
     var confirmPassword by remember { mutableStateOf("") }
 
-    SkyFitTextInputComponent("Kullanıcı Adı", username, leftIconPainter = painterResource(Res.drawable.logo_skyfit))
+    fun validateInputs() {
+        onInputReadyState(
+            username.isNotBlank() &&
+                    email.isNotBlank() &&
+                    password.isNotBlank() &&
+                    password == confirmPassword
+        )
+    }
+
+    SkyFitTextInputComponent(
+        hint = "Kullanıcı Adı",
+        value = username,
+        onValueChange = {
+            username = it
+            validateInputs()
+        },
+        leftIconPainter = painterResource(Res.drawable.logo_skyfit)
+    )
     Spacer(Modifier.height(16.dp))
-    SkyFitTextInputComponent("Kullanıcı Adı", email, leftIconPainter = painterResource(Res.drawable.logo_skyfit))
+    SkyFitTextInputComponent(
+        hint = "Kullanıcı Adı",
+        value = email,
+        onValueChange = {
+            email = it
+            validateInputs()
+        },
+        leftIconPainter = painterResource(Res.drawable.logo_skyfit)
+    )
     Spacer(Modifier.height(16.dp))
-    SkyFitPasswordInputComponent("Şifrenizi girin", password)
+    SkyFitPasswordInputComponent(
+        hint = "Şifrenizi girin",
+        value = password,
+        onValueChange = {
+            password = it
+            validateInputs()
+        },
+    )
     Spacer(Modifier.height(16.dp))
-    SkyFitPasswordInputComponent("Şifrenizi tekrar girin", confirmPassword)
+    SkyFitPasswordInputComponent(
+        hint = "Şifrenizi tekrar girin",
+        value = confirmPassword,
+        onValueChange = {
+            confirmPassword = it
+            validateInputs()
+        }
+    )
 }
 
 @Composable
 private fun MobileRegisterScreenActionComponent(enabled: Boolean = false, onRegisterClick: () -> Unit) {
     SkyFitButtonComponent(
-        Modifier.fillMaxWidth(), text = "Kayıt Ol",
+        modifier = Modifier.fillMaxWidth(), text = "Kayıt Ol",
         onClick = onRegisterClick,
-        variant = ButtonVariant.Primary,
-        size = ButtonSize.Large,
-        initialState = ButtonState.Disabled,
-        leftIconPainter = painterResource(Res.drawable.logo_skyfit)
+        isEnabled = enabled
     )
 }
 

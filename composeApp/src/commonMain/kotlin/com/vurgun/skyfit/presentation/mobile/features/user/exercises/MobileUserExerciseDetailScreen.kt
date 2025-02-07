@@ -128,27 +128,27 @@ private fun MobileExerciseActionDetailScreenInfoComponent() {
 private fun MobileExerciseActionDetailScreenCategoryComponent() {
     Row(Modifier.fillMaxWidth().height(56.dp)) {
         SkyFitButtonComponent(
-            Modifier.wrapContentWidth(), text = "Beginner",
+            modifier = Modifier.wrapContentWidth(), text = "Beginner",
             onClick = { },
             variant = ButtonVariant.Secondary,
             size = ButtonSize.Large,
-            initialState = ButtonState.Rest
+            state = ButtonState.Rest
         )
 
         SkyFitButtonComponent(
-            Modifier.wrapContentWidth(), text = "Abs",
+            modifier = Modifier.wrapContentWidth(), text = "Abs",
             onClick = { },
             variant = ButtonVariant.Secondary,
             size = ButtonSize.Large,
-            initialState = ButtonState.Rest
+            state = ButtonState.Rest
         )
 
         SkyFitButtonComponent(
-            Modifier.wrapContentWidth(), text = "4.8*",
+            modifier = Modifier.wrapContentWidth(), text = "4.8*",
             onClick = { },
             variant = ButtonVariant.Secondary,
             size = ButtonSize.Large,
-            initialState = ButtonState.Rest
+            state = ButtonState.Rest
         )
     }
 }

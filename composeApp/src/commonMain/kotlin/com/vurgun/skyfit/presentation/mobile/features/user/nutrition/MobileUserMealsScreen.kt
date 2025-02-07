@@ -367,11 +367,11 @@ object MobileUserMealsScreen {
 
                 if (mealDetail == null) {
                     SkyFitButtonComponent(
-                        Modifier.wrapContentWidth(), text = "Ekle",
+                        modifier = Modifier.wrapContentWidth(), text = "Ekle",
                         onClick = onClickEdit,
                         variant = ButtonVariant.Secondary,
                         size = ButtonSize.Micro,
-                        initialState = ButtonState.Rest,
+                        state = ButtonState.Rest,
                         leftIconPainter = painterResource(Res.drawable.logo_skyfit)
                     )
                 }
@@ -400,11 +400,11 @@ object MobileUserMealsScreen {
     fun MobileDashboardNutritionScreenMealEditActionComponent(onClick: () -> Unit) {
         Box(Modifier.fillMaxWidth().padding(24.dp), contentAlignment = Alignment.Center) {
             SkyFitButtonComponent(
-                Modifier.wrapContentWidth(), text = "Ogun Ekle",
+                modifier = Modifier.wrapContentWidth(), text = "Ogun Ekle",
                 onClick = onClick,
                 variant = ButtonVariant.Secondary,
                 size = ButtonSize.Medium,
-                initialState = ButtonState.Rest,
+                state = ButtonState.Rest,
                 leftIconPainter = painterResource(Res.drawable.logo_skyfit)
             )
         }

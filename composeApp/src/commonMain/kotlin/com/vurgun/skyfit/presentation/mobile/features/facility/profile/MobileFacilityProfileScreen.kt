@@ -102,11 +102,11 @@ private fun MobileFacilityProfileScreenPhotosEmptyComponent(onClickAdd: () -> Un
 
         Box(Modifier.size(componentSize), contentAlignment = Alignment.Center) {
             SkyFitButtonComponent(
-                Modifier.wrapContentWidth(), text = "Fotoğraf Ekle",
+                modifier = Modifier.wrapContentWidth(), text = "Fotoğraf Ekle",
                 onClick = onClickAdd,
                 variant = ButtonVariant.Secondary,
                 size = ButtonSize.Medium,
-                initialState = ButtonState.Rest,
+                state = ButtonState.Rest,
                 leftIconPainter = painterResource(Res.drawable.logo_skyfit)
             )
         }
@@ -143,7 +143,7 @@ private fun MobileFacilityProfileScreenTrainersEmptyComponent(onClickAdd: () -> 
                 onClick = onClickAdd,
                 variant = ButtonVariant.Primary,
                 size = ButtonSize.Medium,
-                initialState = ButtonState.Rest
+                state = ButtonState.Rest
             )
         }
     }
@@ -168,7 +168,7 @@ private fun MobileFacilityProfileScreenPrivateClassesEmptyComponent(onClickAdd: 
                 onClick = onClickAdd,
                 variant = ButtonVariant.Primary,
                 size = ButtonSize.Medium,
-                initialState = ButtonState.Rest
+                state = ButtonState.Rest
             )
         }
     }

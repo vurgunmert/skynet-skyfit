@@ -108,6 +108,8 @@ object SkyFitColor {
         val disabled = Color(0xFFEBEBEB)  // border-disabled
         val secondary = Color(0xFFEBEBEB)  // border-secondary
         val secondaryButton = Color(0xFF73D4D4)  // border-secondary
+        val secondaryButtonHover = Color(0xFF4CA8A9)  // border-secondary
+        val secondaryButtonDisabled = Color(0xFF013B46)  // border-secondary
         val tertiary = Color(0xFFCCCCCC)  // border-tertiary
         val focus = Color(0xFF005BD3)  // border-focus
         val info = Color(0xFF0094D5)  // border-info
@@ -157,9 +159,9 @@ object SkyFitColor {
         val buttonBgRest = Color(0xFF73D4D4) // button-bg-rest
         val buttonBgHover = Color(0xFF4CA8A9)  // button-bg-hover
         val buttonBgActive = Color(0xFF73D4D4)  // button-bg-active
-        val buttonBgDisabled = Color(0xFF444444)  // button-bg-disabled
+        val buttonBgDisabled = Color(0xFF01454F)  // button-bg-disabled
         val buttonBgLoading = Color(0xFF01454F)  // button-bg-loading
         val buttonBgPressed = Color(0xFF4CA8A9)  // button-bg-pressed
-        val secondaryButtonRest = Color(0xFF1E1E1E)  // button-bg-pressed
+        val secondaryButtonRest = Color(0xFF73D4D4).copy(alpha = 0.07f)
     }
 }

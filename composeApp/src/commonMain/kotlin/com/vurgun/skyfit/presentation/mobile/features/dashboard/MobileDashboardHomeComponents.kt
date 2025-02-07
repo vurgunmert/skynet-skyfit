@@ -309,11 +309,11 @@ fun MobileDashboardHomeActivityHourlyCalendarComponent() {
         Row {
             Text("18 Haziran Cumartesi", modifier = Modifier.weight(1f))
             SkyFitButtonComponent(
-                Modifier.wrapContentWidth(), text = "+ Ekle",
+                modifier = Modifier.wrapContentWidth(), text = "+ Ekle",
                 onClick = { },
                 variant = ButtonVariant.Primary,
                 size = ButtonSize.Medium,
-                initialState = ButtonState.Rest
+                state = ButtonState.Rest
             )
         }
         MobileUserActivityHourlyCalendarComponent()
@@ -721,11 +721,11 @@ private fun MobileDashboardHomeExerciseCard(goal: ExerciseGoal) {
             GoalCompletedBadge("💪 Bravo", Color.Black)
         } else {
             SkyFitButtonComponent(
-                Modifier.wrapContentWidth(), text = "Basla",
+                modifier = Modifier.wrapContentWidth(), text = "Basla",
                 onClick = { },
                 variant = ButtonVariant.Primary,
                 size = ButtonSize.Micro,
-                initialState = ButtonState.Disabled
+                state = ButtonState.Disabled
             )
         }
     }
@@ -898,11 +898,11 @@ private fun MobileDashboardHomeFeaturedExerciseCard(exercise: FeaturedExercise) 
         }
 
         SkyFitButtonComponent(
-            Modifier.wrapContentWidth(), text = "Ekle",
+            modifier = Modifier.wrapContentWidth(), text = "Ekle",
             onClick = { },
             variant = ButtonVariant.Primary,
             size = ButtonSize.Micro,
-            initialState = ButtonState.Disabled
+            state = ButtonState.Disabled
         )
     }
 }
@@ -968,11 +968,11 @@ private fun MobileDashboardHomeFeaturedTrainerCard(trainer: HomeFeaturedTrainer)
         }
 
         SkyFitButtonComponent(
-            Modifier.wrapContentWidth(), text = "Ekle",
+            modifier = Modifier.wrapContentWidth(), text = "Ekle",
             onClick = { },
             variant = ButtonVariant.Primary,
             size = ButtonSize.Micro,
-            initialState = ButtonState.Disabled
+            state = ButtonState.Disabled
         )
     }
 }
@@ -1144,11 +1144,11 @@ fun MobileDashboardHomeTrainerNoClassComponent() {
             Spacer(modifier = Modifier.height(16.dp))
 
             SkyFitButtonComponent(
-                Modifier.wrapContentWidth(), text = "Etkinlik Oluştur",
+                modifier = Modifier.wrapContentWidth(), text = "Etkinlik Oluştur",
                 onClick = { },
                 variant = ButtonVariant.Primary,
                 size = ButtonSize.Medium,
-                initialState = ButtonState.Rest
+                state = ButtonState.Rest
             )
         }
 

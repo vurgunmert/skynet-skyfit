@@ -78,11 +78,11 @@ private fun MobileFacilitySettingsAccountScreenInputComponent() {
 @Composable
 private fun MobileFacilitySettingsAccountScreenSaveActionComponent(onClick: () -> Unit) {
     SkyFitButtonComponent(
-        Modifier.fillMaxWidth(), text = "Değişiklikleri Kaydet",
+        modifier = Modifier.fillMaxWidth(), text = "Değişiklikleri Kaydet",
         onClick = onClick,
         variant = ButtonVariant.Primary,
         size = ButtonSize.Large,
-        initialState = ButtonState.Rest,
+        state = ButtonState.Rest,
         leftIconPainter = painterResource(Res.drawable.logo_skyfit)
     )
 }

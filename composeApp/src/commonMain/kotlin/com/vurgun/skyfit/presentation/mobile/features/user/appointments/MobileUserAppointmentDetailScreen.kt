@@ -135,7 +135,7 @@ private fun MobileUserAppointmentDetailScreenCancelActionComponent(onClick: () -
         onClick = onClick,
         variant = ButtonVariant.Secondary,
         size = ButtonSize.Large,
-        initialState = ButtonState.Rest
+        state = ButtonState.Rest
     )
 }
 

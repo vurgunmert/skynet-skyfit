@@ -141,13 +141,13 @@ private fun MobileExploreCommunityDetailScreenInfoComponent(
         }
 
         SkyFitButtonComponent(
-            Modifier
+            modifier = Modifier
                 .padding(end = 24.dp)
                 .wrapContentWidth(), text = "Ayrıl",
             onClick = onLeaveClick,
             variant = ButtonVariant.Secondary,
             size = ButtonSize.Micro,
-            initialState = ButtonState.Rest
+            state = ButtonState.Rest
         )
     }
 }

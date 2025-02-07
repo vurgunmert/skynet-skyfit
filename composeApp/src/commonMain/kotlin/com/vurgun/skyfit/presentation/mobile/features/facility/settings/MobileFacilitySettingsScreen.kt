@@ -28,11 +28,11 @@ fun MobileFacilitySettingsScreen(navigator: Navigator) {
         bottomBar = {
 
             SkyFitButtonComponent(
-                Modifier.fillMaxWidth().padding(24.dp), text = "Oturumu Kapat",
+                modifier = Modifier.fillMaxWidth().padding(24.dp), text = "Oturumu Kapat",
                 onClick = { },
                 variant = ButtonVariant.Primary,
                 size = ButtonSize.Large,
-                initialState = ButtonState.Rest
+                state = ButtonState.Rest
             )
         }
     ) {

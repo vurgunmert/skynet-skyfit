@@ -161,11 +161,11 @@ private fun MobileMealDetailAddScreenAddPhotoActionComponent(
 
         if (photoUrl.isNullOrEmpty()) {
             SkyFitButtonComponent(
-                Modifier.wrapContentWidth(), text = "Besin Ekle",
+                modifier = Modifier.wrapContentWidth(), text = "Besin Ekle",
                 onClick = onClick,
                 variant = ButtonVariant.Secondary,
                 size = ButtonSize.Medium,
-                initialState = ButtonState.Rest,
+                state = ButtonState.Rest,
                 leftIconPainter = painterResource(Res.drawable.logo_skyfit)
             )
         } else {
@@ -181,11 +181,11 @@ private fun MobileMealDetailAddScreenAddPhotoActionComponent(
                 Spacer(Modifier.weight(1f))
 
                 SkyFitButtonComponent(
-                    Modifier.wrapContentWidth(), text = "Besin Ekle",
+                    modifier = Modifier.wrapContentWidth(), text = "Besin Ekle",
                     onClick = onClick,
                     variant = ButtonVariant.Secondary,
                     size = ButtonSize.Medium,
-                    initialState = ButtonState.Rest,
+                    state = ButtonState.Rest,
                     leftIconPainter = painterResource(Res.drawable.logo_skyfit)
                 )
             }
@@ -196,11 +196,11 @@ private fun MobileMealDetailAddScreenAddPhotoActionComponent(
 @Composable
 private fun MobileMealDetailAddScreenSaveActionComponent(onClick: () -> Unit) {
     SkyFitButtonComponent(
-        Modifier.fillMaxWidth(), text = "Kaydet",
+        modifier = Modifier.fillMaxWidth(), text = "Kaydet",
         onClick = onClick,
         variant = ButtonVariant.Primary,
         size = ButtonSize.Large,
-        initialState = ButtonState.Rest,
+        state = ButtonState.Rest,
         leftIconPainter = painterResource(Res.drawable.logo_skyfit)
     )
 }

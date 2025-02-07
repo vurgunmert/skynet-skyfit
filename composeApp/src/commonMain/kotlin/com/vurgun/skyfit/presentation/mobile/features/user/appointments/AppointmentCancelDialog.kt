@@ -86,7 +86,7 @@ fun AppointmentCancelDialog(
                             onClick = onConfirm,
                             variant = ButtonVariant.Secondary,
                             size = ButtonSize.Large,
-                            initialState = ButtonState.Rest
+                            state = ButtonState.Rest
                         )
 
                         SkyFitButtonComponent(
@@ -94,7 +94,7 @@ fun AppointmentCancelDialog(
                             onClick = onDismiss,
                             variant = ButtonVariant.Primary,
                             size = ButtonSize.Large,
-                            initialState = ButtonState.Rest
+                            state = ButtonState.Rest
                         )
                     }
                 }

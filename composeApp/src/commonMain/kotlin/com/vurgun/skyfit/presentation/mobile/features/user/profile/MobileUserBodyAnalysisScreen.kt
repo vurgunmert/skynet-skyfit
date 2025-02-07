@@ -436,7 +436,7 @@ private fun MobileUserBodyAnalysisScreenExitActionComponent(
                             onClick = onClickExit,
                             variant = ButtonVariant.Secondary,
                             size = ButtonSize.Large,
-                            initialState = ButtonState.Rest
+                            state = ButtonState.Rest
                         )
 
                         SkyFitButtonComponent(
@@ -445,7 +445,7 @@ private fun MobileUserBodyAnalysisScreenExitActionComponent(
                             onClick = onClickDismiss,
                             variant = ButtonVariant.Primary,
                             size = ButtonSize.Large,
-                            initialState = ButtonState.Rest
+                            state = ButtonState.Rest
                         )
                     }
                 }
@@ -809,11 +809,11 @@ fun ExerciseSuggestionCard(title: String, details: String) {
 
             // Save Button
             SkyFitButtonComponent(
-                Modifier.fillMaxWidth(), text = "Kaydet",
+                modifier = Modifier.fillMaxWidth(), text = "Kaydet",
                 onClick = { },
                 variant = ButtonVariant.Primary,
                 size = ButtonSize.Medium,
-                initialState = ButtonState.Disabled
+                state = ButtonState.Disabled
             )
         }
     }

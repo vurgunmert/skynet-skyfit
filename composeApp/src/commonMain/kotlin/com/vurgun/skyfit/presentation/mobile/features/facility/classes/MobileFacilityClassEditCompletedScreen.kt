@@ -96,20 +96,20 @@ private fun MobileFacilityClassEditCompletedComponent(
         Spacer(Modifier.height(24.dp))
 
         SkyFitButtonComponent(
-            Modifier.fillMaxWidth(), text = "Profil'e Don",
+            modifier = Modifier.fillMaxWidth(), text = "Profil'e Don",
             onClick = onClickProfile,
             variant = ButtonVariant.Primary,
             size = ButtonSize.Large,
-            initialState = ButtonState.Rest,
+            state = ButtonState.Rest,
             rightIconPainter = painterResource(Res.drawable.logo_skyfit)
         )
         Spacer(Modifier.height(14.dp))
         SkyFitButtonComponent(
-            Modifier.fillMaxWidth(), text = "Ana Sayfa",
+            modifier = Modifier.fillMaxWidth(), text = "Ana Sayfa",
             onClick = onClickDashboard,
             variant = ButtonVariant.Secondary,
             size = ButtonSize.Large,
-            initialState = ButtonState.Rest
+            state = ButtonState.Rest
         )
     }
 }

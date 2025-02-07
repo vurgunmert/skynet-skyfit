@@ -138,11 +138,11 @@ private fun MobileUserExerciseInActionCompletedScreenRateItemComponent() {
 private fun MobileUserExerciseInActionCompletedScreenActionComponent(onClick: () -> Unit) {
     Box(Modifier.fillMaxWidth().padding(32.dp)) {
         SkyFitButtonComponent(
-            Modifier.fillMaxWidth(), text = "Tamamla",
+            modifier = Modifier.fillMaxWidth(), text = "Tamamla",
             onClick = onClick,
             variant = ButtonVariant.Primary,
             size = ButtonSize.Large,
-            initialState = ButtonState.Rest
+            state = ButtonState.Rest
         )
     }
 }

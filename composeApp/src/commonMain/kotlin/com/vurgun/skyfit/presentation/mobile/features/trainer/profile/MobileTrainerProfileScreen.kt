@@ -330,11 +330,11 @@ private fun MobileTrainerProfileSpecialitiesEmptyComponent(onClickAdd: () -> Uni
         ) {
 
             SkyFitButtonComponent(
-                Modifier.wrapContentWidth(), text = "Profili Düzenle",
+                modifier = Modifier.wrapContentWidth(), text = "Profili Düzenle",
                 onClick = onClickAdd,
                 variant = ButtonVariant.Secondary,
                 size = ButtonSize.Medium,
-                initialState = ButtonState.Rest
+                state = ButtonState.Rest
             )
         }
     }
@@ -362,11 +362,11 @@ private fun MobileTrainerProfilePrivateClassesEmptyComponent(onClickAdd: () -> U
         ) {
 
             SkyFitButtonComponent(
-                Modifier.wrapContentWidth(), text = "Ozel Ders Ekle",
+                modifier = Modifier.wrapContentWidth(), text = "Ozel Ders Ekle",
                 onClick = onClickAdd,
                 variant = ButtonVariant.Secondary,
                 size = ButtonSize.Medium,
-                initialState = ButtonState.Rest
+                state = ButtonState.Rest
             )
         }
     }

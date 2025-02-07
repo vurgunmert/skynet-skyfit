@@ -109,19 +109,19 @@ fun MobileUserProfileVisitedScreen(navigator: Navigator) {
 
                     if (isFollowing) {
                         SkyFitButtonComponent(
-                            Modifier.fillMaxWidth(), text = "Takip Et",
+                            modifier = Modifier.fillMaxWidth(), text = "Takip Et",
                             onClick = { },
                             variant = ButtonVariant.Primary,
                             size = ButtonSize.Large,
-                            initialState = ButtonState.Rest
+                            state = ButtonState.Rest
                         )
                     } else {
                         SkyFitButtonComponent(
-                            Modifier.fillMaxWidth(), text = "Takipten Cik",
+                            modifier = Modifier.fillMaxWidth(), text = "Takipten Cik",
                             onClick = { },
                             variant = ButtonVariant.Primary,
                             size = ButtonSize.Large,
-                            initialState = ButtonState.Rest
+                            state = ButtonState.Rest
                         )
                     }
                 }

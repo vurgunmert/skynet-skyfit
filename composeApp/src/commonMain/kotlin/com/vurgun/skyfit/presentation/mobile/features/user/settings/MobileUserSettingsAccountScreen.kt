@@ -198,12 +198,12 @@ fun MobileUserSettingsActivityTagEditComponent(onClick: () -> Unit = {}) {
             )
             Spacer(Modifier.width(16.dp))
             SkyFitButtonComponent(
-                Modifier.wrapContentWidth(),
+                modifier = Modifier.wrapContentWidth(),
                 text = "Ekle",
                 onClick = onClick,
                 variant = ButtonVariant.Secondary,
                 size = ButtonSize.Micro,
-                initialState = ButtonState.Rest
+                state = ButtonState.Rest
             )
         }
         Spacer(Modifier.height(16.dp))
@@ -236,12 +236,12 @@ fun MobileUserSettingsActivityTagEditComponent(onClick: () -> Unit = {}) {
 @Composable
 fun MobileUserSettingsActivityTagInputComponent(onClick: () -> Unit = {}) {
     SkyFitButtonComponent(
-        Modifier.wrapContentWidth(),
+        modifier = Modifier.wrapContentWidth(),
         text = "Etiket başlığı örn: Pilates",
         onClick = onClick,
         variant = ButtonVariant.Secondary,
         size = ButtonSize.Micro,
-        initialState = ButtonState.Rest,
+        state = ButtonState.Rest,
         rightIconPainter = painterResource(Res.drawable.logo_skyfit)
     )
 }
@@ -272,12 +272,12 @@ fun MobileUserSettingsScreenPhotoEditComponent(
         Spacer(Modifier.width(16.dp))
 
         SkyFitButtonComponent(
-            Modifier.width(190.dp),
+            modifier = Modifier.width(190.dp),
             text = label,
             onClick = onClick,
             variant = ButtonVariant.Secondary,
             size = ButtonSize.Medium,
-            initialState = ButtonState.Rest,
+            state = ButtonState.Rest,
             rightIconPainter = painterResource(Res.drawable.logo_skyfit)
         )
     }
@@ -286,11 +286,11 @@ fun MobileUserSettingsScreenPhotoEditComponent(
 @Composable
 fun MobileUserSettingsScreenSaveActionComponent(onClick: () -> Unit) {
     SkyFitButtonComponent(
-        Modifier.fillMaxWidth(), text = "Değişiklikleri Kaydet",
+        modifier = Modifier.fillMaxWidth(), text = "Değişiklikleri Kaydet",
         onClick = onClick,
         variant = ButtonVariant.Primary,
         size = ButtonSize.Large,
-        initialState = ButtonState.Rest,
+        state = ButtonState.Rest,
         leftIconPainter = painterResource(Res.drawable.logo_skyfit)
     )
 }
@@ -324,22 +324,22 @@ fun MobileUserSettingsScreenDeleteActionsComponent(
 
         Spacer(Modifier.height(24.dp))
         SkyFitButtonComponent(
-            Modifier.fillMaxWidth().padding(horizontal = 24.dp),
+            modifier = Modifier.fillMaxWidth().padding(horizontal = 24.dp),
             text = "Hesabı Sil",
             onClick = onDeleteClicked,
             variant = ButtonVariant.Primary,
             size = ButtonSize.Large,
-            initialState = ButtonState.Rest,
+            state = ButtonState.Rest,
             leftIconPainter = painterResource(Res.drawable.logo_skyfit)
         )
         Spacer(Modifier.height(24.dp))
         SkyFitButtonComponent(
-            Modifier.fillMaxWidth().padding(horizontal = 24.dp),
+            modifier = Modifier.fillMaxWidth().padding(horizontal = 24.dp),
             text = "İptal",
             onClick = onCancelClicked,
             variant = ButtonVariant.Secondary,
             size = ButtonSize.Large,
-            initialState = ButtonState.Rest
+            state = ButtonState.Rest
         )
     }
 }

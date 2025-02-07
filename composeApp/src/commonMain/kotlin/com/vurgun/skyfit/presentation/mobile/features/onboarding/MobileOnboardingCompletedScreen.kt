@@ -37,11 +37,11 @@ fun MobileOnboardingCompletedScreen(onClickContinue: () -> Unit) {
             OnboardingCharacterComponent()
             Spacer(Modifier.weight(1f))
             SkyFitButtonComponent(
-                Modifier.fillMaxWidth(), text = "Haydi Başla",
+                modifier = Modifier.fillMaxWidth(), text = "Haydi Başla",
                 onClick = onClickContinue,
                 variant = ButtonVariant.Primary,
                 size = ButtonSize.Large,
-                initialState = ButtonState.Rest
+                state = ButtonState.Rest
             )
             Spacer(Modifier.height(48.dp))
         }

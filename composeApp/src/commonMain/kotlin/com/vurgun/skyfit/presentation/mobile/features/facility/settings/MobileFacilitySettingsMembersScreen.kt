@@ -63,13 +63,13 @@ fun MobileFacilitySettingsSearchUserToolbarComponent(
         SkyFitScreenHeader(title, onClickBack = onClickBack)
 
         SkyFitButtonComponent(
-            Modifier
+            modifier = Modifier
                 .padding(end = 24.dp)
                 .wrapContentWidth(), text = "Ekle",
             onClick = onClickAdd,
             variant = ButtonVariant.Primary,
             size = ButtonSize.Medium,
-            initialState = ButtonState.Rest
+            state = ButtonState.Rest
         )
     }
 }
@@ -132,11 +132,11 @@ fun MobileFacilitySettingsSearchResultItemComponent() {
         }
         Spacer(Modifier.width(24.dp))
         SkyFitButtonComponent(
-            Modifier.wrapContentWidth(), text = "Sil",
+            modifier = Modifier.wrapContentWidth(), text = "Sil",
             onClick = { },
             variant = ButtonVariant.Primary,
             size = ButtonSize.Medium,
-            initialState = ButtonState.Rest
+            state = ButtonState.Rest
         )
     }
 }

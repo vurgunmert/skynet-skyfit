@@ -88,20 +88,20 @@ private fun MobileUserActivityCalendarAddedComponent(onClickCalendar: () -> Unit
         Spacer(Modifier.height(24.dp))
 
         SkyFitButtonComponent(
-            Modifier.fillMaxWidth(), text = "Takvim",
+            modifier = Modifier.fillMaxWidth(), text = "Takvim",
             onClick = onClickCalendar,
             variant = ButtonVariant.Primary,
             size = ButtonSize.Large,
-            initialState = ButtonState.Rest,
+            state = ButtonState.Rest,
             rightIconPainter = painterResource(Res.drawable.logo_skyfit)
         )
         Spacer(Modifier.height(14.dp))
         SkyFitButtonComponent(
-            Modifier.fillMaxWidth(), text = "Ana Sayfa",
+            modifier = Modifier.fillMaxWidth(), text = "Ana Sayfa",
             onClick = onClickDashboard,
             variant = ButtonVariant.Secondary,
             size = ButtonSize.Large,
-            initialState = ButtonState.Rest
+            state = ButtonState.Rest
         )
     }
 }

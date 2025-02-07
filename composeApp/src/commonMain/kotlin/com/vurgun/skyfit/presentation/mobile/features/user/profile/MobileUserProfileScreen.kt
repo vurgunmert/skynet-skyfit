@@ -350,11 +350,11 @@ private fun MobileUserProfileDietGoalsEmptyComponent(onClickAdd: () -> Unit) {
         ) {
 
             SkyFitButtonComponent(
-                Modifier.wrapContentWidth(), text = "Diyet Listesi Oluştur",
+                modifier = Modifier.wrapContentWidth(), text = "Diyet Listesi Oluştur",
                 onClick = onClickAdd,
                 variant = ButtonVariant.Primary,
                 size = ButtonSize.Medium,
-                initialState = ButtonState.Rest
+                state = ButtonState.Rest
             )
         }
     }
@@ -506,11 +506,11 @@ private fun MobileUserProfileScreenExploreExercisesComponent(onClick: () -> Unit
     ) {
 
         SkyFitButtonComponent(
-            Modifier.wrapContentWidth(), text = "Antrenman Keşfet",
+            modifier = Modifier.wrapContentWidth(), text = "Antrenman Keşfet",
             onClick = onClick,
             variant = ButtonVariant.Primary,
             size = ButtonSize.Medium,
-            initialState = ButtonState.Rest
+            state = ButtonState.Rest
         )
     }
 }
@@ -589,11 +589,11 @@ private fun MobileUserProfilePhotoDiaryEmptyComponent(onClickAdd: () -> Unit) {
 
         Box(Modifier.size(componentSize), contentAlignment = Alignment.Center) {
             SkyFitButtonComponent(
-                Modifier.wrapContentWidth(), text = "Fotoğraf Ekle",
+                modifier = Modifier.wrapContentWidth(), text = "Fotoğraf Ekle",
                 onClick = onClickAdd,
                 variant = ButtonVariant.Secondary,
                 size = ButtonSize.Medium,
-                initialState = ButtonState.Rest,
+                state = ButtonState.Rest,
                 leftIconPainter = painterResource(Res.drawable.logo_skyfit)
             )
         }

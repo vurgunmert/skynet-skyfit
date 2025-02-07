@@ -148,11 +148,11 @@ private fun MobileUserActivityCalendarAddActivityScreenInputComponent(
 private fun MobileUserActivityCalendarAddActivityScreenAddTimeActionComponent(onClick: () -> Unit) {
     Box(Modifier.fillMaxWidth().background(SkyFitColor.background.default).padding(16.dp), contentAlignment = Alignment.Center) {
         SkyFitButtonComponent(
-            Modifier.fillMaxWidth(), text = "Sure ekle",
+            modifier = Modifier.fillMaxWidth(), text = "Sure ekle",
             onClick = onClick,
             variant = ButtonVariant.Primary,
             size = ButtonSize.Large,
-            initialState = ButtonState.Rest,
+            state = ButtonState.Rest,
             leftIconPainter = painterResource(Res.drawable.logo_skyfit)
         )
     }
@@ -242,19 +242,19 @@ private fun MobileUserActivityCalendarAddActivityScreenContinueActionsComponent(
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
         SkyFitButtonComponent(
-            Modifier.fillMaxWidth(), text = "Devam Et",
+            modifier = Modifier.fillMaxWidth(), text = "Devam Et",
             onClick = onClickContinue,
             variant = ButtonVariant.Primary,
             size = ButtonSize.Large,
-            initialState = ButtonState.Rest
+            state = ButtonState.Rest
         )
         Spacer(Modifier.height(14.dp))
         SkyFitButtonComponent(
-            Modifier.fillMaxWidth(), text = "İptal",
+            modifier = Modifier.fillMaxWidth(), text = "İptal",
             onClick = onClickCancel,
             variant = ButtonVariant.Secondary,
             size = ButtonSize.Large,
-            initialState = ButtonState.Rest
+            state = ButtonState.Rest
         )
         Spacer(Modifier.height(44.dp))
     }
@@ -288,11 +288,11 @@ private fun MobileUserActivityCalendarAddActivityScreenTextHolderComponent(activ
 private fun MobileUserActivityCalendarAddActivityScreenConfirmActionComponent(onClick: () -> Unit) {
     Box(Modifier.fillMaxWidth().background(SkyFitColor.background.default).padding(16.dp), contentAlignment = Alignment.Center) {
         SkyFitButtonComponent(
-            Modifier.fillMaxWidth(), text = "Aktiviteyi ekle",
+            modifier = Modifier.fillMaxWidth(), text = "Aktiviteyi ekle",
             onClick = onClick,
             variant = ButtonVariant.Primary,
             size = ButtonSize.Large,
-            initialState = ButtonState.Rest,
+            state = ButtonState.Rest,
             leftIconPainter = painterResource(Res.drawable.logo_skyfit)
         )
     }

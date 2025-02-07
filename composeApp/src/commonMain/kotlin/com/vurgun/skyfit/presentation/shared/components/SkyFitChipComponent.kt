@@ -11,12 +11,12 @@ import skyfit.composeapp.generated.resources.logo_skyfit
 @Composable
 fun SkyFitChipComponent(text: String, onClick: () -> Unit) {
     SkyFitButtonComponent(
-        Modifier.wrapContentWidth(),
+        modifier = Modifier.wrapContentWidth(),
         text = text,
         onClick = onClick,
         variant = ButtonVariant.Secondary,
         size = ButtonSize.Micro,
-        initialState = ButtonState.Rest,
+        state = ButtonState.Rest,
         rightIconPainter = painterResource(Res.drawable.logo_skyfit)
     )
 }

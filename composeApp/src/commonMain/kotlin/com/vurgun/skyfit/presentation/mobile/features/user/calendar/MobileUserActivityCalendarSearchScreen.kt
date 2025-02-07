@@ -118,11 +118,11 @@ private fun MobileUserActivityCalendarSearchScreenToolbarComponent(
         Spacer(Modifier.weight(1f))
 
         SkyFitButtonComponent(
-            Modifier.wrapContentWidth(), text = "Yeni",
+            modifier = Modifier.wrapContentWidth(), text = "Yeni",
             onClick = onClickNew,
             variant = ButtonVariant.Primary,
             size = ButtonSize.Micro,
-            initialState = ButtonState.Rest,
+            state = ButtonState.Rest,
             leftIconPainter = painterResource(Res.drawable.logo_skyfit)
         )
     }
@@ -175,19 +175,19 @@ private fun MobileUserActivityCalendarSearchScreenFilterItemComponent() {
 private fun MobileUserActivityCalendarSearchScreenFilterComponent(item: FilterItem, onClick: () -> Unit) {
     if (item.selected) {
         SkyFitButtonComponent(
-            Modifier.wrapContentWidth(), text = item.title,
+            modifier = Modifier.wrapContentWidth(), text = item.title,
             onClick = onClick,
             variant = ButtonVariant.Primary,
             size = ButtonSize.Micro,
-            initialState = ButtonState.Rest
+            state = ButtonState.Rest
         )
     } else {
         SkyFitButtonComponent(
-            Modifier.wrapContentWidth(), text = item.title,
+            modifier = Modifier.wrapContentWidth(), text = item.title,
             onClick = onClick,
             variant = ButtonVariant.Secondary,
             size = ButtonSize.Micro,
-            initialState = ButtonState.Rest
+            state = ButtonState.Rest
         )
     }
 }

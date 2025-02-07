@@ -90,19 +90,19 @@ private fun MobileUserActivityCalendarPaymentRequiredComponent(
         Spacer(Modifier.height(24.dp))
 
         SkyFitButtonComponent(
-            Modifier.fillMaxWidth(), text = "Odeme Yap",
+            modifier = Modifier.fillMaxWidth(), text = "Odeme Yap",
             onClick = onClickContinue,
             variant = ButtonVariant.Primary,
             size = ButtonSize.Large,
-            initialState = ButtonState.Rest
+            state = ButtonState.Rest
         )
         Spacer(Modifier.height(14.dp))
         SkyFitButtonComponent(
-            Modifier.fillMaxWidth(), text = "İptal",
+            modifier = Modifier.fillMaxWidth(), text = "İptal",
             onClick = onClickCancel,
             variant = ButtonVariant.Secondary,
             size = ButtonSize.Large,
-            initialState = ButtonState.Rest
+            state = ButtonState.Rest
         )
     }
 }

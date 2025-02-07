@@ -212,21 +212,21 @@ private data class LeaderboardEntry(val rank: Int, val name: String, val crowns:
 @Composable
 private fun MobileExploreChallengeDetailScreenExitActionComponent() {
     SkyFitButtonComponent(
-        Modifier.fillMaxWidth(), text = "Ayril",
+        modifier = Modifier.fillMaxWidth(), text = "Ayril",
         onClick = { },
         variant = ButtonVariant.Secondary,
         size = ButtonSize.Large,
-        initialState = ButtonState.Rest
+        state = ButtonState.Rest
     )
 }
 
 @Composable
 private fun MobileExploreChallengeDetailScreenJoinActionComponent() {
     SkyFitButtonComponent(
-        Modifier.fillMaxWidth(), text = "Katil",
+        modifier = Modifier.fillMaxWidth(), text = "Katil",
         onClick = { },
         variant = ButtonVariant.Primary,
         size = ButtonSize.Large,
-        initialState = ButtonState.Rest
+        state = ButtonState.Rest
     )
 }

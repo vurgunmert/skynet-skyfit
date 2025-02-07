@@ -2,14 +2,13 @@ package com.vurgun.skyfit.presentation.mobile.features.auth
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -19,13 +18,15 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import com.vurgun.skyfit.presentation.mobile.resources.MobileStyleGuide
 import com.vurgun.skyfit.presentation.shared.components.ButtonSize
 import com.vurgun.skyfit.presentation.shared.components.ButtonState
 import com.vurgun.skyfit.presentation.shared.components.ButtonVariant
 import com.vurgun.skyfit.presentation.shared.components.SkyFitButtonComponent
-import com.vurgun.skyfit.presentation.shared.components.SkyFitPasswordInputComponent
-import com.vurgun.skyfit.presentation.shared.components.SkyFitTextInputComponent
 import com.vurgun.skyfit.presentation.shared.components.SkyFitLogoComponent
+import com.vurgun.skyfit.presentation.shared.components.SkyFitPasswordInputComponent
+import com.vurgun.skyfit.presentation.shared.components.SkyFitScaffold
+import com.vurgun.skyfit.presentation.shared.components.SkyFitTextInputComponent
 import com.vurgun.skyfit.presentation.shared.navigation.SkyFitNavigationRoute
 import com.vurgun.skyfit.presentation.shared.navigation.jumpAndStay
 import com.vurgun.skyfit.presentation.shared.navigation.jumpAndTakeover
@@ -39,14 +40,14 @@ import skyfit.composeapp.generated.resources.logo_skyfit
 @Composable
 fun MobileLoginScreen(navigator: Navigator) {
 
-    Scaffold(
-        backgroundColor = SkyFitColor.background.default
-    ) {
+    SkyFitScaffold {
         Column(
-            modifier = Modifier.fillMaxSize().verticalScroll(rememberScrollState()),
+            modifier = Modifier
+                .widthIn(max = MobileStyleGuide.screenWithMax)
+                .padding(MobileStyleGuide.padding24)
+                .verticalScroll(rememberScrollState()),
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {
-            Spacer(Modifier.height(36.dp))
             SkyFitLogoComponent()
             Spacer(Modifier.height(48.dp))
             MobileLoginScreenTitle()
@@ -81,7 +82,7 @@ private fun MobileLoginScreenTitle() {
 }
 
 @Composable
-private fun ColumnScope.MobileLoginInputGroupComponent(
+private fun MobileLoginInputGroupComponent(
     onLoginGoogle: () -> Unit,
     onLoginFacebook: () -> Unit,
     onLoginApple: () -> Unit,
@@ -92,33 +93,35 @@ private fun ColumnScope.MobileLoginInputGroupComponent(
     var password by remember { mutableStateOf("") }
 
     SkyFitButtonComponent(
-        Modifier.fillMaxWidth(), text = "Google ile giriş yap",
+        text = "Google ile giriş yap",
         onClick = onLoginGoogle,
         variant = ButtonVariant.Secondary,
         size = ButtonSize.Large,
-        initialState = ButtonState.Rest,
+        state = ButtonState.Rest,
+        modifier = Modifier.fillMaxWidth(),
         leftIconPainter = painterResource(Res.drawable.logo_skyfit)
     )
 
     Spacer(Modifier.height(24.dp))
 
     SkyFitButtonComponent(
-        Modifier.fillMaxWidth(), text = "Facebook ile giriş yap",
+        modifier = Modifier.fillMaxWidth(), text = "Facebook ile giriş yap",
         onClick = onLoginFacebook,
         variant = ButtonVariant.Secondary,
         size = ButtonSize.Large,
-        initialState = ButtonState.Rest,
+        state = ButtonState.Rest,
         leftIconPainter = painterResource(Res.drawable.logo_skyfit)
     )
 
     Spacer(Modifier.height(24.dp))
 
     SkyFitButtonComponent(
-        Modifier.fillMaxWidth(), text = "Apple ile giriş yap",
+        modifier = Modifier.fillMaxWidth(),
+        text = "Apple ile giriş yap",
         onClick = onLoginApple,
         variant = ButtonVariant.Secondary,
         size = ButtonSize.Large,
-        initialState = ButtonState.Rest,
+        state = ButtonState.Rest,
         leftIconPainter = painterResource(Res.drawable.logo_skyfit)
     )
 
@@ -162,19 +165,21 @@ private fun MobileLoginActionsComponent(
 ) {
     Column {
         SkyFitButtonComponent(
-            Modifier.fillMaxWidth(), text = "Giriş Yap",
+            modifier = Modifier.fillMaxWidth(),
+            text = "Giriş Yap",
             onClick = onClickLogin,
             variant = ButtonVariant.Primary,
             size = ButtonSize.Large,
-            initialState = ButtonState.Rest
+            state = ButtonState.Rest
         )
         Spacer(Modifier.height(14.dp))
         SkyFitButtonComponent(
-            Modifier.fillMaxWidth(), text = "Kayıt Ol",
+            modifier = Modifier.fillMaxWidth(),
+            text = "Kayıt Ol",
             onClick = onClickRegister,
             variant = ButtonVariant.Secondary,
             size = ButtonSize.Large,
-            initialState = ButtonState.Rest
+            state = ButtonState.Rest
         )
         Spacer(Modifier.height(44.dp))
     }

@@ -328,20 +328,20 @@ private fun MobileUserExerciseInActionScreenBreakComponent(
                 Spacer(Modifier.height(64.dp))
                 Row {
                     SkyFitButtonComponent(
-                        Modifier.wrapContentWidth(), text = "Duraklat",
+                        modifier = Modifier.wrapContentWidth(), text = "Duraklat",
                         onClick = onClickPause,
                         variant = ButtonVariant.Secondary,
                         size = ButtonSize.Large,
-                        initialState = ButtonState.Rest
+                        state = ButtonState.Rest
                     )
                     Spacer(Modifier.width(16.dp))
 
                     SkyFitButtonComponent(
-                        Modifier.wrapContentWidth(), text = "Atla",
+                        modifier = Modifier.wrapContentWidth(), text = "Atla",
                         onClick = onClickSkip,
                         variant = ButtonVariant.Primary,
                         size = ButtonSize.Large,
-                        initialState = ButtonState.Rest
+                        state = ButtonState.Rest
                     )
                 }
 
@@ -467,20 +467,20 @@ private fun MobileUserExerciseInActionScreenTrophyComponent(
             )
             Spacer(Modifier.height(36.dp))
             SkyFitButtonComponent(
-                Modifier.fillMaxWidth(), text = "Ödüller",
+                modifier = Modifier.fillMaxWidth(), text = "Ödüller",
                 onClick = onClickTrophy,
                 variant = ButtonVariant.Secondary,
                 size = ButtonSize.Large,
-                initialState = ButtonState.Rest,
+                state = ButtonState.Rest,
                 leftIconPainter = painterResource(Res.drawable.logo_skyfit)
             )
             Spacer(Modifier.height(16.dp))
             SkyFitButtonComponent(
-                Modifier.fillMaxWidth(), text = "Ileri",
+                modifier = Modifier.fillMaxWidth(), text = "Ileri",
                 onClick = onClickNext,
                 variant = ButtonVariant.Primary,
                 size = ButtonSize.Large,
-                initialState = ButtonState.Rest
+                state = ButtonState.Rest
             )
         }
     }

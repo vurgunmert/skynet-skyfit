@@ -96,19 +96,19 @@ private fun MobileForgotPasswordScreenActionsComponent(
 ) {
     Column {
         SkyFitButtonComponent(
-            Modifier.fillMaxWidth(), text = "Devam Et",
+            modifier = Modifier.fillMaxWidth(), text = "Devam Et",
             onClick = onClickContinue,
             variant = ButtonVariant.Primary,
             size = ButtonSize.Large,
-            initialState = ButtonState.Rest
+            state = ButtonState.Rest
         )
         Spacer(Modifier.height(14.dp))
         SkyFitButtonComponent(
-            Modifier.fillMaxWidth(), text = "İptal",
+            modifier = Modifier.fillMaxWidth(), text = "İptal",
             onClick = onClickCancel,
             variant = ButtonVariant.Secondary,
             size = ButtonSize.Large,
-            initialState = ButtonState.Rest
+            state = ButtonState.Rest
         )
         Spacer(Modifier.height(44.dp))
     }

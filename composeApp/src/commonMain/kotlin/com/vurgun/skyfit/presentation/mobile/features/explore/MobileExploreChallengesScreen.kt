@@ -169,11 +169,11 @@ private fun MobileExploreActiveChallengeItemComponent() {
                 Spacer(Modifier.weight(1f))
                 Text("212 Members")
                 SkyFitButtonComponent(
-                    Modifier.fillMaxWidth(), text = "Katil",
+                    modifier = Modifier.fillMaxWidth(), text = "Katil",
                     onClick = { },
                     variant = ButtonVariant.Secondary,
                     size = ButtonSize.Medium,
-                    initialState = ButtonState.Rest
+                    state = ButtonState.Rest
                 )
             }
         }

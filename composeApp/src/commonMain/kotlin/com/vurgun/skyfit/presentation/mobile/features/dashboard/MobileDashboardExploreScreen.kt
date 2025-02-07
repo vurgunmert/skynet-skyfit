@@ -258,7 +258,7 @@ private fun MobileDashboardExploreScreenFeaturedChallengesComponent() {
                 onClick = { },
                 variant = ButtonVariant.Primary,
                 size = ButtonSize.Medium,
-                initialState = ButtonState.Disabled
+                state = ButtonState.Disabled
             )
         }
     }

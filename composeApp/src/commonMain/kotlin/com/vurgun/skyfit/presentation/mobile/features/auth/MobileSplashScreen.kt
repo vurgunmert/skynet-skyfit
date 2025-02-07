@@ -25,12 +25,10 @@ fun MobileSplashScreen(navigator: Navigator) {
     val viewModel = koinInject<SplashViewModel>()
     val uiState by viewModel.uiState.collectAsState()
 
-    // Construction
     LaunchedEffect(Unit) {
         viewModel.loadData()
     }
 
-    // Navigation
     when (uiState) {
         SplashViewModel.UIState.Idle -> Unit
         SplashViewModel.UIState.Login -> {

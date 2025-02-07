@@ -5,7 +5,7 @@ import composeApp
 struct iOSApp: App {
 
     init() {
-        AppDependencyManagerKt.loadSkyFitModules()
+        AppDependencyManagerKt.loadKoinDependencyModules()
     }
 
     var body: some Scene {

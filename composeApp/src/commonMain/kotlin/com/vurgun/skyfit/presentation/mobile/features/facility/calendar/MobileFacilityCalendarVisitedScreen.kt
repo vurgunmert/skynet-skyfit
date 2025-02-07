@@ -124,11 +124,11 @@ fun MobileFacilityCalendarVisitedScreenPrivateClassesComponent(items: List<SkyFi
 fun MobileFacilityCalendarVisitedScreenCreateActionComponent(onClick: () -> Unit) {
     Box(Modifier.fillMaxWidth().padding(32.dp)) {
         SkyFitButtonComponent(
-            Modifier.fillMaxWidth(), text = "Randevu Olustur",
+            modifier = Modifier.fillMaxWidth(), text = "Randevu Olustur",
             onClick = onClick,
             variant = ButtonVariant.Secondary,
             size = ButtonSize.Large,
-            initialState = ButtonState.Rest,
+            state = ButtonState.Rest,
             leftIconPainter = painterResource(Res.drawable.logo_skyfit)
         )
     }

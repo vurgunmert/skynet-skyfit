@@ -188,7 +188,7 @@ private fun MobileTrainerProfileVisitedScreenInfoCardComponent(
             }
 
             SkyFitButtonComponent(
-                Modifier.fillMaxWidth(),
+                modifier = Modifier.fillMaxWidth(),
                 text = if (isFollowing) "Takipten Çık" else "Takip Et",
                 onClick = if (isFollowing) onClickUnFollow else onClickFollow,
                 variant = ButtonVariant.Primary,
@@ -199,7 +199,7 @@ private fun MobileTrainerProfileVisitedScreenInfoCardComponent(
 
             Row(verticalAlignment = Alignment.CenterVertically) {
                 SkyFitButtonComponent(
-                    Modifier.weight(1f),
+                    modifier = Modifier.weight(1f),
                     text = "Randevu Al",
                     onClick = onClickCalendar,
                     variant = ButtonVariant.Secondary,

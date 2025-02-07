@@ -241,12 +241,12 @@ private fun MobileFacilityClassEditSelectUserGroupComponent() {
 private fun MobileFacilityClassEditScreenActionComponent(enabled: Boolean, onClick: () -> Unit) {
     Box(Modifier.padding(32.dp).background(SkyFitColor.background.default)) {
         SkyFitButtonComponent(
-            Modifier.fillMaxWidth(),
+            modifier = Modifier.fillMaxWidth(),
             text = "Kaydet",
             onClick = onClick,
             variant = ButtonVariant.Primary,
             size = ButtonSize.Large,
-            initialState = ButtonState.Rest,
+            state = ButtonState.Rest,
             leftIconPainter = painterResource(Res.drawable.logo_skyfit),
             isEnabled = enabled
         )
@@ -309,7 +309,7 @@ fun MobileFacilityClassEditScreenCancelDialog(
                             onClick = onClickExit,
                             variant = ButtonVariant.Secondary,
                             size = ButtonSize.Large,
-                            initialState = ButtonState.Rest
+                            state = ButtonState.Rest
                         )
 
                         SkyFitButtonComponent(
@@ -318,7 +318,7 @@ fun MobileFacilityClassEditScreenCancelDialog(
                             onClick = onClickDismiss,
                             variant = ButtonVariant.Primary,
                             size = ButtonSize.Large,
-                            initialState = ButtonState.Rest
+                            state = ButtonState.Rest
                         )
                     }
                 }

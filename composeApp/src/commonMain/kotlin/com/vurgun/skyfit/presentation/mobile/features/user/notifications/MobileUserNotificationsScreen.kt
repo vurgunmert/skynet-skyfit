@@ -119,7 +119,7 @@ private fun MobileUserNotificationsScreenSettingsActionComponent(onClick: () -> 
             onClick = onClick,
             variant = ButtonVariant.Primary,
             size = ButtonSize.Large,
-            initialState = ButtonState.Rest
+            state = ButtonState.Rest
         )
     }
 }
