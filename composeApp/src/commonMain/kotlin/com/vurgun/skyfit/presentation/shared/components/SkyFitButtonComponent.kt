@@ -4,10 +4,10 @@ import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Button
 import androidx.compose.material.ButtonDefaults
@@ -33,7 +33,7 @@ fun SkyFitButtonComponent(
     leftIconPainter: Painter? = null,
     rightIconPainter: Painter? = null,
     isEnabled: Boolean = true,
-    modifier: Modifier = Modifier,
+    modifier: Modifier = Modifier.fillMaxWidth(),
     onClick: () -> Unit,
 ) {
 
@@ -46,12 +46,7 @@ fun SkyFitButtonComponent(
 
     Button(
         onClick = { if (state != ButtonState.Disabled && state != ButtonState.Loading) onClick() },
-        modifier = modifier
-            .padding(
-                start = size.paddingStart, end = size.paddingEnd,
-                top = size.paddingVertical, bottom = size.paddingVertical
-            )
-            .wrapContentHeight(),
+        modifier = modifier,
         colors = ButtonDefaults.buttonColors(
             backgroundColor = buttonStyle.backgroundColor,
             contentColor = buttonStyle.foregroundColor
@@ -69,6 +64,12 @@ fun SkyFitButtonComponent(
         } else {
 
             Row(
+                modifier = Modifier.padding(
+                    start = size.paddingStart,
+                    end = size.paddingEnd,
+                    top = size.paddingVertical,
+                    bottom = size.paddingVertical
+                ),
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.Center
             ) {
@@ -110,9 +111,9 @@ sealed class ButtonSize(
     val iconPadding: Dp,
     val iconSize: Dp
 ) {
-    data object Large : ButtonSize(24.dp, 32.dp, 12.dp, 8.dp, 20.dp)
-    data object Medium : ButtonSize(20.dp, 24.dp, 8.dp, 8.dp, 16.dp)
-    data object Micro : ButtonSize(12.dp, 16.dp, 6.dp, 4.dp, 16.dp)
+    data object Large : ButtonSize(24.dp, 32.dp, 8.dp, 8.dp, 20.dp)
+    data object Medium : ButtonSize(20.dp, 24.dp, 6.dp, 8.dp, 16.dp)
+    data object Micro : ButtonSize(12.dp, 16.dp, 4.dp, 4.dp, 16.dp)
 }
 
 enum class ButtonVariant {

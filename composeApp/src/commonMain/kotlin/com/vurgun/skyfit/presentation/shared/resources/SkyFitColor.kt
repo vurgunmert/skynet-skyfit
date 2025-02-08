@@ -163,5 +163,8 @@ object SkyFitColor {
         val buttonBgLoading = Color(0xFF01454F)  // button-bg-loading
         val buttonBgPressed = Color(0xFF4CA8A9)  // button-bg-pressed
         val secondaryButtonRest = Color(0xFF73D4D4).copy(alpha = 0.07f)
+        val statisticOrange = Color(0xFFD48A73)
+        val statisticPink = Color(0xFFC773D4)
+        val statisticBlue = border.secondaryButton
     }
 }

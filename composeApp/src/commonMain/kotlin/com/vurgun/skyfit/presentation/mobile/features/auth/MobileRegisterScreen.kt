@@ -65,7 +65,7 @@ fun MobileRegisterScreen(navigator: Navigator) {
             )
             Spacer(Modifier.weight(1f))
             MobileRegisterScreenActionComponent(enabled = isSaveButtonEnabled) {
-                navigator.jumpAndTakeover(SkyFitNavigationRoute.Register, SkyFitNavigationRoute.Dashboard)
+                navigator.jumpAndTakeover(SkyFitNavigationRoute.Register, SkyFitNavigationRoute.Onboarding)
             }
             Spacer(Modifier.height(16.dp))
             MobileRegisterScreenLegalActionsComponent(

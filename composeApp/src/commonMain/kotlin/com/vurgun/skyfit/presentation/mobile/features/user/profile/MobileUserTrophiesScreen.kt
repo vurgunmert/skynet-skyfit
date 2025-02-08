@@ -1,8 +1,6 @@
 package com.vurgun.skyfit.presentation.mobile.features.user.profile
 
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -13,19 +11,15 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Icon
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Star
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
+import com.vurgun.skyfit.presentation.shared.components.SkyFitImageComponent
 import com.vurgun.skyfit.presentation.shared.components.SkyFitScreenHeader
 import com.vurgun.skyfit.presentation.shared.features.profile.AvatarImage
 import com.vurgun.skyfit.presentation.shared.resources.SkyFitColor
@@ -94,25 +88,19 @@ private fun MobileUserTrophiesComponent() {
         horizontalArrangement = Arrangement.spacedBy(16.dp)
     ) {
         items(15) { // Replace 15 with the actual count of trophies
-            MobileUserTrophyItemComponent()
+            MobileUserTrophyItemComponent(modifier = Modifier.size(72.dp, 98.dp))
         }
     }
 }
 
 @Composable
-fun MobileUserTrophyItemComponent() {
-    Box(
-        modifier = Modifier
-            .size(72.dp, 98.dp)
-            .clip(RoundedCornerShape(8.dp))
-            .background(SkyFitColor.border.secondaryButton),
-        contentAlignment = Alignment.Center
-    ) {
-        Icon(
-            imageVector = Icons.Default.Star, // Replace with actual trophy icon
-            contentDescription = "Trophy",
-            tint = Color.White
-        )
-    }
+fun MobileUserTrophyItemComponent(
+    url: String = "https://ik.imagekit.io/skynet2skyfit/badge_muscle_master.png?updatedAt=1738863832700",
+    modifier: Modifier = Modifier
+) {
+    SkyFitImageComponent(
+        url = url,
+        modifier = modifier
+    )
 }
 

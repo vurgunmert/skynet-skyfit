@@ -59,7 +59,7 @@ fun SkyFitDailyActivityCanvas(
         val blockWidth = gridWidth / totalBlocks // Her bloğun genişliği
 
         Column(modifier = Modifier.fillMaxSize()) {
-            // Üstte saat başlıkları
+            // Block Hours
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -100,9 +100,10 @@ fun SkyFitDailyActivityCanvas(
                 }
 
                 // Aktivite kutuları
-                activities.sortedBy { it.startHourMinutes }.forEach { activity ->
+                activities.sortedBy { it.startHourMinutes }.forEachIndexed { index, skyFitDailyActivityItem ->
                     DraggableActivityRow(
-                        activity = activity,
+                        index = index,
+                        activity = skyFitDailyActivityItem,
                         blockWidth = blockWidth,
                         onActivityUpdate = onActivityUpdate
                     )
@@ -115,12 +116,14 @@ fun SkyFitDailyActivityCanvas(
 
 @Composable
 fun DraggableActivityRow(
+    index: Int,
     activity: SkyFitDailyActivityItem,
     blockWidth: Dp,
     onActivityUpdate: (SkyFitDailyActivityItem) -> Unit
 ) {
     val density = LocalDensity.current
     val blockWidthPx = with(density) { blockWidth.toPx() } // Blok genişliği (px)
+    val blockHeightPx = 24.dp * index
 
     var xOffset by remember { mutableStateOf(0f) } // Yatay sürükleme pozisyonu
     val initialX = activity.startBlock * blockWidthPx // Başlangıç pozisyonu (grid'e göre hizalı)
@@ -128,7 +131,7 @@ fun DraggableActivityRow(
     Row(
         modifier = Modifier
             .fillMaxWidth()
-            .offset(x = with(density) { (initialX + xOffset).toDp() }, y = 41.dp) // Yatay konum
+            .offset(x = with(density) { (initialX + xOffset).toDp() }, y = 36.dp + blockHeightPx) // Yatay konum
             .padding(vertical = 8.dp, horizontal = 16.dp)
             .draggable(
                 orientation = Orientation.Horizontal,

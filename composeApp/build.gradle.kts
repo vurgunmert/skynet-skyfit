@@ -64,7 +64,9 @@ kotlin {
             api(compose.material)
             api(compose.ui)
             implementation(compose.animation)
-            implementation(compose.components.  resources)
+            implementation(compose.components.resources)
+
+            // Compose Components
 
             // Kotlinx
             implementation(libs.kotlinx.serialization)
@@ -83,7 +85,6 @@ kotlin {
             // peekaboo for Camera work
             implementation(libs.peekaboo.ui)
             implementation(libs.peekaboo.image.picker)
-
 
             // Coil for image loading
             implementation(libs.coil.compose)
