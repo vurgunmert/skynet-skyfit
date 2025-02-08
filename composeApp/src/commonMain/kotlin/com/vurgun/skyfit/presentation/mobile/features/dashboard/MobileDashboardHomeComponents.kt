@@ -65,6 +65,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil3.compose.AsyncImage
+import com.vurgun.skyfit.presentation.mobile.features.trainer.home.MemberChangeLineChart
 import com.vurgun.skyfit.presentation.mobile.features.user.calendar.MobileUserActivityHourlyCalendarComponent
 import com.vurgun.skyfit.presentation.mobile.features.user.profile.MobileUserTrophyItemComponent
 import com.vurgun.skyfit.presentation.mobile.resources.MobileStyleGuide.padding16
@@ -1042,137 +1043,6 @@ private fun MobileDashboardHomeFeaturedTrainerCard(
 private data class HomeFeaturedTrainer(val name: String, val imageUrl: String)
 
 @Composable
-fun MobileDashboardHomeTrainerStatisticsComponent() {
-    Column(
-        modifier = Modifier
-            .size(320.dp, 544.dp)
-            .background(Color.Black, RoundedCornerShape(12.dp))
-            .padding(16.dp)
-    ) {
-        MobileDashboardHomeTrainerStatisticsOverview()
-        Spacer(modifier = Modifier.height(16.dp))
-        MobileDashboardHomeTrainerGraph()
-    }
-}
-
-@Composable
-private fun MobileDashboardHomeTrainerStatisticsOverview() {
-    val stats = listOf(
-        HomeTrainerStat("Takipçi", "327", "+53%", true),
-        HomeTrainerStat("Aktif Dersler", "12", "0%", null),
-        HomeTrainerStat("SkyFit Kazancın", "₺3120", "+53%", true),
-        HomeTrainerStat("Profil Görüntülenmesi", "213", "-2%", false)
-    )
-
-    TrainerGridStatsLayout(stats)
-}
-
-@Composable
-private fun TrainerGridStatsLayout(stats: List<HomeTrainerStat>) {
-    Column {
-        Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
-            stats.subList(0, 2).forEach { MobileDashboardHomeStatCard(it) }
-        }
-        Spacer(modifier = Modifier.height(8.dp))
-        Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
-            stats.subList(2, 4).forEach { MobileDashboardHomeStatCard(it) }
-        }
-    }
-}
-
-@Composable
-private fun MobileDashboardHomeStatCard(stat: HomeTrainerStat) {
-    Column(
-        modifier = Modifier
-            .width(150.dp)
-            .height(80.dp)
-            .clip(RoundedCornerShape(12.dp))
-            .background(Color.DarkGray)
-            .padding(12.dp),
-        verticalArrangement = Arrangement.SpaceBetween
-    ) {
-        Text(text = stat.title, fontSize = 14.sp, color = Color.Gray)
-        Row(verticalAlignment = Alignment.CenterVertically) {
-            Text(text = stat.value, fontSize = 20.sp, color = Color.White, fontWeight = FontWeight.Bold)
-            stat.percentage?.let {
-                Spacer(modifier = Modifier.width(8.dp))
-                Box(
-                    modifier = Modifier
-                        .clip(RoundedCornerShape(6.dp))
-                        .background(if (stat.isPositive == true) Color.Green.copy(alpha = 0.2f) else Color.Red.copy(alpha = 0.2f))
-                        .padding(horizontal = 6.dp, vertical = 2.dp)
-                ) {
-                    Text(text = it, fontSize = 12.sp, color = if (stat.isPositive == true) Color.Green else Color.Red)
-                }
-            }
-        }
-    }
-}
-
-@Composable
-private fun MobileDashboardHomeTrainerGraph() {
-    Column {
-        Row(
-            modifier = Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.SpaceBetween
-        ) {
-            Text(text = "Üye Değişimi Grafiği", fontSize = 14.sp, color = Color.White, fontWeight = FontWeight.Bold)
-            TimeFilterSelector()
-        }
-        Spacer(modifier = Modifier.height(8.dp))
-        MobileDashboardLineChart(
-            dataPoints = listOf(12, 7, 15, 20, 14, 8, 10),
-            labels = listOf("Pzts", "Sal", "Çar", "Per", "Cum", "Cmrts", "Paz")
-        )
-    }
-}
-
-@Composable
-private fun TimeFilterSelector() {
-    Row(horizontalArrangement = Arrangement.spacedBy(4.dp)) {
-        listOf("Y", "6A", "3A", "1A", "H").forEach { label ->
-            Box(
-                modifier = Modifier
-                    .clip(RoundedCornerShape(8.dp))
-                    .background(if (label == "H") Color.Cyan else Color.DarkGray)
-                    .padding(horizontal = 8.dp, vertical = 4.dp)
-            ) {
-                Text(text = label, fontSize = 12.sp, color = Color.White)
-            }
-        }
-    }
-}
-
-@Composable
-private fun MobileDashboardLineChart(dataPoints: List<Int>, labels: List<String>) {
-    Canvas(modifier = Modifier.fillMaxWidth().height(100.dp)) {
-        val maxValue = dataPoints.maxOrNull() ?: 1
-        val stepX = size.width / (dataPoints.size - 1)
-        val stepY = size.height / maxValue.toFloat()
-
-        val path = Path().apply {
-            moveTo(0f, size.height - (dataPoints[0] * stepY))
-            dataPoints.forEachIndexed { index, value ->
-                lineTo(index * stepX, size.height - (value * stepY))
-            }
-        }
-
-        drawPath(path, color = Color.Cyan, style = Stroke(width = 3.dp.toPx(), cap = StrokeCap.Round))
-    }
-
-    Row(
-        modifier = Modifier.fillMaxWidth(),
-        horizontalArrangement = Arrangement.SpaceBetween
-    ) {
-        labels.forEach { label ->
-            Text(text = label, fontSize = 12.sp, color = Color.Gray)
-        }
-    }
-}
-
-private data class HomeTrainerStat(val title: String, val value: String, val percentage: String?, val isPositive: Boolean?)
-
-@Composable
 fun MobileDashboardHomeTrainerNoClassComponent() {
     Box(
         modifier = Modifier
@@ -1470,10 +1340,10 @@ private fun MobileDashboardHomeFacilityGraph() {
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
             Text(text = "Üye Değişimi Grafiği", fontSize = 14.sp, color = Color.White, fontWeight = FontWeight.Bold)
-            TimeFilterSelector()
+//            TimeFilterSelector()
         }
         Spacer(modifier = Modifier.height(8.dp))
-        MobileDashboardLineChart(
+        MemberChangeLineChart(
             dataPoints = listOf(12, 7, 15, 20, 14, 8, 10),
             labels = listOf("Pzts", "Sal", "Çar", "Per", "Cum", "Cmrts", "Paz")
         )
