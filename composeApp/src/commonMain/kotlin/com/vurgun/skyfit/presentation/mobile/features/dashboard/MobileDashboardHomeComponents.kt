@@ -10,32 +10,22 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.aspectRatio
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentWidth
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.Checkbox
-import androidx.compose.material.CheckboxDefaults
 import androidx.compose.material.Icon
-import androidx.compose.material.IconButton
 import androidx.compose.material.Text
-import androidx.compose.material.TextField
-import androidx.compose.material.TextFieldDefaults
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Check
 import androidx.compose.material.icons.filled.DateRange
 import androidx.compose.material.icons.filled.Face
-import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material.icons.filled.Place
 import androidx.compose.material.icons.filled.PlayArrow
-import androidx.compose.material.icons.filled.Search
 import androidx.compose.material.icons.outlined.DateRange
 import androidx.compose.material.icons.outlined.Face
 import androidx.compose.material.icons.outlined.Notifications
@@ -58,10 +48,7 @@ import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil3.compose.AsyncImage
@@ -1042,227 +1029,6 @@ private fun MobileDashboardHomeFeaturedTrainerCard(
 
 private data class HomeFeaturedTrainer(val name: String, val imageUrl: String)
 
-@Composable
-fun MobileDashboardHomeTrainerNoClassComponent() {
-    Box(
-        modifier = Modifier
-            .size(320.dp, 232.dp)
-            .clip(RoundedCornerShape(12.dp))
-            .background(Color.Black)
-            .padding(16.dp)
-    ) {
-        Column(
-            modifier = Modifier.fillMaxSize(),
-            horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.Center
-        ) {
-            Text(
-                text = "Oluşturulmuş dersiniz bulunmamakta",
-                fontSize = 16.sp,
-                color = Color.White,
-                fontWeight = FontWeight.Bold,
-                textAlign = TextAlign.Center
-            )
-
-            Spacer(modifier = Modifier.height(4.dp))
-
-            Text(
-                text = "Ders oluşturduğunuzda buradan görüntüleyebilirsiniz.",
-                fontSize = 14.sp,
-                color = Color.Gray,
-                textAlign = TextAlign.Center
-            )
-
-            Spacer(modifier = Modifier.height(16.dp))
-
-            SkyFitButtonComponent(
-                modifier = Modifier.wrapContentWidth(), text = "Etkinlik Oluştur",
-                onClick = { },
-                variant = ButtonVariant.Primary,
-                size = ButtonSize.Medium,
-                state = ButtonState.Rest
-            )
-        }
-
-        // Search & Filter Buttons (Top Right)
-        Row(
-            modifier = Modifier
-                .align(Alignment.TopEnd)
-                .padding(8.dp)
-        ) {
-            IconButton(onClick = { /* TODO: Open Search */ }) {
-                Icon(imageVector = Icons.Default.Search, contentDescription = "Search", tint = Color.Cyan)
-            }
-            IconButton(onClick = { /* TODO: Open Filters */ }) {
-                Icon(imageVector = Icons.Default.Menu, contentDescription = "Filter", tint = Color.Cyan)
-            }
-        }
-    }
-}
-
-
-@Composable
-fun MobileDashboardHomeTrainerClassScheduleComponent() {
-    val classList = listOf(
-        HomeTrainerClass("Kişisel Kuvvet Antrenmanı", Icons.Outlined.DateRange, "07:00-08:00", "22 Kasım"),
-        HomeTrainerClass("Pilates", Icons.Outlined.DateRange, "07:00-08:00", "22 Kasım"),
-        HomeTrainerClass("Core", Icons.Outlined.DateRange, "07:00-08:00", "22 Kasım"),
-        HomeTrainerClass("Kişisel Kuvvet Antrenmanı", Icons.Outlined.DateRange, "07:00-08:00", "22 Kasım"),
-        HomeTrainerClass("Skipping Rope", Icons.Outlined.DateRange, "07:00-08:00", "22 Kasım"),
-        HomeTrainerClass("Push-Ups", Icons.Outlined.DateRange, "07:00-08:00", "22 Kasım"),
-        HomeTrainerClass("Kişisel Kuvvet Antrenmanı", Icons.Outlined.DateRange, "07:00-08:00", "22 Kasım"),
-        HomeTrainerClass("Skipping Rope", Icons.Outlined.DateRange, "07:00-08:00", "22 Kasım"),
-        HomeTrainerClass("Push-Ups", Icons.Outlined.DateRange, "07:00-08:00", "22 Kasım")
-    )
-
-    Column(
-        modifier = Modifier
-            .size(400.dp, 684.dp)
-            .background(Color.Black, RoundedCornerShape(12.dp))
-            .padding(16.dp)
-    ) {
-        SearchAndFilterBar()
-        Spacer(modifier = Modifier.height(8.dp))
-        HomeClassScheduleTable(classList)
-    }
-}
-
-@Composable
-private fun SearchAndFilterBar() {
-    Column {
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .clip(RoundedCornerShape(8.dp))
-                .background(Color.DarkGray)
-                .padding(horizontal = 12.dp, vertical = 8.dp),
-            horizontalArrangement = Arrangement.SpaceBetween,
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            TextField(
-                value = "",
-                onValueChange = {},
-                placeholder = { Text("Tabloda ara", color = Color.Gray) },
-                singleLine = true,
-                textStyle = TextStyle(color = Color.White),
-                modifier = Modifier.weight(1f),
-                colors = TextFieldDefaults.textFieldColors(
-                    cursorColor = Color.White
-                )
-            )
-
-            Icon(imageVector = Icons.Default.Search, contentDescription = "Search", tint = Color.Cyan)
-            Icon(imageVector = Icons.Default.Menu, contentDescription = "Filter", tint = Color.Cyan)
-        }
-
-        Spacer(modifier = Modifier.height(8.dp))
-
-        Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-            HomeScheduleFilterChip("Aktif")
-            HomeScheduleFilterChip("Pilates")
-            HomeScheduleFilterChip("07:00-08:00")
-            HomeScheduleFilterChip("22/11/2024")
-        }
-    }
-}
-
-@Composable
-private fun HomeScheduleFilterChip(label: String) {
-    Box(
-        modifier = Modifier
-            .clip(RoundedCornerShape(16.dp))
-            .background(Color.DarkGray)
-            .padding(horizontal = 12.dp, vertical = 6.dp)
-    ) {
-        Text(text = label, fontSize = 14.sp, color = Color.Cyan)
-    }
-}
-
-@Composable
-private fun HomeClassScheduleTable(classList: List<HomeTrainerClass>) {
-    LazyColumn(
-        modifier = Modifier.fillMaxWidth(),
-        verticalArrangement = Arrangement.spacedBy(8.dp)
-    ) {
-        item {
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .background(Color.DarkGray)
-                    .padding(8.dp),
-                horizontalArrangement = Arrangement.SpaceBetween
-            ) {
-                Checkbox(checked = false, onCheckedChange = {})
-                Text("Etkinliğin Adı", fontSize = 14.sp, color = Color.Gray)
-                Text("Saat", fontSize = 14.sp, color = Color.Gray)
-                Text("Tarih", fontSize = 14.sp, color = Color.Gray)
-            }
-        }
-
-        items(classList) { trainerClass ->
-            HomeClassScheduleRow(trainerClass)
-        }
-    }
-}
-
-@Composable
-private fun HomeClassScheduleRow(trainerClass: HomeTrainerClass) {
-    Row(
-        modifier = Modifier
-            .fillMaxWidth()
-            .clip(RoundedCornerShape(8.dp))
-            .padding(8.dp),
-        horizontalArrangement = Arrangement.SpaceBetween,
-        verticalAlignment = Alignment.CenterVertically
-    ) {
-        Checkbox(
-            checked = false, onCheckedChange = {},
-            colors = CheckboxDefaults.colors(
-                checkmarkColor = SkyFitColor.specialty.buttonBgRest,
-                uncheckedColor = SkyFitColor.specialty.buttonBgDisabled
-            )
-        )
-
-        Row(
-            modifier = Modifier.weight(1f), // Allowing proper width distribution
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            Icon(
-                imageVector = trainerClass.icon,
-                contentDescription = trainerClass.name,
-                tint = Color.White
-            )
-            Spacer(modifier = Modifier.width(8.dp))
-            Text(
-                text = trainerClass.name,
-                fontSize = 14.sp,
-                color = Color.White,
-                maxLines = 1, // Restrict to one line
-                overflow = TextOverflow.Ellipsis, // Add ellipsis when text overflows
-                modifier = Modifier.weight(1f) // Ensuring text can take available space
-            )
-        }
-
-        Text(
-            text = trainerClass.time,
-            fontSize = 14.sp,
-            color = Color.Gray,
-            softWrap = true,
-            modifier = Modifier.wrapContentWidth()
-        )
-
-        Text(
-            text = trainerClass.date,
-            fontSize = 14.sp,
-            color = Color.Gray,
-            softWrap = true,
-            modifier = Modifier.wrapContentWidth()
-        )
-    }
-}
-
-private data class HomeTrainerClass(val name: String, val icon: ImageVector, val time: String, val date: String)
-
 
 @Composable
 fun MobileDashboardHomeFacilityStatisticsComponent() {
@@ -1351,10 +1117,3 @@ private fun MobileDashboardHomeFacilityGraph() {
 }
 
 private data class HomeFacilityStat(val title: String, val value: String, val percentage: String?, val isPositive: Boolean?)
-
-
-@Composable
-fun MobileDashboardHomeFacilityNoClassComponent() {
-    MobileDashboardHomeTrainerNoClassComponent()
-}
-

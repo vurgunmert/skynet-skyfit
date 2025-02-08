@@ -11,10 +11,10 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import com.vurgun.skyfit.presentation.mobile.features.dashboard.MobileDashboardHomeFacilityNoClassComponent
 import com.vurgun.skyfit.presentation.mobile.features.dashboard.MobileDashboardHomeFacilityStatisticsComponent
 import com.vurgun.skyfit.presentation.mobile.features.dashboard.MobileDashboardHomeToolbarComponent
 import com.vurgun.skyfit.presentation.mobile.features.dashboard.MobileDashboardHomeUpcomingAppointmentsComponent
+import com.vurgun.skyfit.presentation.mobile.features.trainer.home.MobileDashboardHomeTrainerNoClassComponent
 import com.vurgun.skyfit.presentation.shared.resources.SkyFitColor
 import moe.tlaster.precompose.navigation.Navigator
 
@@ -41,4 +41,9 @@ fun MobileFacilityHomeScreen(rootNavigator: Navigator) {
             Spacer(Modifier.height(48.dp))
         }
     }
+}
+
+@Composable
+fun MobileDashboardHomeFacilityNoClassComponent() {
+    MobileDashboardHomeTrainerNoClassComponent(onClickAdd = {})
 }
