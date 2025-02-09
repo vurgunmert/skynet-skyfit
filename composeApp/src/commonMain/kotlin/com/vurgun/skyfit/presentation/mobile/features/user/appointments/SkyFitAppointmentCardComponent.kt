@@ -25,11 +25,12 @@ import androidx.compose.ui.unit.dp
 import com.vurgun.skyfit.presentation.shared.components.SkyFitCheckBoxComponent
 import com.vurgun.skyfit.presentation.shared.resources.SkyFitColor
 import com.vurgun.skyfit.presentation.shared.resources.SkyFitTypography
+import org.jetbrains.compose.resources.DrawableResource
 import org.jetbrains.compose.resources.painterResource
 import skyfit.composeapp.generated.resources.Res
 import skyfit.composeapp.generated.resources.logo_skyfit
 
-data class AppointmentCardItem(
+data class AppointmentCardViewData(
     val iconUrl: String,
     val title: String,
     val date: String,
@@ -41,11 +42,12 @@ data class AppointmentCardItem(
     val cost: String? = null,
     val note: String? = null,
     val isFull: Boolean? = null,
-    val canNotify: Boolean = true
+    val canNotify: Boolean = true,
+    val status: String? = null,
 )
 
 @Composable
-fun AppointmentCardItemComponent(item: AppointmentCardItem, modifier: Modifier) {
+fun AppointmentCardItemComponent(item: AppointmentCardViewData, modifier: Modifier) {
 
     var notifyOnAvailability by remember { mutableStateOf(false) }
 
@@ -80,24 +82,24 @@ fun AppointmentCardItemComponent(item: AppointmentCardItem, modifier: Modifier) 
 
         Spacer(Modifier.height(8.dp))
         Row(Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
-            AppointmentChipComponent(item.date, Modifier.weight(1f))
+            AppointmentSingleDataBoxComponent(item.date, modifier = Modifier.weight(1f))
             Spacer(Modifier.width(8.dp))
-            AppointmentChipComponent(item.category, Modifier.weight(1f))
+            AppointmentSingleDataBoxComponent(item.category, modifier = Modifier.weight(1f))
         }
 
         Spacer(Modifier.height(8.dp))
         Row {
-            AppointmentChipComponent(item.location, Modifier.weight(1f))
+            AppointmentSingleDataBoxComponent(item.location, modifier = Modifier.weight(1f))
             Spacer(Modifier.width(8.dp))
-            AppointmentChipComponent(item.trainer, Modifier.weight(1f))
+            AppointmentSingleDataBoxComponent(item.trainer, modifier = Modifier.weight(1f))
         }
 
         if (item.capacity != null && item.cost != null) {
             Spacer(Modifier.height(8.dp))
             Row {
-                AppointmentChipComponent(item.capacity, Modifier.weight(1f))
+                AppointmentSingleDataBoxComponent(item.capacity, modifier = Modifier.weight(1f))
                 Spacer(Modifier.width(8.dp))
-                AppointmentChipComponent(item.cost, Modifier.weight(1f))
+                AppointmentSingleDataBoxComponent(item.cost, modifier = Modifier.weight(1f))
             }
         }
 
@@ -149,14 +151,16 @@ fun AppointmentCardItemComponent(item: AppointmentCardItem, modifier: Modifier) 
 }
 
 @Composable
-private fun AppointmentChipComponent(text: String, modifier: Modifier) {
+fun AppointmentSingleDataBoxComponent(text: String,
+                                      icon: DrawableResource = Res.drawable.logo_skyfit,
+                                      modifier: Modifier = Modifier) {
     Row(
         modifier.background(SkyFitColor.background.default, shape = RoundedCornerShape(8.dp)).padding(4.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
         Icon(
-            painter = painterResource(Res.drawable.logo_skyfit),
-            contentDescription = "Chip",
+            painter = painterResource(icon),
+            contentDescription = "",
             tint = SkyFitColor.icon.default,
             modifier = Modifier.size(16.dp)
         )

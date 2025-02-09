@@ -29,7 +29,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import com.vurgun.skyfit.presentation.mobile.features.user.appointments.AppointmentCardItem
+import com.vurgun.skyfit.presentation.mobile.features.user.appointments.AppointmentCardViewData
 import com.vurgun.skyfit.presentation.mobile.features.user.appointments.AppointmentCardItemComponent
 import com.vurgun.skyfit.presentation.shared.components.ButtonSize
 import com.vurgun.skyfit.presentation.shared.components.ButtonState
@@ -48,7 +48,7 @@ import skyfit.composeapp.generated.resources.logo_skyfit
 
 @Composable
 fun MobileUserActivityCalendarSearchScreen(navigator: Navigator) {
-    val appointmentCardItem = AppointmentCardItem(
+    val appointmentCardItem = AppointmentCardViewData(
         iconUrl = "TODO()",
         title = "Shoulders and Abs",
         date = "30/11/2024",
@@ -254,7 +254,7 @@ private fun MobileUserActivityCalendarSearchPopularExercisesComponent() {
 
 
 @Composable
-private fun MobileUserActivityCalendarSearchResultsComponent(activityItems: List<AppointmentCardItem>) {
+private fun MobileUserActivityCalendarSearchResultsComponent(activityItems: List<AppointmentCardViewData>) {
 
     LazyColumn(
         modifier = Modifier

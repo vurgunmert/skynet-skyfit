@@ -16,7 +16,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import com.vurgun.skyfit.presentation.mobile.features.user.appointments.AppointmentCardItem
+import com.vurgun.skyfit.presentation.mobile.features.user.appointments.AppointmentCardViewData
 import com.vurgun.skyfit.presentation.mobile.features.user.appointments.AppointmentCardItemComponent
 import com.vurgun.skyfit.presentation.shared.components.ButtonSize
 import com.vurgun.skyfit.presentation.shared.components.ButtonState
@@ -58,7 +58,7 @@ private fun MobileFacilityClassEditCompletedComponent(
     onClickProfile: () -> Unit,
     onClickDashboard: () -> Unit
 ) {
-    val appointmentCardItem = AppointmentCardItem(
+    val appointmentCardItem = AppointmentCardViewData(
         iconUrl = "TODO()",
         title = "Shoulders and Abs",
         date = "30/11/2024",

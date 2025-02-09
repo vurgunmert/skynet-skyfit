@@ -1,15 +1,15 @@
 package com.vurgun.skyfit.presentation.shared.features.user
 
 import androidx.lifecycle.ViewModel
-import com.vurgun.skyfit.presentation.mobile.features.user.appointments.AppointmentCardItem
+import com.vurgun.skyfit.presentation.mobile.features.user.appointments.AppointmentCardViewData
 import com.vurgun.skyfit.presentation.shared.features.social.SkyFitPostCardItem
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 
 class SkyFitUserProfileViewModel: ViewModel() {
 
-    private val _appointments = MutableStateFlow<List<AppointmentCardItem>>(emptyList())
-    val appointments: StateFlow<List<AppointmentCardItem>> get() = _appointments
+    private val _appointments = MutableStateFlow<List<AppointmentCardViewData>>(emptyList())
+    val appointments: StateFlow<List<AppointmentCardViewData>> get() = _appointments
 
     val posts = List(6) { index ->
         SkyFitPostCardItem(

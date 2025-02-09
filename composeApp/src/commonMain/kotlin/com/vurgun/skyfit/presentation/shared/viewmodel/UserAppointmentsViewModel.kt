@@ -2,62 +2,147 @@ package com.vurgun.skyfit.presentation.shared.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.vurgun.skyfit.presentation.mobile.features.user.appointments.AppointmentCardItem
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.flow.stateIn
+import com.vurgun.skyfit.presentation.mobile.features.user.appointments.AppointmentCardViewData
+import kotlinx.coroutines.flow.*
+import kotlinx.coroutines.launch
 
 class UserAppointmentsViewModel : ViewModel() {
 
-    private val _appointments = MutableStateFlow<List<AppointmentCardItem>>(emptyList())
-    val appointments: StateFlow<List<AppointmentCardItem>> get() = _appointments
+    private val _appointments = MutableStateFlow<List<AppointmentCardViewData>>(emptyList())
+    val appointments: StateFlow<List<AppointmentCardViewData>> get() = _appointments
 
-    val tabTitles: StateFlow<List<String>> = appointments.map {
+    private val _activeTab = MutableStateFlow(0)
+    val activeTab: StateFlow<Int> get() = _activeTab
+
+    // Derived states based on active tab selection
+    val filteredAppointments: StateFlow<List<AppointmentCardViewData>> = combine(
+        _appointments, _activeTab
+    ) { allAppointments, tabIndex ->
+        when (tabIndex) {
+            0 -> allAppointments.filter { it.status == "Planlanan" } // Active (future scheduled)
+            1 -> allAppointments.filter { it.status == "İptal" } // Canceled
+            2 -> allAppointments.filter { it.status == "Tamamlandı" || it.status == "Eksik" } // Attendance history
+            else -> allAppointments
+        }
+    }.stateIn(viewModelScope, SharingStarted.Lazily, emptyList())
+
+    val tabTitles: StateFlow<List<String>> = appointments.map { allAppointments ->
         listOf(
-            "Aktif (${3}})",
-            "Iptal edilen (${5})",
-            "Devamsızlık (${2})"
+            "Aktif (${allAppointments.count { it.status == "Planlanan" }})",
+            "İptal edilen (${allAppointments.count { it.status == "İptal" }})",
+            "Geçmiş (${allAppointments.count { it.status == "Tamamlandı" || it.status == "Eksik" }})"
         )
-    }.stateIn(
-        scope = viewModelScope,
-        started = kotlinx.coroutines.flow.SharingStarted.Lazily,
-        initialValue = emptyList()
-    )
+    }.stateIn(viewModelScope, SharingStarted.Lazily, listOf("Aktif (0)", "İptal edilen (0)", "Geçmiş (0)"))
 
     fun loadData() {
-        val randomAppointments = List(6) {
-            AppointmentCardItem(
-                iconUrl = "https://example.com/icon${it + 1}.png", // Example icon URL
-                title = listOf(
-                    "Yoga Class",
-                    "Boxing Training",
-                    "Strength Training",
-                    "Pilates Session",
-                    "Cycling Class",
-                    "Swimming Lesson"
-                ).random(),
-                date = listOf("Jan 30", "Feb 5", "Feb 10", "Mar 2", "Mar 15", "Apr 1").random(),
-                hours = listOf("10:00 AM - 11:00 AM", "2:00 PM - 3:30 PM", "5:00 PM - 6:00 PM").random(),
-                category = listOf("Fitness", "Wellness", "Sports", "Mindfulness").random(),
-                location = listOf("Downtown Gym", "Wellness Center", "City Park", "Online", "Health Club").random(),
-                trainer = listOf("John Doe", "Sarah Lee", "Michael Brown", "Emma Watson", "David Green").random(),
-                capacity = listOf("10", "15", "20", null).random(),
-                cost = listOf("$10", "$15", "$20", "Free", null).random(),
-                note = listOf("Bring a towel", "Yoga mats provided", "Beginner-friendly class", null).random(),
-                isFull = listOf(true, false, null).random(),
-                canNotify = listOf(true, false).random()
+        viewModelScope.launch {
+            val appointments = listOf(
+                AppointmentCardViewData(
+                    iconUrl = "https://example.com/icons/strength.png",
+                    title = "Shoulders and Abs",
+                    date = "30/11/2024",
+                    hours = "08:00 - 09:00",
+                    category = "Group Fitness",
+                    location = "@ironstudio",
+                    trainer = "Michael Blake",
+                    capacity = "10",
+                    cost = "Free",
+                    note = "Try to arrive 5-10 minutes early to warm up and settle in before the class starts.",
+                    isFull = false,
+                    canNotify = true,
+                    status = "Planlanan" // Scheduled for the future
+                ),
+                AppointmentCardViewData(
+                    iconUrl = "https://example.com/icons/pilates.png",
+                    title = "Reformer Pilates",
+                    date = "30/11/2024",
+                    hours = "08:00 - 09:00",
+                    category = "Pilates",
+                    location = "@ironstudio",
+                    trainer = "Michael Blake",
+                    capacity = "12",
+                    cost = "$20",
+                    note = null,
+                    isFull = false,
+                    canNotify = true,
+                    status = "Eksik" // Missed class (no-show)
+                ),
+                AppointmentCardViewData(
+                    iconUrl = "https://example.com/icons/fitness.png",
+                    title = "Fitness",
+                    date = "30/11/2024",
+                    hours = "08:00 - 09:00",
+                    category = "PT",
+                    location = "@ironstudio",
+                    trainer = "Michael Blake",
+                    capacity = "15",
+                    cost = "$25",
+                    note = null,
+                    isFull = true,
+                    canNotify = true,
+                    status = "Tamamlandı" // Completed class (attended)
+                ),
+                AppointmentCardViewData(
+                    iconUrl = "https://example.com/icons/spinning.png",
+                    title = "Spinning Class",
+                    date = "15/10/2024",
+                    hours = "07:30 - 08:30",
+                    category = "Cycling",
+                    location = "@fitnesshub",
+                    trainer = "Emma Johnson",
+                    capacity = "20",
+                    cost = "$15",
+                    note = "Bring your own water bottle!",
+                    isFull = false,
+                    canNotify = false,
+                    status = "İptal" // Canceled
+                ),
+                AppointmentCardViewData(
+                    iconUrl = "https://example.com/icons/yoga.png",
+                    title = "Yoga Flow",
+                    date = "20/10/2024",
+                    hours = "18:00 - 19:00",
+                    category = "Yoga",
+                    location = "@zenstudio",
+                    trainer = "Samantha Green",
+                    capacity = "15",
+                    cost = "Free",
+                    note = "Mats provided, please bring a towel.",
+                    isFull = false,
+                    canNotify = false,
+                    status = "İptal" // Canceled
+                ),
+                AppointmentCardViewData(
+                    iconUrl = "https://example.com/icons/stretching.png",
+                    title = "Stretching & Mobility",
+                    date = "05/09/2024",
+                    hours = "12:00 - 13:00",
+                    category = "Recovery",
+                    location = "@recoverycenter",
+                    trainer = "Lisa Harper",
+                    capacity = "5",
+                    cost = "Free",
+                    note = "Foam rollers provided.",
+                    isFull = false,
+                    canNotify = false,
+                    status = "Eksik" // No-show
+                )
             )
+
+            _appointments.value = appointments
         }
-
-        _appointments.value = randomAppointments
     }
 
-    fun cancelBooking() {
-
+    fun updateActiveTab(index: Int) {
+        _activeTab.value = index
     }
 
-    fun deleteAllInactiveAppointments() {
-
+    fun deleteAppointment(appointment: AppointmentCardViewData) {
+        _appointments.value = _appointments.value.filterNot { it == appointment }
     }
+
+    fun deleteAllAppointments() {
+        _appointments.value = emptyList()
+    }
+
 }

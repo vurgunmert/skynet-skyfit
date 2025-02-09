@@ -54,7 +54,7 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil3.compose.AsyncImage
-import com.vurgun.skyfit.presentation.mobile.features.user.appointments.AppointmentCardItem
+import com.vurgun.skyfit.presentation.mobile.features.user.appointments.AppointmentCardViewData
 import com.vurgun.skyfit.presentation.mobile.features.user.appointments.AppointmentCardItemComponent
 import com.vurgun.skyfit.presentation.shared.components.ButtonSize
 import com.vurgun.skyfit.presentation.shared.components.ButtonState
@@ -244,7 +244,7 @@ private fun MobileUserProfileActionsComponent(
 }
 
 @Composable
-fun MobileUserProfileAppointmentsComponent(appointments: List<AppointmentCardItem>) {
+fun MobileUserProfileAppointmentsComponent(appointments: List<AppointmentCardViewData>) {
     Column(
         modifier = Modifier
             .fillMaxWidth()
