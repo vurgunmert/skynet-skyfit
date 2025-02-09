@@ -1,20 +1,36 @@
 package com.vurgun.skyfit.presentation.shared.viewmodel
 
 import androidx.lifecycle.ViewModel
+import com.vurgun.skyfit.presentation.mobile.features.user.appointments.AppointmentCardViewData
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.update
 
 class UserAppointmentDetailViewModel : ViewModel() {
+    private val _appointment = MutableStateFlow<AppointmentCardViewData?>(null)
+    val appointment: StateFlow<AppointmentCardViewData?> get() = _appointment
 
-    val date = "30/11/2024"
-    val time = "07:00-08:00"
-    val trainer = "07:00-08:00"
-    val facilityName = "ironstudio"
-    val participantCount = "5"
-    val trainerNote = "Try to arrive 5-10 minutes early to warm up and settle in before the class starts."
-
-    fun loadData(bookingPath: String) {
-
+    fun loadData() {
+        _appointment.value = fakeAppointment
     }
 
     fun cancelAppointment() {
+        _appointment.update { it?.copy(status = "İptal") }
     }
+
+    val fakeAppointment = AppointmentCardViewData(
+        iconUrl = "https://example.com/icons/strength.png",
+        title = "Shoulders and Abs",
+        date = "30/11/2024",
+        hours = "08:00 - 09:00",
+        category = "Group Fitness",
+        location = "@ironstudio",
+        trainer = "Michael Blake",
+        capacity = "10",
+        cost = "Free",
+        note = "Try to arrive 5-10 minutes early to warm up and settle in before the class starts.",
+        isFull = false,
+        canNotify = true,
+        status = "Planlanan" // Scheduled for the future
+    )
 }
