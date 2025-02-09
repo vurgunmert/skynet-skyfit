@@ -5,6 +5,7 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.material.Checkbox
 import androidx.compose.material.CheckboxColors
 import androidx.compose.material.CheckboxDefaults
@@ -30,7 +31,8 @@ fun SkyFitCheckBoxComponent(
     )
 ) {
     Row(
-        modifier = modifier.clickable { onCheckedChange(!checked) },
+        modifier = modifier.wrapContentWidth()
+            .clickable { onCheckedChange(!checked) },
         verticalAlignment = Alignment.CenterVertically,
     ) {
         Checkbox(
@@ -41,6 +43,6 @@ fun SkyFitCheckBoxComponent(
             modifier = Modifier.size(16.dp)
         )
         Spacer(Modifier.width(8.dp))
-        Text(label, style = SkyFitTypography.bodyXSmall, modifier = Modifier.weight(1f))
+        Text(label, style = SkyFitTypography.bodyXSmall)
     }
 }

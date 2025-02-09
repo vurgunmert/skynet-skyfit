@@ -35,6 +35,7 @@ fun SkyFitTextInputComponent(
     onValueChange: ((String) -> Unit)? = null,
     leftIconPainter: Painter? = null,
     rightIconPainter: Painter? = null,
+    rightIconComposed: (@Composable () -> Unit)? = null,
     isEnabled: Boolean = true,
     focusRequester: FocusRequester = FocusRequester(),
     keyboardOptions: KeyboardOptions = KeyboardOptions.Default.copy(imeAction = ImeAction.Next),
@@ -43,10 +44,9 @@ fun SkyFitTextInputComponent(
 
     val backgroundColor = error?.let { SkyFitColor.background.surfaceCriticalActive } ?: SkyFitColor.background.surfaceSecondary
 
-    Column(modifier) {
-
+    Column {
         Row(
-            modifier = Modifier
+            modifier = modifier
                 .fillMaxWidth()
                 .background(backgroundColor, shape = CircleShape)
                 .padding(vertical = 18.dp, horizontal = 16.dp)
@@ -82,6 +82,11 @@ fun SkyFitTextInputComponent(
                 },
                 cursorBrush = SolidColor(SkyFitColor.specialty.buttonBgRest),
             )
+
+            if (rightIconComposed != null) {
+                Spacer(Modifier.width(8.dp))
+                rightIconComposed.invoke()
+            }
 
             rightIconPainter?.let {
                 Spacer(Modifier.width(8.dp))

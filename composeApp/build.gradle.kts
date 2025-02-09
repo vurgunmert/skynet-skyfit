@@ -71,6 +71,7 @@ kotlin {
             // Kotlinx
             implementation(libs.kotlinx.serialization)
             implementation(libs.kotlinx.datetime)
+            implementation("cz.kudladev:datetimepicker-kmp:1.0.5")
 
             // Koin for dependency injection
             implementation(libs.koin.core)
