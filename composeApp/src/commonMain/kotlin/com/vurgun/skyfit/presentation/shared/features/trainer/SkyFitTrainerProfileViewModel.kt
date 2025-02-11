@@ -1,12 +1,44 @@
 package com.vurgun.skyfit.presentation.shared.features.trainer
 
 import androidx.lifecycle.ViewModel
+import com.vurgun.skyfit.presentation.mobile.features.trainer.profile.SpecialityItemComponentViewData
 import com.vurgun.skyfit.presentation.shared.features.calendar.SkyFitClassCalendarCardItem
-import com.vurgun.skyfit.presentation.shared.features.social.SkyFitPostCardItem
+import com.vurgun.skyfit.presentation.shared.features.social.PostViewData
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asStateFlow
 
-class SkyFitTrainerProfileViewModel: ViewModel() {
+class SkyFitTrainerProfileViewModel : ViewModel() {
 
-    val privateClasses = listOf(
+    private val _specialities = MutableStateFlow<List<SpecialityItemComponentViewData>>(emptyList())
+    val specialities = _specialities.asStateFlow()
+
+    private val _privateClasses = MutableStateFlow<List<SkyFitClassCalendarCardItem>>(emptyList())
+    val privateClasses = _privateClasses.asStateFlow()
+
+    private val _posts = MutableStateFlow<List<PostViewData>>(emptyList())
+    val posts = _posts.asStateFlow()
+
+    fun loadData() {
+        _specialities.value = fakeSpecialities
+        _privateClasses.value = fakePrivateClasses
+        _posts.value = fakePosts
+    }
+
+    fun addPrivateClass(newClass: SkyFitClassCalendarCardItem) {
+        _privateClasses.value = _privateClasses.value + newClass
+    }
+
+    fun removePrivateClass(title: String) {
+        _privateClasses.value = _privateClasses.value.filter { it.title != title }
+    }
+
+    fun updatePrivateClass(updatedClass: SkyFitClassCalendarCardItem) {
+        _privateClasses.value = _privateClasses.value.map {
+            if (it.title == updatedClass.title) updatedClass else it
+        }
+    }
+
+    val fakePrivateClasses: List<SkyFitClassCalendarCardItem> = listOf(
         SkyFitClassCalendarCardItem(
             title = "Morning Yoga",
             date = "2025-02-01",
@@ -37,9 +69,8 @@ class SkyFitTrainerProfileViewModel: ViewModel() {
         )
     )
 
-
-    val posts = List(6) { index ->
-        SkyFitPostCardItem(
+    val fakePosts: List<PostViewData> = List(6) { index ->
+        PostViewData(
             postId = "post_${index + 1}",
             username = listOf("JohnDoe", "FitnessQueen", "MikeTrainer", "EmmaRunner", "DavidGym", "SophiaYoga").random(),
             socialLink = listOf("https://instagram.com/user", "https://twitter.com/user", "https://linkedin.com/user", null).random(),
@@ -70,4 +101,14 @@ class SkyFitTrainerProfileViewModel: ViewModel() {
             shareCount = (0..100).random(),
         )
     }
+
+    val fakeSpecialities: List<SpecialityItemComponentViewData> = listOf(
+        SpecialityItemComponentViewData("Fonksiyonel Antrenman", "push_up"),
+        SpecialityItemComponentViewData("Kuvvet ve Kondisyon", "muscle"),
+        SpecialityItemComponentViewData("Beslenme Danışmanlığı", "nutrition"),
+        SpecialityItemComponentViewData("Atletik Performans Geliştirme", "athlete"),
+        SpecialityItemComponentViewData("Beslenme Danışmanlığı", "nutrition"),
+        SpecialityItemComponentViewData("Atletik Performans Geliştirme", "athlete")
+    )
 }
+

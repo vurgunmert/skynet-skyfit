@@ -3,7 +3,6 @@ package com.vurgun.skyfit.presentation.mobile.features.user.profile
 import androidx.compose.foundation.ScrollState
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
@@ -14,8 +13,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -37,9 +34,8 @@ import com.vurgun.skyfit.presentation.shared.components.ButtonState
 import com.vurgun.skyfit.presentation.shared.components.ButtonVariant
 import com.vurgun.skyfit.presentation.shared.components.SkyFitButtonComponent
 import com.vurgun.skyfit.presentation.shared.components.SkyFitIconButton
-import com.vurgun.skyfit.presentation.shared.features.social.SkyFitPostCardItem
-import com.vurgun.skyfit.presentation.shared.features.social.SkyFitPostCardItemComponent
 import com.vurgun.skyfit.presentation.shared.features.user.SkyFitUserProfileViewModel
+import com.vurgun.skyfit.presentation.shared.features.user.fakePosts
 import com.vurgun.skyfit.presentation.shared.navigation.SkyFitNavigationRoute
 import com.vurgun.skyfit.presentation.shared.navigation.jumpAndStay
 import com.vurgun.skyfit.presentation.shared.resources.SkyFitColor
@@ -61,7 +57,8 @@ fun MobileUserProfileVisitedScreen(navigator: Navigator) {
     }
 
     val viewModel = SkyFitUserProfileViewModel()
-    val posts = viewModel.posts
+    val profileData by viewModel.profileData.collectAsState()
+    val posts = fakePosts
 
     Scaffold(
         backgroundColor = SkyFitColor.background.default,
@@ -69,7 +66,7 @@ fun MobileUserProfileVisitedScreen(navigator: Navigator) {
             BoxWithConstraints {
                 val width = maxWidth
                 val imageHeight = width * 9 / 16
-                val contentTopPadding = imageHeight * 3 / 10
+                val contentTopPadding = imageHeight * 2 / 10
 
                 MobileUserProfileBackgroundImageComponent(imageHeight)
 
@@ -78,29 +75,14 @@ fun MobileUserProfileVisitedScreen(navigator: Navigator) {
                         .padding(top = contentTopPadding)
                         .fillMaxWidth()
                 ) {
-                    if (showInfoMini) {
-                        MobileUserProfileInfoCardMiniComponent(
-                            name = "Dexter Moore",
-                            social = "@dexteretymo",
-                            imageUrl = "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSJq8Cfy_pOdcJOYIQew3rWrnwwxfc8bZIarg&s",
-                            preferences = listOf(
-                                ProfilePreferenceItem("Boy", "175"),
-                                ProfilePreferenceItem("Kilo", "175"),
-                                ProfilePreferenceItem("Vucut Tipi", "Ecto"),
-                            )
-                        )
-                    } else {
-                        MobileUserProfileInfoCardComponent(
-                            name = "Dexter Moore",
-                            social = "@dexteretymo",
-                            imageUrl = "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSJq8Cfy_pOdcJOYIQew3rWrnwwxfc8bZIarg&s",
-                            preferences = listOf(
-                                ProfilePreferenceItem("Boy", "175"),
-                                ProfilePreferenceItem("Kilo", "175"),
-                                ProfilePreferenceItem("Vucut Tipi", "Ecto"),
-                            )
-                        )
+                    profileData?.let {
+                        if (showInfoMini) {
+                            MobileUserProfileInfoCardMiniComponent(it)
+                        } else {
+                            MobileUserProfileInfoCardComponent(it)
+                        }
                     }
+
                     Spacer(Modifier.height(16.dp))
                     MobileVisitedProfileActionsComponent(
                         onClickAbout = { showPosts = false },

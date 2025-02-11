@@ -20,7 +20,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.vurgun.skyfit.presentation.shared.components.SkyFitCircularImageComponent
 import com.vurgun.skyfit.presentation.shared.components.SkyFitIconButton
-import com.vurgun.skyfit.presentation.shared.features.social.SkyFitPostCardItem
+import com.vurgun.skyfit.presentation.shared.features.social.PostViewData
 import com.vurgun.skyfit.presentation.shared.features.social.SkyFitPostCardItemComponent
 import com.vurgun.skyfit.presentation.shared.components.UserCircleAvatarItem
 import com.vurgun.skyfit.presentation.shared.navigation.SkyFitNavigationRoute
@@ -44,7 +44,7 @@ fun MobileUserSocialMediaScreen(navigator: Navigator) {
         }
     ) {
         val posts = List(6) { index ->
-            SkyFitPostCardItem(
+            PostViewData(
                 postId = "post_${index + 1}",
                 username = listOf("JohnDoe", "FitnessQueen", "MikeTrainer", "EmmaRunner", "DavidGym", "SophiaYoga").random(),
                 socialLink = listOf("https://instagram.com/user", "https://twitter.com/user", "https://linkedin.com/user", null).random(),

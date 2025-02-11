@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Icon
 import androidx.compose.material.Text
@@ -108,7 +109,7 @@ fun SkyFitClassCalendarCardItemComponent(item: SkyFitClassCalendarCardItem, onCl
 }
 
 @Composable
-private fun SkyFitClassCalendarCardItemRowComponent(value: String) {
+fun SkyFitClassCalendarCardItemRowComponent(value: String) {
     Row(verticalAlignment = Alignment.CenterVertically) {
         Icon(
             painter = painterResource(Res.drawable.logo_skyfit),
@@ -116,6 +117,7 @@ private fun SkyFitClassCalendarCardItemRowComponent(value: String) {
             modifier = Modifier.size(16.dp),
             tint = SkyFitColor.icon.secondary
         )
+        Spacer(Modifier.width(4.dp))
         Text(
             text = value,
             style = SkyFitTypography.bodyMediumRegular,

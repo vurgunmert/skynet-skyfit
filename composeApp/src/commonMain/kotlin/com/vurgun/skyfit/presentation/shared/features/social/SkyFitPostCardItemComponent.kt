@@ -35,7 +35,7 @@ import org.jetbrains.compose.resources.painterResource
 import skyfit.composeapp.generated.resources.Res
 import skyfit.composeapp.generated.resources.logo_skyfit
 
-data class SkyFitPostCardItem(
+data class PostViewData(
     val postId: String,
     val username: String,
     val socialLink: String?,
@@ -50,7 +50,7 @@ data class SkyFitPostCardItem(
 
 @Composable
 fun SkyFitPostCardItemComponent(
-    data: SkyFitPostCardItem,
+    data: PostViewData,
     onClickShare: () -> Unit,
     onClickComment: () -> Unit,
     onClickLike: () -> Unit,

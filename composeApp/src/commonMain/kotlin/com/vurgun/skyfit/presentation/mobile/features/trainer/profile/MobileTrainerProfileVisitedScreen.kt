@@ -21,11 +21,12 @@ import androidx.compose.material.Icon
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.vurgun.skyfit.presentation.mobile.features.user.profile.MobileVisitedProfileActionsComponent
-import com.vurgun.skyfit.presentation.mobile.features.user.profile.ProfilePreferenceItem
+import com.vurgun.skyfit.presentation.shared.features.user.ProfilePreferenceItem
 import com.vurgun.skyfit.presentation.shared.components.ButtonSize
 import com.vurgun.skyfit.presentation.shared.components.ButtonVariant
 import com.vurgun.skyfit.presentation.shared.components.SkyFitButtonComponent
@@ -47,9 +48,9 @@ fun MobileTrainerProfileVisitedScreen(navigator: Navigator) {
     val scrollState = rememberScrollState()
     var showPosts: Boolean = false
     val followed: Boolean = false
-    val specialities: List<Any> = emptyList()
-    val privateClasses = viewModel.privateClasses
-    val posts = viewModel.posts
+    val specialities = viewModel.specialities.collectAsState().value
+    val privateClasses = viewModel.privateClasses.collectAsState().value
+    val posts = viewModel.posts.collectAsState().value
 
     Scaffold(
         backgroundColor = SkyFitColor.background.default,
@@ -248,7 +249,7 @@ private fun MobileTrainerProfileVisitedScreenActionsComponent(
 }
 
 @Composable
-private fun MobileTrainerProfileVisitedScreenSpecialitiesComponent(specialities: List<Any>) {
+private fun MobileTrainerProfileVisitedScreenSpecialitiesComponent(specialities: List<SpecialityItemComponentViewData>) {
     if (specialities.isNotEmpty()) {
         MobileTrainerProfileSpecialitiesComponent(specialities)
     }
