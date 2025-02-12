@@ -76,10 +76,10 @@ class SkyFitTrainerProfileViewModel : ViewModel() {
             socialLink = listOf("https://instagram.com/user", "https://twitter.com/user", "https://linkedin.com/user", null).random(),
             timeAgo = listOf("5 min ago", "2 hours ago", "1 day ago", "3 days ago", "1 week ago").random(),
             profileImageUrl = listOf(
-                "https://example.com/profile1.png",
-                "https://example.com/profile2.png",
-                "https://example.com/profile3.png",
-                "https://example.com/profile4.png",
+                "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSxNUUshHHqOs2sWxJAZPctGScPNewNivZn-w&s",
+                "https://images.squarespace-cdn.com/content/v1/63f59136c5b45330af8a1b13/be8fe8de-0eec-49c6-9140-82a501e0422e/Screen+Shot+2023-04-19+at+3.01.08+PM.png",
+                "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSxNUUshHHqOs2sWxJAZPctGScPNewNivZn-w&s",
+                "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS0HX6fpDHt9hoOC5XPVJtHMGgLiXpcICKXfA&s",
                 null
             ).random(),
             content = listOf(
@@ -91,9 +91,12 @@ class SkyFitTrainerProfileViewModel : ViewModel() {
                 "Nutrition is key! What’s your go-to meal?"
             ).random(),
             imageUrl = listOf(
-                "https://example.com/post1.jpg",
-                "https://example.com/post2.jpg",
-                "https://example.com/post3.jpg",
+                "https://www.teatatutoasted.co.nz/cdn/shop/articles/Copy_of_Blog_pics_3_195ecc96-5c21-4363-b9c4-1e9458217175_768x.png?v=1727827333",
+                "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTPfpidl_dC5LY4ASphW2qVybLkXqW5bI-BXg&s",
+                "https://images.squarespace-cdn.com/content/v1/5885cce9e6f2e17ade281ea3/1729523033091-3GQ5CLQPRB5Z056ZKBYU/4.png?format=2500w",
+                null,
+                null,
+                null,
                 null
             ).random(),
             favoriteCount = (0..500).random(),

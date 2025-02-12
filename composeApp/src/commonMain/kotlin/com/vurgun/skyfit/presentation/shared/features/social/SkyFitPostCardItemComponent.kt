@@ -3,7 +3,6 @@ package com.vurgun.skyfit.presentation.shared.features.social
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -15,8 +14,9 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Icon
-import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Share
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -25,10 +25,8 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.dp
 import coil3.compose.AsyncImage
 import com.vurgun.skyfit.presentation.shared.features.social.SkyFitPostCardItemComponent.InteractionRow
-import com.vurgun.skyfit.presentation.shared.features.social.SkyFitPostCardItemComponent.PostContent
-import com.vurgun.skyfit.presentation.shared.features.social.SkyFitPostCardItemComponent.PostImage
 import com.vurgun.skyfit.presentation.shared.features.social.SkyFitPostCardItemComponent.ProfileImage
-import com.vurgun.skyfit.presentation.shared.features.social.SkyFitPostCardItemComponent.UserInfoSection
+import com.vurgun.skyfit.presentation.shared.features.social.SkyFitPostCardItemComponent.SkyFitPostItemUserInfoRow
 import com.vurgun.skyfit.presentation.shared.resources.SkyFitColor
 import com.vurgun.skyfit.presentation.shared.resources.SkyFitTypography
 import org.jetbrains.compose.resources.painterResource
@@ -56,43 +54,53 @@ fun SkyFitPostCardItemComponent(
     onClickLike: () -> Unit,
     onClick: () -> Unit
 ) {
-    Box(
+    Row(
         modifier = Modifier
             .fillMaxWidth()
-            .background(SkyFitColor.background.fillTransparentSecondary, RoundedCornerShape(12.dp))
+            .background(SkyFitColor.background.surfaceSecondary, RoundedCornerShape(12.dp))
             .clickable(onClick = onClick)
             .padding(16.dp)
     ) {
+        ProfileImage(data.profileImageUrl)
 
-        Row(verticalAlignment = Alignment.Top) {
+        Spacer(Modifier.width(8.dp))
 
-            ProfileImage(data.profileImageUrl)
-            Spacer(Modifier.width(8.dp))
-            Column {
-                UserInfoSection(
-                    username = data.username,
-                    socialLink = data.socialLink,
-                    timeAgo = data.timeAgo
-                )
+        Column(
+            Modifier.weight(1f),
+            verticalArrangement = Arrangement.spacedBy(8.dp)
+        ) {
+            SkyFitPostItemUserInfoRow(
+                username = data.username,
+                socialLink = data.socialLink,
+                timeAgo = data.timeAgo
+            )
 
-                data.imageUrl?.let { imageUrl ->
-                    Spacer(modifier = Modifier.height(8.dp))
-                    PostImage(imageUrl = imageUrl)
-                }
-
-                Spacer(modifier = Modifier.height(8.dp))
-                PostContent(content = data.content)
-
-                Spacer(modifier = Modifier.height(8.dp))
-                InteractionRow(
-                    likeCount = data.favoriteCount,
-                    commentCount = data.commentCount,
-                    shareCount = data.shareCount,
-                    onClickComment = onClickComment,
-                    onClickLike = onClickLike,
-                    onClickShare = onClickShare
+            data.imageUrl?.let {
+                AsyncImage(
+                    model = it,
+                    contentDescription = null,
+                    contentScale = ContentScale.Crop,
+                    modifier = Modifier
+                        .height(273.dp)
+                        .clip(RoundedCornerShape(8.dp)),
                 )
             }
+
+            Text(
+                text = data.content,
+                color = SkyFitColor.text.default,
+                style = SkyFitTypography.bodySmall,
+                modifier = Modifier.fillMaxWidth()
+            )
+
+            InteractionRow(
+                likeCount = data.favoriteCount,
+                commentCount = data.commentCount,
+                shareCount = data.shareCount,
+                onClickComment = onClickComment,
+                onClickLike = onClickLike,
+                onClickShare = onClickShare
+            )
         }
     }
 }
@@ -102,18 +110,18 @@ private object SkyFitPostCardItemComponent {
     @Composable
     fun ProfileImage(profileImageUrl: String?) {
         AsyncImage(
-            model = "https://opstudiohk.com/wp-content/uploads/2021/10/muscle-action.jpg",
+            model = profileImageUrl,
             contentDescription = null,
             contentScale = ContentScale.Crop,
             modifier = Modifier
                 .size(48.dp)
                 .clip(CircleShape)
-                .background(MaterialTheme.colors.onSurface.copy(alpha = 0.2f))
+                .background(SkyFitColor.border.default)
         )
     }
 
     @Composable
-    fun UserInfoSection(username: String, socialLink: String?, timeAgo: String?) {
+    fun SkyFitPostItemUserInfoRow(username: String, socialLink: String?, timeAgo: String?) {
         Row(verticalAlignment = Alignment.CenterVertically) {
             Text(
                 text = username,
@@ -126,7 +134,8 @@ private object SkyFitPostCardItemComponent {
                 Text(
                     text = it,
                     color = SkyFitColor.text.secondary,
-                    style = SkyFitTypography.bodySmall
+                    style = SkyFitTypography.bodySmall,
+                    maxLines = 1
                 )
             }
 
@@ -135,32 +144,11 @@ private object SkyFitPostCardItemComponent {
                 Text(
                     text = ". $it",
                     color = SkyFitColor.text.secondary,
-                    style = SkyFitTypography.bodySmall
+                    style = SkyFitTypography.bodySmall,
+                    maxLines = 1
                 )
             }
         }
-    }
-
-    @Composable
-    fun PostImage(imageUrl: String) {
-        AsyncImage(
-            model = imageUrl,
-            contentDescription = null,
-            contentScale = ContentScale.Crop,
-            modifier = Modifier
-                .fillMaxWidth()
-                .height(200.dp)
-                .clip(RoundedCornerShape(12.dp)),
-        )
-    }
-
-    @Composable
-    fun PostContent(content: String) {
-        Text(
-            text = content,
-            color = SkyFitColor.text.default,
-            style = SkyFitTypography.bodySmall
-        )
     }
 
     @Composable
@@ -173,12 +161,18 @@ private object SkyFitPostCardItemComponent {
         onClickLike: () -> Unit
     ) {
         Row(
-            horizontalArrangement = Arrangement.SpaceBetween,
-            modifier = Modifier.fillMaxWidth()
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.spacedBy(16.dp)
         ) {
             InteractionItem(count = commentCount, onClick = onClickComment)
             InteractionItem(count = shareCount, onClick = onClickShare)
             InteractionItem(count = likeCount, onClick = onClickLike)
+            Icon(
+                imageVector = Icons.Default.Share,
+                contentDescription = null,
+                tint = SkyFitColor.text.secondary,
+                modifier = Modifier.size(24.dp)
+            )
         }
     }
 
@@ -186,14 +180,15 @@ private object SkyFitPostCardItemComponent {
     fun InteractionItem(count: Int, onClick: () -> Unit) {
         Row(
             Modifier.clickable(onClick = onClick),
-            verticalAlignment = Alignment.CenterVertically
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.spacedBy(2.dp)
         ) {
             Icon(
                 painterResource(Res.drawable.logo_skyfit),
                 contentDescription = null,
-                tint = SkyFitColor.text.secondary
+                tint = SkyFitColor.text.secondary,
+                modifier = Modifier.size(24.dp)
             )
-            Spacer(modifier = Modifier.width(2.dp))
             Text(
                 text = "$count",
                 color = SkyFitColor.text.secondary,
