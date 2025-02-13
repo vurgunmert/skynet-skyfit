@@ -768,7 +768,7 @@ private fun MobileUserProfileHabitItemComponent() {
 
 @Composable
 fun MobileUserProfilePostsInputComponent(
-    onClickSend: (String) -> Unit // Sends data only when necessary
+    onClickSend: (String) -> Unit
 ) {
     var textFieldValue by remember { mutableStateOf("") }
     val keyboardController = LocalSoftwareKeyboardController.current // For closing keyboard

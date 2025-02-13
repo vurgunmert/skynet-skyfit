@@ -20,8 +20,9 @@ import com.vurgun.skyfit.presentation.shared.navigation.jumpAndTakeover
 import moe.tlaster.precompose.navigation.Navigator
 
 @Composable
-fun MobileOnboardingUserTypeSelectionScreen(onSkip: () -> Unit,
-                                            onNext: () -> Unit) {
+fun MobileOnboardingUserTypeSelectionScreen(onClickUser: () -> Unit,
+                                            onClickTrainer: () -> Unit,
+                                            onClickFacility: () -> Unit) {
     SkyFitScaffold {
         Column(
             modifier = Modifier.fillMaxSize(),
@@ -37,9 +38,9 @@ fun MobileOnboardingUserTypeSelectionScreen(onSkip: () -> Unit,
             )
             Spacer(Modifier.height(64.dp))
             MobileOnboardingUserTypeSelectionComponent(
-                onSelectUser = onNext,
-                onSelectTrainer = onNext,
-                onSelectFacility = onSkip
+                onSelectUser = onClickUser,
+                onSelectTrainer = onClickTrainer,
+                onSelectFacility = onClickFacility
             )
         }
     }

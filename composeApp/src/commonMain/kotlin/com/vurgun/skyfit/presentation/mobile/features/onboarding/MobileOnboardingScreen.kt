@@ -18,15 +18,18 @@ fun MobileOnboardingScreen(rootNavigator: Navigator) {
 
     NavHost(
         navigator = onboardingNavigator,
-        initialRoute = SkyFitNavigationRoute.OnboardingGoalSelection.route
+        initialRoute = SkyFitNavigationRoute.OnboardingCharacterSelection.route
     ) {
         scene(SkyFitNavigationRoute.OnboardingUserTypeSelection.route) {
             MobileOnboardingUserTypeSelectionScreen(
-                onSkip = {
+                onClickUser = {
+                    onboardingNavigator.jumpAndStay(SkyFitNavigationRoute.OnboardingCharacterSelection)
+                },
+                onClickTrainer = {
                     rootNavigator.jumpAndTakeover(SkyFitNavigationRoute.Onboarding, SkyFitNavigationRoute.Dashboard)
                 },
-                onNext = {
-                    onboardingNavigator.jumpAndStay(SkyFitNavigationRoute.OnboardingCharacterSelection)
+                onClickFacility = {
+                    rootNavigator.jumpAndTakeover(SkyFitNavigationRoute.Onboarding, SkyFitNavigationRoute.Dashboard)
                 }
             )
         }

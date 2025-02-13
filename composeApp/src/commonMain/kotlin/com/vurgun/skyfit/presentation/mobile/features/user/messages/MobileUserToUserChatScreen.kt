@@ -13,6 +13,7 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.Icon
+import androidx.compose.material.IconButton
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
@@ -22,9 +23,9 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.vurgun.skyfit.presentation.shared.components.SkyFitCircularImageComponent
+import com.vurgun.skyfit.presentation.shared.components.UserCircleAvatarItem
 import com.vurgun.skyfit.presentation.shared.features.social.SkyFitChatMessageBubble
 import com.vurgun.skyfit.presentation.shared.features.social.SkyFitChatMessageInputComponent
-import com.vurgun.skyfit.presentation.shared.components.UserCircleAvatarItem
 import com.vurgun.skyfit.presentation.shared.resources.SkyFitColor
 import com.vurgun.skyfit.presentation.shared.resources.SkyFitTypography
 import com.vurgun.skyfit.presentation.shared.viewmodel.SkyFitConversationViewModel
@@ -46,7 +47,8 @@ fun MobileUserToUserChatScreen(navigator: Navigator) {
         backgroundColor = SkyFitColor.background.default,
         topBar = {
             MobileUserToUserChatScreenToolbarComponent(
-                participantName = "Olvia Witha",
+                onClickBack = { navigator.popBackStack() },
+                participantName = "Olvia Lorael",
                 lastActive = "2 hours ago"
             )
         }
@@ -62,7 +64,10 @@ fun MobileUserToUserChatScreen(navigator: Navigator) {
             }
 
             SkyFitChatMessageInputComponent(
-                modifier = Modifier.padding(bottom = keyboardState.heightDp).align(Alignment.BottomCenter),
+                modifier = Modifier
+                    .align(Alignment.BottomCenter)
+                    .padding(bottom = 24.dp)
+                    .padding(bottom = keyboardState.heightDp),
                 onSend = { userInput -> viewModel.sendMessage(userInput) }
             )
         }
@@ -71,6 +76,7 @@ fun MobileUserToUserChatScreen(navigator: Navigator) {
 
 @Composable
 private fun MobileUserToUserChatScreenToolbarComponent(
+    onClickBack: () -> Unit,
     participantName: String,
     lastActive: String
 ) {
@@ -81,11 +87,16 @@ private fun MobileUserToUserChatScreenToolbarComponent(
         modifier = Modifier.fillMaxWidth().padding(16.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
-        Icon(
-            painter = painterResource(Res.drawable.logo_skyfit),
-            contentDescription = null,
-            modifier = Modifier.size(16.dp)
-        )
+
+        IconButton(onClick = onClickBack) {
+            Icon(
+                painter = painterResource(Res.drawable.logo_skyfit),
+                contentDescription = "Back",
+                tint = SkyFitColor.text.default,
+                modifier = Modifier.size(16.dp)
+            )
+        }
+        Spacer(Modifier.width(24.dp))
 
         SkyFitCircularImageComponent(
             modifier = Modifier.size(48.dp),

@@ -61,22 +61,20 @@ import com.vurgun.skyfit.presentation.shared.components.ButtonState
 import com.vurgun.skyfit.presentation.shared.components.ButtonVariant
 import com.vurgun.skyfit.presentation.shared.components.SkyFitButtonComponent
 import com.vurgun.skyfit.presentation.shared.components.SkyFitCircularProgressIconButton
+import com.vurgun.skyfit.presentation.shared.components.SkyFitColoredCalendarComponent
 import com.vurgun.skyfit.presentation.shared.components.SkyFitImageComponent
 import com.vurgun.skyfit.presentation.shared.components.SkyFitListItemCardComponent
 import com.vurgun.skyfit.presentation.shared.components.SkyFitMonthPickerDropdownComponent
-import com.vurgun.skyfit.presentation.shared.features.calendar.SkyFitCalendarGridComponent
 import com.vurgun.skyfit.presentation.shared.resources.SkyFitColor
 import com.vurgun.skyfit.presentation.shared.resources.SkyFitTypography
-import com.vurgun.skyfit.utils.now
-import kotlinx.datetime.LocalDate
 import org.jetbrains.compose.resources.painterResource
 import skyfit.composeapp.generated.resources.Res
 import skyfit.composeapp.generated.resources.logo_skyfit
 
 @Composable
 fun MobileDashboardHomeToolbarComponent(
-    onNotifications: () -> Unit = {},
-    onMessages: () -> Unit = {}
+    onClickNotifications: () -> Unit = {},
+    onClickMessages: () -> Unit = {}
 ) {
     Row(
         modifier = Modifier
@@ -88,14 +86,14 @@ fun MobileDashboardHomeToolbarComponent(
             painter = painterResource(Res.drawable.logo_skyfit),
             contentDescription = null,
             tint = SkyFitColor.text.default,
-            modifier = Modifier.size(20.dp).clickable(onClick = onNotifications)
+            modifier = Modifier.size(20.dp).clickable(onClick = onClickNotifications)
         )
         Spacer(Modifier.width(10.dp))
         Icon(
             painter = painterResource(Res.drawable.logo_skyfit),
             contentDescription = null,
             tint = SkyFitColor.text.default,
-            modifier = Modifier.size(20.dp).clickable(onClick = onMessages)
+            modifier = Modifier.size(20.dp).clickable(onClick = onClickMessages)
         )
     }
 }
@@ -255,14 +253,72 @@ private fun MobileDashboardHomeWeekProgressBar(progress: Int, dayLabel: String, 
 
 
 @Composable
-fun MobileDashboardHomeActivityCalendarComponent() {
-    var selectedDate by remember { mutableStateOf(LocalDate.now()) }
+fun MobileDashboardHomeActivityCalendarComponent(
+    onClickShowAll: () -> Unit
+) {
+    var selectedMonth by remember { mutableStateOf("Haziran") }
 
-    SkyFitCalendarGridComponent(
-        initialSelectedDate = selectedDate,
-        isSingleSelect = true,
-        onDateSelected = { selectedDate = it }
-    )
+    Column(
+        Modifier
+            .width(320.dp)
+            .padding(16.dp),
+        verticalArrangement = Arrangement.spacedBy(8.dp),
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+        Row(
+            Modifier.fillMaxWidth(),
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.SpaceBetween
+        ) {
+            Text(
+                text = "Takvim",
+                style = SkyFitTypography.bodyMediumSemibold
+            )
+
+            SkyFitMonthPickerDropdownComponent(
+                selectedMonth = selectedMonth,
+                onMonthSelected = { selectedMonth = it }
+            )
+
+            Text(
+                text = "Hepsini Görüntüle",
+                style = SkyFitTypography.bodyXSmall,
+                color = SkyFitColor.border.secondaryButton,
+                modifier = Modifier.clickable(onClick = onClickShowAll)
+            )
+        }
+
+        SkyFitColoredCalendarComponent()
+
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Box(
+                modifier = Modifier
+                    .size(5.dp)
+                    .background(SkyFitColor.border.secondaryButton, shape = CircleShape)
+            )
+            Spacer(Modifier.width(4.dp))
+            Text(
+                text = "Tamamlandı",
+                style = SkyFitTypography.bodyXSmallSemibold
+            )
+
+            Spacer(Modifier.width(12.dp))
+
+            Box(
+                modifier = Modifier
+                    .size(5.dp)
+                    .background(SkyFitColor.icon.critical, shape = CircleShape)
+            )
+            Spacer(Modifier.width(4.dp))
+            Text(
+                text = "Tamamlanmadı",
+                style = SkyFitTypography.bodyXSmallSemibold
+            )
+        }
+    }
 }
 
 @Composable

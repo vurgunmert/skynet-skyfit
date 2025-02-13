@@ -106,7 +106,7 @@ fun SkyFitColoredCalendarComponent() {
 }
 
 @Composable
-fun DayCell(value: String, style: DayCellStyle) {
+private fun DayCell(value: String, style: DayCellStyle) {
     Box(
         modifier = Modifier
             .size(40.dp)

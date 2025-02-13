@@ -3,6 +3,7 @@ package com.vurgun.skyfit.presentation.mobile.features.user.social
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -15,14 +16,14 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.vurgun.skyfit.presentation.shared.components.SkyFitCircularImageComponent
 import com.vurgun.skyfit.presentation.shared.components.SkyFitIconButton
-import com.vurgun.skyfit.presentation.shared.features.social.PostViewData
-import com.vurgun.skyfit.presentation.shared.features.social.SkyFitPostCardItemComponent
 import com.vurgun.skyfit.presentation.shared.components.UserCircleAvatarItem
+import com.vurgun.skyfit.presentation.shared.features.social.SkyFitPostCardItemComponent
 import com.vurgun.skyfit.presentation.shared.navigation.SkyFitNavigationRoute
 import com.vurgun.skyfit.presentation.shared.navigation.jumpAndStay
 import com.vurgun.skyfit.presentation.shared.resources.SkyFitColor
@@ -35,6 +36,9 @@ import skyfit.composeapp.generated.resources.logo_skyfit
 @Composable
 fun MobileUserSocialMediaScreen(navigator: Navigator) {
 
+    val viewModel = UserSocialMediaViewModel()
+    val posts = viewModel.posts.collectAsState().value
+
     Scaffold(
         backgroundColor = SkyFitColor.background.default,
         topBar = {
@@ -43,42 +47,12 @@ fun MobileUserSocialMediaScreen(navigator: Navigator) {
             })
         }
     ) {
-        val posts = List(6) { index ->
-            PostViewData(
-                postId = "post_${index + 1}",
-                username = listOf("JohnDoe", "FitnessQueen", "MikeTrainer", "EmmaRunner", "DavidGym", "SophiaYoga").random(),
-                socialLink = listOf("https://instagram.com/user", "https://twitter.com/user", "https://linkedin.com/user", null).random(),
-                timeAgo = listOf("5 min ago", "2 hours ago", "1 day ago", "3 days ago", "1 week ago").random(),
-                profileImageUrl = listOf(
-                    "https://example.com/profile1.png",
-                    "https://example.com/profile2.png",
-                    "https://example.com/profile3.png",
-                    "https://example.com/profile4.png",
-                    null
-                ).random(),
-                content = listOf(
-                    "Just finished an amazing workout! 💪",
-                    "Morning yoga session done! 🧘‍♀️",
-                    "Any tips for increasing stamina? 🏃‍♂️",
-                    "Trying out a new HIIT routine. 🔥",
-                    "Recovery day with some light stretching.",
-                    "Nutrition is key! What’s your go-to meal?"
-                ).random(),
-                imageUrl = listOf(
-                    "https://example.com/post1.jpg",
-                    "https://example.com/post2.jpg",
-                    "https://example.com/post3.jpg",
-                    null
-                ).random(),
-                favoriteCount = (0..500).random(),
-                commentCount = (0..200).random(),
-                shareCount = (0..100).random(),
-            )
-        }
-
         LazyColumn(
-            modifier = Modifier.fillMaxSize().padding(horizontal = 24.dp, vertical = 16.dp),
-            verticalArrangement = Arrangement.spacedBy(16.dp)
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(horizontal = 24.dp, vertical = 16.dp),
+            verticalArrangement = Arrangement.spacedBy(16.dp),
+            contentPadding = PaddingValues(bottom = 80.dp)
         ) {
             items(posts) {
                 SkyFitPostCardItemComponent(it,
@@ -139,10 +113,13 @@ private fun MobileUserSocialMediaScreenUserProfilesComponent(onNewPost: () -> Un
     )
 
     LazyRow(
-        Modifier.fillMaxWidth().height(96.dp),
-        horizontalArrangement = Arrangement.spacedBy(16.dp)
+        Modifier
+            .padding(top = 16.dp)
+            .fillMaxWidth()
+            .height(96.dp),
+        horizontalArrangement = Arrangement.spacedBy(16.dp),
+        contentPadding = PaddingValues(start = 16.dp)
     ) {
-
         item {
             MobileUserSocialAvatarItemComponent(userAvatar, onClick = {})
         }

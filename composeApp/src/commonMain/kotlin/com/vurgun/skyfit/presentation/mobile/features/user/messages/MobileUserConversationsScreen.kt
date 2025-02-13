@@ -33,8 +33,11 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.dp
 import com.vurgun.skyfit.presentation.shared.components.SkyFitCircleAvatarRowComponent
 import com.vurgun.skyfit.presentation.shared.components.SkyFitNumberBadge
+import com.vurgun.skyfit.presentation.shared.components.SkyFitScreenHeader
 import com.vurgun.skyfit.presentation.shared.components.SkyFitSearchTextInputComponent
 import com.vurgun.skyfit.presentation.shared.components.UserCircleAvatarItem
+import com.vurgun.skyfit.presentation.shared.navigation.SkyFitNavigationRoute
+import com.vurgun.skyfit.presentation.shared.navigation.jumpAndStay
 import com.vurgun.skyfit.presentation.shared.resources.SkyFitColor
 import com.vurgun.skyfit.presentation.shared.resources.SkyFitTypography
 import moe.tlaster.precompose.navigation.Navigator
@@ -45,12 +48,17 @@ import skyfit.composeapp.generated.resources.logo_skyfit
 @Composable
 fun MobileUserConversationsScreen(navigator: Navigator) {
 
-    var conversations: List<Any> = listOf(1, 2)
+    val viewModel = UserConversationsViewModel()
+    val conversations = viewModel.converstations
 
     Scaffold(
         backgroundColor = SkyFitColor.background.default,
         topBar = {
             Column {
+                SkyFitScreenHeader(
+                    title = "Mesajlar",
+                    onClickBack = { navigator.popBackStack() }
+                )
                 MobileUserConversationsScreenToolbarComponent()
             }
         }
@@ -64,7 +72,10 @@ fun MobileUserConversationsScreen(navigator: Navigator) {
             if (conversations.isEmpty()) {
                 MobileUserConversationsEmptyComponent()
             } else {
-                MobileUserConversationsComponent()
+                MobileUserConversationsComponent(conversations,
+                    onClickConversation = {
+                        navigator.jumpAndStay(SkyFitNavigationRoute.UserToUserChat)
+                    })
                 Spacer(Modifier.height(48.dp))
             }
         }
@@ -122,23 +133,17 @@ private fun MobileUserConversationsEmptyComponent() {
 }
 
 @Composable
-private fun MobileUserConversationsComponent() {
-    var converstations = listOf(
-        UserConversationItem(),
-        UserConversationItem(),
-        UserConversationItem(),
-        UserConversationItem(),
-        UserConversationItem(),
-        UserConversationItem(),
-    )
-
+private fun MobileUserConversationsComponent(
+    conversations: List<UserConversationItem>,
+    onClickConversation: () -> Unit
+) {
     LazyColumn(
         modifier = Modifier.fillMaxSize()
             .padding(horizontal = 16.dp, vertical = 8.dp),
         verticalArrangement = Arrangement.spacedBy(8.dp)
     ) {
-        items(converstations) {
-            MobileUserConversationItemComponent(it, onClick = {})
+        items(conversations) {
+            MobileUserConversationItemComponent(it, onClick = onClickConversation)
         }
     }
 }

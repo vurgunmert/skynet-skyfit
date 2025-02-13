@@ -39,6 +39,8 @@ import com.vurgun.skyfit.presentation.shared.components.SkyFitBadgeTabBarCompone
 import com.vurgun.skyfit.presentation.shared.components.SkyFitButtonComponent
 import com.vurgun.skyfit.presentation.shared.components.SkyFitNotificationItem
 import com.vurgun.skyfit.presentation.shared.components.SkyFitScreenHeader
+import com.vurgun.skyfit.presentation.shared.navigation.SkyFitNavigationRoute
+import com.vurgun.skyfit.presentation.shared.navigation.jumpAndStay
 import com.vurgun.skyfit.presentation.shared.resources.SkyFitColor
 import com.vurgun.skyfit.presentation.shared.resources.SkyFitTypography
 import com.vurgun.skyfit.presentation.shared.viewmodel.UserNotificationsViewModel
@@ -79,9 +81,11 @@ fun MobileUserNotificationsScreen(navigator: Navigator) {
         },
         bottomBar = {
             if (allNotifications.isEmpty()) {
-                MobileUserNotificationsScreenSettingsActionComponent(onClick = {})
+                MobileUserNotificationsScreenSettingsActionComponent(onClick = {
+                    navigator.jumpAndStay(SkyFitNavigationRoute.UserSettingsNotifications)
+                })
             } else {
-                MobileUserNotificationsScreenDeleteAllActionComponent(onClick = {})
+                MobileUserNotificationsScreenDeleteAllActionComponent(onClick = viewModel::deleteAllNotifications)
             }
         }
     ) {
@@ -100,8 +104,12 @@ fun MobileUserNotificationsScreen(navigator: Navigator) {
 @Composable
 private fun MobileUserNotificationsScreenDeleteAllActionComponent(onClick: () -> Unit) {
     Box(
-        Modifier.fillMaxWidth().padding(vertical = 8.dp, horizontal = 16.dp)
-            .clickable(onClick = onClick)
+        Modifier
+            .padding(top = 32.dp, bottom = 54.dp)
+            .fillMaxWidth()
+            .padding(vertical = 8.dp, horizontal = 16.dp)
+            .clickable(onClick = onClick),
+        contentAlignment = Alignment.Center
     ) {
 
         Text(

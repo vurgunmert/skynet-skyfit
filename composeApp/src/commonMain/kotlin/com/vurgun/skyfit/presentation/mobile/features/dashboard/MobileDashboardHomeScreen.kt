@@ -9,7 +9,7 @@ import moe.tlaster.precompose.navigation.Navigator
 
 @Composable
 fun MobileDashboardHomeScreen(rootNavigator: Navigator) {
-    val role = Role.TRAINER
+    val role = Role.USER
 
     when(role){
         Role.VISITOR -> Unit
