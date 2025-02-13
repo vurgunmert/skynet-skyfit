@@ -34,13 +34,14 @@ fun SkyFitButtonComponent(
     rightIconPainter: Painter? = null,
     isEnabled: Boolean = true,
     modifier: Modifier = Modifier.fillMaxWidth(),
-    onClick: () -> Unit,
+    onClick: () -> Unit
 ) {
 
     val buttonStyle = getButtonStyle(variant, if (isEnabled) state else ButtonState.Disabled)
     val buttonTextStyle = when (size) {
         ButtonSize.Large -> SkyFitTypography.bodyLargeMedium
         ButtonSize.Medium -> SkyFitTypography.bodyMediumMedium
+        ButtonSize.MediumDialog -> SkyFitTypography.bodyMediumMedium
         ButtonSize.Micro -> SkyFitTypography.bodyMediumMedium
     }
 
@@ -113,6 +114,7 @@ sealed class ButtonSize(
 ) {
     data object Large : ButtonSize(24.dp, 32.dp, 8.dp, 8.dp, 20.dp)
     data object Medium : ButtonSize(20.dp, 24.dp, 6.dp, 8.dp, 16.dp)
+    data object MediumDialog : ButtonSize(8.dp, 8.dp, 6.dp, 8.dp, 16.dp)
     data object Micro : ButtonSize(12.dp, 16.dp, 4.dp, 4.dp, 16.dp)
 }
 

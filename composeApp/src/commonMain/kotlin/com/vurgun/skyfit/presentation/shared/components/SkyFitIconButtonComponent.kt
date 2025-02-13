@@ -49,7 +49,7 @@ fun SkyFitCircularProgressIconButton(
     onClick: () -> Unit = {}
 ) {
     Box(
-        modifier = modifier.size(40.dp),
+        modifier = modifier.size(40.dp).clickable(onClick = onClick),
         contentAlignment = Alignment.Center
     ) {
         Canvas(modifier = Modifier.size(40.dp)) {

@@ -1,5 +1,5 @@
 package com.vurgun.skyfit.domain.usecase
 
-interface ChatbotQueryUseCase {
+interface ChatbotApiUseCase {
     suspend fun queryChat(question: String): String
 }

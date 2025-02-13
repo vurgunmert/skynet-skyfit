@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -16,21 +17,25 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.Button
-import androidx.compose.material.ButtonDefaults
 import androidx.compose.material.Card
 import androidx.compose.material.Icon
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.min
+import com.vurgun.skyfit.presentation.shared.components.ButtonSize
+import com.vurgun.skyfit.presentation.shared.components.ButtonVariant
+import com.vurgun.skyfit.presentation.shared.components.SkyFitButtonComponent
 import com.vurgun.skyfit.presentation.shared.components.SkyFitScaffold
 import com.vurgun.skyfit.presentation.shared.components.SkyFitScreenHeader
 import com.vurgun.skyfit.presentation.shared.navigation.SkyFitNavigationRoute
@@ -45,14 +50,18 @@ import org.jetbrains.compose.resources.painterResource
 import org.koin.compose.koinInject
 import skyfit.composeapp.generated.resources.Res
 import skyfit.composeapp.generated.resources.background_chatbot
-import skyfit.composeapp.generated.resources.compose_multiplatform
+import skyfit.composeapp.generated.resources.body_scan_fill_semi_left
+import skyfit.composeapp.generated.resources.carbon_report_semi_left
+import skyfit.composeapp.generated.resources.chatbot_shortcut_body_analysis_left
+import skyfit.composeapp.generated.resources.chatbot_shortcut_meal_report_left
+import skyfit.composeapp.generated.resources.ic_lightning
 import skyfit.composeapp.generated.resources.logo_skyfit
 
 @Composable
 fun MobileUserChatBotScreen(navigator: Navigator) {
 
     val viewModel: ChatbotViewModel = koinInject()
-    val showIntro: Boolean = false
+    val showIntro = viewModel.isIntroEnabled.collectAsState().value
 
 
     SkyFitScaffold(
@@ -69,13 +78,14 @@ fun MobileUserChatBotScreen(navigator: Navigator) {
                 horizontalAlignment = Alignment.CenterHorizontally,
                 verticalArrangement = Arrangement.Bottom
             ) {
-                MobileUserChatBotScreenLogoComponent(modifier = Modifier.fillMaxWidth(0.5f))
+                MobileUserChatBotScreenLogoComponent(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .weight(1f)
+                )
 
                 if (showIntro) {
-                    MobileUserChatBotScreenIntroComponent(
-                        title = "Takip ve Destek",
-                        currentPage = 2
-                    )
+                    MobileUserChatBotScreenIntroComponent(onComplete = viewModel::completeIntro)
                 } else {
                     MobileUserChatBotScreenActionGroupComponent(
                         onClickShortcut = {
@@ -106,33 +116,27 @@ private fun MobileUserChatBotScreenBackgroundComponent() {
 
 @Composable
 private fun MobileUserChatBotScreenLogoComponent(modifier: Modifier = Modifier) {
-    BoxWithConstraints(
-        modifier = modifier.fillMaxWidth()
-    ) {
-        val iconSize = maxWidth * 0.4f // Adjust this percentage based on your preference
-
-        Icon(
+    BoxWithConstraints(modifier = modifier, contentAlignment = Alignment.Center) {
+        val size = min(maxWidth, maxHeight) * 0.7f
+        Image(
             painter = painterResource(Res.drawable.logo_skyfit),
-            contentDescription = null,
-            modifier = Modifier.size(iconSize), // Dynamic size
-            tint = SkyFitColor.icon.default
+            contentDescription = "Logo",
+            modifier = Modifier.size(size)
         )
     }
 }
 
-@Composable
-private fun MobileUserChatBotScreenIntroComponent(title: String, currentPage: Int) {
-    val viewModel = ChatBotOnboardingViewModel(
-        onboardCompleted = {
 
-        }
-    )
+@Composable
+private fun MobileUserChatBotScreenIntroComponent(onComplete: () -> Unit) {
+    val viewModel = remember { ChatBotOnboardingViewModel(onboardCompleted = onComplete) }
     val currentPage by viewModel.currentPage
     val pageData = viewModel.currentPageData
 
     Column(
         modifier = Modifier
             .fillMaxWidth()
+            .background(SkyFitColor.background.fillSemiTransparent, RoundedCornerShape(topStart = 36.dp, topEnd = 36.dp))
             .padding(36.dp)
     ) {
 
@@ -171,15 +175,13 @@ private fun MobileUserChatBotScreenIntroComponent(title: String, currentPage: In
                 }
             }
 
-            Button(
-                onClick = {
-                    viewModel.nextPage()
-                },
-                shape = RoundedCornerShape(8.dp),
-                colors = ButtonDefaults.buttonColors(backgroundColor = Color(0xFF42A5F5))
-            ) {
-                Text(text = pageData.buttonLabel, color = Color.White)
-            }
+            SkyFitButtonComponent(
+                modifier = Modifier.wrapContentWidth(),
+                text = pageData.buttonLabel,
+                onClick = viewModel::nextPage,
+                variant = ButtonVariant.Primary,
+                size = ButtonSize.Medium
+            )
         }
     }
 }
@@ -207,29 +209,25 @@ private fun MobileUserChatBotScreenActionGroupComponent(
         )
         Spacer(Modifier.height(16.dp))
 
-        LazyRow(
+        Row(
             Modifier.fillMaxWidth(),
             horizontalArrangement = Arrangement.spacedBy(16.dp) // Horizontal spacing
         ) {
-            item {
-                ShortcutCardBox(
-                    Modifier,
-                    leftRes = Res.drawable.logo_skyfit,
-                    rightRes = Res.drawable.compose_multiplatform,
-                    title = "Vücut Analizi",
-                    onClick = onClickShortcut
-                )
-            }
+            ShortcutCardBox(
+                Modifier.weight(1f),
+                leftRes = Res.drawable.chatbot_shortcut_body_analysis_left,
+                rightRes = Res.drawable.body_scan_fill_semi_left,
+                title = "Vücut Analizi",
+                onClick = onClickShortcut
+            )
 
-            item {
-                ShortcutCardBox(
-                    Modifier,
-                    leftRes = Res.drawable.logo_skyfit,
-                    rightRes = Res.drawable.compose_multiplatform,
-                    title = "Beslenme Raporu",
-                    onClick = onClickShortcut
-                )
-            }
+            ShortcutCardBox(
+                Modifier.weight(1f),
+                leftRes = Res.drawable.chatbot_shortcut_meal_report_left,
+                rightRes = Res.drawable.carbon_report_semi_left,
+                title = "Beslenme Raporu",
+                onClick = onClickShortcut
+            )
         }
 
 
@@ -259,12 +257,12 @@ private fun MobileUserChatBotScreenChatHistoryItemComponent(text: String, onClic
     Row(
         Modifier
             .fillMaxWidth()
-            .background(SkyFitColor.background.fillTransparent, RoundedCornerShape(30.dp))
+            .background(SkyFitColor.background.fillTransparentActive, RoundedCornerShape(20.dp))
             .clickable(onClick = onClick)
             .padding(16.dp)
     ) {
         Icon(
-            painter = painterResource(Res.drawable.logo_skyfit),
+            painter = painterResource(Res.drawable.ic_lightning),
             contentDescription = null,
             modifier = Modifier.size(16.dp)
         )
@@ -311,7 +309,7 @@ fun ShortcutCardBox(
     onClick: () -> Unit
 ) {
     Card(
-        modifier = modifier.size(180.dp).clickable(onClick = onClick),
+        modifier = modifier.aspectRatio(1f).clickable(onClick = onClick),
         shape = RoundedCornerShape(20),
         backgroundColor = SkyFitColor.specialty.buttonBgRest
     ) {

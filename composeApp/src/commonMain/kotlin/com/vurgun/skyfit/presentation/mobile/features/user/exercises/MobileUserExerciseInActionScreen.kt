@@ -537,7 +537,7 @@ private fun MusicProgressIconButton(
     Box(
         modifier = modifier
             .size(48.dp)
-            .background(SkyFitColor.background.surfaceSemiTransparent, shape = RoundedCornerShape(16.dp))
+            .background(SkyFitColor.background.fillSemiTransparent, shape = RoundedCornerShape(16.dp))
             .clickable(onClick = onClick),
         contentAlignment = Alignment.Center
     ) {
@@ -553,7 +553,7 @@ private fun MusicProgressIconButton(
 
             // Background rounded rectangle (keeps everything inside)
             drawRoundRect(
-                color = SkyFitColor.background.surfaceSemiTransparent,
+                color = SkyFitColor.background.fillSemiTransparent,
                 size = rectSize,
                 cornerRadius = CornerRadius(cornerRadius, cornerRadius),
                 topLeft = Offset(padding, padding)

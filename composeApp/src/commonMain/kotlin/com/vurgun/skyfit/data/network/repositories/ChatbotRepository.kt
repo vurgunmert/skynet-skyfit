@@ -3,7 +3,7 @@ package com.vurgun.skyfit.data.network.repositories
 import com.vurgun.skyfit.data.network.api.commonHttpClient
 import com.vurgun.skyfit.data.network.models.ChatbotRequest
 import com.vurgun.skyfit.data.network.models.ChatbotResponse
-import com.vurgun.skyfit.domain.usecase.ChatbotQueryUseCase
+import com.vurgun.skyfit.domain.usecase.ChatbotApiUseCase
 import io.ktor.client.call.body
 import io.ktor.client.request.header
 import io.ktor.client.request.post
@@ -11,7 +11,7 @@ import io.ktor.client.request.setBody
 import io.ktor.http.ContentType
 import io.ktor.http.contentType
 
-class ChatbotRepository : ChatbotQueryUseCase {
+class ChatbotRepository : ChatbotApiUseCase {
 
     //TODO: Secure Keys
     private val apiUrl = "https://bgmh4dsb.rpcld.net/api/v1/prediction/d50d5475-79ac-4e41-8fc5-89f5315b64fe"

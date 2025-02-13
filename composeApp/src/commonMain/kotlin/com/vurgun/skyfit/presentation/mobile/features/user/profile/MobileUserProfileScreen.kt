@@ -33,7 +33,6 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Icon
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
-import androidx.compose.material.TextField
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material.icons.filled.Star
@@ -426,7 +425,7 @@ private fun MobileUserProfileDietGoalItemComponent() {
 private fun MobileUserProfileDietGoalsEmptyComponent(onClickAdd: () -> Unit) {
     Column(
         Modifier.fillMaxWidth()
-            .background(SkyFitColor.background.surfaceSemiTransparent)
+            .background(SkyFitColor.background.fillSemiTransparent)
             .padding(16.dp)
     ) {
 
@@ -546,7 +545,7 @@ fun StatisticCard(title: String, value: String, unit: String, color: Color, icon
 fun MobileUserProfileExerciseHistoryComponent(exercises: List<Any>) {
     Column(
         Modifier.fillMaxWidth()
-            .background(SkyFitColor.background.surfaceSemiTransparent)
+            .background(SkyFitColor.background.fillSemiTransparent)
             .padding(16.dp)
     ) {
 
@@ -716,7 +715,7 @@ private fun MobileUserProfilePhotoDiaryEmptyComponent(onClickAdd: () -> Unit) {
 fun MobileUserProfileHabitsComponent(habits: List<Any>) {
     Column(
         Modifier.fillMaxWidth()
-            .background(SkyFitColor.background.surfaceSemiTransparent)
+            .background(SkyFitColor.background.fillTransparent)
             .padding(16.dp)
     ) {
 

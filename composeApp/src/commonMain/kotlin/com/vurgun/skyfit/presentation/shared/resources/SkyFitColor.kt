@@ -11,7 +11,6 @@ object SkyFitColor {
         val inverse = Color(0xFFEBF9FF)  // bg-inverse
         val surface = Color(0xFF013B46)  // bg-surface
         val surfaceOpalTransparent = Color(0xFF012E36).copy(alpha = 0.02f)  // bg-surface-hover
-        val surfaceSemiTransparent = Color(0xFF012E36).copy(alpha = 0.05f)  // bg-surface-hover
         val surfaceHover = Color(0xFF012E36)  // bg-surface-hover
         val surfaceActive = Color(0xFF01272F)  // bg-surface-active
         val surfaceSelected = Color(0xFF012127)  // bg-surface-selected
@@ -42,6 +41,8 @@ object SkyFitColor {
         val surfaceCritical = Color(0xFF8E1F0B)  // bg-surface-critical
         val surfaceCriticalHover = Color(0xFF5F1507)  // bg-surface-critical-hover
         val surfaceCriticalActive = Color(0xFF2F0A04)  // bg-surface-critical-active
+        val fillSemiTransparent = Color(0xFF012E36).copy(alpha = 0.5f)  // bg-surface-hover
+        val fillTransparentBlur = Color(0xFF00171C).copy(alpha = 0.7f)  // bg-fill-transparent
         val fillTransparent = Color(0xFFBCEFFF).copy(alpha = 0.03f)  // bg-fill-transparent
         val fillTransparentHover = Color(0xFFBCEFFF).copy(alpha = 0.05f)  // bg-fill-transparent-hover
         val fillTransparentActive = Color(0xFFBCEFFF).copy(alpha = 0.07f)  // bg-fill-transparent-active

@@ -99,7 +99,7 @@ private fun MobileExploreUserChallengeItemComponent() {
         Row(
             Modifier.align(Alignment.BottomStart)
                 .fillMaxWidth()
-                .background(SkyFitColor.background.surfaceSemiTransparent, RoundedCornerShape(16.dp))
+                .background(SkyFitColor.background.fillSemiTransparent, RoundedCornerShape(16.dp))
                 .padding(16.dp)
         ) {
             Text("10,000 Steps a Day Challenge")
@@ -141,7 +141,7 @@ private fun MobileExploreActiveChallengeItemComponent() {
         Column(
             Modifier.align(Alignment.BottomStart)
                 .fillMaxWidth()
-                .background(SkyFitColor.background.surfaceSemiTransparent, RoundedCornerShape(16.dp))
+                .background(SkyFitColor.background.fillSemiTransparent, RoundedCornerShape(16.dp))
                 .padding(16.dp)
         ) {
             Text("7 Günlük Esneklik Geliştirme", style = SkyFitTypography.bodyLargeSemibold)
