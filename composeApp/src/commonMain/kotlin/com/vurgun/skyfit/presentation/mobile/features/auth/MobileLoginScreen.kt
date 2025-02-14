@@ -1,13 +1,18 @@
 package com.vurgun.skyfit.presentation.mobile.features.auth
 
+import androidx.compose.animation.core.FastOutSlowInEasing
+import androidx.compose.animation.core.animateDpAsState
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
@@ -17,6 +22,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
 import com.vurgun.skyfit.presentation.mobile.resources.MobileStyleGuide
 import com.vurgun.skyfit.presentation.shared.components.ButtonSize
@@ -32,6 +38,7 @@ import com.vurgun.skyfit.presentation.shared.navigation.jumpAndStay
 import com.vurgun.skyfit.presentation.shared.navigation.jumpAndTakeover
 import com.vurgun.skyfit.presentation.shared.resources.SkyFitColor
 import com.vurgun.skyfit.presentation.shared.resources.SkyFitTypography
+import com.vurgun.skyfit.utils.keyboardAsState
 import moe.tlaster.precompose.navigation.Navigator
 import org.jetbrains.compose.resources.painterResource
 import skyfit.composeapp.generated.resources.Res
@@ -39,17 +46,25 @@ import skyfit.composeapp.generated.resources.ic_apple
 import skyfit.composeapp.generated.resources.ic_envelope_closed
 import skyfit.composeapp.generated.resources.ic_facebook_fill
 import skyfit.composeapp.generated.resources.ic_google
-import skyfit.composeapp.generated.resources.logo_skyfit
 
 @Composable
 fun MobileLoginScreen(navigator: Navigator) {
 
+    val keyboardState by keyboardAsState()
+
+    val animatedBottomOffset by animateDpAsState(
+        targetValue = keyboardState.heightDp,
+        animationSpec = tween(durationMillis = 600, easing = FastOutSlowInEasing)
+    )
+
     SkyFitScaffold {
         Column(
             modifier = Modifier
-                .widthIn(max = MobileStyleGuide.screenWithMax)
                 .padding(MobileStyleGuide.padding24)
-                .verticalScroll(rememberScrollState()),
+                .widthIn(max = MobileStyleGuide.screenWithMax)
+                .verticalScroll(rememberScrollState())
+                .padding(bottom = animatedBottomOffset)
+                .imePadding(),
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {
             SkyFitLogoComponent()
@@ -57,9 +72,18 @@ fun MobileLoginScreen(navigator: Navigator) {
             MobileLoginScreenTitle()
             Spacer(Modifier.height(48.dp))
             MobileLoginInputGroupComponent(
-                onLoginGoogle = {},
-                onLoginFacebook = {},
-                onLoginApple = {},
+                onLoginGoogle = {
+                    navigator.jumpAndTakeover(SkyFitNavigationRoute.Login, SkyFitNavigationRoute.Dashboard)
+                },
+                onLoginFacebook = {
+                    navigator.jumpAndTakeover(SkyFitNavigationRoute.Login, SkyFitNavigationRoute.Dashboard)
+                },
+                onLoginApple = {
+                    navigator.jumpAndTakeover(SkyFitNavigationRoute.Login, SkyFitNavigationRoute.Dashboard)
+                },
+                onLoginCredentials = {
+                    navigator.jumpAndTakeover(SkyFitNavigationRoute.Login, SkyFitNavigationRoute.Dashboard)
+                },
                 onForgotPassword = {
                     navigator.jumpAndStay(SkyFitNavigationRoute.ForgotPassword)
                 }
@@ -90,6 +114,7 @@ private fun MobileLoginInputGroupComponent(
     onLoginGoogle: () -> Unit,
     onLoginFacebook: () -> Unit,
     onLoginApple: () -> Unit,
+    onLoginCredentials: () -> Unit,
     onForgotPassword: () -> Unit
 ) {
 
@@ -150,6 +175,8 @@ private fun MobileLoginInputGroupComponent(
     SkyFitPasswordInputComponent(
         hint = "Şifrenizi girin",
         value = password,
+        keyboardOptions = KeyboardOptions.Default.copy(imeAction = ImeAction.Go),
+        onKeyboardGoAction = onLoginCredentials,
         onValueChange = { password = it }
     )
 

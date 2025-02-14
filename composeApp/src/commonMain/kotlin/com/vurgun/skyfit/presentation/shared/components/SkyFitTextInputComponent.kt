@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.text.BasicTextField
+import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.Icon
 import androidx.compose.material.Text
@@ -39,6 +40,7 @@ fun SkyFitTextInputComponent(
     isEnabled: Boolean = true,
     focusRequester: FocusRequester = FocusRequester(),
     keyboardOptions: KeyboardOptions = KeyboardOptions.Default.copy(imeAction = ImeAction.Next),
+    onKeyboardGoAction: () -> Unit = {},
     modifier: Modifier = Modifier
 ) {
 
@@ -73,6 +75,7 @@ fun SkyFitTextInputComponent(
                 singleLine = true,
                 visualTransformation = VisualTransformation.None,
                 keyboardOptions = keyboardOptions,
+                keyboardActions = KeyboardActions(onGo = { onKeyboardGoAction() }),
                 decorationBox = { innerTextField ->
                     if (value.isNullOrBlank()) {
                         Text(text = hint, color = SkyFitColor.text.default)

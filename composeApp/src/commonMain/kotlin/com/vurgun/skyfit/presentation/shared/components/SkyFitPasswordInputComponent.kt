@@ -1,6 +1,7 @@
 package com.vurgun.skyfit.presentation.shared.components
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -11,8 +12,9 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.text.BasicTextField
+import androidx.compose.foundation.text.KeyboardActions
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.Icon
-import androidx.compose.material.LocalTextStyle
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -20,7 +22,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
@@ -31,16 +33,17 @@ import skyfit.composeapp.generated.resources.Res
 import skyfit.composeapp.generated.resources.ic_lock
 import skyfit.composeapp.generated.resources.ic_visibility_hide
 import skyfit.composeapp.generated.resources.ic_visibility_show
-import skyfit.composeapp.generated.resources.logo_skyfit
 
 @Composable
 fun SkyFitPasswordInputComponent(
     hint: String,
     value: String? = null,
     error: String? = null,
+    keyboardOptions: KeyboardOptions = KeyboardOptions.Default.copy(imeAction = ImeAction.Next),
+    onKeyboardGoAction: () -> Unit = {},
     onValueChange: ((String) -> Unit)? = null
 ) {
-    var isPasswordVisible by remember { mutableStateOf(true) }
+    var isPasswordVisible by remember { mutableStateOf(false) }
 
     val backgroundColor = error?.let { SkyFitColor.background.surfaceCriticalActive } ?: SkyFitColor.background.surfaceSecondary
 
@@ -64,12 +67,14 @@ fun SkyFitPasswordInputComponent(
             BasicTextField(
                 value = value.orEmpty(),
                 onValueChange = { onValueChange?.invoke(it) },
-                textStyle = LocalTextStyle.current.copy(color = Color.White),
+                textStyle = SkyFitTypography.bodyMediumRegular,
                 modifier = Modifier
                     .weight(1f)
                     .padding(horizontal = 4.dp),
                 singleLine = true,
                 visualTransformation = if (isPasswordVisible) VisualTransformation.None else PasswordVisualTransformation(),
+                keyboardOptions = keyboardOptions,
+                keyboardActions = KeyboardActions(onGo = { onKeyboardGoAction() }),
                 decorationBox = { innerTextField ->
                     if (value.isNullOrEmpty()) {
                         Text(text = hint, style = SkyFitTypography.bodyMediumRegular.copy(color = SkyFitColor.text.secondary))
@@ -80,9 +85,11 @@ fun SkyFitPasswordInputComponent(
 
             Spacer(Modifier.width(8.dp))
             Icon(
-                painter = painterResource(Res.drawable.ic_visibility_show),
+                painter = painterResource(if (isPasswordVisible) Res.drawable.ic_visibility_hide else Res.drawable.ic_visibility_show),
                 contentDescription = null,
-                modifier = Modifier.size(16.dp),
+                modifier = Modifier.size(16.dp).clickable {
+                    isPasswordVisible = !isPasswordVisible
+                },
                 tint = SkyFitColor.icon.default
             )
         }
