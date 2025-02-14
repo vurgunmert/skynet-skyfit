@@ -24,29 +24,46 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import coil3.compose.AsyncImage
 import com.vurgun.skyfit.presentation.shared.components.ButtonSize
 import com.vurgun.skyfit.presentation.shared.components.ButtonState
 import com.vurgun.skyfit.presentation.shared.components.ButtonVariant
 import com.vurgun.skyfit.presentation.shared.components.SkyFitButtonComponent
 import com.vurgun.skyfit.presentation.shared.components.SkyFitScaffold
+import com.vurgun.skyfit.presentation.shared.features.profile.RatingStarComponent
+import com.vurgun.skyfit.presentation.shared.navigation.SkyFitNavigationRoute
+import com.vurgun.skyfit.presentation.shared.navigation.jumpAndStay
 import com.vurgun.skyfit.presentation.shared.resources.SkyFitColor
 import com.vurgun.skyfit.presentation.shared.resources.SkyFitTypography
 import moe.tlaster.precompose.navigation.Navigator
 import org.jetbrains.compose.resources.painterResource
 import skyfit.composeapp.generated.resources.Res
-import skyfit.composeapp.generated.resources.logo_skyfit
+import skyfit.composeapp.generated.resources.ic_chevron_left
 
 @Composable
 fun MobileUserExerciseDetailScreen(navigator: Navigator) {
 
-    SkyFitScaffold {
-
-        BoxWithConstraints(modifier = Modifier.fillMaxSize()) {
+    SkyFitScaffold(
+        bottomBar = {
+            SkyFitButtonComponent(
+                modifier = Modifier.padding(24.dp).fillMaxWidth(),
+                text = "Başla",
+                onClick = { navigator.jumpAndStay(SkyFitNavigationRoute.UserExerciseInAction) },
+                variant = ButtonVariant.Primary,
+                size = ButtonSize.Large,
+                state = ButtonState.Rest
+            )
+        }
+    ) {
+        BoxWithConstraints(
+            modifier = Modifier.fillMaxSize()
+                .verticalScroll(rememberScrollState())
+        ) {
             val width = maxWidth
             val imageHeight = width * 0.686f
 
-            Image(
-                painter = painterResource(Res.drawable.logo_skyfit),
+            AsyncImage(
+                model = "https://ik.imagekit.io/skynet2skyfit/exercise_detail_header_fake.png?updatedAt=1739507110520",
                 contentDescription = null,
                 modifier = Modifier.size(width, imageHeight)
             )
@@ -57,7 +74,6 @@ fun MobileUserExerciseDetailScreen(navigator: Navigator) {
                 modifier = Modifier
                     .fillMaxSize()
                     .padding(horizontal = 22.dp)
-                    .verticalScroll(rememberScrollState())
             ) {
                 Spacer(Modifier.height(contentTopPadding))
                 MobileExerciseActionDetailScreenInfoComponent()
@@ -68,15 +84,23 @@ fun MobileUserExerciseDetailScreen(navigator: Navigator) {
                 Spacer(Modifier.height(16.dp))
                 MobileExerciseActionDetailScreenWorkoutInsightsComponent()
             }
+
+            MobileExerciseActionDetailScreenToolbarComponent(
+                modifier = Modifier.align(Alignment.TopStart),
+                onClickBack = { navigator.popBackStack() }
+            )
         }
     }
 }
 
 @Composable
-private fun MobileExerciseActionDetailScreenToolbarComponent(onClickBack: () -> Unit) {
-    Row(Modifier.fillMaxWidth().height(40.dp).padding(horizontal = 24.dp, vertical = 8.dp)) {
+private fun MobileExerciseActionDetailScreenToolbarComponent(
+    modifier: Modifier,
+    onClickBack: () -> Unit
+) {
+    Row(modifier.fillMaxWidth().height(40.dp).padding(horizontal = 24.dp, vertical = 8.dp)) {
         Image(
-            painter = painterResource(Res.drawable.logo_skyfit),
+            painter = painterResource(Res.drawable.ic_chevron_left),
             contentDescription = null,
             modifier = Modifier.size(24.dp).clickable(onClick = onClickBack)
         )
@@ -126,30 +150,25 @@ private fun MobileExerciseActionDetailScreenInfoComponent() {
 
 @Composable
 private fun MobileExerciseActionDetailScreenCategoryComponent() {
-    Row(Modifier.fillMaxWidth().height(56.dp)) {
+    Row(
+        Modifier.fillMaxWidth().padding(8.dp),
+        verticalAlignment = Alignment.CenterVertically
+    ) {
         SkyFitButtonComponent(
             modifier = Modifier.wrapContentWidth(), text = "Beginner",
             onClick = { },
             variant = ButtonVariant.Secondary,
-            size = ButtonSize.Large,
-            state = ButtonState.Rest
+            size = ButtonSize.Micro
         )
 
         SkyFitButtonComponent(
             modifier = Modifier.wrapContentWidth(), text = "Abs",
             onClick = { },
             variant = ButtonVariant.Secondary,
-            size = ButtonSize.Large,
-            state = ButtonState.Rest
+            size = ButtonSize.Micro
         )
-
-        SkyFitButtonComponent(
-            modifier = Modifier.wrapContentWidth(), text = "4.8*",
-            onClick = { },
-            variant = ButtonVariant.Secondary,
-            size = ButtonSize.Large,
-            state = ButtonState.Rest
-        )
+        Spacer(Modifier.weight(1f))
+        RatingStarComponent(4.8, Modifier.wrapContentWidth())
     }
 }
 

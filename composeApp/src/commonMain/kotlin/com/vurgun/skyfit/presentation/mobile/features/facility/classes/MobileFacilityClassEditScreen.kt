@@ -1,6 +1,5 @@
 package com.vurgun.skyfit.presentation.mobile.features.facility.classes
 
-import DatePicker
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -68,6 +67,7 @@ import com.vurgun.skyfit.presentation.shared.components.SkyFitTextInputComponent
 import com.vurgun.skyfit.presentation.shared.resources.SkyFitColor
 import com.vurgun.skyfit.presentation.shared.resources.SkyFitIcon
 import com.vurgun.skyfit.presentation.shared.resources.SkyFitTypography
+import cz.kudladev.DatePicker
 import kotlinx.datetime.LocalDate
 import moe.tlaster.precompose.navigation.Navigator
 import org.jetbrains.compose.resources.painterResource

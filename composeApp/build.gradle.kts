@@ -67,11 +67,11 @@ kotlin {
             implementation(compose.components.resources)
 
             // Compose Components
+            implementation("cz.kudladev:datetimepicker-kmp:1.0.7")
 
             // Kotlinx
             implementation(libs.kotlinx.serialization)
             implementation(libs.kotlinx.datetime)
-            implementation("cz.kudladev:datetimepicker-kmp:1.0.5")
 
             // Koin for dependency injection
             implementation(libs.koin.core)
@@ -90,6 +90,8 @@ kotlin {
             // Coil for image loading
             implementation(libs.coil.compose)
             implementation(libs.coil.network.ktor)
+            implementation("network.chaintech:compose-multiplatform-media-player:1.0.30")
+
 
             // AndroidX Lifecycle libraries
             implementation(libs.androidx.lifecycle.viewmodel)
@@ -107,10 +109,15 @@ kotlin {
             implementation(libs.androidx.activity.compose)
             implementation(libs.gitlive.firebase.auth)
             implementation(libs.ktor.client.okhttp)
+
+            implementation("cz.kudladev:datetimepicker-kmp:1.0.7")
+            implementation ("app.rive:rive-android:9.6.5")
+            implementation ("androidx.startup:startup-runtime:1.2.0")
         }
 
         iosMain.dependencies {
             implementation(libs.ktor.client.darwin)
+            implementation("cz.kudladev:datetimepicker-kmp:1.0.7")
         }
 
         // Desktop-specific source set
@@ -119,12 +126,14 @@ kotlin {
                 implementation(compose.desktop.currentOs)
                 implementation(libs.kotlinx.coroutines.swing)
                 implementation(libs.ktor.client.cio)
+                implementation("cz.kudladev:datetimepicker-kmp:1.0.5")
             }
         }
 
         // JavaScript (WASM)-specific source set
         wasmJsMain.dependencies {
 //            implementation(libs.gitlive.firebase.auth)
+            implementation("cz.kudladev:datetimepicker-kmp:1.0.5")
         }
     }
 }

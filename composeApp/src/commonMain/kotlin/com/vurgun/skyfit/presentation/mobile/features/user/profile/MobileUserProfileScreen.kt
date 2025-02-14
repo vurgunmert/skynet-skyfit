@@ -472,7 +472,7 @@ fun MobileUserProfileAppointmentsComponent(appointments: List<SkyFitClassCalenda
         appointments.forEach {
             SkyFitProfileClassItemComponent(
                 item = it,
-                onClick = {}
+                onClick = onClick
             )
         }
     }

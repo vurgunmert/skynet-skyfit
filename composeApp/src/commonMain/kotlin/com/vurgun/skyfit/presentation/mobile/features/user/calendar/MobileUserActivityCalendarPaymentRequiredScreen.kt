@@ -53,7 +53,7 @@ private fun MobileUserActivityCalendarPaymentRequiredComponent(
     onClickCancel: () -> Unit
 ) {
     val appointmentCardItem = AppointmentCardViewData(
-        iconUrl = "TODO()",
+        iconId = "TODO()",
         title = "Shoulders and Abs",
         date = "30/11/2024",
         hours = "08:00 - 09:00",

@@ -15,6 +15,7 @@ import com.vurgun.skyfit.presentation.shared.resources.SkyFitColor
 import com.vurgun.skyfit.presentation.shared.resources.SkyFitTypography
 import org.jetbrains.compose.resources.painterResource
 import skyfit.composeapp.generated.resources.Res
+import skyfit.composeapp.generated.resources.ic_chevron_left
 import skyfit.composeapp.generated.resources.logo_skyfit
 
 @Composable
@@ -34,7 +35,7 @@ fun SkyFitScreenHeader(
                 .align(Alignment.CenterStart)
         ) {
             Icon(
-                painter = painterResource(Res.drawable.logo_skyfit),
+                painter = painterResource(Res.drawable.ic_chevron_left),
                 contentDescription = "Back",
                 tint = SkyFitColor.text.default,
                 modifier = Modifier.size(16.dp)

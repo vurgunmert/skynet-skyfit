@@ -16,6 +16,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Icon
 import androidx.compose.material.Scaffold
@@ -40,6 +41,8 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import com.vurgun.skyfit.presentation.shared.components.SkyFitBadgeTabBarComponent
 import com.vurgun.skyfit.presentation.shared.components.SkyFitScreenHeader
+import com.vurgun.skyfit.presentation.shared.navigation.SkyFitNavigationRoute
+import com.vurgun.skyfit.presentation.shared.navigation.jumpAndStay
 import com.vurgun.skyfit.presentation.shared.resources.SkyFitColor
 import com.vurgun.skyfit.presentation.shared.resources.SkyFitIcon
 import com.vurgun.skyfit.presentation.shared.resources.SkyFitTypography
@@ -48,6 +51,13 @@ import moe.tlaster.precompose.navigation.Navigator
 import org.jetbrains.compose.resources.painterResource
 import org.koin.compose.koinInject
 import skyfit.composeapp.generated.resources.Res
+import skyfit.composeapp.generated.resources.ic_clock
+import skyfit.composeapp.generated.resources.ic_dashboard
+import skyfit.composeapp.generated.resources.ic_exercises
+import skyfit.composeapp.generated.resources.ic_lira
+import skyfit.composeapp.generated.resources.ic_location_pin
+import skyfit.composeapp.generated.resources.ic_posture
+import skyfit.composeapp.generated.resources.ic_profile_fill
 import skyfit.composeapp.generated.resources.logo_skyfit
 
 @Composable
@@ -92,6 +102,7 @@ fun MobileUserAppointmentsScreen(navigator: Navigator) {
                 BookedAppointmentCardItemComponent(
                     item = appointment,
                     modifier = Modifier.fillMaxWidth(),
+                    onClick = { navigator.jumpAndStay(SkyFitNavigationRoute.UserAppointmentDetail) },
                     onDeleteClick = {
                         appointmentToDelete = appointment
                         showDeleteDialog = true
@@ -129,19 +140,21 @@ fun MobileUserAppointmentsScreen(navigator: Navigator) {
 fun BookedAppointmentCardItemComponent(
     item: AppointmentCardViewData,
     modifier: Modifier = Modifier,
+    onClick: (() -> Unit)? = null,
     onDeleteClick: (() -> Unit)? = null
 ) {
     Column(
         modifier
             .fillMaxWidth()
             .background(SkyFitColor.background.fillTransparentSecondary, RoundedCornerShape(16.dp))
+            .clickable { onClick?.invoke() }
             .padding(12.dp)
     ) {
         // Title Row: Icon + Title + Date + Status/Delete
         Row(Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
             // Exercise Icon
             Icon(
-                painter = painterResource(SkyFitIcon.getIconResource("barbell") ?: Res.drawable.logo_skyfit),
+                painter = SkyFitIcon.getIconResourcePainter(item.iconId, defaultRes = Res.drawable.ic_exercises),
                 contentDescription = item.title,
                 tint = SkyFitColor.icon.default,
                 modifier = Modifier.size(24.dp)
@@ -166,14 +179,19 @@ fun BookedAppointmentCardItemComponent(
             Spacer(Modifier.width(8.dp))
             // Status OR Delete Icon
             if (item.status == "Planlanan") {
-                Icon(
-                    imageVector = Icons.Default.Delete,
-                    contentDescription = "Delete",
-                    tint = Color.Red,
-                    modifier = Modifier
-                        .size(20.dp)
-                        .clickable { onDeleteClick?.invoke() }
-                )
+                Box(
+                    Modifier.size(32.dp).border(1.dp, SkyFitColor.border.critical, CircleShape),
+                    contentAlignment = Alignment.Center
+                ) {
+                    Icon(
+                        imageVector = Icons.Default.Delete,
+                        contentDescription = "Delete",
+                        tint = Color.Red,
+                        modifier = Modifier
+                            .size(20.dp)
+                            .clickable { onDeleteClick?.invoke() }
+                    )
+                }
             } else {
                 Text(
                     text = item.status ?: "",
@@ -192,27 +210,51 @@ fun BookedAppointmentCardItemComponent(
 
         // Time & Category
         Row(Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
-            AppointmentSingleDataBoxComponent(item.hours, modifier = Modifier.weight(1f))
+            AppointmentSingleDataBoxComponent(
+                text = item.hours,
+                iconRes = Res.drawable.ic_clock,
+                modifier = Modifier.weight(1f)
+            )
             Spacer(Modifier.width(8.dp))
-            AppointmentSingleDataBoxComponent(item.category, modifier = Modifier.weight(1f))
+            AppointmentSingleDataBoxComponent(
+                item.category,
+                iconRes = Res.drawable.ic_dashboard,
+                modifier = Modifier.weight(1f)
+            )
         }
 
         Spacer(Modifier.height(8.dp))
 
         // Location & Trainer
         Row {
-            AppointmentSingleDataBoxComponent(item.location, modifier = Modifier.weight(1f))
+            AppointmentSingleDataBoxComponent(
+                text = item.location,
+                iconRes = Res.drawable.ic_location_pin,
+                modifier = Modifier.weight(1f)
+            )
             Spacer(Modifier.width(8.dp))
-            AppointmentSingleDataBoxComponent(item.trainer, modifier = Modifier.weight(1f))
+            AppointmentSingleDataBoxComponent(
+                item.trainer,
+                iconRes = Res.drawable.ic_profile_fill,
+                modifier = Modifier.weight(1f)
+            )
         }
 
         // Capacity & Cost
         if (item.capacity != null && item.cost != null) {
             Spacer(Modifier.height(8.dp))
             Row {
-                AppointmentSingleDataBoxComponent(item.capacity, modifier = Modifier.weight(1f))
+                AppointmentSingleDataBoxComponent(
+                    item.capacity,
+                    iconRes = Res.drawable.ic_posture,
+                    modifier = Modifier.weight(1f)
+                )
                 Spacer(Modifier.width(8.dp))
-                AppointmentSingleDataBoxComponent(item.cost, modifier = Modifier.weight(1f))
+                AppointmentSingleDataBoxComponent(
+                    item.cost,
+                    iconRes = Res.drawable.ic_lira,
+                    modifier = Modifier.weight(1f)
+                )
             }
         }
 

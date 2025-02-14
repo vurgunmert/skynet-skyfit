@@ -24,11 +24,12 @@ import skyfit.composeapp.generated.resources.logo_skyfit
 fun SkyFitIconButton(
     painter: Painter = painterResource(Res.drawable.logo_skyfit),
     modifier: Modifier = Modifier,
+    color: Color = SkyFitColor.background.surfaceSecondary,
     onClick: () -> Unit = {}
 ) {
     Box(
         modifier
-            .background(SkyFitColor.background.surfaceSecondary, shape = CircleShape)
+            .background(color, shape = CircleShape)
             .clickable(onClick = onClick),
         contentAlignment = Alignment.Center
     ) {

@@ -52,6 +52,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil3.compose.AsyncImage
+import com.vurgun.skyfit.presentation.expected.UserCharacterComponent
 import com.vurgun.skyfit.presentation.mobile.features.trainer.home.MemberChangeLineChart
 import com.vurgun.skyfit.presentation.mobile.features.user.calendar.MobileUserActivityHourlyCalendarComponent
 import com.vurgun.skyfit.presentation.mobile.features.user.profile.MobileUserTrophyItemComponent
@@ -62,13 +63,20 @@ import com.vurgun.skyfit.presentation.shared.components.ButtonVariant
 import com.vurgun.skyfit.presentation.shared.components.SkyFitButtonComponent
 import com.vurgun.skyfit.presentation.shared.components.SkyFitCircularProgressIconButton
 import com.vurgun.skyfit.presentation.shared.components.SkyFitColoredCalendarComponent
-import com.vurgun.skyfit.presentation.shared.components.SkyFitImageComponent
 import com.vurgun.skyfit.presentation.shared.components.SkyFitListItemCardComponent
 import com.vurgun.skyfit.presentation.shared.components.SkyFitMonthPickerDropdownComponent
 import com.vurgun.skyfit.presentation.shared.resources.SkyFitColor
 import com.vurgun.skyfit.presentation.shared.resources.SkyFitTypography
 import org.jetbrains.compose.resources.painterResource
 import skyfit.composeapp.generated.resources.Res
+import skyfit.composeapp.generated.resources.ic_bell
+import skyfit.composeapp.generated.resources.ic_calories
+import skyfit.composeapp.generated.resources.ic_chat
+import skyfit.composeapp.generated.resources.ic_clock
+import skyfit.composeapp.generated.resources.ic_exercises
+import skyfit.composeapp.generated.resources.ic_path_distance
+import skyfit.composeapp.generated.resources.ic_steps
+import skyfit.composeapp.generated.resources.ic_water
 import skyfit.composeapp.generated.resources.logo_skyfit
 
 @Composable
@@ -83,14 +91,14 @@ fun MobileDashboardHomeToolbarComponent(
         horizontalArrangement = Arrangement.End
     ) {
         Icon(
-            painter = painterResource(Res.drawable.logo_skyfit),
+            painter = painterResource(Res.drawable.ic_bell),
             contentDescription = null,
             tint = SkyFitColor.text.default,
             modifier = Modifier.size(20.dp).clickable(onClick = onClickNotifications)
         )
         Spacer(Modifier.width(10.dp))
         Icon(
-            painter = painterResource(Res.drawable.logo_skyfit),
+            painter = painterResource(Res.drawable.ic_chat),
             contentDescription = null,
             tint = SkyFitColor.text.default,
             modifier = Modifier.size(20.dp).clickable(onClick = onClickMessages)
@@ -114,43 +122,40 @@ fun MobileDashboardHomeCharacterProgressComponent(
             .fillMaxWidth()
             .padding(horizontal = 16.dp, vertical = 24.dp)
     ) {
-        SkyFitImageComponent(
-            url = characterImageUrl,
-            modifier = Modifier.align(Alignment.Center).size(240.dp)
-        )
+        UserCharacterComponent(Modifier.align(Alignment.Center))
 
         SkyFitCircularProgressIconButton(
-            painter = painterResource(Res.drawable.logo_skyfit),
+            painter = painterResource(Res.drawable.ic_steps),
             progress = stepProgress,
             modifier = Modifier.align(Alignment.TopStart)
         )
 
         SkyFitCircularProgressIconButton(
-            painter = painterResource(Res.drawable.logo_skyfit),
+            painter = painterResource(Res.drawable.ic_path_distance),
             progress = distanceProgress,
             modifier = Modifier.align(Alignment.CenterStart)
         )
 
         SkyFitCircularProgressIconButton(
-            painter = painterResource(Res.drawable.logo_skyfit),
+            painter = painterResource(Res.drawable.ic_calories),
             progress = waterProgress,
             modifier = Modifier.align(Alignment.BottomStart)
         )
 
         SkyFitCircularProgressIconButton(
-            painter = painterResource(Res.drawable.logo_skyfit),
+            painter = painterResource(Res.drawable.ic_water),
             progress = exerciseProgress,
             modifier = Modifier.align(Alignment.TopEnd)
         )
 
         SkyFitCircularProgressIconButton(
-            painter = painterResource(Res.drawable.logo_skyfit),
+            painter = painterResource(Res.drawable.ic_clock),
             progress = calorieProgress,
             modifier = Modifier.align(Alignment.CenterEnd)
         )
 
         SkyFitCircularProgressIconButton(
-            painter = painterResource(Res.drawable.logo_skyfit),
+            painter = painterResource(Res.drawable.ic_exercises),
             progress = activityProgress,
             modifier = Modifier.align(Alignment.BottomEnd)
         )
@@ -328,6 +333,7 @@ fun MobileDashboardHomeActivityHourlyCalendarComponent(
 ) {
     Column(
         Modifier
+            .padding(horizontal = 16.dp)
             .fillMaxWidth()
             .height(400.dp)
             .padding(horizontal = 16.dp)
@@ -818,7 +824,7 @@ private fun MobileDashboardHomeProgressCard(item: HomeGridProgressItem) {
 private data class HomeGridProgressItem(val icon: ImageVector, val title: String, val value: String)
 
 @Composable
-fun MobileDashboardHomeDailyExerciseGoalsComponent() {
+fun MobileDashboardHomeDailyExerciseGoalsComponent(onClick: () -> Unit) {
     val exerciseGoals = listOf(
         HomeExerciseComponentItem("Üst vücut antrenmanı", "Tamamlandı!", isCompleted = true),
         HomeExerciseComponentItem("Alt vücut antrenmanı", "3 set x 15 tekrar", isCompleted = false),
@@ -828,6 +834,7 @@ fun MobileDashboardHomeDailyExerciseGoalsComponent() {
     Column(
         modifier = Modifier
             .fillMaxWidth()
+            .clickable(onClick = onClick)
             .padding(16.dp),
         verticalArrangement = Arrangement.spacedBy(12.dp)
     ) {
@@ -901,7 +908,7 @@ data class HomeExerciseComponentItem(
 )
 
 @Composable
-fun MobileDashboardHomeMealGoalsComponent() {
+fun MobileDashboardHomeMealGoalsComponent(onClick: () -> Unit) {
     val mealGoals = listOf(
         HomeMealGoal(
             "Yogurt Granola Bowl",
@@ -926,6 +933,7 @@ fun MobileDashboardHomeMealGoalsComponent() {
     Column(
         modifier = Modifier
             .fillMaxWidth()
+            .clickable(onClick = onClick)
             .padding(16.dp),
         verticalArrangement = Arrangement.spacedBy(8.dp)
     ) {
@@ -1003,11 +1011,13 @@ fun MobileDashboardHomeFeaturedExercisesComponent(
         HomeExerciseComponentItem("Alt vücut antrenmanı", "3 set x 15 tekrar"),
         HomeExerciseComponentItem("Karın & Core", "3 set x 1 dakika"),
         HomeExerciseComponentItem("Karın & Core", "3 set x 1 dakika")
-    )
+    ),
+    onClick: () -> Unit
 ) {
     Column(
         modifier = Modifier
             .fillMaxWidth()
+            .clickable(onClick = onClick)
             .padding(16.dp),
         verticalArrangement = Arrangement.spacedBy(8.dp)
     ) {
@@ -1023,7 +1033,7 @@ fun MobileDashboardHomeFeaturedExercisesComponent(
 }
 
 @Composable
-fun MobileDashboardHomeFeaturedTrainersComponent() {
+fun MobileDashboardHomeFeaturedTrainersComponent(onClick: () -> Unit) {
     val featuredTrainers = listOf(
         HomeFeaturedTrainer("Emily Rivera", "https://ik.imagekit.io/skynet2skyfit/avatar_sample.png?updatedAt=1738866499680"),
         HomeFeaturedTrainer("David Thompson", "https://ik.imagekit.io/skynet2skyfit/avatar_sample.png?updatedAt=1738866499680"),
@@ -1033,6 +1043,7 @@ fun MobileDashboardHomeFeaturedTrainersComponent() {
     Column(
         modifier = Modifier
             .fillMaxWidth()
+            .clickable(onClick = onClick)
             .padding(16.dp),
         verticalArrangement = Arrangement.spacedBy(8.dp)
     ) {

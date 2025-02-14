@@ -59,6 +59,10 @@ import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import chaintech.videoplayer.host.VideoPlayerHost
+import chaintech.videoplayer.model.PlayerSpeed
+import chaintech.videoplayer.model.ScreenResize
+import chaintech.videoplayer.ui.video.VideoPlayerComposable
 import coil3.compose.AsyncImage
 import com.vurgun.skyfit.presentation.shared.components.ButtonSize
 import com.vurgun.skyfit.presentation.shared.components.ButtonState
@@ -72,6 +76,13 @@ import com.vurgun.skyfit.presentation.shared.resources.SkyFitTypography
 import moe.tlaster.precompose.navigation.Navigator
 import org.jetbrains.compose.resources.painterResource
 import skyfit.composeapp.generated.resources.Res
+import skyfit.composeapp.generated.resources.ic_chevron_left
+import skyfit.composeapp.generated.resources.ic_chevron_right
+import skyfit.composeapp.generated.resources.ic_close_circle
+import skyfit.composeapp.generated.resources.ic_list
+import skyfit.composeapp.generated.resources.ic_music
+import skyfit.composeapp.generated.resources.ic_pause
+import skyfit.composeapp.generated.resources.ic_trophy
 import skyfit.composeapp.generated.resources.logo_skyfit
 
 private enum class MobileUserExerciseInActionScreenStep {
@@ -87,13 +98,25 @@ fun MobileUserExerciseInActionScreen(navigator: Navigator) {
     val showToolbar: Boolean = true
     var activePage by remember { mutableStateOf(MobileUserExerciseInActionScreenStep.SESSION) }
 
+    val playerHost = remember {
+        VideoPlayerHost(
+            url = "https://ik.imagekit.io/skynet2skyfit/283578378-people-fitness-and-exercise-ju.mp4?updatedAt=1739510522809",
+            isPaused = false,
+            isMuted = true,
+            initialSpeed = PlayerSpeed.X1_5,
+            initialVideoFitMode = ScreenResize.FILL,
+            isLooping = true,
+            startTimeInSeconds = 0
+        )
+    }
+
     Box(Modifier.fillMaxSize()) {
-        MobileUserExerciseInActionGraphicComponent()
+        MobileUserExerciseInActionGraphicComponent(playerHost)
 
         if (showToolbar) {
             MobileUserExerciseInActionScreenToolbarComponent(
-                onClickBack = { },
-                exerciseName = "Ip atlama",
+                onClickBack = { navigator.popBackStack() },
+                exerciseName = "Jumping Jacks",
                 exerciseRepeat = "15x4",
                 remainingTime = "00:12",
                 isBreak = false
@@ -101,18 +124,33 @@ fun MobileUserExerciseInActionScreen(navigator: Navigator) {
         }
 
         Column(modifier = Modifier.fillMaxSize()) {
-
             when (activePage) {
                 MobileUserExerciseInActionScreenStep.SESSION -> {
                     Spacer(Modifier.weight(1f))
-                    MobileUserExerciseInActionScreenActionsComponent()
+                    MobileUserExerciseInActionScreenActionsComponent(
+                        onClickPrevious = {  },
+                        onClickPause = {
+                            playerHost.pause()
+                            activePage = MobileUserExerciseInActionScreenStep.BREAK
+                        },
+                        onClickNext = {
+                            playerHost.pause()
+                            activePage = MobileUserExerciseInActionScreenStep.BREAK
+                        }
+                    )
                 }
 
                 MobileUserExerciseInActionScreenStep.BREAK -> {
                     Spacer(Modifier.height(18.dp))
                     MobileUserExerciseInActionScreenBreakComponent(
-                        onClickPause = {},
-                        onClickSkip = {}
+                        onClickPause = {
+                            playerHost.play()
+                            activePage = MobileUserExerciseInActionScreenStep.SESSION
+                        },
+                        onClickSkip = {
+                            playerHost.pause()
+                            activePage = MobileUserExerciseInActionScreenStep.TROPHY
+                        }
                     )
                 }
 
@@ -135,14 +173,17 @@ fun MobileUserExerciseInActionScreen(navigator: Navigator) {
                     )
                 }
             }
-
         }
     }
 }
 
 @Composable
-private fun MobileUserExerciseInActionGraphicComponent() {
-    Box(Modifier.fillMaxSize().background(Color.LightGray))
+private fun MobileUserExerciseInActionGraphicComponent(playerHost: VideoPlayerHost) {
+
+    VideoPlayerComposable(
+        modifier = Modifier.fillMaxSize(),
+        playerHost = playerHost
+    )
 }
 
 
@@ -150,7 +191,7 @@ private fun MobileUserExerciseInActionGraphicComponent() {
 private fun MobileUserExerciseInActionScreenToolbarBackComponent(onClick: () -> Unit) {
     // Back Button
     Icon(
-        painter = painterResource(Res.drawable.logo_skyfit),
+        painter = painterResource(Res.drawable.ic_chevron_left),
         contentDescription = "Back",
         tint = SkyFitColor.text.default,
         modifier = Modifier
@@ -294,7 +335,7 @@ private fun MobileUserExerciseInActionScreenBreakComponent(
                     )
                     Spacer(Modifier.weight(1f))
                     Icon(
-                        painter = painterResource(Res.drawable.logo_skyfit),
+                        painter = painterResource(Res.drawable.ic_close_circle),
                         contentDescription = "Back",
                         tint = SkyFitColor.text.default,
                         modifier = Modifier.size(24.dp)
@@ -331,8 +372,7 @@ private fun MobileUserExerciseInActionScreenBreakComponent(
                         modifier = Modifier.wrapContentWidth(), text = "Duraklat",
                         onClick = onClickPause,
                         variant = ButtonVariant.Secondary,
-                        size = ButtonSize.Large,
-                        state = ButtonState.Rest
+                        size = ButtonSize.Micro
                     )
                     Spacer(Modifier.width(16.dp))
 
@@ -340,8 +380,7 @@ private fun MobileUserExerciseInActionScreenBreakComponent(
                         modifier = Modifier.wrapContentWidth(), text = "Atla",
                         onClick = onClickSkip,
                         variant = ButtonVariant.Primary,
-                        size = ButtonSize.Large,
-                        state = ButtonState.Rest
+                        size = ButtonSize.Micro
                     )
                 }
 
@@ -372,7 +411,7 @@ private fun MobileUserExerciseInActionScreenBreakComponent(
                             .background(SkyFitColor.background.surfaceSecondaryActive, RoundedCornerShape(16.dp))
                     ) {
                         Icon(
-                            painter = painterResource(Res.drawable.logo_skyfit),
+                            painter = painterResource(Res.drawable.ic_list),
                             contentDescription = "Back",
                             tint = SkyFitColor.text.default,
                             modifier = Modifier.size(24.dp)
@@ -453,10 +492,12 @@ private fun MobileUserExerciseInActionScreenTrophyComponent(
             verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            Box(
-                Modifier
+            AsyncImage(
+                model = "https://ik.imagekit.io/skynet2skyfit/badge_muscle_master.png?updatedAt=1738863832700",
+                contentDescription = null,
+                contentScale = ContentScale.Crop,
+                modifier = Modifier
                     .size(148.dp, 203.dp)
-                    .background(SkyFitColor.background.surfaceDisabled)
             )
             Spacer(Modifier.height(36.dp))
             Text(
@@ -467,16 +508,16 @@ private fun MobileUserExerciseInActionScreenTrophyComponent(
             )
             Spacer(Modifier.height(36.dp))
             SkyFitButtonComponent(
-                modifier = Modifier.fillMaxWidth(), text = "Ödüller",
+                modifier = Modifier.wrapContentWidth(), text = "Ödüller",
                 onClick = onClickTrophy,
                 variant = ButtonVariant.Secondary,
                 size = ButtonSize.Large,
                 state = ButtonState.Rest,
-                leftIconPainter = painterResource(Res.drawable.logo_skyfit)
+                leftIconPainter = painterResource(Res.drawable.ic_trophy)
             )
             Spacer(Modifier.height(16.dp))
             SkyFitButtonComponent(
-                modifier = Modifier.fillMaxWidth(), text = "Ileri",
+                modifier = Modifier.wrapContentWidth(), text = "Ileri",
                 onClick = onClickNext,
                 variant = ButtonVariant.Primary,
                 size = ButtonSize.Large,
@@ -487,23 +528,39 @@ private fun MobileUserExerciseInActionScreenTrophyComponent(
 }
 
 @Composable
-private fun MobileUserExerciseInActionScreenActionsComponent() {
+private fun MobileUserExerciseInActionScreenActionsComponent(
+    onClickPrevious: () -> Unit,
+    onClickPause: () -> Unit,
+    onClickNext: () -> Unit
+) {
     Box(
         Modifier
             .padding(24.dp)
             .fillMaxWidth()
-            .background(SkyFitColor.background.surfaceOpalTransparent, RoundedCornerShape(20.dp))
+            .background(SkyFitColor.background.fillTransparentBlur, RoundedCornerShape(20.dp))
             .padding(horizontal = 48.dp, vertical = 16.dp)
     ) {
 
-        Row {
-            SkyFitIconButton(painterResource(Res.drawable.logo_skyfit))
+        Row(verticalAlignment = Alignment.CenterVertically) {
+            SkyFitIconButton(
+                painterResource(Res.drawable.ic_chevron_left),
+                modifier = Modifier.size(44.dp),
+                onClick = onClickPrevious
+            )
             Spacer(Modifier.weight(1f))
-            Box {
-                SkyFitIconButton(painterResource(Res.drawable.logo_skyfit))
-            }
+            SkyFitIconButton(
+                painter = painterResource(Res.drawable.ic_pause),
+                color = SkyFitColor.specialty.buttonBgRest,
+                modifier = Modifier.size(60.dp),
+                onClick = onClickPause
+            )
             Spacer(Modifier.weight(1f))
-            SkyFitIconButton(painterResource(Res.drawable.logo_skyfit))
+            SkyFitIconButton(
+                painter = painterResource(Res.drawable.ic_chevron_right),
+                color = SkyFitColor.specialty.buttonBgRest,
+                modifier = Modifier.size(44.dp),
+                onClick = onClickNext
+            )
         }
     }
 }
@@ -580,7 +637,7 @@ private fun MusicProgressIconButton(
 
         // Center Icon
         Icon(
-            painter = painterResource(Res.drawable.logo_skyfit),
+            painter = painterResource(Res.drawable.ic_music),
             contentDescription = "Music Icon",
             tint = Color.White,
             modifier = Modifier.size(24.dp)

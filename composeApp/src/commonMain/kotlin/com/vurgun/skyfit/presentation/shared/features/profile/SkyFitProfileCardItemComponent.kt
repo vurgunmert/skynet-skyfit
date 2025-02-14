@@ -32,6 +32,7 @@ import com.vurgun.skyfit.presentation.shared.resources.SkyFitColor
 import com.vurgun.skyfit.presentation.shared.resources.SkyFitTypography
 import org.jetbrains.compose.resources.painterResource
 import skyfit.composeapp.generated.resources.Res
+import skyfit.composeapp.generated.resources.ic_star_filled
 import skyfit.composeapp.generated.resources.logo_skyfit
 
 
@@ -171,7 +172,7 @@ fun ProfileCardVerticalDetailItemComponent(title: String, subtitle: String) {
 fun RatingStarComponent(rating: Double, modifier: Modifier = Modifier) {
     Row(
         modifier = modifier
-            .background(Color.Black.copy(alpha = 0.7f), RoundedCornerShape(12.dp))
+            .background(SkyFitColor.background.fillTransparentSecondary, CircleShape)
             .padding(horizontal = 8.dp, vertical = 4.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
@@ -181,9 +182,9 @@ fun RatingStarComponent(rating: Double, modifier: Modifier = Modifier) {
         )
         Spacer(modifier = Modifier.width(4.dp))
         Icon(
-            painter = painterResource(Res.drawable.logo_skyfit),
-            contentDescription = "Star Icon",
-            tint = Color.Yellow,
+            painter = painterResource(Res.drawable.ic_star_filled),
+            contentDescription = "Star",
+            tint = SkyFitColor.icon.default,
             modifier = Modifier.size(16.dp)
         )
     }

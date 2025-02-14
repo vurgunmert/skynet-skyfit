@@ -27,10 +27,11 @@ import com.vurgun.skyfit.presentation.shared.resources.SkyFitTypography
 import org.jetbrains.compose.resources.DrawableResource
 import org.jetbrains.compose.resources.painterResource
 import skyfit.composeapp.generated.resources.Res
+import skyfit.composeapp.generated.resources.ic_exercises
 import skyfit.composeapp.generated.resources.logo_skyfit
 
 data class AppointmentCardViewData(
-    val iconUrl: String,
+    val iconId: String,
     val title: String,
     val date: String,
     val hours: String,
@@ -151,14 +152,14 @@ fun AppointmentCardItemComponent(item: AppointmentCardViewData, modifier: Modifi
 
 @Composable
 fun AppointmentSingleDataBoxComponent(text: String,
-                                      icon: DrawableResource = Res.drawable.logo_skyfit,
+                                      iconRes: DrawableResource = Res.drawable.ic_exercises,
                                       modifier: Modifier = Modifier) {
     Row(
         modifier.background(SkyFitColor.background.default, shape = RoundedCornerShape(8.dp)).padding(4.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
         Icon(
-            painter = painterResource(icon),
+            painter = painterResource(iconRes),
             contentDescription = "",
             tint = SkyFitColor.icon.default,
             modifier = Modifier.size(16.dp)

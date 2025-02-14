@@ -78,9 +78,13 @@ fun MobileUserHomeScreen(rootNavigator: Navigator) {
                 onClickShowAll = { rootNavigator.jumpAndStay(SkyFitNavigationRoute.UserActivityCalendar) }
             )
 
-            MobileDashboardHomeActivityHourlyCalendarComponent()
+            MobileDashboardHomeActivityHourlyCalendarComponent(
+                onClickAdd = { rootNavigator.jumpAndStay(SkyFitNavigationRoute.UserActivityCalendar) }
+            )
 
-            MobileDashboardHomeUpcomingAppointmentsComponent()
+            MobileDashboardHomeUpcomingAppointmentsComponent(
+                onClickShowAll = { rootNavigator.jumpAndStay(SkyFitNavigationRoute.UserAppointments) }
+            )
 
             MobileDashboardHomeGeneralStatisticsComponent()
 
@@ -88,15 +92,23 @@ fun MobileUserHomeScreen(rootNavigator: Navigator) {
 
             MobileDashboardHomeProgressRowsComponent()
 
-            MobileDashboardHomeDailyExerciseGoalsComponent()
+            MobileDashboardHomeDailyExerciseGoalsComponent(
+                onClick = { rootNavigator.jumpAndStay(SkyFitNavigationRoute.UserActivityCalendar) }
+            )
 
-            MobileDashboardHomeMealGoalsComponent()
+            MobileDashboardHomeMealGoalsComponent(
+                onClick = { rootNavigator.jumpAndStay(SkyFitNavigationRoute.DashboardNutrition) }
+            )
 
-            MobileDashboardHomeFeaturedExercisesComponent()
+            MobileDashboardHomeFeaturedExercisesComponent(
+                onClick = { rootNavigator.jumpAndStay(SkyFitNavigationRoute.UserExerciseDetail) }
+            )
 
-            MobileDashboardHomeFeaturedTrainersComponent()
+            MobileDashboardHomeFeaturedTrainersComponent(
+                onClick = { rootNavigator.jumpAndStay(SkyFitNavigationRoute.TrainerProfileVisited) }
+            )
 
-            Spacer(Modifier.height(48.dp))
+            Spacer(Modifier.height(128.dp))
         }
     }
 }

@@ -7,11 +7,12 @@ import com.vurgun.skyfit.presentation.mobile.features.user.home.MobileUserHomeSc
 import com.vurgun.skyfit.presentation.shared.navigation.Role
 import moe.tlaster.precompose.navigation.Navigator
 
+//TODO: USER ROLE MANAGEMENT
+var unmanaged_role = Role.USER
+
 @Composable
 fun MobileDashboardHomeScreen(rootNavigator: Navigator) {
-    val role = Role.USER
-
-    when(role){
+    when(unmanaged_role){
         Role.VISITOR -> Unit
         Role.USER -> MobileUserHomeScreen(rootNavigator)
         Role.TRAINER -> MobileTrainerHomeScreen(rootNavigator)

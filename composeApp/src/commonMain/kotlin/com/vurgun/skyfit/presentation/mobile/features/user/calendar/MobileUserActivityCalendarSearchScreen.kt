@@ -49,7 +49,7 @@ import skyfit.composeapp.generated.resources.logo_skyfit
 @Composable
 fun MobileUserActivityCalendarSearchScreen(navigator: Navigator) {
     val appointmentCardItem = AppointmentCardViewData(
-        iconUrl = "TODO()",
+        iconId = "TODO()",
         title = "Shoulders and Abs",
         date = "30/11/2024",
         hours = "08:00 - 09:00",

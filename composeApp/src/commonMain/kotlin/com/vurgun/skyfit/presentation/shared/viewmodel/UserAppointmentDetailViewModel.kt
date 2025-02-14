@@ -19,7 +19,7 @@ class UserAppointmentDetailViewModel : ViewModel() {
     }
 
     val fakeAppointment = AppointmentCardViewData(
-        iconUrl = "https://example.com/icons/strength.png",
+        iconId = "https://example.com/icons/strength.png",
         title = "Shoulders and Abs",
         date = "30/11/2024",
         hours = "08:00 - 09:00",

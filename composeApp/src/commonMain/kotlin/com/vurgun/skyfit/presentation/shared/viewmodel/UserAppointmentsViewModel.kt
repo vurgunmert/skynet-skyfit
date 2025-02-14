@@ -38,7 +38,7 @@ class UserAppointmentsViewModel : ViewModel() {
         viewModelScope.launch {
             val appointments = listOf(
                 AppointmentCardViewData(
-                    iconUrl = "https://example.com/icons/strength.png",
+                    iconId = "ic_push_up",
                     title = "Shoulders and Abs",
                     date = "30/11/2024",
                     hours = "08:00 - 09:00",
@@ -53,7 +53,7 @@ class UserAppointmentsViewModel : ViewModel() {
                     status = "Planlanan" // Scheduled for the future
                 ),
                 AppointmentCardViewData(
-                    iconUrl = "https://example.com/icons/pilates.png",
+                    iconId = "ic_sit_up",
                     title = "Reformer Pilates",
                     date = "30/11/2024",
                     hours = "08:00 - 09:00",
@@ -68,7 +68,7 @@ class UserAppointmentsViewModel : ViewModel() {
                     status = "Eksik" // Missed class (no-show)
                 ),
                 AppointmentCardViewData(
-                    iconUrl = "https://example.com/icons/fitness.png",
+                    iconId = "ic_yoga",
                     title = "Fitness",
                     date = "30/11/2024",
                     hours = "08:00 - 09:00",
@@ -83,7 +83,7 @@ class UserAppointmentsViewModel : ViewModel() {
                     status = "Tamamlandı" // Completed class (attended)
                 ),
                 AppointmentCardViewData(
-                    iconUrl = "https://example.com/icons/spinning.png",
+                    iconId = "ic_push_up",
                     title = "Spinning Class",
                     date = "15/10/2024",
                     hours = "07:30 - 08:30",
@@ -98,7 +98,7 @@ class UserAppointmentsViewModel : ViewModel() {
                     status = "İptal" // Canceled
                 ),
                 AppointmentCardViewData(
-                    iconUrl = "https://example.com/icons/yoga.png",
+                    iconId = "ic_yoga",
                     title = "Yoga Flow",
                     date = "20/10/2024",
                     hours = "18:00 - 19:00",
@@ -113,7 +113,7 @@ class UserAppointmentsViewModel : ViewModel() {
                     status = "İptal" // Canceled
                 ),
                 AppointmentCardViewData(
-                    iconUrl = "https://example.com/icons/stretching.png",
+                    iconId = "ic_jumping_rope",
                     title = "Stretching & Mobility",
                     date = "05/09/2024",
                     hours = "12:00 - 13:00",
