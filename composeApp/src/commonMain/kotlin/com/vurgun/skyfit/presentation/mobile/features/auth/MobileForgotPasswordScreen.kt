@@ -31,6 +31,7 @@ import com.vurgun.skyfit.presentation.shared.resources.SkyFitTypography
 import moe.tlaster.precompose.navigation.Navigator
 import org.jetbrains.compose.resources.painterResource
 import skyfit.composeapp.generated.resources.Res
+import skyfit.composeapp.generated.resources.ic_envelope_closed
 import skyfit.composeapp.generated.resources.logo_skyfit
 
 @Composable
@@ -54,7 +55,7 @@ fun MobileForgotPasswordScreen(navigator: Navigator) {
                 hint = "Email’inizi girin",
                 value = email,
                 onValueChange = { email = it },
-                leftIconPainter = painterResource(Res.drawable.logo_skyfit)
+                leftIconPainter = painterResource(Res.drawable.ic_envelope_closed)
             )
 
             Spacer(Modifier.weight(1f))

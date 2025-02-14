@@ -35,6 +35,10 @@ import com.vurgun.skyfit.presentation.shared.resources.SkyFitTypography
 import moe.tlaster.precompose.navigation.Navigator
 import org.jetbrains.compose.resources.painterResource
 import skyfit.composeapp.generated.resources.Res
+import skyfit.composeapp.generated.resources.ic_apple
+import skyfit.composeapp.generated.resources.ic_envelope_closed
+import skyfit.composeapp.generated.resources.ic_facebook_fill
+import skyfit.composeapp.generated.resources.ic_google
 import skyfit.composeapp.generated.resources.logo_skyfit
 
 @Composable
@@ -49,7 +53,7 @@ fun MobileLoginScreen(navigator: Navigator) {
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {
             SkyFitLogoComponent()
-            Spacer(Modifier.height(48.dp))
+            Spacer(Modifier.height(36.dp))
             MobileLoginScreenTitle()
             Spacer(Modifier.height(48.dp))
             MobileLoginInputGroupComponent(
@@ -99,7 +103,7 @@ private fun MobileLoginInputGroupComponent(
         size = ButtonSize.Large,
         state = ButtonState.Rest,
         modifier = Modifier.fillMaxWidth(),
-        leftIconPainter = painterResource(Res.drawable.logo_skyfit)
+        leftIconPainter = painterResource(Res.drawable.ic_google)
     )
 
     Spacer(Modifier.height(24.dp))
@@ -110,7 +114,7 @@ private fun MobileLoginInputGroupComponent(
         variant = ButtonVariant.Secondary,
         size = ButtonSize.Large,
         state = ButtonState.Rest,
-        leftIconPainter = painterResource(Res.drawable.logo_skyfit)
+        leftIconPainter = painterResource(Res.drawable.ic_facebook_fill)
     )
 
     Spacer(Modifier.height(24.dp))
@@ -122,7 +126,7 @@ private fun MobileLoginInputGroupComponent(
         variant = ButtonVariant.Secondary,
         size = ButtonSize.Large,
         state = ButtonState.Rest,
-        leftIconPainter = painterResource(Res.drawable.logo_skyfit)
+        leftIconPainter = painterResource(Res.drawable.ic_apple)
     )
 
     Spacer(Modifier.height(16.dp))
@@ -138,7 +142,7 @@ private fun MobileLoginInputGroupComponent(
         hint = "Email’inizi girin",
         value = email,
         onValueChange = { email = it },
-        leftIconPainter = painterResource(Res.drawable.logo_skyfit)
+        leftIconPainter = painterResource(Res.drawable.ic_envelope_closed)
     )
 
     Spacer(Modifier.height(16.dp))

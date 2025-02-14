@@ -28,6 +28,9 @@ import com.vurgun.skyfit.presentation.shared.resources.SkyFitColor
 import com.vurgun.skyfit.presentation.shared.resources.SkyFitTypography
 import org.jetbrains.compose.resources.painterResource
 import skyfit.composeapp.generated.resources.Res
+import skyfit.composeapp.generated.resources.ic_lock
+import skyfit.composeapp.generated.resources.ic_visibility_hide
+import skyfit.composeapp.generated.resources.ic_visibility_show
 import skyfit.composeapp.generated.resources.logo_skyfit
 
 @Composable
@@ -51,7 +54,7 @@ fun SkyFitPasswordInputComponent(
         ) {
 
             Icon(
-                painter = painterResource(Res.drawable.logo_skyfit),
+                painter = painterResource(Res.drawable.ic_lock),
                 contentDescription = null,
                 modifier = Modifier.size(16.dp),
                 tint = SkyFitColor.icon.default
@@ -77,7 +80,7 @@ fun SkyFitPasswordInputComponent(
 
             Spacer(Modifier.width(8.dp))
             Icon(
-                painter = painterResource(Res.drawable.logo_skyfit),
+                painter = painterResource(Res.drawable.ic_visibility_show),
                 contentDescription = null,
                 modifier = Modifier.size(16.dp),
                 tint = SkyFitColor.icon.default

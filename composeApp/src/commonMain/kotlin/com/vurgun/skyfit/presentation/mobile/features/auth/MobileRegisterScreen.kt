@@ -37,6 +37,8 @@ import com.vurgun.skyfit.presentation.shared.resources.SkyFitTypography
 import moe.tlaster.precompose.navigation.Navigator
 import org.jetbrains.compose.resources.painterResource
 import skyfit.composeapp.generated.resources.Res
+import skyfit.composeapp.generated.resources.ic_envelope_closed
+import skyfit.composeapp.generated.resources.ic_profile
 import skyfit.composeapp.generated.resources.logo_skyfit
 
 @Composable
@@ -122,17 +124,17 @@ private fun MobileRegisterInputGroupComponent(onInputReadyState: (Boolean) -> Un
             username = it
             validateInputs()
         },
-        leftIconPainter = painterResource(Res.drawable.logo_skyfit)
+        leftIconPainter = painterResource(Res.drawable.ic_profile)
     )
     Spacer(Modifier.height(16.dp))
     SkyFitTextInputComponent(
-        hint = "Kullanıcı Adı",
+        hint = "Email’inizi girin",
         value = email,
         onValueChange = {
             email = it
             validateInputs()
         },
-        leftIconPainter = painterResource(Res.drawable.logo_skyfit)
+        leftIconPainter = painterResource(Res.drawable.ic_envelope_closed)
     )
     Spacer(Modifier.height(16.dp))
     SkyFitPasswordInputComponent(
