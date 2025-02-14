@@ -5,23 +5,43 @@ import androidx.compose.ui.graphics.painter.Painter
 import org.jetbrains.compose.resources.DrawableResource
 import org.jetbrains.compose.resources.painterResource
 import skyfit.composeapp.generated.resources.Res
-import skyfit.composeapp.generated.resources.logo_skyfit
+import skyfit.composeapp.generated.resources.ic_biceps_force
+import skyfit.composeapp.generated.resources.ic_exercises
+import skyfit.composeapp.generated.resources.ic_fast_food
+import skyfit.composeapp.generated.resources.ic_jumping_rope
+import skyfit.composeapp.generated.resources.ic_pull_up_bar
+import skyfit.composeapp.generated.resources.ic_push_up
+import skyfit.composeapp.generated.resources.ic_sit_up
+import skyfit.composeapp.generated.resources.ic_sleep
+import skyfit.composeapp.generated.resources.ic_smoking
+import skyfit.composeapp.generated.resources.ic_yoga
 
 object SkyFitIcon {
 
     val iconMap = mapOf(
-        "push_up" to Res.drawable.logo_skyfit,
-        "yoga" to Res.drawable.logo_skyfit,
-        "barbell" to Res.drawable.logo_skyfit,
-        "barbell_fill" to Res.drawable.logo_skyfit
+        "ic_exercises" to Res.drawable.ic_exercises,
+        "ic_push_up" to Res.drawable.ic_push_up,
+        "ic_biceps_force" to Res.drawable.ic_biceps_force,
+        "ic_pull_up_bar" to Res.drawable.ic_pull_up_bar,
+        "ic_jumping_rope" to Res.drawable.ic_jumping_rope,
+        "ic_sit_up" to Res.drawable.ic_sit_up,
+        "ic_yoga" to Res.drawable.ic_yoga,
+        "ic_sleep" to Res.drawable.ic_sleep,
+        "ic_fast_food" to Res.drawable.ic_fast_food,
+        "ic_smoking" to Res.drawable.ic_smoking,
     )
 
-    fun getIconResource(name: String?): DrawableResource? {
-        return iconMap[name]
+    fun getIconResource(id: String?): DrawableResource? {
+        return iconMap[id]
     }
 
     @Composable
-    fun getIconResourcePainter(name: String?): Painter? {
-        return iconMap[name]?.let { painterResource(it) }
+    fun getIconResourcePainter(id: String?): Painter? {
+        return iconMap[id]?.let { painterResource(it) }
+    }
+
+    @Composable
+    fun getIconResourcePainter(id: String?, defaultRes: DrawableResource): Painter {
+        return iconMap[id]?.let { painterResource(it) } ?: painterResource(defaultRes)
     }
 }

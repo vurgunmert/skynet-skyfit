@@ -34,8 +34,8 @@ import com.vurgun.skyfit.presentation.shared.components.ButtonState
 import com.vurgun.skyfit.presentation.shared.components.ButtonVariant
 import com.vurgun.skyfit.presentation.shared.components.SkyFitButtonComponent
 import com.vurgun.skyfit.presentation.shared.components.SkyFitIconButton
+import com.vurgun.skyfit.presentation.shared.features.trainer.fakePosts
 import com.vurgun.skyfit.presentation.shared.features.user.SkyFitUserProfileViewModel
-import com.vurgun.skyfit.presentation.shared.features.user.fakePosts
 import com.vurgun.skyfit.presentation.shared.navigation.SkyFitNavigationRoute
 import com.vurgun.skyfit.presentation.shared.navigation.jumpAndStay
 import com.vurgun.skyfit.presentation.shared.resources.SkyFitColor
@@ -115,7 +115,7 @@ fun MobileUserProfileVisitedScreen(navigator: Navigator) {
         if (showPosts) {
             MobileUserProfilePostsComponent(posts = posts, listState = postListState)
         } else {
-            MobileUserProfileAboutGroupComponent(scrollState, navigator, viewModel)
+            MobileUserProfileAboutGroupComponent(scrollState, navigator, emptyList())
         }
     }
 }
@@ -136,12 +136,13 @@ fun MobileVisitedProfileActionsComponent(
     onClickAbout: () -> Unit = {},
     onClickPosts: () -> Unit = {}
 ) {
-    var aboutSelected by remember { mutableStateOf(true) } // Default to "Hakkımda"
+    var aboutSelected by remember { mutableStateOf(true) }
 
     Row(
         modifier
             .background(SkyFitColor.background.surfaceSecondary, RoundedCornerShape(20.dp))
-            .padding(8.dp)
+            .padding(8.dp),
+        verticalAlignment = Alignment.CenterVertically
     ) {
         Box(
             modifier = Modifier
@@ -189,20 +190,19 @@ private fun MobileUserProfileVisitedScreenAboutGroupComponent(
 ) {
     var dietGoals: List<Any> = listOf(1, 2, 3)
     var showMeasurements: Boolean = true
-    var exerciseHistory: List<Any> = listOf(1, 2, 3)
-    var photos: List<Any> = emptyList()
-    var statistics: List<Any> = emptyList()
-    var habits: List<Any> = emptyList()
-    var posts: List<Any> = emptyList()
-    val appointments = viewModel.appointments.collectAsState()
+    val statistics by viewModel.statistics.collectAsState()
+    val appointments by viewModel.appointments.collectAsState()
+    val exercises by viewModel.exercises.collectAsState()
+    val habits by viewModel.habits.collectAsState()
+    val photoDiary by viewModel.photoDiary.collectAsState()
 
 
     Column(
         modifier = Modifier.fillMaxSize().verticalScroll(scrollState),
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
-        if (appointments.value.isEmpty()) {
-            MobileUserProfileAppointmentsComponent(appointments.value)
+        if (appointments.isEmpty()) {
+            MobileUserProfileAppointmentsComponent(appointments)
         }
         if (dietGoals.isNotEmpty()) {
             MobileUserProfileDietGoalsComponent(dietGoals)
@@ -215,17 +215,13 @@ private fun MobileUserProfileVisitedScreenAboutGroupComponent(
             })
         }
 
-        if (statistics.isNotEmpty()) {
-            MobileUserProfileStatisticsBarsComponent()
+        statistics?.let { MobileUserProfileStatisticsBarsComponent(it) }
+
+        if (exercises.isNotEmpty()) {
+            MobileUserProfileExerciseHistoryComponent(exercises)
         }
 
-        if (exerciseHistory.isNotEmpty()) {
-            MobileUserProfileExerciseHistoryComponent(exerciseHistory)
-        }
-
-        if (photos.isNotEmpty()) {
-            MobileUserProfilePhotoDiaryComponent()
-        }
+        photoDiary?.let { MobileUserProfilePhotoDiaryComponent(it) }
 
         if (habits.isNotEmpty()) {
             MobileUserProfileHabitsComponent(habits)

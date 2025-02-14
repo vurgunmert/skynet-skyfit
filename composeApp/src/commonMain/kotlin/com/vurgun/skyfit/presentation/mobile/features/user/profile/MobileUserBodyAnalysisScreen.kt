@@ -70,9 +70,13 @@ import com.vurgun.skyfit.presentation.shared.resources.SkyFitColor
 import com.vurgun.skyfit.presentation.shared.resources.SkyFitTypography
 import io.ktor.util.encodeBase64
 import moe.tlaster.precompose.navigation.Navigator
+import org.jetbrains.compose.resources.DrawableResource
 import org.jetbrains.compose.resources.painterResource
 import skyfit.composeapp.generated.resources.Res
 import skyfit.composeapp.generated.resources.body_analysis_back_figure
+import skyfit.composeapp.generated.resources.body_analysis_figure_back
+import skyfit.composeapp.generated.resources.body_analysis_figure_front
+import skyfit.composeapp.generated.resources.body_analysis_figure_right
 import skyfit.composeapp.generated.resources.body_analysis_front_figure
 import skyfit.composeapp.generated.resources.body_analysis_grid
 import skyfit.composeapp.generated.resources.body_analysis_right_figure
@@ -248,7 +252,11 @@ private fun PostureCaptureInfoCard(title: String, content: List<String>) {
 
 
 @Composable
-private fun PostureOptionItem(text: String, onClick: () -> Unit) {
+private fun PostureOptionItem(
+    res: DrawableResource,
+    text: String,
+    onClick: () -> Unit
+) {
     Card(
         modifier = Modifier
             .fillMaxWidth()
@@ -265,7 +273,7 @@ private fun PostureOptionItem(text: String, onClick: () -> Unit) {
             verticalAlignment = Alignment.CenterVertically
         ) {
             Image(
-                painter = painterResource(Res.drawable.logo_skyfit),
+                painter = painterResource(res),
                 contentDescription = text,
                 modifier = Modifier.size(32.dp)
             )
@@ -849,12 +857,15 @@ private fun MobileUserBodyAnalysisScreenPostureOptionsComponent(
             verticalArrangement = Arrangement.spacedBy(12.dp)
         ) {
             PostureOptionItem(
+                res = Res.drawable.body_analysis_figure_front,
                 text = "Ön Görünüm", onClick = onClickFront
             )
             PostureOptionItem(
+                res = Res.drawable.body_analysis_figure_back,
                 text = "Arka Görünüm", onClick = onClickBack
             )
             PostureOptionItem(
+                res = Res.drawable.body_analysis_figure_right,
                 text = "Sağ Görünüm", onClick = onClickRight
             )
         }

@@ -22,11 +22,11 @@ import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.vurgun.skyfit.presentation.mobile.features.user.profile.MobileVisitedProfileActionsComponent
-import com.vurgun.skyfit.presentation.shared.features.user.ProfilePreferenceItem
 import com.vurgun.skyfit.presentation.shared.components.ButtonSize
 import com.vurgun.skyfit.presentation.shared.components.ButtonVariant
 import com.vurgun.skyfit.presentation.shared.components.SkyFitButtonComponent
@@ -48,6 +48,7 @@ fun MobileTrainerProfileVisitedScreen(navigator: Navigator) {
     val scrollState = rememberScrollState()
     var showPosts: Boolean = false
     val followed: Boolean = false
+    val profileData by viewModel.profileData.collectAsState()
     val specialities = viewModel.specialities.collectAsState().value
     val privateClasses = viewModel.privateClasses.collectAsState().value
     val posts = viewModel.posts.collectAsState().value
@@ -67,16 +68,7 @@ fun MobileTrainerProfileVisitedScreen(navigator: Navigator) {
                         .padding(top = contentTopPadding)
                         .fillMaxWidth()
                 ) {
-                    MobileTrainerProfileInfoCardComponent(
-                        name = "Trainer Solice",
-                        social = "@dexteretymo",
-                        imageUrl = "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSJq8Cfy_pOdcJOYIQew3rWrnwwxfc8bZIarg&s",
-                        preferences = listOf(
-                            ProfilePreferenceItem("Boy", "175"),
-                            ProfilePreferenceItem("Kilo", "175"),
-                            ProfilePreferenceItem("Vucut Tipi", "Ecto"),
-                        )
-                    )
+                    MobileTrainerProfileInfoCardComponent(profileData)
                     Spacer(Modifier.height(16.dp))
                     MobileTrainerProfileVisitedScreenActionsComponent(
                         onClickAbout = { showPosts = false },

@@ -2,8 +2,13 @@ package com.vurgun.skyfit.presentation.shared.features.user
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.vurgun.skyfit.presentation.mobile.features.user.appointments.AppointmentCardViewData
+import com.vurgun.skyfit.presentation.mobile.features.user.profile.ProfileExerciseHistoryItem
+import com.vurgun.skyfit.presentation.mobile.features.user.profile.ProfileHabitItem
+import com.vurgun.skyfit.presentation.mobile.features.user.profile.UserProfileActivityStatisticsViewData
+import com.vurgun.skyfit.presentation.mobile.features.user.profile.UserProfilePhotoDiaryViewData
+import com.vurgun.skyfit.presentation.shared.features.calendar.SkyFitClassCalendarCardItem
 import com.vurgun.skyfit.presentation.shared.features.social.PostViewData
+import com.vurgun.skyfit.presentation.shared.features.trainer.fakePosts
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
@@ -13,16 +18,26 @@ import kotlinx.coroutines.flow.stateIn
 class SkyFitUserProfileViewModel : ViewModel() {
 
     // User Profile Data
-    private val _profileData = MutableStateFlow<TopBarGroupViewData?>(null)
-    val profileData: StateFlow<TopBarGroupViewData?> get() = _profileData
+    private val _profileData = MutableStateFlow<TopBarGroupViewData>(TopBarGroupViewData())
+    val profileData: StateFlow<TopBarGroupViewData> get() = _profileData
 
-    // Posts Data
     private val _posts = MutableStateFlow<List<PostViewData>>(emptyList())
     val posts: StateFlow<List<PostViewData>> get() = _posts
 
-    // Appointments Data
-    private val _appointments = MutableStateFlow<List<AppointmentCardViewData>>(emptyList())
-    val appointments: StateFlow<List<AppointmentCardViewData>> get() = _appointments
+    private val _appointments = MutableStateFlow<List<SkyFitClassCalendarCardItem>>(emptyList())
+    val appointments: StateFlow<List<SkyFitClassCalendarCardItem>> get() = _appointments
+
+    private val _exercises = MutableStateFlow<List<ProfileExerciseHistoryItem>>(emptyList())
+    val exercises: StateFlow<List<ProfileExerciseHistoryItem>> get() = _exercises
+
+    private val _habits = MutableStateFlow<List<ProfileHabitItem>>(emptyList())
+    val habits: StateFlow<List<ProfileHabitItem>> get() = _habits
+
+    private val _statistics = MutableStateFlow<UserProfileActivityStatisticsViewData?>(null)
+    val statistics: StateFlow<UserProfileActivityStatisticsViewData?> get() = _statistics
+
+    private val _photoDiary = MutableStateFlow<UserProfilePhotoDiaryViewData?>(null)
+    val photoDiary: StateFlow<UserProfilePhotoDiaryViewData?> get() = _photoDiary
 
     // UI State
     private val _showPosts = MutableStateFlow(false)
@@ -40,6 +55,9 @@ class SkyFitUserProfileViewModel : ViewModel() {
         loadProfileData()
         loadPosts()
         loadAppointments()
+        _exercises.value = fakeProfileExercises
+        _habits.value = fakeProfileHabits
+        _photoDiary.value = UserProfilePhotoDiaryViewData()
     }
 
     private fun loadProfileData() {
@@ -48,9 +66,9 @@ class SkyFitUserProfileViewModel : ViewModel() {
             social = "@dexteretymo",
             imageUrl = "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSJq8Cfy_pOdcJOYIQew3rWrnwwxfc8bZIarg&s",
             preferences = listOf(
-                ProfilePreferenceItem("Boy", "175"),
-                ProfilePreferenceItem("Kilo", "75"),
-                ProfilePreferenceItem("Vücut Tipi", "Ecto")
+                UserProfilePreferenceItem(iconId = "ic_height_outline","Boy", "175"),
+                UserProfilePreferenceItem(iconId = "ic_dna_outline","Kilo", "75"),
+                UserProfilePreferenceItem(iconId = "ic_overweight","Vücut Tipi", "Ecto")
             ),
             showInfoMini = false
         )
@@ -61,7 +79,7 @@ class SkyFitUserProfileViewModel : ViewModel() {
     }
 
     private fun loadAppointments() {
-        _appointments.value = fakeAppointments
+        _appointments.value = fakeAppointmentClasses
     }
 
     fun updateScroll(scrollValue: Int, firstItemIndex: Int) {
@@ -74,140 +92,61 @@ class SkyFitUserProfileViewModel : ViewModel() {
     }
 }
 
-
-
-data class ProfilePreferenceItem(val title: String, val subtitle: String)
-
-data class TopBarGroupViewData(
-    val name: String,
-    val social: String,
-    val imageUrl: String,
-    val preferences: List<ProfilePreferenceItem>,
-    val showInfoMini: Boolean = false // Whether to show the mini info card
+val fakeProfileExercises: List<ProfileExerciseHistoryItem> = listOf(
+    ProfileExerciseHistoryItem("ic_push_up", "Şınav"),
+    ProfileExerciseHistoryItem("ic_yoga", "Yoga"),
+    ProfileExerciseHistoryItem("ic_pull_up_bar", "Pull up"),
+    ProfileExerciseHistoryItem("ic_sit_up", "Mekik"),
+    ProfileExerciseHistoryItem("ic_jumping_rope", "İp atlama"),
 )
 
-val fakePosts = List(6) { index ->
-    PostViewData(
-        postId = "post_${index + 1}",
-        username = listOf("JohnDoe", "FitnessQueen", "MikeTrainer", "EmmaRunner", "DavidGym", "SophiaYoga").random(),
-        socialLink = listOf("https://instagram.com/user", "https://twitter.com/user", "https://linkedin.com/user", null).random(),
-        timeAgo = listOf("5 min ago", "2 hours ago", "1 day ago", "3 days ago", "1 week ago").random(),
-        profileImageUrl = listOf(
-            "https://example.com/profile1.png",
-            "https://example.com/profile2.png",
-            "https://example.com/profile3.png",
-            "https://example.com/profile4.png",
-            null
-        ).random(),
-        content = listOf(
-            "Just finished an amazing workout! 💪",
-            "Morning yoga session done! 🧘‍♀️",
-            "Any tips for increasing stamina? 🏃‍♂️",
-            "Trying out a new HIIT routine. 🔥",
-            "Recovery day with some light stretching.",
-            "Nutrition is key! What’s your go-to meal?"
-        ).random(),
-        imageUrl = listOf(
-            "https://example.com/post1.jpg",
-            "https://example.com/post2.jpg",
-            "https://example.com/post3.jpg",
-            null
-        ).random(),
-        favoriteCount = (0..500).random(),
-        commentCount = (0..200).random(),
-        shareCount = (0..100).random(),
-    )
-}
+val fakeProfileHabits: List<ProfileHabitItem> = listOf(
+    ProfileHabitItem("ic_sleep", "Düzensiz Uyku"),
+    ProfileHabitItem("ic_fast_food", "Fast Food"),
+    ProfileHabitItem("ic_smoking", "Smoking")
+)
 
-val fakeAppointments = listOf(
-    AppointmentCardViewData(
-        iconUrl = "https://example.com/icons/strength.png",
-        title = "Shoulders and Abs",
-        date = "30/11/2024",
+val fakeAppointmentClasses: List<SkyFitClassCalendarCardItem> = listOf(
+    SkyFitClassCalendarCardItem(
+        title = "Morning Yoga",
+        date = "2025-02-01",
         hours = "08:00 - 09:00",
-        category = "Group Fitness",
-        location = "@ironstudio",
-        trainer = "Michael Blake",
-        capacity = "10",
-        cost = "Free",
-        note = "Try to arrive 5-10 minutes early to warm up and settle in before the class starts.",
-        isFull = false,
-        canNotify = true,
-        status = "Planlanan" // Scheduled for the future
-    ),
-    AppointmentCardViewData(
-        iconUrl = "https://example.com/icons/pilates.png",
-        title = "Reformer Pilates",
-        date = "30/11/2024",
-        hours = "08:00 - 09:00",
-        category = "Pilates",
-        location = "@ironstudio",
-        trainer = "Michael Blake",
-        capacity = "12",
-        cost = "$20",
-        note = null,
-        isFull = false,
-        canNotify = true,
-        status = "Eksik" // Missed class (no-show)
-    ),
-    AppointmentCardViewData(
-        iconUrl = "https://example.com/icons/fitness.png",
-        title = "Fitness",
-        date = "30/11/2024",
-        hours = "08:00 - 09:00",
-        category = "PT",
-        location = "@ironstudio",
-        trainer = "Michael Blake",
+        category = "Yoga",
+        location = "Studio A",
+        trainer = "Alice Johnson",
         capacity = "15",
-        cost = "$25",
-        note = null,
-        isFull = true,
-        canNotify = true,
-        status = "Tamamlandı" // Completed class (attended)
+        cost = "$10",
+        note = "Bring your own mat",
+        enabled = true,
+        selected = false,
+        booked = false,
+        iconId = "ic_push_up"
     ),
-    AppointmentCardViewData(
-        iconUrl = "https://example.com/icons/spinning.png",
-        title = "Spinning Class",
-        date = "15/10/2024",
-        hours = "07:30 - 08:30",
-        category = "Cycling",
-        location = "@fitnesshub",
-        trainer = "Emma Johnson",
+    SkyFitClassCalendarCardItem(
+        title = "HIIT Workout",
+        date = "2025-02-01",
+        hours = "10:00 - 10:45",
+        category = "Fitness",
+        location = "Gym B",
+        trainer = "John Doe",
         capacity = "20",
         cost = "$15",
-        note = "Bring your own water bottle!",
-        isFull = false,
-        canNotify = false,
-        status = "İptal" // Canceled
-    ),
-    AppointmentCardViewData(
-        iconUrl = "https://example.com/icons/yoga.png",
-        title = "Yoga Flow",
-        date = "20/10/2024",
-        hours = "18:00 - 19:00",
-        category = "Yoga",
-        location = "@zenstudio",
-        trainer = "Samantha Green",
-        capacity = "15",
-        cost = "Free",
-        note = "Mats provided, please bring a towel.",
-        isFull = false,
-        canNotify = false,
-        status = "İptal" // Canceled
-    ),
-    AppointmentCardViewData(
-        iconUrl = "https://example.com/icons/stretching.png",
-        title = "Stretching & Mobility",
-        date = "05/09/2024",
-        hours = "12:00 - 13:00",
-        category = "Recovery",
-        location = "@recoverycenter",
-        trainer = "Lisa Harper",
-        capacity = "5",
-        cost = "Free",
-        note = "Foam rollers provided.",
-        isFull = false,
-        canNotify = false,
-        status = "Eksik" // No-show
+        note = "High-intensity training",
+        enabled = true,
+        selected = false,
+        booked = false,
+        iconId = "ic_biceps_force"
     )
+)
+
+data class UserProfilePreferenceItem(val iconId: String,
+                                     val title: String,
+                                     val subtitle: String)
+
+data class TopBarGroupViewData(
+    val name: String = "",
+    val social: String = "",
+    val imageUrl: String = "",
+    val preferences: List<UserProfilePreferenceItem> = emptyList(),
+    val showInfoMini: Boolean = false // Whether to show the mini info card
 )

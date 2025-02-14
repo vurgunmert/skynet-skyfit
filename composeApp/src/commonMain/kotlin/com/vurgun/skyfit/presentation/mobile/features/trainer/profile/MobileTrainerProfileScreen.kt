@@ -57,11 +57,11 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import coil3.compose.AsyncImage
-import com.vurgun.skyfit.presentation.mobile.features.user.profile.HeaderVerticalDivider
+import com.vurgun.skyfit.presentation.mobile.features.user.profile.MobileUserProfileActionsComponent
 import com.vurgun.skyfit.presentation.mobile.features.user.profile.MobileUserProfilePostsComponent
 import com.vurgun.skyfit.presentation.mobile.features.user.profile.MobileUserProfilePostsInputComponent
 import com.vurgun.skyfit.presentation.mobile.features.user.profile.MobileVisitedProfileActionsComponent
-import com.vurgun.skyfit.presentation.mobile.features.user.profile.ProfileCardPreferenceItem
+import com.vurgun.skyfit.presentation.mobile.features.user.profile.UserProfileCardPreferenceRow
 import com.vurgun.skyfit.presentation.shared.components.ButtonSize
 import com.vurgun.skyfit.presentation.shared.components.ButtonVariant
 import com.vurgun.skyfit.presentation.shared.components.SkyFitButtonComponent
@@ -69,13 +69,20 @@ import com.vurgun.skyfit.presentation.shared.features.calendar.SkyFitClassCalend
 import com.vurgun.skyfit.presentation.shared.features.calendar.SkyFitClassCalendarCardItemRowComponent
 import com.vurgun.skyfit.presentation.shared.features.social.PostViewData
 import com.vurgun.skyfit.presentation.shared.features.trainer.SkyFitTrainerProfileViewModel
-import com.vurgun.skyfit.presentation.shared.features.user.ProfilePreferenceItem
+import com.vurgun.skyfit.presentation.shared.features.user.TopBarGroupViewData
+import com.vurgun.skyfit.presentation.shared.navigation.SkyFitNavigationRoute
+import com.vurgun.skyfit.presentation.shared.navigation.jumpAndStay
 import com.vurgun.skyfit.presentation.shared.resources.SkyFitColor
 import com.vurgun.skyfit.presentation.shared.resources.SkyFitIcon
 import com.vurgun.skyfit.presentation.shared.resources.SkyFitTypography
 import moe.tlaster.precompose.navigation.Navigator
 import org.jetbrains.compose.resources.painterResource
 import skyfit.composeapp.generated.resources.Res
+import skyfit.composeapp.generated.resources.ic_clock
+import skyfit.composeapp.generated.resources.ic_dashboard
+import skyfit.composeapp.generated.resources.ic_exercises
+import skyfit.composeapp.generated.resources.ic_note
+import skyfit.composeapp.generated.resources.ic_profile_fill
 import skyfit.composeapp.generated.resources.logo_skyfit
 
 @Composable
@@ -85,6 +92,7 @@ fun MobileTrainerProfileScreen(navigator: Navigator) {
     val scrollState = rememberScrollState()
     var showPosts by remember { mutableStateOf(false) }
 
+    val profileData by viewModel.profileData.collectAsState()
     val specialities by viewModel.specialities.collectAsState()
     val privateClasses = viewModel.privateClasses.collectAsState().value
     val posts = viewModel.posts.collectAsState().value
@@ -108,21 +116,18 @@ fun MobileTrainerProfileScreen(navigator: Navigator) {
                         .padding(top = contentTopPadding)
                         .fillMaxWidth()
                 ) {
-                    MobileTrainerProfileInfoCardComponent(
-                        name = "Trainer Solice",
-                        social = "@dexteretymo",
-                        imageUrl = "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSJq8Cfy_pOdcJOYIQew3rWrnwwxfc8bZIarg&s",
-                        preferences = listOf(
-                            ProfilePreferenceItem("Boy", "175"),
-                            ProfilePreferenceItem("Kilo", "175"),
-                            ProfilePreferenceItem("Vucut Tipi", "Ecto"),
-                        )
-                    )
+
+                    profileData?.let {
+                        MobileTrainerProfileInfoCardComponent(it)
+                    }
+
                     Spacer(Modifier.height(16.dp))
-                    MobileTrainerProfileActionsComponent(
+                    MobileUserProfileActionsComponent(
+                        showPosts = showPosts,
                         onClickAbout = { showPosts = false },
                         onClickPosts = { showPosts = true },
-                        onClickSettings = {}
+                        onClickSettings = { navigator.jumpAndStay(SkyFitNavigationRoute.TrainerSettingsAccount) },
+                        onClickNewPost = { navigator.jumpAndStay(SkyFitNavigationRoute.UserSocialMediaPostAdd) }
                     )
                 }
             }
@@ -173,12 +178,8 @@ fun MobileTrainerProfileBackgroundImageComponent(height: Dp) {
 }
 
 @Composable
-fun MobileTrainerProfileInfoCardComponent(
-    name: String,
-    social: String,
-    imageUrl: String,
-    preferences: List<ProfilePreferenceItem>
-) {
+fun MobileTrainerProfileInfoCardComponent(viewData: TopBarGroupViewData?) {
+    viewData ?: return
 
     Box(modifier = Modifier.fillMaxWidth()) {
         Box(
@@ -189,7 +190,6 @@ fun MobileTrainerProfileInfoCardComponent(
                 .heightIn(max = 140.dp)
                 .background(SkyFitColor.background.fillTransparent, RoundedCornerShape(16.dp))
         ) {
-
             Box(
                 modifier = Modifier
                     .fillMaxSize()
@@ -208,12 +208,12 @@ fun MobileTrainerProfileInfoCardComponent(
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     Text(
-                        text = name,
+                        text = viewData.name,
                         style = SkyFitTypography.bodyLargeSemibold
                     )
                     Spacer(modifier = Modifier.width(8.dp)) // Space between name and social link
                     Text(
-                        text = social,
+                        text = viewData.social,
                         style = SkyFitTypography.bodySmallMedium,
                         color = SkyFitColor.text.secondary
                     )
@@ -221,25 +221,14 @@ fun MobileTrainerProfileInfoCardComponent(
 
                 Spacer(modifier = Modifier.height(16.dp))
 
-                if (preferences.isNotEmpty()) {
-                    Row(
-                        modifier = Modifier.fillMaxWidth(),
-                        horizontalArrangement = Arrangement.SpaceAround,
-                        verticalAlignment = Alignment.CenterVertically
-                    ) {
-                        preferences.forEachIndexed { index, item ->
-                            ProfileCardPreferenceItem(item.title, item.subtitle)
-                            if (index < preferences.lastIndex) {
-                                HeaderVerticalDivider()
-                            }
-                        }
-                    }
+                if (viewData.preferences.isNotEmpty()) {
+                    UserProfileCardPreferenceRow(Modifier.fillMaxWidth())
                 }
             }
         }
 
         AsyncImage(
-            model = imageUrl,
+            model = viewData.imageUrl,
             contentDescription = "Profile",
             contentScale = ContentScale.Crop,
             modifier = Modifier
@@ -261,35 +250,6 @@ fun MobileTrainerProfilePostsComponent(
     listState: LazyListState = rememberLazyListState()
 ) {
     MobileUserProfilePostsComponent(posts, listState)
-}
-
-@Composable
-private fun MobileTrainerProfileActionsComponent(
-    onClickAbout: () -> Unit,
-    onClickPosts: () -> Unit,
-    onClickSettings: () -> Unit
-) {
-
-    Row(Modifier.padding(horizontal = 16.dp).fillMaxWidth()) {
-        MobileVisitedProfileActionsComponent(
-            Modifier.weight(1f),
-            onClickAbout,
-            onClickPosts
-        )
-        Spacer(Modifier.width(16.dp))
-        Box(
-            Modifier.size(56.dp)
-                .background(SkyFitColor.background.surfaceSecondary, RoundedCornerShape(16.dp))
-                .clickable(onClick = onClickSettings), contentAlignment = Alignment.Center
-        ) {
-            Icon(
-                painter = painterResource(Res.drawable.logo_skyfit),
-                contentDescription = "Settings",
-                tint = SkyFitColor.icon.default,
-                modifier = Modifier.size(24.dp)
-            )
-        }
-    }
 }
 
 @Composable
@@ -425,7 +385,7 @@ fun MobileTrainerProfilePrivateClassesComponent(privateClasses: List<SkyFitClass
 
 
 @Composable
-private fun SkyFitProfileClassItemComponent(item: SkyFitClassCalendarCardItem, onClick: () -> Unit) {
+fun SkyFitProfileClassItemComponent(item: SkyFitClassCalendarCardItem, onClick: () -> Unit) {
 
     Box(
         Modifier.fillMaxWidth()
@@ -436,7 +396,7 @@ private fun SkyFitProfileClassItemComponent(item: SkyFitClassCalendarCardItem, o
         Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
             Row(verticalAlignment = Alignment.CenterVertically) {
                 Icon(
-                    painter = painterResource(Res.drawable.logo_skyfit),
+                    painter = SkyFitIcon.getIconResourcePainter(item.iconId, defaultRes = Res.drawable.ic_exercises),
                     contentDescription = null,
                     modifier = Modifier.size(24.dp),
                     tint = SkyFitColor.icon.default
@@ -449,19 +409,19 @@ private fun SkyFitProfileClassItemComponent(item: SkyFitClassCalendarCardItem, o
             }
 
             item.hours?.let {
-                SkyFitClassCalendarCardItemRowComponent(it)
+                SkyFitClassCalendarCardItemRowComponent(it, iconRes = Res.drawable.ic_clock)
             }
 
             item.trainer?.let {
-                SkyFitClassCalendarCardItemRowComponent(it)
+                SkyFitClassCalendarCardItemRowComponent(it, iconRes = Res.drawable.ic_profile_fill)
             }
 
             item.category?.let {
-                SkyFitClassCalendarCardItemRowComponent(it)
+                SkyFitClassCalendarCardItemRowComponent(it, iconRes = Res.drawable.ic_dashboard)
             }
 
             item.note?.let {
-                SkyFitClassCalendarCardItemRowComponent(it)
+                SkyFitClassCalendarCardItemRowComponent(it, iconRes = Res.drawable.ic_note)
             }
         }
     }

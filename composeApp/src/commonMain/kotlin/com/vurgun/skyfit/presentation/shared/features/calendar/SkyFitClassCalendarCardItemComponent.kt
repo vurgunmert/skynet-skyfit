@@ -21,8 +21,14 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.vurgun.skyfit.presentation.shared.resources.SkyFitColor
 import com.vurgun.skyfit.presentation.shared.resources.SkyFitTypography
+import org.jetbrains.compose.resources.DrawableResource
 import org.jetbrains.compose.resources.painterResource
 import skyfit.composeapp.generated.resources.Res
+import skyfit.composeapp.generated.resources.ic_clock
+import skyfit.composeapp.generated.resources.ic_dashboard
+import skyfit.composeapp.generated.resources.ic_location_pin
+import skyfit.composeapp.generated.resources.ic_note
+import skyfit.composeapp.generated.resources.ic_profile_fill
 import skyfit.composeapp.generated.resources.logo_skyfit
 
 data class SkyFitClassCalendarCardItem(
@@ -37,7 +43,8 @@ data class SkyFitClassCalendarCardItem(
     val note: String? = null,
     val enabled: Boolean = false,
     val selected: Boolean = false,
-    val booked: Boolean = false
+    val booked: Boolean = false,
+    val iconId: String = ""
 )
 
 @Composable
@@ -77,42 +84,43 @@ fun SkyFitClassCalendarCardItemComponent(item: SkyFitClassCalendarCardItem, onCl
 
             item.date?.let {
                 Spacer(Modifier.height(8.dp))
-                SkyFitClassCalendarCardItemRowComponent(it)
+                SkyFitClassCalendarCardItemRowComponent(it, iconRes = Res.drawable.ic_clock)
             }
 
             item.hours?.let {
                 Spacer(Modifier.height(8.dp))
-                SkyFitClassCalendarCardItemRowComponent(it)
+                SkyFitClassCalendarCardItemRowComponent(it, iconRes = Res.drawable.ic_clock)
             }
 
             item.location?.let {
                 Spacer(Modifier.height(8.dp))
-                SkyFitClassCalendarCardItemRowComponent(it)
+                SkyFitClassCalendarCardItemRowComponent(it, iconRes = Res.drawable.ic_location_pin)
             }
 
             item.trainer?.let {
                 Spacer(Modifier.height(8.dp))
-                SkyFitClassCalendarCardItemRowComponent(it)
+                SkyFitClassCalendarCardItemRowComponent(it, iconRes = Res.drawable.ic_profile_fill)
             }
 
             item.category?.let {
                 Spacer(Modifier.height(8.dp))
-                SkyFitClassCalendarCardItemRowComponent(it)
+                SkyFitClassCalendarCardItemRowComponent(it, iconRes = Res.drawable.ic_dashboard)
             }
 
             item.note?.let {
                 Spacer(Modifier.height(8.dp))
-                SkyFitClassCalendarCardItemRowComponent(it)
+                SkyFitClassCalendarCardItemRowComponent(it, iconRes = Res.drawable.ic_note)
             }
         }
     }
 }
 
 @Composable
-fun SkyFitClassCalendarCardItemRowComponent(value: String) {
+fun SkyFitClassCalendarCardItemRowComponent(value: String, iconRes: DrawableResource) {
+
     Row(verticalAlignment = Alignment.CenterVertically) {
         Icon(
-            painter = painterResource(Res.drawable.logo_skyfit),
+            painter = painterResource(iconRes),
             contentDescription = null,
             modifier = Modifier.size(16.dp),
             tint = SkyFitColor.icon.secondary
