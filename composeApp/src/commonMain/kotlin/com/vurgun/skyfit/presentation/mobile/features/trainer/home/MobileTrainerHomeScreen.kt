@@ -94,7 +94,7 @@ fun MobileTrainerHomeScreen(rootNavigator: Navigator) {
 
             MobileDashboardHomeTrainerClassScheduleComponent()
 
-            Spacer(Modifier.height(48.dp))
+            Spacer(Modifier.height(128.dp))
         }
     }
 }

@@ -17,6 +17,8 @@ import androidx.compose.material.Icon
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
@@ -131,7 +133,8 @@ private fun MobileTrainerCalendarVisitedScreenCalendarGridComponent() {
 @Composable
 private fun MobileTrainerCalendarVisitedScreenPrivateClassesComponent() {
     val viewModel = FacilityCalendarVisitedViewModel()
-    MobileFacilityCalendarVisitedScreenPrivateClassesComponent(viewModel.items)
+    val calendarClasses by viewModel.calendarClasses.collectAsState()
+    MobileFacilityCalendarVisitedScreenPrivateClassesComponent(calendarClasses, {})
 }
 
 @Composable

@@ -48,17 +48,21 @@ data class SkyFitClassCalendarCardItem(
 )
 
 @Composable
-fun SkyFitClassCalendarCardItemComponent(item: SkyFitClassCalendarCardItem, onClick: () -> Unit) {
+fun SkyFitClassCalendarCardItemComponent(item: SkyFitClassCalendarCardItem, onClick: (SkyFitClassCalendarCardItem) -> Unit) {
 
     Box(
         Modifier.fillMaxWidth()
             .background(SkyFitColor.background.fillTransparentSecondary, RoundedCornerShape(16.dp))
-            .border(
-                width = 1.dp,
-                color = SkyFitColor.border.secondaryButton,
-                shape = RoundedCornerShape(16.dp)
-            )
-            .clickable(onClick = onClick)
+            .apply {
+                if (item.selected){
+                    this.border(
+                        width = 1.dp,
+                        color = SkyFitColor.border.secondaryButton,
+                        shape = RoundedCornerShape(16.dp)
+                    )
+                }
+            }
+            .clickable(onClick = { onClick(item) })
             .padding(12.dp)
     ) {
         Column {

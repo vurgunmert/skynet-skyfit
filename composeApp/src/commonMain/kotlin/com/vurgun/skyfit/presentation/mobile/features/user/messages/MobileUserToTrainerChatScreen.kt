@@ -1,15 +1,23 @@
 package com.vurgun.skyfit.presentation.mobile.features.user.messages
 
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.asPaddingValues
+import androidx.compose.foundation.layout.consumeWindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.ime
+import androidx.compose.foundation.layout.imePadding
+import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.Icon
@@ -37,10 +45,8 @@ import skyfit.composeapp.generated.resources.logo_skyfit
 
 @Composable
 fun MobileUserToTrainerChatScreen(navigator: Navigator) {
-
     val viewModel: SkyFitConversationViewModel = koinInject()
     val messages by viewModel.messages.collectAsState()
-    val keyboardState by keyboardAsState()
 
     Scaffold(
         backgroundColor = SkyFitColor.background.default,
@@ -50,24 +56,41 @@ fun MobileUserToTrainerChatScreen(navigator: Navigator) {
                 lastActive = "2 hours ago"
             )
         }
-    ) {
-        Box {
+    ) { paddingValues ->
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(paddingValues)
+        ) {
             LazyColumn(
                 modifier = Modifier
-                    .fillMaxSize()
+                    .weight(1f) // Allows list to take available space
+                    .fillMaxWidth()
+                    .consumeWindowInsets(WindowInsets.ime) // Prevents layout shifting
+                    .windowInsetsPadding(WindowInsets.ime), // Ensures correct keyboard behavior
+                reverseLayout = true, // Keeps the latest message at the bottom
+                verticalArrangement = Arrangement.Bottom
             ) {
                 items(messages) { message ->
                     SkyFitChatMessageBubble(message)
                 }
             }
 
+            // Chat input field at the bottom
             SkyFitChatMessageInputComponent(
-                modifier = Modifier.padding(bottom = keyboardState.heightDp).align(Alignment.BottomCenter),
-                onSend = { userInput -> viewModel.sendMessage(userInput) }
-            )
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .windowInsetsPadding(WindowInsets.ime) // Ensures correct spacing
+                    .navigationBarsPadding() // Avoids navbar overlap
+                    .padding(horizontal = 8.dp, vertical = 4.dp) // Fine-tune spacing
+            ) { userInput ->
+                viewModel.sendMessage(userInput)
+            }
         }
     }
 }
+
+
 
 @Composable
 private fun MobileUserToTrainerChatScreenToolbarComponent(

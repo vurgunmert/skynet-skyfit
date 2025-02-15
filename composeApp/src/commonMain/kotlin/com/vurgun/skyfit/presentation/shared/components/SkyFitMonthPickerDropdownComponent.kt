@@ -17,6 +17,7 @@ import com.vurgun.skyfit.presentation.shared.resources.SkyFitTypography
 
 @Composable
 fun SkyFitMonthPickerDropdownComponent(
+    modifier: Modifier,
     selectedMonth: String,
     onMonthSelected: (String) -> Unit
 ) {
@@ -24,7 +25,7 @@ fun SkyFitMonthPickerDropdownComponent(
     var isOpen by remember { mutableStateOf(false) }
 
     Row(
-        modifier = Modifier
+        modifier = modifier
             .padding(8.dp)
             .clickable { isOpen = true },
         horizontalArrangement = Arrangement.spacedBy(4.dp),
@@ -53,9 +54,9 @@ fun SkyFitMonthPickerDropdownComponent(
     MonthsMenu(
         isOpen = isOpen,
         setIsOpen = { isOpen = it },
-        itemSelected = { id ->
-            selected = id
-            onMonthSelected(id)
+        itemSelected = { id, value ->
+            selected = value
+            onMonthSelected(value)
             isOpen = false
         }
     )
@@ -65,7 +66,7 @@ fun SkyFitMonthPickerDropdownComponent(
 fun MonthsMenu(
     isOpen: Boolean,
     setIsOpen: (Boolean) -> Unit,
-    itemSelected: (String) -> Unit
+    itemSelected: (String, String) -> Unit
 ) {
     val menuItems = getMenu()
     DropdownMenu(
@@ -76,7 +77,7 @@ fun MonthsMenu(
     ) {
         menuItems.forEach { (key, value) ->
             DropdownMenuItem(onClick = {
-                itemSelected(key)
+                itemSelected(key, value)
                 setIsOpen(false)
             }) {
                 Text(text = value, style = SkyFitTypography.bodyXSmallSemibold)

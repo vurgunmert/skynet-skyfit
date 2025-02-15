@@ -17,6 +17,7 @@ import androidx.compose.material.Icon
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -43,12 +44,14 @@ import kotlinx.datetime.LocalDate
 import moe.tlaster.precompose.navigation.Navigator
 import org.jetbrains.compose.resources.painterResource
 import skyfit.composeapp.generated.resources.Res
+import skyfit.composeapp.generated.resources.ic_check
 import skyfit.composeapp.generated.resources.logo_skyfit
 
 @Composable
 fun MobileFacilityCalendarVisitedScreen(navigator: Navigator) {
 
-    val viewModel = FacilityCalendarVisitedViewModel()
+    val viewModel = remember { FacilityCalendarVisitedViewModel() }
+    val calendarClasses by viewModel.calendarClasses.collectAsState()
 
     val showCreateAction: Boolean = true
     Scaffold(
@@ -65,11 +68,14 @@ fun MobileFacilityCalendarVisitedScreen(navigator: Navigator) {
         }
     ) {
         Column(
-            modifier = Modifier.fillMaxSize().verticalScroll(rememberScrollState()),
+            modifier = Modifier
+                .fillMaxSize()
+                .verticalScroll(rememberScrollState()),
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {
             MobileFacilityCalendarVisitedScreenCalendarGridComponent()
-            MobileFacilityCalendarVisitedScreenPrivateClassesComponent(viewModel.items)
+            MobileFacilityCalendarVisitedScreenPrivateClassesComponent(calendarClasses, viewModel::toggleSelection)
+            Spacer(Modifier.height(112.dp))
         }
     }
 }
@@ -86,9 +92,13 @@ fun MobileFacilityCalendarVisitedScreenCalendarGridComponent() {
 }
 
 @Composable
-fun MobileFacilityCalendarVisitedScreenPrivateClassesComponent(items: List<SkyFitClassCalendarCardItem>) {
+fun MobileFacilityCalendarVisitedScreenPrivateClassesComponent(
+    items: List<SkyFitClassCalendarCardItem>,
+    onSelect: (SkyFitClassCalendarCardItem) -> Unit
+) {
     Box(
         Modifier
+            .padding(16.dp)
             .fillMaxWidth()
             .background(SkyFitColor.background.fillTransparent, RoundedCornerShape(16.dp))
             .padding(16.dp)
@@ -113,7 +123,7 @@ fun MobileFacilityCalendarVisitedScreenPrivateClassesComponent(items: List<SkyFi
                 Spacer(Modifier.height(16.dp))
                 SkyFitClassCalendarCardItemComponent(
                     item = item,
-                    onClick = { }
+                    onClick = onSelect
                 )
             }
         }
@@ -129,7 +139,7 @@ fun MobileFacilityCalendarVisitedScreenCreateActionComponent(onClick: () -> Unit
             variant = ButtonVariant.Secondary,
             size = ButtonSize.Large,
             state = ButtonState.Rest,
-            leftIconPainter = painterResource(Res.drawable.logo_skyfit)
+            leftIconPainter = painterResource(Res.drawable.ic_check)
         )
     }
 }

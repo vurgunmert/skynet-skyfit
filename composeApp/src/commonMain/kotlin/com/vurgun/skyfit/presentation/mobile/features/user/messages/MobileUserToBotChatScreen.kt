@@ -11,10 +11,12 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import com.vurgun.skyfit.presentation.shared.components.SkyFitScaffold
 import com.vurgun.skyfit.presentation.shared.components.SkyFitScreenHeader
 import com.vurgun.skyfit.presentation.shared.features.social.SkyFitChatMessageBubble
 import com.vurgun.skyfit.presentation.shared.features.social.SkyFitChatMessageBubbleShimmer
@@ -32,33 +34,43 @@ fun MobileUserToBotChatScreen(navigator: Navigator) {
     val isLoading by viewModel.isLoading.collectAsState()
     val listState = rememberLazyListState()
 
-    Column(
-        Modifier.fillMaxSize()
-            .background(SkyFitColor.background.default)
-    ) {
-        SkyFitScreenHeader("Chatbot", onClickBack = { navigator.popBackStack() })
+    // Auto-scroll to the last message when a new one arrives
+    LaunchedEffect(messages.size) {
+        if (messages.isNotEmpty()) {
+            listState.animateScrollToItem(messages.size - 1)
+        }
+    }
 
-        LazyColumn(
-            Modifier
-                .fillMaxWidth()
-                .weight(1f),
-            state = listState,
-            verticalArrangement = Arrangement.Bottom
+    SkyFitScaffold(topBar = {
+        SkyFitScreenHeader("Chatbot", onClickBack = { navigator.popBackStack() })
+    }) {
+        Column(
+            Modifier.fillMaxSize()
+                .background(SkyFitColor.background.default)
         ) {
-            items(messages) { message ->
-                SkyFitChatMessageBubble(message)
-            }
-            if (isLoading) {
-                item {
-                    SkyFitChatMessageBubbleShimmer()
+            LazyColumn(
+                modifier = Modifier
+                    .weight(1f)
+                    .padding(horizontal = 24.dp),
+                state = listState,
+                verticalArrangement = Arrangement.spacedBy(48.dp)
+            ) {
+                items(messages) { message ->
+                    SkyFitChatMessageBubble(message)
+                }
+
+                if (isLoading) {
+                    item {
+                        SkyFitChatMessageBubbleShimmer()
+                    }
                 }
             }
-        }
 
-        Box(Modifier.padding(24.dp)) {
-            SkyFitChatMessageInputComponent(
-                onSend = { userInput -> viewModel.sendQuery(userInput) }
-            )
+            Box(Modifier.padding(24.dp).fillMaxWidth()) {
+                SkyFitChatMessageInputComponent(
+                    onSend = { userInput -> viewModel.sendQuery(userInput) }
+                )
+            }
         }
     }
 }

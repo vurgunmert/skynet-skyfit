@@ -3,9 +3,11 @@ package com.vurgun.skyfit.presentation.shared.components
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
@@ -14,6 +16,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.vurgun.skyfit.presentation.shared.resources.SkyFitColor
 import com.vurgun.skyfit.presentation.shared.resources.SkyFitTypography
@@ -76,7 +79,7 @@ fun SkyFitColoredCalendarComponent() {
     val uncompletedDays = listOf("11/02/2025", "12/02/2025", "13/02/2025")
     val currentDate = "14/02/2025"
 
-// Automatically adjusts to 5x7 format
+    // Automatically adjusts to 5x7 format
     val dayList = generateDayList(
         startDate = "01/02/2025",
         completedDays = completedDays,
@@ -84,32 +87,39 @@ fun SkyFitColoredCalendarComponent() {
         currentDate = currentDate
     )
 
+    BoxWithConstraints(
+        modifier = Modifier.fillMaxWidth()
+    ) {
+        val totalWidth = maxWidth
+        val calculatedSize = (totalWidth / 7).coerceIn(40.dp, 60.dp) // Min 40dp, Max 60dp
 
-    Column {
-        // Headers can be optional since DayCell can handle all states now
-        Row {
-            listOf("Pzt", "Sal", "Çar", "Per", "Cum", "Cmrt", "Paz").forEach { day ->
-                DayCell(day, DayCellStyle.Label) // Headers as default style
-            }
-        }
-        Spacer(modifier = Modifier.height(8.dp))
-
-        // Render the calendar
-        dayList.chunked(7).forEach { week ->
+        Column {
+            // Headers
             Row {
-                week.forEach { (day, style) ->
-                    DayCell(day, style)
+                listOf("Pzt", "Sal", "Çar", "Per", "Cum", "Cmrt", "Paz").forEach { day ->
+                    DayCell(day, DayCellStyle.Label, calculatedSize)
+                }
+            }
+            Spacer(modifier = Modifier.height(8.dp))
+
+            // Render the calendar
+            dayList.chunked(7).forEach { week ->
+                Row {
+                    week.forEach { (day, style) ->
+                        DayCell(day, style, calculatedSize)
+                    }
                 }
             }
         }
     }
 }
 
+
 @Composable
-private fun DayCell(value: String, style: DayCellStyle) {
+private fun DayCell(value: String, style: DayCellStyle, size: Dp) {
     Box(
         modifier = Modifier
-            .size(40.dp)
+            .size(size) // Dynamic size between 40dp - 60dp
             .background(style.backgroundColor, shape = CircleShape)
             .then(
                 if (style.borderColor != null) {

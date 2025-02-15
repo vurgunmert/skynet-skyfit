@@ -28,6 +28,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.dp
+import coil3.compose.AsyncImage
 import com.vurgun.skyfit.presentation.shared.resources.SkyFitColor
 import com.vurgun.skyfit.presentation.shared.resources.SkyFitTypography
 import org.jetbrains.compose.resources.painterResource
@@ -93,9 +94,9 @@ private fun ProfileCardItemBox(
             .size(186.dp, 278.dp)
             .clickable { onClick() }
     ) {
-        // Background Image
-        Image(
-            painter = painterResource(Res.drawable.logo_skyfit),
+        // Profile Image
+        AsyncImage(
+            model = imageUrl,
             contentDescription = "Image",
             modifier = Modifier
                 .fillMaxSize()

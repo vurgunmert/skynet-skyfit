@@ -7,11 +7,13 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.aspectRatio
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
@@ -21,17 +23,10 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Icon
 import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Check
 import androidx.compose.material.icons.filled.DateRange
 import androidx.compose.material.icons.filled.Face
 import androidx.compose.material.icons.filled.Place
 import androidx.compose.material.icons.filled.PlayArrow
-import androidx.compose.material.icons.outlined.DateRange
-import androidx.compose.material.icons.outlined.Face
-import androidx.compose.material.icons.outlined.Notifications
-import androidx.compose.material.icons.outlined.Person
-import androidx.compose.material.icons.outlined.Place
-import androidx.compose.material.icons.outlined.Warning
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -46,14 +41,12 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Path
 import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.graphics.drawscope.Stroke
-import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil3.compose.AsyncImage
 import com.vurgun.skyfit.presentation.expected.UserCharacterComponent
-import com.vurgun.skyfit.presentation.mobile.features.trainer.home.MemberChangeLineChart
 import com.vurgun.skyfit.presentation.mobile.features.user.calendar.MobileUserActivityHourlyCalendarComponent
 import com.vurgun.skyfit.presentation.mobile.features.user.profile.MobileUserTrophyItemComponent
 import com.vurgun.skyfit.presentation.mobile.resources.MobileStyleGuide.padding16
@@ -67,17 +60,19 @@ import com.vurgun.skyfit.presentation.shared.components.SkyFitListItemCardCompon
 import com.vurgun.skyfit.presentation.shared.components.SkyFitMonthPickerDropdownComponent
 import com.vurgun.skyfit.presentation.shared.resources.SkyFitColor
 import com.vurgun.skyfit.presentation.shared.resources.SkyFitTypography
+import org.jetbrains.compose.resources.DrawableResource
 import org.jetbrains.compose.resources.painterResource
 import skyfit.composeapp.generated.resources.Res
 import skyfit.composeapp.generated.resources.ic_bell
 import skyfit.composeapp.generated.resources.ic_calories
 import skyfit.composeapp.generated.resources.ic_chat
+import skyfit.composeapp.generated.resources.ic_check
 import skyfit.composeapp.generated.resources.ic_clock
 import skyfit.composeapp.generated.resources.ic_exercises
 import skyfit.composeapp.generated.resources.ic_path_distance
 import skyfit.composeapp.generated.resources.ic_steps
+import skyfit.composeapp.generated.resources.ic_tool_illustration
 import skyfit.composeapp.generated.resources.ic_water
-import skyfit.composeapp.generated.resources.logo_skyfit
 
 @Composable
 fun MobileDashboardHomeToolbarComponent(
@@ -265,7 +260,7 @@ fun MobileDashboardHomeActivityCalendarComponent(
 
     Column(
         Modifier
-            .width(320.dp)
+            .fillMaxWidth()
             .padding(16.dp),
         verticalArrangement = Arrangement.spacedBy(8.dp),
         horizontalAlignment = Alignment.CenterHorizontally
@@ -281,6 +276,7 @@ fun MobileDashboardHomeActivityCalendarComponent(
             )
 
             SkyFitMonthPickerDropdownComponent(
+                modifier = Modifier.padding(start = 32.dp).weight(1f),
                 selectedMonth = selectedMonth,
                 onMonthSelected = { selectedMonth = it }
             )
@@ -364,9 +360,9 @@ fun MobileDashboardHomeActivityHourlyCalendarComponent(
 @Composable
 fun MobileDashboardHomeUpcomingAppointmentsComponent(
     appointments: List<HomeAppointmentComponentItem> = listOf(
-        HomeAppointmentComponentItem("", "Kişisel kuvvet antrenmanı", "08:00", "@ironstudio"),
-        HomeAppointmentComponentItem("", "Kişisel kuvvet antrenmanı", "08:00", "@ironstudio"),
-        HomeAppointmentComponentItem("", "Kişisel kuvvet antrenmanı", "08:00", "@ironstudio")
+        HomeAppointmentComponentItem("ic_biceps_force", "Kişisel kuvvet antrenmanı", "08:00", "@ironstudio"),
+        HomeAppointmentComponentItem("ic_biceps_force", "Kişisel kuvvet antrenmanı", "08:00", "@ironstudio"),
+        HomeAppointmentComponentItem("ic_biceps_force", "Kişisel kuvvet antrenmanı", "08:00", "@ironstudio")
     ),
     onClickShowAll: () -> Unit = {}
 ) {
@@ -470,7 +466,7 @@ private fun MobileDashboardHomeAppointmentCard(appointment: HomeAppointmentCompo
 }
 
 data class HomeAppointmentComponentItem(
-    val icon: String,
+    val iconId: String,
     val title: String,
     val time: String,
     val location: String
@@ -637,10 +633,13 @@ fun MobileDashboardHomeMonthlyStatisticsComponent() {
             .fillMaxWidth()
             .padding(16.dp)
     ) {
-        SkyFitMonthPickerDropdownComponent(
-            selectedMonth = selectedMonth,
-            onMonthSelected = { selectedMonth = it }
-        )
+        Box(Modifier.fillMaxWidth(), contentAlignment = Alignment.CenterEnd) {
+            SkyFitMonthPickerDropdownComponent(
+                modifier = Modifier,
+                selectedMonth = selectedMonth,
+                onMonthSelected = { selectedMonth = it }
+            )
+        }
 
         Spacer(modifier = Modifier.height(12.dp))
         MobileDashboardHomeWorkoutStatistics(
@@ -748,41 +747,43 @@ fun MobileDashboardHomeLineChart(dataPoints: List<Int>, color: Color) {
 }
 
 @Composable
-fun MobileDashboardHomeProgressRowsComponent() {
+fun MobileDashboardHomeProgressGridComponent() {
     val progressData = listOf(
-        HomeGridProgressItem(Icons.Outlined.Person, "Adımlar", "5902"),
-        HomeGridProgressItem(Icons.Outlined.Place, "Koşulan mesafe", "2.1 km"),
-        HomeGridProgressItem(Icons.Outlined.Warning, "Su miktarı", "5L"),
-        HomeGridProgressItem(Icons.Outlined.Notifications, "Tamamlanan antrenman", "1/3"),
-        HomeGridProgressItem(Icons.Outlined.Face, "Yakılan kalori", "3201 kcal"),
-        HomeGridProgressItem(Icons.Outlined.DateRange, "Aktiflik", "54 dk")
+        HomeGridProgressItem(iconRes = Res.drawable.ic_steps, "Adımlar", "5902"),
+        HomeGridProgressItem(iconRes = Res.drawable.ic_path_distance, "Koşulan mesafe", "2.1 km"),
+        HomeGridProgressItem(iconRes = Res.drawable.ic_water, "Su miktarı", "5L"),
+        HomeGridProgressItem(iconRes = Res.drawable.ic_exercises, "Tamamlanan antrenman", "1/3"),
+        HomeGridProgressItem(iconRes = Res.drawable.ic_calories, "Yakılan kalori", "3201 kcal"),
+        HomeGridProgressItem(iconRes = Res.drawable.ic_clock, "Aktiflik", "54 dk")
     )
 
     Column(
         modifier = Modifier
             .fillMaxWidth()
             .padding(16.dp),
-        verticalArrangement = Arrangement.spacedBy(12.dp) // Adjusted spacing for uniformity
+        verticalArrangement = Arrangement.spacedBy(12.dp) // Ensures uniform vertical spacing
     ) {
         for (i in progressData.indices step 2) {
             Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.spacedBy(12.dp) // Adjusted spacing
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(IntrinsicSize.Max), // Makes both items match the tallest one
+                horizontalArrangement = Arrangement.spacedBy(12.dp)
             ) {
                 Box(
                     modifier = Modifier
                         .weight(1f)
-                        .aspectRatio(1f) // Ensures square-like equal heights
+                        .fillMaxHeight() // Stretch to match tallest item in row
                 ) {
-                    MobileDashboardHomeProgressCard(progressData[i])
+                    MobileDashboardHomeProgressGridItemCard(progressData[i])
                 }
                 if (i + 1 < progressData.size) {
                     Box(
                         modifier = Modifier
                             .weight(1f)
-                            .aspectRatio(1f)
+                            .fillMaxHeight()
                     ) {
-                        MobileDashboardHomeProgressCard(progressData[i + 1])
+                        MobileDashboardHomeProgressGridItemCard(progressData[i + 1])
                     }
                 }
             }
@@ -790,20 +791,19 @@ fun MobileDashboardHomeProgressRowsComponent() {
     }
 }
 
-
 @Composable
-private fun MobileDashboardHomeProgressCard(item: HomeGridProgressItem) {
+private fun MobileDashboardHomeProgressGridItemCard(item: HomeGridProgressItem) {
     Column(
         modifier = Modifier
             .fillMaxWidth()
-            .aspectRatio(1f)
+            .fillMaxHeight() // Ensure the card expands fully to match the tallest one
             .background(SkyFitColor.background.surfaceSecondary, RoundedCornerShape(12.dp))
             .padding(12.dp),
-        verticalArrangement = Arrangement.SpaceBetween,
-        horizontalAlignment = Alignment.Start
+        verticalArrangement = Arrangement.spacedBy(12.dp),
+        horizontalAlignment = Alignment.Start,
     ) {
         Icon(
-            painter = painterResource(Res.drawable.logo_skyfit),
+            painter = painterResource(item.iconRes),
             contentDescription = null,
             modifier = Modifier.size(24.dp),
             tint = SkyFitColor.icon.default
@@ -821,7 +821,13 @@ private fun MobileDashboardHomeProgressCard(item: HomeGridProgressItem) {
     }
 }
 
-private data class HomeGridProgressItem(val icon: ImageVector, val title: String, val value: String)
+
+
+private data class HomeGridProgressItem(
+    val iconRes: DrawableResource,
+    val title: String,
+    val value: String
+)
 
 @Composable
 fun MobileDashboardHomeDailyExerciseGoalsComponent(onClick: () -> Unit) {
@@ -852,39 +858,47 @@ fun MobileDashboardHomeDailyExerciseGoalsComponent(onClick: () -> Unit) {
 private fun MobileDashboardHomeExerciseCard(goal: HomeExerciseComponentItem) {
     val backgroundColor = if (goal.isCompleted) SkyFitColor.background.surfaceSecondary else SkyFitColor.specialty.buttonBgRest
     val textColor = if (goal.isCompleted) SkyFitColor.text.default else SkyFitColor.text.inverse
-
-    Row(
-        modifier = Modifier
-            .fillMaxWidth()
-            .background(backgroundColor, RoundedCornerShape(16.dp))
-            .padding(16.dp),
-        horizontalArrangement = Arrangement.SpaceBetween,
-        verticalAlignment = Alignment.CenterVertically
+    Box(
+        Modifier .background(backgroundColor, RoundedCornerShape(16.dp))
     ) {
-        Column {
-            Text(
-                text = goal.title,
-                style = SkyFitTypography.bodyLarge,
-                color = textColor
-            )
-            Spacer(Modifier.height(8.dp))
-            Text(
-                text = goal.details,
-                style = SkyFitTypography.bodySmallSemibold,
-                color = textColor
-            )
-        }
+        Icon(
+            painter = painterResource(Res.drawable.ic_tool_illustration),
+            contentDescription = null,
+            tint = SkyFitColor.icon.secondary,
+            modifier = Modifier.align(Alignment.BottomEnd).padding(end = 64.dp)
+        )
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(16.dp),
+            horizontalArrangement = Arrangement.SpaceBetween,
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Column {
+                Text(
+                    text = goal.title,
+                    style = SkyFitTypography.bodyLarge,
+                    color = textColor
+                )
+                Spacer(Modifier.height(8.dp))
+                Text(
+                    text = goal.details,
+                    style = SkyFitTypography.bodySmallSemibold,
+                    color = textColor
+                )
+            }
 
-        if (goal.isCompleted) {
-            GoalCompletedBadge("💪 Bravo", Color.Black)
-        } else {
-            SkyFitButtonComponent(
-                modifier = Modifier.wrapContentWidth(), text = "Basla",
-                onClick = { },
-                variant = ButtonVariant.Primary,
-                size = ButtonSize.Micro,
-                state = ButtonState.Disabled
-            )
+            if (goal.isCompleted) {
+                GoalCompletedBadge("💪 Bravo", Color.Black)
+            } else {
+                SkyFitButtonComponent(
+                    modifier = Modifier.wrapContentWidth(), text = "Basla",
+                    onClick = { },
+                    variant = ButtonVariant.Primary,
+                    size = ButtonSize.Micro,
+                    state = ButtonState.Disabled
+                )
+            }
         }
     }
 }
@@ -988,16 +1002,21 @@ private fun MobileDashboardHomeMealCard(meal: HomeMealGoal) {
         }
 
         if (meal.isSelected) {
-            Icon(
-                imageVector = Icons.Default.Check,
-                contentDescription = "Selected",
-                tint = Color.Black,
-                modifier = Modifier
+            Box(
+                Modifier.size(32.dp)
                     .align(Alignment.TopEnd)
-                    .size(32.dp)
-                    .background(Color.Cyan, CircleShape)
-                    .border(1.dp, Color.Black, CircleShape)
-            )
+                    .offset(x = 8.dp, y = (-8).dp)
+                    .background(SkyFitColor.specialty.buttonBgRest, CircleShape)
+                    .border(1.dp, SkyFitColor.icon.inverse, CircleShape),
+                contentAlignment = Alignment.Center
+            ) {
+                Icon(
+                    painter = painterResource(Res.drawable.ic_check),
+                    contentDescription = "Selected",
+                    tint = SkyFitColor.icon.inverse,
+                    modifier = Modifier.size(16.dp)
+                )
+            }
         }
     }
 }
@@ -1063,124 +1082,48 @@ private fun MobileDashboardHomeFeaturedTrainerCard(
     trainer: HomeFeaturedTrainer,
     onClickAdd: () -> Unit = {}
 ) {
-    SkyFitListItemCardComponent(
-        modifier = Modifier
-            .fillMaxWidth()
+    Box(
+        Modifier
             .background(SkyFitColor.background.surfaceSecondary, RoundedCornerShape(16.dp))
-            .padding(16.dp)
     ) {
-        AsyncImage(
-            model = trainer.imageUrl,
+        Icon(
+            painter = painterResource(Res.drawable.ic_tool_illustration),
             contentDescription = null,
-            contentScale = ContentScale.Crop,
+            tint = SkyFitColor.icon.inverse,
+            modifier = Modifier.align(Alignment.BottomEnd).padding(end = 64.dp)
+        )
+
+        Row(
             modifier = Modifier
-                .size(36.dp)
-                .clip(CircleShape)
-        )
-        Spacer(modifier = Modifier.width(8.dp))
-        Text(
-            text = trainer.name,
-            style = SkyFitTypography.bodyLarge,
-            modifier = Modifier.weight(1f)
-        )
-        Spacer(modifier = Modifier.width(8.dp))
-        SkyFitButtonComponent(
-            modifier = Modifier.wrapContentWidth(), text = "Ekle",
-            onClick = onClickAdd,
-            variant = ButtonVariant.Primary,
-            size = ButtonSize.Micro,
-            state = ButtonState.Rest
-        )
+                .fillMaxWidth()
+                .padding(16.dp),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            AsyncImage(
+                model = trainer.imageUrl,
+                contentDescription = null,
+                contentScale = ContentScale.Crop,
+                modifier = Modifier
+                    .size(36.dp)
+                    .clip(CircleShape)
+            )
+            Spacer(modifier = Modifier.width(8.dp))
+            Text(
+                text = trainer.name,
+                style = SkyFitTypography.bodyLarge,
+                modifier = Modifier.weight(1f)
+            )
+            Spacer(modifier = Modifier.width(8.dp))
+            SkyFitButtonComponent(
+                modifier = Modifier.wrapContentWidth(), text = "Ekle",
+                onClick = onClickAdd,
+                variant = ButtonVariant.Primary,
+                size = ButtonSize.Micro,
+                state = ButtonState.Rest
+            )
+        }
     }
 }
 
 private data class HomeFeaturedTrainer(val name: String, val imageUrl: String)
 
-
-@Composable
-fun MobileDashboardHomeFacilityStatisticsComponent() {
-    Column(
-        modifier = Modifier
-            .size(320.dp, 544.dp)
-            .background(Color.Black, RoundedCornerShape(12.dp))
-            .padding(16.dp)
-    ) {
-        MobileDashboardHomeFacilityStatisticsOverview()
-        Spacer(modifier = Modifier.height(16.dp))
-        MobileDashboardHomeFacilityGraph()
-    }
-}
-
-@Composable
-private fun MobileDashboardHomeFacilityStatisticsOverview() {
-    val stats = listOf(
-        HomeFacilityStat("Aktif Üye", "327", "+53%", true),
-        HomeFacilityStat("Aktif Dersler", "12", "0%", null),
-        HomeFacilityStat("SkyFit Kazancın", "₺3120", "+53%", true),
-        HomeFacilityStat("Profil Görüntülenmesi", "213", "-2%", false)
-    )
-
-    FacilityGridStatsLayout(stats)
-}
-
-@Composable
-private fun FacilityGridStatsLayout(stats: List<HomeFacilityStat>) {
-    Column {
-        Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
-            stats.subList(0, 2).forEach { MobileDashboardHomeFacilityStatCard(it) }
-        }
-        Spacer(modifier = Modifier.height(8.dp))
-        Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
-            stats.subList(2, 4).forEach { MobileDashboardHomeFacilityStatCard(it) }
-        }
-    }
-}
-
-@Composable
-private fun MobileDashboardHomeFacilityStatCard(stat: HomeFacilityStat) {
-    Column(
-        modifier = Modifier
-            .width(150.dp)
-            .height(80.dp)
-            .clip(RoundedCornerShape(12.dp))
-            .background(Color.DarkGray)
-            .padding(12.dp),
-        verticalArrangement = Arrangement.SpaceBetween
-    ) {
-        Text(text = stat.title, fontSize = 14.sp, color = Color.Gray)
-        Row(verticalAlignment = Alignment.CenterVertically) {
-            Text(text = stat.value, fontSize = 20.sp, color = Color.White, fontWeight = FontWeight.Bold)
-            stat.percentage?.let {
-                Spacer(modifier = Modifier.width(8.dp))
-                Box(
-                    modifier = Modifier
-                        .clip(RoundedCornerShape(6.dp))
-                        .background(if (stat.isPositive == true) Color.Green.copy(alpha = 0.2f) else Color.Red.copy(alpha = 0.2f))
-                        .padding(horizontal = 6.dp, vertical = 2.dp)
-                ) {
-                    Text(text = it, fontSize = 12.sp, color = if (stat.isPositive == true) Color.Green else Color.Red)
-                }
-            }
-        }
-    }
-}
-
-@Composable
-private fun MobileDashboardHomeFacilityGraph() {
-    Column {
-        Row(
-            modifier = Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.SpaceBetween
-        ) {
-            Text(text = "Üye Değişimi Grafiği", fontSize = 14.sp, color = Color.White, fontWeight = FontWeight.Bold)
-//            TimeFilterSelector()
-        }
-        Spacer(modifier = Modifier.height(8.dp))
-        MemberChangeLineChart(
-            dataPoints = listOf(12, 7, 15, 20, 14, 8, 10),
-            labels = listOf("Pzts", "Sal", "Çar", "Per", "Cum", "Cmrts", "Paz")
-        )
-    }
-}
-
-private data class HomeFacilityStat(val title: String, val value: String, val percentage: String?, val isPositive: Boolean?)

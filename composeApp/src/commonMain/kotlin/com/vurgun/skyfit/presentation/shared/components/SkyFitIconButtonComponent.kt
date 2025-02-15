@@ -2,6 +2,7 @@ package com.vurgun.skyfit.presentation.shared.components
 
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.size
@@ -18,6 +19,7 @@ import androidx.compose.ui.unit.dp
 import com.vurgun.skyfit.presentation.shared.resources.SkyFitColor
 import org.jetbrains.compose.resources.painterResource
 import skyfit.composeapp.generated.resources.Res
+import skyfit.composeapp.generated.resources.ic_chevron_left
 import skyfit.composeapp.generated.resources.logo_skyfit
 
 @Composable
@@ -30,6 +32,48 @@ fun SkyFitIconButton(
     Box(
         modifier
             .background(color, shape = CircleShape)
+            .clickable(onClick = onClick),
+        contentAlignment = Alignment.Center
+    ) {
+        Icon(
+            painter = painter,
+            contentDescription = "Button",
+            tint = SkyFitColor.icon.default,
+            modifier = Modifier.size(16.dp)
+        )
+    }
+}
+
+@Composable
+fun SkyFitPrimaryCircularBackButton(
+    modifier: Modifier = Modifier.size(48.dp),
+    onClick: () -> Unit = {}
+) {
+    Box(
+        modifier
+            .background(SkyFitColor.specialty.buttonBgRest, shape = CircleShape)
+            .clickable(onClick = onClick),
+        contentAlignment = Alignment.Center
+    ) {
+        Icon(
+            painter = painterResource(Res.drawable.ic_chevron_left),
+            contentDescription = "Back",
+            tint = SkyFitColor.icon.inverseSecondary,
+            modifier = Modifier.size(20.dp)
+        )
+    }
+}
+
+@Composable
+fun SkyFitSecondaryIconButton(
+    painter: Painter = painterResource(Res.drawable.logo_skyfit),
+    modifier: Modifier = Modifier.size(44.dp),
+    onClick: () -> Unit = {}
+) {
+    Box(
+        modifier
+            .background(SkyFitColor.specialty.secondaryButtonRest, shape = CircleShape)
+            .border(1.dp, SkyFitColor.specialty.buttonBgRest, CircleShape)
             .clickable(onClick = onClick),
         contentAlignment = Alignment.Center
     ) {

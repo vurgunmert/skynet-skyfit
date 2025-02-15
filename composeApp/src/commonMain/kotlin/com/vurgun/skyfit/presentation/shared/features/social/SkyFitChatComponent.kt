@@ -30,6 +30,7 @@ import com.vurgun.skyfit.presentation.shared.resources.SkyFitColor
 import com.vurgun.skyfit.presentation.shared.resources.SkyFitTypography
 import org.jetbrains.compose.resources.painterResource
 import skyfit.composeapp.generated.resources.Res
+import skyfit.composeapp.generated.resources.ic_send
 import skyfit.composeapp.generated.resources.logo_skyfit
 
 data class ChatMessageItem(
@@ -93,7 +94,7 @@ fun SkyFitChatMessageInputComponent(modifier: Modifier = Modifier, onSend: (Stri
             verticalAlignment = Alignment.CenterVertically
         ) {
             BasicTextField(
-                modifier = Modifier.weight(1f).padding(horizontal = 8.dp),
+                modifier = Modifier.padding(horizontal = 16.dp).weight(1f),
                 value = userInput,
                 onValueChange = { userInput = it },
                 textStyle = SkyFitTypography.bodyMediumRegular.copy(color = SkyFitColor.text.default),
@@ -126,7 +127,7 @@ private fun SkyFitChatSendIconButton(modifier: Modifier, onClick: () -> Unit) {
             .padding(10.dp)
     ) {
         Icon(
-            painter = painterResource(Res.drawable.logo_skyfit),
+            painter = painterResource(Res.drawable.ic_send),
             contentDescription = "Send",
             tint = SkyFitColor.icon.inverseSecondary,
             modifier = Modifier.size(16.dp)
