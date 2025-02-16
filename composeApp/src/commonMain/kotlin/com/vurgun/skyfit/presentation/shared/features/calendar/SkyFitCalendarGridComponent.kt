@@ -44,6 +44,9 @@ import kotlinx.datetime.LocalDate
 import kotlinx.datetime.number
 import org.jetbrains.compose.resources.painterResource
 import skyfit.composeapp.generated.resources.Res
+import skyfit.composeapp.generated.resources.ic_calendar_dots
+import skyfit.composeapp.generated.resources.ic_chevron_left
+import skyfit.composeapp.generated.resources.ic_chevron_right
 import skyfit.composeapp.generated.resources.logo_skyfit
 
 @Composable
@@ -109,7 +112,7 @@ private object SkyFitCalendarGridComponent {
             horizontalArrangement = Arrangement.Start
         ) {
             Icon(
-                painter = painterResource(Res.drawable.logo_skyfit),
+                painter = painterResource(Res.drawable.ic_calendar_dots),
                 contentDescription = null,
                 tint = SkyFitColor.text.default,
                 modifier = Modifier.size(24.dp)
@@ -131,7 +134,7 @@ private object SkyFitCalendarGridComponent {
             horizontalArrangement = Arrangement.End
         ) {
             Icon(
-                painter = painterResource(Res.drawable.logo_skyfit),
+                painter = painterResource(Res.drawable.ic_chevron_left),
                 contentDescription = null,
                 tint = SkyFitColor.text.default,
                 modifier = Modifier
@@ -146,7 +149,7 @@ private object SkyFitCalendarGridComponent {
                 textAlign = TextAlign.Center
             )
             Icon(
-                painter = painterResource(Res.drawable.logo_skyfit),
+                painter = painterResource(Res.drawable.ic_chevron_right),
                 contentDescription = null,
                 tint = SkyFitColor.text.default,
                 modifier = Modifier

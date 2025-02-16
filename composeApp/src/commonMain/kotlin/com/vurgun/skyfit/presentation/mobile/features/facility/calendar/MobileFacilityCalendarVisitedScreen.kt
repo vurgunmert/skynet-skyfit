@@ -17,6 +17,7 @@ import androidx.compose.material.Icon
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -45,6 +46,7 @@ import moe.tlaster.precompose.navigation.Navigator
 import org.jetbrains.compose.resources.painterResource
 import skyfit.composeapp.generated.resources.Res
 import skyfit.composeapp.generated.resources.ic_check
+import skyfit.composeapp.generated.resources.ic_exercises
 import skyfit.composeapp.generated.resources.logo_skyfit
 
 @Composable
@@ -52,15 +54,20 @@ fun MobileFacilityCalendarVisitedScreen(navigator: Navigator) {
 
     val viewModel = remember { FacilityCalendarVisitedViewModel() }
     val calendarClasses by viewModel.calendarClasses.collectAsState()
+    val navigationEvent by viewModel.navigationEvent.collectAsState()
+    val isAppointmentAllowed by viewModel.isAppointmentAllowed.collectAsState()
 
-    val showCreateAction: Boolean = true
+    LaunchedEffect(navigationEvent) {
+        navigationEvent?.let { navigator.jumpAndStay(it) }
+    }
+
     Scaffold(
         backgroundColor = SkyFitColor.background.default,
         topBar = {
             SkyFitScreenHeader("Randevu Al", onClickBack = { navigator.popBackStack() })
         },
         bottomBar = {
-            if (showCreateAction) {
+            if (isAppointmentAllowed) {
                 MobileFacilityCalendarVisitedScreenCreateActionComponent(onClick = {
                     navigator.jumpAndStay(SkyFitNavigationRoute.UserAppointmentDetail)
                 })
@@ -74,22 +81,12 @@ fun MobileFacilityCalendarVisitedScreen(navigator: Navigator) {
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {
             MobileFacilityCalendarVisitedScreenCalendarGridComponent()
-            MobileFacilityCalendarVisitedScreenPrivateClassesComponent(calendarClasses, viewModel::toggleSelection)
+            MobileFacilityCalendarVisitedScreenPrivateClassesComponent(calendarClasses, viewModel::handleClassSelection)
             Spacer(Modifier.height(112.dp))
         }
     }
 }
 
-@Composable
-fun MobileFacilityCalendarVisitedScreenCalendarGridComponent() {
-    var selectedDate by remember { mutableStateOf(LocalDate.now()) }
-
-    SkyFitCalendarGridComponent(
-        initialSelectedDate = selectedDate,
-        isSingleSelect = true,
-        onDateSelected = { selectedDate = it }
-    )
-}
 
 @Composable
 fun MobileFacilityCalendarVisitedScreenPrivateClassesComponent(
@@ -106,13 +103,13 @@ fun MobileFacilityCalendarVisitedScreenPrivateClassesComponent(
         Column(Modifier.fillMaxWidth()) {
             Row(verticalAlignment = Alignment.CenterVertically) {
                 Icon(
-                    painter = painterResource(Res.drawable.logo_skyfit),
+                    painter = painterResource(Res.drawable.ic_exercises),
                     contentDescription = null,
                     modifier = Modifier.size(24.dp),
                     tint = SkyFitColor.icon.default
                 )
                 Text(
-                    text = "Ozel Ders Sec",
+                    text = "Özel Ders Seç",
                     style = SkyFitTypography.bodyLargeSemibold,
                     modifier = Modifier.padding(8.dp).height(24.dp),
                     textAlign = TextAlign.Center
@@ -142,4 +139,15 @@ fun MobileFacilityCalendarVisitedScreenCreateActionComponent(onClick: () -> Unit
             leftIconPainter = painterResource(Res.drawable.ic_check)
         )
     }
+}
+
+@Composable
+fun MobileFacilityCalendarVisitedScreenCalendarGridComponent() {
+    var selectedDate by remember { mutableStateOf(LocalDate.now()) }
+
+    SkyFitCalendarGridComponent(
+        initialSelectedDate = selectedDate,
+        isSingleSelect = true,
+        onDateSelected = { selectedDate = it }
+    )
 }

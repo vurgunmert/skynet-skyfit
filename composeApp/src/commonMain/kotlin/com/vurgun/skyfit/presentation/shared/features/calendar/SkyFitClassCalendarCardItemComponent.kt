@@ -18,18 +18,20 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import com.vurgun.skyfit.presentation.shared.resources.SkyFitColor
+import com.vurgun.skyfit.presentation.shared.resources.SkyFitIcon
 import com.vurgun.skyfit.presentation.shared.resources.SkyFitTypography
 import org.jetbrains.compose.resources.DrawableResource
 import org.jetbrains.compose.resources.painterResource
 import skyfit.composeapp.generated.resources.Res
 import skyfit.composeapp.generated.resources.ic_clock
 import skyfit.composeapp.generated.resources.ic_dashboard
+import skyfit.composeapp.generated.resources.ic_exercises
 import skyfit.composeapp.generated.resources.ic_location_pin
 import skyfit.composeapp.generated.resources.ic_note
 import skyfit.composeapp.generated.resources.ic_profile_fill
-import skyfit.composeapp.generated.resources.logo_skyfit
 
 data class SkyFitClassCalendarCardItem(
     val title: String,
@@ -48,93 +50,106 @@ data class SkyFitClassCalendarCardItem(
 )
 
 @Composable
-fun SkyFitClassCalendarCardItemComponent(item: SkyFitClassCalendarCardItem, onClick: (SkyFitClassCalendarCardItem) -> Unit) {
+fun SkyFitClassCalendarCardItemComponent(
+    item: SkyFitClassCalendarCardItem,
+    onClick: (SkyFitClassCalendarCardItem) -> Unit
+) {
+    val textColor = if (item.enabled) SkyFitColor.text.default else SkyFitColor.text.disabled
+    val subTextColor = if (item.enabled) SkyFitColor.text.secondary else SkyFitColor.text.disabled
+    val iconColor = if (item.enabled) SkyFitColor.icon.default else SkyFitColor.icon.disabled
 
     Box(
         Modifier.fillMaxWidth()
             .background(SkyFitColor.background.fillTransparentSecondary, RoundedCornerShape(16.dp))
-            .apply {
-                if (item.selected){
-                    this.border(
+            .then(
+                if (item.selected) {
+                    Modifier.border(
                         width = 1.dp,
                         color = SkyFitColor.border.secondaryButton,
                         shape = RoundedCornerShape(16.dp)
                     )
-                }
-            }
+                } else Modifier
+            )
             .clickable(onClick = { onClick(item) })
             .padding(12.dp)
     ) {
         Column {
             Row(verticalAlignment = Alignment.CenterVertically) {
                 Icon(
-                    painter = painterResource(Res.drawable.logo_skyfit),
+                    painter = SkyFitIcon.getIconResourcePainter(item.iconId, defaultRes = Res.drawable.ic_exercises),
                     contentDescription = null,
                     modifier = Modifier.size(24.dp),
-                    tint = SkyFitColor.icon.default
+                    tint = iconColor
                 )
                 Text(
                     text = item.title,
                     style = SkyFitTypography.bodyLargeSemibold,
-                    modifier = Modifier.padding(start = 8.dp)
+                    modifier = Modifier.padding(start = 8.dp),
+                    color = textColor
                 )
                 Spacer(Modifier.weight(1f))
                 Text(
                     text = "(${item.capacity})",
                     style = SkyFitTypography.bodyLargeSemibold,
-                    modifier = Modifier.padding(start = 8.dp)
+                    modifier = Modifier.padding(start = 8.dp),
+                    color = textColor
                 )
             }
 
             item.date?.let {
                 Spacer(Modifier.height(8.dp))
-                SkyFitClassCalendarCardItemRowComponent(it, iconRes = Res.drawable.ic_clock)
+                SkyFitClassCalendarCardItemRowComponent(it, iconRes = Res.drawable.ic_clock, subTextColor, iconColor)
             }
 
             item.hours?.let {
                 Spacer(Modifier.height(8.dp))
-                SkyFitClassCalendarCardItemRowComponent(it, iconRes = Res.drawable.ic_clock)
+                SkyFitClassCalendarCardItemRowComponent(it, iconRes = Res.drawable.ic_clock, subTextColor, iconColor)
             }
 
             item.location?.let {
                 Spacer(Modifier.height(8.dp))
-                SkyFitClassCalendarCardItemRowComponent(it, iconRes = Res.drawable.ic_location_pin)
+                SkyFitClassCalendarCardItemRowComponent(it, iconRes = Res.drawable.ic_location_pin, subTextColor, iconColor)
             }
 
             item.trainer?.let {
                 Spacer(Modifier.height(8.dp))
-                SkyFitClassCalendarCardItemRowComponent(it, iconRes = Res.drawable.ic_profile_fill)
+                SkyFitClassCalendarCardItemRowComponent(it, iconRes = Res.drawable.ic_profile_fill, subTextColor, iconColor)
             }
 
             item.category?.let {
                 Spacer(Modifier.height(8.dp))
-                SkyFitClassCalendarCardItemRowComponent(it, iconRes = Res.drawable.ic_dashboard)
+                SkyFitClassCalendarCardItemRowComponent(it, iconRes = Res.drawable.ic_dashboard, subTextColor, iconColor)
             }
 
             item.note?.let {
                 Spacer(Modifier.height(8.dp))
-                SkyFitClassCalendarCardItemRowComponent(it, iconRes = Res.drawable.ic_note)
+                SkyFitClassCalendarCardItemRowComponent(it, iconRes = Res.drawable.ic_note, subTextColor, iconColor)
             }
         }
     }
 }
 
 @Composable
-fun SkyFitClassCalendarCardItemRowComponent(value: String, iconRes: DrawableResource) {
+fun SkyFitClassCalendarCardItemRowComponent(
+    value: String,
+    iconRes: DrawableResource,
+    textColor: Color = SkyFitColor.text.default,
+    iconColor: Color = SkyFitColor.icon.default
+) {
 
     Row(verticalAlignment = Alignment.CenterVertically) {
         Icon(
             painter = painterResource(iconRes),
             contentDescription = null,
             modifier = Modifier.size(16.dp),
-            tint = SkyFitColor.icon.secondary
+            tint = iconColor
         )
         Spacer(Modifier.width(4.dp))
         Text(
             text = value,
             style = SkyFitTypography.bodyMediumRegular,
             modifier = Modifier.weight(1f),
-            color = SkyFitColor.text.secondary
+            color = textColor
         )
     }
 }

@@ -6,6 +6,7 @@ import kotlinx.datetime.LocalDate
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.isoDayNumber
 import kotlinx.datetime.minus
+import kotlinx.datetime.plus
 import kotlinx.datetime.toLocalDateTime
 
 // Helpers for LocalDate
@@ -63,6 +64,15 @@ fun LocalDate.isBefore(other: LocalDate): Boolean = this < other
 fun LocalDate.isAfter(other: LocalDate): Boolean = this > other
 fun LocalDate.Companion.now(): LocalDate {
     return Clock.System.now().toLocalDateTime(TimeZone.currentSystemDefault()).date
+}
+
+fun LocalDate.withDayOfMonth(day: Int): LocalDate {
+    return this.minus(dayOfMonth - day, DateTimeUnit.DAY)
+}
+
+fun LocalDate.lengthOfMonth(): Int {
+    val nextMonth = this.plus(1, DateTimeUnit.MONTH)
+    return nextMonth.withDayOfMonth(1).minus(1, DateTimeUnit.DAY).dayOfMonth
 }
 
 fun getTurkishMonthName(month: Int): String {

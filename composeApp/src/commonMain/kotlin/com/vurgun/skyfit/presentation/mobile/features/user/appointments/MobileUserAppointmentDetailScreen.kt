@@ -18,7 +18,6 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Icon
-import androidx.compose.material.IconButton
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -39,10 +38,16 @@ import com.vurgun.skyfit.presentation.shared.resources.SkyFitColor
 import com.vurgun.skyfit.presentation.shared.resources.SkyFitTypography
 import com.vurgun.skyfit.presentation.shared.viewmodel.UserAppointmentDetailViewModel
 import moe.tlaster.precompose.navigation.Navigator
+import org.jetbrains.compose.resources.DrawableResource
 import org.jetbrains.compose.resources.painterResource
 import org.koin.compose.koinInject
 import skyfit.composeapp.generated.resources.Res
-import skyfit.composeapp.generated.resources.logo_skyfit
+import skyfit.composeapp.generated.resources.ic_check
+import skyfit.composeapp.generated.resources.ic_check_circle
+import skyfit.composeapp.generated.resources.ic_chevron_left
+import skyfit.composeapp.generated.resources.ic_clock
+import skyfit.composeapp.generated.resources.ic_location_pin
+import skyfit.composeapp.generated.resources.ic_profile
 
 @Composable
 fun MobileUserAppointmentDetailScreen(navigator: Navigator) {
@@ -82,17 +87,12 @@ fun MobileUserAppointmentDetailScreen(navigator: Navigator) {
 @Composable
 fun MobileUserAppointmentDetailScreenToolbarComponent(title: String, onClickBack: () -> Unit, status: String?) {
     Box(Modifier.fillMaxWidth().padding(horizontal = 24.dp, vertical = 8.dp)) {
-        IconButton(
-            onClick = onClickBack,
-            modifier = Modifier.align(Alignment.CenterStart)
-        ) {
-            Icon(
-                painter = painterResource(Res.drawable.logo_skyfit),
-                contentDescription = "Back",
-                tint = SkyFitColor.text.default,
-                modifier = Modifier.size(16.dp)
-            )
-        }
+        Icon(
+            painter = painterResource(Res.drawable.ic_chevron_left),
+            contentDescription = "Back",
+            tint = SkyFitColor.text.default,
+            modifier = Modifier.align(Alignment.CenterStart).size(16.dp).clickable(onClick = onClickBack)
+        )
 
         Text(
             text = title,
@@ -111,8 +111,10 @@ fun MobileUserAppointmentDetailScreenToolbarComponent(title: String, onClickBack
 fun MobileUserAppointmentDetailScreenInformationComponent(appointment: AppointmentCardViewData) {
     Column(Modifier.fillMaxWidth().padding(vertical = 16.dp)) {
         AppointmentDetailRow(
+            leftIconRes = Res.drawable.ic_clock,
             leftTitle = "Tarih - Saat",
             leftValue = "${appointment.date}\n${appointment.hours}",
+            rightIconRes = Res.drawable.ic_profile,
             rightTitle = "Eğitmen",
             rightValue = appointment.trainer
         )
@@ -120,8 +122,10 @@ fun MobileUserAppointmentDetailScreenInformationComponent(appointment: Appointme
         Spacer(Modifier.height(16.dp))
 
         AppointmentDetailRow(
+            leftIconRes = Res.drawable.ic_location_pin,
             leftTitle = "Studio",
             leftValue = appointment.location,
+            rightIconRes = Res.drawable.ic_check_circle,
             rightTitle = "Toplam Katılımcı",
             rightValue = appointment.capacity ?: "-"
         )
@@ -130,21 +134,34 @@ fun MobileUserAppointmentDetailScreenInformationComponent(appointment: Appointme
 
 // 📌 **New Component to Ensure Equal Height in a Row**
 @Composable
-fun AppointmentDetailRow(leftTitle: String, leftValue: String, rightTitle: String, rightValue: String) {
+fun AppointmentDetailRow(
+    leftIconRes: DrawableResource,
+    leftTitle: String,
+    leftValue: String,
+    rightIconRes: DrawableResource,
+    rightTitle: String,
+    rightValue: String
+) {
     BoxWithConstraints(Modifier.fillMaxWidth()) {
         val maxHeight = remember { mutableStateOf(0.dp) } // Store max height
 
         Row(Modifier.fillMaxWidth()) {
-            AppointmentDetailItemCard(leftTitle, leftValue, Modifier.weight(1f), maxHeight)
+            AppointmentDetailItemCard(leftIconRes, leftTitle, leftValue, Modifier.weight(1f), maxHeight)
             Spacer(Modifier.width(16.dp))
-            AppointmentDetailItemCard(rightTitle, rightValue, Modifier.weight(1f), maxHeight)
+            AppointmentDetailItemCard(rightIconRes, rightTitle, rightValue, Modifier.weight(1f), maxHeight)
         }
     }
 }
 
 // 📌 **Updated Detail Card with Adjustable Height**
 @Composable
-fun AppointmentDetailItemCard(title: String, value: String, modifier: Modifier, maxHeight: MutableState<Dp>) {
+fun AppointmentDetailItemCard(
+    iconRes: DrawableResource,
+    title: String,
+    value: String,
+    modifier: Modifier,
+    maxHeight: MutableState<Dp>
+) {
     val density = LocalDensity.current // Get current density for conversion
 
     Box(
@@ -161,7 +178,7 @@ fun AppointmentDetailItemCard(title: String, value: String, modifier: Modifier, 
     ) {
         Column {
             Icon(
-                painter = painterResource(Res.drawable.logo_skyfit),
+                painter = painterResource(iconRes),
                 contentDescription = "Icon",
                 tint = SkyFitColor.text.default,
                 modifier = Modifier.size(16.dp)
