@@ -24,8 +24,8 @@ data class UserAccountState(
 
 class SkyFitUserAccountSettingsViewModel : ViewModel() {
 
-    private val _userAccountState = MutableStateFlow(UserAccountState())
-    val userAccountState: StateFlow<UserAccountState> = _userAccountState
+    private val _accountState = MutableStateFlow(UserAccountState())
+    val accountState: StateFlow<UserAccountState> = _accountState
 
     private var initialState: UserAccountState? = null
 
@@ -43,12 +43,12 @@ class SkyFitUserAccountSettingsViewModel : ViewModel() {
             profileImageUrl = null,
             backgroundImageUrl = null
         )
-        _userAccountState.value = initial
+        _accountState.value = initial
         initialState = initial
     }
 
     private fun updateState(update: UserAccountState.() -> UserAccountState) {
-        _userAccountState.update {
+        _accountState.update {
             val newState = it.update().copy(isUpdated = it != initialState)
             newState
         }
@@ -92,7 +92,7 @@ class SkyFitUserAccountSettingsViewModel : ViewModel() {
 
     fun saveChanges() {
         updateState { copy(isUpdated = false) }
-        initialState = _userAccountState.value
+        initialState = _accountState.value
     }
 
     fun deleteAccount() {

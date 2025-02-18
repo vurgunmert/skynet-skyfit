@@ -134,7 +134,7 @@ private fun MobileUserActivityCalendarSearchScreenSearchComponent() {
         modifier = Modifier.fillMaxWidth().padding(horizontal = 8.dp, vertical = 16.dp),
         contentAlignment = Alignment.Center
     ) {
-        SkyFitSearchTextInputComponent("Antrenman, antrenör ya da spor salonu ara")
+        SkyFitSearchTextInputComponent(hint = "Antrenman, antrenör ya da spor salonu ara")
     }
 }
 

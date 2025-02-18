@@ -1,6 +1,7 @@
 package com.vurgun.skyfit.presentation.mobile.features.facility.settings
 
 
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -12,27 +13,43 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Scaffold
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import com.vurgun.skyfit.presentation.mobile.features.user.settings.MobileUserSettingsActivityTagEditComponent
-import com.vurgun.skyfit.presentation.mobile.features.user.settings.MobileUserSettingsScreenPhotoEditComponent
-import com.vurgun.skyfit.presentation.shared.components.ButtonSize
-import com.vurgun.skyfit.presentation.shared.components.ButtonState
-import com.vurgun.skyfit.presentation.shared.components.ButtonVariant
-import com.vurgun.skyfit.presentation.shared.components.SkyFitButtonComponent
 import com.vurgun.skyfit.presentation.shared.components.SkyFitScreenHeader
+import com.vurgun.skyfit.presentation.shared.features.settings.AccountSettingsSelectToEnterMultilineInputComponent
 import com.vurgun.skyfit.presentation.shared.features.settings.MobileSettingsMenuItemComponent
+import com.vurgun.skyfit.presentation.shared.features.settings.MobileUserSettingsActivityTagEditComponent
+import com.vurgun.skyfit.presentation.shared.features.settings.MobileUserSettingsScreenDeleteActionsComponent
+import com.vurgun.skyfit.presentation.shared.features.settings.MobileUserSettingsScreenPhotoEditComponent
+import com.vurgun.skyfit.presentation.shared.features.settings.MobileUserSettingsScreenSaveActionComponent
+import com.vurgun.skyfit.presentation.shared.navigation.SkyFitNavigationRoute
+import com.vurgun.skyfit.presentation.shared.navigation.jumpAndStay
 import com.vurgun.skyfit.presentation.shared.resources.SkyFitColor
 import moe.tlaster.precompose.navigation.Navigator
-import org.jetbrains.compose.resources.painterResource
 import skyfit.composeapp.generated.resources.Res
-import skyfit.composeapp.generated.resources.logo_skyfit
+import skyfit.composeapp.generated.resources.ic_delete
+import skyfit.composeapp.generated.resources.ic_lock
 
 @Composable
 fun MobileFacilitySettingsAccountScreen(navigator: Navigator) {
 
-    var saveEnabled: Boolean = true
+    val viewModel = remember { FacilityAccountSettingsViewModel() }
+
+    val accountState by viewModel.accountState.collectAsState()
+    val scrollState = rememberScrollState()
+
+    var showDeleteConfirm by remember { mutableStateOf(false) }
+
+    LaunchedEffect(Unit) {
+        viewModel.loadData()
+    }
 
     Scaffold(
         backgroundColor = SkyFitColor.background.default,
@@ -40,49 +57,67 @@ fun MobileFacilitySettingsAccountScreen(navigator: Navigator) {
             SkyFitScreenHeader("Hesap Ayarlari", onClickBack = { navigator.popBackStack() })
         },
         bottomBar = {
-            if (saveEnabled) {
+            if (showDeleteConfirm) {
+                MobileUserSettingsScreenDeleteActionsComponent(
+                    onCancelClicked = { showDeleteConfirm = false },
+                    onDeleteClicked = {}
+                )
+            } else if (accountState.isUpdated) {
                 Box(Modifier.fillMaxWidth().padding(24.dp)) {
-                    MobileFacilitySettingsAccountScreenSaveActionComponent(
-                        onClick = { saveEnabled = false }
-                    )
+                    MobileUserSettingsScreenSaveActionComponent(onClick = viewModel::saveChanges)
                 }
             }
         }
     ) {
         Column(
-            modifier = Modifier.fillMaxSize().verticalScroll(rememberScrollState()),
+            modifier = Modifier.fillMaxSize()
+                .padding(24.dp)
+                .verticalScroll(scrollState),
             horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.spacedBy(24.dp)
         ) {
-            MobileFacilitySettingsAccountScreenInputComponent()
 
-            MobileSettingsMenuItemComponent("Şifremi Değiştir")
-            Spacer(Modifier.height(32.dp))
+            MobileUserSettingsScreenPhotoEditComponent(
+                urlString = null,
+                label = "Arkaplanı Düzenle",
+                onImagePicked = {
+                    //TODO: Picked image should be stored
+                }
+            )
 
-            MobileSettingsMenuItemComponent("Hesabı Sil")
-            Spacer(Modifier.height(32.dp))
+            AccountSettingsSelectToEnterMultilineInputComponent(
+                title = "Biyografi *",
+                hint = "Biyografi bilgilerinizi girin",
+                value = accountState.biography,
+                onValueChange = { viewModel.updateBiography(it) }
+            )
+
+            AccountSettingsSelectToEnterMultilineInputComponent(
+                title = "Adres *",
+                hint = "Adres bilgilerinizi girin",
+                value = accountState.location,
+                onValueChange = { viewModel.updateLocation(it) }
+            )
+
+            MobileUserSettingsActivityTagEditComponent(
+                selectedTags = accountState.profileTags,
+                onTagsSelected = viewModel::updateTags
+            )
+
+            MobileSettingsMenuItemComponent(
+                text = "Şifremi Değiştir",
+                iconRes = Res.drawable.ic_lock,
+                onClick = { navigator.jumpAndStay(SkyFitNavigationRoute.UserSettingsChangePassword) }
+            )
+
+            MobileSettingsMenuItemComponent(
+                text = "Hesabı Sil",
+                iconRes = Res.drawable.ic_delete,
+                onClick = { showDeleteConfirm = true }
+            )
+
+            Spacer(Modifier.height(124.dp))
         }
     }
 }
 
-@Composable
-private fun MobileFacilitySettingsAccountScreenInputComponent() {
-
-    Spacer(Modifier.height(24.dp))
-    MobileUserSettingsScreenPhotoEditComponent("backgroundImageUrl", label = "Arkaplanı Düzenle") {
-
-    }
-    Spacer(Modifier.height(24.dp))
-//    MobileUserSettingsActivityTagEditComponent()
-}
-
-@Composable
-private fun MobileFacilitySettingsAccountScreenSaveActionComponent(onClick: () -> Unit) {
-    SkyFitButtonComponent(
-        modifier = Modifier.fillMaxWidth(), text = "Değişiklikleri Kaydet",
-        onClick = onClick,
-        variant = ButtonVariant.Primary,
-        size = ButtonSize.Large,
-        state = ButtonState.Rest,
-        leftIconPainter = painterResource(Res.drawable.logo_skyfit)
-    )
-}

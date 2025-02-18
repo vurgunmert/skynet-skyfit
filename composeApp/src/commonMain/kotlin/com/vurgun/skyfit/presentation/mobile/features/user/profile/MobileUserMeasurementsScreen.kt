@@ -71,7 +71,7 @@ fun MobileUserMeasurementsScreen(navigator: Navigator) {
 
 @Composable
 private fun MobileUserMeasurementsScreenSearchComponent() {
-    SkyFitSearchTextInputComponent("Test Ara")
+    SkyFitSearchTextInputComponent(hint = "Test Ara")
 }
 
 @Composable

@@ -114,7 +114,7 @@ private fun MobileUserConversationsSearchComponent() {
         Spacer(Modifier.height(8.dp))
 
         SkyFitSearchTextInputComponent(
-            "Search...",
+            hint = "Search...",
             value = searchQuery,
             onValueChange = { searchQuery = it },
             modifier = Modifier.padding(horizontal = 16.dp)

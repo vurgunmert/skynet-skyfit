@@ -32,7 +32,7 @@ fun MobileExploreBlogScreen(rootNavigator: Navigator) {
         topBar = {
             Column {
                 SkyFitScreenHeader("Blog", onClickBack = { rootNavigator.popBackStack() })
-                SkyFitSearchTextInputComponent("Antrenman ara")
+                SkyFitSearchTextInputComponent(hint = "Antrenman ara")
             }
         }
     ) {

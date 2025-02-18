@@ -1,9 +1,8 @@
 package com.vurgun.skyfit.presentation.mobile.features.facility.settings
 
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -16,7 +15,16 @@ import com.vurgun.skyfit.presentation.shared.features.settings.MobileSettingsMen
 import com.vurgun.skyfit.presentation.shared.components.SkyFitButtonComponent
 import com.vurgun.skyfit.presentation.shared.components.SkyFitScaffold
 import com.vurgun.skyfit.presentation.shared.components.SkyFitScreenHeader
+import com.vurgun.skyfit.presentation.shared.navigation.SkyFitNavigationRoute
+import com.vurgun.skyfit.presentation.shared.navigation.jumpAndStay
 import moe.tlaster.precompose.navigation.Navigator
+import skyfit.composeapp.generated.resources.Res
+import skyfit.composeapp.generated.resources.ic_athletic_performance
+import skyfit.composeapp.generated.resources.ic_bell
+import skyfit.composeapp.generated.resources.ic_credit_card
+import skyfit.composeapp.generated.resources.ic_posture_fill
+import skyfit.composeapp.generated.resources.ic_profile
+import skyfit.composeapp.generated.resources.ic_question_circle
 
 @Composable
 fun MobileFacilitySettingsScreen(navigator: Navigator) {
@@ -36,31 +44,53 @@ fun MobileFacilitySettingsScreen(navigator: Navigator) {
             )
         }
     ) {
-        MobileFacilitySettingsScreenOptionsComponent()
-    }
-}
+        Column(
+            modifier = Modifier.fillMaxWidth().padding(top = 32.dp, start = 32.dp, end = 22.dp),
+            verticalArrangement = Arrangement.spacedBy(32.dp)
+        ) {
+
+            MobileSettingsMenuItemComponent(
+                text = "Hesap Ayarlari",
+                iconRes = Res.drawable.ic_profile,
+                onClick = { navigator.jumpAndStay(SkyFitNavigationRoute.FacilitySettingsAccount) }
+            )
+
+            MobileSettingsMenuItemComponent(
+                text = "Ödeme Geçmişi",
+                iconRes = Res.drawable.ic_credit_card,
+                onClick = { navigator.jumpAndStay(SkyFitNavigationRoute.FacilitySettingsPaymentHistory) }
+            )
+
+            MobileSettingsMenuItemDividerComponent()
+
+            MobileSettingsMenuItemComponent(
+                text = "Bildirimler",
+                iconRes = Res.drawable.ic_bell,
+                onClick = { navigator.jumpAndStay(SkyFitNavigationRoute.FacilitySettingsNotifications) }
+            )
+
+            MobileSettingsMenuItemDividerComponent()
+
+            MobileSettingsMenuItemComponent(
+                text = "Üyeler",
+                iconRes = Res.drawable.ic_posture_fill,
+                onClick = { navigator.jumpAndStay(SkyFitNavigationRoute.FacilitySettingsMembers) }
+            )
 
 
-@Composable
-private fun MobileFacilitySettingsScreenOptionsComponent() {
-    Column(Modifier.fillMaxWidth().padding(top = 32.dp, start = 32.dp, end = 22.dp)) {
+            MobileSettingsMenuItemComponent(
+                text = "Eğitmenler",
+                iconRes = Res.drawable.ic_athletic_performance,
+                onClick = { navigator.jumpAndStay(SkyFitNavigationRoute.FacilitySettingsTrainers) }
+            )
 
-        MobileSettingsMenuItemComponent("Hesap Ayarlari")
-        Spacer(Modifier.height(32.dp))
-        MobileSettingsMenuItemComponent("Ödeme Geçmişi")
-        Spacer(Modifier.height(32.dp))
-        MobileSettingsMenuItemDividerComponent()
-        Spacer(Modifier.height(32.dp))
-        MobileSettingsMenuItemComponent("Bildirimler")
-        Spacer(Modifier.height(32.dp))
-        MobileSettingsMenuItemDividerComponent()
-        Spacer(Modifier.height(32.dp))
-        MobileSettingsMenuItemComponent("Uyeler")
-        Spacer(Modifier.height(32.dp))
-        MobileSettingsMenuItemComponent("Egitmenler")
-        Spacer(Modifier.height(32.dp))
-        MobileSettingsMenuItemDividerComponent()
-        Spacer(Modifier.height(32.dp))
-        MobileSettingsMenuItemComponent("Destek ve Yardim")
+            MobileSettingsMenuItemDividerComponent()
+
+            MobileSettingsMenuItemComponent(
+                text = "Destek ve Yardim",
+                iconRes = Res.drawable.ic_question_circle,
+                onClick = { navigator.jumpAndStay(SkyFitNavigationRoute.FacilitySettingsHelp) }
+            )
+        }
     }
 }

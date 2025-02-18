@@ -7,6 +7,10 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.Scaffold
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.vurgun.skyfit.presentation.shared.features.settings.SettingsSwitchOptionItem
@@ -18,40 +22,29 @@ import moe.tlaster.precompose.navigation.Navigator
 @Composable
 fun MobileFacilitySettingsNotificationsScreen(navigator: Navigator) {
 
+    val viewModel = remember { FacilityNotificationSettingsViewModel() }
+    val options by viewModel.options.collectAsState()
+
+    LaunchedEffect(Unit) {
+        viewModel.loadData()
+    }
+
     Scaffold(
         backgroundColor = SkyFitColor.background.default,
         topBar = {
             SkyFitScreenHeader("Bildirimler", onClickBack = { navigator.popBackStack() })
         }
     ) {
-        MobileFacilitySettingsNotificationsScreenOptionsComponent()
-    }
-}
-
-@Composable
-private fun MobileFacilitySettingsNotificationsScreenOptionsComponent() {
-    var options = listOf(
-        SettingsSwitchOptionItem("Ders Hatırlatmaları", "Yaklaşan derslerin bir gün önceden bildirimini al", true),
-        SettingsSwitchOptionItem("Antrenör Güncellemeleri", "Antrenörlerin ders iptali veya değişiklik duyuruları.", false),
-        SettingsSwitchOptionItem("Günlük antrenman hatırlatıcıları", "", true),
-        SettingsSwitchOptionItem("Yeni meydan okumalar", "", false),
-        SettingsSwitchOptionItem("Antrenör Güncellemeleri", "Antrenörlerin ders iptali veya değişiklik duyuruları.", false),
-        SettingsSwitchOptionItem("Günlük antrenman hatırlatıcıları", "", true),
-        SettingsSwitchOptionItem("Yeni meydan okumalar", "", false),
-        SettingsSwitchOptionItem("Antrenör Güncellemeleri", "Antrenörlerin ders iptali veya değişiklik duyuruları.", false),
-        SettingsSwitchOptionItem("Günlük antrenman hatırlatıcıları", "", true),
-        SettingsSwitchOptionItem("Yeni meydan okumalar", "", false),
-        SettingsSwitchOptionItem("Antrenör Güncellemeleri", "Antrenörlerin ders iptali veya değişiklik duyuruları.", false),
-        SettingsSwitchOptionItem("Günlük antrenman hatırlatıcıları", "", true),
-        SettingsSwitchOptionItem("Yeni meydan okumalar", "", false)
-    )
-
-    LazyColumn(
-        modifier = Modifier.padding(start = 33.dp, top = 32.dp, end = 23.dp, bottom = 24.dp).fillMaxSize(),
-        verticalArrangement = Arrangement.spacedBy(16.dp)
-    ) {
-        items(options) {
-            SkyFitSettingsSwitchOptionItemComponent(it, onChangeEnable = { })
+        LazyColumn(
+            modifier = Modifier.padding(start = 33.dp, top = 32.dp, end = 23.dp, bottom = 24.dp).fillMaxSize(),
+            verticalArrangement = Arrangement.spacedBy(16.dp)
+        ) {
+            items(options) { option ->
+                SkyFitSettingsSwitchOptionItemComponent(
+                    item = option,
+                    onChangeEnable = { isEnabled -> viewModel.updateOption(option, isEnabled) }
+                )
+            }
         }
     }
 }

@@ -23,7 +23,6 @@ import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Close
-import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.Info
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -57,9 +56,8 @@ import skyfit.composeapp.generated.resources.ic_delete
 import skyfit.composeapp.generated.resources.ic_exercises
 import skyfit.composeapp.generated.resources.ic_lira
 import skyfit.composeapp.generated.resources.ic_location_pin
-import skyfit.composeapp.generated.resources.ic_posture
+import skyfit.composeapp.generated.resources.ic_posture_fill
 import skyfit.composeapp.generated.resources.ic_profile_fill
-import skyfit.composeapp.generated.resources.logo_skyfit
 
 @Composable
 fun MobileUserAppointmentsScreen(navigator: Navigator) {
@@ -247,7 +245,7 @@ fun BookedAppointmentCardItemComponent(
             Row {
                 AppointmentSingleDataBoxComponent(
                     item.capacity,
-                    iconRes = Res.drawable.ic_posture,
+                    iconRes = Res.drawable.ic_posture_fill,
                     modifier = Modifier.weight(1f)
                 )
                 Spacer(Modifier.width(8.dp))

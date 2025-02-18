@@ -16,10 +16,9 @@ fun MobileFacilitySettingsTrainersScreen(navigator: Navigator) {
                     onClickBack = { navigator.popBackStack() },
                     onClickAdd = { }
                 )
-                MobileFacilitySettingsSearchUserComponent()
             }
         }
     ) {
-        MobileFacilitySettingsSearchResultsComponent()
+
     }
 }

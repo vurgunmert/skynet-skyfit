@@ -87,7 +87,7 @@ import skyfit.composeapp.generated.resources.ic_close_circle
 import skyfit.composeapp.generated.resources.ic_flip_camera
 import skyfit.composeapp.generated.resources.ic_image
 import skyfit.composeapp.generated.resources.ic_info_circle
-import skyfit.composeapp.generated.resources.ic_posture
+import skyfit.composeapp.generated.resources.ic_posture_fill
 import skyfit.composeapp.generated.resources.ic_visibility_hide
 import skyfit.composeapp.generated.resources.logo_skyfit
 
@@ -208,7 +208,7 @@ private fun MobileUserBodyAnalysisScreenToolbarComponent(
         )
         Spacer(Modifier.weight(1f))
         SkyFitIconButton(
-            painter = painterResource(Res.drawable.ic_posture),
+            painter = painterResource(Res.drawable.ic_posture_fill),
             modifier = Modifier.size(48.dp),
             onClick = onToggleGuide
         )

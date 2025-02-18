@@ -1,5 +1,6 @@
 package com.vurgun.skyfit.presentation.mobile.features.facility.settings
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -17,6 +18,9 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -37,19 +41,44 @@ import moe.tlaster.precompose.navigation.Navigator
 @Composable
 fun MobileFacilitySettingsMembersScreen(navigator: Navigator) {
 
+    val viewModel = remember { FacilityMembersViewModel() }
+    val members by viewModel.members.collectAsState()
+    val searchQuery by viewModel.searchQuery.collectAsState()
+
     SkyFitScaffold(
         topBar = {
-            Column {
+            Column(Modifier.fillMaxWidth()) {
                 MobileFacilitySettingsSearchUserToolbarComponent(
                     title = "Uyeler",
                     onClickBack = { navigator.popBackStack() },
-                    onClickAdd = { }
+                    onClickAdd = { viewModel.addMember() }
                 )
-                MobileFacilitySettingsSearchUserComponent()
+
+                SkyFitSearchTextInputComponent(
+                    hint = "Ara",
+                    value = searchQuery,
+                    onValueChange = { viewModel.updateSearchQuery(it) },
+                    modifier = Modifier.padding(horizontal = 16.dp)
+                )
             }
         }
-    ) {
-        MobileFacilitySettingsSearchResultsComponent()
+    ) { paddingValues ->
+
+        LazyColumn(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(paddingValues)
+                .padding(20.dp),
+            verticalArrangement = Arrangement.spacedBy(16.dp)
+        ) {
+            items(members) {
+                MobileFacilityMemberItemComponent(
+                    item = it,
+                    onClick = {},
+                    onClickDelete = { viewModel.deleteMember(it.memberId) }
+                )
+            }
+        }
     }
 }
 
@@ -59,7 +88,7 @@ fun MobileFacilitySettingsSearchUserToolbarComponent(
     onClickBack: () -> Unit,
     onClickAdd: () -> Unit
 ) {
-    Box(Modifier.fillMaxWidth(), contentAlignment = Alignment.CenterEnd) {
+    Box(Modifier.fillMaxWidth().padding(vertical = 12.dp), contentAlignment = Alignment.CenterEnd) {
         SkyFitScreenHeader(title, onClickBack = onClickBack)
 
         SkyFitButtonComponent(
@@ -68,74 +97,51 @@ fun MobileFacilitySettingsSearchUserToolbarComponent(
                 .wrapContentWidth(), text = "Ekle",
             onClick = onClickAdd,
             variant = ButtonVariant.Primary,
-            size = ButtonSize.Medium,
+            size = ButtonSize.Micro,
             state = ButtonState.Rest
         )
     }
 }
 
-
 @Composable
-fun MobileFacilitySettingsSearchUserComponent() {
-    Box(
-        modifier = Modifier.fillMaxWidth().padding(horizontal = 8.dp, vertical = 16.dp),
-        contentAlignment = Alignment.Center
-    ) {
-        SkyFitSearchTextInputComponent("Ara")
-    }
-}
-
-@Composable
-fun MobileFacilitySettingsSearchResultsComponent() {
-    var items = listOf<Any>(1, 2, 3)
-
-    LazyColumn(
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(16.dp),
-        verticalArrangement = Arrangement.spacedBy(16.dp)
-    ) {
-        items(items) {
-            MobileFacilitySettingsSearchResultItemComponent()
-        }
-    }
-}
-
-@Composable
-fun MobileFacilitySettingsSearchResultItemComponent() {
+fun MobileFacilityMemberItemComponent(
+    item: FacilitySettingsMemberViewData,
+    onClick: () -> Unit,
+    onClickDelete: () -> Unit
+) {
     Row(
-        Modifier.fillMaxWidth().padding(horizontal = 24.dp, vertical = 8.dp),
+        Modifier.fillMaxWidth().clickable(onClick = onClick),
         verticalAlignment = Alignment.CenterVertically
     ) {
         AsyncImage(
-            model = "https://img.freepik.com/free-psd/3d-illustration-person-with-sunglasses_23-2149436188.jpg",
-            contentDescription = null,
+            model = item.profileImageUrl,
+            contentDescription = "Profile Image",
             contentScale = ContentScale.Crop,
             modifier = Modifier
                 .size(60.dp)
                 .clip(CircleShape)
         )
         Spacer(Modifier.width(16.dp))
-        Column(
-            Modifier.weight(1f)
-        ) {
+
+        Column(Modifier.weight(1f)) {
             Text(
-                text = "stephaniebrook",
+                text = item.userName,
                 style = SkyFitTypography.bodyLargeSemibold
             )
             Spacer(Modifier.height(4.dp))
             Text(
-                text = "Stephanie Brook",
+                text = item.fullName,
                 style = SkyFitTypography.bodyMediumRegular,
                 color = SkyFitColor.text.secondary
             )
         }
         Spacer(Modifier.width(24.dp))
         SkyFitButtonComponent(
-            modifier = Modifier.wrapContentWidth(), text = "Sil",
-            onClick = { },
+            text = "Sil",
+            modifier = Modifier.wrapContentWidth(),
+            onClick = onClickDelete,
             variant = ButtonVariant.Primary,
-            size = ButtonSize.Medium,
+            size = ButtonSize.Micro,
             state = ButtonState.Rest
         )
     }

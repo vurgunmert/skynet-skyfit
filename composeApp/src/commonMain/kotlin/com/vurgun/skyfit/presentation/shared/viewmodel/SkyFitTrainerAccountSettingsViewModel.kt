@@ -1,100 +1,76 @@
 package com.vurgun.skyfit.presentation.shared.viewmodel
 
 import androidx.lifecycle.ViewModel
-import com.vurgun.skyfit.data.network.models.BodyType
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.update
+
+data class TrainerAccountState(
+    val userName: String? = null,
+    val fullName: String? = null,
+    val email: String? = null,
+    val biography: String? = null,
+    val profileImageUrl: String? = null,
+    val backgroundImageUrl: String? = null,
+    val profileTags: List<String> = emptyList(),
+    val isUpdated: Boolean = false
+)
 
 class SkyFitTrainerAccountSettingsViewModel : ViewModel() {
 
-    // StateFlows for individual user fields
-    val _userName = MutableStateFlow<String?>(null)
-    val _fullName = MutableStateFlow<String?>(null)
-    val _email = MutableStateFlow<String?>(null)
-    val _height = MutableStateFlow<Int?>(null)
-    val _heightUnit = MutableStateFlow<String?>(null)
-    val _weight = MutableStateFlow<Int?>(null)
-    val _weightUnit = MutableStateFlow<String?>(null)
-    val _bodyType = MutableStateFlow<BodyType?>(null)
-    val _profileImageUrl = MutableStateFlow<String?>(null)
-    val _backgroundImageUrl = MutableStateFlow<String?>(null)
+    private val _accountState = MutableStateFlow(TrainerAccountState())
+    val accountState: StateFlow<TrainerAccountState> = _accountState
 
-    // Baseline data for comparison
-    private var initialUserName: String? = null
-    private var initialFullName: String? = null
-    private var initialEmail: String? = null
-    private var initialHeight: Int? = null
-    private var initialWeight: Int? = null
-    private var initialBodyType: BodyType? = null
-    private var initialProfileImageUrl: String? = null
-    private var initialBackgroundImageUrl: String? = null
-
-    // Public StateFlows for UI consumption
-    val userName: StateFlow<String?> = _userName
-    val fullName: StateFlow<String?> = _fullName
-    val email: StateFlow<String?> = _email
-    val height: StateFlow<Int?> = _height
-    val heightUnit: StateFlow<String?> = _heightUnit
-    val weightUnit: StateFlow<String?> = _weightUnit
-    val weight: StateFlow<Int?> = _weight
-    val bodyType: StateFlow<BodyType?> = _bodyType
-    val profileImageUrl: StateFlow<String?> = _profileImageUrl
-    val backgroundImageUrl: StateFlow<String?> = _backgroundImageUrl
-
-    // Derived StateFlow to check if any value has been updated
-    private val _isAnyUpdated = MutableStateFlow(false)
-    val isAnyUpdated: StateFlow<Boolean> = _isAnyUpdated
+    private var initialState: TrainerAccountState? = null
 
     fun loadData() {
-
+        val initial = TrainerAccountState(
+            userName = "maxjacobson",
+            fullName = "Maxine",
+            email = "maxine@gmail.com",
+            biography = "Whether you're a beginner or looking to advance, My balanced approach will guide you every step of the way. \uD83C\uDFC3\uD83C\uDFFD\u200D♂\uFE0F\n" +
+                    "@ironstudio",
+            profileTags = listOf("Kardiyo", "Kas Gelişimi", "Fonksiyonel Antrenman"),
+            profileImageUrl = null,
+            backgroundImageUrl = null
+        )
+        _accountState.value = initial
+        initialState = initial
     }
 
-    // Update state when any value changes
-    private fun updateIsAnyUpdated() {
-        _isAnyUpdated.value = _userName.value != initialUserName ||
-                _fullName.value != initialFullName ||
-                _email.value != initialEmail ||
-                _height.value != initialHeight ||
-                _weight.value != initialWeight ||
-                _bodyType.value != initialBodyType ||
-                _profileImageUrl.value != initialProfileImageUrl ||
-                _backgroundImageUrl.value != initialBackgroundImageUrl
+    private fun updateState(update: TrainerAccountState.() -> TrainerAccountState) {
+        _accountState.update {
+            val newState = it.update().copy(isUpdated = it != initialState)
+            newState
+        }
     }
 
-    // Update methods for state management
     fun updateUserName(value: String) {
-        _userName.value = value
-        updateIsAnyUpdated()
+        updateState { copy(userName = value) }
     }
 
     fun updateFullName(value: String) {
-        _fullName.value = value
-        updateIsAnyUpdated()
+        updateState { copy(fullName = value) }
     }
 
     fun updateEmail(value: String) {
-        _email.value = value
-        updateIsAnyUpdated()
+        updateState { copy(email = value) }
     }
 
-    fun updateHeight(value: String) {
-        _height.value = value.toIntOrNull()
-        updateIsAnyUpdated()
+    fun updateBiography(value: String) {
+        updateState { copy(biography = value) }
     }
 
-    fun updateWeight(value: String) {
-        _weight.value = value.toIntOrNull()
-        updateIsAnyUpdated()
+    fun updateTags(tags: List<String>) {
+        updateState { copy(profileTags = tags) }
     }
 
-    fun updateBodyType(value: BodyType) {
-        _bodyType.value = value
-        updateIsAnyUpdated()
+    fun saveChanges() {
+        updateState { copy(isUpdated = false) }
+        initialState = _accountState.value
     }
-
 
     fun deleteAccount() {
-//        TODO("Not yet implemented")
+        // TODO: Implement account deletion logic
     }
-
 }

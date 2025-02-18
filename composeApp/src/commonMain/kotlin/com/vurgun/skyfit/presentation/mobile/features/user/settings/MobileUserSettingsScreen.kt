@@ -22,6 +22,7 @@ import skyfit.composeapp.generated.resources.Res
 import skyfit.composeapp.generated.resources.ic_bell
 import skyfit.composeapp.generated.resources.ic_credit_card
 import skyfit.composeapp.generated.resources.ic_profile
+import skyfit.composeapp.generated.resources.ic_question_circle
 
 @Composable
 fun MobileUserSettingsScreen(navigator: Navigator) {
@@ -66,9 +67,11 @@ fun MobileUserSettingsScreen(navigator: Navigator) {
                 onClick = { navigator.jumpAndStay(SkyFitNavigationRoute.UserSettingsNotifications) }
             )
 
+            MobileSettingsMenuItemDividerComponent()
+
             MobileSettingsMenuItemComponent(
                 text = "Destek ve Yardim",
-                iconRes = Res.drawable.ic_bell,
+                iconRes = Res.drawable.ic_question_circle,
                 onClick = { navigator.jumpAndStay(SkyFitNavigationRoute.UserSettingsHelp) }
             )
         }
