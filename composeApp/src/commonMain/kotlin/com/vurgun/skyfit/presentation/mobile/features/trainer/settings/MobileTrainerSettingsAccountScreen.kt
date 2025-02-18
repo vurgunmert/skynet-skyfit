@@ -148,5 +148,5 @@ private fun MobileTrainerSettingsAccountScreenInputComponent(viewModel: SkyFitTr
         rightIconPainter = painterResource(Res.drawable.logo_skyfit)
     )
 
-    MobileUserSettingsActivityTagEditComponent()
+//    MobileUserSettingsActivityTagEditComponent()
 }

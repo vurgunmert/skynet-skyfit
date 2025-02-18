@@ -12,7 +12,7 @@ enum class BodyType(
     ECTOMORPH("Ectomorph", "Ektomorf", "Ecto", "Ekto"),
     MESOMORPH("Mesomorph", "Mezomorf", "Meso", "Mezo"),
     ENDOMORPH("Endomorph", "Endomorf", "Endo", "Endo"),
-    NOT_DEFINED("Not Defined", "Tanımlanmamış", "N/A", "N/A");
+    NOT_DEFINED("Not Defined", "Tanımlanmamış", "-", "-");
 
     companion object {
         fun fromDisplayName(name: String): BodyType {

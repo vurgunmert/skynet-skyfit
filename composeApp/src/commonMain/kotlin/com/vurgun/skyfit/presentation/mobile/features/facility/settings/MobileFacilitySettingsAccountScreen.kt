@@ -72,7 +72,7 @@ private fun MobileFacilitySettingsAccountScreenInputComponent() {
 
     }
     Spacer(Modifier.height(24.dp))
-    MobileUserSettingsActivityTagEditComponent()
+//    MobileUserSettingsActivityTagEditComponent()
 }
 
 @Composable

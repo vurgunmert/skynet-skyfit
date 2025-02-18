@@ -65,7 +65,7 @@ fun MobileOnboardingWeightSelectionScreen(
 }
 
 @Composable
-private fun WeightPicker(
+fun WeightPicker(
     selectedWeight: Int,
     onWeightSelected: (Int) -> Unit,
     minWeight: Int = 40,
@@ -84,7 +84,7 @@ private fun WeightPicker(
 }
 
 @Composable
-private fun WeightUnitPicker(
+fun WeightUnitPicker(
     selectedWeightUnit: String = "kg",
     onWeightUnitSelected: (String) -> Unit
 ) {

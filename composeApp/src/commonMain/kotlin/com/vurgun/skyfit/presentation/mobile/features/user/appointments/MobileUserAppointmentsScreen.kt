@@ -53,6 +53,7 @@ import org.koin.compose.koinInject
 import skyfit.composeapp.generated.resources.Res
 import skyfit.composeapp.generated.resources.ic_clock
 import skyfit.composeapp.generated.resources.ic_dashboard
+import skyfit.composeapp.generated.resources.ic_delete
 import skyfit.composeapp.generated.resources.ic_exercises
 import skyfit.composeapp.generated.resources.ic_lira
 import skyfit.composeapp.generated.resources.ic_location_pin
@@ -184,7 +185,7 @@ fun BookedAppointmentCardItemComponent(
                     contentAlignment = Alignment.Center
                 ) {
                     Icon(
-                        imageVector = Icons.Default.Delete,
+                        painter = painterResource(Res.drawable.ic_delete),
                         contentDescription = "Delete",
                         tint = Color.Red,
                         modifier = Modifier

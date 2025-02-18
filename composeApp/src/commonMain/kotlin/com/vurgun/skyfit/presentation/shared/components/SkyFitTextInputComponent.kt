@@ -40,6 +40,7 @@ fun SkyFitTextInputComponent(
     isEnabled: Boolean = true,
     focusRequester: FocusRequester = FocusRequester(),
     keyboardOptions: KeyboardOptions = KeyboardOptions.Default.copy(imeAction = ImeAction.Next),
+    keyboardActions: KeyboardActions = KeyboardActions(),
     onKeyboardGoAction: () -> Unit = {},
     modifier: Modifier = Modifier
 ) {
@@ -66,6 +67,7 @@ fun SkyFitTextInputComponent(
 
             BasicTextField(
                 modifier = Modifier
+                    .weight(1f)
                     .focusRequester(focusRequester)
                     .onFocusChanged { if (it.isFocused && value?.isNotEmpty() == true) focusRequester.freeFocus() },
                 enabled = isEnabled,

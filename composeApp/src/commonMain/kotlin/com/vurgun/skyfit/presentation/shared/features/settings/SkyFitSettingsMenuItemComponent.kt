@@ -2,6 +2,7 @@ package com.vurgun.skyfit.presentation.shared.features.settings
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -17,32 +18,39 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.vurgun.skyfit.presentation.shared.resources.SkyFitColor
 import com.vurgun.skyfit.presentation.shared.resources.SkyFitTypography
+import org.jetbrains.compose.resources.DrawableResource
 import org.jetbrains.compose.resources.painterResource
 import skyfit.composeapp.generated.resources.Res
+import skyfit.composeapp.generated.resources.ic_chevron_right
 import skyfit.composeapp.generated.resources.logo_skyfit
 
 
 @Composable
-fun MobileSettingsMenuItemComponent(text: String, onClick: () -> Unit = {}) {
+fun MobileSettingsMenuItemComponent(text: String,
+                                    iconRes: DrawableResource? = null,
+                                    onClick: () -> Unit = {}) {
     Row(
         modifier = Modifier.fillMaxWidth().clickable(onClick = onClick),
-        verticalAlignment = Alignment.CenterVertically
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.spacedBy(16.dp)
     ) {
-        Icon(
-            painter = painterResource(Res.drawable.logo_skyfit),
-            contentDescription = null,
-            modifier = Modifier.size(24.dp),
-            tint = SkyFitColor.icon.default
-        )
-        Spacer(Modifier.width(16.dp))
+        if (iconRes != null) {
+            Icon(
+                painter = painterResource(iconRes),
+                contentDescription = null,
+                modifier = Modifier.size(24.dp),
+                tint = SkyFitColor.icon.default
+            )
+        }
+
         Text(
             text = text,
             modifier = Modifier.weight(1f),
             style = SkyFitTypography.bodyMediumMedium
         )
-        Spacer(Modifier.width(16.dp))
+
         Icon(
-            painter = painterResource(Res.drawable.logo_skyfit),
+            painter = painterResource(Res.drawable.ic_chevron_right),
             contentDescription = null,
             modifier = Modifier.size(24.dp),
             tint = SkyFitColor.icon.default
