@@ -74,7 +74,7 @@ fun MobileFacilitySettingsScreen(navigator: Navigator) {
             MobileSettingsMenuItemComponent(
                 text = "Üyeler",
                 iconRes = Res.drawable.ic_posture_fill,
-                onClick = { navigator.jumpAndStay(SkyFitNavigationRoute.FacilitySettingsMembers) }
+                onClick = { navigator.jumpAndStay(SkyFitNavigationRoute.FacilitySettingsSearchMembers) }
             )
 
 

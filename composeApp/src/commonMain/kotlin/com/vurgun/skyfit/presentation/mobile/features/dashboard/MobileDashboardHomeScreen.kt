@@ -8,7 +8,7 @@ import com.vurgun.skyfit.presentation.shared.navigation.Role
 import moe.tlaster.precompose.navigation.Navigator
 
 //TODO: USER ROLE MANAGEMENT
-var unmanaged_role = Role.USER
+var unmanaged_role = Role.FACILITY_MANAGER
 
 @Composable
 fun MobileDashboardHomeScreen(rootNavigator: Navigator) {

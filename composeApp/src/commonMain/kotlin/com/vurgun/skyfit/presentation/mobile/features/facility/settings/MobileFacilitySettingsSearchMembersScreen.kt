@@ -34,14 +34,16 @@ import com.vurgun.skyfit.presentation.shared.components.SkyFitButtonComponent
 import com.vurgun.skyfit.presentation.shared.components.SkyFitScaffold
 import com.vurgun.skyfit.presentation.shared.components.SkyFitScreenHeader
 import com.vurgun.skyfit.presentation.shared.components.SkyFitSearchTextInputComponent
+import com.vurgun.skyfit.presentation.shared.navigation.SkyFitNavigationRoute
+import com.vurgun.skyfit.presentation.shared.navigation.jumpAndStay
 import com.vurgun.skyfit.presentation.shared.resources.SkyFitColor
 import com.vurgun.skyfit.presentation.shared.resources.SkyFitTypography
 import moe.tlaster.precompose.navigation.Navigator
 
 @Composable
-fun MobileFacilitySettingsMembersScreen(navigator: Navigator) {
+fun MobileFacilitySettingsSearchMembersScreen(navigator: Navigator) {
 
-    val viewModel = remember { FacilityMembersViewModel() }
+    val viewModel = remember { FacilitySearchMembersViewModel() }
     val members by viewModel.members.collectAsState()
     val searchQuery by viewModel.searchQuery.collectAsState()
 
@@ -51,7 +53,7 @@ fun MobileFacilitySettingsMembersScreen(navigator: Navigator) {
                 MobileFacilitySettingsSearchUserToolbarComponent(
                     title = "Uyeler",
                     onClickBack = { navigator.popBackStack() },
-                    onClickAdd = { viewModel.addMember() }
+                    onClickAdd = { navigator.jumpAndStay(SkyFitNavigationRoute.FacilitySettingsAddMembers) }
                 )
 
                 SkyFitSearchTextInputComponent(
@@ -75,7 +77,16 @@ fun MobileFacilitySettingsMembersScreen(navigator: Navigator) {
                 MobileFacilityMemberItemComponent(
                     item = it,
                     onClick = {},
-                    onClickDelete = { viewModel.deleteMember(it.memberId) }
+                    actionContent = {
+                        SkyFitButtonComponent(
+                            text = "Sil",
+                            modifier = Modifier.wrapContentWidth(),
+                            onClick = { viewModel.deleteMember(it.memberId) },
+                            variant = ButtonVariant.Primary,
+                            size = ButtonSize.Micro,
+                            state = ButtonState.Rest
+                        )
+                    }
                 )
             }
         }
@@ -107,7 +118,7 @@ fun MobileFacilitySettingsSearchUserToolbarComponent(
 fun MobileFacilityMemberItemComponent(
     item: FacilitySettingsMemberViewData,
     onClick: () -> Unit,
-    onClickDelete: () -> Unit
+    actionContent: @Composable () -> Unit
 ) {
     Row(
         Modifier.fillMaxWidth().clickable(onClick = onClick),
@@ -136,13 +147,6 @@ fun MobileFacilityMemberItemComponent(
             )
         }
         Spacer(Modifier.width(24.dp))
-        SkyFitButtonComponent(
-            text = "Sil",
-            modifier = Modifier.wrapContentWidth(),
-            onClick = onClickDelete,
-            variant = ButtonVariant.Primary,
-            size = ButtonSize.Micro,
-            state = ButtonState.Rest
-        )
+        actionContent()
     }
 }

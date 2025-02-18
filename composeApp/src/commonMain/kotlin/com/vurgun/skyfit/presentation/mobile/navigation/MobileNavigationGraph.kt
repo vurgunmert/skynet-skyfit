@@ -26,9 +26,10 @@ import com.vurgun.skyfit.presentation.mobile.features.facility.classes.MobileFac
 import com.vurgun.skyfit.presentation.mobile.features.facility.profile.MobileFacilityPhotoDiaryScreen
 import com.vurgun.skyfit.presentation.mobile.features.facility.profile.MobileFacilityProfileScreen
 import com.vurgun.skyfit.presentation.mobile.features.facility.profile.MobileFacilityProfileVisitedScreen
+import com.vurgun.skyfit.presentation.mobile.features.facility.settings.MobileFacilitySettingsAddMembersScreen
 import com.vurgun.skyfit.presentation.mobile.features.facility.settings.MobileFacilitySettingsAccountScreen
 import com.vurgun.skyfit.presentation.mobile.features.facility.settings.MobileFacilitySettingsHelpScreen
-import com.vurgun.skyfit.presentation.mobile.features.facility.settings.MobileFacilitySettingsMembersScreen
+import com.vurgun.skyfit.presentation.mobile.features.facility.settings.MobileFacilitySettingsSearchMembersScreen
 import com.vurgun.skyfit.presentation.mobile.features.facility.settings.MobileFacilitySettingsNotificationsScreen
 import com.vurgun.skyfit.presentation.mobile.features.facility.settings.MobileFacilitySettingsPaymentHistoryScreen
 import com.vurgun.skyfit.presentation.mobile.features.facility.settings.MobileFacilitySettingsScreen
@@ -90,7 +91,7 @@ fun MobileNavigationGraph() {
 
     NavHost(
         navigator = rootNavigator,
-        initialRoute = SkyFitNavigationRoute.FacilitySettings.route
+        initialRoute = SkyFitNavigationRoute.FacilityClasses.route
     ) {
 
         // Auth
@@ -209,7 +210,8 @@ fun MobileNavigationGraph() {
         //Facility - Settings
         scene(SkyFitNavigationRoute.FacilitySettings.route) { MobileFacilitySettingsScreen(rootNavigator) }
         scene(SkyFitNavigationRoute.FacilitySettingsAccount.route) { MobileFacilitySettingsAccountScreen(rootNavigator) }
-        scene(SkyFitNavigationRoute.FacilitySettingsMembers.route) { MobileFacilitySettingsMembersScreen(rootNavigator) }
+        scene(SkyFitNavigationRoute.FacilitySettingsSearchMembers.route) { MobileFacilitySettingsSearchMembersScreen(rootNavigator) }
+        scene(SkyFitNavigationRoute.FacilitySettingsAddMembers.route) { MobileFacilitySettingsAddMembersScreen(rootNavigator) }
         scene(SkyFitNavigationRoute.FacilitySettingsTrainers.route) { MobileFacilitySettingsTrainersScreen(rootNavigator) }
         scene(SkyFitNavigationRoute.FacilitySettingsPaymentHistory.route) { MobileFacilitySettingsPaymentHistoryScreen(rootNavigator) }
         scene(SkyFitNavigationRoute.FacilitySettingsNotifications.route) { MobileFacilitySettingsNotificationsScreen(rootNavigator) }

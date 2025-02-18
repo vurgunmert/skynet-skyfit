@@ -1,3 +1,5 @@
+@file:OptIn(ExperimentalUuidApi::class)
+
 package com.vurgun.skyfit.presentation.shared.features.calendar
 
 import androidx.compose.foundation.background
@@ -32,8 +34,11 @@ import skyfit.composeapp.generated.resources.ic_exercises
 import skyfit.composeapp.generated.resources.ic_location_pin
 import skyfit.composeapp.generated.resources.ic_note
 import skyfit.composeapp.generated.resources.ic_profile_fill
+import kotlin.uuid.ExperimentalUuidApi
+import kotlin.uuid.Uuid
 
 data class SkyFitClassCalendarCardItem(
+    val classId: String = Uuid.random().toString(),
     val title: String,
     val date: String? = null,
     val hours: String? = null,
