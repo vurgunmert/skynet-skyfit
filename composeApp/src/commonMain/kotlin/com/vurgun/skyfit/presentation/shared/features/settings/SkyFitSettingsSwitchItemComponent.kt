@@ -16,11 +16,12 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.vurgun.skyfit.presentation.shared.resources.SkyFitColor
+import com.vurgun.skyfit.presentation.shared.resources.SkyFitTypography
 
 data class SettingsSwitchOptionItem(
     val title: String,
-    val subtitle: String,
-    val enabled: Boolean
+    val subtitle: String? = null,
+    val isEnabled: Boolean = true
 )
 
 @Composable
@@ -31,17 +32,19 @@ fun SkyFitSettingsSwitchOptionItemComponent(
     Row(
         modifier = Modifier.fillMaxWidth()
             .padding(vertical = 8.dp)
-            .clickable { onChangeEnable.invoke(!item.enabled) },
-        verticalAlignment = Alignment.Top
+            .clickable { onChangeEnable.invoke(!item.isEnabled) },
+        verticalAlignment = Alignment.CenterVertically
     ) {
         Column(Modifier.weight(1f)) {
-            Text(item.title)
-            Spacer(Modifier.height(4.dp))
-            Text(item.subtitle)
+            Text(item.title, style = SkyFitTypography.bodyMediumMedium)
+            if (!item.subtitle.isNullOrEmpty()) {
+                Spacer(Modifier.height(4.dp))
+                Text(item.subtitle, style = SkyFitTypography.bodyMediumMedium, color = SkyFitColor.text.secondary)
+            }
         }
         Spacer(Modifier.width(16.dp))
         Switch(
-            checked = item.enabled,
+            checked = item.isEnabled,
             onCheckedChange = onChangeEnable,
             colors = SwitchDefaults.colors(
                 checkedThumbColor = SkyFitColor.icon.secondary,
