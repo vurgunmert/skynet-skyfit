@@ -123,6 +123,7 @@ sealed class SkyFitNavigationRoute(
     // - Settings
     data object UserSettings : SkyFitNavigationRoute("user/settings", roles = listOf(Role.USER))
     data object UserSettingsAccount : SkyFitNavigationRoute("user/settings/account", roles = listOf(Role.USER))
+    data object UserSettingsChangePassword : SkyFitNavigationRoute("user/settings/change_password", roles = listOf(Role.USER))
     data object UserSettingsNotifications :
         SkyFitNavigationRoute("user/settings/notifications", roles = listOf(Role.USER))
 

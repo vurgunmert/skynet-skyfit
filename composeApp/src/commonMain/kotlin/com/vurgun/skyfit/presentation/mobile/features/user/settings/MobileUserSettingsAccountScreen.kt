@@ -188,7 +188,7 @@ fun MobileUserSettingsAccountScreen(navigator: Navigator) {
             MobileSettingsMenuItemComponent(
                 text = "Şifremi Değiştir",
                 iconRes = Res.drawable.ic_lock,
-                onClick = { navigator.jumpAndStay(SkyFitNavigationRoute.ForgotPasswordReset) }
+                onClick = { navigator.jumpAndStay(SkyFitNavigationRoute.UserSettingsChangePassword) }
             )
 
             MobileSettingsMenuItemComponent(

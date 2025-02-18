@@ -73,6 +73,7 @@ import com.vurgun.skyfit.presentation.mobile.features.user.profile.MobileUserPro
 import com.vurgun.skyfit.presentation.mobile.features.user.profile.MobileUserProfileVisitedScreen
 import com.vurgun.skyfit.presentation.mobile.features.user.profile.MobileUserTrophiesScreen
 import com.vurgun.skyfit.presentation.mobile.features.user.settings.MobileUserSettingsAccountScreen
+import com.vurgun.skyfit.presentation.mobile.features.user.settings.MobileUserSettingsChangePasswordScreen
 import com.vurgun.skyfit.presentation.mobile.features.user.settings.MobileUserSettingsHelpScreen
 import com.vurgun.skyfit.presentation.mobile.features.user.settings.MobileUserSettingsNotificationsScreen
 import com.vurgun.skyfit.presentation.mobile.features.user.settings.MobileUserSettingsPaymentHistoryScreen
@@ -89,7 +90,7 @@ fun MobileNavigationGraph() {
 
     NavHost(
         navigator = rootNavigator,
-        initialRoute = SkyFitNavigationRoute.UserSettings.route
+        initialRoute = SkyFitNavigationRoute.Dashboard.route
     ) {
 
         // Auth
@@ -171,6 +172,7 @@ fun MobileNavigationGraph() {
         scene(SkyFitNavigationRoute.UserSettingsAccount.route) { MobileUserSettingsAccountScreen(rootNavigator) }
         scene(SkyFitNavigationRoute.UserSettingsNotifications.route) { MobileUserSettingsNotificationsScreen(rootNavigator) }
         scene(SkyFitNavigationRoute.UserSettingsPaymentHistory.route) { MobileUserSettingsPaymentHistoryScreen(rootNavigator) }
+        scene(SkyFitNavigationRoute.UserSettingsChangePassword.route) { MobileUserSettingsChangePasswordScreen(rootNavigator) }
         scene(SkyFitNavigationRoute.UserSettingsHelp.route) { MobileUserSettingsHelpScreen(rootNavigator) }
         //endregion User
 

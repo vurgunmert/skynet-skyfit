@@ -4,7 +4,6 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -19,12 +18,14 @@ import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.Icon
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import coil3.compose.AsyncImage
+import com.vurgun.skyfit.presentation.mobile.features.user.profile.VerticalDivider
 import com.vurgun.skyfit.presentation.shared.components.ButtonSize
 import com.vurgun.skyfit.presentation.shared.components.ButtonState
 import com.vurgun.skyfit.presentation.shared.components.ButtonVariant
@@ -38,7 +39,9 @@ import com.vurgun.skyfit.presentation.shared.resources.SkyFitTypography
 import moe.tlaster.precompose.navigation.Navigator
 import org.jetbrains.compose.resources.painterResource
 import skyfit.composeapp.generated.resources.Res
+import skyfit.composeapp.generated.resources.ic_calories
 import skyfit.composeapp.generated.resources.ic_chevron_left
+import skyfit.composeapp.generated.resources.ic_clock
 
 @Composable
 fun MobileUserExerciseDetailScreen(navigator: Navigator) {
@@ -83,6 +86,7 @@ fun MobileUserExerciseDetailScreen(navigator: Navigator) {
                 MobileExerciseActionDetailScreenWorkoutEditorialComponent()
                 Spacer(Modifier.height(16.dp))
                 MobileExerciseActionDetailScreenWorkoutInsightsComponent()
+                Spacer(Modifier.height(124.dp))
             }
 
             MobileExerciseActionDetailScreenToolbarComponent(
@@ -109,41 +113,60 @@ private fun MobileExerciseActionDetailScreenToolbarComponent(
 
 @Composable
 private fun MobileExerciseActionDetailScreenInfoComponent() {
-    Box(Modifier.fillMaxWidth().height(92.dp).background(SkyFitColor.background.fillTransparentHover, RoundedCornerShape(24.dp))) {
-        Row(
-            horizontalArrangement = Arrangement.SpaceEvenly,
-            modifier = Modifier.fillMaxWidth()
+    Row(
+        horizontalArrangement = Arrangement.SpaceEvenly,
+        verticalAlignment = Alignment.CenterVertically,
+        modifier = Modifier
+            .fillMaxWidth()
+            .height(92.dp)
+            .background(SkyFitColor.background.surfaceSecondary, RoundedCornerShape(24.dp))
+    ) {
+        Column(
+            Modifier.fillMaxHeight(),
+            verticalArrangement = Arrangement.Center
         ) {
-            Column(
-                Modifier.fillMaxHeight(),
-                horizontalAlignment = Alignment.CenterHorizontally,
-                verticalArrangement = Arrangement.Center
-            ) {
+            Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                Icon(
+                    painter = painterResource(Res.drawable.ic_calories),
+                    contentDescription = null,
+                    modifier = Modifier.size(24.dp),
+                    tint = SkyFitColor.icon.default
+                )
                 Text(
                     text = "500 kcal",
-                    style = SkyFitTypography.bodyLarge.copy(color = SkyFitColor.text.default)
-                )
-                Spacer(Modifier.height(4.dp))
-                Text(
-                    text = "Yakılacak Enerji",
-                    style = SkyFitTypography.bodySmall.copy(color = SkyFitColor.text.secondary)
+                    style = SkyFitTypography.bodyMediumSemibold.copy(color = SkyFitColor.text.default)
                 )
             }
-            Column(
-                Modifier.fillMaxHeight(),
-                horizontalAlignment = Alignment.CenterHorizontally,
-                verticalArrangement = Arrangement.Center
-            ) {
+            Spacer(Modifier.height(4.dp))
+            Text(
+                text = "Yakılacak Enerji",
+                style = SkyFitTypography.bodySmall.copy(color = SkyFitColor.text.secondary)
+            )
+        }
+
+        VerticalDivider(Modifier.height(52.dp))
+
+        Column(
+            Modifier.fillMaxHeight(),
+            verticalArrangement = Arrangement.Center
+        ) {
+            Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                Icon(
+                    painter = painterResource(Res.drawable.ic_clock),
+                    contentDescription = null,
+                    modifier = Modifier.size(24.dp),
+                    tint = SkyFitColor.icon.default
+                )
                 Text(
                     text = "30 dk",
-                    style = SkyFitTypography.bodyLarge.copy(color = SkyFitColor.text.default)
-                )
-                Spacer(Modifier.height(4.dp))
-                Text(
-                    text = "Süre",
-                    style = SkyFitTypography.bodySmall.copy(color = SkyFitColor.text.secondary)
+                    style = SkyFitTypography.bodyMediumSemibold.copy(color = SkyFitColor.text.default)
                 )
             }
+            Spacer(Modifier.height(4.dp))
+            Text(
+                text = "Süre",
+                style = SkyFitTypography.bodySmall.copy(color = SkyFitColor.text.secondary)
+            )
         }
     }
 }
