@@ -9,9 +9,9 @@ import com.vurgun.skyfit.presentation.shared.components.SkyFitImageComponent
 
 @Composable
 actual fun UserCharacterComponent(modifier: Modifier) {
-//    RiveUserCharacterComponent(modifier.size(240.dp))
-    SkyFitImageComponent(
-        url =  "https://ik.imagekit.io/skynet2skyfit/character_carrot.png?updatedAt=1738866664880",
-        modifier = modifier.size(240.dp)
-    )
+    RiveUserCharacterComponent(modifier.size(240.dp))
+//    SkyFitImageComponent(
+//        url =  "https://ik.imagekit.io/skynet2skyfit/character_carrot.png?updatedAt=1738866664880",
+//        modifier = modifier.size(240.dp)
+//    )
 }
