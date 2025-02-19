@@ -3,6 +3,7 @@ package com.vurgun.skyfit.presentation.mobile.features.user.profile
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.vurgun.skyfit.data.network.repositories.BodyAnalysisRepository
+import com.vurgun.skyfit.data.network.repositories.BodyTypeAnalysisRepository
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
@@ -29,7 +30,8 @@ class MobileUserBodyAnalysisViewModel : ViewModel() {
     private val _capturedPostures = MutableStateFlow<Set<PostureType>>(emptySet())
     val capturedPostures: StateFlow<Set<PostureType>> = _capturedPostures.asStateFlow()
 
-    private val repository = BodyAnalysisRepository()
+    private val bodyTypeAnalysisRepository = BodyTypeAnalysisRepository()
+    private val bodyAnalysisRepository = BodyAnalysisRepository()
 
     fun showInfoScreen() {
         _uiState.value = MobileUserBodyAnalysisState.Info
@@ -53,12 +55,23 @@ class MobileUserBodyAnalysisViewModel : ViewModel() {
 
     fun startScanning(encodedBase64Image: String?) {
         if (encodedBase64Image != null) {
-            viewModelScope.launch {
-                val response = repository.sendBase64EncodedImage(encodedBase64Image)
-                //TODO: what is reponse format??
-                print(response)
+            //TODO: Body Analysis
 
-                delay(3000)
+            viewModelScope.launch {
+                val response = bodyAnalysisRepository.sendBase64EncodedImage(encodedBase64Image)
+                //TODO: In what format we can handle this -> Ahmet?
+                print(response)
+                delay(2000)
+                _uiState.value = MobileUserBodyAnalysisState.CaptureResult
+            }
+
+            //TODO: Body Type Analysis
+
+            viewModelScope.launch {
+                //TODO: Can we send base64 instead of a image url -> Ahmet?
+                val predictionResponse = bodyTypeAnalysisRepository.sendImageUrl("https://source.roboflow.com/CECMTkNg4zdmZ0o2pq6HcI85gRj1/xN6r5Nl2vq6t24LQBsKH/thumb.jpg")
+                println(predictionResponse)
+                delay(2000)
                 _uiState.value = MobileUserBodyAnalysisState.CaptureResult
             }
         } else {
