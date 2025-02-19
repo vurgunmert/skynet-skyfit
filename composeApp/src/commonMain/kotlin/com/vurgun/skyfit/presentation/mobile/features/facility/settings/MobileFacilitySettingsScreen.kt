@@ -10,11 +10,11 @@ import androidx.compose.ui.unit.dp
 import com.vurgun.skyfit.presentation.shared.components.ButtonSize
 import com.vurgun.skyfit.presentation.shared.components.ButtonState
 import com.vurgun.skyfit.presentation.shared.components.ButtonVariant
-import com.vurgun.skyfit.presentation.shared.features.settings.MobileSettingsMenuItemComponent
-import com.vurgun.skyfit.presentation.shared.features.settings.MobileSettingsMenuItemDividerComponent
 import com.vurgun.skyfit.presentation.shared.components.SkyFitButtonComponent
 import com.vurgun.skyfit.presentation.shared.components.SkyFitScaffold
 import com.vurgun.skyfit.presentation.shared.components.SkyFitScreenHeader
+import com.vurgun.skyfit.presentation.shared.features.settings.MobileSettingsMenuItemComponent
+import com.vurgun.skyfit.presentation.shared.features.settings.MobileSettingsMenuItemDividerComponent
 import com.vurgun.skyfit.presentation.shared.navigation.SkyFitNavigationRoute
 import com.vurgun.skyfit.presentation.shared.navigation.jumpAndStay
 import moe.tlaster.precompose.navigation.Navigator
@@ -31,7 +31,7 @@ fun MobileFacilitySettingsScreen(navigator: Navigator) {
 
     SkyFitScaffold(
         topBar = {
-            SkyFitScreenHeader(title = "Ayarlar", onClickBack = { })
+            SkyFitScreenHeader(title = "Ayarlar", onClickBack = { navigator.popBackStack() })
         },
         bottomBar = {
 

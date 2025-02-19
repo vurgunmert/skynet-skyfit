@@ -126,7 +126,7 @@ fun MobileTrainerProfileScreen(navigator: Navigator) {
                         showPosts = showPosts,
                         onClickAbout = { showPosts = false },
                         onClickPosts = { showPosts = true },
-                        onClickSettings = { navigator.jumpAndStay(SkyFitNavigationRoute.TrainerSettingsAccount) },
+                        onClickSettings = { navigator.jumpAndStay(SkyFitNavigationRoute.TrainerSettings) },
                         onClickNewPost = { navigator.jumpAndStay(SkyFitNavigationRoute.UserSocialMediaPostAdd) }
                     )
                 }

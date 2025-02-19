@@ -29,7 +29,7 @@ fun MobileUserSettingsScreen(navigator: Navigator) {
 
     SkyFitScaffold(
         topBar = {
-            SkyFitScreenHeader(title = "Ayarlar", onClickBack = { })
+            SkyFitScreenHeader(title = "Ayarlar", onClickBack = { navigator.popBackStack() })
         },
         bottomBar = {
 

@@ -171,7 +171,7 @@ fun MobileUserProfileTopBarGroupComponent(
                 showPosts = showPosts,
                 onClickAbout = { viewModel.toggleShowPosts(false) },
                 onClickPosts = { viewModel.toggleShowPosts(true) },
-                onClickSettings = { navigator.jumpAndStay(SkyFitNavigationRoute.UserSettingsAccount) },
+                onClickSettings = { navigator.jumpAndStay(SkyFitNavigationRoute.UserSettings) },
                 onClickNewPost = { navigator.jumpAndStay(SkyFitNavigationRoute.UserSocialMediaPostAdd) }
             )
         }
