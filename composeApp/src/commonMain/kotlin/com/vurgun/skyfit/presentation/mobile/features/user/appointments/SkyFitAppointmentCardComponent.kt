@@ -23,11 +23,19 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.vurgun.skyfit.presentation.shared.components.SkyFitCheckBoxComponent
 import com.vurgun.skyfit.presentation.shared.resources.SkyFitColor
+import com.vurgun.skyfit.presentation.shared.resources.SkyFitIcon
 import com.vurgun.skyfit.presentation.shared.resources.SkyFitTypography
 import org.jetbrains.compose.resources.DrawableResource
 import org.jetbrains.compose.resources.painterResource
 import skyfit.composeapp.generated.resources.Res
+import skyfit.composeapp.generated.resources.ic_clock
+import skyfit.composeapp.generated.resources.ic_dashboard
 import skyfit.composeapp.generated.resources.ic_exercises
+import skyfit.composeapp.generated.resources.ic_lira
+import skyfit.composeapp.generated.resources.ic_location_pin
+import skyfit.composeapp.generated.resources.ic_note
+import skyfit.composeapp.generated.resources.ic_posture
+import skyfit.composeapp.generated.resources.ic_profile
 import skyfit.composeapp.generated.resources.logo_skyfit
 
 data class AppointmentCardViewData(
@@ -60,7 +68,7 @@ fun AppointmentCardItemComponent(item: AppointmentCardViewData, modifier: Modifi
 
         Row(Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
             Icon(
-                painter = painterResource(Res.drawable.logo_skyfit),
+                painter = SkyFitIcon.getIconResourcePainter(item.iconId, Res.drawable.ic_exercises),
                 contentDescription = "Exercise",
                 tint = SkyFitColor.icon.default,
                 modifier = Modifier.size(24.dp)
@@ -82,24 +90,48 @@ fun AppointmentCardItemComponent(item: AppointmentCardViewData, modifier: Modifi
 
         Spacer(Modifier.height(8.dp))
         Row(Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
-            AppointmentSingleDataBoxComponent(item.date, modifier = Modifier.weight(1f))
+            AppointmentSingleDataBoxComponent(
+                text = item.hours,
+                iconRes = Res.drawable.ic_clock,
+                modifier = Modifier.weight(1f)
+            )
             Spacer(Modifier.width(8.dp))
-            AppointmentSingleDataBoxComponent(item.category, modifier = Modifier.weight(1f))
+            AppointmentSingleDataBoxComponent(
+                text = item.category,
+                iconRes = Res.drawable.ic_dashboard,
+                modifier = Modifier.weight(1f)
+            )
         }
 
         Spacer(Modifier.height(8.dp))
         Row {
-            AppointmentSingleDataBoxComponent(item.location, modifier = Modifier.weight(1f))
+            AppointmentSingleDataBoxComponent(
+                text = item.location,
+                iconRes = Res.drawable.ic_location_pin,
+                modifier = Modifier.weight(1f)
+            )
             Spacer(Modifier.width(8.dp))
-            AppointmentSingleDataBoxComponent(item.trainer, modifier = Modifier.weight(1f))
+            AppointmentSingleDataBoxComponent(
+                text = item.trainer,
+                iconRes = Res.drawable.ic_profile,
+                modifier = Modifier.weight(1f)
+            )
         }
 
         if (item.capacity != null && item.cost != null) {
             Spacer(Modifier.height(8.dp))
             Row {
-                AppointmentSingleDataBoxComponent(item.capacity, modifier = Modifier.weight(1f))
+                AppointmentSingleDataBoxComponent(
+                    text = item.capacity,
+                    iconRes = Res.drawable.ic_posture,
+                    modifier = Modifier.weight(1f)
+                )
                 Spacer(Modifier.width(8.dp))
-                AppointmentSingleDataBoxComponent(item.cost, modifier = Modifier.weight(1f))
+                AppointmentSingleDataBoxComponent(
+                    text = item.cost,
+                    iconRes = Res.drawable.ic_lira,
+                    modifier = Modifier.weight(1f)
+                )
             }
         }
 
@@ -107,8 +139,8 @@ fun AppointmentCardItemComponent(item: AppointmentCardViewData, modifier: Modifi
             Spacer(Modifier.height(8.dp))
             Row(Modifier.fillMaxWidth(), verticalAlignment = Alignment.Top) {
                 Icon(
-                    painter = painterResource(Res.drawable.logo_skyfit),
-                    contentDescription = "Chip",
+                    painter = painterResource(Res.drawable.ic_note),
+                    contentDescription = "Note",
                     tint = SkyFitColor.icon.default,
                     modifier = Modifier.size(16.dp)
                 )
@@ -151,9 +183,11 @@ fun AppointmentCardItemComponent(item: AppointmentCardViewData, modifier: Modifi
 }
 
 @Composable
-fun AppointmentSingleDataBoxComponent(text: String,
-                                      iconRes: DrawableResource = Res.drawable.ic_exercises,
-                                      modifier: Modifier = Modifier) {
+fun AppointmentSingleDataBoxComponent(
+    text: String,
+    iconRes: DrawableResource = Res.drawable.ic_exercises,
+    modifier: Modifier = Modifier
+) {
     Row(
         modifier.background(SkyFitColor.background.default, shape = RoundedCornerShape(8.dp)).padding(4.dp),
         verticalAlignment = Alignment.CenterVertically

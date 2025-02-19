@@ -1,5 +1,6 @@
 package com.vurgun.skyfit.presentation.mobile.features.facility.classes
 
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -29,6 +30,7 @@ import com.vurgun.skyfit.presentation.shared.resources.SkyFitTypography
 import moe.tlaster.precompose.navigation.Navigator
 import org.jetbrains.compose.resources.painterResource
 import skyfit.composeapp.generated.resources.Res
+import skyfit.composeapp.generated.resources.img_check_mark_blue_box
 import skyfit.composeapp.generated.resources.logo_skyfit
 
 @Composable
@@ -42,12 +44,11 @@ fun MobileFacilityClassEditCompletedScreen(navigator: Navigator) {
             Spacer(Modifier.height(60.dp))
             MobileFacilityClassEditCompletedComponent(
                 onClickProfile = {
-                    navigator.jumpAndTakeover(
-                        SkyFitNavigationRoute.FacilityClasses,
-                        SkyFitNavigationRoute.DashboardProfile
-                    )
+                    navigator.jumpAndTakeover(SkyFitNavigationRoute.FacilityClassEdit, SkyFitNavigationRoute.DashboardProfile)
                 },
-                onClickDashboard = {}
+                onClickDashboard = {
+                    navigator.jumpAndTakeover(SkyFitNavigationRoute.FacilityClassEdit, SkyFitNavigationRoute.Dashboard)
+                }
             )
         }
     }
@@ -59,7 +60,7 @@ private fun MobileFacilityClassEditCompletedComponent(
     onClickDashboard: () -> Unit
 ) {
     val appointmentCardItem = AppointmentCardViewData(
-        iconId = "TODO()",
+        iconId = "ic_push_up",
         title = "Shoulders and Abs",
         date = "30/11/2024",
         hours = "08:00 - 09:00",
@@ -76,8 +77,8 @@ private fun MobileFacilityClassEditCompletedComponent(
         Modifier.fillMaxSize().padding(24.dp),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        Icon(
-            painter = painterResource(Res.drawable.logo_skyfit),
+        Image(
+            painter = painterResource(Res.drawable.img_check_mark_blue_box),
             contentDescription = null,
             modifier = Modifier.size(104.dp)
         )
@@ -100,8 +101,7 @@ private fun MobileFacilityClassEditCompletedComponent(
             onClick = onClickProfile,
             variant = ButtonVariant.Primary,
             size = ButtonSize.Large,
-            state = ButtonState.Rest,
-            rightIconPainter = painterResource(Res.drawable.logo_skyfit)
+            state = ButtonState.Rest
         )
         Spacer(Modifier.height(14.dp))
         SkyFitButtonComponent(

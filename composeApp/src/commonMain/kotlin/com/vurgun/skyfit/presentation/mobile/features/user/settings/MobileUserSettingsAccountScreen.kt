@@ -26,7 +26,7 @@ import com.vurgun.skyfit.presentation.shared.components.BodyTypePickerDialog
 import com.vurgun.skyfit.presentation.shared.components.HeightPickerDialog
 import com.vurgun.skyfit.presentation.shared.components.SkyFitScreenHeader
 import com.vurgun.skyfit.presentation.shared.components.WeightPickerDialog
-import com.vurgun.skyfit.presentation.shared.features.settings.AccountSettingsSelectToEnterInputComponent
+import com.vurgun.skyfit.presentation.shared.features.settings.SkyFitSelectToEnterInputComponent
 import com.vurgun.skyfit.presentation.shared.features.settings.AccountSettingsSelectToSetInputComponent
 import com.vurgun.skyfit.presentation.shared.features.settings.MobileSettingsMenuItemComponent
 import com.vurgun.skyfit.presentation.shared.features.settings.MobileUserSettingsActivityTagEditComponent
@@ -42,6 +42,7 @@ import org.koin.compose.koinInject
 import skyfit.composeapp.generated.resources.Res
 import skyfit.composeapp.generated.resources.ic_delete
 import skyfit.composeapp.generated.resources.ic_lock
+import skyfit.composeapp.generated.resources.ic_pencil
 
 @Composable
 fun MobileUserSettingsAccountScreen(navigator: Navigator) {
@@ -100,46 +101,52 @@ fun MobileUserSettingsAccountScreen(navigator: Navigator) {
                 }
             )
 
-            AccountSettingsSelectToEnterInputComponent(
+            SkyFitSelectToEnterInputComponent(
                 title = "Kullanıcı Adı *",
                 hint = "Kullanıcı Adı",
                 value = userAccountState.userName,
-                onValueChange = { viewModel.updateUserName(it) }
+                onValueChange = { viewModel.updateUserName(it) },
+                rightIconRes = Res.drawable.ic_pencil
             )
 
-            AccountSettingsSelectToEnterInputComponent(
+            SkyFitSelectToEnterInputComponent(
                 title = "Ad Soyad *",
                 hint = "Ad Soyad",
                 value = userAccountState.fullName,
-                onValueChange = { viewModel.updateFullName(it) }
+                onValueChange = { viewModel.updateFullName(it) },
+                rightIconRes = Res.drawable.ic_pencil
             )
 
-            AccountSettingsSelectToEnterInputComponent(
+            SkyFitSelectToEnterInputComponent(
                 title = "Email *",
                 hint = "Email",
                 value = userAccountState.email,
-                onValueChange = { viewModel.updateEmail(it) }
+                onValueChange = { viewModel.updateEmail(it) },
+                rightIconRes = Res.drawable.ic_pencil
             )
 
             AccountSettingsSelectToSetInputComponent(
                 modifier = Modifier.clickable { showWeightDialog = true },
                 title = "Boy (${userAccountState.heightUnit})",
                 hint = "Boyunuzu girin",
-                value = userAccountState.height?.toString() ?: ""
+                value = userAccountState.height?.toString() ?: "",
+                rightIconRes = Res.drawable.ic_pencil
             )
 
             AccountSettingsSelectToSetInputComponent(
                 modifier = Modifier.clickable { showWeightDialog = true },
                 title = "Kilo (${userAccountState.weightUnit})",
                 hint = "Kilonuzu girin",
-                value = userAccountState.weight?.toString() ?: ""
+                value = userAccountState.weight?.toString() ?: "",
+                rightIconRes = Res.drawable.ic_pencil
             )
 
             AccountSettingsSelectToSetInputComponent(
                 modifier = Modifier.clickable { showBodyTypeDialog = true },
                 title = "Vücut Tipi",
                 hint = "Ecto",
-                value = userAccountState.bodyType.turkishShort
+                value = userAccountState.bodyType.turkishShort,
+                rightIconRes = Res.drawable.ic_pencil
             )
 
             MobileUserSettingsActivityTagEditComponent(

@@ -1,6 +1,7 @@
 package com.vurgun.skyfit.presentation.mobile.features.facility.classes
 
 import androidx.lifecycle.ViewModel
+import com.vurgun.skyfit.utils.now
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.update
@@ -10,22 +11,23 @@ import kotlinx.datetime.LocalDate
 data class FacilityTrainerViewData(
     val id: String,
     val name: String,
-    val imageUrl: String
+    val imageUrl: String?
 )
 // endregion
 
 // region: FacilityClassViewData (User-selected class details)
 data class FacilityClassViewData(
-    val title: String = "",
-    val icon: String = "push_up",
+    val title: String? = null,
+    val description: String? = null,
+    val icon: String? = null,
     val selectedTrainer: FacilityTrainerViewData? = null, // Nullable to allow selection
-    val trainers: List<FacilityTrainerViewData> = emptyList(),
-    val selectedDate: LocalDate = LocalDate(2024, 12, 21),
+    val trainers: List<FacilityTrainerViewData> = fakeFacilityTrainers,
+    val selectedDate: LocalDate = LocalDate.now(),
     val startTime: String = "08:00",
     val endTime: String = "08:30",
     val repeatOption: String = "Hergün",
     val selectedDaysOfWeek: List<String> = emptyList(),
-    val monthlyOption: String = "Her ayın ilk pazartesi",
+    val monthlyOption: String = classRepeatMonthlyOptions.first(),
     val isAppointmentMandatory: Boolean = false,
     val isPaymentMandatory: Boolean = false,
     val price: String = "0.00",
@@ -37,6 +39,20 @@ data class FacilityClassViewData(
 )
 // endregion
 
+val classRepeatPeriodOptions = listOf("Hergün", "Haftada belirli günler", "Ayda bir kez", "Tekrar yok")
+val classRepeatMonthlyOptions = listOf("Her ayın ilk pazartesi", "Her ayın 15. günü")
+val classRepeatDaysOfWeek = listOf("Pazartesi", "Salı", "Çarşamba", "Perşembe", "Cuma", "Cumartesi", "Pazar")
+
+
+// Simulated function to load a class
+private val fakeFacilityTrainers = listOf(
+    FacilityTrainerViewData("1","Sude Kale", "https://ik.imagekit.io/skynet2skyfit/avatar_sample.png?updatedAt=1738866499680"),
+    FacilityTrainerViewData("2","Alex Lang", "https://ik.imagekit.io/skynet2skyfit/avatar_sample.png?updatedAt=1738866499680"),
+    FacilityTrainerViewData("3","Sophia Hawl", "https://example.com/sophia.jpg"),
+    FacilityTrainerViewData("4","Cenk Kar", "https://ik.imagekit.io/skynet2skyfit/avatar_sample.png?updatedAt=1738866499680"),
+    FacilityTrainerViewData("5","Racheal Lee", "https://example.com/racheal.jpg"),
+    FacilityTrainerViewData("6","Karen Maroon", "https://example.com/karen.jpg")
+)
 
 class MobileFacilityClassEditScreenViewModel : ViewModel() {
 
@@ -45,23 +61,15 @@ class MobileFacilityClassEditScreenViewModel : ViewModel() {
 
     private var initialState: FacilityClassViewData? = null // To track modifications
 
-    // Simulated function to load a class
-    private val facilityTrainers = listOf(
-        FacilityTrainerViewData("1","Sude Kale", "https://ik.imagekit.io/skynet2skyfit/avatar_sample.png?updatedAt=1738866499680"),
-        FacilityTrainerViewData("2","Alex Lang", "https://ik.imagekit.io/skynet2skyfit/avatar_sample.png?updatedAt=1738866499680"),
-        FacilityTrainerViewData("3","Sophia Hawl", "https://example.com/sophia.jpg"),
-        FacilityTrainerViewData("4","Cenk Kar", "https://ik.imagekit.io/skynet2skyfit/avatar_sample.png?updatedAt=1738866499680"),
-        FacilityTrainerViewData("5","Racheal Lee", "https://example.com/racheal.jpg"),
-        FacilityTrainerViewData("6","Karen Maroon", "https://example.com/karen.jpg")
-    )
+
 
     fun loadClass(facilityId: String, classId: String?) {
-        val fetchedData = classId?.let { fakeFetchClassData(facilityId, it) }
-            ?: FacilityClassViewData(trainers = facilityTrainers)
+//        val fetchedData = classId?.let { fakeFetchClassData(facilityId, it) }
+//            ?: FacilityClassViewData(trainers = facilityTrainers)
+//
+//        initialState = fetchedData.copy()
 
-        initialState = fetchedData.copy()
-
-        _facilityClassState.update { fetchedData } // 🔥 This will ensure recomposition
+//        _facilityClassState.update { fetchedData } // 🔥 This will ensure recomposition
     }
 
     // Compare current state with the initial state, enable Save if changed
@@ -79,6 +87,11 @@ class MobileFacilityClassEditScreenViewModel : ViewModel() {
 
     fun updateTitle(title: String) {
         _facilityClassState.update { it.copy(title = title) }
+        checkIfModified()
+    }
+
+    fun updateDescription(description: String) {
+        _facilityClassState.update { it.copy(description = description) }
         checkIfModified()
     }
 
@@ -163,7 +176,7 @@ class MobileFacilityClassEditScreenViewModel : ViewModel() {
         return FacilityClassViewData(
             title = "Example Class",
             selectedTrainer = FacilityTrainerViewData("1","Sude Kale", "https://example.com/sude.jpg"),
-            trainers = facilityTrainers,
+            trainers = fakeFacilityTrainers,
             trainerNote = "Be sure to stretch before class!",
             selectedDate = LocalDate(2024, 12, 24),
             startTime = "09:00",

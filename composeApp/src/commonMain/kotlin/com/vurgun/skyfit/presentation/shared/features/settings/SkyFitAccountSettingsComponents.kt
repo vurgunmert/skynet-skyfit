@@ -189,14 +189,15 @@ fun MobileUserSettingsScreenDeleteActionsComponent(
 
 
 @Composable
-fun AccountSettingsSelectToEnterInputComponent(
+fun SkyFitSelectToEnterInputComponent(
     title: String = "Title",
     hint: String = "Hint",
     value: String? = null,
     error: String? = null,
     onValueChange: ((String) -> Unit)? = null,
     focusRequester: FocusRequester = FocusRequester(),
-    nextFocusRequester: FocusRequester? = null
+    nextFocusRequester: FocusRequester? = null,
+    rightIconRes: DrawableResource? = null
 ) {
     val keyboardController = LocalSoftwareKeyboardController.current
     val backgroundColor = error?.let { SkyFitColor.background.surfaceCriticalActive }
@@ -237,20 +238,22 @@ fun AccountSettingsSelectToEnterInputComponent(
                 cursorBrush = SolidColor(SkyFitColor.specialty.buttonBgRest),
                 decorationBox = { innerTextField ->
                     if (value.isNullOrBlank()) {
-                        Text(text = hint, color = SkyFitColor.text.default)
+                        Text(text = hint, color = SkyFitColor.text.secondary)
                     } else {
                         innerTextField()
                     }
                 }
             )
 
-            Spacer(Modifier.width(8.dp))
-            Icon(
-                painter = painterResource(Res.drawable.ic_pencil),
-                contentDescription = "Edit",
-                modifier = Modifier.size(16.dp),
-                tint = SkyFitColor.icon.default
-            )
+            if (rightIconRes != null) {
+                Spacer(Modifier.width(8.dp))
+                Icon(
+                    painter = painterResource(Res.drawable.ic_pencil),
+                    contentDescription = "Edit",
+                    modifier = Modifier.size(16.dp),
+                    tint = SkyFitColor.icon.default
+                )
+            }
         }
 
         error?.let {
@@ -271,13 +274,13 @@ fun AccountSettingsSelectToSetInputComponent(
     title: String = "Title",
     hint: String = "Hint",
     value: String? = null,
-    rightIconRes: DrawableResource? = Res.drawable.ic_pencil
+    rightIconRes: DrawableResource? = null
 ) {
-    Column(Modifier.fillMaxWidth(), verticalArrangement = Arrangement.spacedBy(4.dp)) {
-        Text(title, modifier.padding(start = 8.dp), style = SkyFitTypography.bodySmallSemibold)
+    Column(modifier.fillMaxWidth(), verticalArrangement = Arrangement.spacedBy(4.dp)) {
+        Text(title, Modifier.padding(start = 8.dp), style = SkyFitTypography.bodySmallSemibold)
 
         Row(
-            modifier = modifier
+            modifier = Modifier
                 .fillMaxWidth()
                 .background(SkyFitColor.background.surfaceSecondary, shape = CircleShape)
                 .padding(vertical = 18.dp, horizontal = 16.dp),
@@ -328,7 +331,8 @@ fun MobileUserSettingsActivityTagEditComponent(
                 modifier = Modifier.clickable { showTagPickerDialog = true },
                 title = "Profil Etiketleri",
                 hint = "Etiketlerini Sec örn: Pilates, Kondisyon",
-                value = null
+                value = null,
+                rightIconRes = Res.drawable.ic_pencil
             )
             Spacer(Modifier.height(12.dp))
             Box(
@@ -391,13 +395,14 @@ fun MobileUserSettingsActivityTagEditComponent(
 
 
 @Composable
-fun AccountSettingsSelectToEnterMultilineInputComponent(
+fun SkyFitSelectToEnterMultilineInputComponent(
     title: String = "Title",
     hint: String = "Hint",
     value: String? = null,
     onValueChange: ((String) -> Unit)? = null,
     focusRequester: FocusRequester = FocusRequester(),
-    nextFocusRequester: FocusRequester? = null
+    nextFocusRequester: FocusRequester? = null,
+    rightIconRes: DrawableResource? = null
 ) {
     val keyboardController = LocalSoftwareKeyboardController.current
 
@@ -437,20 +442,23 @@ fun AccountSettingsSelectToEnterMultilineInputComponent(
                 cursorBrush = SolidColor(SkyFitColor.specialty.buttonBgRest),
                 decorationBox = { innerTextField ->
                     if (value.isNullOrBlank()) {
-                        Text(text = hint, color = SkyFitColor.text.default)
+                        Text(text = hint, color = SkyFitColor.text.secondary)
                     } else {
                         innerTextField()
                     }
                 }
             )
 
-            Spacer(Modifier.width(8.dp))
-            Icon(
-                painter = painterResource(Res.drawable.ic_pencil),
-                contentDescription = "Edit",
-                tint = SkyFitColor.text.default,
-                modifier = Modifier.size(16.dp)
-            )
+            if (rightIconRes != null) {
+                Spacer(Modifier.width(8.dp))
+                Icon(
+                    painter = painterResource(Res.drawable.ic_pencil),
+                    contentDescription = "Edit",
+                    tint = SkyFitColor.text.default,
+                    modifier = Modifier.size(16.dp)
+                )
+            }
+
         }
     }
 }

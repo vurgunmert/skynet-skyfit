@@ -22,8 +22,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.vurgun.skyfit.presentation.shared.components.SkyFitScreenHeader
-import com.vurgun.skyfit.presentation.shared.features.settings.AccountSettingsSelectToEnterInputComponent
-import com.vurgun.skyfit.presentation.shared.features.settings.AccountSettingsSelectToEnterMultilineInputComponent
+import com.vurgun.skyfit.presentation.shared.features.settings.SkyFitSelectToEnterInputComponent
+import com.vurgun.skyfit.presentation.shared.features.settings.SkyFitSelectToEnterMultilineInputComponent
 import com.vurgun.skyfit.presentation.shared.features.settings.MobileSettingsMenuItemComponent
 import com.vurgun.skyfit.presentation.shared.features.settings.MobileUserSettingsActivityTagEditComponent
 import com.vurgun.skyfit.presentation.shared.features.settings.MobileUserSettingsScreenDeleteActionsComponent
@@ -38,6 +38,7 @@ import org.koin.compose.koinInject
 import skyfit.composeapp.generated.resources.Res
 import skyfit.composeapp.generated.resources.ic_delete
 import skyfit.composeapp.generated.resources.ic_lock
+import skyfit.composeapp.generated.resources.ic_pencil
 
 @Composable
 fun MobileTrainerSettingsAccountScreen(navigator: Navigator) {
@@ -93,32 +94,36 @@ fun MobileTrainerSettingsAccountScreen(navigator: Navigator) {
                 }
             )
 
-            AccountSettingsSelectToEnterInputComponent(
+            SkyFitSelectToEnterInputComponent(
                 title = "Kullanıcı Adı *",
                 hint = "Kullanıcı Adı",
                 value = trainerAccountState.userName,
-                onValueChange = { viewModel.updateUserName(it) }
+                onValueChange = { viewModel.updateUserName(it) },
+                rightIconRes = Res.drawable.ic_pencil
             )
 
-            AccountSettingsSelectToEnterInputComponent(
+            SkyFitSelectToEnterInputComponent(
                 title = "Ad Soyad *",
                 hint = "Ad Soyad",
                 value = trainerAccountState.fullName,
-                onValueChange = { viewModel.updateFullName(it) }
+                onValueChange = { viewModel.updateFullName(it) },
+                rightIconRes = Res.drawable.ic_pencil
             )
 
-            AccountSettingsSelectToEnterInputComponent(
+            SkyFitSelectToEnterInputComponent(
                 title = "Email *",
                 hint = "Email",
                 value = trainerAccountState.email,
-                onValueChange = { viewModel.updateEmail(it) }
+                onValueChange = { viewModel.updateEmail(it) },
+                rightIconRes = Res.drawable.ic_pencil
             )
 
-            AccountSettingsSelectToEnterMultilineInputComponent(
+            SkyFitSelectToEnterMultilineInputComponent(
                 title = "Biyografi *",
                 hint = "Biyografi bilgilerinizi girin",
                 value = trainerAccountState.biography,
-                onValueChange = { viewModel.updateBiography(it) }
+                onValueChange = { viewModel.updateBiography(it) },
+                rightIconRes = Res.drawable.ic_pencil
             )
 
 

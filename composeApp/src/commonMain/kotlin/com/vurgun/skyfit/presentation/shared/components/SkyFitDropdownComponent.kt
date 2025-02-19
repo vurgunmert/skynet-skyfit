@@ -25,12 +25,15 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.vurgun.skyfit.presentation.shared.resources.SkyFitColor
 import com.vurgun.skyfit.presentation.shared.resources.SkyFitTypography
+import org.jetbrains.compose.resources.painterResource
+import skyfit.composeapp.generated.resources.Res
+import skyfit.composeapp.generated.resources.ic_chevron_down
 
 @Composable
 fun SkyFitDropdownComponent(
     title: String,
     options: List<String>,
-    selectedOption: String, // 🔥 Always use this
+    selectedOption: String,
     onOptionSelected: (String) -> Unit,
     modifier: Modifier = Modifier.fillMaxWidth()
 ) {
@@ -48,20 +51,20 @@ fun SkyFitDropdownComponent(
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .background(SkyFitColor.background.surfaceSecondary, RoundedCornerShape(16.dp))
+                .background(SkyFitColor.background.surfaceSecondary, RoundedCornerShape(20.dp))
                 .clickable { isOpen = true }
                 .padding(horizontal = 16.dp, vertical = 12.dp),
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
             Text(
-                text = selectedOption, // 🔥 Use selectedOption directly
+                text = selectedOption,
                 style = SkyFitTypography.bodyMediumRegular,
                 modifier = Modifier.weight(1f)
             )
 
             Icon(
-                imageVector = Icons.Default.ArrowDropDown,
+                painter = painterResource(Res.drawable.ic_chevron_down),
                 contentDescription = "Dropdown Arrow",
                 tint = SkyFitColor.icon.default,
                 modifier = Modifier.size(20.dp)
@@ -79,7 +82,7 @@ fun SkyFitDropdownComponent(
             options.forEach { option ->
                 DropdownMenuItem(
                     onClick = {
-                        onOptionSelected(option) // 🔥 Update ViewModel state
+                        onOptionSelected(option)
                         isOpen = false
                     }
                 ) {

@@ -25,9 +25,9 @@ fun SkyFitCheckBoxComponent(
     modifier: Modifier = Modifier,
     enabled: Boolean = true,
     colors: CheckboxColors = CheckboxDefaults.colors(
-        checkedColor = SkyFitColor.transparent,
-        checkmarkColor = SkyFitColor.specialty.buttonBgRest,
-        uncheckedColor = SkyFitColor.icon.default
+        checkedColor = SkyFitColor.icon.default,
+        checkmarkColor = SkyFitColor.icon.inverseSecondary,
+        uncheckedColor = SkyFitColor.icon.default,
     )
 ) {
     Row(
@@ -43,6 +43,6 @@ fun SkyFitCheckBoxComponent(
             modifier = Modifier.size(16.dp)
         )
         Spacer(Modifier.width(8.dp))
-        Text(label, style = SkyFitTypography.bodyXSmall)
+        Text(label, style = SkyFitTypography.bodyMediumRegular)
     }
 }
