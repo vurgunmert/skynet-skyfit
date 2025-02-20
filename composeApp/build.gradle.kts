@@ -32,37 +32,13 @@ kotlin {
         }
     }
 
-    // JVM target for desktop applications
-    jvm("desktop")
-
-    // JavaScript (WASM) target configuration
-    @OptIn(ExperimentalWasmDsl::class)
-    wasmJs {
-        moduleName = "composeApp"
-        browser {
-            val rootDirPath = project.rootDir.path
-            val projectDirPath = project.projectDir.path
-            commonWebpackConfig {
-                outputFileName = "composeApp.js"
-                devServer = (devServer ?: KotlinWebpackConfig.DevServer()).apply {
-                    static = (static ?: mutableListOf()).apply {
-                        // Serve sources to debug inside browser
-                        add(rootDirPath)
-                        add(projectDirPath)
-                    }
-                }
-            }
-        }
-        binaries.executable()
-    }
-
     sourceSets {
         commonMain.dependencies {
             // Compose Multiplatform libraries
-            api(compose.runtime)
-            api(compose.foundation)
-            api(compose.material)
-            api(compose.ui)
+            implementation(compose.runtime)
+            implementation(compose.foundation)
+            implementation(compose.material)
+            implementation(compose.ui)
             implementation(compose.animation)
             implementation(compose.components.resources)
 
@@ -70,6 +46,7 @@ kotlin {
             implementation("cz.kudladev:datetimepicker-kmp:1.0.7")
 
             // Kotlinx
+            implementation(libs.kotlinx.coroutines.core)
             implementation(libs.kotlinx.serialization)
             implementation(libs.kotlinx.datetime)
 
@@ -92,22 +69,14 @@ kotlin {
             implementation(libs.coil.network.ktor)
             implementation("network.chaintech:compose-multiplatform-media-player:1.0.30")
 
-
-            // AndroidX Lifecycle libraries
-            implementation(libs.androidx.lifecycle.viewmodel)
-            implementation(libs.androidx.lifecycle.runtime.compose)
-
-            // Firebase Authentication
-            implementation(libs.gitlive.firebase.auth)
-
             // PreCompose for multiplatform navigation
-            api(libs.precompose)
+            implementation(libs.precompose)
+            implementation(libs.precompose.viewmodel)
         }
 
         androidMain.dependencies {
             implementation(compose.preview)
             implementation(libs.androidx.activity.compose)
-            implementation(libs.gitlive.firebase.auth)
             implementation(libs.ktor.client.okhttp)
 
             implementation("cz.kudladev:datetimepicker-kmp:1.0.7")
@@ -118,22 +87,6 @@ kotlin {
         iosMain.dependencies {
             implementation(libs.ktor.client.darwin)
             implementation("cz.kudladev:datetimepicker-kmp:1.0.7")
-        }
-
-        // Desktop-specific source set
-        val desktopMain by getting {
-            dependencies {
-                implementation(compose.desktop.currentOs)
-                implementation(libs.kotlinx.coroutines.swing)
-                implementation(libs.ktor.client.cio)
-                implementation("cz.kudladev:datetimepicker-kmp:1.0.5")
-            }
-        }
-
-        // JavaScript (WASM)-specific source set
-        wasmJsMain.dependencies {
-//            implementation(libs.gitlive.firebase.auth)
-            implementation("cz.kudladev:datetimepicker-kmp:1.0.5")
         }
     }
 }
@@ -162,21 +115,5 @@ android {
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_11
         targetCompatibility = JavaVersion.VERSION_11
-    }
-}
-
-dependencies {
-    implementation(libs.firebase.common.ktx)
-}
-
-compose.desktop {
-    application {
-        mainClass = "com.vurgun.skyfit.MainKt"
-
-        nativeDistributions {
-            targetFormats(TargetFormat.Dmg, TargetFormat.Msi, TargetFormat.Deb)
-            packageName = "com.vurgun.skyfit"
-            packageVersion = "1.0.0"
-        }
     }
 }

@@ -7,11 +7,8 @@ import com.vurgun.skyfit.data.network.models.NotificationCategory
 import com.vurgun.skyfit.data.network.models.NotificationPriority
 import com.vurgun.skyfit.data.network.models.NotificationType
 import com.vurgun.skyfit.data.network.models.SkyFitNotification
-import dev.gitlive.firebase.Firebase
-import dev.gitlive.firebase.auth.auth
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch

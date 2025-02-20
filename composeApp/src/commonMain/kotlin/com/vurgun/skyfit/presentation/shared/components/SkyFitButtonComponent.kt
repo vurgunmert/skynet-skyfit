@@ -57,11 +57,22 @@ fun SkyFitButtonComponent(
         enabled = isEnabled || state != ButtonState.Disabled
     ) {
         if (state == ButtonState.Loading) {
-            CircularProgressIndicator(
-                color = buttonStyle.foregroundColor,
-                modifier = Modifier.size(size.iconSize),
-                strokeWidth = 2.dp
-            )
+            Row(
+                modifier = Modifier.padding(
+                    start = size.paddingStart,
+                    end = size.paddingEnd,
+                    top = size.paddingVertical,
+                    bottom = size.paddingVertical
+                ),
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.Center
+            ) {
+                CircularProgressIndicator(
+                    color = buttonStyle.foregroundColor,
+                    modifier = Modifier.size(size.iconSize),
+                    strokeWidth = 2.dp
+                )
+            }
         } else {
 
             Row(

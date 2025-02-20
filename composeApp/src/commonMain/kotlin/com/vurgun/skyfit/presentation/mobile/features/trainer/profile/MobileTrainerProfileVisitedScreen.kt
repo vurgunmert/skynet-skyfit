@@ -30,7 +30,7 @@ import com.vurgun.skyfit.presentation.mobile.features.user.profile.MobileVisited
 import com.vurgun.skyfit.presentation.shared.components.ButtonSize
 import com.vurgun.skyfit.presentation.shared.components.ButtonVariant
 import com.vurgun.skyfit.presentation.shared.components.SkyFitButtonComponent
-import com.vurgun.skyfit.presentation.shared.components.SkyFitIconButton
+import com.vurgun.skyfit.presentation.shared.components.button.SkyFitIconButton
 import com.vurgun.skyfit.presentation.shared.features.profile.ProfileCardVerticalDetailItemComponent
 import com.vurgun.skyfit.presentation.shared.features.profile.VerticalDetailDivider
 import com.vurgun.skyfit.presentation.shared.features.trainer.SkyFitTrainerProfileViewModel

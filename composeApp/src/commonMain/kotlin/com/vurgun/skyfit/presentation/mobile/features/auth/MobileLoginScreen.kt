@@ -1,9 +1,6 @@
 package com.vurgun.skyfit.presentation.mobile.features.auth
 
-import androidx.compose.animation.core.FastOutSlowInEasing
-import androidx.compose.animation.core.animateDpAsState
-import androidx.compose.animation.core.tween
-import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -12,50 +9,53 @@ import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
 import com.vurgun.skyfit.presentation.mobile.resources.MobileStyleGuide
-import com.vurgun.skyfit.presentation.shared.components.ButtonSize
-import com.vurgun.skyfit.presentation.shared.components.ButtonState
-import com.vurgun.skyfit.presentation.shared.components.ButtonVariant
-import com.vurgun.skyfit.presentation.shared.components.SkyFitButtonComponent
 import com.vurgun.skyfit.presentation.shared.components.SkyFitLogoComponent
-import com.vurgun.skyfit.presentation.shared.components.SkyFitPasswordInputComponent
 import com.vurgun.skyfit.presentation.shared.components.SkyFitScaffold
-import com.vurgun.skyfit.presentation.shared.components.SkyFitTextInputComponent
+import com.vurgun.skyfit.presentation.shared.components.button.PrimaryLargeButton
+import com.vurgun.skyfit.presentation.shared.components.button.SecondaryLargeButton
+import com.vurgun.skyfit.presentation.shared.components.text.input.PhoneNumberTextInput
 import com.vurgun.skyfit.presentation.shared.navigation.SkyFitNavigationRoute
 import com.vurgun.skyfit.presentation.shared.navigation.jumpAndStay
 import com.vurgun.skyfit.presentation.shared.navigation.jumpAndTakeover
-import com.vurgun.skyfit.presentation.shared.resources.SkyFitColor
 import com.vurgun.skyfit.presentation.shared.resources.SkyFitTypography
-import com.vurgun.skyfit.utils.keyboardAsState
+import kotlinx.coroutines.flow.collectLatest
 import moe.tlaster.precompose.navigation.Navigator
-import org.jetbrains.compose.resources.painterResource
+import org.jetbrains.compose.resources.stringResource
+import org.koin.compose.koinInject
 import skyfit.composeapp.generated.resources.Res
-import skyfit.composeapp.generated.resources.ic_apple
-import skyfit.composeapp.generated.resources.ic_envelope_closed
-import skyfit.composeapp.generated.resources.ic_facebook_fill
-import skyfit.composeapp.generated.resources.ic_google
+import skyfit.composeapp.generated.resources.auth_login
+import skyfit.composeapp.generated.resources.auth_register
+import skyfit.composeapp.generated.resources.auth_welcome_message
 
 @Composable
 fun MobileLoginScreen(navigator: Navigator) {
+    val viewModel: MobileLoginViewModel = koinInject()
+    val phoneNumber by viewModel.phoneNumber.collectAsState()
+    val isLoginEnabled by viewModel.isLoginEnabled.collectAsState()
+    val isLoading by viewModel.isLoading.collectAsState()
 
-    val keyboardState by keyboardAsState()
-
-    val animatedBottomOffset by animateDpAsState(
-        targetValue = keyboardState.heightDp,
-        animationSpec = tween(durationMillis = 600, easing = FastOutSlowInEasing)
-    )
+    LaunchedEffect(viewModel) {
+        viewModel.navigationEvents.collectLatest { event ->
+            when (event) {
+                is MobileLoginNavigation.GoToDashboard -> {
+                    navigator.jumpAndTakeover(SkyFitNavigationRoute.Login, SkyFitNavigationRoute.Dashboard)
+                }
+                is MobileLoginNavigation.GoToRegister -> {
+                    navigator.jumpAndStay(SkyFitNavigationRoute.Register)
+                }
+            }
+        }
+    }
 
     SkyFitScaffold {
         Column(
@@ -63,155 +63,173 @@ fun MobileLoginScreen(navigator: Navigator) {
                 .padding(MobileStyleGuide.padding24)
                 .widthIn(max = MobileStyleGuide.screenWithMax)
                 .verticalScroll(rememberScrollState())
-                .padding(bottom = animatedBottomOffset)
                 .imePadding(),
             horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.spacedBy(48.dp)
         ) {
-            SkyFitLogoComponent()
-            Spacer(Modifier.height(36.dp))
-            MobileLoginScreenTitle()
-            Spacer(Modifier.height(48.dp))
-            MobileLoginInputGroupComponent(
-                onLoginGoogle = {
-                    navigator.jumpAndTakeover(SkyFitNavigationRoute.Login, SkyFitNavigationRoute.Dashboard)
-                },
-                onLoginFacebook = {
-                    navigator.jumpAndTakeover(SkyFitNavigationRoute.Login, SkyFitNavigationRoute.Dashboard)
-                },
-                onLoginApple = {
-                    navigator.jumpAndTakeover(SkyFitNavigationRoute.Login, SkyFitNavigationRoute.Dashboard)
-                },
-                onLoginCredentials = {
-                    navigator.jumpAndTakeover(SkyFitNavigationRoute.Login, SkyFitNavigationRoute.Dashboard)
-                },
-                onForgotPassword = {
-                    navigator.jumpAndStay(SkyFitNavigationRoute.ForgotPassword)
-                }
+            MobileLoginWelcomeGroup()
+            MobileLoginWithPhoneContentGroup(
+                phoneNumber = phoneNumber,
+                onPhoneNumberChanged = viewModel::onPhoneNumberChanged
             )
-            Spacer(Modifier.height(48.dp))
-            MobileLoginActionsComponent(
-                onClickLogin = {
-                    navigator.jumpAndTakeover(SkyFitNavigationRoute.Login, SkyFitNavigationRoute.Dashboard)
-                },
-                onClickRegister = {
-                    navigator.jumpAndStay(SkyFitNavigationRoute.Register)
-                }
+            MobileLoginActionGroup(
+                isLoginEnabled = isLoginEnabled,
+                isLoading = isLoading,
+                onClickLogin = { viewModel.onLoginClicked() },
+                onClickRegister = { viewModel.onRegisterClicked() }
             )
         }
     }
 }
 
+
 @Composable
-private fun MobileLoginScreenTitle() {
-    Text(
-        text = "Skyfit’e Hoşgeldin \uD83D\uDC4B\uD83C\uDFFC",
-        style = SkyFitTypography.heading3
-    )
+private fun MobileLoginWelcomeGroup() {
+    Column(
+        modifier = Modifier.fillMaxWidth(),
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+        SkyFitLogoComponent()
+        Spacer(Modifier.height(24.dp))
+        Text(
+            text = stringResource(Res.string.auth_welcome_message),
+            style = SkyFitTypography.heading3
+        )
+    }
 }
 
 @Composable
-private fun MobileLoginInputGroupComponent(
+private fun MobileLoginWithPhoneContentGroup(
+    phoneNumber: String,
+    onPhoneNumberChanged: (String) -> Unit
+) {
+    Column(
+        modifier = Modifier.fillMaxWidth(),
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+        PhoneNumberTextInput(value = phoneNumber, onValueChange = onPhoneNumberChanged)
+    }
+}
+
+@Composable
+private fun MobileLoginActionGroup(
+    isLoginEnabled: Boolean,
+    isLoading: Boolean,
+    onClickLogin: () -> Unit,
+    onClickRegister: () -> Unit
+) {
+    Column(
+        modifier = Modifier.fillMaxWidth(),
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.spacedBy(15.dp)
+    ) {
+        PrimaryLargeButton(
+            modifier = Modifier.fillMaxWidth(),
+            text = stringResource(Res.string.auth_login),
+            onClick = onClickLogin,
+            isLoading = isLoading,
+            isEnabled = isLoginEnabled && !isLoading
+        )
+
+        SecondaryLargeButton(
+            modifier = Modifier.fillMaxWidth(),
+            text = stringResource(Res.string.auth_register),
+            onClick = onClickRegister
+        )
+    }
+}
+
+
+/*
+MobileLoginWithCredentialsContentGroup(
+    onLoginGoogle = {
+        navigator.jumpAndTakeover(SkyFitNavigationRoute.Login, SkyFitNavigationRoute.Dashboard)
+    },
+    onLoginFacebook = {
+        navigator.jumpAndTakeover(SkyFitNavigationRoute.Login, SkyFitNavigationRoute.Dashboard)
+    },
+    onLoginApple = {
+        navigator.jumpAndTakeover(SkyFitNavigationRoute.Login, SkyFitNavigationRoute.Dashboard)
+    },
+    onLoginCredentials = {
+        navigator.jumpAndTakeover(SkyFitNavigationRoute.Login, SkyFitNavigationRoute.Dashboard)
+    },
+    onForgotPassword = {
+        navigator.jumpAndStay(SkyFitNavigationRoute.ForgotPassword)
+    }
+)
+
+@Composable
+private fun MobileLoginWithCredentialsContentGroup(
     onLoginGoogle: () -> Unit,
     onLoginFacebook: () -> Unit,
     onLoginApple: () -> Unit,
     onLoginCredentials: () -> Unit,
     onForgotPassword: () -> Unit
 ) {
-
+    //TODO: ViewModel
     var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
 
-    SkyFitButtonComponent(
-        text = "Google ile giriş yap",
-        onClick = onLoginGoogle,
-        variant = ButtonVariant.Secondary,
-        size = ButtonSize.Large,
-        state = ButtonState.Rest,
-        modifier = Modifier.fillMaxWidth(),
-        leftIconPainter = painterResource(Res.drawable.ic_google)
-    )
-
-    Spacer(Modifier.height(24.dp))
-
-    SkyFitButtonComponent(
-        modifier = Modifier.fillMaxWidth(), text = "Facebook ile giriş yap",
-        onClick = onLoginFacebook,
-        variant = ButtonVariant.Secondary,
-        size = ButtonSize.Large,
-        state = ButtonState.Rest,
-        leftIconPainter = painterResource(Res.drawable.ic_facebook_fill)
-    )
-
-    Spacer(Modifier.height(24.dp))
-
-    SkyFitButtonComponent(
-        modifier = Modifier.fillMaxWidth(),
-        text = "Apple ile giriş yap",
-        onClick = onLoginApple,
-        variant = ButtonVariant.Secondary,
-        size = ButtonSize.Large,
-        state = ButtonState.Rest,
-        leftIconPainter = painterResource(Res.drawable.ic_apple)
-    )
-
-    Spacer(Modifier.height(16.dp))
-
-    Text(
-        text = "ya da email ile devam et",
-        style = SkyFitTypography.bodyMediumRegular.copy(color = SkyFitColor.text.secondary)
-    )
-
-    Spacer(Modifier.height(16.dp))
-
-    SkyFitTextInputComponent(
-        hint = "Email’inizi girin",
-        value = email,
-        onValueChange = { email = it },
-        leftIconPainter = painterResource(Res.drawable.ic_envelope_closed)
-    )
-
-    Spacer(Modifier.height(16.dp))
-
-    SkyFitPasswordInputComponent(
-        hint = "Şifrenizi girin",
-        value = password,
-        keyboardOptions = KeyboardOptions.Default.copy(imeAction = ImeAction.Go),
-        onKeyboardGoAction = onLoginCredentials,
-        onValueChange = { password = it }
-    )
-
-    Spacer(Modifier.height(16.dp))
-
-    Text(
-        text = "Şifremi Unuttum",
-        style = SkyFitTypography.bodyMediumUnderlined.copy(SkyFitColor.text.secondary),
-        modifier = Modifier.clickable(onClick = onForgotPassword)
-    )
-}
-
-@Composable
-private fun MobileLoginActionsComponent(
-    onClickLogin: () -> Unit,
-    onClickRegister: () -> Unit
-) {
-    Column {
-        SkyFitButtonComponent(
+    Column(
+        modifier = Modifier
+            .fillMaxWidth(),
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+        SecondaryLargeButton(
+            text = stringResource(Res.string.auth_login_via_google),
+            onClick = onLoginGoogle,
             modifier = Modifier.fillMaxWidth(),
-            text = "Giriş Yap",
-            onClick = onClickLogin,
-            variant = ButtonVariant.Primary,
-            size = ButtonSize.Large,
-            state = ButtonState.Rest
+            leftIconPainter = painterResource(Res.drawable.ic_google)
         )
-        Spacer(Modifier.height(14.dp))
-        SkyFitButtonComponent(
+
+        Spacer(Modifier.height(24.dp))
+
+        SecondaryLargeButton(
+            text = stringResource(Res.string.auth_login_via_facebook),
+            onClick = onLoginFacebook,
             modifier = Modifier.fillMaxWidth(),
-            text = "Kayıt Ol",
-            onClick = onClickRegister,
-            variant = ButtonVariant.Secondary,
-            size = ButtonSize.Large,
-            state = ButtonState.Rest
+            leftIconPainter = painterResource(Res.drawable.ic_facebook_fill)
         )
-        Spacer(Modifier.height(44.dp))
+
+        Spacer(Modifier.height(24.dp))
+
+        SecondaryLargeButton(
+            text = stringResource(Res.string.auth_login_via_apple),
+            onClick = onLoginApple,
+            modifier = Modifier.fillMaxWidth(),
+            leftIconPainter = painterResource(Res.drawable.ic_apple)
+        )
+
+        Spacer(Modifier.height(16.dp))
+
+        SecondaryMediumText(text = stringResource(Res.string.auth_continue_via_email))
+
+        Spacer(Modifier.height(16.dp))
+
+        SkyFitTextInputComponent(
+            hint = stringResource(Res.string.auth_enter_email),
+            value = email,
+            onValueChange = { email = it },
+            leftIconPainter = painterResource(Res.drawable.ic_envelope_closed)
+        )
+
+        Spacer(Modifier.height(16.dp))
+
+        SkyFitPasswordInputComponent(
+            hint = stringResource(Res.string.auth_enter_password),
+            value = password,
+            keyboardOptions = KeyboardOptions.Default.copy(imeAction = ImeAction.Go),
+            onKeyboardGoAction = onLoginCredentials,
+            onValueChange = { password = it }
+        )
+
+        Spacer(Modifier.height(16.dp))
+
+        SecondaryMediumUnderlinedText(
+            text = stringResource(Res.string.auth_forgot_password),
+            modifier = Modifier.clickable(onClick = onForgotPassword)
+        )
     }
 }
+*/

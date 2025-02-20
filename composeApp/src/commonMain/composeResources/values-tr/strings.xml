@@ -1,0 +1,13 @@
+<resources>
+    <string name="app_name">SkyFit</string>
+    <string name="auth_welcome_message">Skyfit’e Hoşgeldin 👋🏼</string>
+    <string name="auth_login_via_google">Google ile giriş yap</string>
+    <string name="auth_login_via_facebook">Facebook ile giriş yap</string>
+    <string name="auth_login_via_apple">Apple ile giriş yap</string>
+    <string name="auth_continue_via_email">ya da email ile devam et</string>
+    <string name="auth_enter_email">Email’inizi girin</string>
+    <string name="auth_enter_password">Şifrenizi girin</string>
+    <string name="auth_forgot_password">Şifremi Unuttum</string>
+    <string name="auth_login">Giriş Yap</string>
+    <string name="auth_register">Kayıt Ol</string>
+</resources>

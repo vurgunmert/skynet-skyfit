@@ -3,7 +3,7 @@ package com.vurgun.skyfit.data.network.repositories
 import com.vurgun.skyfit.data.network.api.commonHttpClient
 import com.vurgun.skyfit.data.network.models.ChatbotRequest
 import com.vurgun.skyfit.data.network.models.ChatbotResponse
-import com.vurgun.skyfit.domain.usecase.ChatbotApiUseCase
+import com.vurgun.skyfit.domain.usecases.ChatbotApiUseCase
 import io.ktor.client.call.body
 import io.ktor.client.request.header
 import io.ktor.client.request.post

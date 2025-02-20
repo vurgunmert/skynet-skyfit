@@ -30,7 +30,7 @@ import androidx.compose.ui.graphics.drawscope.drawIntoCanvas
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.dp
 import coil3.compose.AsyncImage
-import com.vurgun.skyfit.presentation.shared.components.SkyFitIconButton
+import com.vurgun.skyfit.presentation.shared.components.button.SkyFitIconButton
 import com.vurgun.skyfit.presentation.shared.components.SkyFitScaffold
 import com.vurgun.skyfit.presentation.shared.resources.SkyFitColor
 import moe.tlaster.precompose.navigation.Navigator

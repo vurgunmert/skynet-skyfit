@@ -37,7 +37,6 @@ import com.vurgun.skyfit.presentation.shared.components.ButtonSize
 import com.vurgun.skyfit.presentation.shared.components.ButtonState
 import com.vurgun.skyfit.presentation.shared.components.ButtonVariant
 import com.vurgun.skyfit.presentation.shared.components.SkyFitButtonComponent
-import com.vurgun.skyfit.presentation.shared.components.SkyFitSecondaryIconButton
 import com.vurgun.skyfit.presentation.shared.features.facility.FacilityProfileVisitedViewModel
 import com.vurgun.skyfit.presentation.shared.features.profile.ProfileCardVerticalDetailItemComponent
 import com.vurgun.skyfit.presentation.shared.features.profile.RatingStarComponent
@@ -49,8 +48,6 @@ import com.vurgun.skyfit.presentation.shared.resources.SkyFitTypography
 import moe.tlaster.precompose.navigation.Navigator
 import org.jetbrains.compose.resources.painterResource
 import skyfit.composeapp.generated.resources.Res
-import skyfit.composeapp.generated.resources.ic_calendar_dots
-import skyfit.composeapp.generated.resources.ic_send
 import skyfit.composeapp.generated.resources.logo_skyfit
 
 @Composable

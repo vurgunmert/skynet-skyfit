@@ -65,7 +65,7 @@ import moe.tlaster.precompose.navigation.Navigator
 
 @Composable
 fun MobileForgotPasswordCodeScreen(navigator: Navigator) {
-    val viewModel = remember { OtpViewModel() }
+    val viewModel = remember { MobileForgotPasswordCodeScreenViewModel() }
     val keyboardState by keyboardAsState()
     val otpState by viewModel.otpState.collectAsState()
 
@@ -136,7 +136,7 @@ private fun MobileForgotPasswordCodeScreenActionsComponent(
 }
 
 @Composable
-fun OtpInputRow(viewModel: OtpViewModel) {
+fun OtpInputRow(viewModel: MobileForgotPasswordCodeScreenViewModel) {
     val otpState by viewModel.otpState.collectAsState()
     val focusRequesters = List(4) { FocusRequester() }
 

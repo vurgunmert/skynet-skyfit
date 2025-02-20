@@ -42,8 +42,8 @@ import com.vurgun.skyfit.presentation.mobile.features.facility.profile.MobileFac
 import com.vurgun.skyfit.presentation.shared.components.ButtonSize
 import com.vurgun.skyfit.presentation.shared.components.ButtonVariant
 import com.vurgun.skyfit.presentation.shared.components.SkyFitButtonComponent
-import com.vurgun.skyfit.presentation.shared.components.SkyFitPrimaryCircularBackButton
-import com.vurgun.skyfit.presentation.shared.components.SkyFitSecondaryIconButton
+import com.vurgun.skyfit.presentation.shared.components.button.SkyFitPrimaryCircularBackButton
+import com.vurgun.skyfit.presentation.shared.components.button.SkyFitSecondaryIconButton
 import com.vurgun.skyfit.presentation.shared.features.calendar.SkyFitClassCalendarCardItem
 import com.vurgun.skyfit.presentation.shared.features.calendar.SkyFitClassCalendarCardItemRowComponent
 import com.vurgun.skyfit.presentation.shared.features.facility.FacilityProfileVisitedViewModel

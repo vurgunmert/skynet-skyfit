@@ -2,7 +2,7 @@ package com.vurgun.skyfit.presentation.shared.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.vurgun.skyfit.domain.usecase.ChatbotApiUseCase
+import com.vurgun.skyfit.domain.usecases.ChatbotApiUseCase
 import com.vurgun.skyfit.presentation.shared.features.social.ChatMessageItem
 import com.vurgun.skyfit.utils.now
 import kotlinx.coroutines.flow.MutableStateFlow

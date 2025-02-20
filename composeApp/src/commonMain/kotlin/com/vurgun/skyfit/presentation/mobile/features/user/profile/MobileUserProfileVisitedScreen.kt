@@ -33,7 +33,7 @@ import com.vurgun.skyfit.presentation.shared.components.ButtonSize
 import com.vurgun.skyfit.presentation.shared.components.ButtonState
 import com.vurgun.skyfit.presentation.shared.components.ButtonVariant
 import com.vurgun.skyfit.presentation.shared.components.SkyFitButtonComponent
-import com.vurgun.skyfit.presentation.shared.components.SkyFitIconButton
+import com.vurgun.skyfit.presentation.shared.components.button.SkyFitIconButton
 import com.vurgun.skyfit.presentation.shared.features.trainer.fakePosts
 import com.vurgun.skyfit.presentation.shared.features.user.SkyFitUserProfileViewModel
 import com.vurgun.skyfit.presentation.shared.navigation.SkyFitNavigationRoute

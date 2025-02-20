@@ -68,7 +68,7 @@ import com.vurgun.skyfit.presentation.shared.components.ButtonSize
 import com.vurgun.skyfit.presentation.shared.components.ButtonState
 import com.vurgun.skyfit.presentation.shared.components.ButtonVariant
 import com.vurgun.skyfit.presentation.shared.components.SkyFitButtonComponent
-import com.vurgun.skyfit.presentation.shared.components.SkyFitIconButton
+import com.vurgun.skyfit.presentation.shared.components.button.SkyFitIconButton
 import com.vurgun.skyfit.presentation.shared.navigation.SkyFitNavigationRoute
 import com.vurgun.skyfit.presentation.shared.navigation.jumpAndTakeover
 import com.vurgun.skyfit.presentation.shared.resources.SkyFitColor
@@ -83,7 +83,6 @@ import skyfit.composeapp.generated.resources.ic_list
 import skyfit.composeapp.generated.resources.ic_music
 import skyfit.composeapp.generated.resources.ic_pause
 import skyfit.composeapp.generated.resources.ic_trophy
-import skyfit.composeapp.generated.resources.logo_skyfit
 
 private enum class MobileUserExerciseInActionScreenStep {
     SESSION,

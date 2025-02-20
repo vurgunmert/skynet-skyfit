@@ -40,7 +40,7 @@ import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
 import coil3.Uri
 import coil3.compose.AsyncImage
-import com.vurgun.skyfit.presentation.shared.components.SkyFitIconButton
+import com.vurgun.skyfit.presentation.shared.components.button.SkyFitIconButton
 import com.vurgun.skyfit.presentation.shared.components.SkyFitScreenHeader
 import com.vurgun.skyfit.presentation.shared.resources.SkyFitColor
 import com.vurgun.skyfit.presentation.shared.resources.SkyFitTypography

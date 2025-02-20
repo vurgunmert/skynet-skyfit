@@ -1,6 +1,7 @@
 package com.vurgun.skyfit.construction
 
 import com.vurgun.skyfit.data.configuration.dataDependencyModule
+import com.vurgun.skyfit.di.authModule
 import com.vurgun.skyfit.presentation.configuration.presentationDependencyModule
 import org.koin.core.context.startKoin
 import org.koin.dsl.module
@@ -9,7 +10,8 @@ object AppDependencyManager {
 
     fun loadSkyFitModules() {
         startKoin {
-            modules(dataDependencyModule,
+            modules(authModule,
+                    dataDependencyModule,
                     presentationDependencyModule)
         }
     }
@@ -17,7 +19,8 @@ object AppDependencyManager {
 
 fun loadKoinDependencyModules() {
     startKoin {
-        modules(dataDependencyModule,
-                presentationDependencyModule)
+        modules(authModule,
+            dataDependencyModule,
+            presentationDependencyModule)
     }
 }
