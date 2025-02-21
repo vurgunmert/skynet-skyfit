@@ -28,7 +28,7 @@ import com.vurgun.skyfit.presentation.shared.components.ButtonVariant
 import com.vurgun.skyfit.presentation.shared.components.SkyFitButtonComponent
 import com.vurgun.skyfit.presentation.shared.components.SkyFitScreenHeader
 import com.vurgun.skyfit.presentation.shared.components.SkyFitTextInputComponent
-import com.vurgun.skyfit.presentation.shared.navigation.SkyFitNavigationRoute
+import com.vurgun.skyfit.presentation.shared.navigation.NavigationRoute
 import com.vurgun.skyfit.presentation.shared.navigation.jumpAndStay
 import com.vurgun.skyfit.presentation.shared.resources.SkyFitColor
 import com.vurgun.skyfit.presentation.shared.resources.SkyFitTypography
@@ -51,16 +51,16 @@ fun MobileUserMealDetailAddScreen(rootNavigator: Navigator) {
 
     NavHost(
         navigator = detailNavigator,
-        initialRoute = SkyFitNavigationRoute.UserMealDetailAdd.route
+        initialRoute = NavigationRoute.UserMealDetailAdd.route
     ) {
-        scene(SkyFitNavigationRoute.UserMealDetailAdd.route) {
+        scene(NavigationRoute.UserMealDetailAdd.route) {
             MobileUserMealDetailAddInputScreen(
                 onClickBack = { rootNavigator.popBackStack() },
-                onClickCapturePhoto = { detailNavigator.jumpAndStay(SkyFitNavigationRoute.UserMealDetailAddPhoto) },
-                onClickSave = { rootNavigator.navigate(SkyFitNavigationRoute.DashboardNutrition.route) }
+                onClickCapturePhoto = { detailNavigator.jumpAndStay(NavigationRoute.UserMealDetailAddPhoto) },
+                onClickSave = { rootNavigator.navigate(NavigationRoute.DashboardNutrition.route) }
             )
         }
-        scene(SkyFitNavigationRoute.UserMealDetailAddPhoto.route) {
+        scene(NavigationRoute.UserMealDetailAddPhoto.route) {
             MobileUserMealDetailAddPhotoScreen(detailNavigator)
         }
     }

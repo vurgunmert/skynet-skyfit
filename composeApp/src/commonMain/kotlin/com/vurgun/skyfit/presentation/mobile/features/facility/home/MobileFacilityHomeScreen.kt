@@ -29,7 +29,7 @@ import com.vurgun.skyfit.presentation.mobile.features.dashboard.MobileDashboardH
 import com.vurgun.skyfit.presentation.mobile.features.dashboard.MobileDashboardHomeUpcomingAppointmentsComponent
 import com.vurgun.skyfit.presentation.mobile.features.trainer.home.MemberChangeLineChart
 import com.vurgun.skyfit.presentation.mobile.features.trainer.home.MobileDashboardHomeTrainerNoClassComponent
-import com.vurgun.skyfit.presentation.shared.navigation.SkyFitNavigationRoute
+import com.vurgun.skyfit.presentation.shared.navigation.NavigationRoute
 import com.vurgun.skyfit.presentation.shared.navigation.jumpAndStay
 import com.vurgun.skyfit.presentation.shared.resources.SkyFitColor
 import moe.tlaster.precompose.navigation.Navigator
@@ -51,7 +51,7 @@ fun MobileFacilityHomeScreen(rootNavigator: Navigator) {
             MobileDashboardHomeFacilityStatisticsComponent()
 
             MobileDashboardHomeFacilityNoClassComponent(
-                onClick = { rootNavigator.jumpAndStay(SkyFitNavigationRoute.FacilityClasses) }
+                onClick = { rootNavigator.jumpAndStay(NavigationRoute.FacilityClasses) }
             )
 
             MobileDashboardHomeUpcomingAppointmentsComponent()

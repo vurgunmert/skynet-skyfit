@@ -1,7 +1,7 @@
 package com.vurgun.skyfit.presentation.mobile.features.auth
 
 import com.vurgun.skyfit.domain.usecases.auth.AuthenticatePhoneNumberUseCase
-import com.vurgun.skyfit.domain.util.ResultWrapper
+import com.vurgun.skyfit.domain.usecases.auth.AuthLoginResult
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import moe.tlaster.precompose.viewmodel.ViewModel
@@ -9,7 +9,8 @@ import moe.tlaster.precompose.viewmodel.viewModelScope
 
 sealed class MobileLoginNavigation {
     data object GoToDashboard : MobileLoginNavigation()
-    data object GoToRegister : MobileLoginNavigation()
+    data object GoToOTPVerification : MobileLoginNavigation()
+    data class ShowError(val message: String) : MobileLoginNavigation()
 }
 
 class MobileLoginViewModel(
@@ -40,15 +41,17 @@ class MobileLoginViewModel(
             val result = authenticatePhoneNumberUseCase.execute(_phoneNumber.value)
             _isLoading.value = false
 
-            if (result is ResultWrapper.Success) {
-                _navigationEvents.emit(MobileLoginNavigation.GoToDashboard)
+            when (result) {
+                is AuthLoginResult.AwaitingOTPRegister -> {
+                    _navigationEvents.emit(MobileLoginNavigation.GoToOTPVerification)
+                }
+                is AuthLoginResult.AwaitingOTPLogin -> {
+                    _navigationEvents.emit(MobileLoginNavigation.GoToOTPVerification)
+                }
+                is AuthLoginResult.Error -> {
+                    _navigationEvents.emit(MobileLoginNavigation.ShowError(result.message))
+                }
             }
-        }
-    }
-
-    fun onRegisterClicked() {
-        viewModelScope.launch {
-            _navigationEvents.emit(MobileLoginNavigation.GoToRegister)
         }
     }
 }

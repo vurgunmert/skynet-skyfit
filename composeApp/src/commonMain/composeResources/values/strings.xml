@@ -11,4 +11,8 @@
     <string name="auth_login">Giriş Yap</string>
     <string name="auth_register">Kayıt Ol</string>
     <string name="auth_verify">Onayla</string>
+    <string name="auth_code_sent_to_phone">Lütfen %1$s numarasına gelen kodu girin</string>
+    <string name="resend_code_timer">Yeniden göndermek için %1$d saniye</string>
+    <string name="resend_code">Tekrar Gönder</string>
+
 </resources>

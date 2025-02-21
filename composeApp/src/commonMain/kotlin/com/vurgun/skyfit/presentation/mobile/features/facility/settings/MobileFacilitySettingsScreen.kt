@@ -15,7 +15,7 @@ import com.vurgun.skyfit.presentation.shared.components.SkyFitScaffold
 import com.vurgun.skyfit.presentation.shared.components.SkyFitScreenHeader
 import com.vurgun.skyfit.presentation.shared.features.settings.MobileSettingsMenuItemComponent
 import com.vurgun.skyfit.presentation.shared.features.settings.MobileSettingsMenuItemDividerComponent
-import com.vurgun.skyfit.presentation.shared.navigation.SkyFitNavigationRoute
+import com.vurgun.skyfit.presentation.shared.navigation.NavigationRoute
 import com.vurgun.skyfit.presentation.shared.navigation.jumpAndStay
 import moe.tlaster.precompose.navigation.Navigator
 import skyfit.composeapp.generated.resources.Res
@@ -52,13 +52,13 @@ fun MobileFacilitySettingsScreen(navigator: Navigator) {
             MobileSettingsMenuItemComponent(
                 text = "Hesap Ayarlari",
                 iconRes = Res.drawable.ic_profile,
-                onClick = { navigator.jumpAndStay(SkyFitNavigationRoute.FacilitySettingsAccount) }
+                onClick = { navigator.jumpAndStay(NavigationRoute.FacilitySettingsAccount) }
             )
 
             MobileSettingsMenuItemComponent(
                 text = "Ödeme Geçmişi",
                 iconRes = Res.drawable.ic_credit_card,
-                onClick = { navigator.jumpAndStay(SkyFitNavigationRoute.FacilitySettingsPaymentHistory) }
+                onClick = { navigator.jumpAndStay(NavigationRoute.FacilitySettingsPaymentHistory) }
             )
 
             MobileSettingsMenuItemDividerComponent()
@@ -66,7 +66,7 @@ fun MobileFacilitySettingsScreen(navigator: Navigator) {
             MobileSettingsMenuItemComponent(
                 text = "Bildirimler",
                 iconRes = Res.drawable.ic_bell,
-                onClick = { navigator.jumpAndStay(SkyFitNavigationRoute.FacilitySettingsNotifications) }
+                onClick = { navigator.jumpAndStay(NavigationRoute.FacilitySettingsNotifications) }
             )
 
             MobileSettingsMenuItemDividerComponent()
@@ -74,14 +74,14 @@ fun MobileFacilitySettingsScreen(navigator: Navigator) {
             MobileSettingsMenuItemComponent(
                 text = "Üyeler",
                 iconRes = Res.drawable.ic_posture_fill,
-                onClick = { navigator.jumpAndStay(SkyFitNavigationRoute.FacilitySettingsSearchMembers) }
+                onClick = { navigator.jumpAndStay(NavigationRoute.FacilitySettingsSearchMembers) }
             )
 
 
             MobileSettingsMenuItemComponent(
                 text = "Eğitmenler",
                 iconRes = Res.drawable.ic_athletic_performance,
-                onClick = { navigator.jumpAndStay(SkyFitNavigationRoute.FacilitySettingsTrainers) }
+                onClick = { navigator.jumpAndStay(NavigationRoute.FacilitySettingsTrainers) }
             )
 
             MobileSettingsMenuItemDividerComponent()
@@ -89,7 +89,7 @@ fun MobileFacilitySettingsScreen(navigator: Navigator) {
             MobileSettingsMenuItemComponent(
                 text = "Destek ve Yardim",
                 iconRes = Res.drawable.ic_question_circle,
-                onClick = { navigator.jumpAndStay(SkyFitNavigationRoute.FacilitySettingsHelp) }
+                onClick = { navigator.jumpAndStay(NavigationRoute.FacilitySettingsHelp) }
             )
         }
     }

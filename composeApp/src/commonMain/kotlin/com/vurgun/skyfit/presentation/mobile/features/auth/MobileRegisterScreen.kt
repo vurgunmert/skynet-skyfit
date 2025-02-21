@@ -1,5 +1,6 @@
 package com.vurgun.skyfit.presentation.mobile.features.auth
 
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
@@ -11,42 +12,85 @@ import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.ClickableText
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import com.vurgun.skyfit.presentation.mobile.resources.MobileStyleGuide
-import com.vurgun.skyfit.presentation.shared.components.SkyFitButtonComponent
-import com.vurgun.skyfit.presentation.shared.components.SkyFitLogoComponent
-import com.vurgun.skyfit.presentation.shared.components.SkyFitPasswordInputComponent
 import com.vurgun.skyfit.presentation.shared.components.SkyFitScaffold
-import com.vurgun.skyfit.presentation.shared.components.SkyFitTextInputComponent
-import com.vurgun.skyfit.presentation.shared.navigation.SkyFitNavigationRoute
+import com.vurgun.skyfit.presentation.shared.components.button.PrimaryLargeButton
+import com.vurgun.skyfit.presentation.shared.components.text.input.PasswordTextInput
+import com.vurgun.skyfit.presentation.shared.components.text.input.PersonNameTextInput
+import com.vurgun.skyfit.presentation.shared.components.text.input.PhoneNumberTextInput
+import com.vurgun.skyfit.presentation.shared.navigation.NavigationRoute
 import com.vurgun.skyfit.presentation.shared.navigation.jumpAndTakeover
 import com.vurgun.skyfit.presentation.shared.resources.SkyFitColor
 import com.vurgun.skyfit.presentation.shared.resources.SkyFitTypography
+import kotlinx.coroutines.flow.collectLatest
 import moe.tlaster.precompose.navigation.Navigator
-import org.jetbrains.compose.resources.painterResource
+import moe.tlaster.precompose.navigation.query
+import org.jetbrains.compose.resources.stringResource
+import org.koin.compose.koinInject
 import skyfit.composeapp.generated.resources.Res
-import skyfit.composeapp.generated.resources.ic_envelope_closed
-import skyfit.composeapp.generated.resources.ic_profile
-import skyfit.composeapp.generated.resources.logo_skyfit
+import skyfit.composeapp.generated.resources.auth_register
 
 @Composable
 fun MobileRegisterScreen(navigator: Navigator) {
+    val viewModel: MobileRegisterViewModel = koinInject()
+    val keyboardController = LocalSoftwareKeyboardController.current
 
-    var isSaveButtonEnabled by remember { mutableStateOf(false) }
+    val currentEntry by navigator.currentEntry.collectAsState(null)
+    val phoneNumber = remember(currentEntry) {
+        currentEntry?.query("phone", default = "") ?: ""
+    }
+
+    val fullName by viewModel.fullName.collectAsState()
+    val password by viewModel.password.collectAsState()
+    val confirmPassword by viewModel.confirmPassword.collectAsState()
+    val isRegisterEnabled by viewModel.isRegisterEnabled.collectAsState()
+
     var showTermsDialog by remember { mutableStateOf(false) }
     var showPrivacyDialog by remember { mutableStateOf(false) }
+
+    LaunchedEffect(phoneNumber) {
+        viewModel.setPhoneNumber(phoneNumber)
+    }
+
+    val nameFocusRequester = remember { FocusRequester() }
+    val passwordFocusRequester = remember { FocusRequester() }
+    val confirmPasswordFocusRequester = remember { FocusRequester() }
+
+    LaunchedEffect(viewModel) {
+        viewModel.navigationEvents.collectLatest { event ->
+            when (event) {
+                is MobileRegisterNavigation.GoToOnboarding -> {
+                    navigator.jumpAndTakeover(NavigationRoute.Register, NavigationRoute.Onboarding)
+                }
+            }
+        }
+    }
+
+    LaunchedEffect(Unit) {
+        nameFocusRequester.requestFocus()
+    }
+
+    LaunchedEffect(isRegisterEnabled) {
+        if (isRegisterEnabled) {
+            keyboardController?.hide()
+        }
+    }
 
     SkyFitScaffold {
         Column(
@@ -58,17 +102,29 @@ fun MobileRegisterScreen(navigator: Navigator) {
                 .verticalScroll(rememberScrollState()),
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {
-            SkyFitLogoComponent()
-            Spacer(Modifier.height(36.dp))
-            MobileRegisterScreenTitleComponent()
+            MobileLoginWelcomeGroup()
+
             Spacer(Modifier.height(48.dp))
             MobileRegisterInputGroupComponent(
-                onInputReadyState = { isSaveButtonEnabled = it }
+                phoneNumber = phoneNumber,
+                fullName = fullName,
+                password = password,
+                confirmPassword = confirmPassword,
+                passwordError = viewModel.passwordError.collectAsState().value,
+                confirmPasswordError = viewModel.confirmPasswordError.collectAsState().value,
+                onFullNameChanged = viewModel::setFullName,
+                onPasswordChanged = viewModel::setPassword,
+                onConfirmPasswordChanged = viewModel::setConfirmPassword,
+                nameFocusRequester = nameFocusRequester,
+                passwordFocusRequester = passwordFocusRequester,
+                confirmPasswordFocusRequester = confirmPasswordFocusRequester
             )
             Spacer(Modifier.weight(1f))
-            MobileRegisterScreenActionComponent(enabled = isSaveButtonEnabled) {
-                navigator.jumpAndTakeover(SkyFitNavigationRoute.Register, SkyFitNavigationRoute.Onboarding)
-            }
+            MobileRegisterScreenActionComponent(
+                isRegisterEnabled = isRegisterEnabled,
+                isLoading = false,
+                onClickRegister = viewModel::onRegisterClicked
+            )
             Spacer(Modifier.height(16.dp))
             MobileRegisterScreenLegalActionsComponent(
                 onPrivacyPolicyClick = { showPrivacyDialog = true },
@@ -93,75 +149,79 @@ fun MobileRegisterScreen(navigator: Navigator) {
 }
 
 @Composable
-private fun MobileRegisterScreenTitleComponent() {
-    Text(
-        text = "Skyfit’e Hoşgeldin \uD83D\uDC4B\uD83C\uDFFC",
-        style = SkyFitTypography.heading3
-    )
-}
+private fun MobileRegisterInputGroupComponent(
+    phoneNumber: String,
+    fullName: String,
+    password: String,
+    confirmPassword: String,
+    passwordError: String?,
+    confirmPasswordError: String?,
+    onFullNameChanged: (String) -> Unit,
+    onPasswordChanged: (String) -> Unit,
+    onConfirmPasswordChanged: (String) -> Unit,
+    nameFocusRequester: FocusRequester,
+    passwordFocusRequester: FocusRequester,
+    confirmPasswordFocusRequester: FocusRequester
+) {
+    val keyboardController = LocalSoftwareKeyboardController.current
 
-@Composable
-private fun MobileRegisterInputGroupComponent(onInputReadyState: (Boolean) -> Unit) {
+    Column(
+        modifier = Modifier.fillMaxWidth(),
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.spacedBy(16.dp)
+    ) {
+        PhoneNumberTextInput(
+            value = phoneNumber,
+            onValueChange = { },
+            isEnabled = false
+        )
 
-    var username by remember { mutableStateOf("") }
-    var email by remember { mutableStateOf("") }
-    var password by remember { mutableStateOf("") }
-    var confirmPassword by remember { mutableStateOf("") }
+        PersonNameTextInput(
+            value = fullName,
+            onValueChange = onFullNameChanged,
+            focusRequester = nameFocusRequester,
+            onKeyboardNextAction = {
+                passwordFocusRequester.requestFocus()
+            }
+        )
 
-    fun validateInputs() {
-        onInputReadyState(
-            username.isNotBlank() &&
-                    email.isNotBlank() &&
-                    password.isNotBlank() &&
-                    password == confirmPassword
+        PasswordTextInput(
+            value = password,
+            onValueChange = onPasswordChanged,
+            hint = "Şifrenizi girin",
+            error = passwordError,
+            focusRequester = passwordFocusRequester,
+            onKeyboardNextAction = {
+                confirmPasswordFocusRequester.requestFocus()
+            }
+        )
+
+        PasswordTextInput(
+            value = confirmPassword,
+            onValueChange = onConfirmPasswordChanged,
+            hint = "Şifrenizi tekrar girin",
+            error = confirmPasswordError,
+            focusRequester = confirmPasswordFocusRequester,
+            onKeyboardDoneAction = {
+                keyboardController?.hide() // Close keyboard when done
+            }
         )
     }
-
-    SkyFitTextInputComponent(
-        hint = "Kullanıcı Adı",
-        value = username,
-        onValueChange = {
-            username = it
-            validateInputs()
-        },
-        leftIconPainter = painterResource(Res.drawable.ic_profile)
-    )
-    Spacer(Modifier.height(16.dp))
-    SkyFitTextInputComponent(
-        hint = "Email’inizi girin",
-        value = email,
-        onValueChange = {
-            email = it
-            validateInputs()
-        },
-        leftIconPainter = painterResource(Res.drawable.ic_envelope_closed)
-    )
-    Spacer(Modifier.height(16.dp))
-    SkyFitPasswordInputComponent(
-        hint = "Şifrenizi girin",
-        value = password,
-        onValueChange = {
-            password = it
-            validateInputs()
-        },
-    )
-    Spacer(Modifier.height(16.dp))
-    SkyFitPasswordInputComponent(
-        hint = "Şifrenizi tekrar girin",
-        value = confirmPassword,
-        onValueChange = {
-            confirmPassword = it
-            validateInputs()
-        }
-    )
 }
 
+
 @Composable
-private fun MobileRegisterScreenActionComponent(enabled: Boolean = false, onRegisterClick: () -> Unit) {
-    SkyFitButtonComponent(
-        modifier = Modifier.fillMaxWidth(), text = "Kayıt Ol",
-        onClick = onRegisterClick,
-        isEnabled = enabled
+private fun MobileRegisterScreenActionComponent(
+    isRegisterEnabled: Boolean,
+    isLoading: Boolean,
+    onClickRegister: () -> Unit
+) {
+    PrimaryLargeButton(
+        modifier = Modifier.fillMaxWidth(),
+        text = stringResource(Res.string.auth_register),
+        onClick = onClickRegister,
+        isLoading = isLoading,
+        isEnabled = isRegisterEnabled && !isLoading
     )
 }
 

@@ -39,7 +39,7 @@ import com.vurgun.skyfit.presentation.shared.components.SkyFitScreenHeader
 import com.vurgun.skyfit.presentation.shared.features.calendar.SkyFitClassCalendarCardItem
 import com.vurgun.skyfit.presentation.shared.features.calendar.SkyFitClassCalendarCardItemRowComponent
 import com.vurgun.skyfit.presentation.shared.features.facility.FacilityClassesViewModel
-import com.vurgun.skyfit.presentation.shared.navigation.SkyFitNavigationRoute
+import com.vurgun.skyfit.presentation.shared.navigation.NavigationRoute
 import com.vurgun.skyfit.presentation.shared.navigation.jumpAndStay
 import com.vurgun.skyfit.presentation.shared.resources.SkyFitColor
 import com.vurgun.skyfit.presentation.shared.resources.SkyFitIcon
@@ -88,7 +88,7 @@ fun MobileFacilityClassesScreen(navigator: Navigator) {
                         text = "+ Yeni",
                         style = SkyFitTypography.bodyMediumRegular,
                         color = SkyFitColor.text.secondary,
-                        modifier = Modifier.clickable { navigator.jumpAndStay(SkyFitNavigationRoute.FacilityClassEdit) }
+                        modifier = Modifier.clickable { navigator.jumpAndStay(NavigationRoute.FacilityClassEdit) }
                     )
                 }
             }
@@ -97,7 +97,7 @@ fun MobileFacilityClassesScreen(navigator: Navigator) {
             items(activeClasses, key = { it.classId }) { item ->
                 SkyFitClassItemComponent(
                     item = item,
-                    onEdit = { navigator.jumpAndStay(SkyFitNavigationRoute.FacilityClassEdit) },
+                    onEdit = { navigator.jumpAndStay(NavigationRoute.FacilityClassEdit) },
                     onDeactivate = { viewModel.toggleClassStatus(item.classId) },
                     onActivate = { viewModel.toggleClassStatus(item.classId) },
                     onDelete = { viewModel.deleteClass(item.classId) }
@@ -114,7 +114,7 @@ fun MobileFacilityClassesScreen(navigator: Navigator) {
             items(inactiveClasses, key = { it.classId }) { item ->
                 SkyFitClassItemComponent(
                     item = item,
-                    onEdit = { navigator.jumpAndStay(SkyFitNavigationRoute.FacilityClassEdit) },
+                    onEdit = { navigator.jumpAndStay(NavigationRoute.FacilityClassEdit) },
                     onDeactivate = { viewModel.toggleClassStatus(item.classId) },
                     onActivate = { viewModel.toggleClassStatus(item.classId) },
                     onDelete = { viewModel.deleteClass(item.classId) }

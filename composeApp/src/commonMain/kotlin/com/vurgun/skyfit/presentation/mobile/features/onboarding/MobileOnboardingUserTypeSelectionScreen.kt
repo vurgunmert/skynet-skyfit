@@ -14,10 +14,6 @@ import com.vurgun.skyfit.presentation.shared.components.SkyFitScaffold
 import com.vurgun.skyfit.presentation.shared.components.SkyFitTextButton
 import com.vurgun.skyfit.presentation.shared.features.onboarding.OnboardingStepProgressComponent
 import com.vurgun.skyfit.presentation.shared.features.onboarding.OnboardingTitleGroupComponent
-import com.vurgun.skyfit.presentation.shared.navigation.SkyFitNavigationRoute
-import com.vurgun.skyfit.presentation.shared.navigation.jumpAndStay
-import com.vurgun.skyfit.presentation.shared.navigation.jumpAndTakeover
-import moe.tlaster.precompose.navigation.Navigator
 
 @Composable
 fun MobileOnboardingUserTypeSelectionScreen(onClickUser: () -> Unit,

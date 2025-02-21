@@ -24,7 +24,7 @@ import com.vurgun.skyfit.presentation.shared.components.SkyFitCircularImageCompo
 import com.vurgun.skyfit.presentation.shared.components.button.SkyFitIconButton
 import com.vurgun.skyfit.presentation.shared.components.UserCircleAvatarItem
 import com.vurgun.skyfit.presentation.shared.features.social.SkyFitPostCardItemComponent
-import com.vurgun.skyfit.presentation.shared.navigation.SkyFitNavigationRoute
+import com.vurgun.skyfit.presentation.shared.navigation.NavigationRoute
 import com.vurgun.skyfit.presentation.shared.navigation.jumpAndStay
 import com.vurgun.skyfit.presentation.shared.resources.SkyFitColor
 import com.vurgun.skyfit.presentation.shared.resources.SkyFitTypography
@@ -43,7 +43,7 @@ fun MobileUserSocialMediaScreen(navigator: Navigator) {
         backgroundColor = SkyFitColor.background.default,
         topBar = {
             MobileUserSocialMediaScreenUserProfilesComponent(onNewPost = {
-                navigator.jumpAndStay(SkyFitNavigationRoute.UserSocialMediaPostAdd)
+                navigator.jumpAndStay(NavigationRoute.UserSocialMediaPostAdd)
             })
         }
     ) {

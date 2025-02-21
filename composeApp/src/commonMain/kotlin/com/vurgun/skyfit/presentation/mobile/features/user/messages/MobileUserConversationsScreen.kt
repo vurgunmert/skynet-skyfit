@@ -36,7 +36,7 @@ import com.vurgun.skyfit.presentation.shared.components.SkyFitNumberBadge
 import com.vurgun.skyfit.presentation.shared.components.SkyFitScreenHeader
 import com.vurgun.skyfit.presentation.shared.components.SkyFitSearchTextInputComponent
 import com.vurgun.skyfit.presentation.shared.components.UserCircleAvatarItem
-import com.vurgun.skyfit.presentation.shared.navigation.SkyFitNavigationRoute
+import com.vurgun.skyfit.presentation.shared.navigation.NavigationRoute
 import com.vurgun.skyfit.presentation.shared.navigation.jumpAndStay
 import com.vurgun.skyfit.presentation.shared.resources.SkyFitColor
 import com.vurgun.skyfit.presentation.shared.resources.SkyFitTypography
@@ -74,7 +74,7 @@ fun MobileUserConversationsScreen(navigator: Navigator) {
             } else {
                 MobileUserConversationsComponent(conversations,
                     onClickConversation = {
-                        navigator.jumpAndStay(SkyFitNavigationRoute.UserToUserChat)
+                        navigator.jumpAndStay(NavigationRoute.UserToUserChat)
                     })
                 Spacer(Modifier.height(48.dp))
             }

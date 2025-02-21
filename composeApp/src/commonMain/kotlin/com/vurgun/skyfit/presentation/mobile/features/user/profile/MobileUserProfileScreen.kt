@@ -68,7 +68,7 @@ import com.vurgun.skyfit.presentation.shared.features.social.PostViewData
 import com.vurgun.skyfit.presentation.shared.features.social.SkyFitPostCardItemComponent
 import com.vurgun.skyfit.presentation.shared.features.user.SkyFitUserProfileViewModel
 import com.vurgun.skyfit.presentation.shared.features.user.TopBarGroupViewData
-import com.vurgun.skyfit.presentation.shared.navigation.SkyFitNavigationRoute
+import com.vurgun.skyfit.presentation.shared.navigation.NavigationRoute
 import com.vurgun.skyfit.presentation.shared.navigation.jumpAndStay
 import com.vurgun.skyfit.presentation.shared.resources.SkyFitColor
 import com.vurgun.skyfit.presentation.shared.resources.SkyFitIcon
@@ -171,8 +171,8 @@ fun MobileUserProfileTopBarGroupComponent(
                 showPosts = showPosts,
                 onClickAbout = { viewModel.toggleShowPosts(false) },
                 onClickPosts = { viewModel.toggleShowPosts(true) },
-                onClickSettings = { navigator.jumpAndStay(SkyFitNavigationRoute.UserSettings) },
-                onClickNewPost = { navigator.jumpAndStay(SkyFitNavigationRoute.UserSocialMediaPostAdd) }
+                onClickSettings = { navigator.jumpAndStay(NavigationRoute.UserSettings) },
+                onClickNewPost = { navigator.jumpAndStay(NavigationRoute.UserSocialMediaPostAdd) }
             )
         }
     }
@@ -357,7 +357,7 @@ fun MobileUserProfileAboutGroupComponent(
         if (appointments.isNotEmpty()) {
             MobileUserProfileAppointmentsComponent(
                 appointments = appointments,
-                onClick = { navigator.jumpAndStay(SkyFitNavigationRoute.UserAppointments) })
+                onClick = { navigator.jumpAndStay(NavigationRoute.UserAppointments) })
         }
 
         if (dietGoals.isEmpty()) {
@@ -368,7 +368,7 @@ fun MobileUserProfileAboutGroupComponent(
 
         if (showMeasurements) {
             MobileUserProfileMeasurementsComponent(onClick = {
-                navigator.jumpAndStay(SkyFitNavigationRoute.UserMeasurements)
+                navigator.jumpAndStay(NavigationRoute.UserMeasurements)
             })
         }
 
@@ -378,7 +378,7 @@ fun MobileUserProfileAboutGroupComponent(
 
         if (exercises.isEmpty()) {
             MobileUserProfileScreenExploreExercisesComponent {
-                navigator.jumpAndStay(SkyFitNavigationRoute.DashboardExploreExercises)
+                navigator.jumpAndStay(NavigationRoute.DashboardExploreExercises)
             }
         } else {
             MobileUserProfileExerciseHistoryComponent(exercises)
@@ -386,12 +386,12 @@ fun MobileUserProfileAboutGroupComponent(
 
         if (photoDiary == null) {
             MobileUserProfilePhotoDiaryEmptyComponent(onClickAdd = {
-                navigator.jumpAndStay(SkyFitNavigationRoute.UserPhotoDiary)
+                navigator.jumpAndStay(NavigationRoute.UserPhotoDiary)
             })
         } else {
             MobileUserProfilePhotoDiaryComponent(photoDiary,
                 onClickAdd = {
-                    navigator.jumpAndStay(SkyFitNavigationRoute.UserPhotoDiary)
+                    navigator.jumpAndStay(NavigationRoute.UserPhotoDiary)
                 })
         }
 

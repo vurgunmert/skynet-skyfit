@@ -69,7 +69,7 @@ import com.vurgun.skyfit.presentation.shared.components.ButtonState
 import com.vurgun.skyfit.presentation.shared.components.ButtonVariant
 import com.vurgun.skyfit.presentation.shared.components.SkyFitButtonComponent
 import com.vurgun.skyfit.presentation.shared.components.button.SkyFitIconButton
-import com.vurgun.skyfit.presentation.shared.navigation.SkyFitNavigationRoute
+import com.vurgun.skyfit.presentation.shared.navigation.NavigationRoute
 import com.vurgun.skyfit.presentation.shared.navigation.jumpAndTakeover
 import com.vurgun.skyfit.presentation.shared.resources.SkyFitColor
 import com.vurgun.skyfit.presentation.shared.resources.SkyFitTypography
@@ -157,7 +157,7 @@ fun MobileUserExerciseInActionScreen(navigator: Navigator) {
                     Spacer(Modifier.height(18.dp))
                     MobileUserExerciseInActionScreenTrophyComponent(
                         onClickTrophy = {
-                            navigator.jumpAndTakeover(SkyFitNavigationRoute.Dashboard, SkyFitNavigationRoute.UserTrophies)
+                            navigator.jumpAndTakeover(NavigationRoute.Dashboard, NavigationRoute.UserTrophies)
                         },
                         onClickNext = {
                             activePage = MobileUserExerciseInActionScreenStep.COMPLETE
@@ -167,8 +167,8 @@ fun MobileUserExerciseInActionScreen(navigator: Navigator) {
 
                 MobileUserExerciseInActionScreenStep.COMPLETE -> {
                     navigator.jumpAndTakeover(
-                        SkyFitNavigationRoute.UserExerciseInAction,
-                        SkyFitNavigationRoute.UserExerciseInActionComplete
+                        NavigationRoute.UserExerciseInAction,
+                        NavigationRoute.UserExerciseInActionComplete
                     )
                 }
             }

@@ -6,7 +6,6 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -17,15 +16,13 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
-import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import com.vurgun.skyfit.presentation.mobile.features.user.messages.ChatBotButtonComponent
 import com.vurgun.skyfit.presentation.shared.components.SkyFitScaffold
-import com.vurgun.skyfit.presentation.shared.navigation.SkyFitNavigationRoute
-import com.vurgun.skyfit.presentation.shared.navigation.SkyFitNavigationRoute.DashboardHome
+import com.vurgun.skyfit.presentation.shared.navigation.NavigationRoute
+import com.vurgun.skyfit.presentation.shared.navigation.NavigationRoute.DashboardHome
 import com.vurgun.skyfit.presentation.shared.navigation.jumpAndStay
 import com.vurgun.skyfit.presentation.shared.resources.SkyFitColor
 import moe.tlaster.precompose.navigation.NavHost
@@ -35,7 +32,6 @@ import moe.tlaster.precompose.navigation.PopUpTo
 import moe.tlaster.precompose.navigation.rememberNavigator
 import org.jetbrains.compose.resources.painterResource
 import skyfit.composeapp.generated.resources.Res
-import skyfit.composeapp.generated.resources.compose_multiplatform
 import skyfit.composeapp.generated.resources.ic_barbell
 import skyfit.composeapp.generated.resources.ic_barbell_fill
 import skyfit.composeapp.generated.resources.ic_coffee
@@ -46,23 +42,22 @@ import skyfit.composeapp.generated.resources.ic_plus
 import skyfit.composeapp.generated.resources.ic_profile
 import skyfit.composeapp.generated.resources.ic_profile_fill
 import skyfit.composeapp.generated.resources.ic_search
-import skyfit.composeapp.generated.resources.logo_skyfit
 
 @Composable
 fun MobileDashboardWithNavigation(
     rootNavigator: Navigator,
     dashboardNavigator: Navigator,
-    initialRoute: SkyFitNavigationRoute = DashboardHome
+    initialRoute: NavigationRoute = DashboardHome
 ) {
     NavHost(
         navigator = dashboardNavigator,
         initialRoute = initialRoute.route
     ) {
         scene(DashboardHome.route) { MobileDashboardHomeScreen(rootNavigator) }
-        scene(SkyFitNavigationRoute.DashboardExplore.route) { MobileDashboardExploreScreen(rootNavigator) }
-        scene(SkyFitNavigationRoute.DashboardSocial.route) { MobileDashboardSocialScreen(rootNavigator) }
-        scene(SkyFitNavigationRoute.DashboardNutrition.route) { MobileDashboardNutritionScreen(rootNavigator) }
-        scene(SkyFitNavigationRoute.DashboardProfile.route) { MobileDashboardProfileScreen(rootNavigator) }
+        scene(NavigationRoute.DashboardExplore.route) { MobileDashboardExploreScreen(rootNavigator) }
+        scene(NavigationRoute.DashboardSocial.route) { MobileDashboardSocialScreen(rootNavigator) }
+        scene(NavigationRoute.DashboardNutrition.route) { MobileDashboardNutritionScreen(rootNavigator) }
+        scene(NavigationRoute.DashboardProfile.route) { MobileDashboardProfileScreen(rootNavigator) }
     }
 }
 
@@ -70,7 +65,7 @@ fun MobileDashboardWithNavigation(
 @Composable
 fun MobileDashboardScreen(
     rootNavigator: Navigator,
-    initialRoute: SkyFitNavigationRoute = DashboardHome
+    initialRoute: NavigationRoute = DashboardHome
 ) {
     val dashboardNavigator = rememberNavigator()
     // Collect the current navigation entry as state
@@ -86,12 +81,12 @@ fun MobileDashboardScreen(
                     .padding(bottom = 24.dp),
                 currentRoute = currentRoute,
                 onClickHome = { dashboardNavigator.takeover(DashboardHome) },
-                onClickExplore = { dashboardNavigator.takeover(SkyFitNavigationRoute.DashboardExplore) },
-                onClickSocial = { dashboardNavigator.takeover(SkyFitNavigationRoute.DashboardSocial) },
-                onClickAddPost = { rootNavigator.jumpAndStay(SkyFitNavigationRoute.UserSocialMediaPostAdd) },
-                onClickNutrition = { dashboardNavigator.takeover(SkyFitNavigationRoute.DashboardNutrition) },
-                onClickProfile = { dashboardNavigator.takeover(SkyFitNavigationRoute.DashboardProfile) },
-                onClickChatBot = { rootNavigator.jumpAndStay(SkyFitNavigationRoute.UserChatBot) },
+                onClickExplore = { dashboardNavigator.takeover(NavigationRoute.DashboardExplore) },
+                onClickSocial = { dashboardNavigator.takeover(NavigationRoute.DashboardSocial) },
+                onClickAddPost = { rootNavigator.jumpAndStay(NavigationRoute.UserSocialMediaPostAdd) },
+                onClickNutrition = { dashboardNavigator.takeover(NavigationRoute.DashboardNutrition) },
+                onClickProfile = { dashboardNavigator.takeover(NavigationRoute.DashboardProfile) },
+                onClickChatBot = { rootNavigator.jumpAndStay(NavigationRoute.UserChatBot) },
             )
         }
     ) {
@@ -147,7 +142,7 @@ private fun MobileDashboardBottomBar(
                     modifier = Modifier.size(24.dp).clickable(onClick = onClickHome)
                 )
 
-                val exploreIconRes = if (currentRoute == SkyFitNavigationRoute.DashboardExplore.route) Res.drawable.ic_barbell_fill else Res.drawable.ic_barbell
+                val exploreIconRes = if (currentRoute == NavigationRoute.DashboardExplore.route) Res.drawable.ic_barbell_fill else Res.drawable.ic_barbell
                 Icon(
                     painter = painterResource(exploreIconRes),
                     contentDescription = "Explore",
@@ -155,17 +150,17 @@ private fun MobileDashboardBottomBar(
                     modifier = Modifier.size(24.dp).clickable(onClick = onClickExplore)
                 )
 
-                val socialIconRes = if (currentRoute == SkyFitNavigationRoute.DashboardSocial.route) Res.drawable.ic_plus else Res.drawable.ic_search
+                val socialIconRes = if (currentRoute == NavigationRoute.DashboardSocial.route) Res.drawable.ic_plus else Res.drawable.ic_search
                 Icon(
                     painter = painterResource(socialIconRes),
-                    contentDescription = if (currentRoute == SkyFitNavigationRoute.DashboardSocial.route) "Add Post" else "Social",
+                    contentDescription = if (currentRoute == NavigationRoute.DashboardSocial.route) "Add Post" else "Social",
                     tint = SkyFitColor.text.inverse,
                     modifier = Modifier.size(24.dp).clickable(
-                        onClick = if (currentRoute == SkyFitNavigationRoute.DashboardSocial.route) onClickAddPost else onClickSocial
+                        onClick = if (currentRoute == NavigationRoute.DashboardSocial.route) onClickAddPost else onClickSocial
                     )
                 )
 
-                val nutritionIconRes = if (currentRoute == SkyFitNavigationRoute.DashboardNutrition.route) Res.drawable.ic_coffee_fill else Res.drawable.ic_coffee
+                val nutritionIconRes = if (currentRoute == NavigationRoute.DashboardNutrition.route) Res.drawable.ic_coffee_fill else Res.drawable.ic_coffee
                 Icon(
                     painter = painterResource(nutritionIconRes),
                     contentDescription = "Nutrition",
@@ -173,7 +168,7 @@ private fun MobileDashboardBottomBar(
                     modifier = Modifier.size(24.dp).clickable(onClick = onClickNutrition)
                 )
 
-                val profileIconRes = if (currentRoute == SkyFitNavigationRoute.DashboardProfile.route) Res.drawable.ic_profile_fill else Res.drawable.ic_profile
+                val profileIconRes = if (currentRoute == NavigationRoute.DashboardProfile.route) Res.drawable.ic_profile_fill else Res.drawable.ic_profile
                 Icon(
                     painter = painterResource(profileIconRes),
                     contentDescription = "Profile",
@@ -195,7 +190,7 @@ private fun MobileDashboardBottomBar(
 
 
 
-private fun Navigator.takeover(to: SkyFitNavigationRoute) {
+private fun Navigator.takeover(to: NavigationRoute) {
     navigate(
         route = to.route,
         options = NavOptions(

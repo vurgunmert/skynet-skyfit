@@ -36,7 +36,7 @@ import com.vurgun.skyfit.presentation.shared.features.calendar.FacilityCalendarV
 import com.vurgun.skyfit.presentation.shared.features.calendar.SkyFitCalendarGridComponent
 import com.vurgun.skyfit.presentation.shared.features.calendar.SkyFitClassCalendarCardItem
 import com.vurgun.skyfit.presentation.shared.features.calendar.SkyFitClassCalendarCardItemComponent
-import com.vurgun.skyfit.presentation.shared.navigation.SkyFitNavigationRoute
+import com.vurgun.skyfit.presentation.shared.navigation.NavigationRoute
 import com.vurgun.skyfit.presentation.shared.navigation.jumpAndStay
 import com.vurgun.skyfit.presentation.shared.resources.SkyFitColor
 import com.vurgun.skyfit.presentation.shared.resources.SkyFitTypography
@@ -47,7 +47,6 @@ import org.jetbrains.compose.resources.painterResource
 import skyfit.composeapp.generated.resources.Res
 import skyfit.composeapp.generated.resources.ic_check
 import skyfit.composeapp.generated.resources.ic_exercises
-import skyfit.composeapp.generated.resources.logo_skyfit
 
 @Composable
 fun MobileFacilityCalendarVisitedScreen(navigator: Navigator) {
@@ -69,7 +68,7 @@ fun MobileFacilityCalendarVisitedScreen(navigator: Navigator) {
         bottomBar = {
             if (isAppointmentAllowed) {
                 MobileFacilityCalendarVisitedScreenCreateActionComponent(onClick = {
-                    navigator.jumpAndStay(SkyFitNavigationRoute.UserAppointmentDetail)
+                    navigator.jumpAndStay(NavigationRoute.UserAppointmentDetail)
                 })
             }
         }

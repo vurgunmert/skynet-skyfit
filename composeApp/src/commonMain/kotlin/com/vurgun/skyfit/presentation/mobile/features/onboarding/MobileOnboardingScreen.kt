@@ -3,7 +3,7 @@ package com.vurgun.skyfit.presentation.mobile.features.onboarding
 import androidx.compose.runtime.Composable
 import com.vurgun.skyfit.presentation.mobile.features.dashboard.unmanaged_role
 import com.vurgun.skyfit.presentation.shared.navigation.Role
-import com.vurgun.skyfit.presentation.shared.navigation.SkyFitNavigationRoute
+import com.vurgun.skyfit.presentation.shared.navigation.NavigationRoute
 import com.vurgun.skyfit.presentation.shared.navigation.jumpAndStay
 import com.vurgun.skyfit.presentation.shared.navigation.jumpAndTakeover
 import moe.tlaster.precompose.navigation.NavHost
@@ -15,93 +15,93 @@ fun MobileOnboardingScreen(rootNavigator: Navigator) {
     val onboardingNavigator = rememberNavigator()
 
     val completeOnboarding: () -> Unit = {
-        rootNavigator.jumpAndTakeover(SkyFitNavigationRoute.Onboarding, SkyFitNavigationRoute.Dashboard)
+        rootNavigator.jumpAndTakeover(NavigationRoute.Onboarding, NavigationRoute.Dashboard)
     }
 
     NavHost(
         navigator = onboardingNavigator,
-        initialRoute = SkyFitNavigationRoute.OnboardingUserTypeSelection.route
+        initialRoute = NavigationRoute.OnboardingUserTypeSelection.route
     ) {
-        scene(SkyFitNavigationRoute.OnboardingUserTypeSelection.route) {
+        scene(NavigationRoute.OnboardingUserTypeSelection.route) {
             MobileOnboardingUserTypeSelectionScreen(
                 onClickUser = {
                     unmanaged_role = Role.USER
-                    onboardingNavigator.jumpAndStay(SkyFitNavigationRoute.OnboardingCharacterSelection)
+                    onboardingNavigator.jumpAndStay(NavigationRoute.OnboardingCharacterSelection)
                 },
                 onClickTrainer = {
                     unmanaged_role = Role.TRAINER
-                    rootNavigator.jumpAndTakeover(SkyFitNavigationRoute.Onboarding, SkyFitNavigationRoute.Dashboard)
+                    rootNavigator.jumpAndTakeover(NavigationRoute.Onboarding, NavigationRoute.Dashboard)
                 },
                 onClickFacility = {
                     unmanaged_role = Role.FACILITY_MANAGER
-                    rootNavigator.jumpAndTakeover(SkyFitNavigationRoute.Onboarding, SkyFitNavigationRoute.Dashboard)
+                    rootNavigator.jumpAndTakeover(NavigationRoute.Onboarding, NavigationRoute.Dashboard)
                 }
             )
         }
-        scene(SkyFitNavigationRoute.OnboardingCharacterSelection.route) {
+        scene(NavigationRoute.OnboardingCharacterSelection.route) {
             MobileOnboardingCharacterSelectionScreen(
                 onSkip = {
-                    rootNavigator.jumpAndTakeover(SkyFitNavigationRoute.Onboarding, SkyFitNavigationRoute.Dashboard)
+                    rootNavigator.jumpAndTakeover(NavigationRoute.Onboarding, NavigationRoute.Dashboard)
                 },
                 onNext = {
-                    onboardingNavigator.jumpAndStay(SkyFitNavigationRoute.OnboardingBirthYearSelection)
+                    onboardingNavigator.jumpAndStay(NavigationRoute.OnboardingBirthYearSelection)
                 }
             )
         }
-        scene(SkyFitNavigationRoute.OnboardingBirthYearSelection.route) {
+        scene(NavigationRoute.OnboardingBirthYearSelection.route) {
             MobileOnboardingBirthYearSelectionScreen(
                 onSkip = {
-                    rootNavigator.jumpAndTakeover(SkyFitNavigationRoute.Onboarding, SkyFitNavigationRoute.Dashboard)
+                    rootNavigator.jumpAndTakeover(NavigationRoute.Onboarding, NavigationRoute.Dashboard)
                 },
                 onNext = {
-                    onboardingNavigator.jumpAndStay(SkyFitNavigationRoute.OnboardingGenderSelection)
+                    onboardingNavigator.jumpAndStay(NavigationRoute.OnboardingGenderSelection)
                 }
             )
         }
-        scene(SkyFitNavigationRoute.OnboardingGenderSelection.route) {
+        scene(NavigationRoute.OnboardingGenderSelection.route) {
             MobileOnboardingGenderSelectionScreen(
                 onSkip = {
-                    rootNavigator.jumpAndTakeover(SkyFitNavigationRoute.Onboarding, SkyFitNavigationRoute.Dashboard)
+                    rootNavigator.jumpAndTakeover(NavigationRoute.Onboarding, NavigationRoute.Dashboard)
                 },
                 onNext = {
-                    onboardingNavigator.jumpAndStay(SkyFitNavigationRoute.OnboardingWeightSelection)
+                    onboardingNavigator.jumpAndStay(NavigationRoute.OnboardingWeightSelection)
                 }
             )
         }
-        scene(SkyFitNavigationRoute.OnboardingWeightSelection.route) {
+        scene(NavigationRoute.OnboardingWeightSelection.route) {
             MobileOnboardingWeightSelectionScreen(
                 onSkip = {
-                    rootNavigator.jumpAndTakeover(SkyFitNavigationRoute.Onboarding, SkyFitNavigationRoute.Dashboard)
+                    rootNavigator.jumpAndTakeover(NavigationRoute.Onboarding, NavigationRoute.Dashboard)
                 },
                 onNext = {
-                    onboardingNavigator.jumpAndStay(SkyFitNavigationRoute.OnboardingHeightSelection)
+                    onboardingNavigator.jumpAndStay(NavigationRoute.OnboardingHeightSelection)
                 }
             )
         }
-        scene(SkyFitNavigationRoute.OnboardingHeightSelection.route) {
+        scene(NavigationRoute.OnboardingHeightSelection.route) {
             MobileOnboardingHeightSelectionScreen(
                 onSkip = {
-                    rootNavigator.jumpAndTakeover(SkyFitNavigationRoute.Onboarding, SkyFitNavigationRoute.Dashboard)
+                    rootNavigator.jumpAndTakeover(NavigationRoute.Onboarding, NavigationRoute.Dashboard)
                 },
                 onNext = {
-                    onboardingNavigator.jumpAndStay(SkyFitNavigationRoute.OnboardingGoalSelection)
+                    onboardingNavigator.jumpAndStay(NavigationRoute.OnboardingGoalSelection)
                 }
             )
         }
-        scene(SkyFitNavigationRoute.OnboardingGoalSelection.route) {
+        scene(NavigationRoute.OnboardingGoalSelection.route) {
             MobileOnboardingGoalSelectionScreen(
                 onSkip = {
-                    rootNavigator.jumpAndTakeover(SkyFitNavigationRoute.Onboarding, SkyFitNavigationRoute.Dashboard)
+                    rootNavigator.jumpAndTakeover(NavigationRoute.Onboarding, NavigationRoute.Dashboard)
                 },
                 onNext = {
-                    onboardingNavigator.jumpAndStay(SkyFitNavigationRoute.OnboardingCompleted)
+                    onboardingNavigator.jumpAndStay(NavigationRoute.OnboardingCompleted)
                 }
             )
         }
-        scene(SkyFitNavigationRoute.OnboardingCompleted.route) {
+        scene(NavigationRoute.OnboardingCompleted.route) {
             MobileOnboardingCompletedScreen(
                 onClickContinue = {
-                    rootNavigator.jumpAndTakeover(SkyFitNavigationRoute.Onboarding, SkyFitNavigationRoute.Dashboard)
+                    rootNavigator.jumpAndTakeover(NavigationRoute.Onboarding, NavigationRoute.Dashboard)
                 }
             )
         }

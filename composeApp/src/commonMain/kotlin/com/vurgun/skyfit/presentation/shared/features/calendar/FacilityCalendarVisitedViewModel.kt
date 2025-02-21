@@ -1,7 +1,7 @@
 package com.vurgun.skyfit.presentation.shared.features.calendar
 
 import androidx.lifecycle.ViewModel
-import com.vurgun.skyfit.presentation.shared.navigation.SkyFitNavigationRoute
+import com.vurgun.skyfit.presentation.shared.navigation.NavigationRoute
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.update
@@ -14,8 +14,8 @@ class FacilityCalendarVisitedViewModel : ViewModel() {
     private val _isAppointmentAllowed = MutableStateFlow(false)
     val isAppointmentAllowed: StateFlow<Boolean> get() = _isAppointmentAllowed
 
-    private val _navigationEvent = MutableStateFlow<SkyFitNavigationRoute?>(null)
-    val navigationEvent: StateFlow<SkyFitNavigationRoute?> get() = _navigationEvent
+    private val _navigationEvent = MutableStateFlow<NavigationRoute?>(null)
+    val navigationEvent: StateFlow<NavigationRoute?> get() = _navigationEvent
 
     fun toggleSelection(selectedItem: SkyFitClassCalendarCardItem) {
         _calendarClasses.update { currentList ->
@@ -34,7 +34,7 @@ class FacilityCalendarVisitedViewModel : ViewModel() {
 
     fun handleClassSelection(selectedItem: SkyFitClassCalendarCardItem) {
         if (selectedItem.booked) {
-            _navigationEvent.value = SkyFitNavigationRoute.UserAppointmentDetail
+            _navigationEvent.value = NavigationRoute.UserAppointmentDetail
         } else {
             toggleSelection(selectedItem)
         }

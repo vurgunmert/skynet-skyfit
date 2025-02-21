@@ -22,7 +22,7 @@ import com.vurgun.skyfit.presentation.shared.components.SkyFitButtonComponent
 import com.vurgun.skyfit.presentation.shared.components.SkyFitPasswordInputComponent
 import com.vurgun.skyfit.presentation.shared.components.SkyFitScaffold
 import com.vurgun.skyfit.presentation.shared.components.SkyFitLogoComponent
-import com.vurgun.skyfit.presentation.shared.navigation.SkyFitNavigationRoute
+import com.vurgun.skyfit.presentation.shared.navigation.NavigationRoute
 import com.vurgun.skyfit.presentation.shared.navigation.jumpAndTakeover
 import com.vurgun.skyfit.presentation.shared.resources.SkyFitColor
 import com.vurgun.skyfit.presentation.shared.resources.SkyFitTypography
@@ -45,7 +45,7 @@ fun MobileForgotPasswordResetScreen(navigator: Navigator) {
             Spacer(Modifier.weight(1f))
             MobileForgotPasswordResetScreenActionsComponent(
                 onClickContinue = {
-                    navigator.jumpAndTakeover(SkyFitNavigationRoute.ForgotPasswordReset, SkyFitNavigationRoute.Dashboard)
+                    navigator.jumpAndTakeover(NavigationRoute.ForgotPasswordReset, NavigationRoute.Dashboard)
                 },
                 onClickCancel = {}
             )

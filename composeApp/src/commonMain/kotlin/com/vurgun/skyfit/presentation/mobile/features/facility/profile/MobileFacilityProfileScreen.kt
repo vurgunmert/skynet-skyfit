@@ -41,7 +41,7 @@ import com.vurgun.skyfit.presentation.shared.features.facility.FacilityProfileVi
 import com.vurgun.skyfit.presentation.shared.features.profile.ProfileCardVerticalDetailItemComponent
 import com.vurgun.skyfit.presentation.shared.features.profile.RatingStarComponent
 import com.vurgun.skyfit.presentation.shared.features.profile.VerticalDetailDivider
-import com.vurgun.skyfit.presentation.shared.navigation.SkyFitNavigationRoute
+import com.vurgun.skyfit.presentation.shared.navigation.NavigationRoute
 import com.vurgun.skyfit.presentation.shared.navigation.jumpAndStay
 import com.vurgun.skyfit.presentation.shared.resources.SkyFitColor
 import com.vurgun.skyfit.presentation.shared.resources.SkyFitTypography
@@ -92,8 +92,8 @@ fun MobileFacilityProfileScreen(navigator: Navigator) {
                 showPosts = showPosts,
                 onClickAbout = { showPosts = false },
                 onClickPosts = { showPosts = true },
-                onClickSettings = { navigator.jumpAndStay(SkyFitNavigationRoute.FacilitySettings) },
-                onClickNewPost = { navigator.jumpAndStay(SkyFitNavigationRoute.UserSocialMediaPostAdd) }
+                onClickSettings = { navigator.jumpAndStay(NavigationRoute.FacilitySettings) },
+                onClickNewPost = { navigator.jumpAndStay(NavigationRoute.UserSocialMediaPostAdd) }
             )
 
             if (photos.isEmpty()) {

@@ -15,7 +15,7 @@ import com.vurgun.skyfit.presentation.shared.components.SkyFitScaffold
 import com.vurgun.skyfit.presentation.shared.components.SkyFitScreenHeader
 import com.vurgun.skyfit.presentation.shared.features.settings.MobileSettingsMenuItemComponent
 import com.vurgun.skyfit.presentation.shared.features.settings.MobileSettingsMenuItemDividerComponent
-import com.vurgun.skyfit.presentation.shared.navigation.SkyFitNavigationRoute
+import com.vurgun.skyfit.presentation.shared.navigation.NavigationRoute
 import com.vurgun.skyfit.presentation.shared.navigation.jumpAndStay
 import moe.tlaster.precompose.navigation.Navigator
 import skyfit.composeapp.generated.resources.Res
@@ -50,13 +50,13 @@ fun MobileTrainerSettingsScreen(navigator: Navigator) {
             MobileSettingsMenuItemComponent(
                 text = "Hesap Ayarlari",
                 iconRes = Res.drawable.ic_profile,
-                onClick = { navigator.jumpAndStay(SkyFitNavigationRoute.TrainerSettingsAccount) }
+                onClick = { navigator.jumpAndStay(NavigationRoute.TrainerSettingsAccount) }
             )
 
             MobileSettingsMenuItemComponent(
                 text = "Ödeme Geçmişi",
                 iconRes = Res.drawable.ic_credit_card,
-                onClick = { navigator.jumpAndStay(SkyFitNavigationRoute.TrainerSettingsPaymentHistory) }
+                onClick = { navigator.jumpAndStay(NavigationRoute.TrainerSettingsPaymentHistory) }
             )
 
             MobileSettingsMenuItemDividerComponent()
@@ -64,7 +64,7 @@ fun MobileTrainerSettingsScreen(navigator: Navigator) {
             MobileSettingsMenuItemComponent(
                 text = "Bildirimler",
                 iconRes = Res.drawable.ic_bell,
-                onClick = { navigator.jumpAndStay(SkyFitNavigationRoute.TrainerSettingsNotifications) }
+                onClick = { navigator.jumpAndStay(NavigationRoute.TrainerSettingsNotifications) }
             )
 
             MobileSettingsMenuItemDividerComponent()
@@ -72,7 +72,7 @@ fun MobileTrainerSettingsScreen(navigator: Navigator) {
             MobileSettingsMenuItemComponent(
                 text = "Destek ve Yardim",
                 iconRes = Res.drawable.ic_question_circle,
-                onClick = { navigator.jumpAndStay(SkyFitNavigationRoute.TrainerSettingsHelp) }
+                onClick = { navigator.jumpAndStay(NavigationRoute.TrainerSettingsHelp) }
             )
         }
     }

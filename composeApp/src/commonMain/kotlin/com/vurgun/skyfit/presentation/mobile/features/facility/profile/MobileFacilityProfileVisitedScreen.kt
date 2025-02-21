@@ -51,7 +51,7 @@ import com.vurgun.skyfit.presentation.shared.features.profile.ProfileCardVertica
 import com.vurgun.skyfit.presentation.shared.features.profile.RatingStarComponent
 import com.vurgun.skyfit.presentation.shared.features.profile.TrainerProfileCardItemBox
 import com.vurgun.skyfit.presentation.shared.features.profile.VerticalDetailDivider
-import com.vurgun.skyfit.presentation.shared.navigation.SkyFitNavigationRoute
+import com.vurgun.skyfit.presentation.shared.navigation.NavigationRoute
 import com.vurgun.skyfit.presentation.shared.navigation.jumpAndStay
 import com.vurgun.skyfit.presentation.shared.resources.SkyFitColor
 import com.vurgun.skyfit.presentation.shared.resources.SkyFitIcon
@@ -107,8 +107,8 @@ fun MobileFacilityProfileVisitedScreen(navigator: Navigator) {
                 isFollowing = isFollowing,
                 onClickFollow = { isFollowing = true },
                 onClickUnFollow = { isFollowing = false },
-                onClickCalendar = { navigator.jumpAndStay(SkyFitNavigationRoute.FacilityCalendarVisited) },
-                onClickMessage = { navigator.jumpAndStay(SkyFitNavigationRoute.UserToFacilityChat) }
+                onClickCalendar = { navigator.jumpAndStay(NavigationRoute.FacilityCalendarVisited) },
+                onClickMessage = { navigator.jumpAndStay(NavigationRoute.UserToFacilityChat) }
             )
 
             if (photos.isNotEmpty()) {
@@ -121,7 +121,7 @@ fun MobileFacilityProfileVisitedScreen(navigator: Navigator) {
 
             if (privateClasses.isNotEmpty()) {
                 MobileFacilityProfileVisitedScreenPrivateClassesComponent(privateClasses, onClick = {
-                    navigator.jumpAndStay(SkyFitNavigationRoute.FacilityCalendarVisited)
+                    navigator.jumpAndStay(NavigationRoute.FacilityCalendarVisited)
                 })
             }
         }

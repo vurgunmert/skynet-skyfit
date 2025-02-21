@@ -56,7 +56,7 @@ import com.vurgun.skyfit.presentation.shared.components.ButtonVariant
 import com.vurgun.skyfit.presentation.shared.components.SkyFitButtonComponent
 import com.vurgun.skyfit.presentation.shared.components.SkyFitLogoComponent
 import com.vurgun.skyfit.presentation.shared.components.SkyFitScaffold
-import com.vurgun.skyfit.presentation.shared.navigation.SkyFitNavigationRoute
+import com.vurgun.skyfit.presentation.shared.navigation.NavigationRoute
 import com.vurgun.skyfit.presentation.shared.navigation.jumpAndStay
 import com.vurgun.skyfit.presentation.shared.resources.SkyFitColor
 import com.vurgun.skyfit.presentation.shared.resources.SkyFitTypography
@@ -94,7 +94,7 @@ fun MobileForgotPasswordCodeScreen(navigator: Navigator) {
                 submitEnabled = otpState.isCodeReady,
                 onClickSubmit = {
                     viewModel.submitCode()
-                    navigator.jumpAndStay(SkyFitNavigationRoute.ForgotPasswordReset)
+                    navigator.jumpAndStay(NavigationRoute.ForgotPasswordReset)
                 },
                 onClickResend = {}
             )

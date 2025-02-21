@@ -5,6 +5,7 @@ import com.vurgun.skyfit.presentation.mobile.features.auth.MobileForgotPasswordC
 import com.vurgun.skyfit.presentation.mobile.features.auth.MobileForgotPasswordResetScreen
 import com.vurgun.skyfit.presentation.mobile.features.auth.MobileForgotPasswordScreen
 import com.vurgun.skyfit.presentation.mobile.features.auth.MobileLoginScreen
+import com.vurgun.skyfit.presentation.mobile.features.auth.MobileOTPVerificationScreen
 import com.vurgun.skyfit.presentation.mobile.features.auth.MobileRegisterScreen
 import com.vurgun.skyfit.presentation.mobile.features.auth.MobileSplashScreen
 import com.vurgun.skyfit.presentation.mobile.features.dashboard.MobileDashboardScreen
@@ -80,7 +81,7 @@ import com.vurgun.skyfit.presentation.mobile.features.user.settings.MobileUserSe
 import com.vurgun.skyfit.presentation.mobile.features.user.settings.MobileUserSettingsPaymentHistoryScreen
 import com.vurgun.skyfit.presentation.mobile.features.user.settings.MobileUserSettingsScreen
 import com.vurgun.skyfit.presentation.mobile.features.user.social.MobileUserSocialMediaNewPostScreen
-import com.vurgun.skyfit.presentation.shared.navigation.SkyFitNavigationRoute
+import com.vurgun.skyfit.presentation.shared.navigation.NavigationRoute
 import moe.tlaster.precompose.navigation.NavHost
 import moe.tlaster.precompose.navigation.Navigator
 import moe.tlaster.precompose.navigation.rememberNavigator
@@ -91,131 +92,132 @@ fun MobileNavigationGraph() {
 
     NavHost(
         navigator = rootNavigator,
-        initialRoute = SkyFitNavigationRoute.Splash.route
+        initialRoute = NavigationRoute.Login.route
     ) {
 
         // Auth
-        scene(SkyFitNavigationRoute.Splash.route) { MobileSplashScreen(rootNavigator) }
-        scene(SkyFitNavigationRoute.Login.route) { MobileLoginScreen(rootNavigator) }
-        scene(SkyFitNavigationRoute.Register.route) { MobileRegisterScreen(rootNavigator) }
-        scene(SkyFitNavigationRoute.ForgotPassword.route) { MobileForgotPasswordScreen(rootNavigator) }
-        scene(SkyFitNavigationRoute.ForgotPasswordCode.route) { MobileForgotPasswordCodeScreen(rootNavigator) }
-        scene(SkyFitNavigationRoute.ForgotPasswordReset.route) { MobileForgotPasswordResetScreen(rootNavigator) }
+        scene(NavigationRoute.Splash.route) { MobileSplashScreen(rootNavigator) }
+        scene(NavigationRoute.Login.route) { MobileLoginScreen(rootNavigator) }
+        scene(NavigationRoute.Register.route) { MobileRegisterScreen(rootNavigator) }
+        scene(NavigationRoute.ForgotPassword.route) { MobileForgotPasswordScreen(rootNavigator) }
+        scene(NavigationRoute.ForgotPasswordCode.route) { MobileForgotPasswordCodeScreen(rootNavigator) }
+        scene(NavigationRoute.OTPVerification.route) { MobileOTPVerificationScreen(rootNavigator) }
+        scene(NavigationRoute.ForgotPasswordReset.route) { MobileForgotPasswordResetScreen(rootNavigator) }
 
         //General
-        scene(SkyFitNavigationRoute.Onboarding.route) { MobileOnboardingScreen(rootNavigator) }
-        scene(SkyFitNavigationRoute.Dashboard.route) { MobileDashboardScreen(rootNavigator) }
-        scene(SkyFitNavigationRoute.DashboardProfile.route) { MobileDashboardScreen(rootNavigator, SkyFitNavigationRoute.DashboardProfile) }
-        scene(SkyFitNavigationRoute.DashboardExplore.route) { MobileDashboardScreen(rootNavigator, SkyFitNavigationRoute.DashboardExplore) }
-        scene(SkyFitNavigationRoute.DashboardNutrition.route) {
-            MobileDashboardScreen(rootNavigator, SkyFitNavigationRoute.DashboardNutrition)
+        scene(NavigationRoute.Onboarding.route) { MobileOnboardingScreen(rootNavigator) }
+        scene(NavigationRoute.Dashboard.route) { MobileDashboardScreen(rootNavigator) }
+        scene(NavigationRoute.DashboardProfile.route) { MobileDashboardScreen(rootNavigator, NavigationRoute.DashboardProfile) }
+        scene(NavigationRoute.DashboardExplore.route) { MobileDashboardScreen(rootNavigator, NavigationRoute.DashboardExplore) }
+        scene(NavigationRoute.DashboardNutrition.route) {
+            MobileDashboardScreen(rootNavigator, NavigationRoute.DashboardNutrition)
         }
 
         //Explore
-        scene(SkyFitNavigationRoute.DashboardExploreTrainers.route) { MobileExploreTrainersScreen(rootNavigator) }
-        scene(SkyFitNavigationRoute.DashboardExploreExercises.route) { MobileExploreExercisesScreen(rootNavigator) }
-        scene(SkyFitNavigationRoute.DashboardExploreFacilities.route) { MobileExploreFacilitiesScreen(rootNavigator) }
-        scene(SkyFitNavigationRoute.DashboardExploreBlogs.route) { MobileExploreBlogScreen(rootNavigator) }
-        scene(SkyFitNavigationRoute.DashboardExploreBlogArticleDetail.route) { MobileExploreBlogArticleDetailScreen(rootNavigator) }
-        scene(SkyFitNavigationRoute.DashboardExploreChallenges.route) { MobileExploreChallengesScreen(rootNavigator) }
-        scene(SkyFitNavigationRoute.DashboardExploreChallengeDetail.route) { MobileExploreChallengeDetailScreen(rootNavigator) }
-        scene(SkyFitNavigationRoute.DashboardExploreCommunities.route) { MobileExploreCommunitiesScreen(rootNavigator) }
-        scene(SkyFitNavigationRoute.DashboardExploreCommunityDetail.route) { MobileExploreCommunityDetailScreen(rootNavigator) }
+        scene(NavigationRoute.DashboardExploreTrainers.route) { MobileExploreTrainersScreen(rootNavigator) }
+        scene(NavigationRoute.DashboardExploreExercises.route) { MobileExploreExercisesScreen(rootNavigator) }
+        scene(NavigationRoute.DashboardExploreFacilities.route) { MobileExploreFacilitiesScreen(rootNavigator) }
+        scene(NavigationRoute.DashboardExploreBlogs.route) { MobileExploreBlogScreen(rootNavigator) }
+        scene(NavigationRoute.DashboardExploreBlogArticleDetail.route) { MobileExploreBlogArticleDetailScreen(rootNavigator) }
+        scene(NavigationRoute.DashboardExploreChallenges.route) { MobileExploreChallengesScreen(rootNavigator) }
+        scene(NavigationRoute.DashboardExploreChallengeDetail.route) { MobileExploreChallengeDetailScreen(rootNavigator) }
+        scene(NavigationRoute.DashboardExploreCommunities.route) { MobileExploreCommunitiesScreen(rootNavigator) }
+        scene(NavigationRoute.DashboardExploreCommunityDetail.route) { MobileExploreCommunityDetailScreen(rootNavigator) }
 
 
         //region User
         //User - Exercises
-        scene(SkyFitNavigationRoute.UserExerciseDetail.route) { MobileUserExerciseDetailScreen(rootNavigator) }
-        scene(SkyFitNavigationRoute.UserExerciseInAction.route) { MobileUserExerciseInActionScreen(rootNavigator) }
-        scene(SkyFitNavigationRoute.UserExerciseInActionComplete.route) { MobileUserExerciseInActionCompletedScreen(rootNavigator) }
+        scene(NavigationRoute.UserExerciseDetail.route) { MobileUserExerciseDetailScreen(rootNavigator) }
+        scene(NavigationRoute.UserExerciseInAction.route) { MobileUserExerciseInActionScreen(rootNavigator) }
+        scene(NavigationRoute.UserExerciseInActionComplete.route) { MobileUserExerciseInActionCompletedScreen(rootNavigator) }
 
         //User - Nutrition
-        scene(SkyFitNavigationRoute.UserMealDetail.route) { MobileUserMealDetailScreen(rootNavigator) }
-        scene(SkyFitNavigationRoute.UserMealDetailAdd.route) { MobileUserMealDetailAddScreen(rootNavigator) }
-        scene(SkyFitNavigationRoute.UserMealDetailAddPhoto.route) { MobileUserMealDetailAddPhotoScreen(rootNavigator) }
+        scene(NavigationRoute.UserMealDetail.route) { MobileUserMealDetailScreen(rootNavigator) }
+        scene(NavigationRoute.UserMealDetailAdd.route) { MobileUserMealDetailAddScreen(rootNavigator) }
+        scene(NavigationRoute.UserMealDetailAddPhoto.route) { MobileUserMealDetailAddPhotoScreen(rootNavigator) }
 
         //User - Calendar
-        scene(SkyFitNavigationRoute.UserActivityCalendar.route) { MobileUserActivityCalendarScreen(rootNavigator) }
-        scene(SkyFitNavigationRoute.UserActivityCalendarAdd.route) { MobileUserActivityCalendarAddActivityScreen(rootNavigator) }
-        scene(SkyFitNavigationRoute.UserActivityCalendarSearch.route) { MobileUserActivityCalendarSearchScreen(rootNavigator) }
-        scene(SkyFitNavigationRoute.UserPaymentProcess.route) { MobileUserPaymentProcessScreen(rootNavigator) }
-        scene(SkyFitNavigationRoute.UserActivityCalendarPaymentRequired.route) {
+        scene(NavigationRoute.UserActivityCalendar.route) { MobileUserActivityCalendarScreen(rootNavigator) }
+        scene(NavigationRoute.UserActivityCalendarAdd.route) { MobileUserActivityCalendarAddActivityScreen(rootNavigator) }
+        scene(NavigationRoute.UserActivityCalendarSearch.route) { MobileUserActivityCalendarSearchScreen(rootNavigator) }
+        scene(NavigationRoute.UserPaymentProcess.route) { MobileUserPaymentProcessScreen(rootNavigator) }
+        scene(NavigationRoute.UserActivityCalendarPaymentRequired.route) {
             MobileUserActivityCalendarPaymentRequiredScreen(
                 rootNavigator
             )
         }
-        scene(SkyFitNavigationRoute.UserActivityCalendarConfirmed.route) { MobileUserActivityCalendarAddedScreen(rootNavigator) }
+        scene(NavigationRoute.UserActivityCalendarConfirmed.route) { MobileUserActivityCalendarAddedScreen(rootNavigator) }
         //User - Appointments
-        scene(SkyFitNavigationRoute.UserAppointments.route) { MobileUserAppointmentsScreen(rootNavigator) }
-        scene(SkyFitNavigationRoute.UserAppointmentDetail.route) { MobileUserAppointmentDetailScreen(rootNavigator) }
+        scene(NavigationRoute.UserAppointments.route) { MobileUserAppointmentsScreen(rootNavigator) }
+        scene(NavigationRoute.UserAppointmentDetail.route) { MobileUserAppointmentDetailScreen(rootNavigator) }
         //User - Social
-        scene(SkyFitNavigationRoute.UserSocialMedia.route) { MobileDashboardScreen(rootNavigator, SkyFitNavigationRoute.DashboardSocial) }
-        scene(SkyFitNavigationRoute.UserSocialMediaPostAdd.route) { MobileUserSocialMediaNewPostScreen(rootNavigator) }
+        scene(NavigationRoute.UserSocialMedia.route) { MobileDashboardScreen(rootNavigator, NavigationRoute.DashboardSocial) }
+        scene(NavigationRoute.UserSocialMediaPostAdd.route) { MobileUserSocialMediaNewPostScreen(rootNavigator) }
         //User - Notifications
-        scene(SkyFitNavigationRoute.UserNotifications.route) { MobileUserNotificationsScreen(rootNavigator) }
+        scene(NavigationRoute.UserNotifications.route) { MobileUserNotificationsScreen(rootNavigator) }
         //User - Messages
-        scene(SkyFitNavigationRoute.UserChatBot.route) { MobileUserChatBotScreen(rootNavigator) }
-        scene(SkyFitNavigationRoute.UserToBotChat.route) { MobileUserToBotChatScreen(rootNavigator) }
-        scene(SkyFitNavigationRoute.UserConversations.route) { MobileUserConversationsScreen(rootNavigator) }
-        scene(SkyFitNavigationRoute.UserToUserChat.route) { MobileUserToUserChatScreen(rootNavigator) }
-        scene(SkyFitNavigationRoute.UserToTrainerChat.route) { MobileUserToTrainerChatScreen(rootNavigator) }
-        scene(SkyFitNavigationRoute.UserToGroupChat.route) { MobileUserToGroupChatScreen(rootNavigator) }
-        scene(SkyFitNavigationRoute.UserToFacilityChat.route) { MobileUserToFacilityChatScreen(rootNavigator) }
+        scene(NavigationRoute.UserChatBot.route) { MobileUserChatBotScreen(rootNavigator) }
+        scene(NavigationRoute.UserToBotChat.route) { MobileUserToBotChatScreen(rootNavigator) }
+        scene(NavigationRoute.UserConversations.route) { MobileUserConversationsScreen(rootNavigator) }
+        scene(NavigationRoute.UserToUserChat.route) { MobileUserToUserChatScreen(rootNavigator) }
+        scene(NavigationRoute.UserToTrainerChat.route) { MobileUserToTrainerChatScreen(rootNavigator) }
+        scene(NavigationRoute.UserToGroupChat.route) { MobileUserToGroupChatScreen(rootNavigator) }
+        scene(NavigationRoute.UserToFacilityChat.route) { MobileUserToFacilityChatScreen(rootNavigator) }
         //User - Profile
-        scene(SkyFitNavigationRoute.UserProfile.route) { MobileUserProfileScreen(rootNavigator) }
-        scene(SkyFitNavigationRoute.UserProfileVisited.route) { MobileUserProfileVisitedScreen(rootNavigator) }
-        scene(SkyFitNavigationRoute.UserPhotoDiary.route) { MobileUserPhotoDiaryScreen(rootNavigator) }
-        scene(SkyFitNavigationRoute.UserMeasurements.route) { MobileUserMeasurementsScreen(rootNavigator) }
-        scene(SkyFitNavigationRoute.UserBodyAnalysis.route) { MobileUserBodyAnalysisScreen(rootNavigator) }
-        scene(SkyFitNavigationRoute.UserTrophies.route) { MobileUserTrophiesScreen(rootNavigator) }
+        scene(NavigationRoute.UserProfile.route) { MobileUserProfileScreen(rootNavigator) }
+        scene(NavigationRoute.UserProfileVisited.route) { MobileUserProfileVisitedScreen(rootNavigator) }
+        scene(NavigationRoute.UserPhotoDiary.route) { MobileUserPhotoDiaryScreen(rootNavigator) }
+        scene(NavigationRoute.UserMeasurements.route) { MobileUserMeasurementsScreen(rootNavigator) }
+        scene(NavigationRoute.UserBodyAnalysis.route) { MobileUserBodyAnalysisScreen(rootNavigator) }
+        scene(NavigationRoute.UserTrophies.route) { MobileUserTrophiesScreen(rootNavigator) }
         //User - Settings
-        scene(SkyFitNavigationRoute.UserSettings.route) { MobileUserSettingsScreen(rootNavigator) }
-        scene(SkyFitNavigationRoute.UserSettingsAccount.route) { MobileUserSettingsAccountScreen(rootNavigator) }
-        scene(SkyFitNavigationRoute.UserSettingsNotifications.route) { MobileUserSettingsNotificationsScreen(rootNavigator) }
-        scene(SkyFitNavigationRoute.UserSettingsPaymentHistory.route) { MobileUserSettingsPaymentHistoryScreen(rootNavigator) }
-        scene(SkyFitNavigationRoute.UserSettingsChangePassword.route) { MobileUserSettingsChangePasswordScreen(rootNavigator) }
-        scene(SkyFitNavigationRoute.UserSettingsHelp.route) { MobileUserSettingsHelpScreen(rootNavigator) }
+        scene(NavigationRoute.UserSettings.route) { MobileUserSettingsScreen(rootNavigator) }
+        scene(NavigationRoute.UserSettingsAccount.route) { MobileUserSettingsAccountScreen(rootNavigator) }
+        scene(NavigationRoute.UserSettingsNotifications.route) { MobileUserSettingsNotificationsScreen(rootNavigator) }
+        scene(NavigationRoute.UserSettingsPaymentHistory.route) { MobileUserSettingsPaymentHistoryScreen(rootNavigator) }
+        scene(NavigationRoute.UserSettingsChangePassword.route) { MobileUserSettingsChangePasswordScreen(rootNavigator) }
+        scene(NavigationRoute.UserSettingsHelp.route) { MobileUserSettingsHelpScreen(rootNavigator) }
         //endregion User
 
         //region Trainer
         //Trainer - Appointments
-        scene(SkyFitNavigationRoute.TrainerAppointments.route) { MobileTrainerAppointmentsScreen(rootNavigator) }
-        scene(SkyFitNavigationRoute.TrainerAppointmentDetail.route) { MobileTrainerAppointmentDetailScreen(rootNavigator) }
+        scene(NavigationRoute.TrainerAppointments.route) { MobileTrainerAppointmentsScreen(rootNavigator) }
+        scene(NavigationRoute.TrainerAppointmentDetail.route) { MobileTrainerAppointmentDetailScreen(rootNavigator) }
         //Trainer - Profile
-        scene(SkyFitNavigationRoute.TrainerProfile.route) { MobileTrainerProfileScreen(rootNavigator) }
-        scene(SkyFitNavigationRoute.TrainerProfileVisited.route) { MobileTrainerProfileVisitedScreen(rootNavigator) }
+        scene(NavigationRoute.TrainerProfile.route) { MobileTrainerProfileScreen(rootNavigator) }
+        scene(NavigationRoute.TrainerProfileVisited.route) { MobileTrainerProfileVisitedScreen(rootNavigator) }
         //Trainer - Calendar
-        scene(SkyFitNavigationRoute.TrainerCalendarVisited.route) { MobileTrainerCalendarVisitedScreen(rootNavigator) }
+        scene(NavigationRoute.TrainerCalendarVisited.route) { MobileTrainerCalendarVisitedScreen(rootNavigator) }
         //Trainer - Settings
-        scene(SkyFitNavigationRoute.TrainerSettings.route) { MobileTrainerSettingsScreen(rootNavigator) }
-        scene(SkyFitNavigationRoute.TrainerSettingsAccount.route) { MobileTrainerSettingsAccountScreen(rootNavigator) }
-        scene(SkyFitNavigationRoute.TrainerSettingsNotifications.route) { MobileTrainerSettingsNotificationsScreen(rootNavigator) }
-        scene(SkyFitNavigationRoute.TrainerSettingsPaymentHistory.route) { MobileTrainerSettingsPaymentHistoryScreen(rootNavigator) }
-        scene(SkyFitNavigationRoute.TrainerSettingsHelp.route) { MobileTrainerSettingsHelpScreen(rootNavigator) }
+        scene(NavigationRoute.TrainerSettings.route) { MobileTrainerSettingsScreen(rootNavigator) }
+        scene(NavigationRoute.TrainerSettingsAccount.route) { MobileTrainerSettingsAccountScreen(rootNavigator) }
+        scene(NavigationRoute.TrainerSettingsNotifications.route) { MobileTrainerSettingsNotificationsScreen(rootNavigator) }
+        scene(NavigationRoute.TrainerSettingsPaymentHistory.route) { MobileTrainerSettingsPaymentHistoryScreen(rootNavigator) }
+        scene(NavigationRoute.TrainerSettingsHelp.route) { MobileTrainerSettingsHelpScreen(rootNavigator) }
         //endregion Trainer
 
         //region Facility
         //Facility - Profile
-        scene(SkyFitNavigationRoute.FacilityProfile.route) { MobileFacilityProfileScreen(rootNavigator) }
-        scene(SkyFitNavigationRoute.FacilityProfileVisited.route) { MobileFacilityProfileVisitedScreen(rootNavigator) }
-        scene(SkyFitNavigationRoute.FacilityPhotoDiary.route) { MobileFacilityPhotoDiaryScreen(rootNavigator) }
+        scene(NavigationRoute.FacilityProfile.route) { MobileFacilityProfileScreen(rootNavigator) }
+        scene(NavigationRoute.FacilityProfileVisited.route) { MobileFacilityProfileVisitedScreen(rootNavigator) }
+        scene(NavigationRoute.FacilityPhotoDiary.route) { MobileFacilityPhotoDiaryScreen(rootNavigator) }
         //Facility - Calendar
-        scene(SkyFitNavigationRoute.FacilityCalendar.route) { MobileFacilityCalendarScreen(rootNavigator) }
-        scene(SkyFitNavigationRoute.FacilityCalendarVisited.route) { MobileFacilityCalendarVisitedScreen(rootNavigator) }
+        scene(NavigationRoute.FacilityCalendar.route) { MobileFacilityCalendarScreen(rootNavigator) }
+        scene(NavigationRoute.FacilityCalendarVisited.route) { MobileFacilityCalendarVisitedScreen(rootNavigator) }
         //Facility - Classes
-        scene(SkyFitNavigationRoute.FacilityClasses.route) { MobileFacilityClassesScreen(rootNavigator) }
-        scene(SkyFitNavigationRoute.FacilityClassEdit.route) { MobileFacilityClassEditScreen(rootNavigator) }
-        scene(SkyFitNavigationRoute.FacilityClassEditCompleted.route) { MobileFacilityClassEditCompletedScreen(rootNavigator) }
-        scene(SkyFitNavigationRoute.FacilityClassDetailVisited.route) { MobileFacilityClassDetailVisitedScreen(rootNavigator) }
+        scene(NavigationRoute.FacilityClasses.route) { MobileFacilityClassesScreen(rootNavigator) }
+        scene(NavigationRoute.FacilityClassEdit.route) { MobileFacilityClassEditScreen(rootNavigator) }
+        scene(NavigationRoute.FacilityClassEditCompleted.route) { MobileFacilityClassEditCompletedScreen(rootNavigator) }
+        scene(NavigationRoute.FacilityClassDetailVisited.route) { MobileFacilityClassDetailVisitedScreen(rootNavigator) }
         //Facility - Settings
-        scene(SkyFitNavigationRoute.FacilitySettings.route) { MobileFacilitySettingsScreen(rootNavigator) }
-        scene(SkyFitNavigationRoute.FacilitySettingsAccount.route) { MobileFacilitySettingsAccountScreen(rootNavigator) }
-        scene(SkyFitNavigationRoute.FacilitySettingsSearchMembers.route) { MobileFacilitySettingsSearchMembersScreen(rootNavigator) }
-        scene(SkyFitNavigationRoute.FacilitySettingsAddMembers.route) { MobileFacilitySettingsAddMembersScreen(rootNavigator) }
-        scene(SkyFitNavigationRoute.FacilitySettingsTrainers.route) { MobileFacilitySettingsTrainersScreen(rootNavigator) }
-        scene(SkyFitNavigationRoute.FacilitySettingsPaymentHistory.route) { MobileFacilitySettingsPaymentHistoryScreen(rootNavigator) }
-        scene(SkyFitNavigationRoute.FacilitySettingsNotifications.route) { MobileFacilitySettingsNotificationsScreen(rootNavigator) }
-        scene(SkyFitNavigationRoute.FacilitySettingsHelp.route) { MobileFacilitySettingsHelpScreen(rootNavigator) }
+        scene(NavigationRoute.FacilitySettings.route) { MobileFacilitySettingsScreen(rootNavigator) }
+        scene(NavigationRoute.FacilitySettingsAccount.route) { MobileFacilitySettingsAccountScreen(rootNavigator) }
+        scene(NavigationRoute.FacilitySettingsSearchMembers.route) { MobileFacilitySettingsSearchMembersScreen(rootNavigator) }
+        scene(NavigationRoute.FacilitySettingsAddMembers.route) { MobileFacilitySettingsAddMembersScreen(rootNavigator) }
+        scene(NavigationRoute.FacilitySettingsTrainers.route) { MobileFacilitySettingsTrainersScreen(rootNavigator) }
+        scene(NavigationRoute.FacilitySettingsPaymentHistory.route) { MobileFacilitySettingsPaymentHistoryScreen(rootNavigator) }
+        scene(NavigationRoute.FacilitySettingsNotifications.route) { MobileFacilitySettingsNotificationsScreen(rootNavigator) }
+        scene(NavigationRoute.FacilitySettingsHelp.route) { MobileFacilitySettingsHelpScreen(rootNavigator) }
         //endregion Facility
     }
 }

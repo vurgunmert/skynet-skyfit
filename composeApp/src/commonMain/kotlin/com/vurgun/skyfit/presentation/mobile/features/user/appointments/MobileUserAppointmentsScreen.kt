@@ -40,7 +40,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import com.vurgun.skyfit.presentation.shared.components.SkyFitBadgeTabBarComponent
 import com.vurgun.skyfit.presentation.shared.components.SkyFitScreenHeader
-import com.vurgun.skyfit.presentation.shared.navigation.SkyFitNavigationRoute
+import com.vurgun.skyfit.presentation.shared.navigation.NavigationRoute
 import com.vurgun.skyfit.presentation.shared.navigation.jumpAndStay
 import com.vurgun.skyfit.presentation.shared.resources.SkyFitColor
 import com.vurgun.skyfit.presentation.shared.resources.SkyFitIcon
@@ -101,7 +101,7 @@ fun MobileUserAppointmentsScreen(navigator: Navigator) {
                 BookedAppointmentCardItemComponent(
                     item = appointment,
                     modifier = Modifier.fillMaxWidth(),
-                    onClick = { navigator.jumpAndStay(SkyFitNavigationRoute.UserAppointmentDetail) },
+                    onClick = { navigator.jumpAndStay(NavigationRoute.UserAppointmentDetail) },
                     onDeleteClick = {
                         appointmentToDelete = appointment
                         showDeleteDialog = true

@@ -5,7 +5,6 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.widthIn
 import androidx.compose.material.Text
@@ -18,13 +17,12 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.vurgun.skyfit.presentation.mobile.resources.MobileStyleGuide
-import com.vurgun.skyfit.presentation.shared.components.ButtonSize
 import com.vurgun.skyfit.presentation.shared.components.ButtonVariant
 import com.vurgun.skyfit.presentation.shared.components.SkyFitButtonComponent
 import com.vurgun.skyfit.presentation.shared.components.SkyFitLogoComponent
 import com.vurgun.skyfit.presentation.shared.components.SkyFitScaffold
 import com.vurgun.skyfit.presentation.shared.components.SkyFitTextInputComponent
-import com.vurgun.skyfit.presentation.shared.navigation.SkyFitNavigationRoute
+import com.vurgun.skyfit.presentation.shared.navigation.NavigationRoute
 import com.vurgun.skyfit.presentation.shared.navigation.jumpAndStay
 import com.vurgun.skyfit.presentation.shared.resources.SkyFitColor
 import com.vurgun.skyfit.presentation.shared.resources.SkyFitTypography
@@ -32,7 +30,6 @@ import moe.tlaster.precompose.navigation.Navigator
 import org.jetbrains.compose.resources.painterResource
 import skyfit.composeapp.generated.resources.Res
 import skyfit.composeapp.generated.resources.ic_envelope_closed
-import skyfit.composeapp.generated.resources.logo_skyfit
 
 @Composable
 fun MobileForgotPasswordScreen(navigator: Navigator) {
@@ -63,7 +60,7 @@ fun MobileForgotPasswordScreen(navigator: Navigator) {
             SkyFitButtonComponent(
                 text = "Devam Et",
                 modifier = Modifier.fillMaxWidth(),
-                onClick = { navigator.jumpAndStay(SkyFitNavigationRoute.ForgotPasswordCode) },
+                onClick = { navigator.jumpAndStay(NavigationRoute.ForgotPasswordCode) },
                 variant = ButtonVariant.Primary,
             )
             Spacer(Modifier.height(14.dp))

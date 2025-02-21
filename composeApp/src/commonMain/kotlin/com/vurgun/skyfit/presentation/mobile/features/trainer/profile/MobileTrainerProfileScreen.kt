@@ -60,7 +60,6 @@ import coil3.compose.AsyncImage
 import com.vurgun.skyfit.presentation.mobile.features.user.profile.MobileUserProfileActionsComponent
 import com.vurgun.skyfit.presentation.mobile.features.user.profile.MobileUserProfilePostsComponent
 import com.vurgun.skyfit.presentation.mobile.features.user.profile.MobileUserProfilePostsInputComponent
-import com.vurgun.skyfit.presentation.mobile.features.user.profile.MobileVisitedProfileActionsComponent
 import com.vurgun.skyfit.presentation.mobile.features.user.profile.UserProfileCardPreferenceRow
 import com.vurgun.skyfit.presentation.shared.components.ButtonSize
 import com.vurgun.skyfit.presentation.shared.components.ButtonVariant
@@ -70,7 +69,7 @@ import com.vurgun.skyfit.presentation.shared.features.calendar.SkyFitClassCalend
 import com.vurgun.skyfit.presentation.shared.features.social.PostViewData
 import com.vurgun.skyfit.presentation.shared.features.trainer.SkyFitTrainerProfileViewModel
 import com.vurgun.skyfit.presentation.shared.features.user.TopBarGroupViewData
-import com.vurgun.skyfit.presentation.shared.navigation.SkyFitNavigationRoute
+import com.vurgun.skyfit.presentation.shared.navigation.NavigationRoute
 import com.vurgun.skyfit.presentation.shared.navigation.jumpAndStay
 import com.vurgun.skyfit.presentation.shared.resources.SkyFitColor
 import com.vurgun.skyfit.presentation.shared.resources.SkyFitIcon
@@ -126,8 +125,8 @@ fun MobileTrainerProfileScreen(navigator: Navigator) {
                         showPosts = showPosts,
                         onClickAbout = { showPosts = false },
                         onClickPosts = { showPosts = true },
-                        onClickSettings = { navigator.jumpAndStay(SkyFitNavigationRoute.TrainerSettings) },
-                        onClickNewPost = { navigator.jumpAndStay(SkyFitNavigationRoute.UserSocialMediaPostAdd) }
+                        onClickSettings = { navigator.jumpAndStay(NavigationRoute.TrainerSettings) },
+                        onClickNewPost = { navigator.jumpAndStay(NavigationRoute.UserSocialMediaPostAdd) }
                     )
                 }
             }

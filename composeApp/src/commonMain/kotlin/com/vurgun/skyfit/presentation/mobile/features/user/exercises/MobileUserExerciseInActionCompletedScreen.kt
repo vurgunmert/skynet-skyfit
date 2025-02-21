@@ -5,7 +5,6 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.aspectRatio
@@ -29,7 +28,7 @@ import com.vurgun.skyfit.presentation.shared.components.ButtonState
 import com.vurgun.skyfit.presentation.shared.components.ButtonVariant
 import com.vurgun.skyfit.presentation.shared.components.SkyFitButtonComponent
 import com.vurgun.skyfit.presentation.shared.components.SkyFitScaffold
-import com.vurgun.skyfit.presentation.shared.navigation.SkyFitNavigationRoute
+import com.vurgun.skyfit.presentation.shared.navigation.NavigationRoute
 import com.vurgun.skyfit.presentation.shared.navigation.jumpAndTakeover
 import com.vurgun.skyfit.presentation.shared.resources.SkyFitColor
 import com.vurgun.skyfit.presentation.shared.resources.SkyFitTypography
@@ -65,7 +64,7 @@ fun MobileUserExerciseInActionCompletedScreen(navigator: Navigator) {
                 }
                 Spacer(Modifier.weight(1f))
                 MobileUserExerciseInActionCompletedScreenActionComponent(onClick = {
-                    navigator.jumpAndTakeover(SkyFitNavigationRoute.UserExerciseDetail, SkyFitNavigationRoute.Dashboard)
+                    navigator.jumpAndTakeover(NavigationRoute.UserExerciseDetail, NavigationRoute.Dashboard)
                 })
             }
         }

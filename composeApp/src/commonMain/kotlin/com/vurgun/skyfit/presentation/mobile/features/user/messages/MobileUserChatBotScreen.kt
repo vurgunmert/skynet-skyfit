@@ -38,7 +38,7 @@ import com.vurgun.skyfit.presentation.shared.components.ButtonVariant
 import com.vurgun.skyfit.presentation.shared.components.SkyFitButtonComponent
 import com.vurgun.skyfit.presentation.shared.components.SkyFitScaffold
 import com.vurgun.skyfit.presentation.shared.components.SkyFitScreenHeader
-import com.vurgun.skyfit.presentation.shared.navigation.SkyFitNavigationRoute
+import com.vurgun.skyfit.presentation.shared.navigation.NavigationRoute
 import com.vurgun.skyfit.presentation.shared.navigation.jumpAndStay
 import com.vurgun.skyfit.presentation.shared.resources.SkyFitColor
 import com.vurgun.skyfit.presentation.shared.resources.SkyFitTypography
@@ -89,13 +89,13 @@ fun MobileUserChatBotScreen(navigator: Navigator) {
                 } else {
                     MobileUserChatBotScreenActionGroupComponent(
                         onClickShortcut = {
-                            navigator.jumpAndStay(SkyFitNavigationRoute.UserBodyAnalysis)
+                            navigator.jumpAndStay(NavigationRoute.UserBodyAnalysis)
                         },
                         onClickChatHistory = {
-                            navigator.jumpAndStay(SkyFitNavigationRoute.UserToBotChat)
+                            navigator.jumpAndStay(NavigationRoute.UserToBotChat)
                         },
                         onClickChat = {
-                            navigator.jumpAndStay(SkyFitNavigationRoute.UserToBotChat)
+                            navigator.jumpAndStay(NavigationRoute.UserToBotChat)
                         }
                     )
                 }

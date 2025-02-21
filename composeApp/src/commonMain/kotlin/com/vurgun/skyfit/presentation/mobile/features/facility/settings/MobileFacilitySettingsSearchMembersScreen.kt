@@ -34,7 +34,7 @@ import com.vurgun.skyfit.presentation.shared.components.SkyFitButtonComponent
 import com.vurgun.skyfit.presentation.shared.components.SkyFitScaffold
 import com.vurgun.skyfit.presentation.shared.components.SkyFitScreenHeader
 import com.vurgun.skyfit.presentation.shared.components.SkyFitSearchTextInputComponent
-import com.vurgun.skyfit.presentation.shared.navigation.SkyFitNavigationRoute
+import com.vurgun.skyfit.presentation.shared.navigation.NavigationRoute
 import com.vurgun.skyfit.presentation.shared.navigation.jumpAndStay
 import com.vurgun.skyfit.presentation.shared.resources.SkyFitColor
 import com.vurgun.skyfit.presentation.shared.resources.SkyFitTypography
@@ -53,7 +53,7 @@ fun MobileFacilitySettingsSearchMembersScreen(navigator: Navigator) {
                 MobileFacilitySettingsSearchUserToolbarComponent(
                     title = "Uyeler",
                     onClickBack = { navigator.popBackStack() },
-                    onClickAdd = { navigator.jumpAndStay(SkyFitNavigationRoute.FacilitySettingsAddMembers) }
+                    onClickAdd = { navigator.jumpAndStay(NavigationRoute.FacilitySettingsAddMembers) }
                 )
 
                 SkyFitSearchTextInputComponent(

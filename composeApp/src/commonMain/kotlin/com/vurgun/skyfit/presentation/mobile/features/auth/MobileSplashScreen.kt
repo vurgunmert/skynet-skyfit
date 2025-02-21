@@ -11,7 +11,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import com.vurgun.skyfit.presentation.shared.features.auth.SplashViewModel
-import com.vurgun.skyfit.presentation.shared.navigation.SkyFitNavigationRoute
+import com.vurgun.skyfit.presentation.shared.navigation.NavigationRoute
 import com.vurgun.skyfit.presentation.shared.navigation.jumpAndTakeover
 import com.vurgun.skyfit.presentation.shared.resources.SkyFitColor
 import moe.tlaster.precompose.navigation.Navigator
@@ -32,11 +32,11 @@ fun MobileSplashScreen(navigator: Navigator) {
     when (uiState) {
         SplashViewModel.UIState.Idle -> Unit
         SplashViewModel.UIState.Login -> {
-            navigator.jumpAndTakeover(SkyFitNavigationRoute.Splash, SkyFitNavigationRoute.Login)
+            navigator.jumpAndTakeover(NavigationRoute.Splash, NavigationRoute.Login)
         }
 
         SplashViewModel.UIState.Ready -> {
-            navigator.jumpAndTakeover(SkyFitNavigationRoute.Splash, SkyFitNavigationRoute.Dashboard)
+            navigator.jumpAndTakeover(NavigationRoute.Splash, NavigationRoute.Dashboard)
         }
     }
 

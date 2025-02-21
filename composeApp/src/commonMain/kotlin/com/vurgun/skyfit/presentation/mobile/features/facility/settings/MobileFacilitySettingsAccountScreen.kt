@@ -29,7 +29,7 @@ import com.vurgun.skyfit.presentation.shared.features.settings.MobileUserSetting
 import com.vurgun.skyfit.presentation.shared.features.settings.MobileUserSettingsScreenDeleteActionsComponent
 import com.vurgun.skyfit.presentation.shared.features.settings.MobileUserSettingsScreenPhotoEditComponent
 import com.vurgun.skyfit.presentation.shared.features.settings.MobileUserSettingsScreenSaveActionComponent
-import com.vurgun.skyfit.presentation.shared.navigation.SkyFitNavigationRoute
+import com.vurgun.skyfit.presentation.shared.navigation.NavigationRoute
 import com.vurgun.skyfit.presentation.shared.navigation.jumpAndStay
 import com.vurgun.skyfit.presentation.shared.resources.SkyFitColor
 import moe.tlaster.precompose.navigation.Navigator
@@ -110,7 +110,7 @@ fun MobileFacilitySettingsAccountScreen(navigator: Navigator) {
             MobileSettingsMenuItemComponent(
                 text = "Şifremi Değiştir",
                 iconRes = Res.drawable.ic_lock,
-                onClick = { navigator.jumpAndStay(SkyFitNavigationRoute.UserSettingsChangePassword) }
+                onClick = { navigator.jumpAndStay(NavigationRoute.UserSettingsChangePassword) }
             )
 
             MobileSettingsMenuItemComponent(

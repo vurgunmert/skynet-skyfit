@@ -15,6 +15,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
@@ -22,11 +25,11 @@ import com.vurgun.skyfit.presentation.mobile.resources.MobileStyleGuide
 import com.vurgun.skyfit.presentation.shared.components.SkyFitLogoComponent
 import com.vurgun.skyfit.presentation.shared.components.SkyFitScaffold
 import com.vurgun.skyfit.presentation.shared.components.button.PrimaryLargeButton
-import com.vurgun.skyfit.presentation.shared.components.button.SecondaryLargeButton
 import com.vurgun.skyfit.presentation.shared.components.text.input.PhoneNumberTextInput
-import com.vurgun.skyfit.presentation.shared.navigation.SkyFitNavigationRoute
+import com.vurgun.skyfit.presentation.shared.navigation.NavigationRoute
 import com.vurgun.skyfit.presentation.shared.navigation.jumpAndStay
 import com.vurgun.skyfit.presentation.shared.navigation.jumpAndTakeover
+import com.vurgun.skyfit.presentation.shared.resources.SkyFitColor
 import com.vurgun.skyfit.presentation.shared.resources.SkyFitTypography
 import kotlinx.coroutines.flow.collectLatest
 import moe.tlaster.precompose.navigation.Navigator
@@ -34,7 +37,6 @@ import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.koinInject
 import skyfit.composeapp.generated.resources.Res
 import skyfit.composeapp.generated.resources.auth_login
-import skyfit.composeapp.generated.resources.auth_register
 import skyfit.composeapp.generated.resources.auth_welcome_message
 
 @Composable
@@ -44,14 +46,21 @@ fun MobileLoginScreen(navigator: Navigator) {
     val isLoginEnabled by viewModel.isLoginEnabled.collectAsState()
     val isLoading by viewModel.isLoading.collectAsState()
 
+    var errorMessage by remember { mutableStateOf<String?>(null) }
+
     LaunchedEffect(viewModel) {
         viewModel.navigationEvents.collectLatest { event ->
             when (event) {
                 is MobileLoginNavigation.GoToDashboard -> {
-                    navigator.jumpAndTakeover(SkyFitNavigationRoute.Login, SkyFitNavigationRoute.Dashboard)
+                    navigator.jumpAndTakeover(NavigationRoute.Login, NavigationRoute.Dashboard)
                 }
-                is MobileLoginNavigation.GoToRegister -> {
-                    navigator.jumpAndStay(SkyFitNavigationRoute.Register)
+
+                is MobileLoginNavigation.GoToOTPVerification -> {
+                    navigator.jumpAndStay(NavigationRoute.OTPVerification.route + "?phone=$phoneNumber")
+                }
+
+                is MobileLoginNavigation.ShowError -> {
+                    errorMessage = event.message
                 }
             }
         }
@@ -70,13 +79,16 @@ fun MobileLoginScreen(navigator: Navigator) {
             MobileLoginWelcomeGroup()
             MobileLoginWithPhoneContentGroup(
                 phoneNumber = phoneNumber,
+                errorMessage = errorMessage,
                 onPhoneNumberChanged = viewModel::onPhoneNumberChanged
             )
             MobileLoginActionGroup(
                 isLoginEnabled = isLoginEnabled,
                 isLoading = isLoading,
-                onClickLogin = { viewModel.onLoginClicked() },
-                onClickRegister = { viewModel.onRegisterClicked() }
+                onClickLogin = {
+                    errorMessage = null
+                    viewModel.onLoginClicked()
+                }
             )
         }
     }
@@ -84,7 +96,7 @@ fun MobileLoginScreen(navigator: Navigator) {
 
 
 @Composable
-private fun MobileLoginWelcomeGroup() {
+fun MobileLoginWelcomeGroup() {
     Column(
         modifier = Modifier.fillMaxWidth(),
         horizontalAlignment = Alignment.CenterHorizontally
@@ -101,13 +113,23 @@ private fun MobileLoginWelcomeGroup() {
 @Composable
 private fun MobileLoginWithPhoneContentGroup(
     phoneNumber: String,
+    errorMessage: String?,
     onPhoneNumberChanged: (String) -> Unit
 ) {
     Column(
         modifier = Modifier.fillMaxWidth(),
-        horizontalAlignment = Alignment.CenterHorizontally
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.spacedBy(8.dp)
     ) {
         PhoneNumberTextInput(value = phoneNumber, onValueChange = onPhoneNumberChanged)
+
+        errorMessage?.let {
+            Text(
+                text = it,
+                style = SkyFitTypography.bodyMediumRegular,
+                color = SkyFitColor.text.criticalOnBgFill
+            )
+        }
     }
 }
 
@@ -115,28 +137,15 @@ private fun MobileLoginWithPhoneContentGroup(
 private fun MobileLoginActionGroup(
     isLoginEnabled: Boolean,
     isLoading: Boolean,
-    onClickLogin: () -> Unit,
-    onClickRegister: () -> Unit
+    onClickLogin: () -> Unit
 ) {
-    Column(
+    PrimaryLargeButton(
         modifier = Modifier.fillMaxWidth(),
-        horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.spacedBy(15.dp)
-    ) {
-        PrimaryLargeButton(
-            modifier = Modifier.fillMaxWidth(),
-            text = stringResource(Res.string.auth_login),
-            onClick = onClickLogin,
-            isLoading = isLoading,
-            isEnabled = isLoginEnabled && !isLoading
-        )
-
-        SecondaryLargeButton(
-            modifier = Modifier.fillMaxWidth(),
-            text = stringResource(Res.string.auth_register),
-            onClick = onClickRegister
-        )
-    }
+        text = stringResource(Res.string.auth_login),
+        onClick = onClickLogin,
+        isLoading = isLoading,
+        isEnabled = isLoginEnabled && !isLoading
+    )
 }
 
 

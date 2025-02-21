@@ -65,7 +65,7 @@ import com.vurgun.skyfit.presentation.shared.components.SkyFitScreenHeader
 import com.vurgun.skyfit.presentation.shared.features.settings.AccountSettingsSelectToSetInputComponent
 import com.vurgun.skyfit.presentation.shared.features.settings.SkyFitSelectToEnterInputComponent
 import com.vurgun.skyfit.presentation.shared.features.settings.SkyFitSelectToEnterMultilineInputComponent
-import com.vurgun.skyfit.presentation.shared.navigation.SkyFitNavigationRoute
+import com.vurgun.skyfit.presentation.shared.navigation.NavigationRoute
 import com.vurgun.skyfit.presentation.shared.navigation.jumpAndTakeover
 import com.vurgun.skyfit.presentation.shared.resources.SkyFitColor
 import com.vurgun.skyfit.presentation.shared.resources.SkyFitIcon
@@ -106,8 +106,8 @@ fun MobileFacilityClassEditScreen(navigator: Navigator) {
                 enabled = facilityClass.isSaveButtonEnabled,
                 onClick = {
                     navigator.jumpAndTakeover(
-                        SkyFitNavigationRoute.FacilityClasses,
-                        SkyFitNavigationRoute.FacilityClassEditCompleted
+                        NavigationRoute.FacilityClasses,
+                        NavigationRoute.FacilityClassEditCompleted
                     )
                 })
         }

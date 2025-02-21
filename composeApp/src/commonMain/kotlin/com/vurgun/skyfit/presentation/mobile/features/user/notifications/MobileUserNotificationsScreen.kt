@@ -39,7 +39,7 @@ import com.vurgun.skyfit.presentation.shared.components.SkyFitBadgeTabBarCompone
 import com.vurgun.skyfit.presentation.shared.components.SkyFitButtonComponent
 import com.vurgun.skyfit.presentation.shared.components.SkyFitNotificationItem
 import com.vurgun.skyfit.presentation.shared.components.SkyFitScreenHeader
-import com.vurgun.skyfit.presentation.shared.navigation.SkyFitNavigationRoute
+import com.vurgun.skyfit.presentation.shared.navigation.NavigationRoute
 import com.vurgun.skyfit.presentation.shared.navigation.jumpAndStay
 import com.vurgun.skyfit.presentation.shared.resources.SkyFitColor
 import com.vurgun.skyfit.presentation.shared.resources.SkyFitTypography
@@ -82,7 +82,7 @@ fun MobileUserNotificationsScreen(navigator: Navigator) {
         bottomBar = {
             if (allNotifications.isEmpty()) {
                 MobileUserNotificationsScreenSettingsActionComponent(onClick = {
-                    navigator.jumpAndStay(SkyFitNavigationRoute.UserSettingsNotifications)
+                    navigator.jumpAndStay(NavigationRoute.UserSettingsNotifications)
                 })
             } else {
                 MobileUserNotificationsScreenDeleteAllActionComponent(onClick = viewModel::deleteAllNotifications)

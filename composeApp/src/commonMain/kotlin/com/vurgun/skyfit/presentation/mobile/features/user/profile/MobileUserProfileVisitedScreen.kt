@@ -36,7 +36,7 @@ import com.vurgun.skyfit.presentation.shared.components.SkyFitButtonComponent
 import com.vurgun.skyfit.presentation.shared.components.button.SkyFitIconButton
 import com.vurgun.skyfit.presentation.shared.features.trainer.fakePosts
 import com.vurgun.skyfit.presentation.shared.features.user.SkyFitUserProfileViewModel
-import com.vurgun.skyfit.presentation.shared.navigation.SkyFitNavigationRoute
+import com.vurgun.skyfit.presentation.shared.navigation.NavigationRoute
 import com.vurgun.skyfit.presentation.shared.navigation.jumpAndStay
 import com.vurgun.skyfit.presentation.shared.resources.SkyFitColor
 import com.vurgun.skyfit.presentation.shared.resources.SkyFitTypography
@@ -211,7 +211,7 @@ private fun MobileUserProfileVisitedScreenAboutGroupComponent(
         if (showMeasurements) {
             Spacer(Modifier.height(16.dp))
             MobileUserProfileMeasurementsComponent(onClick = {
-                navigator.jumpAndStay(SkyFitNavigationRoute.UserMeasurements)
+                navigator.jumpAndStay(NavigationRoute.UserMeasurements)
             })
         }
 

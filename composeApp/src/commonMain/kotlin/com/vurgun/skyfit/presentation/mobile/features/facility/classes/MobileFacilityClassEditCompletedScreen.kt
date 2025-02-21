@@ -10,7 +10,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.Icon
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -24,14 +23,13 @@ import com.vurgun.skyfit.presentation.shared.components.ButtonState
 import com.vurgun.skyfit.presentation.shared.components.ButtonVariant
 import com.vurgun.skyfit.presentation.shared.components.SkyFitButtonComponent
 import com.vurgun.skyfit.presentation.shared.components.SkyFitScaffold
-import com.vurgun.skyfit.presentation.shared.navigation.SkyFitNavigationRoute
+import com.vurgun.skyfit.presentation.shared.navigation.NavigationRoute
 import com.vurgun.skyfit.presentation.shared.navigation.jumpAndTakeover
 import com.vurgun.skyfit.presentation.shared.resources.SkyFitTypography
 import moe.tlaster.precompose.navigation.Navigator
 import org.jetbrains.compose.resources.painterResource
 import skyfit.composeapp.generated.resources.Res
 import skyfit.composeapp.generated.resources.img_check_mark_blue_box
-import skyfit.composeapp.generated.resources.logo_skyfit
 
 @Composable
 fun MobileFacilityClassEditCompletedScreen(navigator: Navigator) {
@@ -44,10 +42,10 @@ fun MobileFacilityClassEditCompletedScreen(navigator: Navigator) {
             Spacer(Modifier.height(60.dp))
             MobileFacilityClassEditCompletedComponent(
                 onClickProfile = {
-                    navigator.jumpAndTakeover(SkyFitNavigationRoute.FacilityClassEdit, SkyFitNavigationRoute.DashboardProfile)
+                    navigator.jumpAndTakeover(NavigationRoute.FacilityClassEdit, NavigationRoute.DashboardProfile)
                 },
                 onClickDashboard = {
-                    navigator.jumpAndTakeover(SkyFitNavigationRoute.FacilityClassEdit, SkyFitNavigationRoute.Dashboard)
+                    navigator.jumpAndTakeover(NavigationRoute.FacilityClassEdit, NavigationRoute.Dashboard)
                 }
             )
         }

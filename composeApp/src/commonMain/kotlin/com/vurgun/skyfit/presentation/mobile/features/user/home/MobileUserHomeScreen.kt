@@ -26,7 +26,7 @@ import com.vurgun.skyfit.presentation.mobile.features.dashboard.MobileDashboardH
 import com.vurgun.skyfit.presentation.mobile.features.dashboard.MobileDashboardHomeWeekProgressComponent
 import com.vurgun.skyfit.presentation.mobile.resources.MobileStyleGuide
 import com.vurgun.skyfit.presentation.shared.components.SkyFitScaffold
-import com.vurgun.skyfit.presentation.shared.navigation.SkyFitNavigationRoute
+import com.vurgun.skyfit.presentation.shared.navigation.NavigationRoute
 import com.vurgun.skyfit.presentation.shared.navigation.jumpAndStay
 import moe.tlaster.precompose.navigation.Navigator
 
@@ -37,10 +37,10 @@ fun MobileUserHomeScreen(rootNavigator: Navigator) {
         topBar = {
             MobileDashboardHomeToolbarComponent(
                 onClickNotifications = {
-                    rootNavigator.jumpAndStay(SkyFitNavigationRoute.UserNotifications)
+                    rootNavigator.jumpAndStay(NavigationRoute.UserNotifications)
                 },
                 onClickMessages = {
-                    rootNavigator.jumpAndStay(SkyFitNavigationRoute.UserConversations)
+                    rootNavigator.jumpAndStay(NavigationRoute.UserConversations)
                 }
             )
         }
@@ -61,15 +61,15 @@ fun MobileUserHomeScreen(rootNavigator: Navigator) {
             MobileDashboardHomeWeekProgressComponent()
 
             MobileDashboardHomeActivityCalendarComponent(
-                onClickShowAll = { rootNavigator.jumpAndStay(SkyFitNavigationRoute.UserActivityCalendar) }
+                onClickShowAll = { rootNavigator.jumpAndStay(NavigationRoute.UserActivityCalendar) }
             )
 
             MobileDashboardHomeActivityHourlyCalendarComponent(
-                onClickAdd = { rootNavigator.jumpAndStay(SkyFitNavigationRoute.UserActivityCalendar) }
+                onClickAdd = { rootNavigator.jumpAndStay(NavigationRoute.UserActivityCalendar) }
             )
 
             MobileDashboardHomeUpcomingAppointmentsComponent(
-                onClickShowAll = { rootNavigator.jumpAndStay(SkyFitNavigationRoute.UserAppointments) }
+                onClickShowAll = { rootNavigator.jumpAndStay(NavigationRoute.UserAppointments) }
             )
 
             MobileDashboardHomeGeneralStatisticsComponent()
@@ -79,19 +79,19 @@ fun MobileUserHomeScreen(rootNavigator: Navigator) {
             MobileDashboardHomeProgressGridComponent()
 
             MobileDashboardHomeDailyExerciseGoalsComponent(
-                onClick = { rootNavigator.jumpAndStay(SkyFitNavigationRoute.UserExerciseDetail) }
+                onClick = { rootNavigator.jumpAndStay(NavigationRoute.UserExerciseDetail) }
             )
 
             MobileDashboardHomeMealGoalsComponent(
-                onClick = { rootNavigator.jumpAndStay(SkyFitNavigationRoute.DashboardNutrition) }
+                onClick = { rootNavigator.jumpAndStay(NavigationRoute.DashboardNutrition) }
             )
 
             MobileDashboardHomeFeaturedExercisesComponent(
-                onClick = { rootNavigator.jumpAndStay(SkyFitNavigationRoute.UserExerciseDetail) }
+                onClick = { rootNavigator.jumpAndStay(NavigationRoute.UserExerciseDetail) }
             )
 
             MobileDashboardHomeFeaturedTrainersComponent(
-                onClick = { rootNavigator.jumpAndStay(SkyFitNavigationRoute.TrainerProfileVisited) }
+                onClick = { rootNavigator.jumpAndStay(NavigationRoute.TrainerProfileVisited) }
             )
 
             Spacer(Modifier.height(128.dp))
