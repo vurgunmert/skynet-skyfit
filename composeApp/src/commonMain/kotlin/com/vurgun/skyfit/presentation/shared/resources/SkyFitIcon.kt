@@ -6,6 +6,9 @@ import org.jetbrains.compose.resources.DrawableResource
 import org.jetbrains.compose.resources.painterResource
 import skyfit.composeapp.generated.resources.Res
 import skyfit.composeapp.generated.resources.ic_biceps_force
+import skyfit.composeapp.generated.resources.ic_character_carrot
+import skyfit.composeapp.generated.resources.ic_character_koala
+import skyfit.composeapp.generated.resources.ic_character_panda
 import skyfit.composeapp.generated.resources.ic_exercises
 import skyfit.composeapp.generated.resources.ic_fast_food
 import skyfit.composeapp.generated.resources.ic_jumping_rope
@@ -15,6 +18,7 @@ import skyfit.composeapp.generated.resources.ic_sit_up
 import skyfit.composeapp.generated.resources.ic_sleep
 import skyfit.composeapp.generated.resources.ic_smoking
 import skyfit.composeapp.generated.resources.ic_yoga
+import skyfit.composeapp.generated.resources.logo_skyfit
 
 object SkyFitIcon {
 
@@ -43,5 +47,22 @@ object SkyFitIcon {
     @Composable
     fun getIconResourcePainter(id: String?, defaultRes: DrawableResource): Painter {
         return iconMap[id]?.let { painterResource(it) } ?: painterResource(defaultRes)
+    }
+}
+
+object SkyFitCharacterIcon {
+    val iconMap = mapOf(
+        "ic_character_carrot" to Res.drawable.ic_character_carrot,
+        "ic_character_koala" to Res.drawable.ic_character_koala,
+        "ic_character_panda" to Res.drawable.ic_character_panda
+    )
+
+    fun getIconResource(id: String?): DrawableResource? {
+        return iconMap[id]
+    }
+
+    @Composable
+    fun getIconResourcePainter(id: String?): Painter {
+        return iconMap[id]?.let { painterResource(it) } ?: painterResource(Res.drawable.logo_skyfit)
     }
 }

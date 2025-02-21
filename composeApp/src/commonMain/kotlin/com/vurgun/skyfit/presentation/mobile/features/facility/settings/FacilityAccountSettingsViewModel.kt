@@ -6,6 +6,7 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.update
 
 data class FacilityAccountState(
+    val name: String? = null,
     val biography: String? = null,
     val backgroundImageUrl: String? = null,
     val location: String? = null,
@@ -22,6 +23,7 @@ class FacilityAccountSettingsViewModel : ViewModel() {
 
     fun loadData() {
         val initial = FacilityAccountState(
+            name = "IronStudio Fitness",
             biography = "At IronStudio Fitness, we’re all about building strength, confidence, and a community of like-minded individuals. Our expert trainers offer personalized programs in strength training, functional fitness, and overall wellness. Let's forge your fitness together!",
             profileTags = listOf("Kardiyo", "Kas Gelişimi", "Fonksiyonel Antrenman"),
             location = "1425 Maplewood Avenue, Apt 3B, Brookfield, IL 60513, USA",
@@ -36,6 +38,10 @@ class FacilityAccountSettingsViewModel : ViewModel() {
             val newState = it.update().copy(isUpdated = it != initialState)
             newState
         }
+    }
+
+    fun updateName(value: String) {
+        updateState { copy(name = value) }
     }
 
     fun updateBiography(value: String) {

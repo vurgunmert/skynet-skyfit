@@ -26,6 +26,8 @@ import com.vurgun.skyfit.presentation.shared.features.onboarding.OnboardingStepP
 import com.vurgun.skyfit.presentation.shared.features.onboarding.OnboardingTitleGroupComponent
 import org.jetbrains.compose.resources.painterResource
 import skyfit.composeapp.generated.resources.Res
+import skyfit.composeapp.generated.resources.ic_gender_female
+import skyfit.composeapp.generated.resources.ic_gender_male
 import skyfit.composeapp.generated.resources.logo_skyfit
 
 @Composable
@@ -67,10 +69,10 @@ fun OnboardingGenderSelectorComponent() {
     ) {
         SkyFitSelectableCardComponent(
             isSelected = isMaleSelected,
-            modifier = Modifier.size(112.dp, 104.dp).padding(horizontal = 24.dp, vertical = 20.dp),
+            modifier = Modifier.size(112.dp, 104.dp),
             onClick = { isMaleSelected = !isMaleSelected }) {
             Image(
-                painter = painterResource(Res.drawable.logo_skyfit), // Replace with your image resource
+                painter = painterResource(Res.drawable.ic_gender_male),
                 contentDescription = null,
                 modifier = Modifier.size(64.dp)
             )
@@ -80,10 +82,10 @@ fun OnboardingGenderSelectorComponent() {
 
         SkyFitSelectableCardComponent(
             isSelected = !isMaleSelected,
-            modifier = Modifier.size(112.dp, 104.dp).padding(horizontal = 24.dp, vertical = 20.dp),
+            modifier = Modifier.size(112.dp, 104.dp),
             onClick = { isMaleSelected = !isMaleSelected }) {
             Image(
-                painter = painterResource(Res.drawable.logo_skyfit), // Replace with your image resource
+                painter = painterResource(Res.drawable.ic_gender_female), // Replace with your image resource
                 contentDescription = null,
                 modifier = Modifier.size(64.dp)
             )

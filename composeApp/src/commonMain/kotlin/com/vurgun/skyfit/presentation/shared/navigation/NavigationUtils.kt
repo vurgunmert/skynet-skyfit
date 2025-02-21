@@ -1,5 +1,6 @@
 package com.vurgun.skyfit.presentation.shared.navigation
 
+import com.vurgun.skyfit.domain.model.UserRole
 import moe.tlaster.precompose.navigation.NavOptions
 import moe.tlaster.precompose.navigation.Navigator
 import moe.tlaster.precompose.navigation.PopUpTo
@@ -34,7 +35,7 @@ fun Navigator.jumpAndStay(route: String) {
 // Extensions for Navigator to handle role-based navigation
 fun Navigator.navigateToScreen(
     screen: NavigationRoute,
-    userRole: Role,
+    userRole: UserRole,
     vararg args: Pair<NavigationRoute.Param, String?>
 ) {
     if (userRole in screen.roles) {

@@ -26,8 +26,10 @@ import com.vurgun.skyfit.presentation.shared.components.SkyFitSelectableCardComp
 import com.vurgun.skyfit.presentation.shared.features.onboarding.OnboardingActionGroupComponent
 import com.vurgun.skyfit.presentation.shared.features.onboarding.OnboardingStepProgressComponent
 import com.vurgun.skyfit.presentation.shared.features.onboarding.OnboardingTitleGroupComponent
+import com.vurgun.skyfit.presentation.shared.resources.SkyFitCharacterIcon
 import org.jetbrains.compose.resources.painterResource
 import skyfit.composeapp.generated.resources.Res
+import skyfit.composeapp.generated.resources.ic_character_carrot
 import skyfit.composeapp.generated.resources.logo_skyfit
 
 @Composable
@@ -53,27 +55,20 @@ fun MobileOnboardingCharacterSelectionScreen(
                 onClickContinue = onNext,
                 onClickSkip = onSkip
             )
-            Spacer(Modifier.height(48.dp))
+            Spacer(Modifier.height(36.dp))
         }
     }
 }
 
 @Composable
 private fun MobileOnboardingCharacterSelectionScreenSelectableCardsComponent() {
-    val items = listOf("Carrot", "Pizza", "Koala") // Replace with real data
+    val items = SkyFitCharacterIcon.iconMap.keys.toList()
     var selectedIndex by remember { mutableStateOf<Int?>(null) }
 
     MobileOnboardingCharacterSelectionScreenSelectableCardGridComponent(
         items = items,
         selectedIndex = selectedIndex,
-        onCardSelected = { selectedIndex = it },
-        cardContent = {
-            Image(
-                painter = painterResource(Res.drawable.logo_skyfit), // Replace with your image resource
-                contentDescription = null,
-                modifier = Modifier.fillMaxSize()
-            )
-        }
+        onCardSelected = { selectedIndex = it }
     )
 }
 
@@ -82,8 +77,7 @@ private fun MobileOnboardingCharacterSelectionScreenSelectableCardsComponent() {
 private fun MobileOnboardingCharacterSelectionScreenSelectableCardGridComponent(
     items: List<String>,
     selectedIndex: Int?,
-    onCardSelected: (Int) -> Unit,
-    cardContent: @Composable BoxScope.(Int) -> Unit // Shared content for all cards
+    onCardSelected: (Int) -> Unit
 ) {
     LazyVerticalGrid(
         columns = GridCells.Fixed(3),
@@ -94,12 +88,16 @@ private fun MobileOnboardingCharacterSelectionScreenSelectableCardGridComponent(
         verticalArrangement = Arrangement.spacedBy(12.dp),
         horizontalArrangement = Arrangement.spacedBy(12.dp)
     ) {
-        itemsIndexed(items) { index, _ ->
+        itemsIndexed(items) { index, item ->
             SkyFitSelectableCardComponent(
                 isSelected = selectedIndex == index,
                 onClick = { onCardSelected(index) }
             ) {
-                cardContent(index)
+                Image(
+                    painter = SkyFitCharacterIcon.getIconResourcePainter(item),
+                    contentDescription = item,
+                    modifier = Modifier.fillMaxSize()
+                )
             }
         }
     }

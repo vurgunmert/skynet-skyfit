@@ -1,8 +1,8 @@
 package com.vurgun.skyfit.presentation.mobile.features.onboarding
 
 import androidx.compose.runtime.Composable
+import com.vurgun.skyfit.domain.model.UserRole
 import com.vurgun.skyfit.presentation.mobile.features.dashboard.unmanaged_role
-import com.vurgun.skyfit.presentation.shared.navigation.Role
 import com.vurgun.skyfit.presentation.shared.navigation.NavigationRoute
 import com.vurgun.skyfit.presentation.shared.navigation.jumpAndStay
 import com.vurgun.skyfit.presentation.shared.navigation.jumpAndTakeover
@@ -25,15 +25,15 @@ fun MobileOnboardingScreen(rootNavigator: Navigator) {
         scene(NavigationRoute.OnboardingUserTypeSelection.route) {
             MobileOnboardingUserTypeSelectionScreen(
                 onClickUser = {
-                    unmanaged_role = Role.USER
+                    unmanaged_role = UserRole.USER
                     onboardingNavigator.jumpAndStay(NavigationRoute.OnboardingCharacterSelection)
                 },
                 onClickTrainer = {
-                    unmanaged_role = Role.TRAINER
+                    unmanaged_role = UserRole.USER
                     rootNavigator.jumpAndTakeover(NavigationRoute.Onboarding, NavigationRoute.Dashboard)
                 },
                 onClickFacility = {
-                    unmanaged_role = Role.FACILITY_MANAGER
+                    unmanaged_role = UserRole.FACILITY_MANAGER
                     rootNavigator.jumpAndTakeover(NavigationRoute.Onboarding, NavigationRoute.Dashboard)
                 }
             )

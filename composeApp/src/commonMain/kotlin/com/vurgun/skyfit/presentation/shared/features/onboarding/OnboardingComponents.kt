@@ -30,13 +30,12 @@ import com.vurgun.skyfit.presentation.shared.resources.SkyFitTypography
 @Composable
 fun OnboardingStepProgressComponent(
     totalSteps: Int = 6,
-    currentStep: Int = 1, // Current page starts from 1
+    currentStep: Int = 1,
     activeColor: Color = SkyFitColor.specialty.buttonBgRest,
     inactiveColor: Color = SkyFitColor.background.surfaceSecondary,
     stepHeight: Dp = 10.dp,
     spacing: Dp = 6.dp
 ) {
-    // Use a BoxWithConstraints to get the parent width
     BoxWithConstraints(
         modifier = Modifier
             .fillMaxWidth()
@@ -90,7 +89,11 @@ fun OnboardingActionGroupComponent(
     onClickContinue: () -> Unit,
     onClickSkip: () -> Unit
 ) {
-    Column {
+    Column(
+        modifier = Modifier.fillMaxWidth(),
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.spacedBy(14.dp)
+    ) {
         SkyFitButtonComponent(
             modifier = Modifier.fillMaxWidth(), text = "Devam Et",
             onClick = onClickContinue,
@@ -98,7 +101,7 @@ fun OnboardingActionGroupComponent(
             size = ButtonSize.Large,
             state = ButtonState.Rest
         )
-        Spacer(Modifier.height(14.dp))
+
         SkyFitButtonComponent(
             modifier = Modifier.fillMaxWidth(), text = "Atla",
             onClick = onClickSkip,
@@ -106,7 +109,6 @@ fun OnboardingActionGroupComponent(
             size = ButtonSize.Large,
             state = ButtonState.Rest
         )
-        Spacer(Modifier.height(44.dp))
     }
 }
 

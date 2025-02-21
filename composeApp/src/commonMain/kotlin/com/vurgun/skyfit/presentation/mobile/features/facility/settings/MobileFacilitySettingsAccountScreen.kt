@@ -87,6 +87,14 @@ fun MobileFacilitySettingsAccountScreen(navigator: Navigator) {
             )
 
             SkyFitSelectToEnterMultilineInputComponent(
+                title = "Isyeri Adi *",
+                hint = "Profilinizde gozukecek isyeri adi",
+                value = accountState.name,
+                onValueChange = { viewModel.updateName(it) },
+                rightIconRes = Res.drawable.ic_pencil
+            )
+
+            SkyFitSelectToEnterMultilineInputComponent(
                 title = "Biyografi *",
                 hint = "Biyografi bilgilerinizi girin",
                 value = accountState.biography,
