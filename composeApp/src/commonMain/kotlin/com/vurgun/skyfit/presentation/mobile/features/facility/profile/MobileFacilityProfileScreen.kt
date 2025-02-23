@@ -105,7 +105,10 @@ fun MobileFacilityProfileScreen(navigator: Navigator) {
             if (trainers.isEmpty()) {
                 MobileFacilityProfileScreenTrainersEmptyComponent(onClickAdd = {})
             } else {
-                MobileFacilityProfileVisitedScreenTrainersComponent(trainers)
+                MobileFacilityProfileVisitedScreenTrainersComponent(
+                    trainers = trainers,
+                    onClick = { navigator.jumpAndStay(NavigationRoute.TrainerProfileVisited) }
+                )
             }
 
             if (privateClasses.isEmpty()) {
@@ -113,6 +116,8 @@ fun MobileFacilityProfileScreen(navigator: Navigator) {
             } else {
                 MobileFacilityProfileVisitedScreenPrivateClassesComponent(privateClasses)
             }
+
+            Spacer(Modifier.height(124.dp))
         }
     }
 }

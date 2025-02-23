@@ -1,6 +1,7 @@
 package com.vurgun.skyfit.presentation.mobile.features.dashboard
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -43,6 +44,8 @@ import com.vurgun.skyfit.presentation.shared.components.SkyFitSearchFilterBarCom
 import com.vurgun.skyfit.presentation.shared.components.SkyFitSearchTextInputComponent
 import com.vurgun.skyfit.presentation.shared.features.profile.FacilityProfileCardItemBox
 import com.vurgun.skyfit.presentation.shared.features.profile.TrainerProfileCardItemBox
+import com.vurgun.skyfit.presentation.shared.navigation.NavigationRoute
+import com.vurgun.skyfit.presentation.shared.navigation.jumpAndStay
 import com.vurgun.skyfit.presentation.shared.resources.SkyFitColor
 import com.vurgun.skyfit.presentation.shared.resources.SkyFitTypography
 import com.vurgun.skyfit.presentation.shared.viewmodel.DashboardExploreScreenViewModel
@@ -70,40 +73,58 @@ fun MobileDashboardExploreScreen(rootNavigator: Navigator) {
             modifier = Modifier
                 .padding(16.dp)
                 .fillMaxSize()
-                .verticalScroll(rememberScrollState())
+                .verticalScroll(rememberScrollState()),
+            verticalArrangement = Arrangement.spacedBy(24.dp)
         ) {
-            MobileDashboardExploreScreenFeaturedExercisesComponent()
-            MobileDashboardExploreScreenFeaturedTrainersComponent(trainers)
-            MobileDashboardExploreScreenFeaturedFacilitiesComponent(facilities)
-            MobileDashboardExploreScreenFeaturedCommunitiesComponent()
-            MobileDashboardExploreScreenFeaturedChallengesComponent()
+            MobileDashboardExploreScreenFeaturedExercisesComponent(
+                onClick = { rootNavigator.jumpAndStay(NavigationRoute.UserExerciseDetail) })
+
+            MobileDashboardExploreScreenFeaturedTrainersComponent(
+                trainers,
+                onClick = { rootNavigator.jumpAndStay(NavigationRoute.TrainerProfileVisited) })
+
+            MobileDashboardExploreScreenFeaturedFacilitiesComponent(
+                facilities,
+                onClick = { rootNavigator.jumpAndStay(NavigationRoute.FacilityProfileVisited) })
+
+            MobileDashboardExploreScreenFeaturedCommunitiesComponent(
+                onClick = { rootNavigator.jumpAndStay(NavigationRoute.DashboardExploreCommunities) })
+
+            MobileDashboardExploreScreenFeaturedChallengesComponent(
+                onClick = { rootNavigator.jumpAndStay(NavigationRoute.DashboardExploreChallenges) })
+
+            Spacer(Modifier.height(124.dp))
         }
     }
 }
 
 @Composable
-private fun MobileDashboardExploreScreenFeaturedExercisesComponent() {
+private fun MobileDashboardExploreScreenFeaturedExercisesComponent(onClick: () -> Unit) {
 
     var exerciseItems = listOf(1, 2, 3, 4, 5)
-
-    MobileDashboardExploreScreenTitleActionComponent("Popüler Antrenmanlar")
-    Spacer(Modifier.height(12.dp))
-
-    LazyRow(
-        Modifier.fillMaxWidth(),
-        horizontalArrangement = Arrangement.spacedBy(16.dp)
+    Column(
+        modifier = Modifier.fillMaxWidth(),
+        verticalArrangement = Arrangement.spacedBy(12.dp)
     ) {
-        items(exerciseItems) {
-            MobileDashboardExploreScreenFeaturedExerciseItemComponent()
+        MobileDashboardExploreScreenTitleActionComponent("Popüler Antrenmanlar")
+        Spacer(Modifier.height(12.dp))
+
+        LazyRow(
+            Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.spacedBy(16.dp)
+        ) {
+            items(exerciseItems) {
+                MobileDashboardExploreScreenFeaturedExerciseItemComponent(onClick)
+            }
         }
     }
 }
 
 @Composable
-private fun MobileDashboardExploreScreenFeaturedExerciseItemComponent() {
-    Box(Modifier.size(186.dp, 278.dp)) {
+private fun MobileDashboardExploreScreenFeaturedExerciseItemComponent(onClick: () -> Unit) {
+    Box(Modifier.size(186.dp, 278.dp).clickable(onClick = onClick)) {
         AsyncImage(
-            model = "https://cdn.shopify.com/s/files/1/0599/3624/3866/t/57/assets/e69266f5f9de--field-street-fitness-6-4a2977.jpg?v=1682607953",
+            model = "https://ik.imagekit.io/skynet2skyfit/image%2028.png?updatedAt=1740295545580",
             contentDescription = null,
             contentScale = ContentScale.Crop,
             modifier = Modifier
@@ -122,144 +143,174 @@ private fun MobileDashboardExploreScreenFeaturedExerciseItemComponent() {
 }
 
 @Composable
-private fun MobileDashboardExploreScreenFeaturedTrainersComponent(trainers: List<TrainerProfileCardItemViewData>) {
-    MobileDashboardExploreScreenTitleActionComponent("Pro Antrenörler")
-
-    LazyRow(
+private fun MobileDashboardExploreScreenFeaturedTrainersComponent(
+    trainers: List<TrainerProfileCardItemViewData>,
+    onClick: () -> Unit
+) {
+    Column(
         modifier = Modifier.fillMaxWidth(),
-        contentPadding = PaddingValues(start = 12.dp),
-        horizontalArrangement = Arrangement.spacedBy(16.dp) // Horizontal spacing
+        verticalArrangement = Arrangement.spacedBy(12.dp)
     ) {
-        items(trainers) { trainer ->
-            TrainerProfileCardItemBox(
-                imageUrl = trainer.imageUrl,
-                name = trainer.name,
-                followerCount = trainer.followerCount,
-                classCount = trainer.classCount,
-                videoCount = trainer.videoCount,
-                rating = trainer.rating,
-                onClick = { /* Handle click */ }
-            )
+        MobileDashboardExploreScreenTitleActionComponent("Pro Antrenörler")
+
+        LazyRow(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.spacedBy(16.dp)
+        ) {
+            items(trainers) { trainer ->
+                TrainerProfileCardItemBox(
+                    imageUrl = trainer.imageUrl,
+                    name = trainer.name,
+                    followerCount = trainer.followerCount,
+                    classCount = trainer.classCount,
+                    videoCount = trainer.videoCount,
+                    rating = trainer.rating,
+                    onClick = onClick
+                )
+            }
         }
     }
 }
 
 @Composable
-private fun MobileDashboardExploreScreenFeaturedFacilitiesComponent(facilities: List<FacilityProfileCardItemViewData>) {
-    MobileDashboardExploreScreenTitleActionComponent("Popüler Tesisler")
-
-    LazyRow(
+private fun MobileDashboardExploreScreenFeaturedFacilitiesComponent(
+    facilities: List<FacilityProfileCardItemViewData>,
+    onClick: () -> Unit
+) {
+    Column(
         modifier = Modifier.fillMaxWidth(),
-        contentPadding = PaddingValues(start = 12.dp),
-        horizontalArrangement = Arrangement.spacedBy(16.dp) // Horizontal spacing
+        verticalArrangement = Arrangement.spacedBy(12.dp)
     ) {
-        items(facilities) { trainer ->
-            FacilityProfileCardItemBox(
-                imageUrl = trainer.imageUrl,
-                name = trainer.name,
-                memberCount = trainer.memberCount,
-                trainerCount = trainer.trainerCount,
-                rating = trainer.rating ?: 0.0,
-                onClick = { /* Handle click */ }
-            )
+        MobileDashboardExploreScreenTitleActionComponent("Popüler Tesisler")
+
+        LazyRow(
+            modifier = Modifier.fillMaxWidth(),
+            contentPadding = PaddingValues(top = 12.dp),
+            horizontalArrangement = Arrangement.spacedBy(16.dp)
+        ) {
+            items(facilities) { facility ->
+                FacilityProfileCardItemBox(
+                    imageUrl = facility.imageUrl,
+                    name = facility.name,
+                    memberCount = facility.memberCount,
+                    trainerCount = facility.trainerCount,
+                    rating = facility.rating ?: 0.0,
+                    onClick = onClick
+                )
+            }
         }
     }
 }
 
 @Composable
-private fun MobileDashboardExploreScreenFeaturedCommunitiesComponent() {
-
-    MobileDashboardExploreScreenTitleActionComponent("Topluluklar")
-    Spacer(Modifier.height(12.dp))
-
-    Row {
-        Box(Modifier.weight(1f), contentAlignment = Alignment.Center) {
-            AsyncImage(
-                model = "https://cdn.shopify.com/s/files/1/0599/3624/3866/t/57/assets/e69266f5f9de--field-street-fitness-6-4a2977.jpg?v=1682607953",
-                contentDescription = null,
-                contentScale = ContentScale.Crop,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(72.dp)
-                    .clip(RoundedCornerShape(16.dp))
-            )
-            Text(
-                "FormdaKal",
-                style = SkyFitTypography.heading4
-            )
-        }
-
-        Spacer(Modifier.width(6.dp))
-
-        Box(Modifier.weight(1f), contentAlignment = Alignment.Center) {
-            AsyncImage(
-                model = "https://cdn.shopify.com/s/files/1/0599/3624/3866/t/57/assets/e69266f5f9de--field-street-fitness-6-4a2977.jpg?v=1682607953",
-                contentDescription = null,
-                contentScale = ContentScale.Crop,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(72.dp)
-                    .clip(RoundedCornerShape(16.dp))
-            )
-            Text(
-                "FormdaKal",
-                style = SkyFitTypography.heading4
-            )
-        }
-    }
-}
-
-@Composable
-private fun MobileDashboardExploreScreenFeaturedChallengesComponent() {
-    MobileDashboardExploreScreenTitleActionComponent("Meydan Okumalar")
-    Spacer(Modifier.height(12.dp))
+private fun MobileDashboardExploreScreenFeaturedCommunitiesComponent(onClick: () -> Unit) {
 
     Column(
-        Modifier.fillMaxWidth()
-            .background(SkyFitColor.specialty.buttonBgHover, RoundedCornerShape(16.dp))
-            .padding(16.dp)
+        modifier = Modifier.fillMaxWidth(),
+        verticalArrangement = Arrangement.spacedBy(12.dp)
     ) {
-        Text(
-            "10,000 Steps a Day Challange",
-            style = SkyFitTypography.heading3
-        )
-        Spacer(Modifier.height(12.dp))
+        MobileDashboardExploreScreenTitleActionComponent("Topluluklar")
+
         Row {
-            AsyncImage(
-                model = "https://cdn.shopify.com/s/files/1/0599/3624/3866/t/57/assets/e69266f5f9de--field-street-fitness-6-4a2977.jpg?v=1682607953",
-                contentDescription = null,
-                contentScale = ContentScale.Crop,
-                modifier = Modifier.size(32.dp)
-                    .clip(CircleShape)
-                    .offset(x = (-6).dp)
-            )
-            AsyncImage(
-                model = "https://cdn.shopify.com/s/files/1/0599/3624/3866/t/57/assets/e69266f5f9de--field-street-fitness-6-4a2977.jpg?v=1682607953",
-                contentDescription = null,
-                contentScale = ContentScale.Crop,
-                modifier = Modifier.size(32.dp)
-                    .clip(CircleShape)
-                    .offset(x = (-6).dp)
-            )
-            AsyncImage(
-                model = "https://cdn.shopify.com/s/files/1/0599/3624/3866/t/57/assets/e69266f5f9de--field-street-fitness-6-4a2977.jpg?v=1682607953",
-                contentDescription = null,
-                contentScale = ContentScale.Crop,
-                modifier = Modifier.size(32.dp)
-                    .clip(CircleShape)
-                    .offset(x = (-6).dp)
-            )
+            Box(
+                modifier = Modifier.weight(1f).clickable(onClick = onClick),
+                contentAlignment = Alignment.Center
+            ) {
+                AsyncImage(
+                    model = "https://ik.imagekit.io/skynet2skyfit/image%2026.png?updatedAt=1740294973693",
+                    contentDescription = null,
+                    contentScale = ContentScale.Crop,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(72.dp)
+                        .clip(RoundedCornerShape(16.dp))
+                )
+                Text(
+                    "FormdaKal",
+                    style = SkyFitTypography.heading4
+                )
+            }
 
-            Spacer(Modifier.weight(1f))
+            Spacer(Modifier.width(6.dp))
 
-            SkyFitButtonComponent(
-                text = "Katil",
-                modifier = Modifier.wrapContentWidth(),
-                onClick = { },
-                variant = ButtonVariant.Primary,
-                size = ButtonSize.Medium,
-                state = ButtonState.Disabled
+            Box(
+                modifier = Modifier.weight(1f).clickable(onClick = onClick),
+                contentAlignment = Alignment.Center
+            ) {
+                AsyncImage(
+                    model = "https://ik.imagekit.io/skynet2skyfit/image%2027.png?updatedAt=1740294973688",
+                    contentDescription = null,
+                    contentScale = ContentScale.Crop,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(72.dp)
+                        .clip(RoundedCornerShape(16.dp))
+                )
+                Text(
+                    "FitZirve",
+                    style = SkyFitTypography.heading4
+                )
+            }
+        }
+    }
+}
+
+@Composable
+private fun MobileDashboardExploreScreenFeaturedChallengesComponent(onClick: () -> Unit) {
+    Column(
+        modifier = Modifier.fillMaxWidth(),
+        verticalArrangement = Arrangement.spacedBy(12.dp)
+    ) {
+        MobileDashboardExploreScreenTitleActionComponent("Meydan Okumalar")
+
+        Column(
+            Modifier.fillMaxWidth()
+                .background(SkyFitColor.specialty.buttonBgHover, RoundedCornerShape(16.dp))
+                .clickable(onClick = onClick)
+                .padding(16.dp)
+        ) {
+            Text(
+                "10,000 Steps a Day Challange",
+                style = SkyFitTypography.heading3
             )
+            Spacer(Modifier.height(12.dp))
+            Row {
+                AsyncImage(
+                    model = "https://cdn.shopify.com/s/files/1/0599/3624/3866/t/57/assets/e69266f5f9de--field-street-fitness-6-4a2977.jpg?v=1682607953",
+                    contentDescription = null,
+                    contentScale = ContentScale.Crop,
+                    modifier = Modifier.size(32.dp)
+                        .clip(CircleShape)
+                        .offset(x = (-6).dp)
+                )
+                AsyncImage(
+                    model = "https://cdn.shopify.com/s/files/1/0599/3624/3866/t/57/assets/e69266f5f9de--field-street-fitness-6-4a2977.jpg?v=1682607953",
+                    contentDescription = null,
+                    contentScale = ContentScale.Crop,
+                    modifier = Modifier.size(32.dp)
+                        .clip(CircleShape)
+                        .offset(x = (-6).dp)
+                )
+                AsyncImage(
+                    model = "https://cdn.shopify.com/s/files/1/0599/3624/3866/t/57/assets/e69266f5f9de--field-street-fitness-6-4a2977.jpg?v=1682607953",
+                    contentDescription = null,
+                    contentScale = ContentScale.Crop,
+                    modifier = Modifier.size(32.dp)
+                        .clip(CircleShape)
+                        .offset(x = (-6).dp)
+                )
+
+                Spacer(Modifier.weight(1f))
+
+                SkyFitButtonComponent(
+                    text = "Katil",
+                    modifier = Modifier.wrapContentWidth(),
+                    onClick = { },
+                    variant = ButtonVariant.Primary,
+                    size = ButtonSize.Medium,
+                    state = ButtonState.Disabled
+                )
+            }
         }
     }
 }

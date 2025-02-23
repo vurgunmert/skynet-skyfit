@@ -38,6 +38,7 @@ import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -60,6 +61,7 @@ import com.preat.peekaboo.ui.camera.CameraMode
 import com.preat.peekaboo.ui.camera.PeekabooCamera
 import com.preat.peekaboo.ui.camera.PeekabooCameraState
 import com.preat.peekaboo.ui.camera.rememberPeekabooCameraState
+import com.vurgun.skyfit.permission.requestCameraPermission
 import com.vurgun.skyfit.presentation.shared.components.ButtonSize
 import com.vurgun.skyfit.presentation.shared.components.ButtonState
 import com.vurgun.skyfit.presentation.shared.components.ButtonVariant
@@ -97,7 +99,6 @@ fun MobileUserBodyAnalysisScreen(navigator: Navigator) {
 
     val viewModel = remember { MobileUserBodyAnalysisViewModel() }
     val uiState by viewModel.uiState.collectAsState()
-
     var capturedImage by remember { mutableStateOf<ByteArray?>(null) }
 
     val cameraState = rememberPeekabooCameraState(
@@ -107,6 +108,11 @@ fun MobileUserBodyAnalysisScreen(navigator: Navigator) {
             viewModel.startScanning(capturedImage?.encodeBase64())
         }
     )
+
+    var permissionGranted by remember { mutableStateOf(false) }
+    if (uiState is MobileUserBodyAnalysisState.CameraPreview) {
+        permissionGranted = requestCameraPermission()
+    }
 
     SkyFitScaffold {
         Box(Modifier.fillMaxSize()) {
@@ -137,15 +143,29 @@ fun MobileUserBodyAnalysisScreen(navigator: Navigator) {
             /** 🔹 CAMERA PREVIEW */
             if (uiState is MobileUserBodyAnalysisState.CameraPreview) {
                 val state = uiState as MobileUserBodyAnalysisState.CameraPreview
-                MobileUserBodyAnalysisScreenCameraPreviewComponent(
-                    cameraState = cameraState,
-                    posture = state.postureType,
-                    showGuide = state.showGuide,
-                    onToggleGuide = { viewModel.toggleGuideVisibility(state.postureType, !state.showGuide) },
-                    onCapture = { viewModel.startScanning(capturedImage?.encodeBase64()) },
-                    onClickExit = { viewModel.showCaptureExitScreen() },
-                    onToggleInfo = { viewModel.showInfoScreen() }
-                )
+
+                if (permissionGranted) {
+                    MobileUserBodyAnalysisScreenCameraPreviewComponent(
+                        cameraState = cameraState,
+                        posture = state.postureType,
+                        showGuide = state.showGuide,
+                        onToggleGuide = { viewModel.toggleGuideVisibility(state.postureType, !state.showGuide) },
+                        onCapture = { viewModel.startScanning(capturedImage?.encodeBase64()) },
+                        onClickExit = { viewModel.showCaptureExitScreen() },
+                        onToggleInfo = { viewModel.showInfoScreen() }
+                    )
+                } else {
+                    Box(
+                        modifier = Modifier.fillMaxSize(),
+                        contentAlignment = Alignment.Center
+                    ) {
+                        Text(
+                            text = "Kamera erişimi reddedildi. Lütfen izin verin.",
+                            style = SkyFitTypography.bodyLargeMedium,
+                            color = Color.White
+                        )
+                    }
+                }
             }
 
             /** 🔹 SCANNING PROGRESS */
@@ -192,6 +212,7 @@ fun MobileUserBodyAnalysisScreen(navigator: Navigator) {
         }
     }
 }
+
 
 @Composable
 private fun MobileUserBodyAnalysisScreenToolbarComponent(

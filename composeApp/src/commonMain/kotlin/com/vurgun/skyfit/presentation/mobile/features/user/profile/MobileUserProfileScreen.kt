@@ -398,6 +398,8 @@ fun MobileUserProfileAboutGroupComponent(
         if (habits.isNotEmpty()) {
             MobileUserProfileHabitsComponent(habits)
         }
+
+        Spacer(Modifier.height(124.dp))
     }
 }
 

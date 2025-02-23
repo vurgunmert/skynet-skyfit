@@ -27,13 +27,13 @@ import com.vurgun.skyfit.presentation.mobile.features.facility.classes.MobileFac
 import com.vurgun.skyfit.presentation.mobile.features.facility.profile.MobileFacilityPhotoDiaryScreen
 import com.vurgun.skyfit.presentation.mobile.features.facility.profile.MobileFacilityProfileScreen
 import com.vurgun.skyfit.presentation.mobile.features.facility.profile.MobileFacilityProfileVisitedScreen
-import com.vurgun.skyfit.presentation.mobile.features.facility.settings.MobileFacilitySettingsAddMembersScreen
 import com.vurgun.skyfit.presentation.mobile.features.facility.settings.MobileFacilitySettingsAccountScreen
+import com.vurgun.skyfit.presentation.mobile.features.facility.settings.MobileFacilitySettingsAddMembersScreen
 import com.vurgun.skyfit.presentation.mobile.features.facility.settings.MobileFacilitySettingsHelpScreen
-import com.vurgun.skyfit.presentation.mobile.features.facility.settings.MobileFacilitySettingsSearchMembersScreen
 import com.vurgun.skyfit.presentation.mobile.features.facility.settings.MobileFacilitySettingsNotificationsScreen
 import com.vurgun.skyfit.presentation.mobile.features.facility.settings.MobileFacilitySettingsPaymentHistoryScreen
 import com.vurgun.skyfit.presentation.mobile.features.facility.settings.MobileFacilitySettingsScreen
+import com.vurgun.skyfit.presentation.mobile.features.facility.settings.MobileFacilitySettingsSearchMembersScreen
 import com.vurgun.skyfit.presentation.mobile.features.facility.settings.MobileFacilitySettingsTrainersScreen
 import com.vurgun.skyfit.presentation.mobile.features.onboarding.MobileOnboardingScreen
 import com.vurgun.skyfit.presentation.mobile.features.trainer.appointments.MobileTrainerAppointmentDetailScreen
@@ -92,7 +92,7 @@ fun MobileNavigationGraph() {
 
     NavHost(
         navigator = rootNavigator,
-        initialRoute = NavigationRoute.Dashboard.route
+        initialRoute = NavigationRoute.TrainerProfileVisited.route
     ) {
 
         // Auth

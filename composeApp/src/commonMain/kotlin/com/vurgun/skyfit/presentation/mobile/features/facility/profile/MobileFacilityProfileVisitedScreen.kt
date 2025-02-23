@@ -6,7 +6,6 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -116,7 +115,10 @@ fun MobileFacilityProfileVisitedScreen(navigator: Navigator) {
             }
 
             if (trainers.isNotEmpty()) {
-                MobileFacilityProfileVisitedScreenTrainersComponent(trainers)
+                MobileFacilityProfileVisitedScreenTrainersComponent(
+                    trainers = trainers,
+                    onClick = { navigator.jumpAndStay(NavigationRoute.TrainerProfileVisited) }
+                )
             }
 
             if (privateClasses.isNotEmpty()) {
@@ -307,37 +309,46 @@ object MobileFacilityProfileVisitedScreen {
     }
 
     @Composable
-    fun MobileFacilityProfileVisitedScreenTrainersComponent(trainers: List<TrainerProfileCardItemViewData>) {
-        Text(
-            text = "Antrenörlerimiz",
-            style = SkyFitTypography.bodyLargeSemibold,
-            modifier = Modifier.padding(12.dp)
-        )
-        LazyRow(
-            modifier = Modifier.fillMaxWidth(),
-            contentPadding = PaddingValues(start = 12.dp),
-            horizontalArrangement = Arrangement.spacedBy(16.dp) // Horizontal spacing
+    fun MobileFacilityProfileVisitedScreenTrainersComponent(
+        trainers: List<TrainerProfileCardItemViewData>,
+        onClick: () -> Unit
+    ) {
+        Column(
+            Modifier.fillMaxWidth(),
+            verticalArrangement = Arrangement.spacedBy(12.dp)
         ) {
-            items(trainers) { trainer ->
-                TrainerProfileCardItemBox(
-                    imageUrl = trainer.imageUrl,
-                    name = trainer.name,
-                    followerCount = trainer.followerCount,
-                    classCount = trainer.classCount,
-                    videoCount = trainer.videoCount,
-                    rating = trainer.rating,
-                    onClick = { /* Handle click */ }
-                )
+            Text(
+                text = "Antrenörlerimiz",
+                style = SkyFitTypography.bodyLargeSemibold
+            )
+            LazyRow(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.spacedBy(16.dp)
+            ) {
+                items(trainers) { trainer ->
+                    TrainerProfileCardItemBox(
+                        imageUrl = trainer.imageUrl,
+                        name = trainer.name,
+                        followerCount = trainer.followerCount,
+                        classCount = trainer.classCount,
+                        videoCount = trainer.videoCount,
+                        rating = trainer.rating,
+                        onClick = onClick
+                    )
+                }
             }
         }
     }
 
     @Composable
-    fun MobileFacilityProfileVisitedScreenPrivateClassesComponent(privateClasses: List<SkyFitClassCalendarCardItem>,
-                                                                  onClick: () -> Unit = {}) {
+    fun MobileFacilityProfileVisitedScreenPrivateClassesComponent(
+        privateClasses: List<SkyFitClassCalendarCardItem>,
+        onClick: () -> Unit = {}
+    ) {
         Column(
             Modifier
-                .padding(16.dp).fillMaxWidth()
+                .padding(horizontal = 16.dp)
+                .fillMaxWidth()
                 .background(SkyFitColor.background.fillTransparent, RoundedCornerShape(20.dp))
                 .clickable(onClick = onClick)
                 .padding(16.dp)

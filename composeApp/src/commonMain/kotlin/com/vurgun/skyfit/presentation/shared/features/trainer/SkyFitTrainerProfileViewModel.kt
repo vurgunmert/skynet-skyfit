@@ -128,10 +128,10 @@ val fakePosts: List<PostViewData> = List(6) { index ->
 }
 
 val fakeSpecialities: List<SpecialityItemComponentViewData> = listOf(
-    SpecialityItemComponentViewData("Fonksiyonel Antrenman", "push_up"),
-    SpecialityItemComponentViewData("Kuvvet ve Kondisyon", "muscle"),
-    SpecialityItemComponentViewData("Beslenme Danışmanlığı", "nutrition"),
-    SpecialityItemComponentViewData("Atletik Performans Geliştirme", "athlete"),
-    SpecialityItemComponentViewData("Beslenme Danışmanlığı", "nutrition"),
-    SpecialityItemComponentViewData("Atletik Performans Geliştirme", "athlete")
+    SpecialityItemComponentViewData("Fonksiyonel Antrenman", "ic_push_up"),
+    SpecialityItemComponentViewData("Kuvvet ve Kondisyon", "ic_biceps_force"),
+    SpecialityItemComponentViewData("Beslenme Danışmanlığı", "ic_meal"),
+    SpecialityItemComponentViewData("Atletik Performans Geliştirme", "ic_barbell"),
+    SpecialityItemComponentViewData("Beslenme Danışmanlığı", "ic_meal"),
+    SpecialityItemComponentViewData("Atletik Performans Geliştirme", "ic_athletic_performance")
 )

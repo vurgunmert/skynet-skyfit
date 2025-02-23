@@ -80,6 +80,7 @@ import skyfit.composeapp.generated.resources.Res
 import skyfit.composeapp.generated.resources.ic_clock
 import skyfit.composeapp.generated.resources.ic_dashboard
 import skyfit.composeapp.generated.resources.ic_exercises
+import skyfit.composeapp.generated.resources.ic_medal
 import skyfit.composeapp.generated.resources.ic_note
 import skyfit.composeapp.generated.resources.ic_profile_fill
 import skyfit.composeapp.generated.resources.logo_skyfit
@@ -115,10 +116,7 @@ fun MobileTrainerProfileScreen(navigator: Navigator) {
                         .padding(top = contentTopPadding)
                         .fillMaxWidth()
                 ) {
-
-                    profileData?.let {
-                        MobileTrainerProfileInfoCardComponent(it)
-                    }
+                    MobileTrainerProfileInfoCardComponent(profileData)
 
                     Spacer(Modifier.height(16.dp))
                     MobileUserProfileActionsComponent(
@@ -161,6 +159,8 @@ fun MobileTrainerProfileAboutGroupComponent(
         } else {
             MobileTrainerProfilePrivateClassesComponent(privateClasses)
         }
+
+        Spacer(Modifier.height(124.dp))
     }
 }
 
@@ -263,7 +263,7 @@ fun MobileTrainerProfileSpecialitiesComponent(specialities: List<SpecialityItemC
 
         Row(verticalAlignment = Alignment.CenterVertically) {
             Icon(
-                painter = painterResource(Res.drawable.logo_skyfit),
+                painter = painterResource(Res.drawable.ic_medal),
                 modifier = Modifier.size(24.dp),
                 contentDescription = "",
                 tint = SkyFitColor.icon.default
@@ -305,7 +305,7 @@ private fun MobileTrainerProfileSpecialityItemComponent(data: SpecialityItemComp
             contentAlignment = Alignment.Center
         ) {
             Icon(
-                painter = SkyFitIcon.getIconResourcePainter(data.iconId) ?: painterResource(Res.drawable.logo_skyfit),
+                painter = SkyFitIcon.getIconResourcePainter(data.iconId, defaultRes = Res.drawable.ic_exercises),
                 modifier = Modifier.size(32.dp),
                 contentDescription = "",
                 tint = SkyFitColor.icon.default

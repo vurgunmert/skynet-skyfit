@@ -41,8 +41,8 @@ import com.vurgun.skyfit.presentation.shared.resources.SkyFitColor
 import com.vurgun.skyfit.presentation.shared.resources.SkyFitTypography
 import org.jetbrains.compose.resources.painterResource
 import skyfit.composeapp.generated.resources.Res
+import skyfit.composeapp.generated.resources.ic_delete
 import skyfit.composeapp.generated.resources.ic_search
-import skyfit.composeapp.generated.resources.logo_skyfit
 
 @Composable
 fun SkyFitSearchTextInputComponent(
@@ -118,10 +118,9 @@ fun SkyFitSearchFilterBarComponent(onEnableSearch: (Boolean) -> Unit) {
         horizontalArrangement = Arrangement.spacedBy(8.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
-        // First icon for showing search
         item {
             SkyFitIconButton(
-                painter = painterResource(Res.drawable.logo_skyfit),
+                painter = painterResource(Res.drawable.ic_search),
                 onClick = {
                     isSearchVisible = !isSearchVisible
                     onEnableSearch(isSearchVisible)
@@ -129,15 +128,13 @@ fun SkyFitSearchFilterBarComponent(onEnableSearch: (Boolean) -> Unit) {
             )
         }
 
-        // Second icon for deselecting all filters
         item {
             SkyFitIconButton(
-                painter = painterResource(Res.drawable.logo_skyfit),
+                painter = painterResource(Res.drawable.ic_delete),
                 onClick = { selectedItems = emptySet() }
             )
         }
 
-        // Filter items
         items(filterItems) { filter ->
             SkyFitSearchFilter(
                 text = filter,

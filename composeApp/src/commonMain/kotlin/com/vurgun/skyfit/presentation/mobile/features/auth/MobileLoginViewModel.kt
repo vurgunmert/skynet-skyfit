@@ -17,7 +17,7 @@ class MobileLoginViewModel(
     private val authenticatePhoneNumberUseCase: AuthenticatePhoneNumberUseCase
 ) : ViewModel() {
 
-    private val _phoneNumber = MutableStateFlow("")
+    private val _phoneNumber = MutableStateFlow("5555555555")
     val phoneNumber: StateFlow<String> = _phoneNumber.asStateFlow()
 
     val isLoginEnabled: StateFlow<Boolean> = _phoneNumber.map { it.length == 10 }

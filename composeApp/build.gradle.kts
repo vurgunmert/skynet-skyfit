@@ -44,6 +44,7 @@ kotlin {
 
             // Compose Components
             implementation("cz.kudladev:datetimepicker-kmp:1.0.7")
+            implementation("com.google.accompanist:accompanist-permissions:0.37.2")
 
             // Kotlinx
             implementation(libs.kotlinx.coroutines.core)

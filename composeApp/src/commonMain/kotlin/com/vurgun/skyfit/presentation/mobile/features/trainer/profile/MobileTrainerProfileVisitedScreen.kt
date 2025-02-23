@@ -18,231 +18,242 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Icon
-import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.blur
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.dp
+import coil3.compose.AsyncImage
+import com.vurgun.skyfit.presentation.mobile.features.facility.profile.MobileFacilityProfileVisitedScreen.MobileFacilityProfileVisitedScreenPrivateClassesComponent
 import com.vurgun.skyfit.presentation.mobile.features.user.profile.MobileVisitedProfileActionsComponent
+import com.vurgun.skyfit.presentation.mobile.features.user.profile.UserProfileCardPreferenceRow
 import com.vurgun.skyfit.presentation.shared.components.ButtonSize
 import com.vurgun.skyfit.presentation.shared.components.ButtonVariant
 import com.vurgun.skyfit.presentation.shared.components.SkyFitButtonComponent
-import com.vurgun.skyfit.presentation.shared.components.button.SkyFitIconButton
-import com.vurgun.skyfit.presentation.shared.features.profile.ProfileCardVerticalDetailItemComponent
-import com.vurgun.skyfit.presentation.shared.features.profile.VerticalDetailDivider
+import com.vurgun.skyfit.presentation.shared.components.button.SkyFitPrimaryCircularBackButton
 import com.vurgun.skyfit.presentation.shared.features.trainer.SkyFitTrainerProfileViewModel
+import com.vurgun.skyfit.presentation.shared.features.user.TopBarGroupViewData
+import com.vurgun.skyfit.presentation.shared.navigation.NavigationRoute
+import com.vurgun.skyfit.presentation.shared.navigation.jumpAndStay
 import com.vurgun.skyfit.presentation.shared.resources.SkyFitColor
 import com.vurgun.skyfit.presentation.shared.resources.SkyFitTypography
 import moe.tlaster.precompose.navigation.Navigator
 import org.jetbrains.compose.resources.painterResource
 import skyfit.composeapp.generated.resources.Res
-import skyfit.composeapp.generated.resources.logo_skyfit
+import skyfit.composeapp.generated.resources.ic_calendar_dots
+import skyfit.composeapp.generated.resources.ic_send
 
 @Composable
 fun MobileTrainerProfileVisitedScreen(navigator: Navigator) {
 
-    val viewModel = SkyFitTrainerProfileViewModel()
+    val viewModel = remember { SkyFitTrainerProfileViewModel() }
     val scrollState = rememberScrollState()
-    var showPosts: Boolean = false
-    val followed: Boolean = false
+    var showPosts by remember { mutableStateOf(false) }
+
     val profileData by viewModel.profileData.collectAsState()
-    val specialities = viewModel.specialities.collectAsState().value
+    val specialities by viewModel.specialities.collectAsState()
     val privateClasses = viewModel.privateClasses.collectAsState().value
     val posts = viewModel.posts.collectAsState().value
+    var isFollowing by remember { mutableStateOf(false) }
 
-    Scaffold(
-        backgroundColor = SkyFitColor.background.default,
-        topBar = {
-            BoxWithConstraints {
-                val width = maxWidth
-                val imageHeight = width * 9 / 16
-                val contentTopPadding = imageHeight * 3 / 10
+    LaunchedEffect(Unit) {
+        viewModel.loadData()
+    }
 
-                MobileTrainerProfileBackgroundImageComponent(imageHeight)
-
-                Column(
-                    Modifier
-                        .padding(top = contentTopPadding)
-                        .fillMaxWidth()
-                ) {
-                    MobileTrainerProfileInfoCardComponent(profileData)
-                    Spacer(Modifier.height(16.dp))
-                    MobileTrainerProfileVisitedScreenActionsComponent(
-                        onClickAbout = { showPosts = false },
-                        onClickPosts = { showPosts = true },
-                        onClickMessage = {}
-                    )
-                }
-
-                MobileTrainerProfileVisitedScreenToolbarComponent(onClickBack = { navigator.popBackStack() })
-            }
-        }
+    BoxWithConstraints(
+        modifier = Modifier.fillMaxSize()
+            .background(SkyFitColor.background.default)
     ) {
+        val width = maxWidth
+        val imageHeight = width * 9 / 16
+        val contentTopPadding = imageHeight * 3 / 10
+
+        MobileTrainerProfileBackgroundImageComponent(imageHeight)
+
         Column(
             modifier = Modifier.fillMaxSize().verticalScroll(scrollState),
             horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.spacedBy(16.dp)
         ) {
+            Spacer(Modifier.height(contentTopPadding))
+
+            MobileTrainerProfileVisitedScreenInfoCardComponent(
+                viewData = profileData,
+                isFollowing = isFollowing,
+                onClickFollow = { isFollowing = true },
+                onClickUnFollow = { isFollowing = false },
+                onClickCalendar = { navigator.jumpAndStay(NavigationRoute.FacilityCalendarVisited) }
+            )
+
+            MobileTrainerProfileVisitedScreenActionsComponent(
+                showMessage = isFollowing,
+                onClickAbout = { showPosts = false },
+                onClickPosts = { showPosts = true },
+                onClickMessage = { navigator.jumpAndStay(NavigationRoute.UserToTrainerChat) }
+            )
+
             if (showPosts) {
                 MobileTrainerProfilePostsComponent(posts)
             } else {
 
-                MobileTrainerProfileVisitedScreenSpecialitiesComponent(specialities)
+                if (specialities.isNotEmpty()) {
+                    MobileTrainerProfileSpecialitiesComponent(specialities)
+                }
 
-                Spacer(Modifier.height(16.dp))
-
-                MobileTrainerProfilePrivateClassesComponent(privateClasses)
+                if (privateClasses.isNotEmpty()) {
+                    MobileFacilityProfileVisitedScreenPrivateClassesComponent(privateClasses, onClick = {
+                        navigator.jumpAndStay(NavigationRoute.FacilityCalendarVisited)
+                    })
+                }
             }
         }
+
+        MobileTrainerProfileVisitedScreenToolbarComponent(onClickBack = { navigator.popBackStack() })
     }
 }
 
 @Composable
 private fun MobileTrainerProfileVisitedScreenToolbarComponent(onClickBack: () -> Unit) {
     Box(Modifier.fillMaxWidth().padding(horizontal = 8.dp, vertical = 24.dp)) {
-        SkyFitIconButton(
-            painter = painterResource(Res.drawable.logo_skyfit),
-            modifier = Modifier.size(48.dp).clickable(onClick = onClickBack)
-        )
+        SkyFitPrimaryCircularBackButton(onClick = onClickBack)
     }
 }
 
 @Composable
 private fun MobileTrainerProfileVisitedScreenInfoCardComponent(
+    viewData: TopBarGroupViewData?,
+    isFollowing: Boolean,
     onClickFollow: () -> Unit,
     onClickUnFollow: () -> Unit,
-    onClickCalendar: () -> Unit,
-    onClickMessage: () -> Unit,
+    onClickCalendar: () -> Unit
 ) {
-    var isFollowing: Boolean = true
+    viewData ?: return
 
-    Box(
-        modifier = Modifier
-            .padding(horizontal = 16.dp)
-            .fillMaxWidth()
-            .background(color = SkyFitColor.background.surfaceSecondary, RoundedCornerShape(16.dp))
-            .padding(24.dp)
-    ) {
-
-        Column(
-            modifier = Modifier.fillMaxWidth(),
-            horizontalAlignment = Alignment.CenterHorizontally
+    Box(modifier = Modifier.fillMaxWidth()) {
+        Box(
+            modifier = Modifier
+                .padding(top = 70.dp)
+                .padding(horizontal = 16.dp)
+                .width(398.dp)
+                .background(SkyFitColor.background.fillTransparent, RoundedCornerShape(16.dp))
         ) {
-            Row(
-                horizontalArrangement = Arrangement.Center,
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                Text(
-                    text = "item.name",
-                    style = SkyFitTypography.bodyLargeSemibold,
-                )
-                Spacer(modifier = Modifier.width(8.dp))
-                Text(
-                    text = "item.socialDisplayLink.orEmpty()",
-                    style = SkyFitTypography.bodySmallMedium,
-                    color = SkyFitColor.text.secondary
-                )
-            }
-
-            Spacer(modifier = Modifier.height(16.dp))
-
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.SpaceAround,
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                ProfileCardVerticalDetailItemComponent(title = "${333}", subtitle = "Takipçi")
-                VerticalDetailDivider()
-                ProfileCardVerticalDetailItemComponent(title = "${22}", subtitle = "Ozel Ders")
-                VerticalDetailDivider()
-                ProfileCardVerticalDetailItemComponent(title = "${123}", subtitle = "Paylasimlar")
-            }
-
-            Text(
-                text = "item.bio.orEmpty()",
-                style = SkyFitTypography.bodySmall,
-                modifier = Modifier.padding(top = 16.dp).fillMaxWidth()
+            Box(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .background(Color(0xFF012E36).copy(alpha = 0.88f), RoundedCornerShape(16.dp))
+                    .blur(40.dp)
             )
 
-            Row(verticalAlignment = Alignment.CenterVertically) {
-                Icon(
-                    painter = painterResource(Res.drawable.logo_skyfit),
-                    contentDescription = null,
-                    modifier = Modifier.size(16.dp),
-                    tint = SkyFitColor.icon.default
-                )
-                Text(
-                    text = "item.location",
-                    style = SkyFitTypography.bodySmallSemibold,
-                    modifier = Modifier.padding(top = 16.dp).fillMaxWidth()
-                )
-            }
+            Column(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .background(color = SkyFitColor.background.surfaceSecondary, RoundedCornerShape(16.dp))
+                    .padding(start = 16.dp, top = 36.dp, end = 16.dp, bottom = 16.dp),
+                horizontalAlignment = Alignment.CenterHorizontally,
+            ) {
+                Row(
+                    horizontalArrangement = Arrangement.Center,
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Text(
+                        text = viewData.name,
+                        style = SkyFitTypography.bodyLargeSemibold
+                    )
+                    Spacer(modifier = Modifier.width(8.dp)) // Space between name and social link
+                    Text(
+                        text = viewData.social,
+                        style = SkyFitTypography.bodySmallMedium,
+                        color = SkyFitColor.text.secondary
+                    )
+                }
 
-            SkyFitButtonComponent(
-                modifier = Modifier.fillMaxWidth(),
-                text = if (isFollowing) "Takipten Çık" else "Takip Et",
-                onClick = if (isFollowing) onClickUnFollow else onClickFollow,
-                variant = ButtonVariant.Primary,
-                size = ButtonSize.Large
-            )
+                Spacer(modifier = Modifier.height(16.dp))
 
-            Spacer(modifier = Modifier.height(16.dp))
+                if (viewData.preferences.isNotEmpty()) {
+                    UserProfileCardPreferenceRow(Modifier.fillMaxWidth())
+                }
 
-            Row(verticalAlignment = Alignment.CenterVertically) {
+                Spacer(modifier = Modifier.height(16.dp))
+
                 SkyFitButtonComponent(
-                    modifier = Modifier.weight(1f),
-                    text = "Randevu Al",
-                    onClick = onClickCalendar,
-                    variant = ButtonVariant.Secondary,
-                    size = ButtonSize.Large,
-                    leftIconPainter = painterResource(Res.drawable.logo_skyfit)
+                    modifier = Modifier.fillMaxWidth(),
+                    text = if (isFollowing) "Takipten Çık" else "Takip Et",
+                    onClick = if (isFollowing) onClickUnFollow else onClickFollow,
+                    variant = ButtonVariant.Primary,
+                    size = ButtonSize.Large
                 )
-                if (isFollowing) {
-                    Spacer(modifier = Modifier.width(10.dp))
-                    SkyFitIconButton(
-                        painter = painterResource(Res.drawable.logo_skyfit),
-                        modifier = Modifier.size(44.dp)
+
+                Spacer(modifier = Modifier.height(16.dp))
+
+                Row(verticalAlignment = Alignment.CenterVertically) {
+                    SkyFitButtonComponent(
+                        modifier = Modifier.weight(1f),
+                        text = "Randevu Al",
+                        onClick = onClickCalendar,
+                        variant = ButtonVariant.Secondary,
+                        size = ButtonSize.Large,
+                        leftIconPainter = painterResource(Res.drawable.ic_calendar_dots)
                     )
                 }
             }
         }
+
+        AsyncImage(
+            model = viewData.imageUrl,
+            contentDescription = "Profile",
+            contentScale = ContentScale.Crop,
+            modifier = Modifier
+                .size(100.dp)
+                .clip(RoundedCornerShape(20.dp))
+                .align(Alignment.TopCenter)
+        )
     }
 }
 
 @Composable
 private fun MobileTrainerProfileVisitedScreenActionsComponent(
+    showMessage: Boolean,
     onClickAbout: () -> Unit,
     onClickPosts: () -> Unit,
     onClickMessage: () -> Unit
 ) {
-
-    Row(Modifier.padding(horizontal = 16.dp).fillMaxWidth()) {
+    Row(
+        Modifier.padding(horizontal = 16.dp).fillMaxWidth(),
+        horizontalArrangement = Arrangement.spacedBy(16.dp),
+        verticalAlignment = Alignment.CenterVertically
+    ) {
         MobileVisitedProfileActionsComponent(
-            Modifier.weight(1f),
-            onClickAbout,
-            onClickPosts
+            modifier = Modifier.weight(1f),
+            onClickAbout = onClickAbout,
+            onClickPosts = onClickPosts
         )
-        Spacer(Modifier.width(16.dp))
-        Box(
-            Modifier.size(56.dp)
-                .background(SkyFitColor.background.surfaceSecondary, RoundedCornerShape(16.dp))
-                .clickable(onClick = onClickMessage), contentAlignment = Alignment.Center
-        ) {
-            Icon(
-                painter = painterResource(Res.drawable.logo_skyfit),
-                contentDescription = "Message",
-                tint = SkyFitColor.icon.default,
-                modifier = Modifier.size(24.dp)
-            )
+
+        if (showMessage) {
+            Box(
+                Modifier
+                    .background(SkyFitColor.background.surfaceSecondary, RoundedCornerShape(16.dp))
+                    .clickable(onClick = onClickMessage)
+                    .padding(12.dp),
+                contentAlignment = Alignment.Center
+            ) {
+                Icon(
+                    painter = painterResource(Res.drawable.ic_send),
+                    contentDescription = "Send",
+                    tint = SkyFitColor.icon.default,
+                    modifier = Modifier.size(24.dp)
+                )
+            }
         }
     }
 }
 
-@Composable
-private fun MobileTrainerProfileVisitedScreenSpecialitiesComponent(specialities: List<SpecialityItemComponentViewData>) {
-    if (specialities.isNotEmpty()) {
-        MobileTrainerProfileSpecialitiesComponent(specialities)
-    }
-}
