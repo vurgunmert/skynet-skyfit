@@ -27,6 +27,7 @@ import com.vurgun.skyfit.presentation.shared.resources.SkyFitTypography
 import moe.tlaster.precompose.navigation.Navigator
 import org.jetbrains.compose.resources.painterResource
 import skyfit.composeapp.generated.resources.Res
+import skyfit.composeapp.generated.resources.ic_medal
 import skyfit.composeapp.generated.resources.logo_skyfit
 
 @Composable
@@ -60,7 +61,7 @@ fun MobileUserTrophiesScreen(navigator: Navigator) {
 private fun MobileUserTrophiesUserInfoComponent() {
     Column(horizontalAlignment = Alignment.CenterHorizontally) {
         AvatarImage(
-            avatarUrl = "",
+            avatarUrl = "https://ik.imagekit.io/skynet2skyfit/Profile%20Photo.png?updatedAt=1739703080462",
             modifier = Modifier.size(64.dp)
         )
         Spacer(Modifier.height(4.dp))
@@ -68,7 +69,7 @@ private fun MobileUserTrophiesUserInfoComponent() {
         Spacer(Modifier.height(4.dp))
         Row(verticalAlignment = Alignment.CenterVertically) {
             Icon(
-                painter = painterResource(Res.drawable.logo_skyfit),
+                painter = painterResource(Res.drawable.ic_medal),
                 modifier = Modifier.size(24.dp),
                 contentDescription = ""
             )
@@ -88,7 +89,7 @@ private fun MobileUserTrophiesComponent() {
         horizontalArrangement = Arrangement.spacedBy(16.dp)
     ) {
         items(15) { // Replace 15 with the actual count of trophies
-            MobileUserTrophyItemComponent(modifier = Modifier.size(72.dp, 98.dp))
+            MobileUserTrophyItemComponent(modifier = Modifier)
         }
     }
 }

@@ -24,11 +24,7 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Icon
-import androidx.compose.material.IconButton
 import androidx.compose.material.Text
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.KeyboardArrowLeft
-import androidx.compose.material.icons.filled.KeyboardArrowRight
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -62,7 +58,9 @@ import kotlinx.datetime.plus
 import moe.tlaster.precompose.navigation.Navigator
 import org.jetbrains.compose.resources.painterResource
 import skyfit.composeapp.generated.resources.Res
-import skyfit.composeapp.generated.resources.logo_skyfit
+import skyfit.composeapp.generated.resources.ic_chevron_left
+import skyfit.composeapp.generated.resources.ic_chevron_right
+import skyfit.composeapp.generated.resources.ic_plus
 
 @Composable
 fun MobileUserMealsScreen(rootNavigator: Navigator) {
@@ -76,26 +74,30 @@ fun MobileUserMealsScreen(rootNavigator: Navigator) {
         selectedDate = selectedDate.plus(7, DateTimeUnit.DAY) // Go forward 7 days
     }
 
-    SkyFitScaffold {
-        Column(
-            modifier = Modifier.fillMaxSize().verticalScroll(rememberScrollState()),
-            horizontalAlignment = Alignment.CenterHorizontally,
-        ) {
-            Spacer(Modifier.height(22.dp))
-
-
+    SkyFitScaffold(
+        topBar = {
             MobileDashboardNutritionScreenDayOfWeekComponent(
                 selectedDate = selectedDate,
                 onDateSelected = { newDate -> selectedDate = newDate },
                 onPreviousWeek = { goToPreviousWeek() },
                 onNextWeek = { goToNextWeek() }
             )
-            Spacer(Modifier.height(22.dp))
-            MobileDashboardNutritionScreenStatisticsComponent()
-            Spacer(Modifier.height(32.dp))
-            MobileDashboardNutritionScreenMealsComponent()
-            MobileDashboardNutritionScreenMealEditActionComponent(onClick = {})
+        }
+    ) {
 
+        Column(
+            modifier = Modifier
+                .padding(16.dp)
+                .fillMaxSize()
+                .verticalScroll(rememberScrollState()),
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.spacedBy(16.dp)
+        ) {
+            MobileDashboardNutritionScreenStatisticsComponent()
+
+            MobileDashboardNutritionScreenMealsComponent()
+
+            MobileDashboardNutritionScreenMealEditActionComponent(onClick = {})
         }
     }
 }
@@ -119,12 +121,16 @@ object MobileUserMealsScreen {
                 .fillMaxWidth()
                 .padding(horizontal = 16.dp, vertical = 8.dp),
             verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.SpaceBetween
+            horizontalArrangement = Arrangement.Center
         ) {
             // Left Arrow (Previous Week)
-            IconButton(onClick = onPreviousWeek) {
-                Icon(imageVector = Icons.Default.KeyboardArrowLeft, contentDescription = "Previous", tint = SkyFitColor.icon.default)
-            }
+            Icon(
+                painter = painterResource(Res.drawable.ic_chevron_left),
+                contentDescription = "Previous",
+                modifier = Modifier.size(24.dp),
+                tint = SkyFitColor.icon.default
+            )
+            Spacer(Modifier.width(4.dp))
 
             Column(horizontalAlignment = Alignment.CenterHorizontally) {
                 // Weekday Labels
@@ -164,10 +170,15 @@ object MobileUserMealsScreen {
                 }
             }
 
+            Spacer(Modifier.width(4.dp))
+
             // Right Arrow (Next Week)
-            IconButton(onClick = onNextWeek) {
-                Icon(imageVector = Icons.Default.KeyboardArrowRight, contentDescription = "Next", tint = SkyFitColor.icon.default)
-            }
+            Icon(
+                painter = painterResource(Res.drawable.ic_chevron_right),
+                contentDescription = "Next",
+                modifier = Modifier.size(24.dp),
+                tint = SkyFitColor.icon.default
+            )
         }
     }
 
@@ -372,7 +383,7 @@ object MobileUserMealsScreen {
                         variant = ButtonVariant.Secondary,
                         size = ButtonSize.Micro,
                         state = ButtonState.Rest,
-                        leftIconPainter = painterResource(Res.drawable.logo_skyfit)
+                        leftIconPainter = painterResource(Res.drawable.ic_plus)
                     )
                 }
             }
@@ -405,7 +416,7 @@ object MobileUserMealsScreen {
                 variant = ButtonVariant.Secondary,
                 size = ButtonSize.Medium,
                 state = ButtonState.Rest,
-                leftIconPainter = painterResource(Res.drawable.logo_skyfit)
+                leftIconPainter = painterResource(Res.drawable.ic_plus)
             )
         }
     }

@@ -59,6 +59,7 @@ import com.vurgun.skyfit.presentation.shared.components.SkyFitColoredCalendarCom
 import com.vurgun.skyfit.presentation.shared.components.SkyFitListItemCardComponent
 import com.vurgun.skyfit.presentation.shared.components.SkyFitMonthPickerDropdownComponent
 import com.vurgun.skyfit.presentation.shared.resources.SkyFitColor
+import com.vurgun.skyfit.presentation.shared.resources.SkyFitIcon
 import com.vurgun.skyfit.presentation.shared.resources.SkyFitTypography
 import org.jetbrains.compose.resources.DrawableResource
 import org.jetbrains.compose.resources.painterResource
@@ -110,11 +111,13 @@ fun MobileDashboardHomeCharacterProgressComponent(
     exerciseProgress: Float = 0.7f,
     calorieProgress: Float = 0.1f,
     activityProgress: Float = 0.5f,
+    onClick: () -> Unit
 ) {
 
     Box(
         modifier = Modifier
             .fillMaxWidth()
+            .clickable(onClick = onClick)
             .padding(horizontal = 16.dp, vertical = 24.dp)
     ) {
         UserCharacterComponent(Modifier.align(Alignment.Center))
@@ -179,7 +182,7 @@ fun MobileDashboardHomeTrophiesBarComponent(
 }
 
 @Composable
-fun MobileDashboardHomeWeekProgressComponent() {
+fun MobileDashboardHomeWeekProgressComponent(onClick: () -> Unit) {
     val progressData = listOf(60, 42, 100, 0, 0, 0, 0) // Progress values for each day
     val daysOfWeek = listOf("Pzt", "Sal", "Çar", "Per", "Cum", "Cmrt", "Paz") // Day labels
     val selectedDay = 2 // Highlighted day index (e.g., Wednesday - Çar)
@@ -189,6 +192,7 @@ fun MobileDashboardHomeWeekProgressComponent() {
             .padding(horizontal = 16.dp)
             .fillMaxWidth()
             .height(148.dp)
+            .clickable(onClick = onClick)
     ) {
         Text(
             text = "Bu hafta",
@@ -393,17 +397,19 @@ fun MobileDashboardHomeUpcomingAppointmentsComponent(
 
         appointments.forEach { appointment ->
             Spacer(modifier = Modifier.height(8.dp))
-            MobileDashboardHomeAppointmentCard(appointment)
+            MobileDashboardHomeAppointmentCard(appointment, onClick = onClickShowAll)
         }
     }
 }
 
 @Composable
-private fun MobileDashboardHomeAppointmentCard(appointment: HomeAppointmentComponentItem) {
+private fun MobileDashboardHomeAppointmentCard(appointment: HomeAppointmentComponentItem,
+                                               onClick: () -> Unit = {}) {
     SkyFitListItemCardComponent(
         modifier = Modifier
             .fillMaxWidth()
             .background(SkyFitColor.background.surfaceSecondary, RoundedCornerShape(16.dp))
+            .clickable(onClick = onClick)
             .padding(12.dp)
     ) {
         Box(
@@ -413,7 +419,7 @@ private fun MobileDashboardHomeAppointmentCard(appointment: HomeAppointmentCompo
             contentAlignment = Alignment.Center
         ) {
             Icon(
-                imageVector = Icons.Default.Face,
+                painter = SkyFitIcon.getIconResourcePainter(appointment.iconId, Res.drawable.ic_exercises),
                 contentDescription = "Activity",
                 tint = SkyFitColor.icon.default,
                 modifier = Modifier.size(24.dp)

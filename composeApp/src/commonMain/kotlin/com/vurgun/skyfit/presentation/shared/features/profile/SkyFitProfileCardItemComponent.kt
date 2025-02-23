@@ -77,6 +77,7 @@ fun FacilityProfileCardItemBox(
             Pair("$trainerCount", "Eğitmen")
         ),
         rating = rating,
+        showRatingInDetail = true,
         onClick = onClick
     )
 }
@@ -87,6 +88,7 @@ private fun ProfileCardItemBox(
     name: String,
     details: List<Pair<String, String>>,
     rating: Double,
+    showRatingInDetail: Boolean = false,
     onClick: () -> Unit
 ) {
     Box(
@@ -150,6 +152,10 @@ private fun ProfileCardItemBox(
                         ProfileCardVerticalDetailItemComponent(title = detail.first, subtitle = detail.second)
                         if (index < details.lastIndex) VerticalDetailDivider()
                     }
+                    if (showRatingInDetail) {
+                        VerticalDetailDivider()
+                        RatingStarComponent(rating, Modifier.padding(8.dp))
+                    }
                 }
             }
         }
@@ -173,7 +179,7 @@ fun ProfileCardVerticalDetailItemComponent(title: String, subtitle: String) {
 fun RatingStarComponent(rating: Double, modifier: Modifier = Modifier) {
     Row(
         modifier = modifier
-            .background(SkyFitColor.background.fillTransparentSecondary, CircleShape)
+            .background(SkyFitColor.background.fillSemiTransparent, CircleShape)
             .padding(horizontal = 8.dp, vertical = 4.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
@@ -308,14 +314,13 @@ fun ExerciseProfileCardItemComponent(
 }
 
 @Composable
-fun AvatarImage(avatarUrl: String, modifier: Modifier = Modifier) {
-    Image(
-        painter = painterResource(Res.drawable.logo_skyfit), // Replace with actual image loading logic
+fun AvatarImage(avatarUrl: String, modifier: Modifier = Modifier.size(32.dp)) {
+    AsyncImage(
+        model = avatarUrl,
         contentDescription = "Avatar",
         modifier = modifier
-            .size(32.dp)
-            .clip(RoundedCornerShape(16.dp))
-            .background(Color.Gray), // Placeholder background
+            .clip(CircleShape)
+            .background(Color.Gray),
         contentScale = ContentScale.Crop
     )
 }

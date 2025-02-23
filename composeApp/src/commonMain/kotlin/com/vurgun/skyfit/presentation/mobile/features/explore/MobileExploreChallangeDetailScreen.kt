@@ -14,16 +14,17 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Icon
-import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Star
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -37,6 +38,7 @@ import com.vurgun.skyfit.presentation.shared.components.ButtonSize
 import com.vurgun.skyfit.presentation.shared.components.ButtonState
 import com.vurgun.skyfit.presentation.shared.components.ButtonVariant
 import com.vurgun.skyfit.presentation.shared.components.SkyFitButtonComponent
+import com.vurgun.skyfit.presentation.shared.components.SkyFitScaffold
 import com.vurgun.skyfit.presentation.shared.components.SkyFitScreenHeader
 import com.vurgun.skyfit.presentation.shared.resources.SkyFitColor
 import moe.tlaster.precompose.navigation.Navigator
@@ -44,20 +46,22 @@ import moe.tlaster.precompose.navigation.Navigator
 @Composable
 fun MobileExploreChallengeDetailScreen(rootNavigator: Navigator) {
 
-    var joined: Boolean = true
+    var userJoined by remember { mutableStateOf(true) }
     var challengeTitle = "10,000 Steps a Day Challenge"
 
-    Scaffold(
-        backgroundColor = SkyFitColor.background.default,
+    SkyFitScaffold(
         topBar = {
             SkyFitScreenHeader(challengeTitle, onClickBack = { rootNavigator.popBackStack() })
         }
     ) {
         Column(
-            modifier = Modifier.fillMaxSize().verticalScroll(rememberScrollState()),
+            modifier = Modifier
+                .padding(16.dp)
+                .fillMaxSize(),
             horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.spacedBy(16.dp)
         ) {
-            if (joined) {
+            if (userJoined) {
                 MobileExploreChallengeDetailScreenParticipantBarComponent()
             } else {
 //                MobileExploreChallengeDetailScreenJoinInfoComponent()
@@ -65,11 +69,15 @@ fun MobileExploreChallengeDetailScreen(rootNavigator: Navigator) {
 
             MobileExploreChallengeDetailScreenLeadershipBoardComponent()
 
-            if (joined) {
-                MobileExploreChallengeDetailScreenExitActionComponent()
+            Spacer(Modifier.weight(1f))
+
+            if (userJoined) {
+                MobileExploreChallengeDetailScreenExitActionComponent(onClick = { userJoined = false })
             } else {
-                MobileExploreChallengeDetailScreenJoinActionComponent()
+                MobileExploreChallengeDetailScreenJoinActionComponent(onClick = { userJoined = true })
             }
+
+            Spacer(Modifier.height(32.dp))
         }
     }
 }
@@ -87,7 +95,7 @@ private fun MobileExploreChallengeDetailScreenParticipantBarComponent() {
         modifier = Modifier
             .size(382.dp, 56.dp)
             .clip(RoundedCornerShape(16.dp))
-            .background(Color.DarkGray)
+            .background(SkyFitColor.background.surfaceSecondary)
             .padding(horizontal = 16.dp, vertical = 8.dp),
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.SpaceBetween
@@ -129,8 +137,8 @@ private fun MobileExploreChallengeDetailScreenLeadershipBoardComponent() {
 
     Column(
         modifier = Modifier
-            .size(382.dp, 644.dp)
-            .background(Color.Black, RoundedCornerShape(12.dp))
+            .size(382.dp, 400.dp)
+            .background(SkyFitColor.background.surfaceSecondary, RoundedCornerShape(12.dp))
             .padding(16.dp)
     ) {
         // Header
@@ -210,10 +218,10 @@ private fun TimeFilterSelector() {
 private data class LeaderboardEntry(val rank: Int, val name: String, val crowns: Int, val steps: String)
 
 @Composable
-private fun MobileExploreChallengeDetailScreenExitActionComponent() {
+private fun MobileExploreChallengeDetailScreenExitActionComponent(onClick: () -> Unit) {
     SkyFitButtonComponent(
         modifier = Modifier.fillMaxWidth(), text = "Ayril",
-        onClick = { },
+        onClick = onClick,
         variant = ButtonVariant.Secondary,
         size = ButtonSize.Large,
         state = ButtonState.Rest
@@ -221,10 +229,10 @@ private fun MobileExploreChallengeDetailScreenExitActionComponent() {
 }
 
 @Composable
-private fun MobileExploreChallengeDetailScreenJoinActionComponent() {
+private fun MobileExploreChallengeDetailScreenJoinActionComponent(onClick: () -> Unit) {
     SkyFitButtonComponent(
         modifier = Modifier.fillMaxWidth(), text = "Katil",
-        onClick = { },
+        onClick = onClick,
         variant = ButtonVariant.Primary,
         size = ButtonSize.Large,
         state = ButtonState.Rest

@@ -92,7 +92,7 @@ fun MobileNavigationGraph() {
 
     NavHost(
         navigator = rootNavigator,
-        initialRoute = NavigationRoute.TrainerProfileVisited.route
+        initialRoute = NavigationRoute.Splash.route
     ) {
 
         // Auth

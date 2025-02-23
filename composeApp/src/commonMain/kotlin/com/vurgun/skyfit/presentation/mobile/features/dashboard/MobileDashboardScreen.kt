@@ -6,9 +6,11 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Icon
 import androidx.compose.runtime.Composable
@@ -128,66 +130,79 @@ private fun MobileDashboardBottomBar(
             modifier = Modifier
                 .shadow(8.dp, shape = RoundedCornerShape(50), ambientColor = Color.Black, spotColor = Color.Black)
                 .background(SkyFitColor.specialty.buttonBgRest, RoundedCornerShape(50))
-                .padding(vertical = 16.dp, horizontal = 32.dp)
+                .padding(horizontal = 32.dp),
+            contentAlignment = Alignment.Center
         ) {
             Row(
                 modifier = Modifier.padding(vertical = 8.dp, horizontal = 8.dp),
-                horizontalArrangement = Arrangement.spacedBy(32.dp)
+                horizontalArrangement = Arrangement.spacedBy(24.dp)
             ) {
                 val homeIconRes = if (currentRoute == DashboardHome.route) Res.drawable.ic_home_fill else Res.drawable.ic_home
-                Icon(
-                    painter = painterResource(homeIconRes),
-                    contentDescription = "Home",
-                    tint = SkyFitColor.text.inverse,
-                    modifier = Modifier.size(24.dp).clickable(onClick = onClickHome)
-                )
-
-                val exploreIconRes = if (currentRoute == NavigationRoute.DashboardExplore.route) Res.drawable.ic_barbell_fill else Res.drawable.ic_barbell
-                Icon(
-                    painter = painterResource(exploreIconRes),
-                    contentDescription = "Explore",
-                    tint = SkyFitColor.text.inverse,
-                    modifier = Modifier.size(24.dp).clickable(onClick = onClickExplore)
-                )
-
-                val socialIconRes = if (currentRoute == NavigationRoute.DashboardSocial.route) Res.drawable.ic_plus else Res.drawable.ic_search
-                Icon(
-                    painter = painterResource(socialIconRes),
-                    contentDescription = if (currentRoute == NavigationRoute.DashboardSocial.route) "Add Post" else "Social",
-                    tint = SkyFitColor.text.inverse,
-                    modifier = Modifier.size(24.dp).clickable(
-                        onClick = if (currentRoute == NavigationRoute.DashboardSocial.route) onClickAddPost else onClickSocial
+                Box(Modifier.width(32.dp).height(68.dp).clickable(onClick = onClickHome), contentAlignment = Alignment.Center) {
+                    Icon(
+                        painter = painterResource(homeIconRes),
+                        contentDescription = "Home",
+                        tint = SkyFitColor.text.inverse,
+                        modifier = Modifier.size(24.dp)
                     )
-                )
+                }
 
-                val nutritionIconRes = if (currentRoute == NavigationRoute.DashboardNutrition.route) Res.drawable.ic_coffee_fill else Res.drawable.ic_coffee
-                Icon(
-                    painter = painterResource(nutritionIconRes),
-                    contentDescription = "Nutrition",
-                    tint = SkyFitColor.text.inverse,
-                    modifier = Modifier.size(24.dp).clickable(onClick = onClickNutrition)
-                )
+                val exploreIconRes =
+                    if (currentRoute == NavigationRoute.DashboardExplore.route) Res.drawable.ic_barbell_fill else Res.drawable.ic_barbell
+                Box(Modifier.width(32.dp).height(68.dp).clickable(onClick = onClickHome), contentAlignment = Alignment.Center) {
+                    Icon(
+                        painter = painterResource(exploreIconRes),
+                        contentDescription = "Explore",
+                        tint = SkyFitColor.text.inverse,
+                        modifier = Modifier.size(24.dp).clickable(onClick = onClickExplore)
+                    )
+                }
 
-                val profileIconRes = if (currentRoute == NavigationRoute.DashboardProfile.route) Res.drawable.ic_profile_fill else Res.drawable.ic_profile
-                Icon(
-                    painter = painterResource(profileIconRes),
-                    contentDescription = "Profile",
-                    tint = SkyFitColor.text.inverse,
-                    modifier = Modifier.size(24.dp).clickable(onClick = onClickProfile)
-                )
+                val socialIconRes =
+                    if (currentRoute == NavigationRoute.DashboardSocial.route) Res.drawable.ic_plus else Res.drawable.ic_search
+                Box(Modifier.width(32.dp).height(68.dp).clickable(onClick = onClickHome), contentAlignment = Alignment.Center) {
+                    Icon(
+                        painter = painterResource(socialIconRes),
+                        contentDescription = if (currentRoute == NavigationRoute.DashboardSocial.route) "Add Post" else "Social",
+                        tint = SkyFitColor.text.inverse,
+                        modifier = Modifier.size(24.dp).clickable(
+                            onClick = if (currentRoute == NavigationRoute.DashboardSocial.route) onClickAddPost else onClickSocial
+                        )
+                    )
+                }
+
+                val nutritionIconRes =
+                    if (currentRoute == NavigationRoute.DashboardNutrition.route) Res.drawable.ic_coffee_fill else Res.drawable.ic_coffee
+                Box(Modifier.width(32.dp).height(68.dp).clickable(onClick = onClickHome), contentAlignment = Alignment.Center) {
+                    Icon(
+                        painter = painterResource(nutritionIconRes),
+                        contentDescription = "Nutrition",
+                        tint = SkyFitColor.text.inverse,
+                        modifier = Modifier.size(24.dp).clickable(onClick = onClickNutrition)
+                    )
+                }
+
+                val profileIconRes =
+                    if (currentRoute == NavigationRoute.DashboardProfile.route) Res.drawable.ic_profile_fill else Res.drawable.ic_profile
+                Box(Modifier.width(32.dp).height(68.dp).clickable(onClick = onClickHome), contentAlignment = Alignment.Center) {
+                    Icon(
+                        painter = painterResource(profileIconRes),
+                        contentDescription = "Profile",
+                        tint = SkyFitColor.text.inverse,
+                        modifier = Modifier.size(24.dp).clickable(onClick = onClickProfile)
+                    )
+                }
             }
         }
 
         ChatBotButtonComponent(
             modifier = Modifier
                 .align(Alignment.BottomEnd)
-                .padding(bottom = 102.dp, end = 20.dp),
+                .padding(bottom = 112.dp, end = 20.dp),
             onClick = onClickChatBot
         )
     }
 }
-
-
 
 
 private fun Navigator.takeover(to: NavigationRoute) {

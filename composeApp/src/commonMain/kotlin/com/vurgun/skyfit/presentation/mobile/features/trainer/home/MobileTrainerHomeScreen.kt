@@ -61,6 +61,8 @@ import com.vurgun.skyfit.presentation.shared.components.ButtonSize
 import com.vurgun.skyfit.presentation.shared.components.ButtonState
 import com.vurgun.skyfit.presentation.shared.components.ButtonVariant
 import com.vurgun.skyfit.presentation.shared.components.SkyFitButtonComponent
+import com.vurgun.skyfit.presentation.shared.navigation.NavigationRoute
+import com.vurgun.skyfit.presentation.shared.navigation.jumpAndStay
 import com.vurgun.skyfit.presentation.shared.resources.SkyFitColor
 import com.vurgun.skyfit.presentation.shared.resources.SkyFitTypography
 import moe.tlaster.precompose.navigation.Navigator
@@ -80,13 +82,19 @@ fun MobileTrainerHomeScreen(rootNavigator: Navigator) {
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {
 
-            MobileDashboardHomeCharacterProgressComponent()
+            MobileDashboardHomeCharacterProgressComponent(
+                onClick = { rootNavigator.jumpAndStay(NavigationRoute.DashboardProfile) }
+            )
 
             Spacer(Modifier.height(24.dp))
 
-            MobileDashboardHomeTrophiesBarComponent()
+            MobileDashboardHomeTrophiesBarComponent(
+                onClick = { rootNavigator.jumpAndStay(NavigationRoute.UserTrophies) }
+            )
 
-            MobileDashboardHomeWeekProgressComponent()
+            MobileDashboardHomeWeekProgressComponent(
+                onClick = { rootNavigator.jumpAndStay(NavigationRoute.UserActivityCalendar) }
+            )
 
             MobileDashboardHomeTrainerStatisticsComponent()
 

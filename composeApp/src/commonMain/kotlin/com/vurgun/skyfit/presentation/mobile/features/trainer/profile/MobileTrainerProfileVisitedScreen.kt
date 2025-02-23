@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -41,6 +42,7 @@ import com.vurgun.skyfit.presentation.shared.components.ButtonSize
 import com.vurgun.skyfit.presentation.shared.components.ButtonVariant
 import com.vurgun.skyfit.presentation.shared.components.SkyFitButtonComponent
 import com.vurgun.skyfit.presentation.shared.components.button.SkyFitPrimaryCircularBackButton
+import com.vurgun.skyfit.presentation.shared.features.calendar.SkyFitClassCalendarCardItem
 import com.vurgun.skyfit.presentation.shared.features.trainer.SkyFitTrainerProfileViewModel
 import com.vurgun.skyfit.presentation.shared.features.user.TopBarGroupViewData
 import com.vurgun.skyfit.presentation.shared.navigation.NavigationRoute
@@ -81,7 +83,7 @@ fun MobileTrainerProfileVisitedScreen(navigator: Navigator) {
         MobileTrainerProfileBackgroundImageComponent(imageHeight)
 
         Column(
-            modifier = Modifier.fillMaxSize().verticalScroll(scrollState),
+            modifier = Modifier.fillMaxSize(),
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.spacedBy(16.dp)
         ) {
@@ -105,22 +107,37 @@ fun MobileTrainerProfileVisitedScreen(navigator: Navigator) {
             if (showPosts) {
                 MobileTrainerProfilePostsComponent(posts)
             } else {
-
-                if (specialities.isNotEmpty()) {
-                    MobileTrainerProfileSpecialitiesComponent(specialities)
-                }
-
-                if (privateClasses.isNotEmpty()) {
-                    MobileFacilityProfileVisitedScreenPrivateClassesComponent(privateClasses, onClick = {
-                        navigator.jumpAndStay(NavigationRoute.FacilityCalendarVisited)
-                    })
-                }
+                MobileTrainerProfileVisitedAboutGroup(specialities, privateClasses, navigator)
             }
         }
 
         MobileTrainerProfileVisitedScreenToolbarComponent(onClickBack = { navigator.popBackStack() })
     }
 }
+
+@Composable
+private fun ColumnScope.MobileTrainerProfileVisitedAboutGroup(
+    specialities: List<SpecialityItemComponentViewData> = emptyList(),
+    privateClasses: List<SkyFitClassCalendarCardItem> = emptyList(),
+    navigator: Navigator
+) {
+    Column(
+        modifier = Modifier.weight(1f).verticalScroll(rememberScrollState()),
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.spacedBy(16.dp)
+    ) {
+        if (specialities.isNotEmpty()) {
+            MobileTrainerProfileSpecialitiesComponent(specialities)
+        }
+
+        if (privateClasses.isNotEmpty()) {
+            MobileFacilityProfileVisitedScreenPrivateClassesComponent(privateClasses, onClick = {
+                navigator.jumpAndStay(NavigationRoute.FacilityCalendarVisited)
+            })
+        }
+    }
+}
+
 
 @Composable
 private fun MobileTrainerProfileVisitedScreenToolbarComponent(onClickBack: () -> Unit) {
@@ -147,13 +164,6 @@ private fun MobileTrainerProfileVisitedScreenInfoCardComponent(
                 .width(398.dp)
                 .background(SkyFitColor.background.fillTransparent, RoundedCornerShape(16.dp))
         ) {
-            Box(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .background(Color(0xFF012E36).copy(alpha = 0.88f), RoundedCornerShape(16.dp))
-                    .blur(40.dp)
-            )
-
             Column(
                 modifier = Modifier
                     .fillMaxWidth()

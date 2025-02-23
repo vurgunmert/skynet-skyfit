@@ -107,7 +107,6 @@ private fun MobileDashboardExploreScreenFeaturedExercisesComponent(onClick: () -
         verticalArrangement = Arrangement.spacedBy(12.dp)
     ) {
         MobileDashboardExploreScreenTitleActionComponent("Popüler Antrenmanlar")
-        Spacer(Modifier.height(12.dp))
 
         LazyRow(
             Modifier.fillMaxWidth(),
@@ -185,7 +184,6 @@ private fun MobileDashboardExploreScreenFeaturedFacilitiesComponent(
 
         LazyRow(
             modifier = Modifier.fillMaxWidth(),
-            contentPadding = PaddingValues(top = 12.dp),
             horizontalArrangement = Arrangement.spacedBy(16.dp)
         ) {
             items(facilities) { facility ->

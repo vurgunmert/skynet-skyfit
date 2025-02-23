@@ -37,6 +37,10 @@ import com.vurgun.skyfit.presentation.shared.resources.SkyFitColor
 import com.vurgun.skyfit.presentation.shared.resources.SkyFitTypography
 import org.jetbrains.compose.resources.painterResource
 import skyfit.composeapp.generated.resources.Res
+import skyfit.composeapp.generated.resources.ic_check_circle
+import skyfit.composeapp.generated.resources.ic_info_circle
+import skyfit.composeapp.generated.resources.ic_warning
+import skyfit.composeapp.generated.resources.ic_warning_diamond
 import skyfit.composeapp.generated.resources.logo_skyfit
 
 @OptIn(ExperimentalMaterialApi::class)
@@ -96,8 +100,6 @@ fun SkyFitNotificationItem(notification: SkyFitNotification) {
 
             notification.NotificationIcon()
 
-
-            // Notification Text
             Column(
                 Modifier
                     .weight(1f)
@@ -198,12 +200,12 @@ fun NotificationType.borderColor(): Color {
 @Composable
 private fun NotificationType.toNotificationIcon(): Painter {
     return when (this) {
-        NotificationType.CRITICAL -> painterResource(Res.drawable.logo_skyfit)
-        NotificationType.WARNING -> painterResource(Res.drawable.logo_skyfit)
-        NotificationType.INFO -> painterResource(Res.drawable.logo_skyfit)
-        NotificationType.SUCCESS -> painterResource(Res.drawable.logo_skyfit)
-        NotificationType.ERROR -> painterResource(Res.drawable.logo_skyfit)
-        NotificationType.SYSTEM -> painterResource(Res.drawable.logo_skyfit)
+        NotificationType.CRITICAL -> painterResource(Res.drawable.ic_warning_diamond)
+        NotificationType.WARNING -> painterResource(Res.drawable.ic_warning)
+        NotificationType.INFO -> painterResource(Res.drawable.ic_info_circle)
+        NotificationType.SUCCESS -> painterResource(Res.drawable.ic_check_circle)
+        NotificationType.ERROR -> painterResource(Res.drawable.ic_warning_diamond)
+        NotificationType.SYSTEM -> painterResource(Res.drawable.ic_info_circle)
     }
 }
 

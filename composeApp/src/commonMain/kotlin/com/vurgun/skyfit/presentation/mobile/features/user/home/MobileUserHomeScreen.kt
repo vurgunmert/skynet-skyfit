@@ -52,13 +52,19 @@ fun MobileUserHomeScreen(rootNavigator: Navigator) {
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {
 
-            MobileDashboardHomeCharacterProgressComponent()
+            MobileDashboardHomeCharacterProgressComponent(
+                onClick = { rootNavigator.jumpAndStay(NavigationRoute.DashboardProfile) }
+            )
 
             Spacer(Modifier.height(24.dp))
 
-            MobileDashboardHomeTrophiesBarComponent()
+            MobileDashboardHomeTrophiesBarComponent(
+                onClick = { rootNavigator.jumpAndStay(NavigationRoute.UserTrophies) }
+            )
 
-            MobileDashboardHomeWeekProgressComponent()
+            MobileDashboardHomeWeekProgressComponent(
+                onClick = { rootNavigator.jumpAndStay(NavigationRoute.UserActivityCalendar) }
+            )
 
             MobileDashboardHomeActivityCalendarComponent(
                 onClickShowAll = { rootNavigator.jumpAndStay(NavigationRoute.UserActivityCalendar) }
