@@ -1,7 +1,4 @@
-import org.jetbrains.compose.desktop.application.dsl.TargetFormat
-import org.jetbrains.kotlin.gradle.ExperimentalWasmDsl
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
-import org.jetbrains.kotlin.gradle.targets.js.webpack.KotlinWebpackConfig
 
 plugins {
     alias(libs.plugins.kotlinMultiplatform)
@@ -81,8 +78,8 @@ kotlin {
             implementation(libs.ktor.client.okhttp)
 
             implementation("cz.kudladev:datetimepicker-kmp:1.0.7")
-            implementation ("app.rive:rive-android:9.6.5")
-            implementation ("androidx.startup:startup-runtime:1.2.0")
+            implementation("app.rive:rive-android:9.6.5")
+            implementation("androidx.startup:startup-runtime:1.2.0")
         }
 
         iosMain.dependencies {

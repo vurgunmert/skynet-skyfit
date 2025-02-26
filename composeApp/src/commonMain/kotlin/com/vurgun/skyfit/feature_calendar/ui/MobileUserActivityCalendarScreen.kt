@@ -1,0 +1,77 @@
+package com.vurgun.skyfit.feature_calendar.ui
+
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.Scaffold
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import com.vurgun.skyfit.core.ui.components.SkyFitScreenHeader
+import com.vurgun.skyfit.core.ui.components.calendar.SkyFitDailyActivityCanvas
+import com.vurgun.skyfit.core.ui.components.calendar.SkyFitDailyActivityItem
+import com.vurgun.skyfit.core.ui.components.calendar.SkyFitCalendarGridComponent
+import com.vurgun.skyfit.core.ui.resources.SkyFitColor
+import com.vurgun.skyfit.core.utils.now
+import kotlinx.datetime.LocalDate
+import moe.tlaster.precompose.navigation.Navigator
+
+@Composable
+fun MobileUserActivityCalendarScreen(navigator: Navigator) {
+
+    Scaffold(
+        backgroundColor = SkyFitColor.background.default,
+        topBar = {
+            SkyFitScreenHeader("Takvim", onClickBack = { navigator.popBackStack() })
+        }
+    ) {
+        Column(
+            modifier = Modifier.fillMaxSize().verticalScroll(rememberScrollState()),
+            horizontalAlignment = Alignment.CenterHorizontally,
+        ) {
+            MobileUserActivityGridCalendarComponent()
+            MobileUserActivityHourlyCalendarComponent()
+        }
+    }
+}
+
+@Composable
+private fun MobileUserActivityGridCalendarComponent() {
+    var selectedDate by remember { mutableStateOf(LocalDate.now()) }
+
+    SkyFitCalendarGridComponent(
+        initialSelectedDate = selectedDate,
+        isSingleSelect = true,
+        onDateSelected = { selectedDate = it }
+    )
+}
+
+@Composable
+fun MobileUserActivityHourlyCalendarComponent() {
+    var activities by remember {
+        mutableStateOf(
+            listOf(
+                SkyFitDailyActivityItem(emoji = "🔥", name = "Yürüyüş", startHourMinutes = 900, startBlock = 2),
+                SkyFitDailyActivityItem(emoji = "🔥", name = "Ogun Hazirligi", startHourMinutes = 1200, startBlock = 4),
+                SkyFitDailyActivityItem(emoji = "🔥", name = "Bacak Antrenmani", startHourMinutes = 1800, startBlock = 5)
+            )
+        )
+    }
+    var selectedBlock by remember { mutableStateOf(2) }
+
+    SkyFitDailyActivityCanvas(
+        activities = activities,
+        selectedBlock = selectedBlock,
+        onActivityUpdate = { updatedActivity ->
+            activities = activities.map {
+                if (it.name == updatedActivity.name) updatedActivity else it
+            }
+            selectedBlock = updatedActivity.startBlock
+        }
+    )
+}

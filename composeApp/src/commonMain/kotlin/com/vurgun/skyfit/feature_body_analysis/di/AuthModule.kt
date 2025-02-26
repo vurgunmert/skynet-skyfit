@@ -1,0 +1,25 @@
+package com.vurgun.skyfit.feature_body_analysis.di
+
+import com.vurgun.skyfit.core.utils.DispatcherProvider
+import com.vurgun.skyfit.feature_auth.data.AuthRepositoryImpl
+import com.vurgun.skyfit.feature_auth.domain.repositories.AuthRepository
+import com.vurgun.skyfit.feature_auth.domain.usecases.AuthRegisterUseCase
+import com.vurgun.skyfit.feature_auth.domain.usecases.AuthRequestOTPCodeUseCase
+import com.vurgun.skyfit.feature_auth.domain.usecases.AuthLoginUseCase
+import com.vurgun.skyfit.feature_auth.ui.viewmodel.MobileLoginViewModel
+import com.vurgun.skyfit.feature_auth.ui.viewmodel.MobileOTPVerificationViewModel
+import com.vurgun.skyfit.feature_auth.ui.viewmodel.MobileRegisterViewModel
+import org.koin.dsl.module
+
+val authModule = module {
+    single { DispatcherProvider() }
+    single<AuthRepository> { AuthRepositoryImpl(get()) }
+
+    factory { AuthRegisterUseCase(get(), get()) }
+    factory { AuthLoginUseCase(get(), get()) }
+    factory { AuthRequestOTPCodeUseCase(get(), get()) }
+
+    factory { MobileLoginViewModel(get()) }
+    factory { MobileRegisterViewModel(get()) }
+    factory { MobileOTPVerificationViewModel(get(), get()) }
+}
