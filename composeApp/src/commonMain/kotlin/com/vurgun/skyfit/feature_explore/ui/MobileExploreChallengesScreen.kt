@@ -74,9 +74,9 @@ fun MobileExploreChallengesScreen(rootNavigator: Navigator) {
             modifier = Modifier.fillMaxSize(),
             verticalArrangement = Arrangement.spacedBy(12.dp)
         ) {
-            MobileExploreUserChallengesComponent(onClick = { rootNavigator.jumpAndStay(NavigationRoute.DashboardExploreChallengeDetail) })
+            MobileExploreUserChallengesComponent(onClick = { rootNavigator.jumpAndStay(NavigationRoute.ExploreChallengeDetail) })
             Spacer(Modifier.height(12.dp))
-            MobileExploreActiveChallengesComponent(onClick = { rootNavigator.jumpAndStay(NavigationRoute.DashboardExploreChallengeDetail) })
+            MobileExploreActiveChallengesComponent(onClick = { rootNavigator.jumpAndStay(NavigationRoute.ExploreChallengeDetail) })
             Spacer(Modifier.height(24.dp))
         }
     }

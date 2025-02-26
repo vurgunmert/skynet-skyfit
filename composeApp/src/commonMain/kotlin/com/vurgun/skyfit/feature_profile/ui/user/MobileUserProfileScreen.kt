@@ -376,7 +376,7 @@ fun MobileUserProfileAboutGroupComponent(
 
         if (exercises.isEmpty()) {
             MobileUserProfileScreenExploreExercisesComponent {
-                navigator.jumpAndStay(NavigationRoute.DashboardExploreExercises)
+                navigator.jumpAndStay(NavigationRoute.ExploreExercises)
             }
         } else {
             MobileUserProfileExerciseHistoryComponent(exercises)

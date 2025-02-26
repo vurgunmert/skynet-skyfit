@@ -66,9 +66,10 @@ class MobileOTPVerificationViewModel(
             _isLoading.value = false
 
             when (result) {
-                AuthLoginResult.AwaitingOTPLogin -> _events.emit(OTPVerificationEvent.GoToDashboard)
+                AuthLoginResult.Success -> _events.emit(OTPVerificationEvent.GoToDashboard)
+                AuthLoginResult.AwaitingOTPLogin -> resendOTP()
                 AuthLoginResult.AwaitingOTPRegister -> _events.emit(OTPVerificationEvent.GoToRegister)
-                is AuthLoginResult.Error ->  _events.emit(OTPVerificationEvent.ShowError(result.message))
+                is AuthLoginResult.Error -> _events.emit(OTPVerificationEvent.ShowError(result.message))
             }
         }
     }

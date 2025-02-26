@@ -19,7 +19,7 @@ val authModule = module {
     factory { AuthLoginUseCase(get(), get()) }
     factory { AuthRequestOTPCodeUseCase(get(), get()) }
 
-    factory { MobileLoginViewModel(get()) }
+    factory { MobileLoginViewModel(get(), get()) }
     factory { MobileRegisterViewModel(get()) }
     factory { MobileOTPVerificationViewModel(get(), get()) }
 }

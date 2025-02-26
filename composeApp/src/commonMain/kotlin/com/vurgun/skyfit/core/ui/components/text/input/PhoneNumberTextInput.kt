@@ -32,6 +32,7 @@ import org.jetbrains.compose.resources.painterResource
 import skyfit.composeapp.generated.resources.Res
 import skyfit.composeapp.generated.resources.ic_phone
 
+//TODO: some clicks does not open keyboard :/
 @Composable
 fun PhoneNumberTextInput(
     value: String,

@@ -10,11 +10,21 @@ class AuthLoginUseCase(
     private val authRepository: AuthRepository,
     private val dispatchers: DispatcherProvider
 ) {
-    suspend fun execute(phoneNumber: String, otp: String? = null): AuthLoginResult {
+    suspend fun execute(phoneNumber: String, password: String): AuthLoginResult {
         return withContext(dispatchers.io) {
-            when (val response = authRepository.login("+90$phoneNumber", otp)) {
+            when (val response = authRepository.login("+90$phoneNumber", password)) {
                 is NetworkResponseWrapper.Error -> AuthLoginResult.Error(response.message)
-                is NetworkResponseWrapper.Success -> AuthLoginResult.AwaitingOTPLogin //TODO: How register status detected
+                is NetworkResponseWrapper.Success -> {
+                    if (response.data.verified && response.data.registered) {
+                        AuthLoginResult.Success
+                    } else if (!response.data.verified && response.data.registered) {
+                        AuthLoginResult.AwaitingOTPLogin
+                    } else if (!response.data.verified && !response.data.registered) {
+                        AuthLoginResult.AwaitingOTPRegister
+                    } else {
+                        AuthLoginResult.Error(response.message)
+                    }
+                }
             }
         }
     }

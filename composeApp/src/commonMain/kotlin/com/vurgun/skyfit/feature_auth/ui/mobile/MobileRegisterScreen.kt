@@ -135,15 +135,15 @@ fun MobileRegisterScreen(navigator: Navigator) {
         }
 
         if (showTermsDialog) {
-            MobileAppLegalDialog(
-                policyId = "termsOfService",
+            LegalContentDialog(
+                content = SKYFIT_PRIVACY_POLICY_HTML_FORMAT,
                 onDismissRequest = { showTermsDialog = false }
             )
         }
 
         if (showPrivacyDialog) {
-            MobileAppLegalDialog(
-                policyId = "privacyPolicy",
+            LegalContentDialog(
+                content = TERMS_AND_CONDITIONS_HTML_FORMAT,
                 onDismissRequest = { showPrivacyDialog = false }
             )
         }

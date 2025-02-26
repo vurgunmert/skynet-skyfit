@@ -97,26 +97,10 @@ fun MobileNavigationGraph() {
 
         splashNavGraph(rootNavigator)
         authNavGraph(rootNavigator)
+        dashboardNavGraph(rootNavigator)
+        exploreNavGraph(rootNavigator)
 
         scene(NavigationRoute.Onboarding.route) { MobileOnboardingScreen(rootNavigator) }
-        scene(NavigationRoute.Dashboard.route) { MobileDashboardScreen(rootNavigator) }
-        scene(NavigationRoute.DashboardProfile.route) { MobileDashboardScreen(rootNavigator, NavigationRoute.DashboardProfile) }
-        scene(NavigationRoute.DashboardExplore.route) { MobileDashboardScreen(rootNavigator, NavigationRoute.DashboardExplore) }
-        scene(NavigationRoute.DashboardNutrition.route) {
-            MobileDashboardScreen(rootNavigator, NavigationRoute.DashboardNutrition)
-        }
-
-        //Explore
-        scene(NavigationRoute.DashboardExploreTrainers.route) { MobileExploreTrainersScreen(rootNavigator) }
-        scene(NavigationRoute.DashboardExploreExercises.route) { MobileExploreExercisesScreen(rootNavigator) }
-        scene(NavigationRoute.DashboardExploreFacilities.route) { MobileExploreFacilitiesScreen(rootNavigator) }
-        scene(NavigationRoute.DashboardExploreBlogs.route) { MobileExploreBlogScreen(rootNavigator) }
-        scene(NavigationRoute.DashboardExploreBlogArticleDetail.route) { MobileExploreBlogArticleDetailScreen(rootNavigator) }
-        scene(NavigationRoute.DashboardExploreChallenges.route) { MobileExploreChallengesScreen(rootNavigator) }
-        scene(NavigationRoute.DashboardExploreChallengeDetail.route) { MobileExploreChallengeDetailScreen(rootNavigator) }
-        scene(NavigationRoute.DashboardExploreCommunities.route) { MobileExploreCommunitiesScreen(rootNavigator) }
-        scene(NavigationRoute.DashboardExploreCommunityDetail.route) { MobileExploreCommunityDetailScreen(rootNavigator) }
-
 
         //region User
         //User - Exercises
@@ -229,4 +213,25 @@ fun RouteBuilder.authNavGraph(navigator: Navigator) {
     scene(NavigationRoute.ForgotPassword.route) { MobileForgotPasswordScreen(navigator) }
     scene(NavigationRoute.ForgotPasswordCode.route) { MobileForgotPasswordCodeScreen(navigator) }
     scene(NavigationRoute.ForgotPasswordReset.route) { MobileForgotPasswordResetScreen(navigator) }
+}
+
+fun RouteBuilder.dashboardNavGraph(navigator: Navigator) {
+    scene(NavigationRoute.Dashboard.route) { MobileDashboardScreen(navigator) }
+    scene(NavigationRoute.DashboardHome.route) { MobileDashboardScreen(navigator, NavigationRoute.DashboardHome) }
+    scene(NavigationRoute.DashboardExplore.route) { MobileDashboardScreen(navigator, NavigationRoute.DashboardExplore) }
+    scene(NavigationRoute.DashboardSocial.route) { MobileDashboardScreen(navigator, NavigationRoute.DashboardSocial) }
+    scene(NavigationRoute.DashboardNutrition.route) { MobileDashboardScreen(navigator, NavigationRoute.DashboardNutrition) }
+    scene(NavigationRoute.DashboardProfile.route) { MobileDashboardScreen(navigator, NavigationRoute.DashboardProfile) }
+}
+
+fun RouteBuilder.exploreNavGraph(navigator: Navigator) {
+    scene(NavigationRoute.ExploreTrainers.route) { MobileExploreTrainersScreen(navigator) }
+    scene(NavigationRoute.ExploreExercises.route) { MobileExploreExercisesScreen(navigator) }
+    scene(NavigationRoute.ExploreFacilities.route) { MobileExploreFacilitiesScreen(navigator) }
+    scene(NavigationRoute.ExploreBlogs.route) { MobileExploreBlogScreen(navigator) }
+    scene(NavigationRoute.ExploreBlogArticleDetail.route) { MobileExploreBlogArticleDetailScreen(navigator) }
+    scene(NavigationRoute.ExploreChallenges.route) { MobileExploreChallengesScreen(navigator) }
+    scene(NavigationRoute.ExploreChallengeDetail.route) { MobileExploreChallengeDetailScreen(navigator) }
+    scene(NavigationRoute.ExploreCommunities.route) { MobileExploreCommunitiesScreen(navigator) }
+    scene(NavigationRoute.ExploreCommunityDetail.route) { MobileExploreCommunityDetailScreen(navigator) }
 }

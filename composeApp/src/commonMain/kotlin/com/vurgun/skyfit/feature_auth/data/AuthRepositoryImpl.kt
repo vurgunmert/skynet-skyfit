@@ -11,26 +11,36 @@ class AuthRepositoryImpl(private val settingsStore: LocalSettingsStore) : AuthRe
         delay(2000) // TODO: Replace simulation
 
         return if (phoneNumber.startsWith("+90")) {
+            settingsStore.saveToken("123456")
             NetworkResponseWrapper.Success(data = Unit)
         } else {
             NetworkResponseWrapper.Error(message = "Bu telefon numarası desteklenmiyor.")
         }
     }
 
-    override suspend fun login(phoneNumber: String, otp: String?): NetworkResponseWrapper<SignInResponse> {
-        delay(2000)  // TODO: Replace simulation
-        return if (otp == "1234") {
+    override suspend fun login(phoneNumber: String, password: String): NetworkResponseWrapper<SignInResponse> {
+        return if (phoneNumber.startsWith("+90") && password.isNotBlank()) {
             settingsStore.saveToken("123456")
-            NetworkResponseWrapper.Success(data = SignInResponse(registered = true))
-        } else if (otp == "4321") {
-            NetworkResponseWrapper.Success(data = SignInResponse(registered = false))
+            NetworkResponseWrapper.Success(data = SignInResponse(verified = true, registered = true))
         } else {
-            NetworkResponseWrapper.Error(message = "Geçersiz kod. Lütfen tekrar deneyin.")
+            NetworkResponseWrapper.Error(message = "Giris bilgilerinizi kontrol edip tekrar deneyin.")
         }
     }
 
-    override suspend fun resendOtpCode(phoneNumber: String): NetworkResponseWrapper<Boolean> {
-        delay(2000)  // TODO: Replace simulation
+    override suspend fun requestOtpCode(phoneNumber: String): NetworkResponseWrapper<Boolean> {
+        delay(1000)  // TODO: Replace simulation
         return NetworkResponseWrapper.Success(data = true)
+    }
+
+    override suspend fun verifyOtpCode(phoneNumber: String, code: String): NetworkResponseWrapper<SignInResponse> {
+        delay(2000)  // TODO: Replace simulation
+        return if (code == "1234") {
+            settingsStore.saveToken("123456")
+            NetworkResponseWrapper.Success(data = SignInResponse(verified = true, registered = true))
+        } else if (code == "4321") {
+            NetworkResponseWrapper.Success(data = SignInResponse(verified = true, registered = false))
+        } else {
+            NetworkResponseWrapper.Error(message = "Geçersiz kod. Lütfen tekrar deneyin.")
+        }
     }
 }

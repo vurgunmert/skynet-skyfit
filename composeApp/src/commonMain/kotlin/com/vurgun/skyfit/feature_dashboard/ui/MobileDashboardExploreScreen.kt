@@ -86,10 +86,10 @@ fun MobileDashboardExploreScreen(rootNavigator: Navigator) {
                 onClick = { rootNavigator.jumpAndStay(NavigationRoute.FacilityProfileVisited) })
 
             MobileDashboardExploreScreenFeaturedCommunitiesComponent(
-                onClick = { rootNavigator.jumpAndStay(NavigationRoute.DashboardExploreCommunities) })
+                onClick = { rootNavigator.jumpAndStay(NavigationRoute.ExploreCommunities) })
 
             MobileDashboardExploreScreenFeaturedChallengesComponent(
-                onClick = { rootNavigator.jumpAndStay(NavigationRoute.DashboardExploreChallenges) })
+                onClick = { rootNavigator.jumpAndStay(NavigationRoute.ExploreChallenges) })
 
             Spacer(Modifier.height(124.dp))
         }

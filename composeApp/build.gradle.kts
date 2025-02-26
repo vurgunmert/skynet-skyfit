@@ -70,6 +70,8 @@ kotlin {
             // PreCompose for multiplatform navigation
             implementation(libs.precompose)
             implementation(libs.precompose.viewmodel)
+
+            implementation("com.mikepenz:multiplatform-markdown-renderer:0.31.0")
         }
 
         androidMain.dependencies {

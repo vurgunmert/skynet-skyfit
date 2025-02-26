@@ -11,7 +11,7 @@ class AuthRequestOTPCodeUseCase(
 ) {
     suspend fun execute(phoneNumber: String): NetworkResponseWrapper<Boolean> {
         return withContext(dispatchers.io) {
-            authRepository.resendOtpCode("+90$phoneNumber")
+            authRepository.requestOtpCode("+90$phoneNumber")
         }
     }
 }

@@ -58,15 +58,15 @@ sealed class NavigationRoute(
     data object DashboardProfile : NavigationRoute("dashboard/profile")
 
     // Explore
-    data object DashboardExploreTrainers : NavigationRoute("dashboard/explore/trainers")
-    data object DashboardExploreExercises : NavigationRoute("dashboard/explore/exercises")
-    data object DashboardExploreFacilities : NavigationRoute("dashboard/explore/facilities")
-    data object DashboardExploreBlogs : NavigationRoute("dashboard/explore/blogs")
-    data object DashboardExploreBlogArticleDetail : NavigationRoute("dashboard/explore/blogs/article/{articleId}")
-    data object DashboardExploreChallenges : NavigationRoute("dashboard/explore/challenges")
-    data object DashboardExploreChallengeDetail : NavigationRoute("dashboard/explore/challenges/detail/{challengeId}")
-    data object DashboardExploreCommunities : NavigationRoute("dashboard/explore/communities")
-    data object DashboardExploreCommunityDetail : NavigationRoute("dashboard/explore/communities/detail/{communityId}")
+    data object ExploreTrainers : NavigationRoute("dashboard/explore/trainers")
+    data object ExploreExercises : NavigationRoute("dashboard/explore/exercises")
+    data object ExploreFacilities : NavigationRoute("dashboard/explore/facilities")
+    data object ExploreBlogs : NavigationRoute("dashboard/explore/blogs")
+    data object ExploreBlogArticleDetail : NavigationRoute("dashboard/explore/blogs/article/{articleId}")
+    data object ExploreChallenges : NavigationRoute("dashboard/explore/challenges")
+    data object ExploreChallengeDetail : NavigationRoute("dashboard/explore/challenges/detail/{challengeId}")
+    data object ExploreCommunities : NavigationRoute("dashboard/explore/communities")
+    data object ExploreCommunityDetail : NavigationRoute("dashboard/explore/communities/detail/{communityId}")
 
 
     //region User Screens
