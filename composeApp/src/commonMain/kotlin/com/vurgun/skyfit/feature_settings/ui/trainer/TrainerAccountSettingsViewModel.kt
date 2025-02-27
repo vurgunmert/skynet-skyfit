@@ -16,7 +16,7 @@ data class TrainerAccountState(
     val isUpdated: Boolean = false
 )
 
-class SkyFitTrainerAccountSettingsViewModel : ViewModel() {
+class TrainerAccountSettingsViewModel : ViewModel() {
 
     private val _accountState = MutableStateFlow(TrainerAccountState())
     val accountState: StateFlow<TrainerAccountState> = _accountState

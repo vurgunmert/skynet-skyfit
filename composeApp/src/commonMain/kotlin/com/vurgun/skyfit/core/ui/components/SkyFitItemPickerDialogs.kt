@@ -34,7 +34,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
-import com.vurgun.skyfit.core.data.models.BodyType
+import com.vurgun.skyfit.core.domain.models.BodyType
 import com.vurgun.skyfit.feature_onboarding.ui.WeightPicker
 import com.vurgun.skyfit.feature_onboarding.ui.WeightUnitPicker
 import com.vurgun.skyfit.core.ui.resources.SkyFitColor

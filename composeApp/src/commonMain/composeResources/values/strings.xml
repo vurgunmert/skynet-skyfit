@@ -15,4 +15,49 @@
     <string name="resend_code_timer">Yeniden göndermek için %1$d saniye</string>
     <string name="resend_code">Tekrar Gönder</string>
 
+    <!--Onboarding-->
+    <string name="onboarding_select_user_type_title">Skyfit’e Hoş Geldin!</string>
+    <string name="onboarding_select_user_type_message">Uygulamaya nasıl devam etmek istersin</string>
+    <string name="onboarding_select_character_title">Karakter Seçiniz</string>
+    <string name="onboarding_select_character_message">Seçtiğiniz karakter ana ekranda görüntülenecek</string>
+    <string name="onboarding_select_date_of_birth_title">Doğum Tarihiniz</string>
+    <string name="onboarding_select_date_of_birth_message">Seçiminiz profilinizde görüntülenecek</string>
+    <string name="onboarding_select_gender_title">Cinsiyet Seçiniz</string>
+    <string name="onboarding_select_gender_message">Seçiminiz profilinizde görüntülenecek</string>
+    <string name="onboarding_select_weight_title">Kilonuz</string>
+    <string name="onboarding_select_weight_message">Seçiminiz profilinizde görüntülenecek</string>
+    <string name="onboarding_select_height_title">Boyunuz</string>
+    <string name="onboarding_select_height_message">Seçiminiz profilinizde görüntülenecek</string>
+    <string name="onboarding_select_body_type_title">Vücut Tipiniz</string>
+    <string name="onboarding_select_body_type_message">Seçiminiz profilinizde görüntülenecek</string>
+    <string name="onboarding_user_select_goal_title">Ne için buradasınız</string>
+    <string name="onboarding_user_select_goal_message">Seçiminize göre özel antrenmanlara ulaş</string>
+    <string name="onboarding_trainer_complete_profile_title">Profilini Tamamla</string>
+    <string name="onboarding_trainer_complete_profile_message">Seçiminize göre özel antrenmanlara ulaş</string>
+    <string name="onboarding_facility_complete_profile_title">Profilini Tamamla</string>
+    <string name="onboarding_facility_complete_profile_message">Seçiminize göre özel antrenmanlara ulaş</string>
+    <string name="onboarding_ready_title">Hazırsınız 🚀</string>
+    <string name="onboarding_ready_message">Vakit ayırdığınız için teşekkür ederiz uygulamayı sizin içn hazırlıyoruz</string>
+    <string name="onboarding_lets_get_started">Haydi Başla</string>
+
+    <string name="firstname_lastname">Ad Soyad</string>
+    <string name="mandatory_firstname_lastname">Ad Soyad *</string>
+    <string name="mandatory_work_place">İş Yeri *</string>
+    <string name="mandatory_work_place_name">İş Yeri Adı *</string>
+    <string name="mandatory_biography">Biyografi *</string>
+    <string name="mandatory_address">Adres *</string>
+    <string name="goal_to_lose_weight">Kilo Vermek</string>
+    <string name="goal_to_be_fit">Fit Olmak</string>
+    <string name="goal_to_gain_muscle">Kas Yapmak</string>
+
+    <string name="user">Kullanıcı</string>
+    <string name="trainer">Antrenör</string>
+    <string name="facility">İşletme</string>
+    <string name="skip">Atla</string>
+    <string name="gender_female">Kadın</string>
+    <string name="gender_male">Erkek</string>
+    <string name="body_type_ecto">Ectomorph</string>
+    <string name="body_type_meso">Mesomorph</string>
+    <string name="body_type_endo">Endomorph</string>
+
 </resources>

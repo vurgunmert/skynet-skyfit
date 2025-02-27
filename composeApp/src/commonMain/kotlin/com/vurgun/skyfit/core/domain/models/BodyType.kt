@@ -1,4 +1,4 @@
-package com.vurgun.skyfit.core.data.models
+package com.vurgun.skyfit.core.domain.models
 
 import kotlinx.serialization.Serializable
 

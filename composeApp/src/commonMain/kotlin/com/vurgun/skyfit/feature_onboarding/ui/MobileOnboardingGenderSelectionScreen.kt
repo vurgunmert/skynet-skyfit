@@ -10,7 +10,9 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -20,33 +22,79 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.vurgun.skyfit.core.ui.components.SkyFitScaffold
 import com.vurgun.skyfit.core.ui.components.SkyFitSelectableCardComponent
+import com.vurgun.skyfit.core.ui.resources.SkyFitTypography
+import com.vurgun.skyfit.feature_onboarding.ui.viewmodel.BaseOnboardingViewModel
+import com.vurgun.skyfit.feature_onboarding.ui.viewmodel.TrainerOnboardingViewModel
+import com.vurgun.skyfit.feature_onboarding.ui.viewmodel.UserOnboardingViewModel
+import com.vurgun.skyfit.navigation.NavigationRoute
+import com.vurgun.skyfit.navigation.jumpAndStay
+import com.vurgun.skyfit.navigation.jumpAndTakeover
+import moe.tlaster.precompose.navigation.Navigator
 import org.jetbrains.compose.resources.painterResource
+import org.jetbrains.compose.resources.stringResource
 import skyfit.composeapp.generated.resources.Res
+import skyfit.composeapp.generated.resources.gender_female
+import skyfit.composeapp.generated.resources.gender_male
 import skyfit.composeapp.generated.resources.ic_gender_female
 import skyfit.composeapp.generated.resources.ic_gender_male
+import skyfit.composeapp.generated.resources.onboarding_select_gender_message
+import skyfit.composeapp.generated.resources.onboarding_select_gender_title
 
 @Composable
 fun MobileOnboardingGenderSelectionScreen(
-    onSkip: () -> Unit,
-    onNext: () -> Unit
+    viewModel: BaseOnboardingViewModel,
+    navigator: Navigator
 ) {
+    val cachedGender by remember(viewModel) {
+        derivedStateOf {
+            when (viewModel) {
+                is UserOnboardingViewModel -> viewModel.state.value.gender
+                is TrainerOnboardingViewModel -> viewModel.state.value.gender
+                else -> "male"
+            }
+        }
+    }
+
+    var selectedGender by remember { mutableStateOf(cachedGender ?: "male") }
+
     SkyFitScaffold {
         Column(
             modifier = Modifier.fillMaxSize(),
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {
-            OnboardingStepProgressComponent()
+            OnboardingStepProgressComponent(totalSteps = 7, currentStep = 3)
             Spacer(Modifier.height(178.dp))
             OnboardingTitleGroupComponent(
-                title = "Cinsiyet Seçiniz",
-                subtitle = "Seçiminiz profilinizde görüntülenecek"
+                title = stringResource(Res.string.onboarding_select_gender_title),
+                subtitle = stringResource(Res.string.onboarding_select_gender_message)
             )
             Spacer(Modifier.height(16.dp))
-            OnboardingGenderSelectorComponent()
+            OnboardingGenderSelectorComponent(
+                selectedGender = selectedGender,
+                onSelected = { selectedGender = it }
+            )
             Spacer(Modifier.weight(1f))
             OnboardingActionGroupComponent(
-                onClickContinue = onNext,
-                onClickSkip = onSkip
+                onClickContinue = {
+                    when (viewModel) {
+                        is UserOnboardingViewModel -> viewModel.updateGender(selectedGender)
+                        is TrainerOnboardingViewModel -> viewModel.updateGender(selectedGender)
+                    }
+                    navigator.jumpAndStay(NavigationRoute.OnboardingWeightSelection)
+                },
+                onClickSkip = {
+                    when (viewModel) {
+                        is UserOnboardingViewModel -> navigator.jumpAndTakeover(
+                            NavigationRoute.OnboardingGenderSelection,
+                            NavigationRoute.OnboardingCompleted
+                        )
+
+                        is TrainerOnboardingViewModel -> navigator.jumpAndTakeover(
+                            NavigationRoute.OnboardingGenderSelection,
+                            NavigationRoute.OnboardingTrainerDetails
+                        )
+                    }
+                }
             )
             Spacer(Modifier.height(48.dp))
         }
@@ -54,35 +102,57 @@ fun MobileOnboardingGenderSelectionScreen(
 }
 
 @Composable
-fun OnboardingGenderSelectorComponent() {
-    var isMaleSelected by remember { mutableStateOf(false) }
+fun OnboardingGenderSelectorComponent(
+    selectedGender: String,
+    onSelected: (String) -> Unit
+) {
+    val genderMale = "male"
+    val genderFemale = "female"
 
     Row(
         modifier = Modifier.fillMaxWidth(),
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.Center
     ) {
-        SkyFitSelectableCardComponent(
-            isSelected = isMaleSelected,
-            modifier = Modifier.size(112.dp, 104.dp),
-            onClick = { isMaleSelected = !isMaleSelected }) {
-            Image(
-                painter = painterResource(Res.drawable.ic_gender_male),
-                contentDescription = null,
-                modifier = Modifier.size(64.dp)
+        Column(
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.spacedBy(8.dp)
+        ) {
+            SkyFitSelectableCardComponent(
+                isSelected = selectedGender == genderMale,
+                modifier = Modifier.size(112.dp, 104.dp),
+                onClick = { onSelected(genderMale) }) {
+                Image(
+                    painter = painterResource(Res.drawable.ic_gender_male),
+                    contentDescription = null,
+                    modifier = Modifier.size(64.dp)
+                )
+            }
+            Text(
+                text = stringResource(Res.string.gender_male),
+                style = SkyFitTypography.bodyMediumRegular
             )
         }
 
         Spacer(Modifier.width(24.dp))
 
-        SkyFitSelectableCardComponent(
-            isSelected = !isMaleSelected,
-            modifier = Modifier.size(112.dp, 104.dp),
-            onClick = { isMaleSelected = !isMaleSelected }) {
-            Image(
-                painter = painterResource(Res.drawable.ic_gender_female), // Replace with your image resource
-                contentDescription = null,
-                modifier = Modifier.size(64.dp)
+        Column(
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.spacedBy(8.dp)
+        ) {
+            SkyFitSelectableCardComponent(
+                isSelected = selectedGender == genderFemale,
+                modifier = Modifier.size(112.dp, 104.dp),
+                onClick = { onSelected(genderFemale) }) {
+                Image(
+                    painter = painterResource(Res.drawable.ic_gender_female), // Replace with your image resource
+                    contentDescription = null,
+                    modifier = Modifier.size(64.dp)
+                )
+            }
+            Text(
+                text = stringResource(Res.string.gender_female),
+                style = SkyFitTypography.bodyMediumRegular
             )
         }
     }

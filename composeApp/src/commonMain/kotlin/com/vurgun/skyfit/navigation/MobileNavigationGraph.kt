@@ -35,7 +35,7 @@ import com.vurgun.skyfit.feature_settings.ui.facility.MobileFacilitySettingsPaym
 import com.vurgun.skyfit.feature_settings.ui.facility.MobileFacilitySettingsScreen
 import com.vurgun.skyfit.feature_settings.ui.facility.MobileFacilitySettingsSearchMembersScreen
 import com.vurgun.skyfit.feature_settings.ui.facility.MobileFacilitySettingsTrainersScreen
-import com.vurgun.skyfit.feature_onboarding.ui.MobileOnboardingScreen
+import com.vurgun.skyfit.feature_onboarding.ui.MobileOnboardingNavGraph
 import com.vurgun.skyfit.feature_appointments.ui.trainer.MobileTrainerAppointmentDetailScreen
 import com.vurgun.skyfit.feature_appointments.ui.trainer.MobileTrainerAppointmentsScreen
 import com.vurgun.skyfit.feature_lessons.ui.MobileTrainerCalendarVisitedScreen
@@ -92,7 +92,7 @@ fun MobileNavigationGraph() {
 
     NavHost(
         navigator = rootNavigator,
-        initialRoute = NavigationRoute.Splash.route
+        initialRoute = NavigationRoute.Onboarding.route
     ) {
 
         splashNavGraph(rootNavigator)
@@ -100,7 +100,7 @@ fun MobileNavigationGraph() {
         dashboardNavGraph(rootNavigator)
         exploreNavGraph(rootNavigator)
 
-        scene(NavigationRoute.Onboarding.route) { MobileOnboardingScreen(rootNavigator) }
+        scene(NavigationRoute.Onboarding.route) { MobileOnboardingNavGraph(rootNavigator) }
 
         //region User
         //User - Exercises

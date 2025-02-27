@@ -1,6 +1,6 @@
 package com.vurgun.skyfit.navigation
 
-import com.vurgun.skyfit.core.domain.models.UserRole
+import com.vurgun.skyfit.core.domain.models.UserType
 import moe.tlaster.precompose.navigation.NavOptions
 import moe.tlaster.precompose.navigation.Navigator
 import moe.tlaster.precompose.navigation.PopUpTo
@@ -36,12 +36,12 @@ fun Navigator.jumpAndStay(route: String) {
 // Extensions for Navigator to handle role-based navigation
 fun Navigator.navigateToScreen(
     screen: NavigationRoute,
-    userRole: UserRole,
+    userType: UserType,
     vararg args: Pair<NavigationRoute.Param, String?>
 ) {
-    if (userRole in screen.roles) {
+    if (userType in screen.roles) {
         navigate(screen.createRoute(*args))
     } else {
-        println("Access Denied: User role $userRole cannot access ${screen.route}")
+        println("Access Denied: User role $userType cannot access ${screen.route}")
     }
 }

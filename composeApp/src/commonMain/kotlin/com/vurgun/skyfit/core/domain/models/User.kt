@@ -4,9 +4,9 @@ data class User(
     val userId: String,
     val otpCode: String,
     val username: String,
-    val role: UserRole
+    val role: UserType
 )
 
-enum class UserRole {
+enum class UserType {
     GUEST, USER, TRAINER, FACILITY_MANAGER, ADMIN
 }

@@ -42,7 +42,7 @@ import skyfit.composeapp.generated.resources.ic_pencil
 @Composable
 fun MobileTrainerSettingsAccountScreen(navigator: Navigator) {
 
-    val viewModel: SkyFitTrainerAccountSettingsViewModel = koinInject()
+    val viewModel: TrainerAccountSettingsViewModel = koinInject()
 
     val trainerAccountState by viewModel.accountState.collectAsState()
 

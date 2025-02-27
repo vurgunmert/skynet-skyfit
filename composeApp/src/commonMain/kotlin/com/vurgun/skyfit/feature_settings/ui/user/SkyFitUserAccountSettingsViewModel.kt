@@ -4,7 +4,7 @@ import androidx.lifecycle.ViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.update
-import com.vurgun.skyfit.core.data.models.BodyType
+import com.vurgun.skyfit.core.domain.models.BodyType
 
 // Data class to hold all user account state in one place
 data class UserAccountState(

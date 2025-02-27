@@ -1,7 +1,7 @@
 package com.vurgun.skyfit.core.domain.repository
 
 import com.vurgun.skyfit.core.domain.models.User
-import com.vurgun.skyfit.core.domain.models.UserRole
+import com.vurgun.skyfit.core.domain.models.UserType
 import com.vurgun.skyfit.core.storage.LocalSettingsStore
 
 interface UserRepository {
@@ -18,7 +18,7 @@ class UserRepositoryImpl(
             userId = "123456",
             otpCode = "1234",
             username = "firstUser",
-            role = UserRole.USER
+            role = UserType.USER
         )
     }
 
