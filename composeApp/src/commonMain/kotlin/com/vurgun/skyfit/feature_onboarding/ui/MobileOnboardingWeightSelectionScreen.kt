@@ -121,8 +121,8 @@ fun MobileOnboardingWeightSelectionScreen(
 fun WeightPicker(
     selectedWeight: Int,
     onWeightSelected: (Int) -> Unit,
-    minWeight: Int = 40,
-    maxWeight: Int = 200
+    minWeight: Int = 30,
+    maxWeight: Int = 250
 ) {
     val weights = (minWeight..maxWeight).toList()
 

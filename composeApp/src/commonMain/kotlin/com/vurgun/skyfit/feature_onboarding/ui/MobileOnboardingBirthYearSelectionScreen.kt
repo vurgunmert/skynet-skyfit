@@ -15,12 +15,14 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.vurgun.skyfit.core.ui.components.SkyFitScaffold
 import com.vurgun.skyfit.core.ui.components.YearPicker
+import com.vurgun.skyfit.core.utils.now
 import com.vurgun.skyfit.feature_onboarding.ui.viewmodel.BaseOnboardingViewModel
 import com.vurgun.skyfit.feature_onboarding.ui.viewmodel.TrainerOnboardingViewModel
 import com.vurgun.skyfit.feature_onboarding.ui.viewmodel.UserOnboardingViewModel
 import com.vurgun.skyfit.navigation.NavigationRoute
 import com.vurgun.skyfit.navigation.jumpAndStay
 import com.vurgun.skyfit.navigation.jumpAndTakeover
+import kotlinx.datetime.LocalDate
 import moe.tlaster.precompose.navigation.Navigator
 import org.jetbrains.compose.resources.stringResource
 import skyfit.composeapp.generated.resources.Res
@@ -32,17 +34,21 @@ fun MobileOnboardingBirthYearSelectionScreen(
     viewModel: BaseOnboardingViewModel,
     navigator: Navigator
 ) {
+    val currentYear = LocalDate.now().year
+    val minBirthYear = currentYear - 80  // Oldest users (80 years old)
+    val maxBirthYear = currentYear - 13  // Youngest allowed users (13 years old)
+    val defaultBirthYear = currentYear - 16  // Default to 16-year-olds (active age group)
 
     val cachedYear by remember(viewModel) {
         derivedStateOf {
             when (viewModel) {
                 is UserOnboardingViewModel -> viewModel.state.value.birthYear
                 is TrainerOnboardingViewModel -> viewModel.state.value.birthYear
-                else -> 2000
+                else -> defaultBirthYear
             }
         }
     }
-    var selectedYear by remember { mutableStateOf(cachedYear ?: 2000) }
+    var selectedYear by remember { mutableStateOf(cachedYear ?: defaultBirthYear) }
 
     SkyFitScaffold {
         Column(
@@ -59,8 +65,8 @@ fun MobileOnboardingBirthYearSelectionScreen(
             YearPicker(
                 selectedYear = selectedYear,
                 onYearSelected = { selectedYear = it },
-                startYear = 1930,
-                endYear = 2025
+                startYear = minBirthYear,
+                endYear = maxBirthYear
             )
             Spacer(Modifier.weight(1f))
             OnboardingActionGroupComponent(
@@ -85,7 +91,7 @@ fun MobileOnboardingBirthYearSelectionScreen(
                     }
                 }
             )
-            Spacer(Modifier.height(48.dp))
+            Spacer(Modifier.height(30.dp))
         }
     }
 }

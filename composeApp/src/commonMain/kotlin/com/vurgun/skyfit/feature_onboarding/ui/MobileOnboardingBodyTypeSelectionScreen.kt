@@ -36,7 +36,6 @@ fun MobileOnboardingBodyTypeSelectionScreen(
     viewModel: BaseOnboardingViewModel,
     navigator: Navigator
 ) {
-
     fun getBodyTypeItems(gender: String?): List<BodyTypeItemViewData> {
         return when (gender) {
             "male" -> listOf(
@@ -69,7 +68,13 @@ fun MobileOnboardingBodyTypeSelectionScreen(
         }
     }
 
-    var selectedBodyType by remember { mutableStateOf(cachedBodyType) }
+    var selectedBodyType by remember { mutableStateOf<BodyTypeItemViewData?>(null) }
+
+    LaunchedEffect(cachedBodyType, bodyTypeItems) {
+        if (selectedBodyType == null) {
+            selectedBodyType = cachedBodyType ?: bodyTypeItems.firstOrNull()
+        }
+    }
 
     SkyFitScaffold {
         Column(

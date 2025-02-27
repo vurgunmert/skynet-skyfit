@@ -36,9 +36,7 @@ fun OnboardingStepProgressComponent(
     spacing: Dp = 6.dp
 ) {
     BoxWithConstraints(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(horizontal = 24.dp, vertical = 24.dp)
+        modifier = Modifier.fillMaxWidth()
     ) {
         val spacingTotal = spacing * (totalSteps - 1)
         val totalWidth = maxWidth - 48.dp

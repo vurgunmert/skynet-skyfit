@@ -59,5 +59,6 @@
     <string name="body_type_ecto">Ectomorph</string>
     <string name="body_type_meso">Mesomorph</string>
     <string name="body_type_endo">Endomorph</string>
+    <string name="action_continue">Devam Et</string>
 
 </resources>

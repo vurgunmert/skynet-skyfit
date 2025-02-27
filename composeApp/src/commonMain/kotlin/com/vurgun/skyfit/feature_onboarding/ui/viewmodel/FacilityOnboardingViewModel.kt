@@ -30,8 +30,8 @@ class FacilityOnboardingViewModel : BaseOnboardingViewModel() {
 }
 
 data class FacilityOnboardingState(
-    val facilityName: String? = null,
-    val facilityAddress: String? = null,
-    val facilityBiography: String? = null,
+    val facilityName: String = "",
+    val facilityAddress: String = "",
+    val facilityBiography: String = "",
     val profileTags: List<String> = emptyList()
 )

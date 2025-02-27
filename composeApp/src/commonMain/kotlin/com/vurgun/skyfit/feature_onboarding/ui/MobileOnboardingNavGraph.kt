@@ -44,6 +44,7 @@ fun MobileOnboardingNavGraph(rootNavigator: Navigator) {
                         NavigationRoute.OnboardingUserTypeSelection,
                         NavigationRoute.OnboardingFacilityDetails
                     )
+
                     else -> Unit
                 }
             }
@@ -121,12 +122,32 @@ fun MobileOnboardingNavGraph(rootNavigator: Navigator) {
             }
         }
 
+        scene(NavigationRoute.OnboardingFacilityDetails.route) {
+            if (viewModel is FacilityOnboardingViewModel) {
+                MobileOnboardingFacilityDetailsScreen(
+                    viewModel = viewModel,
+                    navigator = onboardingNavigator
+                )
+            }
+        }
+        scene(NavigationRoute.OnboardingFacilityProfileTags.route) {
+            if (viewModel is FacilityOnboardingViewModel) {
+                MobileOnboardingFacilityProfileTagsScreen(
+                    viewModel = viewModel,
+                    navigator = onboardingNavigator
+                )
+            }
+        }
+
         scene(NavigationRoute.OnboardingCompleted.route) {
-            MobileOnboardingCompletedScreen(
-                onClickContinue = {
-                    rootNavigator.jumpAndTakeover(NavigationRoute.Onboarding, NavigationRoute.Dashboard)
-                }
-            )
+            if (viewModel is BaseOnboardingViewModel) {
+                MobileOnboardingCompletedScreen(
+                    viewModel = viewModel,
+                    onClickContinue = {
+                        rootNavigator.jumpAndTakeover(NavigationRoute.Onboarding, NavigationRoute.Dashboard)
+                    }
+                )
+            }
         }
     }
 }

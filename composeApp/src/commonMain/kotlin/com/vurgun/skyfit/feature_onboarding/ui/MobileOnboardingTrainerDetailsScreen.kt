@@ -27,6 +27,7 @@ import com.vurgun.skyfit.navigation.jumpAndTakeover
 import moe.tlaster.precompose.navigation.Navigator
 import org.jetbrains.compose.resources.stringResource
 import skyfit.composeapp.generated.resources.Res
+import skyfit.composeapp.generated.resources.action_continue
 import skyfit.composeapp.generated.resources.ic_pencil
 import skyfit.composeapp.generated.resources.mandatory_biography
 import skyfit.composeapp.generated.resources.mandatory_firstname_lastname
@@ -96,7 +97,7 @@ fun MobileOnboardingTrainerDetailsScreen(
 
             SkyFitButtonComponent(
                 modifier = Modifier.fillMaxWidth(),
-                text = "Devam Et",
+                text = stringResource(Res.string.action_continue),
                 onClick = {
                     if (isContinueEnabled) {
                         navigator.jumpAndTakeover(

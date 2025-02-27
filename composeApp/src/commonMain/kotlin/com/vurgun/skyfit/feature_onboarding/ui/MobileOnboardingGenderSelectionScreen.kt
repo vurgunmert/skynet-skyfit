@@ -96,7 +96,7 @@ fun MobileOnboardingGenderSelectionScreen(
                     }
                 }
             )
-            Spacer(Modifier.height(48.dp))
+            Spacer(Modifier.height(30.dp))
         }
     }
 }

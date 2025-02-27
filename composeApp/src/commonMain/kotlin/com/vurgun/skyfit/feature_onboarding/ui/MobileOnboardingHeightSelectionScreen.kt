@@ -40,7 +40,7 @@ fun MobileOnboardingHeightSelectionScreen(
             when (viewModel) {
                 is UserOnboardingViewModel -> viewModel.state.value.height
                 is TrainerOnboardingViewModel -> viewModel.state.value.height
-                else -> 165
+                else -> 170
             }
         }
     }
@@ -55,7 +55,7 @@ fun MobileOnboardingHeightSelectionScreen(
         }
     }
 
-    var selectedHeight by remember { mutableStateOf(cachedHeight ?: 165) }
+    var selectedHeight by remember { mutableStateOf(cachedHeight ?: 170) }
     var selectedHeightUnit by remember { mutableStateOf(cachedHeightUnit ?: "cm") }
 
     SkyFitScaffold {
@@ -123,7 +123,7 @@ private fun HeightPicker(
     selectedHeight: Int,
     onHeightSelected: (Int) -> Unit,
     minHeight: Int = 120,
-    maxHeight: Int = 220
+    maxHeight: Int = 230
 ) {
     val weights = (minHeight..maxHeight).toList()
 

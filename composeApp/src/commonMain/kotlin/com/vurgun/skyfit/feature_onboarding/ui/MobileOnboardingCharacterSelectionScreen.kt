@@ -1,24 +1,11 @@
 package com.vurgun.skyfit.feature_onboarding.ui
 
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.derivedStateOf
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
@@ -37,23 +24,42 @@ import skyfit.composeapp.generated.resources.Res
 import skyfit.composeapp.generated.resources.onboarding_select_character_message
 import skyfit.composeapp.generated.resources.onboarding_select_character_title
 
+private data class CharacterItemViewData(
+    val name: String,
+    val iconId: String
+)
+
+private fun getCharacterItems(): List<CharacterItemViewData> {
+    return SkyFitCharacterIcon.iconMap.keys.map { key ->
+        CharacterItemViewData(name = key, iconId = key)
+    }
+}
+
 @Composable
 fun MobileOnboardingCharacterSelectionScreen(
     viewModel: BaseOnboardingViewModel,
     navigator: Navigator
 ) {
-    val characterIds = SkyFitCharacterIcon.iconMap.keys.toList()
+    val characterItems = remember { getCharacterItems() }
+
+    val defaultCharacterId = "ic_character_carrot"
+
     val cachedCharacterId by remember(viewModel) {
         derivedStateOf {
             when (viewModel) {
                 is UserOnboardingViewModel -> viewModel.state.value.characterId
                 is TrainerOnboardingViewModel -> viewModel.state.value.characterId
-                else -> ""
+                else -> null
             }
         }
     }
 
-    var selectedCharacterId by remember { mutableStateOf(cachedCharacterId?.ifEmpty { characterIds.firstOrNull() }) }
+    var selectedCharacterId by remember { mutableStateOf("") }
+
+    LaunchedEffect(cachedCharacterId) {
+        selectedCharacterId = cachedCharacterId.takeUnless { it.isNullOrEmpty() }
+            ?: defaultCharacterId
+    }
 
     SkyFitScaffold {
         Column(
@@ -71,8 +77,8 @@ fun MobileOnboardingCharacterSelectionScreen(
             Spacer(Modifier.height(16.dp))
 
             MobileOnboardingCharacterSelectionScreenSelectableCardGridComponent(
-                items = characterIds,
-                selectedCharacter = selectedCharacterId,
+                items = characterItems,
+                selectedCharacterId = selectedCharacterId,
                 onCharacterSelected = { selectedCharacterId = it }
             )
 
@@ -81,8 +87,8 @@ fun MobileOnboardingCharacterSelectionScreen(
             OnboardingActionGroupComponent(
                 onClickContinue = {
                     when (viewModel) {
-                        is UserOnboardingViewModel -> viewModel.updateCharacter(selectedCharacterId ?: "")
-                        is TrainerOnboardingViewModel -> viewModel.updateCharacter(selectedCharacterId ?: "")
+                        is UserOnboardingViewModel -> viewModel.updateCharacter(selectedCharacterId)
+                        is TrainerOnboardingViewModel -> viewModel.updateCharacter(selectedCharacterId)
                     }
                     navigator.jumpAndStay(NavigationRoute.OnboardingBirthYearSelection)
                 },
@@ -100,15 +106,16 @@ fun MobileOnboardingCharacterSelectionScreen(
                     }
                 }
             )
-            Spacer(Modifier.height(36.dp))
+            Spacer(Modifier.height(30.dp))
         }
     }
 }
 
+
 @Composable
 private fun MobileOnboardingCharacterSelectionScreenSelectableCardGridComponent(
-    items: List<String>,
-    selectedCharacter: String?,
+    items: List<CharacterItemViewData>,
+    selectedCharacterId: String,
     onCharacterSelected: (String) -> Unit
 ) {
     LazyVerticalGrid(
@@ -122,12 +129,12 @@ private fun MobileOnboardingCharacterSelectionScreenSelectableCardGridComponent(
     ) {
         items(items) { item ->
             SkyFitSelectableCardComponent(
-                isSelected = selectedCharacter == item,
-                onClick = { onCharacterSelected(item) }
+                isSelected = selectedCharacterId == item.iconId,
+                onClick = { onCharacterSelected(item.iconId) }
             ) {
                 Image(
-                    painter = SkyFitCharacterIcon.getIconResourcePainter(item),
-                    contentDescription = item,
+                    painter = SkyFitCharacterIcon.getIconResourcePainter(item.iconId),
+                    contentDescription = item.name,
                     modifier = Modifier.fillMaxSize()
                 )
             }

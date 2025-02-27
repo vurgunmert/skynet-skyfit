@@ -44,7 +44,6 @@ import skyfit.composeapp.generated.resources.Res
 import skyfit.composeapp.generated.resources.ic_check
 import skyfit.composeapp.generated.resources.ic_pencil
 
-
 @Composable
 fun WeightPickerDialog(
     initialWeight: Int? = 65,
@@ -117,12 +116,12 @@ fun WeightPickerDialog(
 
 @Composable
 fun HeightPickerDialog(
-    initialHeight: Int? = 165,
+    initialHeight: Int? = 170,
     initialUnit: String? = "cm",
     onDismiss: () -> Unit,
     onHeightSelected: (Int, String) -> Unit
 ) {
-    var selectedHeight by remember { mutableStateOf(initialHeight ?: 165) }
+    var selectedHeight by remember { mutableStateOf(initialHeight ?: 170) }
     var selectedHeightUnit by remember { mutableStateOf(initialUnit ?: "cm") }
 
     Dialog(onDismissRequest = onDismiss) {
