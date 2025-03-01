@@ -23,6 +23,7 @@ import skyfit.composeapp.generated.resources.user
 
 @Composable
 fun MobileOnboardingUserTypeSelectionScreen(onSelected: (UserType) -> Unit) {
+    
     SkyFitScaffold {
         Column(
             modifier = Modifier.fillMaxSize(),

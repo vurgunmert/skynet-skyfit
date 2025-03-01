@@ -47,6 +47,7 @@ import com.vurgun.skyfit.navigation.NavigationRoute
 import com.vurgun.skyfit.navigation.jumpAndStay
 import com.vurgun.skyfit.core.ui.resources.SkyFitColor
 import com.vurgun.skyfit.core.ui.resources.SkyFitTypography
+import com.vurgun.skyfit.feature_explore.ui.viewmodel.DashboardExploreScreenViewModel
 import moe.tlaster.precompose.navigation.Navigator
 
 @Composable

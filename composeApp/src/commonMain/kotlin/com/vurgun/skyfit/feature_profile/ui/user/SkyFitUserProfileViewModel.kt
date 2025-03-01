@@ -4,6 +4,9 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.vurgun.skyfit.feature_profile.ui.fakePosts
 import com.vurgun.skyfit.core.ui.components.calendar.SkyFitClassCalendarCardItem
+import com.vurgun.skyfit.core.ui.resources.SkyFitAsset
+import com.vurgun.skyfit.feature_profile.ui.components.viewdata.LifestyleActionItemViewData
+import com.vurgun.skyfit.feature_profile.ui.components.viewdata.LifestyleActionRowViewData
 import com.vurgun.skyfit.feature_social.ui.PostViewData
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
@@ -23,11 +26,11 @@ class SkyFitUserProfileViewModel : ViewModel() {
     private val _appointments = MutableStateFlow<List<SkyFitClassCalendarCardItem>>(emptyList())
     val appointments: StateFlow<List<SkyFitClassCalendarCardItem>> get() = _appointments
 
-    private val _exercises = MutableStateFlow<List<ProfileExerciseHistoryItem>>(emptyList())
-    val exercises: StateFlow<List<ProfileExerciseHistoryItem>> get() = _exercises
+    private val _exercisesRowViewData = MutableStateFlow<LifestyleActionRowViewData?>(null)
+    val exercisesRowViewData: StateFlow<LifestyleActionRowViewData?> get() = _exercisesRowViewData
 
-    private val _habits = MutableStateFlow<List<ProfileHabitItem>>(emptyList())
-    val habits: StateFlow<List<ProfileHabitItem>> get() = _habits
+    private val _habitsRowViewData = MutableStateFlow<LifestyleActionRowViewData?>(null)
+    val habitsRowViewData: StateFlow<LifestyleActionRowViewData?> get() = _habitsRowViewData
 
     private val _statistics = MutableStateFlow<UserProfileActivityStatisticsViewData?>(null)
     val statistics: StateFlow<UserProfileActivityStatisticsViewData?> get() = _statistics
@@ -51,9 +54,32 @@ class SkyFitUserProfileViewModel : ViewModel() {
         loadProfileData()
         loadPosts()
         loadAppointments()
-        _exercises.value = fakeProfileExercises
-        _habits.value = fakeProfileHabits
         _photoDiary.value = UserProfilePhotoDiaryViewData()
+
+
+        val exercisesViewData = listOf(
+            LifestyleActionItemViewData(SkyFitAsset.SkyFitIcon.PUSH_UP.id, "Şınav"),
+            LifestyleActionItemViewData(SkyFitAsset.SkyFitIcon.YOGA.id, "Yoga"),
+            LifestyleActionItemViewData(SkyFitAsset.SkyFitIcon.PULL_UP_BAR.id, "Pull up"),
+            LifestyleActionItemViewData(SkyFitAsset.SkyFitIcon.SIT_UP.id, "Mekik"),
+            LifestyleActionItemViewData(SkyFitAsset.SkyFitIcon.JUMPING_ROPE.id, "İp atlama")
+        )
+        _exercisesRowViewData.value = LifestyleActionRowViewData(
+            iconId = SkyFitAsset.SkyFitIcon.CLOCK.id,
+            title = "Egzersiz Geçmişi",
+            items = exercisesViewData
+        )
+
+        val habitsViewData = listOf(
+            LifestyleActionItemViewData(SkyFitAsset.SkyFitIcon.SLEEP.id, "Düzensiz Uyku"),
+            LifestyleActionItemViewData(SkyFitAsset.SkyFitIcon.FAST_FOOD.id, "Fast Food"),
+            LifestyleActionItemViewData(SkyFitAsset.SkyFitIcon.SMOKING.id, "Smoking")
+        )
+        _habitsRowViewData.value = LifestyleActionRowViewData(
+            iconId = SkyFitAsset.SkyFitIcon.YOGA.id,
+            title = "Alışkanlıklar",
+            items = habitsViewData
+        )
     }
 
     private fun loadProfileData() {
@@ -87,20 +113,6 @@ class SkyFitUserProfileViewModel : ViewModel() {
         _showPosts.value = show
     }
 }
-
-val fakeProfileExercises: List<ProfileExerciseHistoryItem> = listOf(
-    ProfileExerciseHistoryItem("ic_push_up", "Şınav"),
-    ProfileExerciseHistoryItem("ic_yoga", "Yoga"),
-    ProfileExerciseHistoryItem("ic_pull_up_bar", "Pull up"),
-    ProfileExerciseHistoryItem("ic_sit_up", "Mekik"),
-    ProfileExerciseHistoryItem("ic_jumping_rope", "İp atlama"),
-)
-
-val fakeProfileHabits: List<ProfileHabitItem> = listOf(
-    ProfileHabitItem("ic_sleep", "Düzensiz Uyku"),
-    ProfileHabitItem("ic_fast_food", "Fast Food"),
-    ProfileHabitItem("ic_smoking", "Smoking")
-)
 
 val fakeAppointmentClasses: List<SkyFitClassCalendarCardItem> = listOf(
     SkyFitClassCalendarCardItem(

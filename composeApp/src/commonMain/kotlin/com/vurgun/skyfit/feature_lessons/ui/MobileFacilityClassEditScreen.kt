@@ -222,7 +222,7 @@ private fun FacilityClassHeadInfoInputGroup(
     onTitleChanged: (String) -> Unit
 ) {
     var isIconPickerOpen by remember { mutableStateOf(false) }
-    val icons = SkyFitIcon.iconMap.keys.toList()
+    val icons = SkyFitIcon.idResMap.keys.toList()
 
     Column {
         Row(

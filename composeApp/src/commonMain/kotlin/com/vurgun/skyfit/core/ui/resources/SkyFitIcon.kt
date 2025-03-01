@@ -9,6 +9,7 @@ import skyfit.composeapp.generated.resources.ic_biceps_force
 import skyfit.composeapp.generated.resources.ic_character_carrot
 import skyfit.composeapp.generated.resources.ic_character_koala
 import skyfit.composeapp.generated.resources.ic_character_panda
+import skyfit.composeapp.generated.resources.ic_clock
 import skyfit.composeapp.generated.resources.ic_exercises
 import skyfit.composeapp.generated.resources.ic_fast_food
 import skyfit.composeapp.generated.resources.ic_female_body_type_ecto
@@ -23,12 +24,13 @@ import skyfit.composeapp.generated.resources.ic_push_up
 import skyfit.composeapp.generated.resources.ic_sit_up
 import skyfit.composeapp.generated.resources.ic_sleep
 import skyfit.composeapp.generated.resources.ic_smoking
+import skyfit.composeapp.generated.resources.ic_trophy
 import skyfit.composeapp.generated.resources.ic_yoga
 import skyfit.composeapp.generated.resources.logo_skyfit
 
 object SkyFitIcon {
 
-    val iconMap = mapOf(
+    val idResMap = mapOf(
         "ic_exercises" to Res.drawable.ic_exercises,
         "ic_push_up" to Res.drawable.ic_push_up,
         "ic_biceps_force" to Res.drawable.ic_biceps_force,
@@ -42,17 +44,17 @@ object SkyFitIcon {
     )
 
     fun getIconResource(id: String?): DrawableResource? {
-        return iconMap[id]
+        return idResMap[id]
     }
 
     @Composable
     fun getIconResourcePainter(id: String?): Painter? {
-        return iconMap[id]?.let { painterResource(it) }
+        return idResMap[id]?.let { painterResource(it) }
     }
 
     @Composable
     fun getIconResourcePainter(id: String?, defaultRes: DrawableResource): Painter {
-        return iconMap[id]?.let { painterResource(it) } ?: painterResource(defaultRes)
+        return idResMap[id]?.let { painterResource(it) } ?: painterResource(defaultRes)
     }
 }
 
@@ -92,5 +94,88 @@ object SkyFitBodyTypeIcon {
     @Composable
     fun getIconResourcePainter(id: String?): Painter {
         return (maleIconMap[id] ?: femaleIconMap[id])?.let { painterResource(it) } ?: painterResource(Res.drawable.logo_skyfit)
+    }
+}
+
+object SkyFitAsset {
+
+    enum class SkyFitIcon(val id: String, val res: DrawableResource) {
+        TROPHY("ic_trophy", Res.drawable.ic_trophy),
+        CLOCK("ic_clock", Res.drawable.ic_clock),
+        EXERCISES("ic_exercises", Res.drawable.ic_exercises),
+        PUSH_UP("ic_push_up", Res.drawable.ic_push_up),
+        BICEPS_FORCE("ic_biceps_force", Res.drawable.ic_biceps_force),
+        PULL_UP_BAR("ic_pull_up_bar", Res.drawable.ic_pull_up_bar),
+        JUMPING_ROPE("ic_jumping_rope", Res.drawable.ic_jumping_rope),
+        SIT_UP("ic_sit_up", Res.drawable.ic_sit_up),
+        YOGA("ic_yoga", Res.drawable.ic_yoga),
+        SLEEP("ic_sleep", Res.drawable.ic_sleep),
+        FAST_FOOD("ic_fast_food", Res.drawable.ic_fast_food),
+        SMOKING("ic_smoking", Res.drawable.ic_smoking);
+
+        companion object {
+            private val map = entries.associateBy { it.id }
+
+            fun fromId(id: String?): SkyFitIcon? = map[id]
+
+            fun fromIdOrDefault(id: String?, default: SkyFitIcon = EXERCISES): SkyFitIcon {
+                return map[id] ?: default
+            }
+        }
+    }
+
+    @Composable
+    fun getPainter(iconId: String?, defaultIcon: SkyFitIcon = SkyFitIcon.EXERCISES): Painter {
+        val icon = SkyFitIcon.fromIdOrDefault(iconId, defaultIcon)
+        return painterResource(icon.res)
+    }
+
+    /** 🔹 GENERAL ICONS **/
+    val Icons = mapOf(
+        "ic_exercises" to Res.drawable.ic_exercises,
+        "ic_push_up" to Res.drawable.ic_push_up,
+        "ic_biceps_force" to Res.drawable.ic_biceps_force,
+        "ic_pull_up_bar" to Res.drawable.ic_pull_up_bar,
+        "ic_jumping_rope" to Res.drawable.ic_jumping_rope,
+        "ic_sit_up" to Res.drawable.ic_sit_up,
+        "ic_yoga" to Res.drawable.ic_yoga,
+        "ic_sleep" to Res.drawable.ic_sleep,
+        "ic_fast_food" to Res.drawable.ic_fast_food,
+        "ic_smoking" to Res.drawable.ic_smoking,
+    )
+
+    /** 🔹 CHARACTER ICONS **/
+    val CharacterIcons = mapOf(
+        "ic_character_carrot" to Res.drawable.ic_character_carrot,
+        "ic_character_koala" to Res.drawable.ic_character_koala,
+        "ic_character_panda" to Res.drawable.ic_character_panda
+    )
+
+    /** 🔹 BODY TYPE ICONS **/
+    val MaleBodyTypeIcons = mapOf(
+        "ic_male_body_type_ecto" to Res.drawable.ic_male_body_type_ecto,
+        "ic_male_body_type_meso" to Res.drawable.ic_male_body_type_meso,
+        "ic_male_body_type_endo" to Res.drawable.ic_male_body_type_endo
+    )
+
+    val FemaleBodyTypeIcons = mapOf(
+        "ic_female_body_type_ecto" to Res.drawable.ic_female_body_type_ecto,
+        "ic_female_body_type_meso" to Res.drawable.ic_female_body_type_meso,
+        "ic_female_body_type_endo" to Res.drawable.ic_female_body_type_endo
+    )
+
+    /** 🔹 COMMON METHODS **/
+    fun getIconResource(id: String?): DrawableResource? {
+        return Icons[id] ?: CharacterIcons[id] ?: MaleBodyTypeIcons[id] ?: FemaleBodyTypeIcons[id]
+    }
+
+    @Composable
+    fun getIconPainter(id: String?): Painter? {
+        return getIconResource(id)?.let { painterResource(it) }
+    }
+
+    @Composable
+    fun getIconPainter(id: String?, defaultRes: DrawableResource): Painter {
+        return getIconResource(id)?.let { painterResource(it) } ?: painterResource(defaultRes)
     }
 }

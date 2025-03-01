@@ -1,10 +1,12 @@
 package com.vurgun.skyfit.feature_profile.ui
 
 import androidx.lifecycle.ViewModel
+import com.vurgun.skyfit.core.ui.components.calendar.SkyFitClassCalendarCardItem
+import com.vurgun.skyfit.core.ui.resources.SkyFitAsset
+import com.vurgun.skyfit.feature_profile.ui.components.viewdata.LifestyleActionItemViewData
+import com.vurgun.skyfit.feature_profile.ui.components.viewdata.LifestyleActionRowViewData
 import com.vurgun.skyfit.feature_profile.ui.user.TopBarGroupViewData
 import com.vurgun.skyfit.feature_profile.ui.user.UserProfilePreferenceItem
-import com.vurgun.skyfit.feature_profile.ui.trainer.SpecialityItemComponentViewData
-import com.vurgun.skyfit.core.ui.components.calendar.SkyFitClassCalendarCardItem
 import com.vurgun.skyfit.feature_social.ui.PostViewData
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -15,8 +17,8 @@ class SkyFitTrainerProfileViewModel : ViewModel() {
     private val _profileData = MutableStateFlow<TopBarGroupViewData?>(null)
     val profileData: StateFlow<TopBarGroupViewData?> get() = _profileData
 
-    private val _specialities = MutableStateFlow<List<SpecialityItemComponentViewData>>(emptyList())
-    val specialities = _specialities.asStateFlow()
+    private val _specialtiesRowViewData = MutableStateFlow<LifestyleActionRowViewData?>(null)
+    val specialtiesRowViewData: StateFlow<LifestyleActionRowViewData?> get() = _specialtiesRowViewData
 
     private val _privateClasses = MutableStateFlow<List<SkyFitClassCalendarCardItem>>(emptyList())
     val privateClasses = _privateClasses.asStateFlow()
@@ -26,9 +28,23 @@ class SkyFitTrainerProfileViewModel : ViewModel() {
 
     fun loadData() {
         loadProfileData()
-        _specialities.value = fakeSpecialities
         _privateClasses.value = fakePrivateTrainerClasses
         _posts.value = fakePosts
+
+        val specialtiesViewData = listOf(
+            LifestyleActionItemViewData(SkyFitAsset.SkyFitIcon.PUSH_UP.id, "Fonksiyonel Antrenman"),
+            LifestyleActionItemViewData(SkyFitAsset.SkyFitIcon.BICEPS_FORCE.id, "Kuvvet ve Kondisyon"),
+            LifestyleActionItemViewData(SkyFitAsset.SkyFitIcon.FAST_FOOD.id, "Beslenme Danışmanlığı"),
+            LifestyleActionItemViewData(SkyFitAsset.SkyFitIcon.PULL_UP_BAR.id, "Atletik Performans Geliştirme")
+        )
+
+        _specialtiesRowViewData.value = LifestyleActionRowViewData(
+            iconId = SkyFitAsset.SkyFitIcon.TROPHY.id, // Medal Icon for Specialties
+            title = "Uzmanlık Alanları",
+            items = specialtiesViewData,
+            iconSizePx = 48
+        )
+
     }
 
     fun addPrivateClass(newClass: SkyFitClassCalendarCardItem) {
@@ -51,9 +67,9 @@ class SkyFitTrainerProfileViewModel : ViewModel() {
             social = "@dexteretymo",
             imageUrl = "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSJq8Cfy_pOdcJOYIQew3rWrnwwxfc8bZIarg&s",
             preferences = listOf(
-                UserProfilePreferenceItem(iconId = "ic_height_outline","Boy", "175"),
-                UserProfilePreferenceItem(iconId = "ic_dna_outline","Kilo", "75"),
-                UserProfilePreferenceItem(iconId = "ic_overweight","Vücut Tipi", "Ecto")
+                UserProfilePreferenceItem(iconId = "ic_height_outline", "Boy", "175"),
+                UserProfilePreferenceItem(iconId = "ic_dna_outline", "Kilo", "75"),
+                UserProfilePreferenceItem(iconId = "ic_overweight", "Vücut Tipi", "Ecto")
             ),
             showInfoMini = false
         )
@@ -126,12 +142,3 @@ val fakePosts: List<PostViewData> = List(6) { index ->
         shareCount = (0..100).random(),
     )
 }
-
-val fakeSpecialities: List<SpecialityItemComponentViewData> = listOf(
-    SpecialityItemComponentViewData("Fonksiyonel Antrenman", "ic_push_up"),
-    SpecialityItemComponentViewData("Kuvvet ve Kondisyon", "ic_biceps_force"),
-    SpecialityItemComponentViewData("Beslenme Danışmanlığı", "ic_meal"),
-    SpecialityItemComponentViewData("Atletik Performans Geliştirme", "ic_barbell"),
-    SpecialityItemComponentViewData("Beslenme Danışmanlığı", "ic_meal"),
-    SpecialityItemComponentViewData("Atletik Performans Geliştirme", "ic_athletic_performance")
-)

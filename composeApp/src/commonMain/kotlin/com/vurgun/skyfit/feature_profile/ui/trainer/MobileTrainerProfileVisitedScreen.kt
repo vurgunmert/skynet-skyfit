@@ -33,20 +33,22 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.dp
 import coil3.compose.AsyncImage
-import com.vurgun.skyfit.feature_profile.ui.facility.MobileFacilityProfileVisitedScreen.MobileFacilityProfileVisitedScreenPrivateClassesComponent
-import com.vurgun.skyfit.feature_profile.ui.user.MobileVisitedProfileActionsComponent
-import com.vurgun.skyfit.feature_profile.ui.user.UserProfileCardPreferenceRow
 import com.vurgun.skyfit.core.ui.components.ButtonSize
 import com.vurgun.skyfit.core.ui.components.ButtonVariant
 import com.vurgun.skyfit.core.ui.components.SkyFitButtonComponent
 import com.vurgun.skyfit.core.ui.components.button.SkyFitPrimaryCircularBackButton
 import com.vurgun.skyfit.core.ui.components.calendar.SkyFitClassCalendarCardItem
-import com.vurgun.skyfit.feature_profile.ui.SkyFitTrainerProfileViewModel
-import com.vurgun.skyfit.feature_profile.ui.user.TopBarGroupViewData
-import com.vurgun.skyfit.navigation.NavigationRoute
-import com.vurgun.skyfit.navigation.jumpAndStay
 import com.vurgun.skyfit.core.ui.resources.SkyFitColor
 import com.vurgun.skyfit.core.ui.resources.SkyFitTypography
+import com.vurgun.skyfit.feature_profile.ui.SkyFitTrainerProfileViewModel
+import com.vurgun.skyfit.feature_profile.ui.components.LifestyleActionRow
+import com.vurgun.skyfit.feature_profile.ui.components.viewdata.LifestyleActionRowViewData
+import com.vurgun.skyfit.feature_profile.ui.facility.MobileFacilityProfileVisitedScreen.MobileFacilityProfileVisitedScreenPrivateClassesComponent
+import com.vurgun.skyfit.feature_profile.ui.user.MobileVisitedProfileActionsComponent
+import com.vurgun.skyfit.feature_profile.ui.user.TopBarGroupViewData
+import com.vurgun.skyfit.feature_profile.ui.user.UserProfileCardPreferenceRow
+import com.vurgun.skyfit.navigation.NavigationRoute
+import com.vurgun.skyfit.navigation.jumpAndStay
 import moe.tlaster.precompose.navigation.Navigator
 import org.jetbrains.compose.resources.painterResource
 import skyfit.composeapp.generated.resources.Res
@@ -61,7 +63,7 @@ fun MobileTrainerProfileVisitedScreen(navigator: Navigator) {
     var showPosts by remember { mutableStateOf(false) }
 
     val profileData by viewModel.profileData.collectAsState()
-    val specialities by viewModel.specialities.collectAsState()
+    val specialtiesRowViewData by viewModel.specialtiesRowViewData.collectAsState()
     val privateClasses = viewModel.privateClasses.collectAsState().value
     val posts = viewModel.posts.collectAsState().value
     var isFollowing by remember { mutableStateOf(false) }
@@ -105,7 +107,7 @@ fun MobileTrainerProfileVisitedScreen(navigator: Navigator) {
             if (showPosts) {
                 MobileTrainerProfilePostsComponent(posts)
             } else {
-                MobileTrainerProfileVisitedAboutGroup(specialities, privateClasses, navigator)
+                MobileTrainerProfileVisitedAboutGroup(specialtiesRowViewData, privateClasses, navigator)
             }
         }
 
@@ -115,7 +117,7 @@ fun MobileTrainerProfileVisitedScreen(navigator: Navigator) {
 
 @Composable
 private fun ColumnScope.MobileTrainerProfileVisitedAboutGroup(
-    specialities: List<SpecialityItemComponentViewData> = emptyList(),
+    specialtiesRowViewData: LifestyleActionRowViewData? = null,
     privateClasses: List<SkyFitClassCalendarCardItem> = emptyList(),
     navigator: Navigator
 ) {
@@ -124,8 +126,8 @@ private fun ColumnScope.MobileTrainerProfileVisitedAboutGroup(
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.spacedBy(16.dp)
     ) {
-        if (specialities.isNotEmpty()) {
-            MobileTrainerProfileSpecialitiesComponent(specialities)
+        if (specialtiesRowViewData != null) {
+            LifestyleActionRow(viewData = specialtiesRowViewData)
         }
 
         if (privateClasses.isNotEmpty()) {

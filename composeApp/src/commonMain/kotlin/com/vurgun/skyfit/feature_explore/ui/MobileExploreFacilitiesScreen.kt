@@ -21,7 +21,7 @@ import com.vurgun.skyfit.core.ui.components.SkyFitScreenHeader
 import com.vurgun.skyfit.core.ui.components.SkyFitSearchFilterBarComponent
 import com.vurgun.skyfit.core.ui.components.SkyFitSearchTextInputComponent
 import com.vurgun.skyfit.feature_profile.ui.FacilityProfileCardItemBox
-import com.vurgun.skyfit.feature_dashboard.ui.DashboardExploreScreenViewModel
+import com.vurgun.skyfit.feature_explore.ui.viewmodel.DashboardExploreScreenViewModel
 import moe.tlaster.precompose.navigation.Navigator
 
 @Composable

@@ -34,11 +34,11 @@ import com.vurgun.skyfit.core.ui.components.ButtonState
 import com.vurgun.skyfit.core.ui.components.ButtonVariant
 import com.vurgun.skyfit.core.ui.components.SkyFitButtonComponent
 import com.vurgun.skyfit.core.ui.components.button.SkyFitIconButton
-import com.vurgun.skyfit.navigation.NavigationRoute
-import com.vurgun.skyfit.navigation.jumpAndStay
 import com.vurgun.skyfit.core.ui.resources.SkyFitColor
 import com.vurgun.skyfit.core.ui.resources.SkyFitTypography
 import com.vurgun.skyfit.feature_profile.ui.fakePosts
+import com.vurgun.skyfit.navigation.NavigationRoute
+import com.vurgun.skyfit.navigation.jumpAndStay
 import moe.tlaster.precompose.navigation.Navigator
 import org.jetbrains.compose.resources.painterResource
 import skyfit.composeapp.generated.resources.Res
@@ -191,8 +191,8 @@ private fun MobileUserProfileVisitedScreenAboutGroupComponent(
     var showMeasurements: Boolean = true
     val statistics by viewModel.statistics.collectAsState()
     val appointments by viewModel.appointments.collectAsState()
-    val exercises by viewModel.exercises.collectAsState()
-    val habits by viewModel.habits.collectAsState()
+    val exercisesRowViewData by viewModel.exercisesRowViewData.collectAsState()
+    val habitsRowViewData by viewModel.habitsRowViewData.collectAsState()
     val photoDiary by viewModel.photoDiary.collectAsState()
 
 
@@ -216,14 +216,14 @@ private fun MobileUserProfileVisitedScreenAboutGroupComponent(
 
         statistics?.let { MobileUserProfileStatisticsBarsComponent(it) }
 
-        if (exercises.isNotEmpty()) {
-            MobileUserProfileExerciseHistoryComponent(exercises)
-        }
+//        if (exercisesRowViewData != null) {
+//            LifestyleActionRow(viewData = exercisesRowViewData)
+//        }
 
         photoDiary?.let { MobileUserProfilePhotoDiaryComponent(it) }
 
-        if (habits.isNotEmpty()) {
-            MobileUserProfileHabitsComponent(habits)
-        }
+//        if (habitsRowViewData != null) {
+//            LifestyleActionRow(viewData = habitsRowViewData)
+//        }
     }
 }

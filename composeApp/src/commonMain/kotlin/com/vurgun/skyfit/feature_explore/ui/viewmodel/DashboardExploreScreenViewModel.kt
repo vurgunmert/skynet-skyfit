@@ -1,4 +1,4 @@
-package com.vurgun.skyfit.feature_dashboard.ui
+package com.vurgun.skyfit.feature_explore.ui.viewmodel
 
 import androidx.lifecycle.ViewModel
 import com.vurgun.skyfit.feature_explore.ui.FacilityProfileCardItemViewData

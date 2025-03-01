@@ -92,7 +92,7 @@ fun MobileNavigationGraph() {
 
     NavHost(
         navigator = rootNavigator,
-        initialRoute = NavigationRoute.Onboarding.route
+        initialRoute = NavigationRoute.TrainerProfile.route
     ) {
 
         splashNavGraph(rootNavigator)

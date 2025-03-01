@@ -74,6 +74,8 @@ import com.vurgun.skyfit.navigation.jumpAndStay
 import com.vurgun.skyfit.core.ui.resources.SkyFitColor
 import com.vurgun.skyfit.core.ui.resources.SkyFitIcon
 import com.vurgun.skyfit.core.ui.resources.SkyFitTypography
+import com.vurgun.skyfit.feature_profile.ui.components.LifestyleActionRow
+import com.vurgun.skyfit.feature_profile.ui.components.viewdata.LifestyleActionRowViewData
 import moe.tlaster.precompose.navigation.Navigator
 import org.jetbrains.compose.resources.painterResource
 import skyfit.composeapp.generated.resources.Res
@@ -93,7 +95,7 @@ fun MobileTrainerProfileScreen(navigator: Navigator) {
     var showPosts by remember { mutableStateOf(false) }
 
     val profileData by viewModel.profileData.collectAsState()
-    val specialities by viewModel.specialities.collectAsState()
+    val specialtiesRowViewData by viewModel.specialtiesRowViewData.collectAsState()
     val privateClasses = viewModel.privateClasses.collectAsState().value
     val posts = viewModel.posts.collectAsState().value
 
@@ -133,14 +135,14 @@ fun MobileTrainerProfileScreen(navigator: Navigator) {
         if (showPosts) {
             MobileTrainerProfilePostsComponent(posts)
         } else {
-            MobileTrainerProfileAboutGroupComponent(specialities, privateClasses, scrollState)
+            MobileTrainerProfileAboutGroupComponent(specialtiesRowViewData, privateClasses, scrollState)
         }
     }
 }
 
 @Composable
 fun MobileTrainerProfileAboutGroupComponent(
-    specialities: List<SpecialityItemComponentViewData>,
+    specialtiesRowViewData: LifestyleActionRowViewData?,
     privateClasses: List<SkyFitClassCalendarCardItem>,
     scrollState: ScrollState
 ) {
@@ -148,10 +150,10 @@ fun MobileTrainerProfileAboutGroupComponent(
         modifier = Modifier.fillMaxSize().verticalScroll(scrollState),
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
-        if (specialities.isEmpty()) {
+        if (specialtiesRowViewData == null) {
             MobileTrainerProfileSpecialitiesEmptyComponent(onClickAdd = {})
         } else {
-            MobileTrainerProfileSpecialitiesComponent(specialities)
+            LifestyleActionRow(viewData = specialtiesRowViewData)
         }
 
         if (privateClasses.isEmpty()) {
@@ -250,79 +252,6 @@ fun MobileTrainerProfilePostsComponent(
 ) {
     MobileUserProfilePostsComponent(posts, listState)
 }
-
-@Composable
-fun MobileTrainerProfileSpecialitiesComponent(specialities: List<SpecialityItemComponentViewData>) {
-    Column(
-        Modifier
-            .padding(16.dp)
-            .fillMaxWidth()
-            .background(SkyFitColor.background.surfaceSecondary, RoundedCornerShape(20.dp))
-            .padding(16.dp)
-    ) {
-
-        Row(verticalAlignment = Alignment.CenterVertically) {
-            Icon(
-                painter = painterResource(Res.drawable.ic_medal),
-                modifier = Modifier.size(24.dp),
-                contentDescription = "",
-                tint = SkyFitColor.icon.default
-            )
-            Spacer(Modifier.width(8.dp))
-            Text(
-                text = "Uzmanlık Alanları",
-                style = SkyFitTypography.bodyLargeSemibold
-            )
-        }
-
-        Spacer(Modifier.height(16.dp))
-        LazyRow(
-            modifier = Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.spacedBy(16.dp)
-        ) {
-            items(specialities) {
-                MobileTrainerProfileSpecialityItemComponent(it)
-            }
-        }
-    }
-}
-
-data class SpecialityItemComponentViewData(
-    val name: String = "Atletik Performans Geliştirme",
-    val iconId: String = "push_up"
-)
-
-@Composable
-private fun MobileTrainerProfileSpecialityItemComponent(data: SpecialityItemComponentViewData) {
-    Column(
-        horizontalAlignment = Alignment.CenterHorizontally, // Ensures everything stays centered
-        modifier = Modifier.wrapContentSize()
-    ) {
-        Box(
-            modifier = Modifier
-                .size(68.dp)
-                .background(SkyFitColor.background.fillTransparentSecondary, CircleShape),
-            contentAlignment = Alignment.Center
-        ) {
-            Icon(
-                painter = SkyFitIcon.getIconResourcePainter(data.iconId, defaultRes = Res.drawable.ic_exercises),
-                modifier = Modifier.size(32.dp),
-                contentDescription = "",
-                tint = SkyFitColor.icon.default
-            )
-        }
-        Spacer(Modifier.height(8.dp))
-        Text(
-            text = data.name,
-            style = SkyFitTypography.bodySmall,
-            textAlign = TextAlign.Center,
-            modifier = Modifier.widthIn(max = 78.dp), // Set a fixed or dynamic width
-            softWrap = true,
-            overflow = TextOverflow.Visible
-        )
-    }
-}
-
 
 @Composable
 fun MobileTrainerProfilePrivateClassesComponent(privateClasses: List<SkyFitClassCalendarCardItem>) {

@@ -2,10 +2,14 @@ package com.vurgun.skyfit.feature_auth.data
 
 import com.vurgun.skyfit.core.data.models.NetworkResponseWrapper
 import com.vurgun.skyfit.core.storage.LocalSettingsStore
+import com.vurgun.skyfit.feature_auth.data.service.AuthApiService
 import com.vurgun.skyfit.feature_auth.domain.repositories.AuthRepository
 import kotlinx.coroutines.delay
 
-class AuthRepositoryImpl(private val settingsStore: LocalSettingsStore) : AuthRepository {
+class AuthRepositoryImpl(
+    private val settingsStore: LocalSettingsStore,
+    private val apiService: AuthApiService
+) : AuthRepository {
 
     override suspend fun register(phoneNumber: String, fullName: String, password: String): NetworkResponseWrapper<Unit> {
         delay(2000) // TODO: Replace simulation
@@ -19,6 +23,8 @@ class AuthRepositoryImpl(private val settingsStore: LocalSettingsStore) : AuthRe
     }
 
     override suspend fun login(phoneNumber: String, password: String): NetworkResponseWrapper<SignInResponse> {
+
+        //TODO: Consume apiService
         return if (phoneNumber.startsWith("+90") && password.isNotBlank()) {
             settingsStore.saveToken("123456")
             NetworkResponseWrapper.Success(data = SignInResponse(verified = true, registered = true))

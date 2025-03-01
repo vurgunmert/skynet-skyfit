@@ -5,10 +5,15 @@ import com.vurgun.skyfit.core.domain.repository.AppStateRepositoryImpl
 import com.vurgun.skyfit.core.domain.repository.UserRepository
 import com.vurgun.skyfit.core.domain.repository.UserRepositoryImpl
 import com.vurgun.skyfit.core.ui.viewmodel.AppStateViewModel
+import com.vurgun.skyfit.core.utils.DispatcherProvider
 import org.koin.dsl.module
 
 val appModule = module {
+    single { DispatcherProvider() }
+
     single<AppStateRepository> { AppStateRepositoryImpl() }
+
     single<UserRepository> { UserRepositoryImpl(get()) }
+
     single { AppStateViewModel(get(), get(), get()) }
 }
