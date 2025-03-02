@@ -15,10 +15,12 @@ import skyfit.composeapp.generated.resources.ic_fast_food
 import skyfit.composeapp.generated.resources.ic_female_body_type_ecto
 import skyfit.composeapp.generated.resources.ic_female_body_type_endo
 import skyfit.composeapp.generated.resources.ic_female_body_type_meso
+import skyfit.composeapp.generated.resources.ic_high_intensity_training
 import skyfit.composeapp.generated.resources.ic_jumping_rope
 import skyfit.composeapp.generated.resources.ic_male_body_type_ecto
 import skyfit.composeapp.generated.resources.ic_male_body_type_endo
 import skyfit.composeapp.generated.resources.ic_male_body_type_meso
+import skyfit.composeapp.generated.resources.ic_medal
 import skyfit.composeapp.generated.resources.ic_pull_up_bar
 import skyfit.composeapp.generated.resources.ic_push_up
 import skyfit.composeapp.generated.resources.ic_sit_up
@@ -100,6 +102,8 @@ object SkyFitBodyTypeIcon {
 object SkyFitAsset {
 
     enum class SkyFitIcon(val id: String, val res: DrawableResource) {
+        HIGH_INTENSITY_TRAINING("ic_trophy", Res.drawable.ic_high_intensity_training),
+        MEDAL("ic_trophy", Res.drawable.ic_medal),
         TROPHY("ic_trophy", Res.drawable.ic_trophy),
         CLOCK("ic_clock", Res.drawable.ic_clock),
         EXERCISES("ic_exercises", Res.drawable.ic_exercises),

@@ -57,13 +57,13 @@ import com.vurgun.skyfit.core.ui.components.ButtonState
 import com.vurgun.skyfit.core.ui.components.ButtonVariant
 import com.vurgun.skyfit.core.ui.components.SkyFitButtonComponent
 import com.vurgun.skyfit.core.ui.components.SkyFitScaffold
-import com.vurgun.skyfit.core.ui.components.calendar.SkyFitClassCalendarCardItem
 import com.vurgun.skyfit.core.ui.resources.MobileStyleGuide
 import com.vurgun.skyfit.core.ui.resources.SkyFitColor
 import com.vurgun.skyfit.core.ui.resources.SkyFitTypography
+import com.vurgun.skyfit.feature_lessons.ui.components.LessonSessionColumn
+import com.vurgun.skyfit.feature_lessons.ui.components.viewdata.LessonSessionColumnViewData
 import com.vurgun.skyfit.feature_profile.ui.components.LifestyleActionRow
 import com.vurgun.skyfit.feature_profile.ui.components.viewdata.LifestyleActionRowViewData
-import com.vurgun.skyfit.feature_profile.ui.trainer.SkyFitProfileClassItemComponent
 import com.vurgun.skyfit.feature_social.ui.PostViewData
 import com.vurgun.skyfit.feature_social.ui.SkyFitPostCardItemComponent
 import com.vurgun.skyfit.navigation.NavigationRoute
@@ -77,7 +77,6 @@ import skyfit.composeapp.generated.resources.ic_calories
 import skyfit.composeapp.generated.resources.ic_chart_pie
 import skyfit.composeapp.generated.resources.ic_clock
 import skyfit.composeapp.generated.resources.ic_dna
-import skyfit.composeapp.generated.resources.ic_exercises
 import skyfit.composeapp.generated.resources.ic_height
 import skyfit.composeapp.generated.resources.ic_meal
 import skyfit.composeapp.generated.resources.ic_overweight
@@ -93,7 +92,7 @@ fun MobileUserProfileScreen(navigator: Navigator) {
     // Observing state from ViewModel
     val profileData by viewModel.profileData.collectAsState()
     val posts by viewModel.posts.collectAsState()
-    val appointments by viewModel.appointments.collectAsState()
+    val appointmentsColumViewData by viewModel.appointmentsColumViewData.collectAsState()
     val showPosts by viewModel.showPosts.collectAsState()
     val showInfoMini by viewModel.showInfoMini.collectAsState()
     val exercisesRowViewData by viewModel.exercisesRowViewData.collectAsState()
@@ -125,7 +124,7 @@ fun MobileUserProfileScreen(navigator: Navigator) {
             MobileUserProfileAboutGroupComponent(
                 scrollState,
                 navigator,
-                appointments,
+                appointmentsColumViewData,
                 exercisesRowViewData,
                 habitsRowData,
                 statistics,
@@ -335,7 +334,7 @@ fun UserProfileCardPreferenceItem(
 fun MobileUserProfileAboutGroupComponent(
     scrollState: ScrollState,
     navigator: Navigator,
-    appointments: List<SkyFitClassCalendarCardItem> = emptyList(),
+    appointmentsColumViewData: LessonSessionColumnViewData? = null,
     exercisesRowData: LifestyleActionRowViewData? = null,
     habitsRowData: LifestyleActionRowViewData? = null,
     statistics: UserProfileActivityStatisticsViewData? = null,
@@ -353,10 +352,11 @@ fun MobileUserProfileAboutGroupComponent(
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.spacedBy(16.dp)
     ) {
-        if (appointments.isNotEmpty()) {
-            MobileUserProfileAppointmentsComponent(
-                appointments = appointments,
-                onClick = { navigator.jumpAndStay(NavigationRoute.UserAppointments) })
+        if (appointmentsColumViewData != null) {
+            LessonSessionColumn(
+                viewData = appointmentsColumViewData,
+                onClickItem = { navigator.jumpAndStay(NavigationRoute.UserAppointments) }
+            )
         }
 
         if (dietGoals.isEmpty()) {
@@ -446,39 +446,6 @@ fun MobileUserProfileActionsComponent(
         }
     }
 }
-
-@Composable
-fun MobileUserProfileAppointmentsComponent(appointments: List<SkyFitClassCalendarCardItem>, onClick: () -> Unit = {}) {
-    Column(
-        Modifier
-            .fillMaxWidth()
-            .background(SkyFitColor.background.fillTransparent, RoundedCornerShape(16.dp))
-            .clickable(onClick = onClick)
-            .padding(16.dp),
-        verticalArrangement = Arrangement.spacedBy(8.dp)
-    ) {
-        Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-            Icon(
-                painter = painterResource(Res.drawable.ic_exercises),
-                modifier = Modifier.size(24.dp),
-                contentDescription = "Exercise",
-                tint = SkyFitColor.icon.default
-            )
-            Text(
-                text = "Randevularım",
-                style = SkyFitTypography.bodyMediumSemibold
-            )
-        }
-
-        appointments.forEach {
-            SkyFitProfileClassItemComponent(
-                item = it,
-                onClick = onClick
-            )
-        }
-    }
-}
-
 
 @Composable
 fun MobileUserProfileDietGoalsComponent(records: List<Any>) {

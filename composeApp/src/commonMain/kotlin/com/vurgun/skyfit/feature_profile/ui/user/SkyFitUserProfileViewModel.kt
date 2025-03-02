@@ -2,11 +2,12 @@ package com.vurgun.skyfit.feature_profile.ui.user
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.vurgun.skyfit.feature_profile.ui.fakePosts
-import com.vurgun.skyfit.core.ui.components.calendar.SkyFitClassCalendarCardItem
 import com.vurgun.skyfit.core.ui.resources.SkyFitAsset
+import com.vurgun.skyfit.feature_lessons.ui.components.viewdata.LessonSessionColumnViewData
+import com.vurgun.skyfit.feature_lessons.ui.components.viewdata.LessonSessionItemViewData
 import com.vurgun.skyfit.feature_profile.ui.components.viewdata.LifestyleActionItemViewData
 import com.vurgun.skyfit.feature_profile.ui.components.viewdata.LifestyleActionRowViewData
+import com.vurgun.skyfit.feature_profile.ui.fakePosts
 import com.vurgun.skyfit.feature_social.ui.PostViewData
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
@@ -23,8 +24,8 @@ class SkyFitUserProfileViewModel : ViewModel() {
     private val _posts = MutableStateFlow<List<PostViewData>>(emptyList())
     val posts: StateFlow<List<PostViewData>> get() = _posts
 
-    private val _appointments = MutableStateFlow<List<SkyFitClassCalendarCardItem>>(emptyList())
-    val appointments: StateFlow<List<SkyFitClassCalendarCardItem>> get() = _appointments
+    private val _appointmentsColumViewData = MutableStateFlow<LessonSessionColumnViewData?>(null)
+    val appointmentsColumViewData: StateFlow<LessonSessionColumnViewData?> get() = _appointmentsColumViewData
 
     private val _exercisesRowViewData = MutableStateFlow<LifestyleActionRowViewData?>(null)
     val exercisesRowViewData: StateFlow<LifestyleActionRowViewData?> get() = _exercisesRowViewData
@@ -55,7 +56,6 @@ class SkyFitUserProfileViewModel : ViewModel() {
         loadPosts()
         loadAppointments()
         _photoDiary.value = UserProfilePhotoDiaryViewData()
-
 
         val exercisesViewData = listOf(
             LifestyleActionItemViewData(SkyFitAsset.SkyFitIcon.PUSH_UP.id, "Şınav"),
@@ -88,9 +88,9 @@ class SkyFitUserProfileViewModel : ViewModel() {
             social = "@dexteretymo",
             imageUrl = "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSJq8Cfy_pOdcJOYIQew3rWrnwwxfc8bZIarg&s",
             preferences = listOf(
-                UserProfilePreferenceItem(iconId = "ic_height_outline","Boy", "175"),
-                UserProfilePreferenceItem(iconId = "ic_dna_outline","Kilo", "75"),
-                UserProfilePreferenceItem(iconId = "ic_overweight","Vücut Tipi", "Ecto")
+                UserProfilePreferenceItem(iconId = "ic_height_outline", "Boy", "175"),
+                UserProfilePreferenceItem(iconId = "ic_dna_outline", "Kilo", "75"),
+                UserProfilePreferenceItem(iconId = "ic_overweight", "Vücut Tipi", "Ecto")
             ),
             showInfoMini = false
         )
@@ -101,7 +101,28 @@ class SkyFitUserProfileViewModel : ViewModel() {
     }
 
     private fun loadAppointments() {
-        _appointments.value = fakeAppointmentClasses
+        val appointmentsViewData = listOf(
+            LessonSessionItemViewData(
+                iconId = SkyFitAsset.SkyFitIcon.PUSH_UP.id,
+                title = "Fonksiyonel hareket ve esneklik geliştirme",
+                duration = "60 dakika",
+                location = "@ironstudio",
+                trainer = "Micheal Blake"
+            ),
+            LessonSessionItemViewData(
+                iconId = SkyFitAsset.SkyFitIcon.BICEPS_FORCE.id,
+                title = "Kişisel kuvvet antrenmanı",
+                duration = "60 dakika",
+                location = "@ironstudio",
+                trainer = "Micheal Blake"
+            )
+        )
+
+        _appointmentsColumViewData.value = LessonSessionColumnViewData(
+            iconId = SkyFitAsset.SkyFitIcon.EXERCISES.id,
+            title = "Randevularım",
+            items = appointmentsViewData
+        )
     }
 
     fun updateScroll(scrollValue: Int, firstItemIndex: Int) {
@@ -114,42 +135,11 @@ class SkyFitUserProfileViewModel : ViewModel() {
     }
 }
 
-val fakeAppointmentClasses: List<SkyFitClassCalendarCardItem> = listOf(
-    SkyFitClassCalendarCardItem(
-        title = "Morning Yoga",
-        date = "2025-02-01",
-        hours = "08:00 - 09:00",
-        category = "Yoga",
-        location = "Studio A",
-        trainer = "Alice Johnson",
-        capacity = "15",
-        cost = "$10",
-        note = "Bring your own mat",
-        enabled = true,
-        selected = false,
-        booked = false,
-        iconId = "ic_push_up"
-    ),
-    SkyFitClassCalendarCardItem(
-        title = "HIIT Workout",
-        date = "2025-02-01",
-        hours = "10:00 - 10:45",
-        category = "Fitness",
-        location = "Gym B",
-        trainer = "John Doe",
-        capacity = "20",
-        cost = "$15",
-        note = "High-intensity training",
-        enabled = true,
-        selected = false,
-        booked = false,
-        iconId = "ic_biceps_force"
-    )
+data class UserProfilePreferenceItem(
+    val iconId: String,
+    val title: String,
+    val subtitle: String
 )
-
-data class UserProfilePreferenceItem(val iconId: String,
-                                     val title: String,
-                                     val subtitle: String)
 
 data class TopBarGroupViewData(
     val name: String = "",

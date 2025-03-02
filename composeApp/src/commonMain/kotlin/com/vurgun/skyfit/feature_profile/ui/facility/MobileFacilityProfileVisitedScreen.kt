@@ -1,7 +1,6 @@
 package com.vurgun.skyfit.feature_profile.ui.facility
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxWithConstraints
@@ -22,6 +21,8 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Icon
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -32,35 +33,29 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.dp
 import coil3.compose.AsyncImage
-import com.vurgun.skyfit.feature_explore.ui.TrainerProfileCardItemViewData
-import com.vurgun.skyfit.feature_profile.ui.facility.MobileFacilityProfileVisitedScreen.MobileFacilityProfileVisitedScreenInfoCardComponent
-import com.vurgun.skyfit.feature_profile.ui.facility.MobileFacilityProfileVisitedScreen.MobileFacilityProfileVisitedScreenPhotosComponent
-import com.vurgun.skyfit.feature_profile.ui.facility.MobileFacilityProfileVisitedScreen.MobileFacilityProfileVisitedScreenPrivateClassesComponent
-import com.vurgun.skyfit.feature_profile.ui.facility.MobileFacilityProfileVisitedScreen.MobileFacilityProfileVisitedScreenToolbarComponent
-import com.vurgun.skyfit.feature_profile.ui.facility.MobileFacilityProfileVisitedScreen.MobileFacilityProfileVisitedScreenTrainersComponent
 import com.vurgun.skyfit.core.ui.components.ButtonSize
 import com.vurgun.skyfit.core.ui.components.ButtonVariant
 import com.vurgun.skyfit.core.ui.components.SkyFitButtonComponent
 import com.vurgun.skyfit.core.ui.components.button.SkyFitPrimaryCircularBackButton
 import com.vurgun.skyfit.core.ui.components.button.SkyFitSecondaryIconButton
-import com.vurgun.skyfit.core.ui.components.calendar.SkyFitClassCalendarCardItem
-import com.vurgun.skyfit.core.ui.components.calendar.SkyFitClassCalendarCardItemRowComponent
+import com.vurgun.skyfit.core.ui.resources.SkyFitColor
+import com.vurgun.skyfit.core.ui.resources.SkyFitTypography
+import com.vurgun.skyfit.feature_explore.ui.TrainerProfileCardItemViewData
+import com.vurgun.skyfit.feature_lessons.ui.components.LessonSessionColumn
 import com.vurgun.skyfit.feature_profile.ui.ProfileCardVerticalDetailItemComponent
 import com.vurgun.skyfit.feature_profile.ui.RatingStarComponent
 import com.vurgun.skyfit.feature_profile.ui.TrainerProfileCardItemBox
 import com.vurgun.skyfit.feature_profile.ui.VerticalDetailDivider
+import com.vurgun.skyfit.feature_profile.ui.facility.MobileFacilityProfileVisitedScreen.MobileFacilityProfileVisitedScreenInfoCardComponent
+import com.vurgun.skyfit.feature_profile.ui.facility.MobileFacilityProfileVisitedScreen.MobileFacilityProfileVisitedScreenPhotosComponent
+import com.vurgun.skyfit.feature_profile.ui.facility.MobileFacilityProfileVisitedScreen.MobileFacilityProfileVisitedScreenToolbarComponent
+import com.vurgun.skyfit.feature_profile.ui.facility.MobileFacilityProfileVisitedScreen.MobileFacilityProfileVisitedScreenTrainersComponent
 import com.vurgun.skyfit.navigation.NavigationRoute
 import com.vurgun.skyfit.navigation.jumpAndStay
-import com.vurgun.skyfit.core.ui.resources.SkyFitColor
-import com.vurgun.skyfit.core.ui.resources.SkyFitIcon
-import com.vurgun.skyfit.core.ui.resources.SkyFitTypography
 import moe.tlaster.precompose.navigation.Navigator
 import org.jetbrains.compose.resources.painterResource
 import skyfit.composeapp.generated.resources.Res
 import skyfit.composeapp.generated.resources.ic_calendar_dots
-import skyfit.composeapp.generated.resources.ic_dashboard
-import skyfit.composeapp.generated.resources.ic_exercises
-import skyfit.composeapp.generated.resources.ic_profile_fill
 import skyfit.composeapp.generated.resources.ic_send
 import skyfit.composeapp.generated.resources.logo_skyfit
 
@@ -71,9 +66,13 @@ fun MobileFacilityProfileVisitedScreen(navigator: Navigator) {
     val scrollState = rememberScrollState()
     val photos: List<Any> = listOf(1, 2, 3)
     val trainers = viewModel.trainers
-    val privateClasses = viewModel.privateClasses
+    val lessonsColumViewData by viewModel.lessonsColumViewData.collectAsState()
 
     var isFollowing by remember { mutableStateOf(false) }
+
+    LaunchedEffect(Unit) {
+        viewModel.loadData()
+    }
 
     BoxWithConstraints(
         modifier = Modifier.fillMaxSize()
@@ -120,10 +119,10 @@ fun MobileFacilityProfileVisitedScreen(navigator: Navigator) {
                 )
             }
 
-            if (privateClasses.isNotEmpty()) {
-                MobileFacilityProfileVisitedScreenPrivateClassesComponent(privateClasses, onClick = {
-                    navigator.jumpAndStay(NavigationRoute.FacilityCalendarVisited)
-                })
+            lessonsColumViewData?.let {
+                LessonSessionColumn(
+                    viewData = it,
+                    onClickItem = { navigator.jumpAndStay(NavigationRoute.FacilityCalendarVisited) })
             }
         }
 
@@ -335,79 +334,6 @@ object MobileFacilityProfileVisitedScreen {
                         onClick = onClick
                     )
                 }
-            }
-        }
-    }
-
-    @Composable
-    fun MobileFacilityProfileVisitedScreenPrivateClassesComponent(
-        privateClasses: List<SkyFitClassCalendarCardItem>,
-        onClick: () -> Unit = {}
-    ) {
-        Column(
-            Modifier
-                .padding(horizontal = 16.dp)
-                .fillMaxWidth()
-                .background(SkyFitColor.background.fillTransparent, RoundedCornerShape(20.dp))
-                .clickable(onClick = onClick)
-                .padding(16.dp)
-        ) {
-            Row {
-                Icon(
-                    painter = painterResource(Res.drawable.logo_skyfit),
-                    contentDescription = "Info",
-                    tint = SkyFitColor.icon.default,
-                    modifier = Modifier.size(24.dp)
-                )
-                Spacer(Modifier.width(8.dp))
-                Text(
-                    text = "Özel Dersler",
-                    style = SkyFitTypography.bodyLargeSemibold
-                )
-            }
-
-            privateClasses.forEach {
-                Spacer(Modifier.height(16.dp))
-                SkyFitFacilityProfileClassItemComponent(
-                    item = it,
-                    onClick = { }
-                )
-            }
-        }
-    }
-}
-
-
-@Composable
-fun SkyFitFacilityProfileClassItemComponent(item: SkyFitClassCalendarCardItem, onClick: () -> Unit) {
-
-    Box(
-        Modifier.fillMaxWidth()
-            .background(SkyFitColor.background.fillTransparentSecondary, RoundedCornerShape(16.dp))
-            .clickable(onClick = onClick)
-            .padding(12.dp)
-    ) {
-        Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
-            Row(verticalAlignment = Alignment.CenterVertically) {
-                Icon(
-                    painter = SkyFitIcon.getIconResourcePainter(item.iconId, defaultRes = Res.drawable.ic_exercises),
-                    contentDescription = null,
-                    modifier = Modifier.size(24.dp),
-                    tint = SkyFitColor.icon.default
-                )
-                Text(
-                    text = item.title,
-                    style = SkyFitTypography.bodyLargeSemibold,
-                    modifier = Modifier.weight(1f).padding(horizontal = 8.dp)
-                )
-            }
-
-            item.trainer?.let {
-                SkyFitClassCalendarCardItemRowComponent(it, iconRes = Res.drawable.ic_profile_fill)
-            }
-
-            item.category?.let {
-                SkyFitClassCalendarCardItemRowComponent(it, iconRes = Res.drawable.ic_dashboard)
             }
         }
     }

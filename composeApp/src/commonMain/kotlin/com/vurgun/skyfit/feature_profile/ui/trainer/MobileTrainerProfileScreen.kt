@@ -2,7 +2,6 @@ package com.vurgun.skyfit.feature_profile.ui.trainer
 
 import androidx.compose.foundation.ScrollState
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxWithConstraints
@@ -16,15 +15,10 @@ import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.layout.widthIn
-import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.lazy.LazyListState
-import androidx.compose.foundation.lazy.LazyRow
-import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Divider
@@ -38,7 +32,6 @@ import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Edit
-import androidx.compose.material.icons.filled.Menu
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -52,39 +45,30 @@ import androidx.compose.ui.draw.blur
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import coil3.compose.AsyncImage
-import com.vurgun.skyfit.feature_profile.ui.user.MobileUserProfileActionsComponent
-import com.vurgun.skyfit.feature_profile.ui.user.MobileUserProfilePostsComponent
-import com.vurgun.skyfit.feature_profile.ui.user.MobileUserProfilePostsInputComponent
-import com.vurgun.skyfit.feature_profile.ui.user.UserProfileCardPreferenceRow
 import com.vurgun.skyfit.core.ui.components.ButtonSize
 import com.vurgun.skyfit.core.ui.components.ButtonVariant
 import com.vurgun.skyfit.core.ui.components.SkyFitButtonComponent
-import com.vurgun.skyfit.core.ui.components.calendar.SkyFitClassCalendarCardItem
-import com.vurgun.skyfit.core.ui.components.calendar.SkyFitClassCalendarCardItemRowComponent
-import com.vurgun.skyfit.feature_social.ui.PostViewData
-import com.vurgun.skyfit.feature_profile.ui.SkyFitTrainerProfileViewModel
-import com.vurgun.skyfit.feature_profile.ui.user.TopBarGroupViewData
-import com.vurgun.skyfit.navigation.NavigationRoute
-import com.vurgun.skyfit.navigation.jumpAndStay
 import com.vurgun.skyfit.core.ui.resources.SkyFitColor
-import com.vurgun.skyfit.core.ui.resources.SkyFitIcon
 import com.vurgun.skyfit.core.ui.resources.SkyFitTypography
+import com.vurgun.skyfit.feature_lessons.ui.components.LessonSessionColumn
+import com.vurgun.skyfit.feature_lessons.ui.components.viewdata.LessonSessionColumnViewData
+import com.vurgun.skyfit.feature_profile.ui.SkyFitTrainerProfileViewModel
 import com.vurgun.skyfit.feature_profile.ui.components.LifestyleActionRow
 import com.vurgun.skyfit.feature_profile.ui.components.viewdata.LifestyleActionRowViewData
+import com.vurgun.skyfit.feature_profile.ui.user.MobileUserProfileActionsComponent
+import com.vurgun.skyfit.feature_profile.ui.user.MobileUserProfilePostsComponent
+import com.vurgun.skyfit.feature_profile.ui.user.MobileUserProfilePostsInputComponent
+import com.vurgun.skyfit.feature_profile.ui.user.TopBarGroupViewData
+import com.vurgun.skyfit.feature_profile.ui.user.UserProfileCardPreferenceRow
+import com.vurgun.skyfit.feature_social.ui.PostViewData
+import com.vurgun.skyfit.navigation.NavigationRoute
+import com.vurgun.skyfit.navigation.jumpAndStay
 import moe.tlaster.precompose.navigation.Navigator
 import org.jetbrains.compose.resources.painterResource
 import skyfit.composeapp.generated.resources.Res
-import skyfit.composeapp.generated.resources.ic_clock
-import skyfit.composeapp.generated.resources.ic_dashboard
-import skyfit.composeapp.generated.resources.ic_exercises
-import skyfit.composeapp.generated.resources.ic_medal
-import skyfit.composeapp.generated.resources.ic_note
-import skyfit.composeapp.generated.resources.ic_profile_fill
 import skyfit.composeapp.generated.resources.logo_skyfit
 
 @Composable
@@ -96,8 +80,9 @@ fun MobileTrainerProfileScreen(navigator: Navigator) {
 
     val profileData by viewModel.profileData.collectAsState()
     val specialtiesRowViewData by viewModel.specialtiesRowViewData.collectAsState()
-    val privateClasses = viewModel.privateClasses.collectAsState().value
     val posts = viewModel.posts.collectAsState().value
+
+    val lessonsColumViewData by viewModel.lessonsColumViewData.collectAsState()
 
     LaunchedEffect(Unit) {
         viewModel.loadData()
@@ -135,7 +120,7 @@ fun MobileTrainerProfileScreen(navigator: Navigator) {
         if (showPosts) {
             MobileTrainerProfilePostsComponent(posts)
         } else {
-            MobileTrainerProfileAboutGroupComponent(specialtiesRowViewData, privateClasses, scrollState)
+            MobileTrainerProfileAboutGroupComponent(specialtiesRowViewData, lessonsColumViewData, scrollState)
         }
     }
 }
@@ -143,7 +128,7 @@ fun MobileTrainerProfileScreen(navigator: Navigator) {
 @Composable
 fun MobileTrainerProfileAboutGroupComponent(
     specialtiesRowViewData: LifestyleActionRowViewData?,
-    privateClasses: List<SkyFitClassCalendarCardItem>,
+    lessonSessionColumnViewData: LessonSessionColumnViewData? = null,
     scrollState: ScrollState
 ) {
     Column(
@@ -156,10 +141,13 @@ fun MobileTrainerProfileAboutGroupComponent(
             LifestyleActionRow(viewData = specialtiesRowViewData)
         }
 
-        if (privateClasses.isEmpty()) {
-            MobileTrainerProfilePrivateClassesEmptyComponent(onClickAdd = {})
+        if (lessonSessionColumnViewData != null) {
+            LessonSessionColumn(
+                viewData = lessonSessionColumnViewData,
+                onClickShowAll = {}
+            )
         } else {
-            MobileTrainerProfilePrivateClassesComponent(privateClasses)
+            MobileTrainerProfilePrivateClassesEmptyComponent(onClickAdd = {})
         }
 
         Spacer(Modifier.height(124.dp))
@@ -252,109 +240,6 @@ fun MobileTrainerProfilePostsComponent(
 ) {
     MobileUserProfilePostsComponent(posts, listState)
 }
-
-@Composable
-fun MobileTrainerProfilePrivateClassesComponent(privateClasses: List<SkyFitClassCalendarCardItem>) {
-    var isMenuOpen by remember { mutableStateOf(false) }
-
-    Column(
-        Modifier
-            .padding(horizontal = 16.dp)
-            .fillMaxWidth()
-            .background(SkyFitColor.background.surfaceSecondary, RoundedCornerShape(24.dp))
-            .padding(16.dp)
-    ) {
-        Row(
-            modifier = Modifier.fillMaxWidth(),
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            Icon(
-                painter = painterResource(Res.drawable.logo_skyfit),
-                contentDescription = "Info",
-                tint = SkyFitColor.icon.default,
-                modifier = Modifier.size(24.dp)
-            )
-            Spacer(Modifier.width(8.dp))
-            Text(
-                text = "Özel Dersler",
-                style = SkyFitTypography.bodyLargeSemibold
-            )
-            Spacer(Modifier.weight(1f)) // Pushes the menu to the right
-
-            Box {
-                Icon(
-                    imageVector = Icons.Default.Menu,
-                    contentDescription = "More Options",
-                    tint = SkyFitColor.icon.default,
-                    modifier = Modifier
-                        .size(24.dp)
-                        .clickable { isMenuOpen = true }
-                )
-
-                // Attach the TrainerClassMenuPopup here
-                TrainerClassMenuPopup(
-                    isOpen = isMenuOpen,
-                    onDismiss = { isMenuOpen = false },
-                    onAddEvent = { /* Handle Add Event */ },
-                    onEdit = { /* Handle Edit */ }
-                )
-            }
-        }
-
-        privateClasses.forEach {
-            Spacer(Modifier.height(16.dp))
-            SkyFitProfileClassItemComponent(
-                item = it,
-                onClick = { }
-            )
-        }
-    }
-}
-
-
-@Composable
-fun SkyFitProfileClassItemComponent(item: SkyFitClassCalendarCardItem, onClick: () -> Unit) {
-
-    Box(
-        Modifier.fillMaxWidth()
-            .background(SkyFitColor.background.fillTransparentSecondary, RoundedCornerShape(16.dp))
-            .clickable(onClick = onClick)
-            .padding(12.dp)
-    ) {
-        Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
-            Row(verticalAlignment = Alignment.CenterVertically) {
-                Icon(
-                    painter = SkyFitIcon.getIconResourcePainter(item.iconId, defaultRes = Res.drawable.ic_exercises),
-                    contentDescription = null,
-                    modifier = Modifier.size(24.dp),
-                    tint = SkyFitColor.icon.default
-                )
-                Text(
-                    text = item.title,
-                    style = SkyFitTypography.bodyLargeSemibold,
-                    modifier = Modifier.weight(1f).padding(horizontal = 8.dp)
-                )
-            }
-
-            item.hours?.let {
-                SkyFitClassCalendarCardItemRowComponent(it, iconRes = Res.drawable.ic_clock)
-            }
-
-            item.trainer?.let {
-                SkyFitClassCalendarCardItemRowComponent(it, iconRes = Res.drawable.ic_profile_fill)
-            }
-
-            item.category?.let {
-                SkyFitClassCalendarCardItemRowComponent(it, iconRes = Res.drawable.ic_dashboard)
-            }
-
-            item.note?.let {
-                SkyFitClassCalendarCardItemRowComponent(it, iconRes = Res.drawable.ic_note)
-            }
-        }
-    }
-}
-
 
 @Composable
 private fun TrainerClassMenuPopup(

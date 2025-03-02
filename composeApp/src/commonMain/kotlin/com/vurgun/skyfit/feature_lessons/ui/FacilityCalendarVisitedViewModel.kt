@@ -1,116 +1,105 @@
 package com.vurgun.skyfit.feature_lessons.ui
 
 import androidx.lifecycle.ViewModel
-import com.vurgun.skyfit.navigation.NavigationRoute
-import com.vurgun.skyfit.core.ui.components.calendar.SkyFitClassCalendarCardItem
+import com.vurgun.skyfit.core.ui.resources.SkyFitAsset
+import com.vurgun.skyfit.feature_lessons.ui.components.viewdata.LessonSessionColumnViewData
+import com.vurgun.skyfit.feature_lessons.ui.components.viewdata.LessonSessionItemViewData
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.update
+import kotlinx.datetime.LocalDate
+
+sealed class FacilityCalendarVisitedEvent {
+    data object GoToSessionDetail : FacilityCalendarVisitedEvent()
+}
 
 class FacilityCalendarVisitedViewModel : ViewModel() {
 
-    private val _calendarClasses = MutableStateFlow(fakeCalendarClasses)
-    val calendarClasses: StateFlow<List<SkyFitClassCalendarCardItem>> get() = _calendarClasses
+    private val _isBookingEnabled = MutableStateFlow(false)
+    val isBookingEnabled: StateFlow<Boolean> get() = _isBookingEnabled
 
-    private val _isAppointmentAllowed = MutableStateFlow(false)
-    val isAppointmentAllowed: StateFlow<Boolean> get() = _isAppointmentAllowed
+    private val _navigationEvent = MutableStateFlow<FacilityCalendarVisitedEvent?>(null)
+    val navigationEvent: StateFlow<FacilityCalendarVisitedEvent?> get() = _navigationEvent
 
-    private val _navigationEvent = MutableStateFlow<NavigationRoute?>(null)
-    val navigationEvent: StateFlow<NavigationRoute?> get() = _navigationEvent
+    private val _lessonsColumnViewData = MutableStateFlow<LessonSessionColumnViewData?>(null)
+    val lessonsColumnViewData: StateFlow<LessonSessionColumnViewData?> get() = _lessonsColumnViewData
 
-    fun toggleSelection(selectedItem: SkyFitClassCalendarCardItem) {
-        _calendarClasses.update { currentList ->
-            val updatedList = currentList.map { item ->
-                when {
-                    item == selectedItem && item.enabled && !item.booked && !isClassFull(item) -> {
-                        item.copy(selected = !item.selected)
-                    }
-                    else -> item.copy(selected = false)
-                }
-            }
-            _isAppointmentAllowed.value = updatedList.any { it.selected }
-            updatedList
+    private val _selectedSessionId = MutableStateFlow<String?>(null)
+    val selectedSessionId: StateFlow<String?> get() = _selectedSessionId
+
+    val userBookedSessionIds = listOf("123", "1234", "12345") // User's booked sessions
+
+    fun loadData(date: LocalDate) {
+        val privateLessonsViewData = listOf(
+            LessonSessionItemViewData(
+                iconId = SkyFitAsset.SkyFitIcon.PUSH_UP.id,
+                title = "Shoulders and Abs",
+                trainer = "Micheal Blake",
+                category = "Group Fitness",
+                hours = "08:00 - 09:00",
+                enrolledCount = 2,
+                maxCapacity = 4,
+                note = "Try to arrive 5-10 minutes early to warm up and settle in before the class starts.",
+                sessionId = "4444"
+            ),
+            LessonSessionItemViewData(
+                iconId = SkyFitAsset.SkyFitIcon.HIGH_INTENSITY_TRAINING.id,
+                title = "Reformer Pilates",
+                trainer = "Sarah L.",
+                category = "Pilates",
+                hours = "08:00 - 09:00",
+                enrolledCount = 3,
+                maxCapacity = 3,
+                sessionId = "55555"
+            ),
+            LessonSessionItemViewData(
+                iconId = SkyFitAsset.SkyFitIcon.BICEPS_FORCE.id,
+                title = "Fitness",
+                trainer = "Sarah L.",
+                category = "PT",
+                hours = "08:00 - 09:00",
+                enrolledCount = 1,
+                maxCapacity = 2,
+                sessionId = "12345"
+            )
+        ).map { lesson ->
+            lesson.copy(enabled = lesson.isBooked(userBookedSessionIds) || (lesson.enrolledCount ?: 0) < (lesson.maxCapacity ?: 0))
         }
+
+        _lessonsColumnViewData.value = LessonSessionColumnViewData(
+            iconId = SkyFitAsset.SkyFitIcon.EXERCISES.id,
+            title = "Özel Ders Seç",
+            items = privateLessonsViewData
+        )
     }
 
-    fun handleClassSelection(selectedItem: SkyFitClassCalendarCardItem) {
-        if (selectedItem.booked) {
-            _navigationEvent.value = NavigationRoute.UserAppointmentDetail
+    fun handleClassSelection(selectedItem: LessonSessionItemViewData) {
+        if (selectedItem.isBooked(userBookedSessionIds)) {
+            _navigationEvent.value = FacilityCalendarVisitedEvent.GoToSessionDetail
         } else {
             toggleSelection(selectedItem)
         }
     }
 
-    private fun isClassFull(item: SkyFitClassCalendarCardItem): Boolean {
-        item.capacity ?: return false
-        try {
-            val (current, max) = item.capacity.split("/").map { it.trim().toIntOrNull() ?: 0 }
-            return current >= max
-        } catch (e: IndexOutOfBoundsException) {
-            return false
-        }
-    }
-}
+    private fun toggleSelection(selectedItem: LessonSessionItemViewData) {
+        // 🔥 Prevent selection if the session is disabled
+        if (!selectedItem.enabled) return
 
-val fakeCalendarClasses = listOf(
-    SkyFitClassCalendarCardItem(
-        title = "Morning Yoga",
-        date = "2025-02-01",
-        hours = "08:00 - 09:00",
-        category = "Yoga",
-        location = "Studio A",
-        trainer = "Alice Johnson",
-        capacity = "2/4",
-        cost = "$10",
-        note = "Bring your own mat",
-        enabled = true,
-        selected = false,
-        booked = false,
-        iconId = "ic_push_up"
-    ),
-    SkyFitClassCalendarCardItem(
-        title = "HIIT Workout",
-        date = "2025-02-01",
-        hours = "10:00 - 10:45",
-        category = "Fitness",
-        location = "Gym B",
-        trainer = "John Doe",
-        capacity = "1/4",
-        cost = "$15",
-        note = "High-intensity training",
-        enabled = true,
-        selected = false,
-        booked = false,
-        iconId = "ic_sit_up"
-    ),
-    SkyFitClassCalendarCardItem(
-        title = "HIIT Workout",
-        date = "2025-02-01",
-        hours = "10:00 - 10:45",
-        category = "Fitness",
-        location = "Gym B",
-        trainer = "John Doe",
-        capacity = "3/3",
-        cost = "Free",
-        note = "High-intensity training",
-        enabled = false,
-        selected = false,
-        booked = false,
-        iconId = "ic_jumping_rope"
-    ),
-    SkyFitClassCalendarCardItem(
-        title = "Pilates Core Strength",
-        date = "2025-02-02",
-        hours = "12:00 - 13:00",
-        category = "Pilates",
-        location = "Studio C",
-        trainer = "Emma Stone",
-        capacity = "3/3",
-        cost = "$12",
-        note = "Focus on core strength",
-        enabled = true,
-        selected = false,
-        booked = true,
-        iconId = "ic_push_up"
-    )
-)
+        _selectedSessionId.value = if (_selectedSessionId.value == selectedItem.sessionId) {
+            null // 🔥 Deselect if already selected
+        } else {
+            selectedItem.sessionId // 🔥 Set new selection
+        }
+
+        _lessonsColumnViewData.update { currentData ->
+            currentData?.copy(
+                items = currentData.items.map { lesson ->
+                    lesson.copy(selected = lesson.sessionId == _selectedSessionId.value)
+                }
+            )
+        }
+
+        _isBookingEnabled.value = _selectedSessionId.value != null
+    }
+
+}

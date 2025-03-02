@@ -36,6 +36,8 @@ import com.vurgun.skyfit.core.ui.components.SkyFitButtonComponent
 import com.vurgun.skyfit.core.ui.components.button.SkyFitIconButton
 import com.vurgun.skyfit.core.ui.resources.SkyFitColor
 import com.vurgun.skyfit.core.ui.resources.SkyFitTypography
+import com.vurgun.skyfit.feature_lessons.ui.components.LessonSessionColumn
+import com.vurgun.skyfit.feature_profile.ui.components.LifestyleActionRow
 import com.vurgun.skyfit.feature_profile.ui.fakePosts
 import com.vurgun.skyfit.navigation.NavigationRoute
 import com.vurgun.skyfit.navigation.jumpAndStay
@@ -114,7 +116,7 @@ fun MobileUserProfileVisitedScreen(navigator: Navigator) {
         if (showPosts) {
             MobileUserProfilePostsComponent(posts = posts, listState = postListState)
         } else {
-            MobileUserProfileAboutGroupComponent(scrollState, navigator, emptyList())
+            MobileUserProfileAboutGroupComponent(scrollState, navigator)
         }
     }
 }
@@ -190,7 +192,7 @@ private fun MobileUserProfileVisitedScreenAboutGroupComponent(
     var dietGoals: List<Any> = listOf(1, 2, 3)
     var showMeasurements: Boolean = true
     val statistics by viewModel.statistics.collectAsState()
-    val appointments by viewModel.appointments.collectAsState()
+    val appointmentsColumViewData by viewModel.appointmentsColumViewData.collectAsState()
     val exercisesRowViewData by viewModel.exercisesRowViewData.collectAsState()
     val habitsRowViewData by viewModel.habitsRowViewData.collectAsState()
     val photoDiary by viewModel.photoDiary.collectAsState()
@@ -200,9 +202,10 @@ private fun MobileUserProfileVisitedScreenAboutGroupComponent(
         modifier = Modifier.fillMaxSize().verticalScroll(scrollState),
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
-        if (appointments.isEmpty()) {
-            MobileUserProfileAppointmentsComponent(appointments)
+        appointmentsColumViewData?.let {
+            LessonSessionColumn(viewData = it)
         }
+
         if (dietGoals.isNotEmpty()) {
             MobileUserProfileDietGoalsComponent(dietGoals)
         }
@@ -216,14 +219,14 @@ private fun MobileUserProfileVisitedScreenAboutGroupComponent(
 
         statistics?.let { MobileUserProfileStatisticsBarsComponent(it) }
 
-//        if (exercisesRowViewData != null) {
-//            LifestyleActionRow(viewData = exercisesRowViewData)
-//        }
+        exercisesRowViewData?.let {
+            LifestyleActionRow(viewData = it)
+        }
 
         photoDiary?.let { MobileUserProfilePhotoDiaryComponent(it) }
 
-//        if (habitsRowViewData != null) {
-//            LifestyleActionRow(viewData = habitsRowViewData)
-//        }
+        habitsRowViewData?.let {
+            LifestyleActionRow(viewData = it)
+        }
     }
 }

@@ -1,21 +1,16 @@
 package com.vurgun.skyfit.feature_lessons.ui
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Divider
 import androidx.compose.material.DropdownMenu
@@ -26,6 +21,7 @@ import androidx.compose.material.Scaffold
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -36,25 +32,21 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import com.vurgun.skyfit.core.ui.components.SkyFitScreenHeader
-import com.vurgun.skyfit.core.ui.components.calendar.SkyFitClassCalendarCardItem
-import com.vurgun.skyfit.core.ui.components.calendar.SkyFitClassCalendarCardItemRowComponent
+import com.vurgun.skyfit.core.ui.resources.SkyFitColor
+import com.vurgun.skyfit.core.ui.resources.SkyFitTypography
+import com.vurgun.skyfit.core.utils.now
+import com.vurgun.skyfit.feature_lessons.ui.components.LessonSessionColumnItem
+import com.vurgun.skyfit.feature_lessons.ui.components.viewdata.LessonSessionItemViewData
 import com.vurgun.skyfit.navigation.NavigationRoute
 import com.vurgun.skyfit.navigation.jumpAndStay
-import com.vurgun.skyfit.core.ui.resources.SkyFitColor
-import com.vurgun.skyfit.core.ui.resources.SkyFitIcon
-import com.vurgun.skyfit.core.ui.resources.SkyFitTypography
+import kotlinx.datetime.LocalDate
 import moe.tlaster.precompose.navigation.Navigator
 import org.jetbrains.compose.resources.painterResource
 import skyfit.composeapp.generated.resources.Res
 import skyfit.composeapp.generated.resources.ic_check_circle
-import skyfit.composeapp.generated.resources.ic_clock
 import skyfit.composeapp.generated.resources.ic_close_circle
-import skyfit.composeapp.generated.resources.ic_dashboard
 import skyfit.composeapp.generated.resources.ic_delete
-import skyfit.composeapp.generated.resources.ic_dots_vertical
-import skyfit.composeapp.generated.resources.ic_exercises
 import skyfit.composeapp.generated.resources.ic_pencil
-import skyfit.composeapp.generated.resources.ic_profile_fill
 
 @Composable
 fun MobileFacilityClassesScreen(navigator: Navigator) {
@@ -62,153 +54,131 @@ fun MobileFacilityClassesScreen(navigator: Navigator) {
     val activeClasses by viewModel.activeClasses.collectAsState()
     val inactiveClasses by viewModel.inactiveClasses.collectAsState()
 
+
+    LaunchedEffect(Unit) {
+        viewModel.loadData(LocalDate.now())
+    }
+
     Scaffold(
         backgroundColor = SkyFitColor.background.default,
         topBar = {
             SkyFitScreenHeader("Dersler", onClickBack = { navigator.popBackStack() })
         }
     ) { paddingValues ->
-        LazyColumn(
+
+        Column(
             modifier = Modifier
-                .fillMaxSize()
+                .fillMaxWidth()
                 .padding(paddingValues)
-                .padding(horizontal = 16.dp),
-            verticalArrangement = Arrangement.spacedBy(16.dp)
+                .padding(horizontal = 16.dp)
         ) {
-            // Header for Active Classes
-            item {
-                Row(
-                    modifier = Modifier.fillMaxWidth().padding(horizontal = 8.dp),
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-                    Text(text = "Aktif", style = SkyFitTypography.heading5)
-                    Spacer(Modifier.weight(1f))
-                    Text(
-                        text = "+ Yeni",
-                        style = SkyFitTypography.bodyMediumRegular,
-                        color = SkyFitColor.text.secondary,
-                        modifier = Modifier.clickable { navigator.jumpAndStay(NavigationRoute.FacilityClassEdit) }
-                    )
-                }
-            }
+            ActiveSessionItemsColumn(
+                items = activeClasses,
+                onClickNew = { navigator.jumpAndStay(NavigationRoute.FacilityClassEdit) },
+                onEdit = { navigator.jumpAndStay(NavigationRoute.FacilityClassEdit) },
+                onDeactivate = { viewModel.toggleClassStatus(it.sessionId) },
+                onDelete = { viewModel.deleteClass(it.sessionId) }
+            )
 
-            // Active Classes List
-            items(activeClasses, key = { it.classId }) { item ->
-                SkyFitClassItemComponent(
-                    item = item,
-                    onEdit = { navigator.jumpAndStay(NavigationRoute.FacilityClassEdit) },
-                    onDeactivate = { viewModel.toggleClassStatus(item.classId) },
-                    onActivate = { viewModel.toggleClassStatus(item.classId) },
-                    onDelete = { viewModel.deleteClass(item.classId) }
-                )
-            }
+            Spacer(Modifier.height(40.dp))
 
-            // Header for Inactive Classes
-            item {
-                Spacer(Modifier.height(24.dp)) // Adds space before inactive section
-                Text(text = "Kullanım dışı", style = SkyFitTypography.heading5)
-            }
-
-            // Inactive Classes List
-            items(inactiveClasses, key = { it.classId }) { item ->
-                SkyFitClassItemComponent(
-                    item = item,
-                    onEdit = { navigator.jumpAndStay(NavigationRoute.FacilityClassEdit) },
-                    onDeactivate = { viewModel.toggleClassStatus(item.classId) },
-                    onActivate = { viewModel.toggleClassStatus(item.classId) },
-                    onDelete = { viewModel.deleteClass(item.classId) }
-                )
-            }
+            InactiveSessionItemsColumn(
+                items = inactiveClasses,
+                onClickNew = { navigator.jumpAndStay(NavigationRoute.FacilityClassEdit) },
+                onEdit = { navigator.jumpAndStay(NavigationRoute.FacilityClassEdit) },
+                onActivate = { viewModel.toggleClassStatus(it.sessionId) },
+                onDelete = { viewModel.deleteClass(it.sessionId) }
+            )
         }
     }
 }
 
+@Composable
+private fun ActiveSessionItemsColumn(
+    items: List<LessonSessionItemViewData>,
+    onClickNew: () -> Unit,
+    onDeactivate: (LessonSessionItemViewData) -> Unit,
+    onEdit: (LessonSessionItemViewData) -> Unit,
+    onDelete: (LessonSessionItemViewData) -> Unit
+) {
+    var openMenuItemId by remember { mutableStateOf<String?>(null) }
+
+    Column(
+        modifier = Modifier.fillMaxWidth(),
+        verticalArrangement = Arrangement.spacedBy(16.dp)
+    ) {
+        Row(
+            modifier = Modifier.fillMaxWidth().padding(horizontal = 8.dp),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Text(text = "Aktif", style = SkyFitTypography.heading5)
+            Spacer(Modifier.weight(1f))
+            Text(
+                text = "+ Yeni",
+                style = SkyFitTypography.bodyMediumRegular,
+                color = SkyFitColor.text.secondary,
+                modifier = Modifier.clickable(onClick = onClickNew)
+            )
+        }
+
+        items.forEach { item ->
+            LessonSessionColumnItem(
+                item = item,
+                isMenuOpen = openMenuItemId == item.sessionId,
+                onMenuToggle = { isOpen -> openMenuItemId = if (isOpen) item.sessionId else null },
+                onClickItem = {},
+                menuContent = {
+                    FacilityClassOptionsMenuPopup(
+                        isOpen = openMenuItemId == item.sessionId,
+                        onDismiss = { openMenuItemId = null },
+                        onDeactivate = { onDeactivate(item) },
+                        onEdit = { onEdit(item) },
+                        onDelete = { onDelete(item) }
+                    )
+                }
+            )
+        }
+    }
+}
 
 @Composable
-private fun SkyFitClassItemComponent(
-    item: SkyFitClassCalendarCardItem,
-    onEdit: (SkyFitClassCalendarCardItem) -> Unit,
-    onActivate: (SkyFitClassCalendarCardItem) -> Unit,
-    onDeactivate: (SkyFitClassCalendarCardItem) -> Unit,
-    onDelete: (SkyFitClassCalendarCardItem) -> Unit
+private fun InactiveSessionItemsColumn(
+    items: List<LessonSessionItemViewData>,
+    onClickNew: () -> Unit,
+    onActivate: (LessonSessionItemViewData) -> Unit,
+    onEdit: (LessonSessionItemViewData) -> Unit,
+    onDelete: (LessonSessionItemViewData) -> Unit
 ) {
-    val textColor = if (item.enabled) SkyFitColor.text.default else SkyFitColor.text.disabled
-    val subTextColor = if (item.enabled) SkyFitColor.text.secondary else SkyFitColor.text.disabled
-    val iconColor = if (item.enabled) SkyFitColor.icon.default else SkyFitColor.icon.disabled
-    var isMenuOpen by remember { mutableStateOf(false) }
+    var openMenuItemId by remember { mutableStateOf<String?>(null) }
 
-    Box(
-        Modifier.fillMaxWidth()
-            .background(SkyFitColor.background.fillTransparentSecondary, RoundedCornerShape(16.dp))
-            .then(
-                if (item.selected) {
-                    Modifier.border(
-                        width = 1.dp,
-                        color = SkyFitColor.border.secondaryButton,
-                        shape = RoundedCornerShape(16.dp)
-                    )
-                } else Modifier
-            )
-            .padding(12.dp)
+    Column(
+        modifier = Modifier.fillMaxWidth(),
+        verticalArrangement = Arrangement.spacedBy(16.dp)
     ) {
-        Column {
-            Row(verticalAlignment = Alignment.CenterVertically) {
-                Icon(
-                    painter = SkyFitIcon.getIconResourcePainter(item.iconId, defaultRes = Res.drawable.ic_exercises),
-                    contentDescription = null,
-                    modifier = Modifier.size(24.dp),
-                    tint = iconColor
-                )
-                Text(
-                    text = item.title,
-                    style = SkyFitTypography.bodyLargeSemibold,
-                    modifier = Modifier.padding(start = 8.dp),
-                    color = textColor
-                )
-                Spacer(Modifier.weight(1f))
+        Row(
+            modifier = Modifier.fillMaxWidth().padding(horizontal = 8.dp),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Text(text = "Kullanım dışı", style = SkyFitTypography.heading5)
+            Spacer(Modifier.weight(1f))
+        }
 
-                Box {
-                    Icon(
-                        painter = painterResource(Res.drawable.ic_dots_vertical),
-                        contentDescription = "Options",
-                        tint = SkyFitColor.icon.default,
-                        modifier = Modifier.size(16.dp).clickable { isMenuOpen = true }
+        items.forEach { item ->
+            LessonSessionColumnItem(
+                item = item,
+                isMenuOpen = openMenuItemId == item.sessionId,
+                onMenuToggle = { isOpen -> openMenuItemId = if (isOpen) item.sessionId else null },
+                onClickItem = {},
+                menuContent = {
+                    FacilityClassOptionsMenuPopup(
+                        isOpen = openMenuItemId == item.sessionId,
+                        onDismiss = { openMenuItemId = null },
+                        onActivate = { onActivate(item) },
+                        onEdit = { onEdit(item) },
+                        onDelete = { onDelete(item) }
                     )
-
-                    if (isMenuOpen && item.enabled) {
-                        FacilityClassOptionsMenuPopup(
-                            isOpen = isMenuOpen,
-                            onDismiss = { isMenuOpen = false },
-                            onDeactivate = { onDeactivate(item) },
-                            onEdit = { onEdit(item) },
-                            onDelete = { onDelete(item) }
-                        )
-                    } else if (isMenuOpen && !item.enabled) {
-                        FacilityClassOptionsMenuPopup(
-                            isOpen = isMenuOpen,
-                            onDismiss = { isMenuOpen = false },
-                            onActivate = { onActivate(item) },
-                            onEdit = { onEdit(item) },
-                            onDelete = { onDelete(item) }
-                        )
-                    }
                 }
-            }
-
-            item.hours?.let {
-                Spacer(Modifier.height(8.dp))
-                SkyFitClassCalendarCardItemRowComponent(it, iconRes = Res.drawable.ic_clock, subTextColor, iconColor)
-            }
-
-            item.trainer?.let {
-                Spacer(Modifier.height(8.dp))
-                SkyFitClassCalendarCardItemRowComponent(it, iconRes = Res.drawable.ic_profile_fill, subTextColor, iconColor)
-            }
-
-            item.category?.let {
-                Spacer(Modifier.height(8.dp))
-                SkyFitClassCalendarCardItemRowComponent(it, iconRes = Res.drawable.ic_dashboard, subTextColor, iconColor)
-            }
+            )
         }
     }
 }

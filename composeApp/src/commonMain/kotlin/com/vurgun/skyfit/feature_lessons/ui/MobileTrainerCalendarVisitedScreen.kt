@@ -27,6 +27,7 @@ import com.vurgun.skyfit.core.ui.components.SkyFitScreenHeader
 import com.vurgun.skyfit.core.ui.components.UserCircleAvatarItem
 import com.vurgun.skyfit.core.ui.resources.SkyFitColor
 import com.vurgun.skyfit.core.ui.resources.SkyFitTypography
+import com.vurgun.skyfit.feature_lessons.ui.components.viewdata.LessonSessionColumnViewData
 import moe.tlaster.precompose.navigation.Navigator
 import org.jetbrains.compose.resources.painterResource
 import skyfit.composeapp.generated.resources.Res
@@ -36,6 +37,9 @@ import skyfit.composeapp.generated.resources.logo_skyfit
 fun MobileTrainerCalendarVisitedScreen(navigator: Navigator) {
 
     val showCreateAction: Boolean = true
+
+    val viewModel = FacilityCalendarVisitedViewModel()
+    val lessonsColumnViewData by viewModel.lessonsColumnViewData.collectAsState()
 
     Scaffold(
         backgroundColor = SkyFitColor.background.default,
@@ -54,7 +58,7 @@ fun MobileTrainerCalendarVisitedScreen(navigator: Navigator) {
         ) {
             MobileTrainerCalendarVisitedScreenInfoComponent()
             MobileTrainerCalendarVisitedScreenCalendarGridComponent()
-            MobileTrainerCalendarVisitedScreenPrivateClassesComponent()
+            MobileTrainerCalendarVisitedScreenPrivateClassesComponent(lessonsColumnViewData)
         }
     }
 }
@@ -127,10 +131,8 @@ private fun MobileTrainerCalendarVisitedScreenCalendarGridComponent() {
 }
 
 @Composable
-private fun MobileTrainerCalendarVisitedScreenPrivateClassesComponent() {
-    val viewModel = FacilityCalendarVisitedViewModel()
-    val calendarClasses by viewModel.calendarClasses.collectAsState()
-    MobileFacilityCalendarVisitedScreenPrivateClassesComponent(calendarClasses, {})
+private fun MobileTrainerCalendarVisitedScreenPrivateClassesComponent(lessonsColumnViewData: LessonSessionColumnViewData?) {
+//    MobileFacilityCalendarVisitedScreenPrivateClassesComponent(calendarClasses, {})
 }
 
 @Composable

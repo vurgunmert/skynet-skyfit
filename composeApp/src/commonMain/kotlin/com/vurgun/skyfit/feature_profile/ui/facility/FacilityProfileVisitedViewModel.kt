@@ -1,14 +1,48 @@
 package com.vurgun.skyfit.feature_profile.ui.facility
 
 import androidx.lifecycle.ViewModel
+import com.vurgun.skyfit.core.ui.resources.SkyFitAsset
 import com.vurgun.skyfit.feature_explore.ui.TrainerProfileCardItemViewData
-import com.vurgun.skyfit.feature_profile.ui.fakePrivateTrainerClasses
+import com.vurgun.skyfit.feature_lessons.ui.components.viewdata.LessonSessionColumnViewData
+import com.vurgun.skyfit.feature_lessons.ui.components.viewdata.LessonSessionItemViewData
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 
 class FacilityProfileVisitedViewModel: ViewModel() {
 
-    val privateClasses = fakePrivateTrainerClasses
-
     val trainers = fakeTrainers
+
+    private val _lessonsColumViewData = MutableStateFlow<LessonSessionColumnViewData?>(null)
+    val lessonsColumViewData: StateFlow<LessonSessionColumnViewData?> get() = _lessonsColumViewData
+
+    fun loadData() {
+        val privateLessonsViewData = listOf(
+            LessonSessionItemViewData(
+                iconId = SkyFitAsset.SkyFitIcon.PUSH_UP.id,
+                title = "Shoulders and Abs",
+                trainer = "Micheal Blake",
+                category = "Group Fitness"
+            ),
+            LessonSessionItemViewData(
+                iconId = SkyFitAsset.SkyFitIcon.HIGH_INTENSITY_TRAINING.id,
+                title = "Reformer Pilates",
+                trainer = "Sarah L.",
+                category = "Pilates"
+            ),
+            LessonSessionItemViewData(
+                iconId = SkyFitAsset.SkyFitIcon.BICEPS_FORCE.id,
+                title = "Fitness",
+                trainer = "Sarah L.",
+                category = "PT"
+            )
+        )
+
+        _lessonsColumViewData.value = LessonSessionColumnViewData(
+            iconId = SkyFitAsset.SkyFitIcon.EXERCISES.id,
+            title = "Özel Dersler",
+            items = privateLessonsViewData
+        )
+    }
 }
 
 val fakeTrainers = listOf(

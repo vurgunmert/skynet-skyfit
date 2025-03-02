@@ -37,13 +37,13 @@ import com.vurgun.skyfit.core.ui.components.ButtonSize
 import com.vurgun.skyfit.core.ui.components.ButtonVariant
 import com.vurgun.skyfit.core.ui.components.SkyFitButtonComponent
 import com.vurgun.skyfit.core.ui.components.button.SkyFitPrimaryCircularBackButton
-import com.vurgun.skyfit.core.ui.components.calendar.SkyFitClassCalendarCardItem
 import com.vurgun.skyfit.core.ui.resources.SkyFitColor
 import com.vurgun.skyfit.core.ui.resources.SkyFitTypography
+import com.vurgun.skyfit.feature_lessons.ui.components.LessonSessionColumn
+import com.vurgun.skyfit.feature_lessons.ui.components.viewdata.LessonSessionColumnViewData
 import com.vurgun.skyfit.feature_profile.ui.SkyFitTrainerProfileViewModel
 import com.vurgun.skyfit.feature_profile.ui.components.LifestyleActionRow
 import com.vurgun.skyfit.feature_profile.ui.components.viewdata.LifestyleActionRowViewData
-import com.vurgun.skyfit.feature_profile.ui.facility.MobileFacilityProfileVisitedScreen.MobileFacilityProfileVisitedScreenPrivateClassesComponent
 import com.vurgun.skyfit.feature_profile.ui.user.MobileVisitedProfileActionsComponent
 import com.vurgun.skyfit.feature_profile.ui.user.TopBarGroupViewData
 import com.vurgun.skyfit.feature_profile.ui.user.UserProfileCardPreferenceRow
@@ -64,7 +64,7 @@ fun MobileTrainerProfileVisitedScreen(navigator: Navigator) {
 
     val profileData by viewModel.profileData.collectAsState()
     val specialtiesRowViewData by viewModel.specialtiesRowViewData.collectAsState()
-    val privateClasses = viewModel.privateClasses.collectAsState().value
+    val lessonsColumViewData by viewModel.lessonsColumViewData.collectAsState()
     val posts = viewModel.posts.collectAsState().value
     var isFollowing by remember { mutableStateOf(false) }
 
@@ -107,7 +107,7 @@ fun MobileTrainerProfileVisitedScreen(navigator: Navigator) {
             if (showPosts) {
                 MobileTrainerProfilePostsComponent(posts)
             } else {
-                MobileTrainerProfileVisitedAboutGroup(specialtiesRowViewData, privateClasses, navigator)
+                MobileTrainerProfileVisitedAboutGroup(specialtiesRowViewData, lessonsColumViewData, navigator)
             }
         }
 
@@ -118,7 +118,7 @@ fun MobileTrainerProfileVisitedScreen(navigator: Navigator) {
 @Composable
 private fun ColumnScope.MobileTrainerProfileVisitedAboutGroup(
     specialtiesRowViewData: LifestyleActionRowViewData? = null,
-    privateClasses: List<SkyFitClassCalendarCardItem> = emptyList(),
+    lessonsColumViewData: LessonSessionColumnViewData? = null,
     navigator: Navigator
 ) {
     Column(
@@ -130,10 +130,10 @@ private fun ColumnScope.MobileTrainerProfileVisitedAboutGroup(
             LifestyleActionRow(viewData = specialtiesRowViewData)
         }
 
-        if (privateClasses.isNotEmpty()) {
-            MobileFacilityProfileVisitedScreenPrivateClassesComponent(privateClasses, onClick = {
-                navigator.jumpAndStay(NavigationRoute.FacilityCalendarVisited)
-            })
+        if (lessonsColumViewData != null) {
+            LessonSessionColumn(
+                viewData = lessonsColumViewData,
+                onClickItem = { navigator.jumpAndStay(NavigationRoute.FacilityCalendarVisited) })
         }
     }
 }

@@ -20,6 +20,8 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Icon
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -29,21 +31,21 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.dp
 import coil3.compose.AsyncImage
-import com.vurgun.skyfit.feature_profile.ui.facility.MobileFacilityProfileVisitedScreen.MobileFacilityProfileVisitedScreenPhotosComponent
-import com.vurgun.skyfit.feature_profile.ui.facility.MobileFacilityProfileVisitedScreen.MobileFacilityProfileVisitedScreenPrivateClassesComponent
-import com.vurgun.skyfit.feature_profile.ui.facility.MobileFacilityProfileVisitedScreen.MobileFacilityProfileVisitedScreenTrainersComponent
-import com.vurgun.skyfit.feature_profile.ui.user.MobileUserProfileActionsComponent
 import com.vurgun.skyfit.core.ui.components.ButtonSize
 import com.vurgun.skyfit.core.ui.components.ButtonState
 import com.vurgun.skyfit.core.ui.components.ButtonVariant
 import com.vurgun.skyfit.core.ui.components.SkyFitButtonComponent
+import com.vurgun.skyfit.core.ui.resources.SkyFitColor
+import com.vurgun.skyfit.core.ui.resources.SkyFitTypography
+import com.vurgun.skyfit.feature_lessons.ui.components.LessonSessionColumn
 import com.vurgun.skyfit.feature_profile.ui.ProfileCardVerticalDetailItemComponent
 import com.vurgun.skyfit.feature_profile.ui.RatingStarComponent
 import com.vurgun.skyfit.feature_profile.ui.VerticalDetailDivider
+import com.vurgun.skyfit.feature_profile.ui.facility.MobileFacilityProfileVisitedScreen.MobileFacilityProfileVisitedScreenPhotosComponent
+import com.vurgun.skyfit.feature_profile.ui.facility.MobileFacilityProfileVisitedScreen.MobileFacilityProfileVisitedScreenTrainersComponent
+import com.vurgun.skyfit.feature_profile.ui.user.MobileUserProfileActionsComponent
 import com.vurgun.skyfit.navigation.NavigationRoute
 import com.vurgun.skyfit.navigation.jumpAndStay
-import com.vurgun.skyfit.core.ui.resources.SkyFitColor
-import com.vurgun.skyfit.core.ui.resources.SkyFitTypography
 import moe.tlaster.precompose.navigation.Navigator
 import org.jetbrains.compose.resources.painterResource
 import skyfit.composeapp.generated.resources.Res
@@ -56,8 +58,12 @@ fun MobileFacilityProfileScreen(navigator: Navigator) {
     val scrollState = rememberScrollState()
     val photos: List<Any> = listOf(1, 2, 3)
     val trainers = viewModel.trainers
-    val privateClasses = viewModel.privateClasses
+    val lessonsColumViewData by viewModel.lessonsColumViewData.collectAsState()
     var showPosts by remember { mutableStateOf(false) }
+
+    LaunchedEffect(Unit) {
+        viewModel.loadData()
+    }
 
     BoxWithConstraints(
         modifier = Modifier.fillMaxSize()
@@ -110,11 +116,9 @@ fun MobileFacilityProfileScreen(navigator: Navigator) {
                 )
             }
 
-            if (privateClasses.isEmpty()) {
-                MobileFacilityProfileScreenPrivateClassesEmptyComponent(onClickAdd = {})
-            } else {
-                MobileFacilityProfileVisitedScreenPrivateClassesComponent(privateClasses)
-            }
+            lessonsColumViewData?.let {
+                LessonSessionColumn(viewData = it, onClickShowAll = {})
+            } ?: MobileFacilityProfileScreenPrivateClassesEmptyComponent(onClickAdd = {})
 
             Spacer(Modifier.height(124.dp))
         }

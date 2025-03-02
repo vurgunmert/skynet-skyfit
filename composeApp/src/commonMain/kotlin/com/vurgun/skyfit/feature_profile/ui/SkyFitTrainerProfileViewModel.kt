@@ -1,8 +1,9 @@
 package com.vurgun.skyfit.feature_profile.ui
 
 import androidx.lifecycle.ViewModel
-import com.vurgun.skyfit.core.ui.components.calendar.SkyFitClassCalendarCardItem
 import com.vurgun.skyfit.core.ui.resources.SkyFitAsset
+import com.vurgun.skyfit.feature_lessons.ui.components.viewdata.LessonSessionColumnViewData
+import com.vurgun.skyfit.feature_lessons.ui.components.viewdata.LessonSessionItemViewData
 import com.vurgun.skyfit.feature_profile.ui.components.viewdata.LifestyleActionItemViewData
 import com.vurgun.skyfit.feature_profile.ui.components.viewdata.LifestyleActionRowViewData
 import com.vurgun.skyfit.feature_profile.ui.user.TopBarGroupViewData
@@ -20,15 +21,14 @@ class SkyFitTrainerProfileViewModel : ViewModel() {
     private val _specialtiesRowViewData = MutableStateFlow<LifestyleActionRowViewData?>(null)
     val specialtiesRowViewData: StateFlow<LifestyleActionRowViewData?> get() = _specialtiesRowViewData
 
-    private val _privateClasses = MutableStateFlow<List<SkyFitClassCalendarCardItem>>(emptyList())
-    val privateClasses = _privateClasses.asStateFlow()
-
     private val _posts = MutableStateFlow<List<PostViewData>>(emptyList())
     val posts = _posts.asStateFlow()
 
+    private val _lessonsColumViewData = MutableStateFlow<LessonSessionColumnViewData?>(null)
+    val lessonsColumViewData: StateFlow<LessonSessionColumnViewData?> get() = _lessonsColumViewData
+
     fun loadData() {
         loadProfileData()
-        _privateClasses.value = fakePrivateTrainerClasses
         _posts.value = fakePosts
 
         val specialtiesViewData = listOf(
@@ -45,21 +45,37 @@ class SkyFitTrainerProfileViewModel : ViewModel() {
             iconSizePx = 48
         )
 
+        val privateLessonsViewData = listOf(
+            LessonSessionItemViewData(
+                iconId = SkyFitAsset.SkyFitIcon.PUSH_UP.id,
+                title = "Shoulders and Abs",
+                hours = "08:00 - 09:00",
+                trainer = "Micheal Blake",
+                category = "Group Fitness"
+            ),
+            LessonSessionItemViewData(
+                iconId = SkyFitAsset.SkyFitIcon.HIGH_INTENSITY_TRAINING.id,
+                title = "Reformer Pilates",
+                hours = "09:00 - 10:00",
+                category = "Pilates"
+            ),
+            LessonSessionItemViewData(
+                iconId = SkyFitAsset.SkyFitIcon.BICEPS_FORCE.id,
+                title = "Fitness",
+                hours = "10:00 - 11:00",
+                trainer = "Sarah L.",
+                category = "PT",
+                note = "Try to arrive 5-10 minutes early to warm up and settle in before the class starts."
+            )
+        )
+
+        _lessonsColumViewData.value = LessonSessionColumnViewData(
+            iconId = SkyFitAsset.SkyFitIcon.EXERCISES.id,
+            title = "Özel Dersler",
+            items = privateLessonsViewData
+        )
     }
 
-    fun addPrivateClass(newClass: SkyFitClassCalendarCardItem) {
-        _privateClasses.value = _privateClasses.value + newClass
-    }
-
-    fun removePrivateClass(title: String) {
-        _privateClasses.value = _privateClasses.value.filter { it.title != title }
-    }
-
-    fun updatePrivateClass(updatedClass: SkyFitClassCalendarCardItem) {
-        _privateClasses.value = _privateClasses.value.map {
-            if (it.title == updatedClass.title) updatedClass else it
-        }
-    }
 
     private fun loadProfileData() {
         _profileData.value = TopBarGroupViewData(
@@ -75,37 +91,6 @@ class SkyFitTrainerProfileViewModel : ViewModel() {
         )
     }
 }
-
-val fakePrivateTrainerClasses: List<SkyFitClassCalendarCardItem> = listOf(
-    SkyFitClassCalendarCardItem(
-        title = "Morning Yoga",
-        date = "2025-02-01",
-        hours = "08:00 - 09:00",
-        category = "Yoga",
-        location = "Studio A",
-        trainer = "Alice Johnson",
-        capacity = "15",
-        cost = "$10",
-        note = "Bring your own mat",
-        enabled = true,
-        selected = false,
-        booked = false
-    ),
-    SkyFitClassCalendarCardItem(
-        title = "HIIT Workout",
-        date = "2025-02-01",
-        hours = "10:00 - 10:45",
-        category = "Fitness",
-        location = "Gym B",
-        trainer = "John Doe",
-        capacity = "20",
-        cost = "$15",
-        note = "High-intensity training",
-        enabled = true,
-        selected = false,
-        booked = false
-    )
-)
 
 val fakePosts: List<PostViewData> = List(6) { index ->
     PostViewData(

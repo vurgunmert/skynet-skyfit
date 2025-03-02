@@ -2,141 +2,85 @@ package com.vurgun.skyfit.feature_lessons.ui
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.vurgun.skyfit.core.ui.components.calendar.SkyFitClassCalendarCardItem
-import kotlinx.coroutines.flow.*
+import com.vurgun.skyfit.core.ui.resources.SkyFitAsset
+import com.vurgun.skyfit.feature_lessons.ui.components.viewdata.LessonSessionItemViewData
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import kotlinx.datetime.LocalDate
 
 class FacilityClassesViewModel : ViewModel() {
 
-    private val _allClasses = MutableStateFlow(generateSampleClasses())
-    private val _activeClasses = MutableStateFlow<List<SkyFitClassCalendarCardItem>>(emptyList())
-    private val _inactiveClasses = MutableStateFlow<List<SkyFitClassCalendarCardItem>>(emptyList())
+    private val _allClasses = MutableStateFlow<List<LessonSessionItemViewData>>(emptyList())
+    val allClasses: StateFlow<List<LessonSessionItemViewData>> = _allClasses
 
-    val activeClasses: StateFlow<List<SkyFitClassCalendarCardItem>> = _activeClasses
-    val inactiveClasses: StateFlow<List<SkyFitClassCalendarCardItem>> = _inactiveClasses
+    private val _activeClasses = MutableStateFlow<List<LessonSessionItemViewData>>(emptyList())
+    val activeClasses: StateFlow<List<LessonSessionItemViewData>> = _activeClasses
 
-    init {
-        filterClasses()
-    }
+    private val _inactiveClasses = MutableStateFlow<List<LessonSessionItemViewData>>(emptyList())
+    val inactiveClasses: StateFlow<List<LessonSessionItemViewData>> = _inactiveClasses
 
-    private fun filterClasses() {
+    fun loadData(date: LocalDate) {
         viewModelScope.launch {
-            _allClasses.collect { classes ->
-                _activeClasses.value = classes.filter { it.enabled }
-                _inactiveClasses.value = classes.filterNot { it.enabled }
-            }
+            // Simulating fetching sessions (API or use-case)
+            val fetchedClasses = listOf(
+                LessonSessionItemViewData(
+                    iconId = SkyFitAsset.SkyFitIcon.PUSH_UP.id,
+                    title = "Shoulders and Abs",
+                    date = "08:00 - 09:00",
+                    trainer = "Micheal Blake",
+                    note = "Try to arrive 5-10 minutes early to warm up and settle in before the class starts.",
+                    enabled = true,
+                    sessionId = "1111"
+                ),
+                LessonSessionItemViewData(
+                    iconId = SkyFitAsset.SkyFitIcon.HIGH_INTENSITY_TRAINING.id,
+                    title = "Reformer Pilates",
+                    trainer = "Micheal Blake",
+                    category = "Pilates",
+                    enabled = false,
+                    sessionId = "2222"
+                ),
+                LessonSessionItemViewData(
+                    iconId = SkyFitAsset.SkyFitIcon.BICEPS_FORCE.id,
+                    title = "Fitness",
+                    date = "09:00 - 10:00",
+                    trainer = "Micheal Blake",
+                    category = "PT",
+                    enabled = true,
+                    sessionId = "3333"
+                )
+            )
+
+            _allClasses.value = fetchedClasses
+            filterClasses()
         }
     }
 
-    fun toggleClassStatus(classId: String) {
+    private fun filterClasses() {
+        _activeClasses.value = _allClasses.value.filter { it.enabled }
+        _inactiveClasses.value = _allClasses.value.filterNot { it.enabled }
+    }
+
+    fun toggleClassStatus(sessionId: String) {
         viewModelScope.launch {
-            _allClasses.value = _allClasses.value.map {
-                if (it.classId == classId) it.copy(enabled = !it.enabled) else it
+            _allClasses.update { classes ->
+                classes.map {
+                    if (it.sessionId == sessionId) it.copy(enabled = !it.enabled) else it
+                }
             }
             filterClasses()
         }
     }
 
-    fun addNewClass(classItem: SkyFitClassCalendarCardItem) {
-        _allClasses.value = _allClasses.value + classItem
+    fun addNewClass(newSession: LessonSessionItemViewData) {
+        _allClasses.update { it + newSession }
         filterClasses()
     }
 
-    fun deleteClass(classId: String) {
-        _allClasses.value = _allClasses.value.filterNot { it.classId == classId }
+    fun deleteClass(sessionId: String) {
+        _allClasses.update { it.filterNot { it.sessionId == sessionId } }
         filterClasses()
     }
-}
-
-fun generateSampleClasses(): List<SkyFitClassCalendarCardItem> {
-    return listOf(
-        SkyFitClassCalendarCardItem(
-            title = "Morning Yoga",
-            hours = "08:00 - 09:00",
-            category = "Yoga",
-            trainer = "Alice Johnson",
-            note = "Start your day with mindful movements and deep breathing.",
-            enabled = true,
-            iconId = "ic_yoga"
-        ),
-        SkyFitClassCalendarCardItem(
-            title = "HIIT Burn",
-            hours = "09:30 - 10:15",
-            category = "HIIT",
-            trainer = "Mark Evans",
-            note = "Intense full-body workout, expect sweat and results.",
-            enabled = true,
-            iconId = "ic_push_up"
-        ),
-        SkyFitClassCalendarCardItem(
-            title = "Pilates Core",
-            hours = "11:00 - 12:00",
-            category = "Pilates",
-            trainer = "Michael Blake",
-            note = "Improve core strength and posture.",
-            enabled = true,
-            iconId = "ic_push_up"
-        ),
-        SkyFitClassCalendarCardItem(
-            title = "Zumba Energy",
-            hours = "12:30 - 13:30",
-            category = "Zumba",
-            trainer = "Sophie Martinez",
-            note = "Dance and sweat with Latin-inspired beats!",
-            enabled = true,
-            iconId = "ic_sit_up"
-        ),
-        SkyFitClassCalendarCardItem(
-            title = "Reformer Pilates",
-            hours = "15:00 - 16:00",
-            category = "Pilates",
-            trainer = "Michael Blake",
-            enabled = true,
-            iconId = "ic_pilates"
-        ),
-        SkyFitClassCalendarCardItem(
-            title = "Functional Training",
-            hours = "16:30 - 17:30",
-            category = "Strength",
-            trainer = "Jack Thomson",
-            note = "Train movements, not muscles!",
-            enabled = false,
-            iconId = "ic_jumping_rope"
-        ),
-        SkyFitClassCalendarCardItem(
-            title = "Kickboxing Basics",
-            hours = "18:00 - 19:00",
-            category = "Kickboxing",
-            trainer = "Daniel Adams",
-            note = "Learn the fundamentals of kickboxing.",
-            enabled = true,
-            iconId = "ic_jumping_rope"
-        ),
-        SkyFitClassCalendarCardItem(
-            title = "Evening Stretch",
-            hours = "19:30 - 20:00",
-            category = "Flexibility",
-            trainer = "Emma Wilson",
-            note = "Relax and recover with deep stretching.",
-            enabled = false,
-            iconId = "ic_jumping_rope️"
-        ),
-        SkyFitClassCalendarCardItem(
-            title = "Strength & Conditioning",
-            hours = "20:30 - 21:30",
-            category = "Strength",
-            trainer = "Olivia Carter",
-            enabled = true,
-            iconId = "ic_yoga"
-        ),
-        SkyFitClassCalendarCardItem(
-            title = "Midnight Meditation",
-            hours = "23:00 - 23:45",
-            category = "Meditation",
-            trainer = "Nathan Richards",
-            note = "Calm your mind before sleep.",
-            enabled = false,
-            iconId = "ic_jumping_rope"
-        )
-    )
 }
