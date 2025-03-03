@@ -43,10 +43,11 @@ import com.vurgun.skyfit.feature_lessons.ui.components.LessonSessionColumn
 import com.vurgun.skyfit.feature_lessons.ui.components.viewdata.LessonSessionColumnViewData
 import com.vurgun.skyfit.feature_profile.ui.SkyFitTrainerProfileViewModel
 import com.vurgun.skyfit.feature_profile.ui.components.LifestyleActionRow
+import com.vurgun.skyfit.feature_profile.ui.components.UserProfileCardPreferenceRow
 import com.vurgun.skyfit.feature_profile.ui.components.viewdata.LifestyleActionRowViewData
 import com.vurgun.skyfit.feature_profile.ui.user.MobileVisitedProfileActionsComponent
 import com.vurgun.skyfit.feature_profile.ui.user.TopBarGroupViewData
-import com.vurgun.skyfit.feature_profile.ui.user.UserProfileCardPreferenceRow
+import com.vurgun.skyfit.feature_social.ui.components.LazySocialPostsColumn
 import com.vurgun.skyfit.navigation.NavigationRoute
 import com.vurgun.skyfit.navigation.jumpAndStay
 import moe.tlaster.precompose.navigation.Navigator
@@ -105,7 +106,7 @@ fun MobileTrainerProfileVisitedScreen(navigator: Navigator) {
             )
 
             if (showPosts) {
-                MobileTrainerProfilePostsComponent(posts)
+                LazySocialPostsColumn(posts)
             } else {
                 MobileTrainerProfileVisitedAboutGroup(specialtiesRowViewData, lessonsColumViewData, navigator)
             }

@@ -27,6 +27,7 @@ import com.vurgun.skyfit.navigation.NavigationRoute
 import com.vurgun.skyfit.navigation.jumpAndStay
 import com.vurgun.skyfit.core.ui.resources.SkyFitColor
 import com.vurgun.skyfit.core.ui.resources.SkyFitTypography
+import com.vurgun.skyfit.feature_social.ui.components.SocialPostCard
 import moe.tlaster.precompose.navigation.Navigator
 import org.jetbrains.compose.resources.painterResource
 import skyfit.composeapp.generated.resources.Res
@@ -54,7 +55,7 @@ fun MobileUserSocialMediaScreen(navigator: Navigator) {
             contentPadding = PaddingValues(bottom = 80.dp)
         ) {
             items(posts) {
-                SkyFitPostCardItemComponent(it,
+                SocialPostCard(it,
                     onClick = {},
                     onClickComment = {},
                     onClickLike = {},

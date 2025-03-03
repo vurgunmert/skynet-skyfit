@@ -38,7 +38,12 @@ import com.vurgun.skyfit.core.ui.resources.SkyFitColor
 import com.vurgun.skyfit.core.ui.resources.SkyFitTypography
 import com.vurgun.skyfit.feature_lessons.ui.components.LessonSessionColumn
 import com.vurgun.skyfit.feature_profile.ui.components.LifestyleActionRow
-import com.vurgun.skyfit.feature_profile.ui.fakePosts
+import com.vurgun.skyfit.feature_profile.ui.components.MobileMeasurementsActionCard
+import com.vurgun.skyfit.feature_profile.ui.components.MobileProfileHeader
+import com.vurgun.skyfit.feature_profile.ui.components.MobileProfileHeaderMini
+import com.vurgun.skyfit.feature_profile.ui.components.MobileUserProfileBackgroundImageComponent
+import com.vurgun.skyfit.feature_social.ui.components.LazySocialPostsColumn
+import com.vurgun.skyfit.feature_social.ui.components.viewdata.fakePosts
 import com.vurgun.skyfit.navigation.NavigationRoute
 import com.vurgun.skyfit.navigation.jumpAndStay
 import moe.tlaster.precompose.navigation.Navigator
@@ -78,9 +83,9 @@ fun MobileUserProfileVisitedScreen(navigator: Navigator) {
                 ) {
                     profileData?.let {
                         if (showInfoMini) {
-                            MobileUserProfileInfoCardMiniComponent(it)
+                            MobileProfileHeaderMini(it)
                         } else {
-                            MobileUserProfileInfoCardComponent(it)
+                            MobileProfileHeader(it)
                         }
                     }
 
@@ -114,9 +119,9 @@ fun MobileUserProfileVisitedScreen(navigator: Navigator) {
         }
     ) {
         if (showPosts) {
-            MobileUserProfilePostsComponent(posts = posts, listState = postListState)
+            LazySocialPostsColumn(posts = posts, listState = postListState)
         } else {
-            MobileUserProfileAboutGroupComponent(scrollState, navigator)
+//            MobileUserProfileAboutGroupComponent(scrollState, navigator)
         }
     }
 }
@@ -191,7 +196,6 @@ private fun MobileUserProfileVisitedScreenAboutGroupComponent(
 ) {
     var dietGoals: List<Any> = listOf(1, 2, 3)
     var showMeasurements: Boolean = true
-    val statistics by viewModel.statistics.collectAsState()
     val appointmentsColumViewData by viewModel.appointmentsColumViewData.collectAsState()
     val exercisesRowViewData by viewModel.exercisesRowViewData.collectAsState()
     val habitsRowViewData by viewModel.habitsRowViewData.collectAsState()
@@ -206,24 +210,16 @@ private fun MobileUserProfileVisitedScreenAboutGroupComponent(
             LessonSessionColumn(viewData = it)
         }
 
-        if (dietGoals.isNotEmpty()) {
-            MobileUserProfileDietGoalsComponent(dietGoals)
-        }
-
         if (showMeasurements) {
             Spacer(Modifier.height(16.dp))
-            MobileUserProfileMeasurementsComponent(onClick = {
+            MobileMeasurementsActionCard(onClick = {
                 navigator.jumpAndStay(NavigationRoute.UserMeasurements)
             })
         }
 
-        statistics?.let { MobileUserProfileStatisticsBarsComponent(it) }
-
         exercisesRowViewData?.let {
             LifestyleActionRow(viewData = it)
         }
-
-        photoDiary?.let { MobileUserProfilePhotoDiaryComponent(it) }
 
         habitsRowViewData?.let {
             LifestyleActionRow(viewData = it)

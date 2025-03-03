@@ -37,7 +37,7 @@ fun LifestyleActionRow(
     modifier: Modifier = Modifier
 ) {
     Column(
-        Modifier.fillMaxWidth()
+        modifier.fillMaxWidth()
             .background(SkyFitColor.background.fillTransparent, RoundedCornerShape(20.dp))
             .padding(16.dp),
         verticalArrangement = Arrangement.spacedBy(16.dp)

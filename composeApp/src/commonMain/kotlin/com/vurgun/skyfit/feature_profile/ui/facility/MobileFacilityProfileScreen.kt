@@ -41,9 +41,9 @@ import com.vurgun.skyfit.feature_lessons.ui.components.LessonSessionColumn
 import com.vurgun.skyfit.feature_profile.ui.ProfileCardVerticalDetailItemComponent
 import com.vurgun.skyfit.feature_profile.ui.RatingStarComponent
 import com.vurgun.skyfit.feature_profile.ui.VerticalDetailDivider
+import com.vurgun.skyfit.feature_profile.ui.components.MobileProfileActionsRow
 import com.vurgun.skyfit.feature_profile.ui.facility.MobileFacilityProfileVisitedScreen.MobileFacilityProfileVisitedScreenPhotosComponent
 import com.vurgun.skyfit.feature_profile.ui.facility.MobileFacilityProfileVisitedScreen.MobileFacilityProfileVisitedScreenTrainersComponent
-import com.vurgun.skyfit.feature_profile.ui.user.MobileUserProfileActionsComponent
 import com.vurgun.skyfit.navigation.NavigationRoute
 import com.vurgun.skyfit.navigation.jumpAndStay
 import moe.tlaster.precompose.navigation.Navigator
@@ -93,8 +93,8 @@ fun MobileFacilityProfileScreen(navigator: Navigator) {
 
             MobileFacilityProfileScreenInfoCardComponent()
 
-            MobileUserProfileActionsComponent(
-                showPosts = showPosts,
+            MobileProfileActionsRow(
+                postsSelected = showPosts,
                 onClickAbout = { showPosts = false },
                 onClickPosts = { showPosts = true },
                 onClickSettings = { navigator.jumpAndStay(NavigationRoute.FacilitySettings) },

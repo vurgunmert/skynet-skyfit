@@ -7,8 +7,9 @@ import com.vurgun.skyfit.feature_lessons.ui.components.viewdata.LessonSessionCol
 import com.vurgun.skyfit.feature_lessons.ui.components.viewdata.LessonSessionItemViewData
 import com.vurgun.skyfit.feature_profile.ui.components.viewdata.LifestyleActionItemViewData
 import com.vurgun.skyfit.feature_profile.ui.components.viewdata.LifestyleActionRowViewData
-import com.vurgun.skyfit.feature_profile.ui.fakePosts
-import com.vurgun.skyfit.feature_social.ui.PostViewData
+import com.vurgun.skyfit.feature_profile.ui.components.viewdata.PhotoGalleryStackViewData
+import com.vurgun.skyfit.feature_social.ui.components.viewdata.SocialPostItemViewData
+import com.vurgun.skyfit.feature_social.ui.components.viewdata.fakePosts
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
@@ -21,8 +22,8 @@ class SkyFitUserProfileViewModel : ViewModel() {
     private val _profileData = MutableStateFlow<TopBarGroupViewData>(TopBarGroupViewData())
     val profileData: StateFlow<TopBarGroupViewData> get() = _profileData
 
-    private val _posts = MutableStateFlow<List<PostViewData>>(emptyList())
-    val posts: StateFlow<List<PostViewData>> get() = _posts
+    private val _posts = MutableStateFlow<List<SocialPostItemViewData>>(emptyList())
+    val posts: StateFlow<List<SocialPostItemViewData>> get() = _posts
 
     private val _appointmentsColumViewData = MutableStateFlow<LessonSessionColumnViewData?>(null)
     val appointmentsColumViewData: StateFlow<LessonSessionColumnViewData?> get() = _appointmentsColumViewData
@@ -33,11 +34,8 @@ class SkyFitUserProfileViewModel : ViewModel() {
     private val _habitsRowViewData = MutableStateFlow<LifestyleActionRowViewData?>(null)
     val habitsRowViewData: StateFlow<LifestyleActionRowViewData?> get() = _habitsRowViewData
 
-    private val _statistics = MutableStateFlow<UserProfileActivityStatisticsViewData?>(null)
-    val statistics: StateFlow<UserProfileActivityStatisticsViewData?> get() = _statistics
-
-    private val _photoDiary = MutableStateFlow<UserProfilePhotoDiaryViewData?>(null)
-    val photoDiary: StateFlow<UserProfilePhotoDiaryViewData?> get() = _photoDiary
+    private val _photoDiary = MutableStateFlow<PhotoGalleryStackViewData?>(null)
+    val photoDiary: StateFlow<PhotoGalleryStackViewData?> get() = _photoDiary
 
     // UI State
     private val _showPosts = MutableStateFlow(false)
@@ -55,7 +53,7 @@ class SkyFitUserProfileViewModel : ViewModel() {
         loadProfileData()
         loadPosts()
         loadAppointments()
-        _photoDiary.value = UserProfilePhotoDiaryViewData()
+        _photoDiary.value = PhotoGalleryStackViewData()
 
         val exercisesViewData = listOf(
             LifestyleActionItemViewData(SkyFitAsset.SkyFitIcon.PUSH_UP.id, "Şınav"),

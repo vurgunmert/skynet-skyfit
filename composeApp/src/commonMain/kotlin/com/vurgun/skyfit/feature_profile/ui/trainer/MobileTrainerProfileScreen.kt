@@ -16,8 +16,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentWidth
-import androidx.compose.foundation.lazy.LazyListState
-import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
@@ -57,13 +55,11 @@ import com.vurgun.skyfit.feature_lessons.ui.components.LessonSessionColumn
 import com.vurgun.skyfit.feature_lessons.ui.components.viewdata.LessonSessionColumnViewData
 import com.vurgun.skyfit.feature_profile.ui.SkyFitTrainerProfileViewModel
 import com.vurgun.skyfit.feature_profile.ui.components.LifestyleActionRow
+import com.vurgun.skyfit.feature_profile.ui.components.MobileProfileActionsRow
+import com.vurgun.skyfit.feature_profile.ui.components.UserProfileCardPreferenceRow
 import com.vurgun.skyfit.feature_profile.ui.components.viewdata.LifestyleActionRowViewData
-import com.vurgun.skyfit.feature_profile.ui.user.MobileUserProfileActionsComponent
-import com.vurgun.skyfit.feature_profile.ui.user.MobileUserProfilePostsComponent
-import com.vurgun.skyfit.feature_profile.ui.user.MobileUserProfilePostsInputComponent
 import com.vurgun.skyfit.feature_profile.ui.user.TopBarGroupViewData
-import com.vurgun.skyfit.feature_profile.ui.user.UserProfileCardPreferenceRow
-import com.vurgun.skyfit.feature_social.ui.PostViewData
+import com.vurgun.skyfit.feature_social.ui.components.LazySocialPostsColumn
 import com.vurgun.skyfit.navigation.NavigationRoute
 import com.vurgun.skyfit.navigation.jumpAndStay
 import moe.tlaster.precompose.navigation.Navigator
@@ -106,8 +102,8 @@ fun MobileTrainerProfileScreen(navigator: Navigator) {
                     MobileTrainerProfileInfoCardComponent(profileData)
 
                     Spacer(Modifier.height(16.dp))
-                    MobileUserProfileActionsComponent(
-                        showPosts = showPosts,
+                    MobileProfileActionsRow(
+                        postsSelected = showPosts,
                         onClickAbout = { showPosts = false },
                         onClickPosts = { showPosts = true },
                         onClickSettings = { navigator.jumpAndStay(NavigationRoute.TrainerSettings) },
@@ -118,7 +114,7 @@ fun MobileTrainerProfileScreen(navigator: Navigator) {
         }
     ) {
         if (showPosts) {
-            MobileTrainerProfilePostsComponent(posts)
+            LazySocialPostsColumn(posts)
         } else {
             MobileTrainerProfileAboutGroupComponent(specialtiesRowViewData, lessonsColumViewData, scrollState)
         }
@@ -226,19 +222,6 @@ fun MobileTrainerProfileInfoCardComponent(viewData: TopBarGroupViewData?) {
                 .align(Alignment.TopCenter)
         )
     }
-}
-
-@Composable
-private fun MobileTrainerProfilePostInputComponent() {
-    MobileUserProfilePostsInputComponent(onClickSend = {})
-}
-
-@Composable
-fun MobileTrainerProfilePostsComponent(
-    posts: List<PostViewData>,
-    listState: LazyListState = rememberLazyListState()
-) {
-    MobileUserProfilePostsComponent(posts, listState)
 }
 
 @Composable

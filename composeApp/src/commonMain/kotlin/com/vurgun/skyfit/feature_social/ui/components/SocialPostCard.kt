@@ -1,4 +1,4 @@
-package com.vurgun.skyfit.feature_social.ui
+package com.vurgun.skyfit.feature_social.ui.components
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -15,8 +15,6 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Icon
 import androidx.compose.material.Text
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Share
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -24,38 +22,31 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.dp
 import coil3.compose.AsyncImage
-import com.vurgun.skyfit.feature_social.ui.SkyFitPostCardItemComponent.InteractionRow
-import com.vurgun.skyfit.feature_social.ui.SkyFitPostCardItemComponent.ProfileImage
-import com.vurgun.skyfit.feature_social.ui.SkyFitPostCardItemComponent.SkyFitPostItemUserInfoRow
 import com.vurgun.skyfit.core.ui.resources.SkyFitColor
 import com.vurgun.skyfit.core.ui.resources.SkyFitTypography
+import com.vurgun.skyfit.feature_social.ui.components.SkyFitPostCardItemComponent.InteractionRow
+import com.vurgun.skyfit.feature_social.ui.components.SkyFitPostCardItemComponent.ProfileImage
+import com.vurgun.skyfit.feature_social.ui.components.SkyFitPostCardItemComponent.SkyFitPostItemUserInfoRow
+import com.vurgun.skyfit.feature_social.ui.components.viewdata.SocialPostItemViewData
+import org.jetbrains.compose.resources.DrawableResource
 import org.jetbrains.compose.resources.painterResource
 import skyfit.composeapp.generated.resources.Res
-import skyfit.composeapp.generated.resources.logo_skyfit
-
-data class PostViewData(
-    val postId: String,
-    val username: String,
-    val socialLink: String?,
-    val timeAgo: String?,
-    val profileImageUrl: String?,
-    val content: String,
-    val imageUrl: String?,
-    val favoriteCount: Int,
-    val commentCount: Int,
-    val shareCount: Int,
-)
+import skyfit.composeapp.generated.resources.ic_arrow_replay
+import skyfit.composeapp.generated.resources.ic_chat
+import skyfit.composeapp.generated.resources.ic_heart
+import skyfit.composeapp.generated.resources.ic_share
 
 @Composable
-fun SkyFitPostCardItemComponent(
-    data: PostViewData,
+fun SocialPostCard(
+    data: SocialPostItemViewData,
+    modifier: Modifier = Modifier,
     onClickShare: () -> Unit,
     onClickComment: () -> Unit,
     onClickLike: () -> Unit,
     onClick: () -> Unit
 ) {
     Row(
-        modifier = Modifier
+        modifier = modifier
             .fillMaxWidth()
             .background(SkyFitColor.background.surfaceSecondary, RoundedCornerShape(12.dp))
             .clickable(onClick = onClick)
@@ -164,11 +155,11 @@ private object SkyFitPostCardItemComponent {
             modifier = Modifier.fillMaxWidth(),
             horizontalArrangement = Arrangement.spacedBy(16.dp)
         ) {
-            InteractionItem(count = commentCount, onClick = onClickComment)
-            InteractionItem(count = shareCount, onClick = onClickShare)
-            InteractionItem(count = likeCount, onClick = onClickLike)
+            InteractionItem(iconRes = Res.drawable.ic_chat, count = commentCount, onClick = onClickComment)
+            InteractionItem(iconRes = Res.drawable.ic_arrow_replay, count = shareCount, onClick = onClickShare)
+            InteractionItem(iconRes = Res.drawable.ic_heart, count = likeCount, onClick = onClickLike)
             Icon(
-                imageVector = Icons.Default.Share,
+                painterResource(Res.drawable.ic_share),
                 contentDescription = null,
                 tint = SkyFitColor.text.secondary,
                 modifier = Modifier.size(24.dp)
@@ -177,14 +168,14 @@ private object SkyFitPostCardItemComponent {
     }
 
     @Composable
-    fun InteractionItem(count: Int, onClick: () -> Unit) {
+    fun InteractionItem(iconRes: DrawableResource, count: Int, onClick: () -> Unit) {
         Row(
             Modifier.clickable(onClick = onClick),
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.spacedBy(2.dp)
         ) {
             Icon(
-                painterResource(Res.drawable.logo_skyfit),
+                painterResource(iconRes),
                 contentDescription = null,
                 tint = SkyFitColor.text.secondary,
                 modifier = Modifier.size(24.dp)
