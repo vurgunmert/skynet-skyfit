@@ -36,7 +36,7 @@ fun MobileOnboardingNavGraph(rootNavigator: Navigator) {
         initialRoute = NavigationRoute.OnboardingUserTypeSelection.route
     ) {
         scene(NavigationRoute.OnboardingUserTypeSelection.route) {
-            MobileOnboardingUserTypeSelectionScreen { userType ->
+            OnboardingUserTypeSelectionScreen { userType ->
                 selectedUserType = userType // Store the selected role
                 when (userType) {
                     UserType.USER, UserType.TRAINER -> onboardingNavigator.jumpAndStay(NavigationRoute.OnboardingCharacterSelection)

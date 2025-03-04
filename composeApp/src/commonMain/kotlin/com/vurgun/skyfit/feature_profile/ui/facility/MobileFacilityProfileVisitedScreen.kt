@@ -46,6 +46,8 @@ import com.vurgun.skyfit.feature_profile.ui.ProfileCardVerticalDetailItemCompone
 import com.vurgun.skyfit.feature_profile.ui.RatingStarComponent
 import com.vurgun.skyfit.feature_profile.ui.TrainerProfileCardItemBox
 import com.vurgun.skyfit.feature_profile.ui.VerticalDetailDivider
+import com.vurgun.skyfit.feature_profile.ui.components.PhotoGalleryStackCard
+import com.vurgun.skyfit.feature_profile.ui.components.viewdata.PhotoGalleryStackViewData
 import com.vurgun.skyfit.feature_profile.ui.facility.MobileFacilityProfileVisitedScreen.MobileFacilityProfileVisitedScreenInfoCardComponent
 import com.vurgun.skyfit.feature_profile.ui.facility.MobileFacilityProfileVisitedScreen.MobileFacilityProfileVisitedScreenPhotosComponent
 import com.vurgun.skyfit.feature_profile.ui.facility.MobileFacilityProfileVisitedScreen.MobileFacilityProfileVisitedScreenToolbarComponent
@@ -109,7 +111,10 @@ fun MobileFacilityProfileVisitedScreen(navigator: Navigator) {
             )
 
             if (photos.isNotEmpty()) {
-                MobileFacilityProfileVisitedScreenPhotosComponent()
+                PhotoGalleryStackCard(
+                    viewData = PhotoGalleryStackViewData(title = "Salonu Keşfet", message = "8 fotoğraf, 1 video"),
+                    modifier = Modifier.padding(horizontal = 16.dp)
+                )
             }
 
             if (trainers.isNotEmpty()) {
@@ -150,6 +155,7 @@ object MobileFacilityProfileVisitedScreen {
             val imageSize = maxWidth
             val image2Size = maxWidth - 16.dp
             val image3Size = maxWidth - 32.dp
+
 
             AsyncImage(
                 model = "https://ik.imagekit.io/skynet2skyfit/fake_facility_gym.png?updatedAt=1739637015082",

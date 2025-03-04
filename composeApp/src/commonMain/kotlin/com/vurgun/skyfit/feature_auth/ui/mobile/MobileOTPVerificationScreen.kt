@@ -22,7 +22,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import com.vurgun.skyfit.core.ui.resources.MobileStyleGuide
+import com.vurgun.skyfit.core.ui.resources.SkyFitStyleGuide
 import com.vurgun.skyfit.core.ui.components.SkyFitLogoComponent
 import com.vurgun.skyfit.core.ui.components.SkyFitScaffold
 import com.vurgun.skyfit.core.ui.components.button.PrimaryLargeButton
@@ -94,8 +94,8 @@ fun MobileOTPVerificationScreen(navigator: Navigator) {
     SkyFitScaffold {
         Column(
             modifier = Modifier
-                .padding(MobileStyleGuide.padding24)
-                .widthIn(max = MobileStyleGuide.screenWithMax)
+                .padding(SkyFitStyleGuide.Padding.xLarge)
+                .widthIn(max = SkyFitStyleGuide.Mobile.maxWidth)
                 .verticalScroll(rememberScrollState())
                 .imePadding(),
             horizontalAlignment = Alignment.CenterHorizontally,

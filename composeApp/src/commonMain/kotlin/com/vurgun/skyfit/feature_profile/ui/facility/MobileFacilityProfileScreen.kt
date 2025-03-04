@@ -13,7 +13,6 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
@@ -28,13 +27,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.dp
-import coil3.compose.AsyncImage
-import com.vurgun.skyfit.core.ui.components.ButtonSize
-import com.vurgun.skyfit.core.ui.components.ButtonState
-import com.vurgun.skyfit.core.ui.components.ButtonVariant
-import com.vurgun.skyfit.core.ui.components.SkyFitButtonComponent
 import com.vurgun.skyfit.core.ui.resources.SkyFitColor
 import com.vurgun.skyfit.core.ui.resources.SkyFitTypography
 import com.vurgun.skyfit.feature_lessons.ui.components.LessonSessionColumn
@@ -42,7 +35,9 @@ import com.vurgun.skyfit.feature_profile.ui.ProfileCardVerticalDetailItemCompone
 import com.vurgun.skyfit.feature_profile.ui.RatingStarComponent
 import com.vurgun.skyfit.feature_profile.ui.VerticalDetailDivider
 import com.vurgun.skyfit.feature_profile.ui.components.MobileProfileActionsRow
-import com.vurgun.skyfit.feature_profile.ui.facility.MobileFacilityProfileVisitedScreen.MobileFacilityProfileVisitedScreenPhotosComponent
+import com.vurgun.skyfit.feature_profile.ui.components.MobileProfileBackgroundImage
+import com.vurgun.skyfit.feature_profile.ui.components.PhotoGalleryEmptyStackCard
+import com.vurgun.skyfit.feature_profile.ui.components.PhotoGalleryStackCard
 import com.vurgun.skyfit.feature_profile.ui.facility.MobileFacilityProfileVisitedScreen.MobileFacilityProfileVisitedScreenTrainersComponent
 import com.vurgun.skyfit.navigation.NavigationRoute
 import com.vurgun.skyfit.navigation.jumpAndStay
@@ -56,7 +51,7 @@ fun MobileFacilityProfileScreen(navigator: Navigator) {
 
     val viewModel = FacilityProfileVisitedViewModel()
     val scrollState = rememberScrollState()
-    val photos: List<Any> = listOf(1, 2, 3)
+    val galleryStackViewData = viewModel.galleryStackViewData.collectAsState().value
     val trainers = viewModel.trainers
     val lessonsColumViewData by viewModel.lessonsColumViewData.collectAsState()
     var showPosts by remember { mutableStateOf(false) }
@@ -72,13 +67,9 @@ fun MobileFacilityProfileScreen(navigator: Navigator) {
         val width = maxWidth
         val imageHeight = width * 9 / 16
 
-        AsyncImage(
-            model = "https://cdn.shopify.com/s/files/1/0599/3624/3866/t/57/assets/e69266f5f9de--field-street-fitness-6-4a2977.jpg?v=1682607953",
-            contentDescription = null,
-            contentScale = ContentScale.Crop,
-            modifier = Modifier
-                .fillMaxWidth()
-                .height(imageHeight)
+        MobileProfileBackgroundImage(
+            imageUrl = "https://cdn.shopify.com/s/files/1/0599/3624/3866/t/57/assets/e69266f5f9de--field-street-fitness-6-4a2977.jpg?v=1682607953",
+            height = imageHeight
         )
 
         val contentTopPadding = imageHeight * 8 / 10
@@ -101,14 +92,17 @@ fun MobileFacilityProfileScreen(navigator: Navigator) {
                 onClickNewPost = { navigator.jumpAndStay(NavigationRoute.UserSocialMediaPostAdd) }
             )
 
-            if (photos.isEmpty()) {
-                MobileFacilityProfileScreenPhotosEmptyComponent(onClickAdd = {})
+            if (galleryStackViewData == null) {
+                PhotoGalleryEmptyStackCard { }
             } else {
-                MobileFacilityProfileVisitedScreenPhotosComponent()
+                PhotoGalleryStackCard(
+                    viewData = galleryStackViewData,
+                    modifier = Modifier.padding(horizontal = 16.dp)
+                )
             }
 
             if (trainers.isEmpty()) {
-                MobileFacilityProfileScreenTrainersEmptyComponent(onClickAdd = {})
+                MobileFacilityTrainersCard(onClickAdd = {})
             } else {
                 MobileFacilityProfileVisitedScreenTrainersComponent(
                     trainers = trainers,
@@ -118,7 +112,7 @@ fun MobileFacilityProfileScreen(navigator: Navigator) {
 
             lessonsColumViewData?.let {
                 LessonSessionColumn(viewData = it, onClickShowAll = {})
-            } ?: MobileFacilityProfileScreenPrivateClassesEmptyComponent(onClickAdd = {})
+            } ?: MobileFacilityLessonsEmptyCard { }
 
             Spacer(Modifier.height(124.dp))
         }
@@ -189,89 +183,6 @@ fun MobileFacilityProfileScreenInfoCardComponent() {
                     modifier = Modifier.padding(top = 16.dp).fillMaxWidth()
                 )
             }
-        }
-    }
-}
-
-@Composable
-private fun MobileFacilityProfileScreenPhotosEmptyComponent(onClickAdd: () -> Unit) {
-    BoxWithConstraints(
-        modifier = Modifier
-            .padding(horizontal = 16.dp)
-            .fillMaxWidth()
-    ) {
-        val componentSize = maxWidth
-
-        Box(Modifier.size(componentSize), contentAlignment = Alignment.Center) {
-            SkyFitButtonComponent(
-                modifier = Modifier.wrapContentWidth(), text = "Fotoğraf Ekle",
-                onClick = onClickAdd,
-                variant = ButtonVariant.Secondary,
-                size = ButtonSize.Medium,
-                state = ButtonState.Rest,
-                leftIconPainter = painterResource(Res.drawable.logo_skyfit)
-            )
-        }
-
-        Box(
-            Modifier.align(Alignment.BottomStart)
-                .fillMaxWidth()
-                .background(SkyFitColor.background.fillTransparentSecondary, RoundedCornerShape(16.dp))
-                .padding(16.dp)
-        ) {
-            Text(
-                text = "Salonu Kesfet",
-                style = SkyFitTypography.heading4,
-            )
-        }
-    }
-}
-
-@Composable
-private fun MobileFacilityProfileScreenTrainersEmptyComponent(onClickAdd: () -> Unit) {
-    Column(Modifier.padding(16.dp).fillMaxWidth()) {
-        Text("Antrenorlerimiz", style = SkyFitTypography.bodyLargeSemibold)
-        Spacer(Modifier.height(16.dp))
-        Box(
-            Modifier
-                .fillMaxWidth()
-                .background(SkyFitColor.background.surfaceSecondary, RoundedCornerShape(16.dp))
-                .padding(vertical = 34.dp),
-            contentAlignment = Alignment.Center
-        ) {
-            SkyFitButtonComponent(
-                modifier = Modifier.wrapContentWidth(),
-                text = "Antrenör Ekle",
-                onClick = onClickAdd,
-                variant = ButtonVariant.Primary,
-                size = ButtonSize.Medium,
-                state = ButtonState.Rest
-            )
-        }
-    }
-}
-
-@Composable
-private fun MobileFacilityProfileScreenPrivateClassesEmptyComponent(onClickAdd: () -> Unit) {
-    Column(Modifier.fillMaxWidth().padding(16.dp)) {
-        Text("Ozel Dersler", style = SkyFitTypography.bodyLargeSemibold)
-        Spacer(Modifier.height(16.dp))
-        Box(
-            Modifier
-                .padding(horizontal = 16.dp)
-                .fillMaxWidth()
-                .background(SkyFitColor.background.surfaceSecondary, RoundedCornerShape(16.dp))
-                .padding(vertical = 34.dp),
-            contentAlignment = Alignment.Center
-        ) {
-            SkyFitButtonComponent(
-                modifier = Modifier.wrapContentWidth(),
-                text = "Ders Ekle",
-                onClick = onClickAdd,
-                variant = ButtonVariant.Primary,
-                size = ButtonSize.Medium,
-                state = ButtonState.Rest
-            )
         }
     }
 }

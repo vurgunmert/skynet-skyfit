@@ -48,7 +48,6 @@ import coil3.compose.AsyncImage
 import com.vurgun.skyfit.core.ui.components.UserCharacterComponent
 import com.vurgun.skyfit.feature_calendar.ui.MobileUserActivityHourlyCalendarComponent
 import com.vurgun.skyfit.feature_profile.ui.user.MobileUserTrophyItemComponent
-import com.vurgun.skyfit.core.ui.resources.MobileStyleGuide.padding16
 import com.vurgun.skyfit.core.ui.components.ButtonSize
 import com.vurgun.skyfit.core.ui.components.ButtonState
 import com.vurgun.skyfit.core.ui.components.ButtonVariant
@@ -59,6 +58,7 @@ import com.vurgun.skyfit.core.ui.components.SkyFitListItemCardComponent
 import com.vurgun.skyfit.core.ui.components.SkyFitMonthPickerDropdownComponent
 import com.vurgun.skyfit.core.ui.resources.SkyFitColor
 import com.vurgun.skyfit.core.ui.resources.SkyFitIcon
+import com.vurgun.skyfit.core.ui.resources.SkyFitStyleGuide
 import com.vurgun.skyfit.core.ui.resources.SkyFitTypography
 import org.jetbrains.compose.resources.DrawableResource
 import org.jetbrains.compose.resources.painterResource
@@ -373,12 +373,12 @@ fun MobileDashboardHomeUpcomingAppointmentsComponent(
     Column(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(padding16)
+            .padding(SkyFitStyleGuide.Padding.large)
     ) {
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(horizontal = padding16),
+                .padding(horizontal = SkyFitStyleGuide.Padding.large),
             horizontalArrangement = Arrangement.SpaceBetween,
             verticalAlignment = Alignment.CenterVertically
         ) {

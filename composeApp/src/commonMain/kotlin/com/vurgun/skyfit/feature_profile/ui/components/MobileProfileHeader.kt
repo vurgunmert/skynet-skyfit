@@ -40,7 +40,7 @@ fun MobileProfileHeader(
         val contentTopPadding = imageHeight * 3 / 10
 
         if (!viewData.showInfoMini) {
-            MobileUserProfileBackgroundImageComponent(imageHeight)
+            MobileProfileBackgroundImage(viewData.imageUrl, imageHeight)
         }
 
         Column(
@@ -58,10 +58,10 @@ fun MobileProfileHeader(
 }
 
 @Composable
-fun MobileUserProfileBackgroundImageComponent(height: Dp) {
+fun MobileProfileBackgroundImage(imageUrl: String, height: Dp) {
     AsyncImage(
-        model = "https://cdn.shopify.com/s/files/1/0599/3624/3866/t/57/assets/e69266f5f9de--field-street-fitness-6-4a2977.jpg?v=1682607953",
-        contentDescription = null,
+        model = imageUrl,
+        contentDescription = "BackgroundPhoto",
         contentScale = ContentScale.Crop,
         modifier = Modifier
             .fillMaxWidth()

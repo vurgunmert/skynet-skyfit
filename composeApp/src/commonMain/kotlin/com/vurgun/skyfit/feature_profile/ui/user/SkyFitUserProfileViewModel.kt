@@ -142,7 +142,7 @@ data class UserProfilePreferenceItem(
 data class TopBarGroupViewData(
     val name: String = "",
     val social: String = "",
-    val imageUrl: String = "",
+    val imageUrl: String = "https://cdn.shopify.com/s/files/1/0599/3624/3866/t/57/assets/e69266f5f9de--field-street-fitness-6-4a2977.jpg?v=1682607953",
     val preferences: List<UserProfilePreferenceItem> = emptyList(),
     val showInfoMini: Boolean = false // Whether to show the mini info card
 )

@@ -10,7 +10,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import com.vurgun.skyfit.core.ui.resources.MobileStyleGuide
+import com.vurgun.skyfit.core.ui.resources.SkyFitStyleGuide
 import com.vurgun.skyfit.core.ui.components.SkyFitScaffold
 import com.vurgun.skyfit.navigation.NavigationRoute
 import com.vurgun.skyfit.navigation.jumpAndStay
@@ -33,7 +33,7 @@ fun MobileUserHomeScreen(rootNavigator: Navigator) {
     ) {
         Column(
             modifier = Modifier
-                .widthIn(max = MobileStyleGuide.screenWithMax)
+                .widthIn(max = SkyFitStyleGuide.Mobile.maxWidth)
                 .verticalScroll(rememberScrollState()),
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {

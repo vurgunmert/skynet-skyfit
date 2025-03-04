@@ -28,7 +28,7 @@ import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
-import com.vurgun.skyfit.core.ui.resources.MobileStyleGuide
+import com.vurgun.skyfit.core.ui.resources.SkyFitStyleGuide
 import com.vurgun.skyfit.core.ui.components.SkyFitScaffold
 import com.vurgun.skyfit.core.ui.components.button.PrimaryLargeButton
 import com.vurgun.skyfit.core.ui.components.text.input.PasswordTextInput
@@ -98,9 +98,9 @@ fun MobileRegisterScreen(navigator: Navigator) {
         Column(
             modifier = Modifier
                 .imePadding()
-                .widthIn(max = MobileStyleGuide.screenWithMax)
+                .widthIn(max = SkyFitStyleGuide.Mobile.maxWidth)
                 .fillMaxHeight()
-                .padding(MobileStyleGuide.padding24)
+                .padding(SkyFitStyleGuide.Padding.xLarge)
                 .verticalScroll(rememberScrollState()),
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {

@@ -25,8 +25,8 @@ import com.vurgun.skyfit.feature_profile.ui.components.viewdata.PhotoGalleryStac
 
 @Composable
 fun PhotoGalleryStackCard(
-    modifier: Modifier = Modifier,
     viewData: PhotoGalleryStackViewData,
+    modifier: Modifier = Modifier,
     onClick: (() -> Unit)? = null
 ) {
     BoxWithConstraints(

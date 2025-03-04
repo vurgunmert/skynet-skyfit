@@ -32,8 +32,8 @@ import com.vurgun.skyfit.core.ui.components.button.PrimaryLargeButton
 import com.vurgun.skyfit.core.ui.components.text.SecondaryMediumText
 import com.vurgun.skyfit.core.ui.components.text.SecondaryMediumUnderlinedText
 import com.vurgun.skyfit.core.ui.components.text.input.PhoneNumberTextInput
-import com.vurgun.skyfit.core.ui.resources.MobileStyleGuide
 import com.vurgun.skyfit.core.ui.resources.SkyFitColor
+import com.vurgun.skyfit.core.ui.resources.SkyFitStyleGuide
 import com.vurgun.skyfit.core.ui.resources.SkyFitTypography
 import com.vurgun.skyfit.feature_auth.ui.viewmodel.MobileLoginNavigation
 import com.vurgun.skyfit.feature_auth.ui.viewmodel.MobileLoginViewModel
@@ -84,8 +84,8 @@ fun MobileLoginScreen(navigator: Navigator) {
     SkyFitScaffold {
         Column(
             modifier = Modifier
-                .padding(MobileStyleGuide.padding24)
-                .widthIn(max = MobileStyleGuide.screenWithMax)
+                .padding(SkyFitStyleGuide.Padding.xLarge)
+                .widthIn(max = SkyFitStyleGuide.Mobile.maxWidth)
                 .verticalScroll(rememberScrollState())
                 .imePadding(),
             horizontalAlignment = Alignment.CenterHorizontally,

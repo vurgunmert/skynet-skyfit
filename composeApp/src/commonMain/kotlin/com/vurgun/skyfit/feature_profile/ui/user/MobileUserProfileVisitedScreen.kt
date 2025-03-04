@@ -41,7 +41,7 @@ import com.vurgun.skyfit.feature_profile.ui.components.LifestyleActionRow
 import com.vurgun.skyfit.feature_profile.ui.components.MobileMeasurementsActionCard
 import com.vurgun.skyfit.feature_profile.ui.components.MobileProfileHeader
 import com.vurgun.skyfit.feature_profile.ui.components.MobileProfileHeaderMini
-import com.vurgun.skyfit.feature_profile.ui.components.MobileUserProfileBackgroundImageComponent
+import com.vurgun.skyfit.feature_profile.ui.components.MobileProfileBackgroundImage
 import com.vurgun.skyfit.feature_social.ui.components.LazySocialPostsColumn
 import com.vurgun.skyfit.feature_social.ui.components.viewdata.fakePosts
 import com.vurgun.skyfit.navigation.NavigationRoute
@@ -74,7 +74,7 @@ fun MobileUserProfileVisitedScreen(navigator: Navigator) {
                 val imageHeight = width * 9 / 16
                 val contentTopPadding = imageHeight * 2 / 10
 
-                MobileUserProfileBackgroundImageComponent(imageHeight)
+                MobileProfileBackgroundImage(imageUrl = "", imageHeight)
 
                 Column(
                     Modifier

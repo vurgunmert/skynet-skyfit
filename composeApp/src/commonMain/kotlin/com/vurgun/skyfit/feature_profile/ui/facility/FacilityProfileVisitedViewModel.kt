@@ -5,6 +5,7 @@ import com.vurgun.skyfit.core.ui.resources.SkyFitAsset
 import com.vurgun.skyfit.feature_explore.ui.TrainerProfileCardItemViewData
 import com.vurgun.skyfit.feature_lessons.ui.components.viewdata.LessonSessionColumnViewData
 import com.vurgun.skyfit.feature_lessons.ui.components.viewdata.LessonSessionItemViewData
+import com.vurgun.skyfit.feature_profile.ui.components.viewdata.PhotoGalleryStackViewData
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 
@@ -14,6 +15,9 @@ class FacilityProfileVisitedViewModel: ViewModel() {
 
     private val _lessonsColumViewData = MutableStateFlow<LessonSessionColumnViewData?>(null)
     val lessonsColumViewData: StateFlow<LessonSessionColumnViewData?> get() = _lessonsColumViewData
+
+    private val _galleryStackViewData = MutableStateFlow<PhotoGalleryStackViewData?>(null)
+    val galleryStackViewData: StateFlow<PhotoGalleryStackViewData?> get() = _galleryStackViewData
 
     fun loadData() {
         val privateLessonsViewData = listOf(
@@ -41,6 +45,14 @@ class FacilityProfileVisitedViewModel: ViewModel() {
             iconId = SkyFitAsset.SkyFitIcon.EXERCISES.id,
             title = "Özel Dersler",
             items = privateLessonsViewData
+        )
+
+        _galleryStackViewData.value = PhotoGalleryStackViewData(
+            title = "Salonu Keşfet", message = "8 fotoğraf, 1 video", imageUrls = listOf(
+                "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRjzqP-xQyE7dn40gt74e0fHTWbmnEIjnMJiw&s",
+                "https://ik.imagekit.io/skynet2skyfit/fake_facility_gym.png?updatedAt=1739637015082",
+                "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRjzqP-xQyE7dn40gt74e0fHTWbmnEIjnMJiw&s"
+            )
         )
     }
 }

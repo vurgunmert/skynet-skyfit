@@ -51,7 +51,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import coil3.compose.AsyncImage
-import com.vurgun.skyfit.core.ui.resources.MobileStyleGuide
+import com.vurgun.skyfit.core.ui.resources.SkyFitStyleGuide
 import com.vurgun.skyfit.core.ui.components.ButtonSize
 import com.vurgun.skyfit.core.ui.components.ButtonState
 import com.vurgun.skyfit.core.ui.components.ButtonVariant
@@ -114,8 +114,8 @@ fun MobileFacilityClassEditScreen(navigator: Navigator) {
     ) {
         Column(
             modifier = Modifier
-                .widthIn(max = MobileStyleGuide.screenWithMax)
-                .padding(MobileStyleGuide.padding16)
+                .widthIn(max = SkyFitStyleGuide.Mobile.maxWidth)
+                .padding(SkyFitStyleGuide.Padding.large)
                 .verticalScroll(rememberScrollState()),
             verticalArrangement = Arrangement.spacedBy(24.dp)
         ) {

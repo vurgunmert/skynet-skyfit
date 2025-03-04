@@ -16,7 +16,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import com.vurgun.skyfit.core.ui.resources.MobileStyleGuide
+import com.vurgun.skyfit.core.ui.resources.SkyFitStyleGuide
 import com.vurgun.skyfit.core.ui.components.ButtonVariant
 import com.vurgun.skyfit.core.ui.components.SkyFitButtonComponent
 import com.vurgun.skyfit.core.ui.components.SkyFitLogoComponent
@@ -38,9 +38,9 @@ fun MobileForgotPasswordScreen(navigator: Navigator) {
     SkyFitScaffold {
         Column(
             modifier = Modifier
-                .widthIn(max = MobileStyleGuide.screenWithMax)
+                .widthIn(max = SkyFitStyleGuide.Mobile.maxWidth)
                 .fillMaxHeight()
-                .padding(MobileStyleGuide.padding24),
+                .padding(SkyFitStyleGuide.Mobile.contentPadding),
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {
             SkyFitLogoComponent()
