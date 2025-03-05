@@ -9,14 +9,16 @@ plugins {
 }
 
 kotlin {
-    // Android target configuration
+
+    //region Target: Android
     androidTarget {
         compilerOptions {
             jvmTarget.set(JvmTarget.JVM_11)
         }
     }
+    //endregion Target: Android
 
-    // iOS targets configuration
+    //region Target: iOS
     listOf(
         iosX64(),
         iosArm64(),
@@ -28,6 +30,7 @@ kotlin {
             isStatic = true
         }
     }
+    //endregion Target: iOS
 
     sourceSets {
         commonMain.dependencies {
@@ -40,7 +43,6 @@ kotlin {
             implementation(compose.components.resources)
 
             // Compose Components
-            implementation("cz.kudladev:datetimepicker-kmp:1.0.7")
             implementation("com.google.accompanist:accompanist-permissions:0.37.2")
 
             // Kotlinx
@@ -70,8 +72,6 @@ kotlin {
             // PreCompose for multiplatform navigation
             implementation(libs.precompose)
             implementation(libs.precompose.viewmodel)
-
-            implementation("com.mikepenz:multiplatform-markdown-renderer:0.31.0")
         }
 
         androidMain.dependencies {
@@ -79,18 +79,17 @@ kotlin {
             implementation(libs.androidx.activity.compose)
             implementation(libs.ktor.client.okhttp)
 
-            implementation("cz.kudladev:datetimepicker-kmp:1.0.7")
             implementation("app.rive:rive-android:9.6.5")
             implementation("androidx.startup:startup-runtime:1.2.0")
         }
 
         iosMain.dependencies {
             implementation(libs.ktor.client.darwin)
-            implementation("cz.kudladev:datetimepicker-kmp:1.0.7")
         }
     }
 }
 
+//region Project: Android
 android {
     namespace = "com.vurgun.skyfit"
     compileSdk = libs.versions.android.compileSdk.get().toInt()
@@ -117,3 +116,4 @@ android {
         targetCompatibility = JavaVersion.VERSION_11
     }
 }
+//endregion Project: Android

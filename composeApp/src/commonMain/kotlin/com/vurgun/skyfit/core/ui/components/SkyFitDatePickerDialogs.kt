@@ -7,7 +7,6 @@ import androidx.compose.material.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.unit.dp
 import com.vurgun.skyfit.core.ui.resources.SkyFitColor
-import cz.kudladev.DatePicker
 import kotlinx.datetime.LocalDate
 
 @Composable
@@ -22,11 +21,7 @@ fun DatePickerDialog(
             backgroundColor = SkyFitColor.border.default,
             shape = RoundedCornerShape(16.dp),
             text = {
-                DatePicker(
-                    onSelectDate = { selectedDate ->
-                        onDateSelected(selectedDate)
-                    }
-                )
+                //TODO: Calendar
             },
             confirmButton = {
                 TextButton(onClick = onDismiss) {
