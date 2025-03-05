@@ -43,6 +43,7 @@ import com.vurgun.skyfit.feature_lessons.ui.components.LessonSessionColumn
 import com.vurgun.skyfit.feature_lessons.ui.components.viewdata.LessonSessionColumnViewData
 import com.vurgun.skyfit.feature_profile.ui.SkyFitTrainerProfileViewModel
 import com.vurgun.skyfit.feature_profile.ui.components.LifestyleActionRow
+import com.vurgun.skyfit.feature_profile.ui.components.MobileProfileActionTabsRow
 import com.vurgun.skyfit.feature_profile.ui.components.UserProfileCardPreferenceRow
 import com.vurgun.skyfit.feature_profile.ui.components.viewdata.LifestyleActionRowViewData
 import com.vurgun.skyfit.feature_profile.ui.user.MobileVisitedProfileActionsComponent
@@ -99,6 +100,7 @@ fun MobileTrainerProfileVisitedScreen(navigator: Navigator) {
             )
 
             MobileTrainerProfileVisitedScreenActionsComponent(
+                postsSelected = showPosts,
                 showMessage = isFollowing,
                 onClickAbout = { showPosts = false },
                 onClickPosts = { showPosts = true },
@@ -233,6 +235,7 @@ private fun MobileTrainerProfileVisitedScreenInfoCardComponent(
 
 @Composable
 private fun MobileTrainerProfileVisitedScreenActionsComponent(
+    postsSelected: Boolean,
     showMessage: Boolean,
     onClickAbout: () -> Unit,
     onClickPosts: () -> Unit,
@@ -247,6 +250,12 @@ private fun MobileTrainerProfileVisitedScreenActionsComponent(
             modifier = Modifier.weight(1f),
             onClickAbout = onClickAbout,
             onClickPosts = onClickPosts
+        )
+        MobileProfileActionTabsRow(
+            modifier = Modifier.weight(1f),
+            onClickAbout = onClickAbout,
+            onClickPosts = onClickPosts,
+            postsSelected = postsSelected
         )
 
         if (showMessage) {

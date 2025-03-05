@@ -41,13 +41,13 @@ import com.vurgun.skyfit.core.ui.components.ButtonVariant
 import com.vurgun.skyfit.core.ui.components.SkyFitButtonComponent
 import com.vurgun.skyfit.core.ui.components.SkyFitSearchFilterBarComponent
 import com.vurgun.skyfit.core.ui.components.SkyFitSearchTextInputComponent
-import com.vurgun.skyfit.feature_profile.ui.FacilityProfileCardItemBox
-import com.vurgun.skyfit.feature_profile.ui.TrainerProfileCardItemBox
 import com.vurgun.skyfit.navigation.NavigationRoute
 import com.vurgun.skyfit.navigation.jumpAndStay
 import com.vurgun.skyfit.core.ui.resources.SkyFitColor
 import com.vurgun.skyfit.core.ui.resources.SkyFitTypography
 import com.vurgun.skyfit.feature_explore.ui.viewmodel.DashboardExploreScreenViewModel
+import com.vurgun.skyfit.feature_profile.ui.components.FacilityProfileCardItemBox
+import com.vurgun.skyfit.feature_profile.ui.components.TrainerProfileCardItemBox
 import moe.tlaster.precompose.navigation.Navigator
 
 @Composable

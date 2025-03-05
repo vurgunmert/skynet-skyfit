@@ -41,11 +41,11 @@ import com.vurgun.skyfit.core.ui.components.SkyFitScaffold
 import com.vurgun.skyfit.core.ui.components.SkyFitScreenHeader
 import com.vurgun.skyfit.core.ui.components.SkyFitSearchFilterBarComponent
 import com.vurgun.skyfit.core.ui.components.SkyFitSearchTextInputComponent
-import com.vurgun.skyfit.feature_profile.ui.AvatarImage
-import com.vurgun.skyfit.navigation.NavigationRoute
-import com.vurgun.skyfit.navigation.jumpAndStay
+import com.vurgun.skyfit.core.ui.components.image.CircularImage
 import com.vurgun.skyfit.core.ui.resources.SkyFitColor
 import com.vurgun.skyfit.core.ui.resources.SkyFitTypography
+import com.vurgun.skyfit.navigation.NavigationRoute
+import com.vurgun.skyfit.navigation.jumpAndStay
 import moe.tlaster.precompose.navigation.Navigator
 import org.jetbrains.compose.resources.painterResource
 import skyfit.composeapp.generated.resources.Res
@@ -177,19 +177,19 @@ private fun MobileExploreActiveChallengeItemComponent(onClick: () -> Unit) {
             Spacer(Modifier.height(4.dp))
             Box(Modifier.fillMaxWidth()) {
                 Row(Modifier.align(Alignment.CenterStart)) {
-                    AvatarImage(
+                    CircularImage(
                         avatarUrl = "https://ik.imagekit.io/skynet2skyfit/avatar_sample.png?updatedAt=1738866499680",
                         modifier = Modifier.size(24.dp)
                     )
-                    AvatarImage(
+                    CircularImage(
                         avatarUrl = "https://ik.imagekit.io/skynet2skyfit/avatar_sample.png?updatedAt=1738866499680",
                         modifier = Modifier.size(24.dp).offset(x = (-16).dp)
                     )
-                    AvatarImage(
+                    CircularImage(
                         avatarUrl = "https://ik.imagekit.io/skynet2skyfit/Profile%20Photo.png?updatedAt=1739703080462",
                         modifier = Modifier.size(24.dp).offset(x = (-32).dp)
                     )
-                    AvatarImage(
+                    CircularImage(
                         avatarUrl = "https://ik.imagekit.io/skynet2skyfit/download-5.jpg?updatedAt=1740259432295",
                         modifier = Modifier.size(24.dp).offset(x = (-48).dp)
                     )

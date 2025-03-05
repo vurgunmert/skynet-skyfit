@@ -69,6 +69,16 @@ fun MobileProfileBackgroundImage(imageUrl: String, height: Dp) {
     )
 }
 
+@Composable
+fun MobileProfileBackgroundImage(imageUrl: String, modifier: Modifier = Modifier.fillMaxWidth()) {
+    AsyncImage(
+        model = imageUrl,
+        contentDescription = "BackgroundPhoto",
+        contentScale = ContentScale.Crop,
+        modifier = modifier
+    )
+}
+
 
 @Composable
 fun UserProfileCardPreferenceRow(modifier: Modifier) {

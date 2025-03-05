@@ -20,8 +20,8 @@ import com.vurgun.skyfit.core.ui.components.SkyFitScaffold
 import com.vurgun.skyfit.core.ui.components.SkyFitScreenHeader
 import com.vurgun.skyfit.core.ui.components.SkyFitSearchFilterBarComponent
 import com.vurgun.skyfit.core.ui.components.SkyFitSearchTextInputComponent
-import com.vurgun.skyfit.feature_profile.ui.TrainerProfileCardItemBox
 import com.vurgun.skyfit.feature_explore.ui.viewmodel.DashboardExploreScreenViewModel
+import com.vurgun.skyfit.feature_profile.ui.components.TrainerProfileCardItemBox
 import moe.tlaster.precompose.navigation.Navigator
 
 @Composable

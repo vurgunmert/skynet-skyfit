@@ -47,7 +47,7 @@ fun MobileFacilityHomeScreen(rootNavigator: Navigator) {
             MobileDashboardHomeFacilityStatisticsComponent()
 
             MobileDashboardHomeFacilityNoClassComponent(
-                onClick = { rootNavigator.jumpAndStay(NavigationRoute.FacilityClasses) }
+                onClick = { rootNavigator.jumpAndStay(NavigationRoute.FacilityManageLessons) }
             )
 
             MobileDashboardHomeUpcomingAppointmentsComponent()

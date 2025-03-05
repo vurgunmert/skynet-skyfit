@@ -1,6 +1,5 @@
-package com.vurgun.skyfit.feature_profile.ui
+package com.vurgun.skyfit.feature_profile.ui.components
 
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -11,12 +10,9 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.Icon
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -28,55 +24,85 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.dp
 import coil3.compose.AsyncImage
-import com.vurgun.skyfit.core.ui.components.image.CircularImage
+import com.vurgun.skyfit.core.ui.components.divider.VerticalDivider
 import com.vurgun.skyfit.core.ui.components.special.RatingStarComponent
 import com.vurgun.skyfit.core.ui.resources.SkyFitColor
 import com.vurgun.skyfit.core.ui.resources.SkyFitTypography
-import org.jetbrains.compose.resources.painterResource
-import skyfit.composeapp.generated.resources.Res
-import skyfit.composeapp.generated.resources.logo_skyfit
+import com.vurgun.skyfit.feature_profile.ui.VerticalProfileStatisticItem
 
 @Composable
-fun VerticalProfileStatisticItem(title: String, subtitle: String) {
-    Column(
-        modifier = Modifier.size(56.dp),
-        horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.Center
-    ) {
-        Text(text = title, style = SkyFitTypography.bodyLargeSemibold, color = Color.White)
-        Spacer(modifier = Modifier.height(4.dp))
-        Text(text = subtitle, style = SkyFitTypography.bodySmallMedium, color = Color.Gray)
-    }
+fun TrainerProfileCardItemBox(
+    imageUrl: String,
+    name: String,
+    followerCount: Int,
+    classCount: Int,
+    videoCount: Int,
+    rating: Double?,
+    onClick: () -> Unit
+) {
+    ProfileCardItemBox(
+        imageUrl = imageUrl,
+        name = name,
+        details = listOf(
+            Pair("$followerCount", "Takipçi"),
+            Pair("$classCount", "Dersler"),
+            Pair("$videoCount", "Videolar")
+        ),
+        rating = rating ?: 0.0,
+        onClick = onClick
+    )
 }
 
 @Composable
-fun ExerciseProfileCardItemComponent(
+fun FacilityProfileCardItemBox(
     imageUrl: String,
     name: String,
-    participants: List<String>,
-    extraParticipantsCount: Int,
+    memberCount: Int,
+    trainerCount: Int,
     rating: Double,
     onClick: () -> Unit
 ) {
+    ProfileCardItemBox(
+        imageUrl = imageUrl,
+        name = name,
+        details = listOf(
+            Pair("$memberCount", "Üye"),
+            Pair("$trainerCount", "Eğitmen")
+        ),
+        rating = rating,
+        showRatingInDetail = true,
+        onClick = onClick
+    )
+}
+
+@Composable
+private fun ProfileCardItemBox(
+    imageUrl: String,
+    name: String,
+    details: List<Pair<String, String>>,
+    rating: Double,
+    showRatingInDetail: Boolean = false,
+    onClick: () -> Unit
+) {
     Box(
-        modifier = Modifier
+        Modifier
             .size(186.dp, 278.dp)
             .clickable { onClick() }
     ) {
-        // Background Image
-        Image(
-            painter = painterResource(Res.drawable.logo_skyfit),
-            contentDescription = "Exercise Image",
+        // Profile Image
+        AsyncImage(
+            model = imageUrl,
+            contentDescription = "Image",
             modifier = Modifier
                 .fillMaxSize()
                 .clip(RoundedCornerShape(16.dp)),
             contentScale = ContentScale.Crop
         )
 
-        // Rating Star Box
+        // Rating Star
         RatingStarComponent(rating, Modifier.align(Alignment.TopEnd).padding(8.dp))
 
-        // Bottom Details
+        // Details Box
         Box(
             Modifier
                 .align(Alignment.BottomStart)
@@ -91,6 +117,7 @@ fun ExerciseProfileCardItemComponent(
                     .blur(16.dp, edgeTreatment = BlurredEdgeTreatment.Unbounded)
             )
 
+            // Content
             Column(
                 Modifier
                     .align(Alignment.BottomCenter)
@@ -100,7 +127,6 @@ fun ExerciseProfileCardItemComponent(
                         shape = RoundedCornerShape(16.dp)
                     )
             ) {
-                // Exercise Name
                 Text(
                     text = name,
                     style = SkyFitTypography.bodyMediumSemibold,
@@ -110,46 +136,20 @@ fun ExerciseProfileCardItemComponent(
                 )
                 Spacer(Modifier.height(8.dp))
 
-                // Avatar List with Overlap
                 Row(
                     modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.Center,
                     verticalAlignment = Alignment.CenterVertically
                 ) {
-                    Spacer(Modifier.height(4.dp))
-
-                    participants.take(4).forEachIndexed { index, avatarUrl ->
-                        CircularImage(
-                            avatarUrl = avatarUrl,
-                            modifier = Modifier.size(32.dp).offset(x = (-10 * index).dp)
-                        )
+                    details.forEachIndexed { index, detail ->
+                        VerticalProfileStatisticItem(title = detail.first, subtitle = detail.second)
+                        if (index < details.lastIndex) VerticalDivider(Modifier.height(48.dp))
                     }
-
-                    if (extraParticipantsCount > 0) {
-                        Box(
-                            modifier = Modifier
-                                .offset(x = (-10 * 4).dp)
-                                .size(32.dp)
-                                .background(SkyFitColor.background.surfaceActive, CircleShape),
-                            contentAlignment = Alignment.Center
-                        ) {
-                            Text(
-                                text = "+$extraParticipantsCount",
-                                style = SkyFitTypography.bodySmallMedium
-                            )
-                        }
+                    if (showRatingInDetail) {
+                        VerticalDivider(Modifier.height(48.dp))
+                        RatingStarComponent(rating, Modifier.padding(8.dp))
                     }
-
-
-                    Icon(
-                        painter = painterResource(Res.drawable.logo_skyfit),
-                        contentDescription = "Preview exercise",
-                        tint = SkyFitColor.icon.default,
-                        modifier = Modifier.size(24.dp)
-                    )
-                    Spacer(Modifier.height(4.dp))
                 }
-
-                Spacer(Modifier.height(16.dp))
             }
         }
     }

@@ -34,7 +34,6 @@ fun MobileProfileActionsRow(
     onClickSettings: () -> Unit,
     onClickNewPost: () -> Unit
 ) {
-    val isPostsSelected = remember { postsSelected }
     Row(
         Modifier.padding(horizontal = 16.dp).fillMaxWidth(),
         horizontalArrangement = Arrangement.spacedBy(16.dp),
@@ -50,11 +49,11 @@ fun MobileProfileActionsRow(
         Box(
             Modifier
                 .background(SkyFitColor.background.surfaceSecondary, RoundedCornerShape(16.dp))
-                .clickable(onClick = if (isPostsSelected) onClickNewPost else onClickSettings)
+                .clickable(onClick = if (postsSelected) onClickNewPost else onClickSettings)
                 .padding(12.dp),
             contentAlignment = Alignment.Center
         ) {
-            if (isPostsSelected) {
+            if (postsSelected) {
                 Icon(
                     painter = painterResource(Res.drawable.ic_plus),
                     contentDescription = "New Post",
@@ -74,7 +73,7 @@ fun MobileProfileActionsRow(
 }
 
 @Composable
-private fun MobileProfileActionTabsRow(
+fun MobileProfileActionTabsRow(
     modifier: Modifier = Modifier.fillMaxWidth(),
     onClickAbout: () -> Unit = {},
     onClickPosts: () -> Unit = {},

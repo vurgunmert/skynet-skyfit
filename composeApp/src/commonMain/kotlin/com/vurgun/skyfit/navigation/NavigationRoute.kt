@@ -175,7 +175,7 @@ sealed class NavigationRoute(
     //region Facility Screens
     // - Profile
     data object FacilityProfile : NavigationRoute("profile/facility/owner", roles = listOf(UserType.FACILITY_MANAGER))
-    data object FacilityPhotoDiary :
+    data object FacilityPhotoGallery :
         NavigationRoute("profile/facility/owner/photo_diary", roles = listOf(UserType.FACILITY_MANAGER))
 
     data object FacilityProfileVisited : NavigationRoute(
@@ -202,7 +202,7 @@ sealed class NavigationRoute(
     )
 
     // - Classes
-    data object FacilityClasses : NavigationRoute("facility_classes/owner", roles = listOf(UserType.FACILITY_MANAGER))
+    data object FacilityManageLessons : NavigationRoute("facility_classes/owner", roles = listOf(UserType.FACILITY_MANAGER))
     data object FacilityClassesVisited : NavigationRoute("facility_classes/GUEST", roles = listOf(UserType.USER))
 
     data object FacilityClassEdit :

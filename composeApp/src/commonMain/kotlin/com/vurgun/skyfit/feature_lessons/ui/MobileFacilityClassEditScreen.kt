@@ -106,7 +106,7 @@ fun MobileFacilityClassEditScreen(navigator: Navigator) {
                 enabled = facilityClass.isSaveButtonEnabled,
                 onClick = {
                     navigator.jumpAndTakeover(
-                        NavigationRoute.FacilityClasses,
+                        NavigationRoute.FacilityManageLessons,
                         NavigationRoute.FacilityClassEditCompleted
                     )
                 })

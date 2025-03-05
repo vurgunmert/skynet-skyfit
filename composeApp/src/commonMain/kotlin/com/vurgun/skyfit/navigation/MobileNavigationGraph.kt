@@ -1,6 +1,10 @@
 package com.vurgun.skyfit.navigation
 
 import androidx.compose.runtime.Composable
+import com.vurgun.skyfit.feature_appointments.ui.MobileUserAppointmentDetailScreen
+import com.vurgun.skyfit.feature_appointments.ui.MobileUserAppointmentsScreen
+import com.vurgun.skyfit.feature_appointments.ui.trainer.MobileTrainerAppointmentDetailScreen
+import com.vurgun.skyfit.feature_appointments.ui.trainer.MobileTrainerAppointmentsScreen
 import com.vurgun.skyfit.feature_auth.ui.mobile.MobileForgotPasswordCodeScreen
 import com.vurgun.skyfit.feature_auth.ui.mobile.MobileForgotPasswordResetScreen
 import com.vurgun.skyfit.feature_auth.ui.mobile.MobileForgotPasswordScreen
@@ -8,7 +12,18 @@ import com.vurgun.skyfit.feature_auth.ui.mobile.MobileLoginScreen
 import com.vurgun.skyfit.feature_auth.ui.mobile.MobileOTPVerificationScreen
 import com.vurgun.skyfit.feature_auth.ui.mobile.MobileRegisterScreen
 import com.vurgun.skyfit.feature_auth.ui.mobile.MobileSplashScreen
+import com.vurgun.skyfit.feature_body_analysis.ui.MobileUserBodyAnalysisScreen
+import com.vurgun.skyfit.feature_calendar.ui.MobileUserActivityCalendarAddActivityScreen
+import com.vurgun.skyfit.feature_calendar.ui.MobileUserActivityCalendarAddedScreen
+import com.vurgun.skyfit.feature_calendar.ui.MobileUserActivityCalendarPaymentRequiredScreen
+import com.vurgun.skyfit.feature_calendar.ui.MobileUserActivityCalendarScreen
+import com.vurgun.skyfit.feature_calendar.ui.MobileUserActivityCalendarSearchScreen
+import com.vurgun.skyfit.feature_chatbot.ui.MobileUserChatBotScreen
+import com.vurgun.skyfit.feature_chatbot.ui.MobileUserToBotChatScreen
 import com.vurgun.skyfit.feature_dashboard.ui.MobileDashboardScreen
+import com.vurgun.skyfit.feature_exercises.ui.MobileUserExerciseDetailScreen
+import com.vurgun.skyfit.feature_exercises.ui.MobileUserExerciseInActionCompletedScreen
+import com.vurgun.skyfit.feature_exercises.ui.MobileUserExerciseInActionScreen
 import com.vurgun.skyfit.feature_explore.ui.MobileExploreBlogArticleDetailScreen
 import com.vurgun.skyfit.feature_explore.ui.MobileExploreBlogScreen
 import com.vurgun.skyfit.feature_explore.ui.MobileExploreChallengeDetailScreen
@@ -24,41 +39,8 @@ import com.vurgun.skyfit.feature_lessons.ui.MobileFacilityClassDetailVisitedScre
 import com.vurgun.skyfit.feature_lessons.ui.MobileFacilityClassEditCompletedScreen
 import com.vurgun.skyfit.feature_lessons.ui.MobileFacilityClassEditScreen
 import com.vurgun.skyfit.feature_lessons.ui.MobileFacilityClassesScreen
-import com.vurgun.skyfit.feature_profile.ui.facility.MobileFacilityPhotoDiaryScreen
-import com.vurgun.skyfit.feature_profile.ui.facility.MobileFacilityProfileScreen
-import com.vurgun.skyfit.feature_profile.ui.facility.MobileFacilityProfileVisitedScreen
-import com.vurgun.skyfit.feature_settings.ui.facility.MobileFacilitySettingsAccountScreen
-import com.vurgun.skyfit.feature_settings.ui.facility.MobileFacilitySettingsAddMembersScreen
-import com.vurgun.skyfit.feature_settings.ui.facility.MobileFacilitySettingsHelpScreen
-import com.vurgun.skyfit.feature_settings.ui.facility.MobileFacilitySettingsNotificationsScreen
-import com.vurgun.skyfit.feature_settings.ui.facility.MobileFacilitySettingsPaymentHistoryScreen
-import com.vurgun.skyfit.feature_settings.ui.facility.MobileFacilitySettingsScreen
-import com.vurgun.skyfit.feature_settings.ui.facility.MobileFacilitySettingsSearchMembersScreen
-import com.vurgun.skyfit.feature_settings.ui.facility.MobileFacilitySettingsTrainersScreen
-import com.vurgun.skyfit.feature_onboarding.ui.MobileOnboardingNavGraph
-import com.vurgun.skyfit.feature_appointments.ui.trainer.MobileTrainerAppointmentDetailScreen
-import com.vurgun.skyfit.feature_appointments.ui.trainer.MobileTrainerAppointmentsScreen
 import com.vurgun.skyfit.feature_lessons.ui.MobileTrainerCalendarVisitedScreen
-import com.vurgun.skyfit.feature_profile.ui.trainer.MobileTrainerProfileScreen
-import com.vurgun.skyfit.feature_profile.ui.trainer.MobileTrainerProfileVisitedScreen
-import com.vurgun.skyfit.feature_settings.ui.trainer.MobileTrainerSettingsAccountScreen
-import com.vurgun.skyfit.feature_settings.ui.trainer.MobileTrainerSettingsHelpScreen
-import com.vurgun.skyfit.feature_settings.ui.trainer.MobileTrainerSettingsNotificationsScreen
-import com.vurgun.skyfit.feature_settings.ui.trainer.MobileTrainerSettingsPaymentHistoryScreen
-import com.vurgun.skyfit.feature_settings.ui.trainer.MobileTrainerSettingsScreen
-import com.vurgun.skyfit.feature_appointments.ui.MobileUserAppointmentDetailScreen
-import com.vurgun.skyfit.feature_appointments.ui.MobileUserAppointmentsScreen
-import com.vurgun.skyfit.feature_calendar.ui.MobileUserActivityCalendarAddActivityScreen
-import com.vurgun.skyfit.feature_calendar.ui.MobileUserActivityCalendarAddedScreen
-import com.vurgun.skyfit.feature_calendar.ui.MobileUserActivityCalendarPaymentRequiredScreen
-import com.vurgun.skyfit.feature_calendar.ui.MobileUserActivityCalendarScreen
-import com.vurgun.skyfit.feature_calendar.ui.MobileUserActivityCalendarSearchScreen
-import com.vurgun.skyfit.feature_exercises.ui.MobileUserExerciseDetailScreen
-import com.vurgun.skyfit.feature_exercises.ui.MobileUserExerciseInActionCompletedScreen
-import com.vurgun.skyfit.feature_exercises.ui.MobileUserExerciseInActionScreen
-import com.vurgun.skyfit.feature_chatbot.ui.MobileUserChatBotScreen
 import com.vurgun.skyfit.feature_messaging.ui.MobileUserConversationsScreen
-import com.vurgun.skyfit.feature_chatbot.ui.MobileUserToBotChatScreen
 import com.vurgun.skyfit.feature_messaging.ui.MobileUserToFacilityChatScreen
 import com.vurgun.skyfit.feature_messaging.ui.MobileUserToGroupChatScreen
 import com.vurgun.skyfit.feature_messaging.ui.MobileUserToTrainerChatScreen
@@ -67,13 +49,31 @@ import com.vurgun.skyfit.feature_notifications.ui.MobileUserNotificationsScreen
 import com.vurgun.skyfit.feature_nutrition.ui.MobileUserMealDetailAddPhotoScreen
 import com.vurgun.skyfit.feature_nutrition.ui.MobileUserMealDetailAddScreen
 import com.vurgun.skyfit.feature_nutrition.ui.MobileUserMealDetailScreen
+import com.vurgun.skyfit.feature_onboarding.ui.MobileOnboardingNavGraph
 import com.vurgun.skyfit.feature_payment.ui.MobileUserPaymentProcessScreen
-import com.vurgun.skyfit.feature_body_analysis.ui.MobileUserBodyAnalysisScreen
+import com.vurgun.skyfit.feature_profile.domain.model.ProfileViewMode
+import com.vurgun.skyfit.feature_profile.ui.facility.MobileFacilityPhotoDiaryScreen
+import com.vurgun.skyfit.feature_profile.ui.facility.MobileFacilityProfileScreen
+import com.vurgun.skyfit.feature_profile.ui.trainer.MobileTrainerProfileScreen
+import com.vurgun.skyfit.feature_profile.ui.trainer.MobileTrainerProfileVisitedScreen
 import com.vurgun.skyfit.feature_profile.ui.user.MobileUserMeasurementsScreen
 import com.vurgun.skyfit.feature_profile.ui.user.MobileUserPhotoDiaryScreen
 import com.vurgun.skyfit.feature_profile.ui.user.MobileUserProfileScreen
 import com.vurgun.skyfit.feature_profile.ui.user.MobileUserProfileVisitedScreen
 import com.vurgun.skyfit.feature_profile.ui.user.MobileUserTrophiesScreen
+import com.vurgun.skyfit.feature_settings.ui.facility.MobileFacilitySettingsAccountScreen
+import com.vurgun.skyfit.feature_settings.ui.facility.MobileFacilitySettingsAddMembersScreen
+import com.vurgun.skyfit.feature_settings.ui.facility.MobileFacilitySettingsHelpScreen
+import com.vurgun.skyfit.feature_settings.ui.facility.MobileFacilitySettingsNotificationsScreen
+import com.vurgun.skyfit.feature_settings.ui.facility.MobileFacilitySettingsPaymentHistoryScreen
+import com.vurgun.skyfit.feature_settings.ui.facility.MobileFacilitySettingsScreen
+import com.vurgun.skyfit.feature_settings.ui.facility.MobileFacilitySettingsSearchMembersScreen
+import com.vurgun.skyfit.feature_settings.ui.facility.MobileFacilitySettingsTrainersScreen
+import com.vurgun.skyfit.feature_settings.ui.trainer.MobileTrainerSettingsAccountScreen
+import com.vurgun.skyfit.feature_settings.ui.trainer.MobileTrainerSettingsHelpScreen
+import com.vurgun.skyfit.feature_settings.ui.trainer.MobileTrainerSettingsNotificationsScreen
+import com.vurgun.skyfit.feature_settings.ui.trainer.MobileTrainerSettingsPaymentHistoryScreen
+import com.vurgun.skyfit.feature_settings.ui.trainer.MobileTrainerSettingsScreen
 import com.vurgun.skyfit.feature_settings.ui.user.MobileUserSettingsAccountScreen
 import com.vurgun.skyfit.feature_settings.ui.user.MobileUserSettingsChangePasswordScreen
 import com.vurgun.skyfit.feature_settings.ui.user.MobileUserSettingsHelpScreen
@@ -92,7 +92,7 @@ fun MobileNavigationGraph() {
 
     NavHost(
         navigator = rootNavigator,
-        initialRoute = NavigationRoute.Onboarding.route
+        initialRoute = NavigationRoute.FacilityProfile.route
     ) {
 
         splashNavGraph(rootNavigator)
@@ -175,14 +175,14 @@ fun MobileNavigationGraph() {
 
         //region Facility
         //Facility - Profile
-        scene(NavigationRoute.FacilityProfile.route) { MobileFacilityProfileScreen(rootNavigator) }
-        scene(NavigationRoute.FacilityProfileVisited.route) { MobileFacilityProfileVisitedScreen(rootNavigator) }
-        scene(NavigationRoute.FacilityPhotoDiary.route) { MobileFacilityPhotoDiaryScreen(rootNavigator) }
+        scene(NavigationRoute.FacilityProfile.route) { MobileFacilityProfileScreen(rootNavigator, viewMode = ProfileViewMode.OWNER) }
+        scene(NavigationRoute.FacilityProfileVisited.route) { MobileFacilityProfileScreen(rootNavigator, viewMode = ProfileViewMode.VISITOR) }
+        scene(NavigationRoute.FacilityPhotoGallery.route) { MobileFacilityPhotoDiaryScreen(rootNavigator) }
         //Facility - Calendar
         scene(NavigationRoute.FacilityCalendar.route) { MobileFacilityCalendarScreen(rootNavigator) }
         scene(NavigationRoute.FacilityCalendarVisited.route) { MobileFacilityCalendarVisitedScreen(rootNavigator) }
         //Facility - Classes
-        scene(NavigationRoute.FacilityClasses.route) { MobileFacilityClassesScreen(rootNavigator) }
+        scene(NavigationRoute.FacilityManageLessons.route) { MobileFacilityClassesScreen(rootNavigator) }
         scene(NavigationRoute.FacilityClassEdit.route) { MobileFacilityClassEditScreen(rootNavigator) }
         scene(NavigationRoute.FacilityClassEditCompleted.route) { MobileFacilityClassEditCompletedScreen(rootNavigator) }
         scene(NavigationRoute.FacilityClassDetailVisited.route) { MobileFacilityClassDetailVisitedScreen(rootNavigator) }

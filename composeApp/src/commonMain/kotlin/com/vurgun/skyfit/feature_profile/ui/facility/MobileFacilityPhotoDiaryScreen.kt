@@ -11,6 +11,6 @@ import moe.tlaster.precompose.navigation.Navigator
 fun MobileFacilityPhotoDiaryScreen(navigator: Navigator) {
 
     Button({
-        navigator.jumpAndTakeover(NavigationRoute.FacilityPhotoDiary, NavigationRoute.Dashboard)
+        navigator.jumpAndTakeover(NavigationRoute.FacilityPhotoGallery, NavigationRoute.Dashboard)
     }, content = { Text("Dashboard") })
 }

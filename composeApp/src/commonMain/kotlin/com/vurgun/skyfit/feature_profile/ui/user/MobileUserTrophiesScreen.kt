@@ -21,9 +21,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.vurgun.skyfit.core.ui.components.SkyFitImageComponent
 import com.vurgun.skyfit.core.ui.components.SkyFitScreenHeader
+import com.vurgun.skyfit.core.ui.components.image.CircularImage
 import com.vurgun.skyfit.core.ui.resources.SkyFitColor
 import com.vurgun.skyfit.core.ui.resources.SkyFitTypography
-import com.vurgun.skyfit.feature_profile.ui.AvatarImage
 import moe.tlaster.precompose.navigation.Navigator
 import org.jetbrains.compose.resources.painterResource
 import skyfit.composeapp.generated.resources.Res
@@ -59,7 +59,7 @@ fun MobileUserTrophiesScreen(navigator: Navigator) {
 @Composable
 private fun MobileUserTrophiesUserInfoComponent() {
     Column(horizontalAlignment = Alignment.CenterHorizontally) {
-        AvatarImage(
+        CircularImage(
             avatarUrl = "https://ik.imagekit.io/skynet2skyfit/Profile%20Photo.png?updatedAt=1739703080462",
             modifier = Modifier.size(64.dp)
         )

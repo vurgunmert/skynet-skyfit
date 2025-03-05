@@ -1,5 +1,6 @@
 package com.vurgun.skyfit.feature_onboarding.ui
 
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -24,41 +25,13 @@ import skyfit.composeapp.generated.resources.onboarding_select_user_type_title
 import skyfit.composeapp.generated.resources.trainer
 import skyfit.composeapp.generated.resources.user
 
-//TODO: While in pursue to mobile->desktop I will remove asap after desktop setup
-@Composable
-fun MobileOnboardingUserTypeSelectionScreen(onSelected: (UserType) -> Unit) {
-
-    SkyFitScaffold {
-        Column(
-            modifier = Modifier.fillMaxSize(),
-            horizontalAlignment = Alignment.CenterHorizontally,
-        ) {
-            Spacer(Modifier.height(48.dp))
-            SkyFitLogoComponent()
-            Spacer(Modifier.height(56.dp))
-            OnboardingTitleGroupComponent(
-                title = stringResource(Res.string.onboarding_select_user_type_title),
-                subtitle = stringResource(Res.string.onboarding_select_user_type_message)
-            )
-            Spacer(Modifier.height(64.dp))
-            MobileOnboardingUserTypeSelectionComponent(
-                onSelectUser = { onSelected(UserType.USER) },
-                onSelectTrainer = { onSelected(UserType.TRAINER) },
-                onSelectFacility = { onSelected(UserType.FACILITY_MANAGER) },
-            )
-        }
-    }
-}
-
 @Composable
 fun OnboardingUserTypeSelectionScreen(onSelected: (UserType) -> Unit) {
     SkyFitScaffold {
-        BoxWithConstraints(
+        Box(
             modifier = Modifier.fillMaxSize(),
             contentAlignment = Alignment.Center
         ) {
-            val screenWidth = maxWidth
-
             Column(
                 modifier = Modifier
                     .widthIn(max = SkyFitStyleGuide.Mobile.maxWidth)

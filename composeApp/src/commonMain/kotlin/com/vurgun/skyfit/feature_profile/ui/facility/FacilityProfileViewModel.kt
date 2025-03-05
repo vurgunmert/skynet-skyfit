@@ -6,20 +6,54 @@ import com.vurgun.skyfit.feature_explore.ui.TrainerProfileCardItemViewData
 import com.vurgun.skyfit.feature_lessons.ui.components.viewdata.LessonSessionColumnViewData
 import com.vurgun.skyfit.feature_lessons.ui.components.viewdata.LessonSessionItemViewData
 import com.vurgun.skyfit.feature_profile.ui.components.viewdata.PhotoGalleryStackViewData
+import com.vurgun.skyfit.feature_social.ui.components.viewdata.SocialPostItemViewData
+import com.vurgun.skyfit.feature_social.ui.components.viewdata.fakePosts
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 
-class FacilityProfileVisitedViewModel: ViewModel() {
+data class FacilityProfileInfoViewData(
+    val backgroundUrl: String,
+    val name: String,
+    val bio: String,
+    val address: String,
+    val socialLink: String,
+    val memberCount: Int,
+    val trainerCount: Int,
+    val rating: Double,
+    val isFollowed: Boolean = false,
+    val isRated: Boolean = false
+)
 
-    val trainers = fakeTrainers
+data class FacilityProfileState(
+    val infoViewData: FacilityProfileInfoViewData? = null,
+    val galleryStackViewData: PhotoGalleryStackViewData? = null,
+    val lessonSessionColumnViewData: LessonSessionColumnViewData? = null,
+    val trainers: List<TrainerProfileCardItemViewData> = emptyList(),
+)
 
-    private val _lessonsColumViewData = MutableStateFlow<LessonSessionColumnViewData?>(null)
-    val lessonsColumViewData: StateFlow<LessonSessionColumnViewData?> get() = _lessonsColumViewData
+class FacilityProfileViewModel: ViewModel() {
 
-    private val _galleryStackViewData = MutableStateFlow<PhotoGalleryStackViewData?>(null)
-    val galleryStackViewData: StateFlow<PhotoGalleryStackViewData?> get() = _galleryStackViewData
+    private val _profileState = MutableStateFlow<FacilityProfileState>(FacilityProfileState())
+    val profileState: StateFlow<FacilityProfileState> get() = _profileState
+
+    private val _postsVisible = MutableStateFlow(false)
+    val postsVisible: StateFlow<Boolean> get() = _postsVisible
+
+    private val _posts = MutableStateFlow<List<SocialPostItemViewData>>(emptyList())
+    val posts: StateFlow<List<SocialPostItemViewData>> get() = _posts
 
     fun loadData() {
+        val infoViewData = FacilityProfileInfoViewData(
+            backgroundUrl = "https://cdn.shopify.com/s/files/1/0599/3624/3866/t/57/assets/e69266f5f9de--field-street-fitness-6-4a2977.jpg?v=1682607953",
+            name = "Ironstudio",
+            bio = "At IronStudio Fitness, we’re all about building strength, confidence, and a community of like-minded individuals. Our expert trainers offer personalized programs in strength training, functional fitness, and overall wellness. Let's forge your fitness together!",
+            address = "1425 Maplewood Avenue, Apt 3B, Brookfield, IL 60513, USA",
+            socialLink = "@ironstudio",
+            memberCount = 2564,
+            trainerCount = 15,
+            rating = 4.3
+        )
+
         val privateLessonsViewData = listOf(
             LessonSessionItemViewData(
                 iconId = SkyFitAsset.SkyFitIcon.PUSH_UP.id,
@@ -41,19 +75,46 @@ class FacilityProfileVisitedViewModel: ViewModel() {
             )
         )
 
-        _lessonsColumViewData.value = LessonSessionColumnViewData(
+        val lessonsColumViewData = LessonSessionColumnViewData(
             iconId = SkyFitAsset.SkyFitIcon.EXERCISES.id,
             title = "Özel Dersler",
             items = privateLessonsViewData
         )
 
-        _galleryStackViewData.value = PhotoGalleryStackViewData(
+        val galleryStackViewData = PhotoGalleryStackViewData(
             title = "Salonu Keşfet", message = "8 fotoğraf, 1 video", imageUrls = listOf(
                 "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRjzqP-xQyE7dn40gt74e0fHTWbmnEIjnMJiw&s",
                 "https://ik.imagekit.io/skynet2skyfit/fake_facility_gym.png?updatedAt=1739637015082",
                 "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRjzqP-xQyE7dn40gt74e0fHTWbmnEIjnMJiw&s"
             )
         )
+
+        _profileState.value = FacilityProfileState(
+            infoViewData = infoViewData,
+            galleryStackViewData = galleryStackViewData,
+            lessonSessionColumnViewData = lessonsColumViewData,
+            trainers = fakeTrainers
+        )
+
+        _posts.value = fakePosts
+    }
+
+    fun followFacility() {
+        // TODO: ("Not yet implemented")
+        _profileState.value = _profileState.value.copy(
+            infoViewData = _profileState.value.infoViewData?.copy(isFollowed = true)
+        )
+    }
+
+    fun unfollowFacility() {
+        // TODO: ("Not yet implemented")
+        _profileState.value = _profileState.value.copy(
+            infoViewData = _profileState.value.infoViewData?.copy(isFollowed = false)
+        )
+    }
+
+    fun togglePostTab(isVisible: Boolean) {
+        _postsVisible.value = isVisible
     }
 }
 
