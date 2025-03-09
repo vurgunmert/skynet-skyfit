@@ -28,7 +28,6 @@ import com.vurgun.skyfit.core.ui.components.divider.VerticalDivider
 import com.vurgun.skyfit.core.ui.components.special.RatingStarComponent
 import com.vurgun.skyfit.core.ui.resources.SkyFitColor
 import com.vurgun.skyfit.core.ui.resources.SkyFitTypography
-import com.vurgun.skyfit.feature_profile.ui.VerticalProfileStatisticItem
 
 @Composable
 fun TrainerProfileCardItemBox(

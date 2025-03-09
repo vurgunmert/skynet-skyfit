@@ -37,9 +37,9 @@ import com.vurgun.skyfit.core.ui.resources.SkyFitStyleGuide
 import com.vurgun.skyfit.core.ui.resources.SkyFitTypography
 import com.vurgun.skyfit.feature_auth.ui.viewmodel.MobileLoginNavigation
 import com.vurgun.skyfit.feature_auth.ui.viewmodel.MobileLoginViewModel
-import com.vurgun.skyfit.navigation.NavigationRoute
-import com.vurgun.skyfit.navigation.jumpAndStay
-import com.vurgun.skyfit.navigation.jumpAndTakeover
+import com.vurgun.skyfit.feature_navigation.NavigationRoute
+import com.vurgun.skyfit.feature_navigation.jumpAndStay
+import com.vurgun.skyfit.feature_navigation.jumpAndTakeover
 import kotlinx.coroutines.flow.collectLatest
 import moe.tlaster.precompose.navigation.Navigator
 import org.jetbrains.compose.resources.stringResource

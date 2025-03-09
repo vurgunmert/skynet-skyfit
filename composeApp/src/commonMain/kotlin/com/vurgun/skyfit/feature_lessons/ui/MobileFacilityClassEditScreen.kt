@@ -65,8 +65,8 @@ import com.vurgun.skyfit.core.ui.components.SkyFitScreenHeader
 import com.vurgun.skyfit.feature_settings.ui.AccountSettingsSelectToSetInputComponent
 import com.vurgun.skyfit.feature_settings.ui.SkyFitSelectToEnterInputComponent
 import com.vurgun.skyfit.feature_settings.ui.SkyFitSelectToEnterMultilineInputComponent
-import com.vurgun.skyfit.navigation.NavigationRoute
-import com.vurgun.skyfit.navigation.jumpAndTakeover
+import com.vurgun.skyfit.feature_navigation.NavigationRoute
+import com.vurgun.skyfit.feature_navigation.jumpAndTakeover
 import com.vurgun.skyfit.core.ui.resources.SkyFitColor
 import com.vurgun.skyfit.core.ui.resources.SkyFitIcon
 import com.vurgun.skyfit.core.ui.resources.SkyFitTypography

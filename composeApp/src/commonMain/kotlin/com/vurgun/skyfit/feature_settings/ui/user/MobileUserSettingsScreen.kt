@@ -15,8 +15,8 @@ import com.vurgun.skyfit.core.ui.components.SkyFitScaffold
 import com.vurgun.skyfit.core.ui.components.SkyFitScreenHeader
 import com.vurgun.skyfit.feature_settings.ui.MobileSettingsMenuItemComponent
 import com.vurgun.skyfit.feature_settings.ui.MobileSettingsMenuItemDividerComponent
-import com.vurgun.skyfit.navigation.NavigationRoute
-import com.vurgun.skyfit.navigation.jumpAndStay
+import com.vurgun.skyfit.feature_navigation.NavigationRoute
+import com.vurgun.skyfit.feature_navigation.jumpAndStay
 import moe.tlaster.precompose.navigation.Navigator
 import skyfit.composeapp.generated.resources.Res
 import skyfit.composeapp.generated.resources.ic_bell

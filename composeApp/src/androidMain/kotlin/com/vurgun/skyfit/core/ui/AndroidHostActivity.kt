@@ -1,20 +1,22 @@
 package com.vurgun.skyfit.core.ui
 
-import android.graphics.Color
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import com.vurgun.skyfit.navigation.MobileNavigationGraph
+import androidx.core.view.WindowCompat
+import androidx.core.view.WindowInsetsControllerCompat
+import com.vurgun.skyfit.feature_navigation.MobileNavigationGraph
 
 class AndroidHostActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        window.statusBarColor = Color.parseColor("#00171C")
-//        window.setFlags(
-//            WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS,
-//            WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS
-//        )
+        // Enable edge-to-edge drawing (draw behind the status bar)
+//        WindowCompat.setDecorFitsSystemWindows(window, false)
+        //TODO: Investigate how to get correct heights of bars
+
+        val controller = WindowInsetsControllerCompat(window, window.decorView)
+        controller.isAppearanceLightStatusBars = false
 
         setContent {
             SkyFitHostScreen { MobileNavigationGraph() }

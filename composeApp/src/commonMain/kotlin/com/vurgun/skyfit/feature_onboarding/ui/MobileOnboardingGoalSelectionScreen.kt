@@ -19,8 +19,8 @@ import androidx.compose.ui.unit.dp
 import com.vurgun.skyfit.core.ui.components.SkyFitScaffold
 import com.vurgun.skyfit.core.ui.components.SkyFitSelectableTextButton
 import com.vurgun.skyfit.feature_onboarding.ui.viewmodel.UserOnboardingViewModel
-import com.vurgun.skyfit.navigation.NavigationRoute
-import com.vurgun.skyfit.navigation.jumpAndTakeover
+import com.vurgun.skyfit.feature_navigation.NavigationRoute
+import com.vurgun.skyfit.feature_navigation.jumpAndTakeover
 import moe.tlaster.precompose.navigation.Navigator
 import org.jetbrains.compose.resources.StringResource
 import org.jetbrains.compose.resources.stringResource

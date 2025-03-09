@@ -26,7 +26,7 @@ import androidx.compose.ui.unit.dp
 import coil3.compose.AsyncImage
 import com.vurgun.skyfit.core.ui.resources.SkyFitColor
 import com.vurgun.skyfit.core.ui.resources.SkyFitTypography
-import com.vurgun.skyfit.feature_profile.ui.user.TopBarGroupViewData
+import com.vurgun.skyfit.feature_profile.ui.user.viewmodel.TopBarGroupViewData
 
 @Composable
 fun MobileProfileHeaderMini(viewData: TopBarGroupViewData) {

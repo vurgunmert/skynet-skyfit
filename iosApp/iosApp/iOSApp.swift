@@ -3,7 +3,6 @@ import composeApp
 
 @main
 struct iOSApp: App {
-
     init() {
         DependencyInjectionInitializerKt.doInitKoin()
     }

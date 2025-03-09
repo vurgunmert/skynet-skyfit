@@ -13,8 +13,8 @@ import androidx.compose.ui.Modifier
 import com.vurgun.skyfit.core.domain.models.AppState
 import com.vurgun.skyfit.core.domain.models.UserState
 import com.vurgun.skyfit.core.ui.viewmodel.AppStateViewModel
-import com.vurgun.skyfit.navigation.NavigationRoute
-import com.vurgun.skyfit.navigation.jumpAndTakeover
+import com.vurgun.skyfit.feature_navigation.NavigationRoute
+import com.vurgun.skyfit.feature_navigation.jumpAndTakeover
 import com.vurgun.skyfit.core.ui.resources.SkyFitColor
 import moe.tlaster.precompose.navigation.Navigator
 import org.jetbrains.compose.resources.painterResource

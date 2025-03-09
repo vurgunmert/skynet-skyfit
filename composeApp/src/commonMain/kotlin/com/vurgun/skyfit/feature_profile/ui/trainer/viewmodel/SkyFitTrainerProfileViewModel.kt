@@ -1,4 +1,4 @@
-package com.vurgun.skyfit.feature_profile.ui
+package com.vurgun.skyfit.feature_profile.ui.trainer.viewmodel
 
 import androidx.lifecycle.ViewModel
 import com.vurgun.skyfit.core.ui.resources.SkyFitAsset
@@ -6,8 +6,8 @@ import com.vurgun.skyfit.feature_lessons.ui.components.viewdata.LessonSessionCol
 import com.vurgun.skyfit.feature_lessons.ui.components.viewdata.LessonSessionItemViewData
 import com.vurgun.skyfit.feature_profile.ui.components.viewdata.LifestyleActionItemViewData
 import com.vurgun.skyfit.feature_profile.ui.components.viewdata.LifestyleActionRowViewData
-import com.vurgun.skyfit.feature_profile.ui.user.TopBarGroupViewData
-import com.vurgun.skyfit.feature_profile.ui.user.UserProfilePreferenceItem
+import com.vurgun.skyfit.feature_profile.ui.user.viewmodel.TopBarGroupViewData
+import com.vurgun.skyfit.feature_profile.ui.user.viewmodel.UserProfilePreferenceItem
 import com.vurgun.skyfit.feature_social.ui.components.viewdata.SocialPostItemViewData
 import com.vurgun.skyfit.feature_social.ui.components.viewdata.fakePosts
 import kotlinx.coroutines.flow.MutableStateFlow

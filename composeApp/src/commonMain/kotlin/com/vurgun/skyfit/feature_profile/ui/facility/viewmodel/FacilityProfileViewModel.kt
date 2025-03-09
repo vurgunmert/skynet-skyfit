@@ -1,4 +1,4 @@
-package com.vurgun.skyfit.feature_profile.ui.facility
+package com.vurgun.skyfit.feature_profile.ui.facility.viewmodel
 
 import androidx.lifecycle.ViewModel
 import com.vurgun.skyfit.core.ui.resources.SkyFitAsset

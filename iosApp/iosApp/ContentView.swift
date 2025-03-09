@@ -4,7 +4,15 @@ import composeApp
 
 struct ComposeView: UIViewControllerRepresentable {
     func makeUIViewController(context: Context) -> UIViewController {
-        MainViewControllerKt.MainViewController()
+        let vc = MainViewControllerKt.MainViewController()
+        vc.modalPresentationStyle = .fullScreen
+        vc.view.backgroundColor = .clear // Ensure background is transparent
+
+        // Force drawing behind status bar
+//        vc.edgesForExtendedLayout = .all
+//        vc.modalPresentationCapturesStatusBarAppearance = true
+        //TODO: Investigate how to get status height
+        return vc
     }
 
     func updateUIViewController(_ uiViewController: UIViewController, context: Context) {}
@@ -12,10 +20,11 @@ struct ComposeView: UIViewControllerRepresentable {
 
 struct ContentView: View {
     var body: some View {
-        ComposeView()
-                .ignoresSafeArea(.keyboard) // Compose has own keyboard handler
+        ZStack {
+            Color.black.ignoresSafeArea(.all)
+            ComposeView()
+                .ignoresSafeArea(.all)
+        }
+        .preferredColorScheme(.dark)
     }
 }
-
-
-

@@ -1,4 +1,4 @@
-package com.vurgun.skyfit.navigation
+package com.vurgun.skyfit.feature_navigation
 
 import androidx.compose.runtime.Composable
 import com.vurgun.skyfit.feature_appointments.ui.MobileUserAppointmentDetailScreen
@@ -92,121 +92,23 @@ fun MobileNavigationGraph() {
 
     NavHost(
         navigator = rootNavigator,
-        initialRoute = NavigationRoute.FacilityProfile.route
+        initialRoute = NavigationRoute.Onboarding.route
     ) {
 
-        splashNavGraph(rootNavigator)
         authNavGraph(rootNavigator)
+        onboardingNavGraph(rootNavigator)
         dashboardNavGraph(rootNavigator)
         exploreNavGraph(rootNavigator)
-
-        scene(NavigationRoute.Onboarding.route) { MobileOnboardingNavGraph(rootNavigator) }
-
-        //region User
-        //User - Exercises
-        scene(NavigationRoute.UserExerciseDetail.route) { MobileUserExerciseDetailScreen(rootNavigator) }
-        scene(NavigationRoute.UserExerciseInAction.route) { MobileUserExerciseInActionScreen(rootNavigator) }
-        scene(NavigationRoute.UserExerciseInActionComplete.route) { MobileUserExerciseInActionCompletedScreen(rootNavigator) }
-
-        //User - Nutrition
-        scene(NavigationRoute.UserMealDetail.route) { MobileUserMealDetailScreen(rootNavigator) }
-        scene(NavigationRoute.UserMealDetailAdd.route) { MobileUserMealDetailAddScreen(rootNavigator) }
-        scene(NavigationRoute.UserMealDetailAddPhoto.route) { MobileUserMealDetailAddPhotoScreen(rootNavigator) }
-
-        //User - Calendar
-        scene(NavigationRoute.UserActivityCalendar.route) { MobileUserActivityCalendarScreen(rootNavigator) }
-        scene(NavigationRoute.UserActivityCalendarAdd.route) { MobileUserActivityCalendarAddActivityScreen(rootNavigator) }
-        scene(NavigationRoute.UserActivityCalendarSearch.route) { MobileUserActivityCalendarSearchScreen(rootNavigator) }
-        scene(NavigationRoute.UserPaymentProcess.route) { MobileUserPaymentProcessScreen(rootNavigator) }
-        scene(NavigationRoute.UserActivityCalendarPaymentRequired.route) {
-            MobileUserActivityCalendarPaymentRequiredScreen(
-                rootNavigator
-            )
-        }
-        scene(NavigationRoute.UserActivityCalendarConfirmed.route) { MobileUserActivityCalendarAddedScreen(rootNavigator) }
-        //User - Appointments
-        scene(NavigationRoute.UserAppointments.route) { MobileUserAppointmentsScreen(rootNavigator) }
-        scene(NavigationRoute.UserAppointmentDetail.route) { MobileUserAppointmentDetailScreen(rootNavigator) }
-        //User - Social
-        scene(NavigationRoute.UserSocialMedia.route) { MobileDashboardScreen(rootNavigator, NavigationRoute.DashboardSocial) }
-        scene(NavigationRoute.UserSocialMediaPostAdd.route) { MobileUserSocialMediaNewPostScreen(rootNavigator) }
-        //User - Notifications
-        scene(NavigationRoute.UserNotifications.route) { MobileUserNotificationsScreen(rootNavigator) }
-        //User - Messages
-        scene(NavigationRoute.UserChatBot.route) { MobileUserChatBotScreen(rootNavigator) }
-        scene(NavigationRoute.UserToBotChat.route) { MobileUserToBotChatScreen(rootNavigator) }
-        scene(NavigationRoute.UserConversations.route) { MobileUserConversationsScreen(rootNavigator) }
-        scene(NavigationRoute.UserToUserChat.route) { MobileUserToUserChatScreen(rootNavigator) }
-        scene(NavigationRoute.UserToTrainerChat.route) { MobileUserToTrainerChatScreen(rootNavigator) }
-        scene(NavigationRoute.UserToGroupChat.route) { MobileUserToGroupChatScreen(rootNavigator) }
-        scene(NavigationRoute.UserToFacilityChat.route) { MobileUserToFacilityChatScreen(rootNavigator) }
-        //User - Profile
-        scene(NavigationRoute.UserProfile.route) { MobileUserProfileScreen(rootNavigator) }
-        scene(NavigationRoute.UserProfileVisited.route) { MobileUserProfileVisitedScreen(rootNavigator) }
-        scene(NavigationRoute.UserPhotoDiary.route) { MobileUserPhotoDiaryScreen(rootNavigator) }
-        scene(NavigationRoute.UserMeasurements.route) { MobileUserMeasurementsScreen(rootNavigator) }
-        scene(NavigationRoute.UserBodyAnalysis.route) { MobileUserBodyAnalysisScreen(rootNavigator) }
-        scene(NavigationRoute.UserTrophies.route) { MobileUserTrophiesScreen(rootNavigator) }
-        //User - Settings
-        scene(NavigationRoute.UserSettings.route) { MobileUserSettingsScreen(rootNavigator) }
-        scene(NavigationRoute.UserSettingsAccount.route) { MobileUserSettingsAccountScreen(rootNavigator) }
-        scene(NavigationRoute.UserSettingsNotifications.route) { MobileUserSettingsNotificationsScreen(rootNavigator) }
-        scene(NavigationRoute.UserSettingsPaymentHistory.route) { MobileUserSettingsPaymentHistoryScreen(rootNavigator) }
-        scene(NavigationRoute.UserSettingsChangePassword.route) { MobileUserSettingsChangePasswordScreen(rootNavigator) }
-        scene(NavigationRoute.UserSettingsHelp.route) { MobileUserSettingsHelpScreen(rootNavigator) }
-        //endregion User
-
-        //region Trainer
-        //Trainer - Appointments
-        scene(NavigationRoute.TrainerAppointments.route) { MobileTrainerAppointmentsScreen(rootNavigator) }
-        scene(NavigationRoute.TrainerAppointmentDetail.route) { MobileTrainerAppointmentDetailScreen(rootNavigator) }
-        //Trainer - Profile
-        scene(NavigationRoute.TrainerProfile.route) { MobileTrainerProfileScreen(rootNavigator) }
-        scene(NavigationRoute.TrainerProfileVisited.route) { MobileTrainerProfileVisitedScreen(rootNavigator) }
-        //Trainer - Calendar
-        scene(NavigationRoute.TrainerCalendarVisited.route) { MobileTrainerCalendarVisitedScreen(rootNavigator) }
-        //Trainer - Settings
-        scene(NavigationRoute.TrainerSettings.route) { MobileTrainerSettingsScreen(rootNavigator) }
-        scene(NavigationRoute.TrainerSettingsAccount.route) { MobileTrainerSettingsAccountScreen(rootNavigator) }
-        scene(NavigationRoute.TrainerSettingsNotifications.route) { MobileTrainerSettingsNotificationsScreen(rootNavigator) }
-        scene(NavigationRoute.TrainerSettingsPaymentHistory.route) { MobileTrainerSettingsPaymentHistoryScreen(rootNavigator) }
-        scene(NavigationRoute.TrainerSettingsHelp.route) { MobileTrainerSettingsHelpScreen(rootNavigator) }
-        //endregion Trainer
-
-        //region Facility
-        //Facility - Profile
-        scene(NavigationRoute.FacilityProfile.route) { MobileFacilityProfileScreen(rootNavigator, viewMode = ProfileViewMode.OWNER) }
-        scene(NavigationRoute.FacilityProfileVisited.route) { MobileFacilityProfileScreen(rootNavigator, viewMode = ProfileViewMode.VISITOR) }
-        scene(NavigationRoute.FacilityPhotoGallery.route) { MobileFacilityPhotoDiaryScreen(rootNavigator) }
-        //Facility - Calendar
-        scene(NavigationRoute.FacilityCalendar.route) { MobileFacilityCalendarScreen(rootNavigator) }
-        scene(NavigationRoute.FacilityCalendarVisited.route) { MobileFacilityCalendarVisitedScreen(rootNavigator) }
-        //Facility - Classes
-        scene(NavigationRoute.FacilityManageLessons.route) { MobileFacilityClassesScreen(rootNavigator) }
-        scene(NavigationRoute.FacilityClassEdit.route) { MobileFacilityClassEditScreen(rootNavigator) }
-        scene(NavigationRoute.FacilityClassEditCompleted.route) { MobileFacilityClassEditCompletedScreen(rootNavigator) }
-        scene(NavigationRoute.FacilityClassDetailVisited.route) { MobileFacilityClassDetailVisitedScreen(rootNavigator) }
-        //Facility - Settings
-        scene(NavigationRoute.FacilitySettings.route) { MobileFacilitySettingsScreen(rootNavigator) }
-        scene(NavigationRoute.FacilitySettingsAccount.route) { MobileFacilitySettingsAccountScreen(rootNavigator) }
-        scene(NavigationRoute.FacilitySettingsSearchMembers.route) { MobileFacilitySettingsSearchMembersScreen(rootNavigator) }
-        scene(NavigationRoute.FacilitySettingsAddMembers.route) { MobileFacilitySettingsAddMembersScreen(rootNavigator) }
-        scene(NavigationRoute.FacilitySettingsTrainers.route) { MobileFacilitySettingsTrainersScreen(rootNavigator) }
-        scene(NavigationRoute.FacilitySettingsPaymentHistory.route) { MobileFacilitySettingsPaymentHistoryScreen(rootNavigator) }
-        scene(NavigationRoute.FacilitySettingsNotifications.route) { MobileFacilitySettingsNotificationsScreen(rootNavigator) }
-        scene(NavigationRoute.FacilitySettingsHelp.route) { MobileFacilitySettingsHelpScreen(rootNavigator) }
-        //endregion Facility
+        exerciseNavGraph(rootNavigator)
+        nutritionNavGraph(rootNavigator)
+        userNavGraph(rootNavigator)
+        trainerNavGraph(rootNavigator)
+        facilityNavGraph(rootNavigator)
     }
 }
 
-
-fun RouteBuilder.splashNavGraph(navigator: Navigator) {
-    scene(NavigationRoute.Splash.route) {
-        MobileSplashScreen(navigator)
-    }
-}
-
-fun RouteBuilder.authNavGraph(navigator: Navigator) {
+private fun RouteBuilder.authNavGraph(navigator: Navigator) {
+    scene(NavigationRoute.Splash.route) { MobileSplashScreen(navigator) }
     scene(NavigationRoute.Login.route) { MobileLoginScreen(navigator) }
     scene(NavigationRoute.Register.route) { MobileRegisterScreen(navigator) }
     scene(NavigationRoute.OTPVerification.route) { MobileOTPVerificationScreen(navigator) }
@@ -215,7 +117,11 @@ fun RouteBuilder.authNavGraph(navigator: Navigator) {
     scene(NavigationRoute.ForgotPasswordReset.route) { MobileForgotPasswordResetScreen(navigator) }
 }
 
-fun RouteBuilder.dashboardNavGraph(navigator: Navigator) {
+private fun RouteBuilder.onboardingNavGraph(navigator: Navigator) {
+    scene(NavigationRoute.Onboarding.route) { MobileOnboardingNavGraph(navigator) }
+}
+
+private fun RouteBuilder.dashboardNavGraph(navigator: Navigator) {
     scene(NavigationRoute.Dashboard.route) { MobileDashboardScreen(navigator) }
     scene(NavigationRoute.DashboardHome.route) { MobileDashboardScreen(navigator, NavigationRoute.DashboardHome) }
     scene(NavigationRoute.DashboardExplore.route) { MobileDashboardScreen(navigator, NavigationRoute.DashboardExplore) }
@@ -224,7 +130,7 @@ fun RouteBuilder.dashboardNavGraph(navigator: Navigator) {
     scene(NavigationRoute.DashboardProfile.route) { MobileDashboardScreen(navigator, NavigationRoute.DashboardProfile) }
 }
 
-fun RouteBuilder.exploreNavGraph(navigator: Navigator) {
+private fun RouteBuilder.exploreNavGraph(navigator: Navigator) {
     scene(NavigationRoute.ExploreTrainers.route) { MobileExploreTrainersScreen(navigator) }
     scene(NavigationRoute.ExploreExercises.route) { MobileExploreExercisesScreen(navigator) }
     scene(NavigationRoute.ExploreFacilities.route) { MobileExploreFacilitiesScreen(navigator) }
@@ -234,4 +140,101 @@ fun RouteBuilder.exploreNavGraph(navigator: Navigator) {
     scene(NavigationRoute.ExploreChallengeDetail.route) { MobileExploreChallengeDetailScreen(navigator) }
     scene(NavigationRoute.ExploreCommunities.route) { MobileExploreCommunitiesScreen(navigator) }
     scene(NavigationRoute.ExploreCommunityDetail.route) { MobileExploreCommunityDetailScreen(navigator) }
+}
+
+private fun RouteBuilder.exerciseNavGraph(navigator: Navigator) {
+    scene(NavigationRoute.ExerciseDetail.route) { MobileUserExerciseDetailScreen(navigator) }
+    scene(NavigationRoute.ExerciseInProgress.route) { MobileUserExerciseInActionScreen(navigator) }
+    scene(NavigationRoute.ExerciseCompleted.route) { MobileUserExerciseInActionCompletedScreen(navigator) }
+}
+
+private fun RouteBuilder.nutritionNavGraph(navigator: Navigator) {
+    scene(NavigationRoute.UserMealDetail.route) { MobileUserMealDetailScreen(navigator) }
+    scene(NavigationRoute.UserMealDetailAdd.route) { MobileUserMealDetailAddScreen(navigator) }
+    scene(NavigationRoute.UserMealDetailAddPhoto.route) { MobileUserMealDetailAddPhotoScreen(navigator) }
+}
+
+private fun RouteBuilder.userNavGraph(rootNavigator: Navigator) {
+    //User - Calendar
+    scene(NavigationRoute.UserActivityCalendar.route) { MobileUserActivityCalendarScreen(rootNavigator) }
+    scene(NavigationRoute.UserActivityCalendarAdd.route) { MobileUserActivityCalendarAddActivityScreen(rootNavigator) }
+    scene(NavigationRoute.UserActivityCalendarSearch.route) { MobileUserActivityCalendarSearchScreen(rootNavigator) }
+    scene(NavigationRoute.UserPaymentProcess.route) { MobileUserPaymentProcessScreen(rootNavigator) }
+    scene(NavigationRoute.UserActivityCalendarPaymentRequired.route) {
+        MobileUserActivityCalendarPaymentRequiredScreen(
+            rootNavigator
+        )
+    }
+    scene(NavigationRoute.UserActivityCalendarConfirmed.route) { MobileUserActivityCalendarAddedScreen(rootNavigator) }
+    //User - Appointments
+    scene(NavigationRoute.UserAppointments.route) { MobileUserAppointmentsScreen(rootNavigator) }
+    scene(NavigationRoute.UserAppointmentDetail.route) { MobileUserAppointmentDetailScreen(rootNavigator) }
+    //User - Social
+    scene(NavigationRoute.UserSocialMedia.route) { MobileDashboardScreen(rootNavigator, NavigationRoute.DashboardSocial) }
+    scene(NavigationRoute.UserSocialMediaPostAdd.route) { MobileUserSocialMediaNewPostScreen(rootNavigator) }
+    //User - Notifications
+    scene(NavigationRoute.UserNotifications.route) { MobileUserNotificationsScreen(rootNavigator) }
+    //User - Messages
+    scene(NavigationRoute.UserChatBot.route) { MobileUserChatBotScreen(rootNavigator) }
+    scene(NavigationRoute.UserToBotChat.route) { MobileUserToBotChatScreen(rootNavigator) }
+    scene(NavigationRoute.UserConversations.route) { MobileUserConversationsScreen(rootNavigator) }
+    scene(NavigationRoute.UserToUserChat.route) { MobileUserToUserChatScreen(rootNavigator) }
+    scene(NavigationRoute.UserToTrainerChat.route) { MobileUserToTrainerChatScreen(rootNavigator) }
+    scene(NavigationRoute.UserToGroupChat.route) { MobileUserToGroupChatScreen(rootNavigator) }
+    scene(NavigationRoute.UserToFacilityChat.route) { MobileUserToFacilityChatScreen(rootNavigator) }
+    //User - Profile
+    scene(NavigationRoute.UserProfile.route) { MobileUserProfileScreen(rootNavigator) }
+    scene(NavigationRoute.UserProfileVisited.route) { MobileUserProfileVisitedScreen(rootNavigator) }
+    scene(NavigationRoute.UserPhotoDiary.route) { MobileUserPhotoDiaryScreen(rootNavigator) }
+    scene(NavigationRoute.UserMeasurements.route) { MobileUserMeasurementsScreen(rootNavigator) }
+    scene(NavigationRoute.UserBodyAnalysis.route) { MobileUserBodyAnalysisScreen(rootNavigator) }
+    scene(NavigationRoute.UserTrophies.route) { MobileUserTrophiesScreen(rootNavigator) }
+    //User - Settings
+    scene(NavigationRoute.UserSettings.route) { MobileUserSettingsScreen(rootNavigator) }
+    scene(NavigationRoute.UserSettingsAccount.route) { MobileUserSettingsAccountScreen(rootNavigator) }
+    scene(NavigationRoute.UserSettingsNotifications.route) { MobileUserSettingsNotificationsScreen(rootNavigator) }
+    scene(NavigationRoute.UserSettingsPaymentHistory.route) { MobileUserSettingsPaymentHistoryScreen(rootNavigator) }
+    scene(NavigationRoute.UserSettingsChangePassword.route) { MobileUserSettingsChangePasswordScreen(rootNavigator) }
+    scene(NavigationRoute.UserSettingsHelp.route) { MobileUserSettingsHelpScreen(rootNavigator) }
+}
+
+private fun RouteBuilder.trainerNavGraph(rootNavigator: Navigator) {
+    //Trainer - Appointments
+    scene(NavigationRoute.TrainerAppointments.route) { MobileTrainerAppointmentsScreen(rootNavigator) }
+    scene(NavigationRoute.TrainerAppointmentDetail.route) { MobileTrainerAppointmentDetailScreen(rootNavigator) }
+    //Trainer - Profile
+    scene(NavigationRoute.TrainerProfile.route) { MobileTrainerProfileScreen(rootNavigator) }
+    scene(NavigationRoute.TrainerProfileVisited.route) { MobileTrainerProfileVisitedScreen(rootNavigator) }
+    //Trainer - Calendar
+    scene(NavigationRoute.TrainerCalendarVisited.route) { MobileTrainerCalendarVisitedScreen(rootNavigator) }
+    //Trainer - Settings
+    scene(NavigationRoute.TrainerSettings.route) { MobileTrainerSettingsScreen(rootNavigator) }
+    scene(NavigationRoute.TrainerSettingsAccount.route) { MobileTrainerSettingsAccountScreen(rootNavigator) }
+    scene(NavigationRoute.TrainerSettingsNotifications.route) { MobileTrainerSettingsNotificationsScreen(rootNavigator) }
+    scene(NavigationRoute.TrainerSettingsPaymentHistory.route) { MobileTrainerSettingsPaymentHistoryScreen(rootNavigator) }
+    scene(NavigationRoute.TrainerSettingsHelp.route) { MobileTrainerSettingsHelpScreen(rootNavigator) }
+}
+
+private fun RouteBuilder.facilityNavGraph(rootNavigator: Navigator) {
+    //Facility - Profile
+    scene(NavigationRoute.FacilityProfile.route) { MobileFacilityProfileScreen(rootNavigator, viewMode = ProfileViewMode.OWNER) }
+    scene(NavigationRoute.FacilityProfileVisited.route) { MobileFacilityProfileScreen(rootNavigator, viewMode = ProfileViewMode.VISITOR) }
+    scene(NavigationRoute.FacilityPhotoGallery.route) { MobileFacilityPhotoDiaryScreen(rootNavigator) }
+    //Facility - Calendar
+    scene(NavigationRoute.FacilityCalendar.route) { MobileFacilityCalendarScreen(rootNavigator) }
+    scene(NavigationRoute.FacilityCalendarVisited.route) { MobileFacilityCalendarVisitedScreen(rootNavigator) }
+    //Facility - Classes
+    scene(NavigationRoute.FacilityManageLessons.route) { MobileFacilityClassesScreen(rootNavigator) }
+    scene(NavigationRoute.FacilityClassEdit.route) { MobileFacilityClassEditScreen(rootNavigator) }
+    scene(NavigationRoute.FacilityClassEditCompleted.route) { MobileFacilityClassEditCompletedScreen(rootNavigator) }
+    scene(NavigationRoute.FacilityClassDetailVisited.route) { MobileFacilityClassDetailVisitedScreen(rootNavigator) }
+    //Facility - Settings
+    scene(NavigationRoute.FacilitySettings.route) { MobileFacilitySettingsScreen(rootNavigator) }
+    scene(NavigationRoute.FacilitySettingsAccount.route) { MobileFacilitySettingsAccountScreen(rootNavigator) }
+    scene(NavigationRoute.FacilitySettingsSearchMembers.route) { MobileFacilitySettingsSearchMembersScreen(rootNavigator) }
+    scene(NavigationRoute.FacilitySettingsAddMembers.route) { MobileFacilitySettingsAddMembersScreen(rootNavigator) }
+    scene(NavigationRoute.FacilitySettingsTrainers.route) { MobileFacilitySettingsTrainersScreen(rootNavigator) }
+    scene(NavigationRoute.FacilitySettingsPaymentHistory.route) { MobileFacilitySettingsPaymentHistoryScreen(rootNavigator) }
+    scene(NavigationRoute.FacilitySettingsNotifications.route) { MobileFacilitySettingsNotificationsScreen(rootNavigator) }
+    scene(NavigationRoute.FacilitySettingsHelp.route) { MobileFacilitySettingsHelpScreen(rootNavigator) }
 }

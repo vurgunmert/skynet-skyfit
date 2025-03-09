@@ -28,8 +28,8 @@ import com.vurgun.skyfit.core.ui.components.SkyFitScaffold
 import com.vurgun.skyfit.core.ui.components.button.PrimaryLargeButton
 import com.vurgun.skyfit.core.ui.components.text.SecondaryMediumText
 import com.vurgun.skyfit.core.ui.components.text.input.CodeTextInput
-import com.vurgun.skyfit.navigation.NavigationRoute
-import com.vurgun.skyfit.navigation.jumpAndTakeover
+import com.vurgun.skyfit.feature_navigation.NavigationRoute
+import com.vurgun.skyfit.feature_navigation.jumpAndTakeover
 import com.vurgun.skyfit.feature_auth.ui.viewmodel.MobileOTPVerificationViewModel
 import com.vurgun.skyfit.feature_auth.ui.viewmodel.OTPVerificationEvent
 import com.vurgun.skyfit.core.ui.resources.SkyFitColor

@@ -4,7 +4,7 @@ import com.vurgun.skyfit.core.storage.provideLocalSettings
 import org.koin.core.context.startKoin
 import org.koin.dsl.module
 
-private val storageModule = module { single { provideLocalSettings(get()) } }
+private val storageModule = module { single { provideLocalSettings(null) } }
 
 fun initKoin() {
     startKoin {

@@ -44,8 +44,9 @@ import com.vurgun.skyfit.feature_profile.ui.components.MobileProfileHeaderMini
 import com.vurgun.skyfit.feature_profile.ui.components.MobileProfileBackgroundImage
 import com.vurgun.skyfit.feature_social.ui.components.LazySocialPostsColumn
 import com.vurgun.skyfit.feature_social.ui.components.viewdata.fakePosts
-import com.vurgun.skyfit.navigation.NavigationRoute
-import com.vurgun.skyfit.navigation.jumpAndStay
+import com.vurgun.skyfit.feature_navigation.NavigationRoute
+import com.vurgun.skyfit.feature_navigation.jumpAndStay
+import com.vurgun.skyfit.feature_profile.ui.user.viewmodel.SkyFitUserProfileViewModel
 import moe.tlaster.precompose.navigation.Navigator
 import org.jetbrains.compose.resources.painterResource
 import skyfit.composeapp.generated.resources.Res

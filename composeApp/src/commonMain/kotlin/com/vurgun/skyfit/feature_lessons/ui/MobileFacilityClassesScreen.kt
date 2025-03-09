@@ -37,8 +37,8 @@ import com.vurgun.skyfit.core.ui.resources.SkyFitTypography
 import com.vurgun.skyfit.core.utils.now
 import com.vurgun.skyfit.feature_lessons.ui.components.LessonSessionColumnItem
 import com.vurgun.skyfit.feature_lessons.ui.components.viewdata.LessonSessionItemViewData
-import com.vurgun.skyfit.navigation.NavigationRoute
-import com.vurgun.skyfit.navigation.jumpAndStay
+import com.vurgun.skyfit.feature_navigation.NavigationRoute
+import com.vurgun.skyfit.feature_navigation.jumpAndStay
 import kotlinx.datetime.LocalDate
 import moe.tlaster.precompose.navigation.Navigator
 import org.jetbrains.compose.resources.painterResource

@@ -45,7 +45,7 @@ import com.vurgun.skyfit.feature_explore.ui.TrainerProfileCardItemViewData
 import com.vurgun.skyfit.feature_lessons.ui.components.LessonSessionColumn
 import com.vurgun.skyfit.feature_lessons.ui.components.viewdata.LessonSessionColumnViewData
 import com.vurgun.skyfit.feature_profile.domain.model.ProfileViewMode
-import com.vurgun.skyfit.feature_profile.ui.VerticalProfileStatisticItem
+import com.vurgun.skyfit.feature_profile.ui.components.VerticalProfileStatisticItem
 import com.vurgun.skyfit.feature_profile.ui.components.MobileProfileActionsRow
 import com.vurgun.skyfit.feature_profile.ui.components.MobileProfileBackgroundImage
 import com.vurgun.skyfit.feature_profile.ui.components.PhotoGalleryEmptyStackCard
@@ -54,8 +54,10 @@ import com.vurgun.skyfit.feature_profile.ui.components.VerticalTrainerProfileCar
 import com.vurgun.skyfit.feature_profile.ui.components.viewdata.PhotoGalleryStackViewData
 import com.vurgun.skyfit.feature_social.ui.components.SocialPostCard
 import com.vurgun.skyfit.feature_social.ui.components.SocialQuickPostInputCard
-import com.vurgun.skyfit.navigation.NavigationRoute
-import com.vurgun.skyfit.navigation.jumpAndStay
+import com.vurgun.skyfit.feature_navigation.NavigationRoute
+import com.vurgun.skyfit.feature_navigation.jumpAndStay
+import com.vurgun.skyfit.feature_profile.ui.facility.viewmodel.FacilityProfileInfoViewData
+import com.vurgun.skyfit.feature_profile.ui.facility.viewmodel.FacilityProfileViewModel
 import moe.tlaster.precompose.navigation.Navigator
 import org.jetbrains.compose.resources.painterResource
 import org.koin.compose.koinInject

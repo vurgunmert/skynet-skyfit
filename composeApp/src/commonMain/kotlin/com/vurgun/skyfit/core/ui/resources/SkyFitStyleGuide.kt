@@ -4,6 +4,8 @@ import androidx.compose.ui.unit.dp
 
 object SkyFitStyleGuide {
 
+    val statusBarHeight = 44.dp
+
     object Padding {
         val xSmall = 2.dp   // Very small padding (fine-tuning)
         val small = 4.dp    // Small padding (buttons, small gaps)

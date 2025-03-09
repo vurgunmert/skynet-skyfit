@@ -22,7 +22,7 @@ import coil3.compose.AsyncImage
 import com.vurgun.skyfit.core.ui.components.divider.VerticalDivider
 import com.vurgun.skyfit.core.ui.resources.SkyFitColor
 import com.vurgun.skyfit.core.ui.resources.SkyFitTypography
-import com.vurgun.skyfit.feature_profile.ui.user.TopBarGroupViewData
+import com.vurgun.skyfit.feature_profile.ui.user.viewmodel.TopBarGroupViewData
 import org.jetbrains.compose.resources.DrawableResource
 import org.jetbrains.compose.resources.painterResource
 import skyfit.composeapp.generated.resources.Res

@@ -1,4 +1,4 @@
-package com.vurgun.skyfit.feature_profile.ui.user
+package com.vurgun.skyfit.feature_profile.ui.user.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope

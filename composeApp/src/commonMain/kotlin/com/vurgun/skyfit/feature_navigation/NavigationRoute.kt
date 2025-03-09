@@ -1,4 +1,4 @@
-package com.vurgun.skyfit.navigation
+package com.vurgun.skyfit.feature_navigation
 
 import com.vurgun.skyfit.core.domain.models.UserType
 
@@ -80,11 +80,11 @@ sealed class NavigationRoute(
     data object UserPaymentProcess : NavigationRoute("user/payment/process")
 
     // - Exercises
-    data object UserExerciseDetail :
+    data object ExerciseDetail :
         NavigationRoute("user/exercises/detail/{exerciseId}", roles = listOf(UserType.USER), Param.EXERCISE_ID)
-    data object UserExerciseInAction :
+    data object ExerciseInProgress :
         NavigationRoute("user/exercises/in_action/{exerciseId}", roles = listOf(UserType.USER), Param.EXERCISE_ID)
-    data object UserExerciseInActionComplete :
+    data object ExerciseCompleted :
         NavigationRoute("user/exercises/in_action/completed/{exerciseId}", roles = listOf(UserType.USER), Param.EXERCISE_ID)
 
     // - Calendar

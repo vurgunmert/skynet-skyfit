@@ -15,9 +15,9 @@ import com.vurgun.skyfit.core.ui.resources.SkyFitCharacterIcon
 import com.vurgun.skyfit.feature_onboarding.ui.viewmodel.BaseOnboardingViewModel
 import com.vurgun.skyfit.feature_onboarding.ui.viewmodel.TrainerOnboardingViewModel
 import com.vurgun.skyfit.feature_onboarding.ui.viewmodel.UserOnboardingViewModel
-import com.vurgun.skyfit.navigation.NavigationRoute
-import com.vurgun.skyfit.navigation.jumpAndStay
-import com.vurgun.skyfit.navigation.jumpAndTakeover
+import com.vurgun.skyfit.feature_navigation.NavigationRoute
+import com.vurgun.skyfit.feature_navigation.jumpAndStay
+import com.vurgun.skyfit.feature_navigation.jumpAndTakeover
 import moe.tlaster.precompose.navigation.Navigator
 import org.jetbrains.compose.resources.stringResource
 import skyfit.composeapp.generated.resources.Res

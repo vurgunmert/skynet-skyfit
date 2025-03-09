@@ -1,4 +1,4 @@
-package com.vurgun.skyfit.navigation
+package com.vurgun.skyfit.feature_navigation
 
 import com.vurgun.skyfit.core.domain.models.UserType
 import moe.tlaster.precompose.navigation.NavOptions

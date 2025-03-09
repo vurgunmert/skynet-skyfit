@@ -12,8 +12,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.vurgun.skyfit.core.ui.resources.SkyFitStyleGuide
 import com.vurgun.skyfit.core.ui.components.SkyFitScaffold
-import com.vurgun.skyfit.navigation.NavigationRoute
-import com.vurgun.skyfit.navigation.jumpAndStay
+import com.vurgun.skyfit.feature_navigation.NavigationRoute
+import com.vurgun.skyfit.feature_navigation.jumpAndStay
 import moe.tlaster.precompose.navigation.Navigator
 
 @Composable
@@ -71,7 +71,7 @@ fun MobileUserHomeScreen(rootNavigator: Navigator) {
             MobileDashboardHomeProgressGridComponent()
 
             MobileDashboardHomeDailyExerciseGoalsComponent(
-                onClick = { rootNavigator.jumpAndStay(NavigationRoute.UserExerciseDetail) }
+                onClick = { rootNavigator.jumpAndStay(NavigationRoute.ExerciseDetail) }
             )
 
             MobileDashboardHomeMealGoalsComponent(
@@ -79,7 +79,7 @@ fun MobileUserHomeScreen(rootNavigator: Navigator) {
             )
 
             MobileDashboardHomeFeaturedExercisesComponent(
-                onClick = { rootNavigator.jumpAndStay(NavigationRoute.UserExerciseDetail) }
+                onClick = { rootNavigator.jumpAndStay(NavigationRoute.ExerciseDetail) }
             )
 
             MobileDashboardHomeFeaturedTrainersComponent(

@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style name="Theme.SkyFitMobile" parent="Theme.AppCompat.DayNight.NoActionBar">
+        <item name="android:windowDrawsSystemBarBackgrounds">true</item>
+        <item name="android:statusBarColor">#00171C</item>
+        <item name="android:navigationBarColor">#00171C</item>
+    </style>
+
+    <style name="Theme.SkyFitMobile.NoSplash" parent="Theme.SkyFitMobile">
+        <item name="android:windowIsTranslucent">true</item>
+    </style>
+
+</resources>

@@ -34,8 +34,8 @@ import com.vurgun.skyfit.core.ui.components.button.PrimaryLargeButton
 import com.vurgun.skyfit.core.ui.components.text.input.PasswordTextInput
 import com.vurgun.skyfit.core.ui.components.text.input.PersonNameTextInput
 import com.vurgun.skyfit.core.ui.components.text.input.PhoneNumberTextInput
-import com.vurgun.skyfit.navigation.NavigationRoute
-import com.vurgun.skyfit.navigation.jumpAndTakeover
+import com.vurgun.skyfit.feature_navigation.NavigationRoute
+import com.vurgun.skyfit.feature_navigation.jumpAndTakeover
 import com.vurgun.skyfit.feature_auth.ui.viewmodel.MobileRegisterNavigation
 import com.vurgun.skyfit.feature_auth.ui.viewmodel.MobileRegisterViewModel
 import com.vurgun.skyfit.core.ui.resources.SkyFitColor

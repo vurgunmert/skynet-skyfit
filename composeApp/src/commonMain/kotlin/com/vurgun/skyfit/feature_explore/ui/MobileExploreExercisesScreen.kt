@@ -16,11 +16,11 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import com.vurgun.skyfit.feature_profile.ui.ExerciseProfileCardItemComponent
 import com.vurgun.skyfit.core.ui.components.SkyFitScaffold
 import com.vurgun.skyfit.core.ui.components.SkyFitScreenHeader
 import com.vurgun.skyfit.core.ui.components.SkyFitSearchFilterBarComponent
 import com.vurgun.skyfit.core.ui.components.SkyFitSearchTextInputComponent
+import com.vurgun.skyfit.feature_exercises.ui.components.VerticalExerciseCardItemComponent
 import moe.tlaster.precompose.navigation.Navigator
 
 @Composable
@@ -84,7 +84,7 @@ private fun ExerciseCardItemBox(
     rating: Double,
     onClick: () -> Unit
 ) {
-    ExerciseProfileCardItemComponent(
+    VerticalExerciseCardItemComponent(
         imageUrl = imageUrl,
         name = name,
         participants = participants,

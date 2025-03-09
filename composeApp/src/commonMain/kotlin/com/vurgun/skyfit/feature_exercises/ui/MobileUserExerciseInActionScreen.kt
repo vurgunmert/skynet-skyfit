@@ -69,8 +69,8 @@ import com.vurgun.skyfit.core.ui.components.ButtonState
 import com.vurgun.skyfit.core.ui.components.ButtonVariant
 import com.vurgun.skyfit.core.ui.components.SkyFitButtonComponent
 import com.vurgun.skyfit.core.ui.components.button.SkyFitIconButton
-import com.vurgun.skyfit.navigation.NavigationRoute
-import com.vurgun.skyfit.navigation.jumpAndTakeover
+import com.vurgun.skyfit.feature_navigation.NavigationRoute
+import com.vurgun.skyfit.feature_navigation.jumpAndTakeover
 import com.vurgun.skyfit.core.ui.resources.SkyFitColor
 import com.vurgun.skyfit.core.ui.resources.SkyFitTypography
 import moe.tlaster.precompose.navigation.Navigator
@@ -167,8 +167,8 @@ fun MobileUserExerciseInActionScreen(navigator: Navigator) {
 
                 MobileUserExerciseInActionScreenStep.COMPLETE -> {
                     navigator.jumpAndTakeover(
-                        NavigationRoute.UserExerciseInAction,
-                        NavigationRoute.UserExerciseInActionComplete
+                        NavigationRoute.ExerciseInProgress,
+                        NavigationRoute.ExerciseCompleted
                     )
                 }
             }

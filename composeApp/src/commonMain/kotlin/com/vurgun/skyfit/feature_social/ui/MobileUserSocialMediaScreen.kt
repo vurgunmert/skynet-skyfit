@@ -23,8 +23,8 @@ import androidx.compose.ui.unit.dp
 import com.vurgun.skyfit.core.ui.components.SkyFitCircularImageComponent
 import com.vurgun.skyfit.core.ui.components.button.SkyFitIconButton
 import com.vurgun.skyfit.core.ui.components.UserCircleAvatarItem
-import com.vurgun.skyfit.navigation.NavigationRoute
-import com.vurgun.skyfit.navigation.jumpAndStay
+import com.vurgun.skyfit.feature_navigation.NavigationRoute
+import com.vurgun.skyfit.feature_navigation.jumpAndStay
 import com.vurgun.skyfit.core.ui.resources.SkyFitColor
 import com.vurgun.skyfit.core.ui.resources.SkyFitTypography
 import com.vurgun.skyfit.feature_social.ui.components.SocialPostCard

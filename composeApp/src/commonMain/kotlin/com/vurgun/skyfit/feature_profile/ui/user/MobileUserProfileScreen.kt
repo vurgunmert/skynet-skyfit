@@ -27,8 +27,9 @@ import com.vurgun.skyfit.feature_profile.ui.components.PhotoGalleryEmptyStackCar
 import com.vurgun.skyfit.feature_profile.ui.components.PhotoGalleryStackCard
 import com.vurgun.skyfit.feature_social.ui.components.SocialPostCard
 import com.vurgun.skyfit.feature_social.ui.components.SocialQuickPostInputCard
-import com.vurgun.skyfit.navigation.NavigationRoute
-import com.vurgun.skyfit.navigation.jumpAndStay
+import com.vurgun.skyfit.feature_navigation.NavigationRoute
+import com.vurgun.skyfit.feature_navigation.jumpAndStay
+import com.vurgun.skyfit.feature_profile.ui.user.viewmodel.SkyFitUserProfileViewModel
 import moe.tlaster.precompose.navigation.Navigator
 
 @Composable

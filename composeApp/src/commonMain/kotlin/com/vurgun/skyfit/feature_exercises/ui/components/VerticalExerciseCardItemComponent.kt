@@ -1,9 +1,8 @@
-package com.vurgun.skyfit.feature_profile.ui
+package com.vurgun.skyfit.feature_exercises.ui.components
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -27,7 +26,6 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.dp
-import coil3.compose.AsyncImage
 import com.vurgun.skyfit.core.ui.components.image.CircularImage
 import com.vurgun.skyfit.core.ui.components.special.RatingStarComponent
 import com.vurgun.skyfit.core.ui.resources.SkyFitColor
@@ -37,20 +35,7 @@ import skyfit.composeapp.generated.resources.Res
 import skyfit.composeapp.generated.resources.logo_skyfit
 
 @Composable
-fun VerticalProfileStatisticItem(title: String, subtitle: String) {
-    Column(
-        modifier = Modifier.size(56.dp),
-        horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.Center
-    ) {
-        Text(text = title, style = SkyFitTypography.bodyLargeSemibold, color = Color.White)
-        Spacer(modifier = Modifier.height(4.dp))
-        Text(text = subtitle, style = SkyFitTypography.bodySmallMedium, color = Color.Gray)
-    }
-}
-
-@Composable
-fun ExerciseProfileCardItemComponent(
+fun VerticalExerciseCardItemComponent(
     imageUrl: String,
     name: String,
     participants: List<String>,
