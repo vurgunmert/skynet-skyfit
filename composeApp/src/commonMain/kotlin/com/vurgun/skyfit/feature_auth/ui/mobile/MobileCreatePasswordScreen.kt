@@ -3,7 +3,6 @@ package com.vurgun.skyfit.feature_auth.ui.mobile
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.imePadding
@@ -28,57 +27,63 @@ import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
-import com.vurgun.skyfit.core.ui.resources.SkyFitStyleGuide
 import com.vurgun.skyfit.core.ui.components.SkyFitScaffold
 import com.vurgun.skyfit.core.ui.components.button.PrimaryLargeButton
 import com.vurgun.skyfit.core.ui.components.text.input.PasswordTextInput
 import com.vurgun.skyfit.core.ui.components.text.input.PersonNameTextInput
-import com.vurgun.skyfit.core.ui.components.text.input.PhoneNumberTextInput
-import com.vurgun.skyfit.feature_navigation.NavigationRoute
-import com.vurgun.skyfit.feature_navigation.jumpAndTakeover
-import com.vurgun.skyfit.feature_auth.ui.viewmodel.MobileRegisterNavigation
-import com.vurgun.skyfit.feature_auth.ui.viewmodel.MobileRegisterViewModel
 import com.vurgun.skyfit.core.ui.resources.SkyFitColor
+import com.vurgun.skyfit.core.ui.resources.SkyFitStyleGuide
 import com.vurgun.skyfit.core.ui.resources.SkyFitTypography
+import com.vurgun.skyfit.core.utils.KeyboardState
+import com.vurgun.skyfit.core.utils.keyboardAsState
+import com.vurgun.skyfit.feature_auth.ui.viewmodel.CreatePasswordScreenViewModel
+import com.vurgun.skyfit.feature_auth.ui.viewmodel.CreatePasswordViewEvent
+import com.vurgun.skyfit.feature_navigation.NavigationRoute
+import com.vurgun.skyfit.feature_navigation.jumpAndStay
+import com.vurgun.skyfit.feature_navigation.jumpAndTakeover
 import kotlinx.coroutines.flow.collectLatest
 import moe.tlaster.precompose.navigation.Navigator
-import moe.tlaster.precompose.navigation.query
 import org.jetbrains.compose.resources.stringResource
-import org.koin.compose.koinInject
+import org.koin.compose.viewmodel.koinViewModel
 import skyfit.composeapp.generated.resources.Res
+import skyfit.composeapp.generated.resources.auth_enter_again_password
+import skyfit.composeapp.generated.resources.auth_enter_password
 import skyfit.composeapp.generated.resources.auth_register
+import skyfit.composeapp.generated.resources.user_name
 
 @Composable
-fun MobileRegisterScreen(navigator: Navigator) {
-    val viewModel: MobileRegisterViewModel = koinInject()
-    val keyboardController = LocalSoftwareKeyboardController.current
+fun MobileCreatePasswordScreen(navigator: Navigator) {
+    val viewModel: CreatePasswordScreenViewModel = koinViewModel()
 
-    val currentEntry by navigator.currentEntry.collectAsState(null)
-    val phoneNumber = remember(currentEntry) {
-        currentEntry?.query("phone", default = "") ?: ""
-    }
-
-    val fullName by viewModel.fullName.collectAsState()
+    val username by viewModel.username.collectAsState()
     val password by viewModel.password.collectAsState()
     val confirmPassword by viewModel.confirmPassword.collectAsState()
     val isRegisterEnabled by viewModel.isRegisterEnabled.collectAsState()
-
-    var showTermsDialog by remember { mutableStateOf(false) }
-    var showPrivacyDialog by remember { mutableStateOf(false) }
-
-    LaunchedEffect(phoneNumber) {
-        viewModel.setPhoneNumber(phoneNumber)
-    }
 
     val nameFocusRequester = remember { FocusRequester() }
     val passwordFocusRequester = remember { FocusRequester() }
     val confirmPasswordFocusRequester = remember { FocusRequester() }
 
+    val keyboardState by keyboardAsState()
+    val scrollState = rememberScrollState()
+
+    var errorMessage by remember { mutableStateOf<String?>(null) }
+
+    LaunchedEffect(keyboardState) {
+        if (keyboardState is KeyboardState.Opened) {
+            scrollState.animateScrollTo(keyboardState.heightPx)
+        }
+    }
+
     LaunchedEffect(viewModel) {
-        viewModel.navigationEvents.collectLatest { event ->
+        viewModel.uiEvents.collectLatest { event ->
             when (event) {
-                is MobileRegisterNavigation.GoToOnboarding -> {
-                    navigator.jumpAndTakeover(NavigationRoute.Register, NavigationRoute.Onboarding)
+                is CreatePasswordViewEvent.GoToOnboarding -> {
+                    navigator.jumpAndTakeover(NavigationRoute.CreatePassword, NavigationRoute.Onboarding)
+                }
+
+                is CreatePasswordViewEvent.Error -> {
+                    errorMessage = event.message
                 }
             }
         }
@@ -88,32 +93,23 @@ fun MobileRegisterScreen(navigator: Navigator) {
         nameFocusRequester.requestFocus()
     }
 
-    LaunchedEffect(isRegisterEnabled) {
-        if (isRegisterEnabled) {
-            keyboardController?.hide()
-        }
-    }
-
     SkyFitScaffold {
         Column(
-            modifier = Modifier
-                .imePadding()
-                .widthIn(max = SkyFitStyleGuide.Mobile.maxWidth)
-                .fillMaxHeight()
+            Modifier
                 .padding(SkyFitStyleGuide.Padding.xLarge)
-                .verticalScroll(rememberScrollState()),
+                .widthIn(max = SkyFitStyleGuide.Mobile.maxWidth)
+                .verticalScroll(scrollState)
+                .imePadding(),
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {
             MobileLoginWelcomeGroup()
 
             Spacer(Modifier.height(48.dp))
             MobileRegisterInputGroupComponent(
-                phoneNumber = phoneNumber,
-                fullName = fullName,
+                username = username,
                 password = password,
                 confirmPassword = confirmPassword,
-                passwordError = viewModel.passwordError.collectAsState().value,
-                confirmPasswordError = viewModel.confirmPasswordError.collectAsState().value,
+                passwordError = errorMessage,
                 onFullNameChanged = viewModel::setFullName,
                 onPasswordChanged = viewModel::setPassword,
                 onConfirmPasswordChanged = viewModel::setConfirmPassword,
@@ -121,6 +117,7 @@ fun MobileRegisterScreen(navigator: Navigator) {
                 passwordFocusRequester = passwordFocusRequester,
                 confirmPasswordFocusRequester = confirmPasswordFocusRequester
             )
+            Spacer(Modifier.height(16.dp))
             Spacer(Modifier.weight(1f))
             MobileRegisterScreenActionComponent(
                 isRegisterEnabled = isRegisterEnabled,
@@ -129,22 +126,8 @@ fun MobileRegisterScreen(navigator: Navigator) {
             )
             Spacer(Modifier.height(16.dp))
             MobileRegisterScreenLegalActionsComponent(
-                onPrivacyPolicyClick = { showPrivacyDialog = true },
-                onTermsOfServiceClick = { showTermsDialog = true }
-            )
-        }
-
-        if (showTermsDialog) {
-            LegalContentDialog(
-                content = SKYFIT_PRIVACY_POLICY_HTML_FORMAT,
-                onDismissRequest = { showTermsDialog = false }
-            )
-        }
-
-        if (showPrivacyDialog) {
-            LegalContentDialog(
-                content = TERMS_AND_CONDITIONS_HTML_FORMAT,
-                onDismissRequest = { showPrivacyDialog = false }
+                onPrivacyPolicyClick = { navigator.jumpAndStay(NavigationRoute.PrivacyPolicy) },
+                onTermsOfServiceClick = { navigator.jumpAndStay(NavigationRoute.TermsAndConditions) }
             )
         }
     }
@@ -152,12 +135,10 @@ fun MobileRegisterScreen(navigator: Navigator) {
 
 @Composable
 private fun MobileRegisterInputGroupComponent(
-    phoneNumber: String,
-    fullName: String,
+    username: String,
     password: String,
     confirmPassword: String,
     passwordError: String?,
-    confirmPasswordError: String?,
     onFullNameChanged: (String) -> Unit,
     onPasswordChanged: (String) -> Unit,
     onConfirmPasswordChanged: (String) -> Unit,
@@ -172,14 +153,10 @@ private fun MobileRegisterInputGroupComponent(
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.spacedBy(16.dp)
     ) {
-        PhoneNumberTextInput(
-            value = phoneNumber,
-            onValueChange = { },
-            isEnabled = false
-        )
 
         PersonNameTextInput(
-            value = fullName,
+            hint = stringResource(Res.string.user_name),
+            value = username,
             onValueChange = onFullNameChanged,
             focusRequester = nameFocusRequester,
             onKeyboardNextAction = {
@@ -190,7 +167,7 @@ private fun MobileRegisterInputGroupComponent(
         PasswordTextInput(
             value = password,
             onValueChange = onPasswordChanged,
-            hint = "Şifrenizi girin",
+            hint = stringResource(Res.string.auth_enter_password),
             error = passwordError,
             focusRequester = passwordFocusRequester,
             onKeyboardNextAction = {
@@ -201,11 +178,10 @@ private fun MobileRegisterInputGroupComponent(
         PasswordTextInput(
             value = confirmPassword,
             onValueChange = onConfirmPasswordChanged,
-            hint = "Şifrenizi tekrar girin",
-            error = confirmPasswordError,
+            hint = stringResource(Res.string.auth_enter_again_password),
             focusRequester = confirmPasswordFocusRequester,
             onKeyboardDoneAction = {
-                keyboardController?.hide() // Close keyboard when done
+                keyboardController?.hide()
             }
         )
     }

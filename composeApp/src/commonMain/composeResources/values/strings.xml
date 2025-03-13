@@ -4,16 +4,19 @@
     <string name="auth_login_via_google">Google ile giriş yap</string>
     <string name="auth_login_via_facebook">Facebook ile giriş yap</string>
     <string name="auth_login_via_apple">Apple ile giriş yap</string>
+    <string name="auth_login_via_password">Şifre ile Giriş Yap</string>
     <string name="auth_continue_via_email">ya da email ile devam et</string>
     <string name="auth_enter_email">Email’inizi girin</string>
     <string name="auth_enter_password">Şifrenizi girin</string>
+    <string name="auth_enter_again_password">Şifrenizi tekrar girin</string>
     <string name="auth_forgot_password">Şifremi Unuttum</string>
     <string name="auth_login">Giriş Yap</string>
     <string name="auth_register">Kayıt Ol</string>
     <string name="auth_verify">Onayla</string>
     <string name="auth_code_sent_to_phone">Lütfen %1$s numarasına gelen kodu girin</string>
-    <string name="resend_code_timer">Yeniden göndermek için %1$d saniye</string>
-    <string name="resend_code">Tekrar Gönder</string>
+    <string name="resend_code_timer">Yeni kod göndermek için %1$d saniye bekleyin</string>
+    <string name="ota_code_not_received">Herhangi bir kod iletilmedi mi? </string>
+    <string name="ota_code_resend_code">Tekrar Gönder</string>
 
     <!--Onboarding-->
     <string name="onboarding_select_user_type_title">Skyfit’e Hoş Geldin!</string>
@@ -40,6 +43,8 @@
     <string name="onboarding_ready_message">Vakit ayırdığınız için teşekkür ederiz uygulamayı sizin içn hazırlıyoruz</string>
     <string name="onboarding_lets_get_started">Haydi Başla</string>
 
+    <string name="user_name">Kullanıcı Adı</string>
+    <string name="phone_number">Telefon Numarası</string>
     <string name="firstname_lastname">Ad Soyad</string>
     <string name="mandatory_firstname_lastname">Ad Soyad *</string>
     <string name="mandatory_work_place">İş Yeri *</string>

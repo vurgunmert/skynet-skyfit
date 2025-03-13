@@ -21,7 +21,7 @@ compose-multiplatform = "1.7.0"
 # Dependency Versions
 koin = "4.1.0-Beta4"
 precompose = "1.7.0-alpha01"
-ktor = "3.0.3"
+ktor = "3.1.1"
 coil = "3.0.4"
 peekaboo = "0.5.2"
 
@@ -45,6 +45,7 @@ koin-compose-viewmodel = { group = "io.insert-koin", name = "koin-compose-viewmo
 # PreCompose (Multiplatform Navigation)
 precompose = { group = "moe.tlaster", name = "precompose", version.ref = "precompose" }
 precompose-viewmodel = { group = "moe.tlaster", name = "precompose-viewmodel", version.ref = "precompose" }
+precompose-koin = { group = "moe.tlaster", name = "precompose-koin", version.ref = "precompose" }
 
 # Coil (Image Loading)
 coil-compose = { module = "io.coil-kt.coil3:coil-compose", version.ref = "coil" }
@@ -56,6 +57,7 @@ peekaboo-image-picker = { module = "io.github.onseok:peekaboo-image-picker", ver
 
 # Ktor (Networking)
 ktor-client-core = { group = "io.ktor", name = "ktor-client-core", version.ref = "ktor" }
+ktor-client-logging = { group = "io.ktor", name = "ktor-client-logging", version.ref = "ktor" }
 ktor-client-okhttp = { group = "io.ktor", name = "ktor-client-okhttp", version.ref = "ktor" }
 ktor-client-darwin = { group = "io.ktor", name = "ktor-client-darwin", version.ref = "ktor" }
 ktor-client-content-negotiation = { group = "io.ktor", name = "ktor-client-content-negotiation", version.ref = "ktor" }

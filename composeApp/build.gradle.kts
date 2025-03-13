@@ -57,8 +57,10 @@ kotlin {
 
             // Ktor client core and content negotiation
             implementation(libs.ktor.client.core)
+            implementation(libs.ktor.client.logging)
             implementation(libs.ktor.client.content.negotiation)
             implementation(libs.ktor.serialization.json)
+
 
             // peekaboo for Camera work
             implementation(libs.peekaboo.ui)
@@ -71,7 +73,7 @@ kotlin {
 
             // PreCompose for multiplatform navigation
             implementation(libs.precompose)
-            implementation(libs.precompose.viewmodel)
+            implementation(libs.precompose.koin)
         }
 
         androidMain.dependencies {

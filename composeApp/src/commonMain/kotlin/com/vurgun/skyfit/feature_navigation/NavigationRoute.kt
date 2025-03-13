@@ -32,11 +32,13 @@ sealed class NavigationRoute(
     data object Maintenance : NavigationRoute("maintenance", roles = listOf(UserType.GUEST))
     data object Splash : NavigationRoute("splash", roles = listOf(UserType.GUEST))
     data object Login : NavigationRoute("login", roles = listOf(UserType.GUEST))
-    data object Register : NavigationRoute("register", roles = listOf(UserType.GUEST))
-    data object OTPVerification : NavigationRoute("otp_verification", roles = listOf(UserType.GUEST))
+    data object CreatePassword : NavigationRoute("create_password", roles = listOf(UserType.GUEST))
+    data object LoginOTPVerification : NavigationRoute("login_otp_verification", roles = listOf(UserType.GUEST))
     data object ForgotPassword : NavigationRoute("forgot_password", roles = listOf(UserType.GUEST))
     data object ForgotPasswordCode : NavigationRoute("forgot_password_code", roles = listOf(UserType.GUEST))
     data object ForgotPasswordReset : NavigationRoute("forgot_password_reset", roles = listOf(UserType.GUEST))
+    data object PrivacyPolicy : NavigationRoute("privacy_policy", roles = listOf(UserType.GUEST))
+    data object TermsAndConditions : NavigationRoute("terms_and_conditions", roles = listOf(UserType.GUEST))
 
     //Onboarding
     data object Onboarding : NavigationRoute("onboarding")

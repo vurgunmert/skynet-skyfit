@@ -1,11 +1,13 @@
 package com.vurgun.skyfit.feature_auth.domain.repositories
 
-import com.vurgun.skyfit.feature_auth.data.SignInResponse
-import com.vurgun.skyfit.core.data.models.NetworkResponseWrapper
+import com.vurgun.skyfit.feature_auth.domain.model.AuthLoginResult
+import com.vurgun.skyfit.feature_auth.domain.model.AuthOTPResult
+import com.vurgun.skyfit.feature_auth.domain.model.CreatePasswordResult
+import com.vurgun.skyfit.feature_auth.domain.model.SendOTPResult
 
 interface AuthRepository {
-    suspend fun register(phoneNumber: String, fullName: String, password: String): NetworkResponseWrapper<Unit>
-    suspend fun login(phoneNumber: String, password: String): NetworkResponseWrapper<SignInResponse>
-    suspend fun requestOtpCode(phoneNumber: String): NetworkResponseWrapper<Boolean>
-    suspend fun verifyOtpCode(phoneNumber: String, code: String): NetworkResponseWrapper<SignInResponse>
+    suspend fun login(phoneNumber: String, password: String?): AuthLoginResult
+    suspend fun verifyOTP(code: String): AuthOTPResult
+    suspend fun sendOTP(): SendOTPResult
+    suspend fun createPassword(username: String, password: String, againPassword: String): CreatePasswordResult
 }

@@ -37,6 +37,7 @@ import skyfit.composeapp.generated.resources.ic_profile
 
 @Composable
 fun PersonNameTextInput(
+    hint: String,
     value: String,
     onValueChange: (String) -> Unit,
     modifier: Modifier = Modifier,
@@ -46,8 +47,6 @@ fun PersonNameTextInput(
 ) {
     val keyboardController = LocalSoftwareKeyboardController.current
     var isFocused by remember { mutableStateOf(false) }
-
-    val hint = "Ad Soyad"
 
     Row(
         modifier = modifier

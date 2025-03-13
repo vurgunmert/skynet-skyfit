@@ -8,8 +8,16 @@ class LocalSettingsImpl(context: Context) : LocalSettingsStore {
     private val sharedPreferences: SharedPreferences =
         context.getSharedPreferences("skyfit_prefs", Context.MODE_PRIVATE)
 
-    override fun saveToken(token: String) {
-        sharedPreferences.edit().putString("token", token).apply()
+    override fun savePhoneNumber(value: String) {
+        sharedPreferences.edit().putString("phone_number", value).apply()
+    }
+
+    override fun getPhoneNumber(): String? {
+        return sharedPreferences.getString("phone_number", null)
+    }
+
+    override fun saveToken(value: String) {
+        sharedPreferences.edit().putString("token", value).apply()
     }
 
     override fun getToken(): String? {
@@ -18,5 +26,14 @@ class LocalSettingsImpl(context: Context) : LocalSettingsStore {
 
     override fun clearToken() {
         sharedPreferences.edit().remove("token").apply()
+    }
+
+    override fun clearPhoneNumber() {
+        sharedPreferences.edit().remove("phone_number").apply()
+    }
+
+    override fun clearAll() {
+        clearPhoneNumber()
+        clearToken()
     }
 }

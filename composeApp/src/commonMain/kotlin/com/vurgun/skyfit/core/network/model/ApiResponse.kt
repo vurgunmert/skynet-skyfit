@@ -1,4 +1,4 @@
-package com.vurgun.skyfit.core.data.models
+package com.vurgun.skyfit.core.network.model
 
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable

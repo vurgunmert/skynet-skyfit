@@ -1,4 +1,4 @@
-package com.vurgun.skyfit.core.data.models
+package com.vurgun.skyfit.core.network.model
 
 sealed class NetworkResponseWrapper<out T> {
     data class Success<T>(

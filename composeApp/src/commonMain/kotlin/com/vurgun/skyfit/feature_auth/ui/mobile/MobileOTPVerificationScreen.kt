@@ -3,6 +3,7 @@ package com.vurgun.skyfit.feature_auth.ui.mobile
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -22,69 +23,55 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import com.vurgun.skyfit.core.ui.resources.SkyFitStyleGuide
 import com.vurgun.skyfit.core.ui.components.SkyFitLogoComponent
 import com.vurgun.skyfit.core.ui.components.SkyFitScaffold
 import com.vurgun.skyfit.core.ui.components.button.PrimaryLargeButton
 import com.vurgun.skyfit.core.ui.components.text.SecondaryMediumText
+import com.vurgun.skyfit.core.ui.components.text.SecondaryMediumUnderlinedText
 import com.vurgun.skyfit.core.ui.components.text.input.CodeTextInput
+import com.vurgun.skyfit.core.ui.resources.SkyFitColor
+import com.vurgun.skyfit.core.ui.resources.SkyFitStyleGuide
+import com.vurgun.skyfit.core.ui.resources.SkyFitTypography
+import com.vurgun.skyfit.core.utils.formatPhoneNumber
+import com.vurgun.skyfit.feature_auth.ui.viewmodel.LoginOTPVerificationViewModel
+import com.vurgun.skyfit.feature_auth.ui.viewmodel.LoginOTPVerificationViewEvent
 import com.vurgun.skyfit.feature_navigation.NavigationRoute
 import com.vurgun.skyfit.feature_navigation.jumpAndTakeover
-import com.vurgun.skyfit.feature_auth.ui.viewmodel.MobileOTPVerificationViewModel
-import com.vurgun.skyfit.feature_auth.ui.viewmodel.OTPVerificationEvent
-import com.vurgun.skyfit.core.ui.resources.SkyFitColor
-import com.vurgun.skyfit.core.ui.resources.SkyFitTypography
 import kotlinx.coroutines.flow.collectLatest
 import moe.tlaster.precompose.navigation.Navigator
-import moe.tlaster.precompose.navigation.query
 import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.koinInject
 import skyfit.composeapp.generated.resources.Res
 import skyfit.composeapp.generated.resources.auth_code_sent_to_phone
 import skyfit.composeapp.generated.resources.auth_verify
-import skyfit.composeapp.generated.resources.resend_code
+import skyfit.composeapp.generated.resources.ota_code_not_received
+import skyfit.composeapp.generated.resources.ota_code_resend_code
 import skyfit.composeapp.generated.resources.resend_code_timer
 
 @Composable
 fun MobileOTPVerificationScreen(navigator: Navigator) {
-    val viewModel: MobileOTPVerificationViewModel = koinInject()
+    val viewModel: LoginOTPVerificationViewModel = koinInject()
 
-    val phoneNumber by viewModel.phoneNumber.collectAsState()
     val enteredOtp by viewModel.enteredOtp.collectAsState()
     val isLoading by viewModel.isLoading.collectAsState()
     val isResendEnabled by viewModel.isResendEnabled.collectAsState()
     val countdownTime by viewModel.countdownTime.collectAsState()
     val otpLength = viewModel.otpLength
 
-    val currentEntry by navigator.currentEntry.collectAsState(null)
-    val initialPhoneNumber = remember(currentEntry) {
-        currentEntry?.query("phone", default = "") ?: ""
-    }
-
     var errorMessage by remember { mutableStateOf<String?>(null) }
-
-    LaunchedEffect(initialPhoneNumber) {
-        viewModel.setPhoneNumber(initialPhoneNumber)
-    }
 
     LaunchedEffect(viewModel) {
         viewModel.events.collectLatest { event ->
             when (event) {
-                is OTPVerificationEvent.GoToRegister -> {
-                    navigator.jumpAndTakeover(
-                        from = NavigationRoute.OTPVerification.route,
-                        to = NavigationRoute.Register.route + "?phone=$phoneNumber"
-                    )
+                is LoginOTPVerificationViewEvent.GoToRegister -> {
+                    navigator.jumpAndTakeover(from = NavigationRoute.LoginOTPVerification.route, to = NavigationRoute.CreatePassword.route)
                 }
 
-                is OTPVerificationEvent.GoToDashboard -> {
-                    navigator.jumpAndTakeover(
-                        from = NavigationRoute.OTPVerification,
-                        to = NavigationRoute.Dashboard
-                    )
+                is LoginOTPVerificationViewEvent.GoToDashboard -> {
+                    navigator.jumpAndTakeover(from = NavigationRoute.LoginOTPVerification, to = NavigationRoute.Dashboard)
                 }
 
-                is OTPVerificationEvent.ShowError -> {
+                is LoginOTPVerificationViewEvent.ShowError -> {
                     errorMessage = event.message
                 }
             }
@@ -102,7 +89,7 @@ fun MobileOTPVerificationScreen(navigator: Navigator) {
             verticalArrangement = Arrangement.spacedBy(48.dp)
         ) {
 
-            MobileOTPVerificationTextGroup(phoneNumber)
+            MobileOTPVerificationTextGroup(viewModel.phoneNumber)
 
             MobileOTPVerificationContentGroup(otpLength, onOtpCompleted = viewModel::onOtpChanged)
 
@@ -129,8 +116,7 @@ private fun MobileOTPVerificationTextGroup(phoneNumber: String) {
         SkyFitLogoComponent()
 
         Spacer(Modifier.height(36.dp))
-
-        SecondaryMediumText(text = stringResource(Res.string.auth_code_sent_to_phone, phoneNumber))
+        SecondaryMediumText(text = stringResource(Res.string.auth_code_sent_to_phone, formatPhoneNumber(phoneNumber)))
     }
 }
 
@@ -183,16 +169,15 @@ private fun MobileOTPVerificationActionGroup(
         Spacer(Modifier.height(16.dp))
 
         if (!isResendEnabled) {
-            Text(
-                text = stringResource(Res.string.resend_code_timer, countdownTime),
-                style = SkyFitTypography.bodySmall
-            )
+            SecondaryMediumText(text = stringResource(Res.string.resend_code_timer, countdownTime))
         } else {
-            Text(
-                text = stringResource(Res.string.resend_code),
-                style = SkyFitTypography.bodyMediumRegular.copy(color = SkyFitColor.text.linkInverse),
-                modifier = Modifier.clickable(onClick = onClickResend)
-            )
+            Row {
+                SecondaryMediumText(text = stringResource(Res.string.ota_code_not_received))
+                SecondaryMediumUnderlinedText(
+                    text = stringResource(Res.string.ota_code_resend_code),
+                    modifier = Modifier.clickable(onClick = onClickResend)
+                )
+            }
         }
     }
 }
