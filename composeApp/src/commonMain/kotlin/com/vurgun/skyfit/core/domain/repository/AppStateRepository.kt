@@ -1,6 +1,6 @@
 package com.vurgun.skyfit.core.domain.repository
 
-import com.vurgun.skyfit.core.domain.models.AppState
+import com.vurgun.skyfit.core.domain.model.AppState
 
 interface AppStateRepository {
     suspend fun getAppState(): AppState

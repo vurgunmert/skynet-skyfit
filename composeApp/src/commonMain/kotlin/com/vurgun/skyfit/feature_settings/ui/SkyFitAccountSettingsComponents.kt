@@ -47,6 +47,7 @@ import coil3.compose.AsyncImage
 import com.preat.peekaboo.image.picker.SelectionMode
 import com.preat.peekaboo.image.picker.rememberImagePickerLauncher
 import com.preat.peekaboo.image.picker.toImageBitmap
+import com.vurgun.skyfit.core.domain.model.FitnessTagType
 import com.vurgun.skyfit.core.ui.components.ButtonSize
 import com.vurgun.skyfit.core.ui.components.ButtonState
 import com.vurgun.skyfit.core.ui.components.ButtonVariant
@@ -107,7 +108,8 @@ fun MobileUserSettingsScreenPhotoEditComponent(
                 contentScale = ContentScale.Crop,
                 modifier = Modifier
                     .size(64.dp)
-                    .background(SkyFitColor.background.surfaceSecondary, RoundedCornerShape(20.dp))
+                    .clip(RoundedCornerShape(20.dp))
+                    .background(SkyFitColor.background.surfaceSecondary)
                     .clickable { imagePickerLauncher.launch() },
             )
         }
@@ -194,6 +196,7 @@ fun SkyFitSelectToEnterInputComponent(
     hint: String = "Hint",
     value: String? = null,
     error: String? = null,
+    modifier: Modifier = Modifier.fillMaxWidth(),
     onValueChange: ((String) -> Unit)? = null,
     focusRequester: FocusRequester = FocusRequester(),
     nextFocusRequester: FocusRequester? = null,
@@ -204,7 +207,7 @@ fun SkyFitSelectToEnterInputComponent(
         ?: SkyFitColor.background.surfaceSecondary
 
     Column(
-        modifier = Modifier.fillMaxWidth(),
+        modifier = modifier,
         verticalArrangement = Arrangement.spacedBy(4.dp)
     ) {
         Text(title, Modifier.padding(start = 8.dp), style = SkyFitTypography.bodySmallSemibold)
@@ -239,9 +242,8 @@ fun SkyFitSelectToEnterInputComponent(
                 decorationBox = { innerTextField ->
                     if (value.isNullOrBlank()) {
                         Text(text = hint, color = SkyFitColor.text.secondary)
-                    } else {
-                        innerTextField()
                     }
+                    innerTextField()
                 }
             )
 
@@ -270,13 +272,13 @@ fun SkyFitSelectToEnterInputComponent(
 
 @Composable
 fun AccountSettingsSelectToSetInputComponent(
-    modifier: Modifier = Modifier,
+    modifier: Modifier = Modifier.fillMaxWidth(),
     title: String = "Title",
     hint: String = "Hint",
     value: String? = null,
     rightIconRes: DrawableResource? = null
 ) {
-    Column(modifier.fillMaxWidth(), verticalArrangement = Arrangement.spacedBy(4.dp)) {
+    Column(modifier, verticalArrangement = Arrangement.spacedBy(4.dp)) {
         Text(title, Modifier.padding(start = 8.dp), style = SkyFitTypography.bodySmallSemibold)
 
         Row(
@@ -318,15 +320,15 @@ fun AccountSettingsSelectToSetInputComponent(
 
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
-fun MobileUserSettingsActivityTagEditComponent(
-    selectedTags: List<String>,
-    onTagsSelected: (List<String>) -> Unit
+fun FitnessTagPickerComponent(
+    modifier: Modifier = Modifier,
+    selectedTags: List<FitnessTagType>,
+    onTagsSelected: (List<FitnessTagType>) -> Unit
 ) {
     var showTagPickerDialog by remember { mutableStateOf(false) }
 
     Box {
-
-        Column(Modifier.fillMaxWidth()) {
+        Column(modifier.fillMaxWidth()) {
             AccountSettingsSelectToSetInputComponent(
                 modifier = Modifier.clickable { showTagPickerDialog = true },
                 title = "Profil Etiketleri",
@@ -377,7 +379,8 @@ fun MobileUserSettingsActivityTagEditComponent(
                 verticalArrangement = Arrangement.spacedBy(16.dp),
             ) {
                 selectedTags.forEach {
-                    SkyFitAccountSettingsProfileTagItemComponent(value = it,
+                    SkyFitAccountSettingsProfileTagItemComponent(
+                        value = it.label,
                         onClick = { onTagsSelected(selectedTags - it) })
                 }
             }
@@ -399,6 +402,7 @@ fun SkyFitSelectToEnterMultilineInputComponent(
     title: String = "Title",
     hint: String = "Hint",
     value: String? = null,
+    modifier: Modifier = Modifier.fillMaxWidth(),
     onValueChange: ((String) -> Unit)? = null,
     focusRequester: FocusRequester = FocusRequester(),
     nextFocusRequester: FocusRequester? = null,
@@ -407,7 +411,7 @@ fun SkyFitSelectToEnterMultilineInputComponent(
     val keyboardController = LocalSoftwareKeyboardController.current
 
     Column(
-        modifier = Modifier.fillMaxWidth(),
+        modifier = modifier,
         verticalArrangement = Arrangement.spacedBy(4.dp)
     ) {
         Text(title, Modifier.padding(start = 8.dp), style = SkyFitTypography.bodySmallSemibold)
@@ -443,9 +447,8 @@ fun SkyFitSelectToEnterMultilineInputComponent(
                 decorationBox = { innerTextField ->
                     if (value.isNullOrBlank()) {
                         Text(text = hint, color = SkyFitColor.text.secondary)
-                    } else {
-                        innerTextField()
                     }
+                    innerTextField()
                 }
             )
 

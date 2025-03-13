@@ -29,7 +29,7 @@ import com.vurgun.skyfit.core.ui.components.WeightPickerDialog
 import com.vurgun.skyfit.feature_settings.ui.SkyFitSelectToEnterInputComponent
 import com.vurgun.skyfit.feature_settings.ui.AccountSettingsSelectToSetInputComponent
 import com.vurgun.skyfit.feature_settings.ui.MobileSettingsMenuItemComponent
-import com.vurgun.skyfit.feature_settings.ui.MobileUserSettingsActivityTagEditComponent
+import com.vurgun.skyfit.feature_settings.ui.FitnessTagPickerComponent
 import com.vurgun.skyfit.feature_settings.ui.MobileUserSettingsScreenDeleteActionsComponent
 import com.vurgun.skyfit.feature_settings.ui.MobileUserSettingsScreenPhotoEditComponent
 import com.vurgun.skyfit.feature_settings.ui.MobileUserSettingsScreenSaveActionComponent
@@ -148,7 +148,7 @@ fun MobileUserSettingsAccountScreen(navigator: Navigator) {
                 rightIconRes = Res.drawable.ic_pencil
             )
 
-            MobileUserSettingsActivityTagEditComponent(
+            FitnessTagPickerComponent(
                 selectedTags = userAccountState.profileTags,
                 onTagsSelected = viewModel::updateTags
             )

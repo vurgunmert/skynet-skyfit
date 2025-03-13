@@ -7,7 +7,7 @@ class TrainerOnboardingViewModel : BaseOnboardingViewModel() {
     private val _state = MutableStateFlow(TrainerOnboardingState())
     val state = _state.asStateFlow()
 
-    fun updateCharacter(characterId: String) {
+    fun updateCharacter(characterId: Int) {
         _state.value = _state.value.copy(characterId = characterId)
     }
 
@@ -58,7 +58,7 @@ class TrainerOnboardingViewModel : BaseOnboardingViewModel() {
 }
 
 data class TrainerOnboardingState(
-    val characterId: String? = null,
+    val characterId: Int? = null,
     val birthYear: Int? = null,
     val gender: String? = null,
     val weight: Int? = null,

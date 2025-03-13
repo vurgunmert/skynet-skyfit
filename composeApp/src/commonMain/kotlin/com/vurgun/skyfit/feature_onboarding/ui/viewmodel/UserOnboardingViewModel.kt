@@ -4,10 +4,10 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 
 class UserOnboardingViewModel : BaseOnboardingViewModel() {
-    private val _state = MutableStateFlow(UserOnboardingState())
+    private val _state = MutableStateFlow(LegacyUserOnboardingState())
     val state = _state.asStateFlow()
 
-    fun updateCharacter(characterId: String) {
+    fun updateCharacter(characterId: Int) {
         _state.value = _state.value.copy(characterId = characterId)
     }
 
@@ -49,8 +49,8 @@ class UserOnboardingViewModel : BaseOnboardingViewModel() {
     }
 }
 
-data class UserOnboardingState(
-    val characterId: String? = null,
+data class LegacyUserOnboardingState(
+    val characterId: Int? = null,
     val birthYear: Int? = null,
     val gender: String? = null,
     val weight: Int? = null,

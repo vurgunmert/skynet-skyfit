@@ -25,7 +25,7 @@ import androidx.compose.ui.unit.dp
 import com.vurgun.skyfit.core.ui.components.SkyFitScreenHeader
 import com.vurgun.skyfit.feature_settings.ui.SkyFitSelectToEnterMultilineInputComponent
 import com.vurgun.skyfit.feature_settings.ui.MobileSettingsMenuItemComponent
-import com.vurgun.skyfit.feature_settings.ui.MobileUserSettingsActivityTagEditComponent
+import com.vurgun.skyfit.feature_settings.ui.FitnessTagPickerComponent
 import com.vurgun.skyfit.feature_settings.ui.MobileUserSettingsScreenDeleteActionsComponent
 import com.vurgun.skyfit.feature_settings.ui.MobileUserSettingsScreenPhotoEditComponent
 import com.vurgun.skyfit.feature_settings.ui.MobileUserSettingsScreenSaveActionComponent
@@ -110,7 +110,7 @@ fun MobileFacilitySettingsAccountScreen(navigator: Navigator) {
                 rightIconRes = Res.drawable.ic_pencil
             )
 
-            MobileUserSettingsActivityTagEditComponent(
+            FitnessTagPickerComponent(
                 selectedTags = accountState.profileTags,
                 onTagsSelected = viewModel::updateTags
             )

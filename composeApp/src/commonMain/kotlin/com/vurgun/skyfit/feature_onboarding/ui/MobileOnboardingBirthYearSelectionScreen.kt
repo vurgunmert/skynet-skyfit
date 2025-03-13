@@ -1,27 +1,27 @@
 package com.vurgun.skyfit.feature_onboarding.ui
 
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.derivedStateOf
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
+import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.vurgun.skyfit.core.ui.components.SkyFitScaffold
-import com.vurgun.skyfit.core.ui.components.YearPicker
+import com.vurgun.skyfit.core.ui.components.SkyFitWheelPickerComponent
+import com.vurgun.skyfit.core.ui.resources.SkyFitColor
+import com.vurgun.skyfit.core.utils.getDaysInMonth
 import com.vurgun.skyfit.core.utils.now
-import com.vurgun.skyfit.feature_onboarding.ui.viewmodel.BaseOnboardingViewModel
-import com.vurgun.skyfit.feature_onboarding.ui.viewmodel.TrainerOnboardingViewModel
-import com.vurgun.skyfit.feature_onboarding.ui.viewmodel.UserOnboardingViewModel
 import com.vurgun.skyfit.feature_navigation.NavigationRoute
 import com.vurgun.skyfit.feature_navigation.jumpAndStay
-import com.vurgun.skyfit.feature_navigation.jumpAndTakeover
+import com.vurgun.skyfit.feature_onboarding.ui.viewmodel.OnboardingViewModel
 import kotlinx.datetime.LocalDate
 import moe.tlaster.precompose.navigation.Navigator
 import org.jetbrains.compose.resources.stringResource
@@ -30,25 +30,14 @@ import skyfit.composeapp.generated.resources.onboarding_select_date_of_birth_mes
 import skyfit.composeapp.generated.resources.onboarding_select_date_of_birth_title
 
 @Composable
-fun MobileOnboardingBirthYearSelectionScreen(
-    viewModel: BaseOnboardingViewModel,
+fun MobileOnboardingBirthdaySelectionScreen(
+    viewModel: OnboardingViewModel,
     navigator: Navigator
 ) {
     val currentYear = LocalDate.now().year
-    val minBirthYear = currentYear - 80  // Oldest users (80 years old)
-    val maxBirthYear = currentYear - 13  // Youngest allowed users (13 years old)
-    val defaultBirthYear = currentYear - 16  // Default to 16-year-olds (active age group)
-
-    val cachedYear by remember(viewModel) {
-        derivedStateOf {
-            when (viewModel) {
-                is UserOnboardingViewModel -> viewModel.state.value.birthYear
-                is TrainerOnboardingViewModel -> viewModel.state.value.birthYear
-                else -> defaultBirthYear
-            }
-        }
-    }
-    var selectedYear by remember { mutableStateOf(cachedYear ?: defaultBirthYear) }
+    val selectedYear = viewModel.state.collectAsState().value.birthYear ?: (currentYear - 16)
+    val selectedMonth = viewModel.state.collectAsState().value.birthMonth ?: 1
+    val selectedDay = viewModel.state.collectAsState().value.birthDay ?: 1
 
     SkyFitScaffold {
         Column(
@@ -62,36 +51,99 @@ fun MobileOnboardingBirthYearSelectionScreen(
                 subtitle = stringResource(Res.string.onboarding_select_date_of_birth_message)
             )
             Spacer(Modifier.height(16.dp))
-            YearPicker(
-                selectedYear = selectedYear,
-                onYearSelected = { selectedYear = it },
-                startYear = minBirthYear,
-                endYear = maxBirthYear
-            )
+
+            // Date Picker Row
+            Box {
+                Row(Modifier.align(Alignment.Center)) {
+                    MonthPicker(selectedMonth) { newMonth ->
+                        viewModel.updateMonth(newMonth)
+                    }
+                    Spacer(Modifier.width(16.dp))
+                    DayPicker(selectedMonth, selectedYear, selectedDay) { newDay ->
+                        viewModel.updateDay(newDay)
+                    }
+                    Spacer(Modifier.width(16.dp))
+                    YearPicker(selectedYear, onYearSelected = { newYear ->
+                        viewModel.updateYear(newYear)
+                    })
+                }
+
+                Box(
+                    Modifier
+                        .align(Alignment.Center)
+                        .width(213.dp)
+                        .height(43.dp)
+                        .background(color = SkyFitColor.background.fillTransparentSecondary, shape = RoundedCornerShape(size = 16.dp))
+                )
+            }
+
             Spacer(Modifier.weight(1f))
             OnboardingActionGroupComponent(
                 onClickContinue = {
-                    when (viewModel) {
-                        is UserOnboardingViewModel -> viewModel.updateBirthYear(selectedYear)
-                        is TrainerOnboardingViewModel -> viewModel.updateBirthYear(selectedYear)
-                    }
                     navigator.jumpAndStay(NavigationRoute.OnboardingGenderSelection)
-                },
-                onClickSkip = {
-                    when (viewModel) {
-                        is UserOnboardingViewModel -> navigator.jumpAndTakeover(
-                            NavigationRoute.OnboardingBirthYearSelection,
-                            NavigationRoute.OnboardingCompleted
-                        )
-
-                        is TrainerOnboardingViewModel -> navigator.jumpAndTakeover(
-                            NavigationRoute.OnboardingBirthYearSelection,
-                            NavigationRoute.OnboardingTrainerDetails
-                        )
-                    }
                 }
             )
-            Spacer(Modifier.height(30.dp))
         }
     }
+}
+
+
+@Composable
+private fun YearPicker(
+    selectedYear: Int,
+    onYearSelected: (Int) -> Unit,
+    startYear: Int = LocalDate.now().year - 80,
+    endYear: Int = LocalDate.now().year - 6
+) {
+    val years = (startYear..endYear).toList()
+
+    SkyFitWheelPickerComponent(
+        items = years,
+        selectedItem = selectedYear,
+        onItemSelected = onYearSelected,
+        itemText = { it.toString() },
+        visibleItemCount = 5,
+        modifier = Modifier.width(36.dp)
+    )
+}
+
+
+@Composable
+private fun MonthPicker(
+    selectedMonth: Int,
+    onMonthSelected: (Int) -> Unit
+) {
+    val months = listOf(
+        "Oca", "Şub", "Mar", "Nis", "May", "Haz",
+        "Tem", "Ağu", "Eyl", "Eki", "Kas", "Ara"
+    )
+
+    SkyFitWheelPickerComponent(
+        items = months.indices.map { it + 1 },
+        selectedItem = selectedMonth,
+        onItemSelected = onMonthSelected,
+        itemText = { months[it - 1] },
+        visibleItemCount = 5,
+        modifier = Modifier.width(36.dp)
+    )
+}
+
+
+@Composable
+private fun DayPicker(
+    selectedMonth: Int,
+    selectedYear: Int,
+    selectedDay: Int,
+    onDaySelected: (Int) -> Unit
+) {
+    val daysInMonth = getDaysInMonth(selectedMonth, selectedYear)
+
+    SkyFitWheelPickerComponent(
+        items = (1..daysInMonth).toList(),
+        selectedItem = selectedDay.coerceAtMost(daysInMonth),
+        onItemSelected = onDaySelected,
+        itemText = { it.toString() },
+        visibleItemCount = 5,
+        modifier = Modifier.width(36.dp)
+    )
 }

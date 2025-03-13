@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.imePadding
@@ -98,6 +99,7 @@ fun MobileLoginScreen(navigator: Navigator) {
             modifier = Modifier
                 .padding(SkyFitStyleGuide.Padding.xLarge)
                 .widthIn(max = SkyFitStyleGuide.Mobile.maxWidth)
+                .fillMaxHeight()
                 .verticalScroll(scrollState)
                 .imePadding(),
             horizontalAlignment = Alignment.CenterHorizontally,

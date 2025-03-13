@@ -17,6 +17,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.vurgun.skyfit.core.ui.components.ButtonSize
@@ -28,22 +29,20 @@ import com.vurgun.skyfit.core.ui.resources.SkyFitTypography
 
 @Composable
 fun OnboardingStepProgressComponent(
-    totalSteps: Int = 6,
+    modifier: Modifier = Modifier.fillMaxWidth().padding(24.dp),
+    totalSteps: Int = 7,
     currentStep: Int = 1,
     activeColor: Color = SkyFitColor.specialty.buttonBgRest,
     inactiveColor: Color = SkyFitColor.background.surfaceSecondary,
     stepHeight: Dp = 10.dp,
-    spacing: Dp = 6.dp
+    stepSpacing: Dp = 6.dp,
 ) {
-    BoxWithConstraints(
-        modifier = Modifier.fillMaxWidth()
-    ) {
-        val spacingTotal = spacing * (totalSteps - 1)
-        val totalWidth = maxWidth - 48.dp
-        val stepWidth = (totalWidth) / totalSteps
+    BoxWithConstraints(modifier = modifier) {
+        val availableWidth = maxWidth - (stepSpacing * (totalSteps - 1))
+        val stepWidth = availableWidth / totalSteps
 
         Row(
-            horizontalArrangement = Arrangement.spacedBy(spacing),
+            horizontalArrangement = Arrangement.spacedBy(stepSpacing),
             verticalAlignment = Alignment.CenterVertically,
             modifier = Modifier.fillMaxWidth()
         ) {
@@ -62,11 +61,12 @@ fun OnboardingStepProgressComponent(
     }
 }
 
-
 @Composable
-fun OnboardingTitleGroupComponent(title: String, subtitle: String) {
+fun OnboardingTitleGroupComponent(title: String,
+                                  subtitle: String,
+                                  modifier: Modifier = Modifier) {
     Column(
-        modifier = Modifier.fillMaxWidth().padding(horizontal = 24.dp),
+        modifier = modifier.fillMaxWidth().padding(horizontal = 24.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
         Text(
@@ -76,36 +76,22 @@ fun OnboardingTitleGroupComponent(title: String, subtitle: String) {
         Spacer(Modifier.height(16.dp))
         Text(
             text = subtitle,
-            style = SkyFitTypography.bodyMediumRegular.copy(color = SkyFitColor.text.secondary)
+            style = SkyFitTypography.bodyMediumRegular.copy(color = SkyFitColor.text.secondary),
+            textAlign = TextAlign.Center
         )
     }
 }
 
 @Composable
 fun OnboardingActionGroupComponent(
-    onClickContinue: () -> Unit,
-    onClickSkip: () -> Unit
+    onClickContinue: () -> Unit
 ) {
-    Column(
-        modifier = Modifier.fillMaxWidth(),
-        horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.spacedBy(14.dp)
-    ) {
-        SkyFitButtonComponent(
-            modifier = Modifier.fillMaxWidth(), text = "Devam Et",
-            onClick = onClickContinue,
-            variant = ButtonVariant.Primary,
-            size = ButtonSize.Large,
-            state = ButtonState.Rest
-        )
-
-        SkyFitButtonComponent(
-            modifier = Modifier.fillMaxWidth(), text = "Atla",
-            onClick = onClickSkip,
-            variant = ButtonVariant.Secondary,
-            size = ButtonSize.Large,
-            state = ButtonState.Rest
-        )
-    }
+    SkyFitButtonComponent(
+        modifier = Modifier.padding(16.dp).fillMaxWidth(), text = "Devam Et",
+        onClick = onClickContinue,
+        variant = ButtonVariant.Primary,
+        size = ButtonSize.Large,
+        state = ButtonState.Rest
+    )
 }
 

@@ -2,7 +2,7 @@ package com.vurgun.skyfit.feature_auth.data.service
 
 import com.vurgun.skyfit.core.network.ApiClient
 import com.vurgun.skyfit.core.network.model.ApiResult
-import com.vurgun.skyfit.core.network.model.EmptyResponse
+import com.vurgun.skyfit.core.network.model.EmptyDataResponse
 import com.vurgun.skyfit.feature_auth.data.model.CreatePasswordRequest
 import com.vurgun.skyfit.feature_auth.data.model.LoginRequest
 import com.vurgun.skyfit.feature_auth.data.model.LoginResponse
@@ -41,8 +41,8 @@ class AuthApiService(private val apiClient: ApiClient) {
         }
     }
 
-    suspend fun createPassword(request: CreatePasswordRequest, token: String): ApiResult<EmptyResponse> {
-        return apiClient.safeApiCall<EmptyResponse> {
+    suspend fun createPassword(request: CreatePasswordRequest, token: String): ApiResult<EmptyDataResponse> {
+        return apiClient.safeApiCall<EmptyDataResponse> {
             method = HttpMethod.Post
             bearerAuth(token)
             url("auth/createpassword")

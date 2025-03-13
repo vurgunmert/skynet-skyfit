@@ -155,31 +155,19 @@ object SkyFitAsset {
         "ic_character_panda" to Res.drawable.ic_character_panda
     )
 
-    /** 🔹 BODY TYPE ICONS **/
-    val MaleBodyTypeIcons = mapOf(
-        "ic_male_body_type_ecto" to Res.drawable.ic_male_body_type_ecto,
-        "ic_male_body_type_meso" to Res.drawable.ic_male_body_type_meso,
-        "ic_male_body_type_endo" to Res.drawable.ic_male_body_type_endo
-    )
-
-    val FemaleBodyTypeIcons = mapOf(
-        "ic_female_body_type_ecto" to Res.drawable.ic_female_body_type_ecto,
-        "ic_female_body_type_meso" to Res.drawable.ic_female_body_type_meso,
-        "ic_female_body_type_endo" to Res.drawable.ic_female_body_type_endo
-    )
-
-    /** 🔹 COMMON METHODS **/
-    fun getIconResource(id: String?): DrawableResource? {
-        return Icons[id] ?: CharacterIcons[id] ?: MaleBodyTypeIcons[id] ?: FemaleBodyTypeIcons[id]
+    enum class CharacterIcon(val id: String, val res: DrawableResource) {
+        CARROT("ic_character_carrot", Res.drawable.ic_character_carrot),
+        KOALA("ic_character_koala", Res.drawable.ic_character_koala),
+        PANDA("ic_character_panda", Res.drawable.ic_character_panda)
     }
 
-    @Composable
-    fun getIconPainter(id: String?): Painter? {
-        return getIconResource(id)?.let { painterResource(it) }
+    enum class BodyTypeIcon(val id: String, val res: DrawableResource) {
+        MALE_ECTO("ic_male_body_type_ecto", Res.drawable.ic_male_body_type_ecto),
+        MALE_MESO("ic_male_body_type_meso", Res.drawable.ic_male_body_type_meso),
+        MALE_ENDO("ic_male_body_type_endo", Res.drawable.ic_male_body_type_endo),
+        FEMALE_ECTO("ic_female_body_type_ecto", Res.drawable.ic_female_body_type_ecto),
+        FEMALE_MESO("ic_female_body_type_meso", Res.drawable.ic_female_body_type_meso),
+        FEMALE_ENDO("ic_female_body_type_endo", Res.drawable.ic_female_body_type_endo),
     }
 
-    @Composable
-    fun getIconPainter(id: String?, defaultRes: DrawableResource): Painter {
-        return getIconResource(id)?.let { painterResource(it) } ?: painterResource(defaultRes)
-    }
 }

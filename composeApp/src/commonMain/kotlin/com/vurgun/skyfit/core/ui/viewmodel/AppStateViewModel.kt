@@ -2,9 +2,9 @@ package com.vurgun.skyfit.core.ui.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.vurgun.skyfit.core.domain.models.AppState
-import com.vurgun.skyfit.core.domain.models.User
-import com.vurgun.skyfit.core.domain.models.UserState
+import com.vurgun.skyfit.core.domain.model.AppState
+import com.vurgun.skyfit.core.domain.model.User
+import com.vurgun.skyfit.core.domain.model.UserState
 import com.vurgun.skyfit.core.domain.repository.AppStateRepository
 import com.vurgun.skyfit.core.domain.repository.UserRepository
 import com.vurgun.skyfit.core.storage.LocalSettingsStore

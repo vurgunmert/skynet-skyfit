@@ -10,8 +10,8 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import com.vurgun.skyfit.core.domain.models.AppState
-import com.vurgun.skyfit.core.domain.models.UserState
+import com.vurgun.skyfit.core.domain.model.AppState
+import com.vurgun.skyfit.core.domain.model.UserState
 import com.vurgun.skyfit.core.ui.viewmodel.AppStateViewModel
 import com.vurgun.skyfit.feature_navigation.NavigationRoute
 import com.vurgun.skyfit.feature_navigation.jumpAndTakeover

@@ -10,6 +10,7 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.unit.dp
 import com.vurgun.skyfit.core.ui.resources.SkyFitColor
 import com.vurgun.skyfit.core.ui.resources.SkyFitTypography
@@ -17,10 +18,12 @@ import com.vurgun.skyfit.core.ui.resources.SkyFitTypography
 @Composable
 fun SkyFitTextButton(text: String, onClick: () -> Unit) {
     Box(
-        Modifier.fillMaxWidth()
-            .background(SkyFitColor.background.surfaceSecondary, shape = CircleShape)
+        Modifier
+            .fillMaxWidth()
+            .clip(CircleShape)
+            .background(SkyFitColor.background.surfaceSecondary)
             .clickable(onClick = onClick)
-            .padding(16.dp)
+            .padding(16.dp),
     ) {
         Text(
             text = text,
@@ -33,13 +36,14 @@ fun SkyFitTextButton(text: String, onClick: () -> Unit) {
 fun SkyFitSelectableTextButton(text: String, selected: Boolean, onSelect: (Boolean) -> Unit) {
     Box(
         Modifier.fillMaxWidth()
-            .background(SkyFitColor.background.surfaceSecondary, shape = CircleShape)
+            .clip(CircleShape)
+            .background(SkyFitColor.background.surfaceSecondary)
+            .clickable(onClick = { onSelect(!selected) })
             .border(
                 if (selected) 2.dp else 0.dp,
                 color = SkyFitColor.border.secondaryButton,
                 shape = CircleShape
             )
-            .clickable(onClick = { onSelect(!selected) })
             .padding(16.dp)
     ) {
         Text(

@@ -4,7 +4,8 @@ import androidx.lifecycle.ViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.update
-import com.vurgun.skyfit.core.domain.models.BodyType
+import com.vurgun.skyfit.core.domain.model.BodyType
+import com.vurgun.skyfit.core.domain.model.FitnessTagType
 
 // Data class to hold all user account state in one place
 data class UserAccountState(
@@ -18,7 +19,7 @@ data class UserAccountState(
     val bodyType: BodyType = BodyType.NOT_DEFINED,
     val profileImageUrl: String? = null,
     val backgroundImageUrl: String? = null,
-    val profileTags: List<String> = emptyList(),
+    val profileTags: List<FitnessTagType> = emptyList(),
     val isUpdated: Boolean = false
 )
 
@@ -39,7 +40,7 @@ class SkyFitUserAccountSettingsViewModel : ViewModel() {
             weight = 75,
             weightUnit = "kg",
             bodyType = BodyType.NOT_DEFINED,
-            profileTags = listOf("Kardiyo", "Kas Gelişimi", "Fonksiyonel Antrenman"),
+            profileTags = listOf(FitnessTagType.MUSCLE_GROWTH, FitnessTagType.ENDURANCE),
             profileImageUrl = null,
             backgroundImageUrl = null
         )
@@ -86,7 +87,7 @@ class SkyFitUserAccountSettingsViewModel : ViewModel() {
         updateState { copy(bodyType = value) }
     }
 
-    fun updateTags(tags: List<String>) {
+    fun updateTags(tags: List<FitnessTagType>) {
         updateState { copy(profileTags = tags) }
     }
 

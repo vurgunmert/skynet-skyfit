@@ -34,7 +34,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
-import com.vurgun.skyfit.core.domain.models.BodyType
+import com.vurgun.skyfit.core.domain.model.BodyType
+import com.vurgun.skyfit.core.domain.model.FitnessTagType
 import com.vurgun.skyfit.feature_onboarding.ui.WeightPicker
 import com.vurgun.skyfit.feature_onboarding.ui.WeightUnitPicker
 import com.vurgun.skyfit.core.ui.resources.SkyFitColor
@@ -78,7 +79,7 @@ fun WeightPickerDialog(
                         onWeightSelected = { selectedWeight = it }
                     )
 
-                    WeightUnitPicker(
+                    StringUnitPicker(
                         selectedWeightUnit = selectedWeightUnit,
                         onWeightUnitSelected = { selectedWeightUnit = it }
                     )
@@ -112,6 +113,22 @@ fun WeightPickerDialog(
             }
         }
     }
+}
+@Composable
+fun StringUnitPicker(
+    selectedWeightUnit: String = "kg",
+    onWeightUnitSelected: (String) -> Unit
+) {
+    val weightUnits = listOf("lb", "kg")
+
+    SkyFitWheelPickerComponent(
+        items = weightUnits,
+        selectedItem = selectedWeightUnit,
+        onItemSelected = onWeightUnitSelected,
+        itemText = { it },
+        visibleItemCount = 3,
+        modifier = Modifier.width(64.dp)
+    )
 }
 
 @Composable
@@ -148,7 +165,7 @@ fun HeightPickerDialog(
                         onWeightSelected = { selectedHeight = it }
                     )
 
-                    WeightUnitPicker(
+                    StringUnitPicker(
                         selectedWeightUnit = selectedHeightUnit,
                         onWeightUnitSelected = { selectedHeightUnit = it }
                     )
@@ -187,28 +204,23 @@ fun HeightPickerDialog(
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
 fun FitnessTagPickerDialog(
-    initialTags: List<String> = listOf(),
-    availableTags: List<String> = listOf(
-        "Kardiyo", "Kas Gelişimi", "Esneklik", "Fonksiyonel Antrenman", "HIIT", "Dayanıklılık",
-        "Vücut Geliştirme", "Sporcu Beslenmesi", "Protein Tüketimi", "Hidrasyon", "Egzersiz Programı",
-        "Metabolizma Hızı", "Postür Düzeltme", "Çekirdek Güçlendirme", "Mental Sağlık", "Fiziksel Form",
-        "Düşük Karbonhidrat", "Kas Onarımı", "Fonksiyonel Hareketler", "Dengeli Beslenme"
-    ),
+    initialTags: List<FitnessTagType> = listOf(),
+    availableTags: List<FitnessTagType> = FitnessTagType.getAllTags(),
     onDismiss: () -> Unit,
-    onTagsSelected: (List<String>) -> Unit
+    onTagsSelected: (List<FitnessTagType>) -> Unit
 ) {
     var selectedTags by remember { mutableStateOf(initialTags) }
     var unselectedTags by remember { mutableStateOf(availableTags - initialTags.toSet()) }
 
-    fun toggleTagSelection(tag: String) {
+    fun toggleTagSelection(tag: FitnessTagType) {
         if (selectedTags.contains(tag)) {
             selectedTags = selectedTags - tag
-            unselectedTags = (unselectedTags + tag).sorted()
+            unselectedTags = (unselectedTags + tag)
         } else {
             if (selectedTags.size >= 5) {
                 val removedTag = selectedTags.first()
                 selectedTags = selectedTags.drop(1) + tag
-                unselectedTags = (unselectedTags - tag + removedTag).sorted()
+                unselectedTags = (unselectedTags - tag + removedTag)
             } else {
                 selectedTags = selectedTags + tag
                 unselectedTags = unselectedTags - tag
@@ -242,7 +254,7 @@ fun FitnessTagPickerDialog(
                 ) {
                     selectedTags.forEach { tag ->
                         SkyFitAccountSettingsProfileTagItemComponent(
-                            value = tag,
+                            value = tag.label,
                             enabled = true,
                             showClose = false,
                             onClick = { toggleTagSelection(tag) }
@@ -262,7 +274,7 @@ fun FitnessTagPickerDialog(
                 ) {
                     unselectedTags.forEach { tag ->
                         SkyFitAccountSettingsProfileTagItemComponent(
-                            value = tag,
+                            value = tag.label,
                             enabled = true,
                             onClick = { toggleTagSelection(tag) }
                         )

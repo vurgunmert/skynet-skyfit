@@ -1,6 +1,6 @@
 package com.vurgun.skyfit.feature_navigation
 
-import com.vurgun.skyfit.core.domain.models.UserType
+import com.vurgun.skyfit.core.domain.model.UserType
 import moe.tlaster.precompose.navigation.NavOptions
 import moe.tlaster.precompose.navigation.Navigator
 import moe.tlaster.precompose.navigation.PopUpTo
@@ -9,6 +9,16 @@ fun Navigator.jumpAndTakeover(from: NavigationRoute, to: NavigationRoute) {
     navigate(
         route = to.route,
         options = NavOptions(popUpTo = PopUpTo(from.route, inclusive = true), launchSingleTop = true)
+    )
+}
+
+fun Navigator.jumpAndTakeover(to: NavigationRoute) {
+    navigate(
+        route = to.route,
+        options = NavOptions(
+            popUpTo = PopUpTo("", inclusive = true), // 🔥 Clears entire stack
+            launchSingleTop = true
+        )
     )
 }
 

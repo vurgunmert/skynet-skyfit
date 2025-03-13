@@ -12,23 +12,17 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.derivedStateOf
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
+import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import com.vurgun.skyfit.core.domain.model.GenderType
 import com.vurgun.skyfit.core.ui.components.SkyFitScaffold
 import com.vurgun.skyfit.core.ui.components.SkyFitSelectableCardComponent
 import com.vurgun.skyfit.core.ui.resources.SkyFitTypography
-import com.vurgun.skyfit.feature_onboarding.ui.viewmodel.BaseOnboardingViewModel
-import com.vurgun.skyfit.feature_onboarding.ui.viewmodel.TrainerOnboardingViewModel
-import com.vurgun.skyfit.feature_onboarding.ui.viewmodel.UserOnboardingViewModel
 import com.vurgun.skyfit.feature_navigation.NavigationRoute
 import com.vurgun.skyfit.feature_navigation.jumpAndStay
-import com.vurgun.skyfit.feature_navigation.jumpAndTakeover
+import com.vurgun.skyfit.feature_onboarding.ui.viewmodel.OnboardingViewModel
 import moe.tlaster.precompose.navigation.Navigator
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
@@ -42,20 +36,10 @@ import skyfit.composeapp.generated.resources.onboarding_select_gender_title
 
 @Composable
 fun MobileOnboardingGenderSelectionScreen(
-    viewModel: BaseOnboardingViewModel,
+    viewModel: OnboardingViewModel,
     navigator: Navigator
 ) {
-    val cachedGender by remember(viewModel) {
-        derivedStateOf {
-            when (viewModel) {
-                is UserOnboardingViewModel -> viewModel.state.value.gender
-                is TrainerOnboardingViewModel -> viewModel.state.value.gender
-                else -> "male"
-            }
-        }
-    }
-
-    var selectedGender by remember { mutableStateOf(cachedGender ?: "male") }
+    val selectedGender = viewModel.state.collectAsState().value.gender ?: GenderType.MALE
 
     SkyFitScaffold {
         Column(
@@ -71,44 +55,19 @@ fun MobileOnboardingGenderSelectionScreen(
             Spacer(Modifier.height(16.dp))
             OnboardingGenderSelectorComponent(
                 selectedGender = selectedGender,
-                onSelected = { selectedGender = it }
+                onSelected = viewModel::updateGender
             )
             Spacer(Modifier.weight(1f))
-            OnboardingActionGroupComponent(
-                onClickContinue = {
-                    when (viewModel) {
-                        is UserOnboardingViewModel -> viewModel.updateGender(selectedGender)
-                        is TrainerOnboardingViewModel -> viewModel.updateGender(selectedGender)
-                    }
-                    navigator.jumpAndStay(NavigationRoute.OnboardingWeightSelection)
-                },
-                onClickSkip = {
-                    when (viewModel) {
-                        is UserOnboardingViewModel -> navigator.jumpAndTakeover(
-                            NavigationRoute.OnboardingGenderSelection,
-                            NavigationRoute.OnboardingCompleted
-                        )
-
-                        is TrainerOnboardingViewModel -> navigator.jumpAndTakeover(
-                            NavigationRoute.OnboardingGenderSelection,
-                            NavigationRoute.OnboardingTrainerDetails
-                        )
-                    }
-                }
-            )
-            Spacer(Modifier.height(30.dp))
+            OnboardingActionGroupComponent { navigator.jumpAndStay(NavigationRoute.OnboardingWeightSelection) }
         }
     }
 }
 
 @Composable
 fun OnboardingGenderSelectorComponent(
-    selectedGender: String,
-    onSelected: (String) -> Unit
+    selectedGender: GenderType,
+    onSelected: (GenderType) -> Unit
 ) {
-    val genderMale = "male"
-    val genderFemale = "female"
-
     Row(
         modifier = Modifier.fillMaxWidth(),
         verticalAlignment = Alignment.CenterVertically,
@@ -119,9 +78,9 @@ fun OnboardingGenderSelectorComponent(
             verticalArrangement = Arrangement.spacedBy(8.dp)
         ) {
             SkyFitSelectableCardComponent(
-                isSelected = selectedGender == genderMale,
+                isSelected = selectedGender == GenderType.MALE,
                 modifier = Modifier.size(112.dp, 104.dp),
-                onClick = { onSelected(genderMale) }) {
+                onClick = { onSelected(GenderType.MALE) }) {
                 Image(
                     painter = painterResource(Res.drawable.ic_gender_male),
                     contentDescription = null,
@@ -141,9 +100,9 @@ fun OnboardingGenderSelectorComponent(
             verticalArrangement = Arrangement.spacedBy(8.dp)
         ) {
             SkyFitSelectableCardComponent(
-                isSelected = selectedGender == genderFemale,
+                isSelected = selectedGender == GenderType.FEMALE,
                 modifier = Modifier.size(112.dp, 104.dp),
-                onClick = { onSelected(genderFemale) }) {
+                onClick = { onSelected(GenderType.FEMALE) }) {
                 Image(
                     painter = painterResource(Res.drawable.ic_gender_female), // Replace with your image resource
                     contentDescription = null,

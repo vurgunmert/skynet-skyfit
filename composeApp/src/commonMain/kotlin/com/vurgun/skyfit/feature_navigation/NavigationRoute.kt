@@ -1,10 +1,10 @@
 package com.vurgun.skyfit.feature_navigation
 
-import com.vurgun.skyfit.core.domain.models.UserType
+import com.vurgun.skyfit.core.domain.model.UserType
 
 sealed class NavigationRoute(
     private val baseRoute: String,
-    val roles: List<UserType> = listOf(UserType.USER, UserType.TRAINER, UserType.FACILITY_MANAGER),
+    val roles: List<UserType> = UserType.getAllUserTypes(),
     vararg params: Param
 ) {
     val route: String = if (params.isNotEmpty()) {
@@ -14,9 +14,9 @@ sealed class NavigationRoute(
 
     // Enum for route parameters
     enum class Param(val key: String) {
-        USER_ID("userId"),
+        User_ID("userId"),
         FACILITY_ID("facilityId"),
-        TRAINER_ID("trainerId"),
+        Trainer_ID("trainerId"),
         CLASS_ID("classId"),
         BOOKING_PATH("bookingPath"),
         EXERCISE_ID("exerciseId"),
@@ -29,16 +29,16 @@ sealed class NavigationRoute(
     }
 
     // Auth
-    data object Maintenance : NavigationRoute("maintenance", roles = listOf(UserType.GUEST))
-    data object Splash : NavigationRoute("splash", roles = listOf(UserType.GUEST))
-    data object Login : NavigationRoute("login", roles = listOf(UserType.GUEST))
-    data object CreatePassword : NavigationRoute("create_password", roles = listOf(UserType.GUEST))
-    data object LoginOTPVerification : NavigationRoute("login_otp_verification", roles = listOf(UserType.GUEST))
-    data object ForgotPassword : NavigationRoute("forgot_password", roles = listOf(UserType.GUEST))
-    data object ForgotPasswordCode : NavigationRoute("forgot_password_code", roles = listOf(UserType.GUEST))
-    data object ForgotPasswordReset : NavigationRoute("forgot_password_reset", roles = listOf(UserType.GUEST))
-    data object PrivacyPolicy : NavigationRoute("privacy_policy", roles = listOf(UserType.GUEST))
-    data object TermsAndConditions : NavigationRoute("terms_and_conditions", roles = listOf(UserType.GUEST))
+    data object Maintenance : NavigationRoute("maintenance", roles = listOf(UserType.Guest))
+    data object Splash : NavigationRoute("splash", roles = listOf(UserType.Guest))
+    data object Login : NavigationRoute("login", roles = listOf(UserType.Guest))
+    data object CreatePassword : NavigationRoute("create_password", roles = listOf(UserType.Guest))
+    data object LoginOTPVerification : NavigationRoute("login_otp_verification", roles = listOf(UserType.Guest))
+    data object ForgotPassword : NavigationRoute("forgot_password", roles = listOf(UserType.Guest))
+    data object ForgotPasswordCode : NavigationRoute("forgot_password_code", roles = listOf(UserType.Guest))
+    data object ForgotPasswordReset : NavigationRoute("forgot_password_reset", roles = listOf(UserType.Guest))
+    data object PrivacyPolicy : NavigationRoute("privacy_policy", roles = listOf(UserType.Guest))
+    data object TermsAndConditions : NavigationRoute("terms_and_conditions", roles = listOf(UserType.Guest))
 
     //Onboarding
     data object Onboarding : NavigationRoute("onboarding")
@@ -83,11 +83,11 @@ sealed class NavigationRoute(
 
     // - Exercises
     data object ExerciseDetail :
-        NavigationRoute("user/exercises/detail/{exerciseId}", roles = listOf(UserType.USER), Param.EXERCISE_ID)
+        NavigationRoute("user/exercises/detail/{exerciseId}", roles = listOf(UserType.User), Param.EXERCISE_ID)
     data object ExerciseInProgress :
-        NavigationRoute("user/exercises/in_action/{exerciseId}", roles = listOf(UserType.USER), Param.EXERCISE_ID)
+        NavigationRoute("user/exercises/in_action/{exerciseId}", roles = listOf(UserType.User), Param.EXERCISE_ID)
     data object ExerciseCompleted :
-        NavigationRoute("user/exercises/in_action/completed/{exerciseId}", roles = listOf(UserType.USER), Param.EXERCISE_ID)
+        NavigationRoute("user/exercises/in_action/completed/{exerciseId}", roles = listOf(UserType.User), Param.EXERCISE_ID)
 
     // - Calendar
     data object UserActivityCalendar : NavigationRoute("user_activity_calendar")
@@ -99,43 +99,43 @@ sealed class NavigationRoute(
     // - Appointments
     data object UserAppointments : NavigationRoute("user_appointments")
     data object UserAppointmentDetail :
-        NavigationRoute("user_appointments/detail/{bookingPath}", roles = listOf(UserType.USER), Param.BOOKING_PATH)
+        NavigationRoute("user_appointments/detail/{bookingPath}", roles = listOf(UserType.User), Param.BOOKING_PATH)
 
     // - Nutrition
-    data object UserMealDetail : NavigationRoute("user/nutrition/meals/detail", roles = listOf(UserType.USER))
-    data object UserMealDetailAdd : NavigationRoute("user/nutrition/meals/detail/add", roles = listOf(UserType.USER))
-    data object UserMealDetailAddPhoto : NavigationRoute("user/nutrition/meals/detail/add_photo", roles = listOf(UserType.USER))
+    data object UserMealDetail : NavigationRoute("user/nutrition/meals/detail", roles = listOf(UserType.User))
+    data object UserMealDetailAdd : NavigationRoute("user/nutrition/meals/detail/add", roles = listOf(UserType.User))
+    data object UserMealDetailAddPhoto : NavigationRoute("user/nutrition/meals/detail/add_photo", roles = listOf(UserType.User))
 
     // - Notifications
-    data object UserNotifications : NavigationRoute("notifications", roles = listOf(UserType.USER))
+    data object UserNotifications : NavigationRoute("notifications", roles = listOf(UserType.User))
 
     // - Messages
-    data object UserChatBot : NavigationRoute("user/chat_bot", roles = listOf(UserType.USER))
-    data object UserToBotChat : NavigationRoute("user/conversations/toBot", roles = listOf(UserType.USER))
-    data object UserConversations : NavigationRoute("user/conversations", roles = listOf(UserType.USER))
-    data object UserToUserChat : NavigationRoute("user/conversations/toUser", roles = listOf(UserType.USER))
-    data object UserToTrainerChat : NavigationRoute("user/conversations/toTrainer", roles = listOf(UserType.USER))
-    data object UserToGroupChat : NavigationRoute("user/conversations/toGroup", roles = listOf(UserType.USER))
-    data object UserToFacilityChat : NavigationRoute("user/conversations/toFacility", roles = listOf(UserType.USER))
+    data object UserChatBot : NavigationRoute("user/chat_bot", roles = listOf(UserType.User))
+    data object UserToBotChat : NavigationRoute("user/conversations/toBot", roles = listOf(UserType.User))
+    data object UserConversations : NavigationRoute("user/conversations", roles = listOf(UserType.User))
+    data object UserToUserChat : NavigationRoute("user/conversations/toUser", roles = listOf(UserType.User))
+    data object UserToTrainerChat : NavigationRoute("user/conversations/toTrainer", roles = listOf(UserType.User))
+    data object UserToGroupChat : NavigationRoute("user/conversations/toGroup", roles = listOf(UserType.User))
+    data object UserToFacilityChat : NavigationRoute("user/conversations/toFacility", roles = listOf(UserType.User))
 
     // - Profile
-    data object UserProfile : NavigationRoute("profile/user/owner", roles = listOf(UserType.USER))
-    data object UserProfileVisited : NavigationRoute("profile/user/visited", roles = listOf(UserType.USER))
-    data object UserPhotoDiary : NavigationRoute("profile/user/owner/photo_diary", roles = listOf(UserType.USER))
-    data object UserMeasurements : NavigationRoute("profile/user/owner/measurements", roles = listOf(UserType.USER))
-    data object UserBodyAnalysis : NavigationRoute("profile/user/owner/body_analysis", roles = listOf(UserType.USER))
+    data object UserProfile : NavigationRoute("profile/user/owner", roles = listOf(UserType.User))
+    data object UserProfileVisited : NavigationRoute("profile/user/visited", roles = listOf(UserType.User))
+    data object UserPhotoDiary : NavigationRoute("profile/user/owner/photo_diary", roles = listOf(UserType.User))
+    data object UserMeasurements : NavigationRoute("profile/user/owner/measurements", roles = listOf(UserType.User))
+    data object UserBodyAnalysis : NavigationRoute("profile/user/owner/body_analysis", roles = listOf(UserType.User))
 
     // - Settings
-    data object UserSettings : NavigationRoute("user/settings", roles = listOf(UserType.USER))
-    data object UserSettingsAccount : NavigationRoute("user/settings/account", roles = listOf(UserType.USER))
-    data object UserSettingsChangePassword : NavigationRoute("user/settings/change_password", roles = listOf(UserType.USER))
+    data object UserSettings : NavigationRoute("user/settings", roles = listOf(UserType.User))
+    data object UserSettingsAccount : NavigationRoute("user/settings/account", roles = listOf(UserType.User))
+    data object UserSettingsChangePassword : NavigationRoute("user/settings/change_password", roles = listOf(UserType.User))
     data object UserSettingsNotifications :
-        NavigationRoute("user/settings/notifications", roles = listOf(UserType.USER))
+        NavigationRoute("user/settings/notifications", roles = listOf(UserType.User))
 
     data object UserSettingsPaymentHistory :
-        NavigationRoute("user/settings/payment_history", roles = listOf(UserType.USER))
+        NavigationRoute("user/settings/payment_history", roles = listOf(UserType.User))
 
-    data object UserSettingsHelp : NavigationRoute("user/settings/help", roles = listOf(UserType.USER))
+    data object UserSettingsHelp : NavigationRoute("user/settings/help", roles = listOf(UserType.User))
 
     //endregion User Screens
 
@@ -144,103 +144,103 @@ sealed class NavigationRoute(
     data object TrainerAppointments : NavigationRoute("trainer/appointments")
     data object TrainerAppointmentDetail : NavigationRoute(
         "trainer/appointments/detail/{bookingPath}",
-        roles = listOf(UserType.TRAINER),
+        roles = listOf(UserType.Trainer),
         Param.BOOKING_PATH
     )
 
     // - Profile
-    data object TrainerProfile : NavigationRoute("profile/trainer/owner", roles = listOf(UserType.TRAINER))
+    data object TrainerProfile : NavigationRoute("profile/trainer/owner", roles = listOf(UserType.Trainer))
     data object TrainerPhotoDiary :
-        NavigationRoute("profile/trainer/owner/photo_diary", roles = listOf(UserType.TRAINER))
+        NavigationRoute("profile/trainer/owner/photo_diary", roles = listOf(UserType.Trainer))
 
     data object TrainerProfileVisited :
-        NavigationRoute("profile/trainer/visited/{trainerId}", roles = listOf(UserType.TRAINER), Param.TRAINER_ID)
+        NavigationRoute("profile/trainer/visited/{trainerId}", roles = listOf(UserType.Trainer), Param.Trainer_ID)
 
     data object TrainerCalendarVisited : NavigationRoute(
         "profile/trainer/calendar/visited/{trainerId}",
-        roles = listOf(UserType.USER),
-        Param.TRAINER_ID
+        roles = listOf(UserType.User),
+        Param.Trainer_ID
     )
 
     // - Settings
-    data object TrainerSettings : NavigationRoute("trainer/settings", roles = listOf(UserType.TRAINER))
-    data object TrainerSettingsAccount : NavigationRoute("trainer/settings/account", roles = listOf(UserType.TRAINER))
+    data object TrainerSettings : NavigationRoute("trainer/settings", roles = listOf(UserType.Trainer))
+    data object TrainerSettingsAccount : NavigationRoute("trainer/settings/account", roles = listOf(UserType.Trainer))
     data object TrainerSettingsNotifications :
-        NavigationRoute("trainer/settings/notifications", roles = listOf(UserType.TRAINER))
+        NavigationRoute("trainer/settings/notifications", roles = listOf(UserType.Trainer))
 
     data object TrainerSettingsPaymentHistory :
-        NavigationRoute("trainer/settings/payment_history", roles = listOf(UserType.TRAINER))
+        NavigationRoute("trainer/settings/payment_history", roles = listOf(UserType.Trainer))
 
-    data object TrainerSettingsHelp : NavigationRoute("trainer/settings/help", roles = listOf(UserType.TRAINER))
+    data object TrainerSettingsHelp : NavigationRoute("trainer/settings/help", roles = listOf(UserType.Trainer))
     //endregion Trainer Screens
 
     //region Facility Screens
     // - Profile
-    data object FacilityProfile : NavigationRoute("profile/facility/owner", roles = listOf(UserType.FACILITY_MANAGER))
+    data object FacilityProfile : NavigationRoute("profile/facility/owner", roles = listOf(UserType.Facility))
     data object FacilityPhotoGallery :
-        NavigationRoute("profile/facility/owner/photo_diary", roles = listOf(UserType.FACILITY_MANAGER))
+        NavigationRoute("profile/facility/owner/photo_diary", roles = listOf(UserType.Facility))
 
     data object FacilityProfileVisited : NavigationRoute(
         "profile/facility/owner/visited/{facilityId}",
-        roles = listOf(UserType.USER),
+        roles = listOf(UserType.User),
         Param.FACILITY_ID
     )
 
     // - Calendar
     data object FacilityCalendar :
-        NavigationRoute("facility/activity_calendar/owner", roles = listOf(UserType.FACILITY_MANAGER))
+        NavigationRoute("facility/activity_calendar/owner", roles = listOf(UserType.Facility))
 
     data object FacilityCalendarVisited : NavigationRoute(
-        "facility/activity_calendar/GUEST/{facilityId}",
-        roles = listOf(UserType.USER),
+        "facility/activity_calendar/Guest/{facilityId}",
+        roles = listOf(UserType.User),
         Param.FACILITY_ID
     )
 
     // - Appointments
     data object FacilityAppointmentDetail : NavigationRoute(
         "facility_appointments/detail/{bookingPath}",
-        roles = listOf(UserType.FACILITY_MANAGER),
+        roles = listOf(UserType.Facility),
         Param.BOOKING_PATH
     )
 
     // - Classes
-    data object FacilityManageLessons : NavigationRoute("facility_classes/owner", roles = listOf(UserType.FACILITY_MANAGER))
-    data object FacilityClassesVisited : NavigationRoute("facility_classes/GUEST", roles = listOf(UserType.USER))
+    data object FacilityManageLessons : NavigationRoute("facility_classes/owner", roles = listOf(UserType.Facility))
+    data object FacilityClassesVisited : NavigationRoute("facility_classes/Guest", roles = listOf(UserType.User))
 
     data object FacilityClassEdit :
-        NavigationRoute("facility_class/edit/{classId}", roles = listOf(UserType.FACILITY_MANAGER), Param.CLASS_ID)
+        NavigationRoute("facility_class/edit/{classId}", roles = listOf(UserType.Facility), Param.CLASS_ID)
 
     data object FacilityClassEditCompleted :
-        NavigationRoute("facility_class/edit/completed/{classId}", roles = listOf(UserType.FACILITY_MANAGER), Param.CLASS_ID)
+        NavigationRoute("facility_class/edit/completed/{classId}", roles = listOf(UserType.Facility), Param.CLASS_ID)
 
     data object FacilityClassDetail : NavigationRoute(
         "facility_class/detail/owner/{classId}",
-        roles = listOf(UserType.FACILITY_MANAGER),
+        roles = listOf(UserType.Facility),
         Param.CLASS_ID
     )
 
     data object FacilityClassDetailVisited :
-        NavigationRoute("facility_class/detail/visited/{classId}", roles = listOf(UserType.USER), Param.CLASS_ID)
+        NavigationRoute("facility_class/detail/visited/{classId}", roles = listOf(UserType.User), Param.CLASS_ID)
 
     // - Settings
-    data object FacilitySettings : NavigationRoute("facility/settings", roles = listOf(UserType.FACILITY_MANAGER))
-    data object FacilitySettingsAccount : NavigationRoute("facility/settings/account", roles = listOf(UserType.FACILITY_MANAGER))
+    data object FacilitySettings : NavigationRoute("facility/settings", roles = listOf(UserType.Facility))
+    data object FacilitySettingsAccount : NavigationRoute("facility/settings/account", roles = listOf(UserType.Facility))
     data object FacilitySettingsSearchMembers :
-        NavigationRoute("facility/settings/members/search", roles = listOf(UserType.FACILITY_MANAGER))
+        NavigationRoute("facility/settings/members/search", roles = listOf(UserType.Facility))
     data object FacilitySettingsAddMembers :
-        NavigationRoute("facility/settings/members/add", roles = listOf(UserType.FACILITY_MANAGER))
+        NavigationRoute("facility/settings/members/add", roles = listOf(UserType.Facility))
 
     data object FacilitySettingsTrainers :
-        NavigationRoute("facility/settings/trainers", roles = listOf(UserType.FACILITY_MANAGER))
+        NavigationRoute("facility/settings/trainers", roles = listOf(UserType.Facility))
 
     data object FacilitySettingsPaymentHistory :
-        NavigationRoute("facility/settings/payment_history", roles = listOf(UserType.FACILITY_MANAGER))
+        NavigationRoute("facility/settings/payment_history", roles = listOf(UserType.Facility))
 
     data object FacilitySettingsNotifications :
-        NavigationRoute("facility/settings/notifications", roles = listOf(UserType.FACILITY_MANAGER))
+        NavigationRoute("facility/settings/notifications", roles = listOf(UserType.Facility))
 
     data object FacilitySettingsHelp :
-        NavigationRoute("facility/settings/help", roles = listOf(UserType.FACILITY_MANAGER))
+        NavigationRoute("facility/settings/help", roles = listOf(UserType.Facility))
 
     //endregion Facility Screens
 }

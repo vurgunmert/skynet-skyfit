@@ -54,6 +54,11 @@
     <string name="goal_to_lose_weight">Kilo Vermek</string>
     <string name="goal_to_be_fit">Fit Olmak</string>
     <string name="goal_to_gain_muscle">Kas Yapmak</string>
+    <string name="biography_hint">Whether you're a beginner or looking to advance, My balanced approach will guide you every step of the way. 🏃🏽‍♂️</string>
+    <string name="first_name_mandatory">Ad *</string>
+    <string name="last_name_mandatory">Soyad *</string>
+    <string name="first_name_hint">Adınızı girin️</string>
+    <string name="last_name_hint">Soyadınızı girin️</string>
 
     <string name="user">Kullanıcı</string>
     <string name="trainer">Antrenör</string>

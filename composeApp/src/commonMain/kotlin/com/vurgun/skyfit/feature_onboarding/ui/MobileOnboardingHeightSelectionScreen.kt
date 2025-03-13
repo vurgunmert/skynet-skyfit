@@ -1,29 +1,27 @@
 package com.vurgun.skyfit.feature_onboarding.ui
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.derivedStateOf
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
+import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import com.vurgun.skyfit.core.domain.model.HeightUnitType
 import com.vurgun.skyfit.core.ui.components.SkyFitScaffold
 import com.vurgun.skyfit.core.ui.components.SkyFitWheelPickerComponent
-import com.vurgun.skyfit.feature_onboarding.ui.viewmodel.BaseOnboardingViewModel
-import com.vurgun.skyfit.feature_onboarding.ui.viewmodel.TrainerOnboardingViewModel
-import com.vurgun.skyfit.feature_onboarding.ui.viewmodel.UserOnboardingViewModel
+import com.vurgun.skyfit.core.ui.resources.SkyFitColor
 import com.vurgun.skyfit.feature_navigation.NavigationRoute
 import com.vurgun.skyfit.feature_navigation.jumpAndStay
-import com.vurgun.skyfit.feature_navigation.jumpAndTakeover
+import com.vurgun.skyfit.feature_onboarding.ui.viewmodel.OnboardingViewModel
 import moe.tlaster.precompose.navigation.Navigator
 import org.jetbrains.compose.resources.stringResource
 import skyfit.composeapp.generated.resources.Res
@@ -32,31 +30,11 @@ import skyfit.composeapp.generated.resources.onboarding_select_height_title
 
 @Composable
 fun MobileOnboardingHeightSelectionScreen(
-    viewModel: BaseOnboardingViewModel,
+    viewModel: OnboardingViewModel,
     navigator: Navigator
 ) {
-    val cachedHeight by remember(viewModel) {
-        derivedStateOf {
-            when (viewModel) {
-                is UserOnboardingViewModel -> viewModel.state.value.height
-                is TrainerOnboardingViewModel -> viewModel.state.value.height
-                else -> 170
-            }
-        }
-    }
-
-    val cachedHeightUnit by remember(viewModel) {
-        derivedStateOf {
-            when (viewModel) {
-                is UserOnboardingViewModel -> viewModel.state.value.heightUnit
-                is TrainerOnboardingViewModel -> viewModel.state.value.heightUnit
-                else -> "cm"
-            }
-        }
-    }
-
-    var selectedHeight by remember { mutableStateOf(cachedHeight ?: 170) }
-    var selectedHeightUnit by remember { mutableStateOf(cachedHeightUnit ?: "cm") }
+    val selectedHeight = viewModel.state.collectAsState().value.height ?: 170
+    val selectedHeightUnit = viewModel.state.collectAsState().value.heightUnit
 
     SkyFitScaffold {
         Column(
@@ -70,50 +48,35 @@ fun MobileOnboardingHeightSelectionScreen(
                 subtitle = stringResource(Res.string.onboarding_select_height_message)
             )
             Spacer(Modifier.height(16.dp))
-            Row(
-                verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.Center
-            ) {
-                HeightPicker(
-                    selectedHeight = selectedHeight,
-                    onHeightSelected = { selectedHeight = it })
 
-                HeightUnitPicker(
-                    selectedHeightUnit = selectedHeightUnit,
-                    onHeightUnitSelected = { selectedHeightUnit = it }
+            Box {
+                Row(
+                    modifier = Modifier.align(Alignment.Center),
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.Center
+                ) {
+                    HeightPicker(
+                        selectedHeight = selectedHeight,
+                        onHeightSelected = viewModel::updateHeight
+                    )
+                    Spacer(Modifier.width(16.dp))
+                    HeightUnitPicker(
+                        selectedHeightUnit = selectedHeightUnit,
+                        onHeightUnitSelected = viewModel::updateHeightUnit
+                    )
+                }
+
+                Box(
+                    Modifier
+                        .align(Alignment.Center)
+                        .width(213.dp)
+                        .height(43.dp)
+                        .background(color = SkyFitColor.background.fillTransparentSecondary, shape = RoundedCornerShape(size = 16.dp))
                 )
             }
+
             Spacer(Modifier.weight(1f))
-            OnboardingActionGroupComponent(
-                onClickContinue = {
-                    when (viewModel) {
-                        is UserOnboardingViewModel -> {
-                            viewModel.updateHeight(selectedHeight)
-                            viewModel.updateHeightUnit(selectedHeightUnit)
-                        }
-
-                        is TrainerOnboardingViewModel -> {
-                            viewModel.updateHeight(selectedHeight)
-                            viewModel.updateHeightUnit(selectedHeightUnit)
-                        }
-                    }
-                    navigator.jumpAndStay(NavigationRoute.OnboardingBodyTypeSelection)
-                },
-                onClickSkip = {
-                    when (viewModel) {
-                        is UserOnboardingViewModel -> navigator.jumpAndTakeover(
-                            NavigationRoute.OnboardingHeightSelection,
-                            NavigationRoute.OnboardingCompleted
-                        )
-
-                        is TrainerOnboardingViewModel -> navigator.jumpAndTakeover(
-                            NavigationRoute.OnboardingHeightSelection,
-                            NavigationRoute.OnboardingTrainerDetails
-                        )
-                    }
-                }
-            )
-            Spacer(Modifier.height(48.dp))
+            OnboardingActionGroupComponent { navigator.jumpAndStay(NavigationRoute.OnboardingBodyTypeSelection) }
         }
     }
 }
@@ -133,23 +96,23 @@ private fun HeightPicker(
         onItemSelected = onHeightSelected,
         itemText = { "$it" },
         visibleItemCount = 3,
-        modifier = Modifier.width(112.dp)
+        modifier = Modifier.width(36.dp)
     )
 }
 
 @Composable
 private fun HeightUnitPicker(
-    selectedHeightUnit: String = "cm",
-    onHeightUnitSelected: (String) -> Unit
+    selectedHeightUnit: HeightUnitType,
+    onHeightUnitSelected: (HeightUnitType) -> Unit
 ) {
-    val weightUnits = listOf("ft", "cm")
+    val units = HeightUnitType.getAllUnits()
 
     SkyFitWheelPickerComponent(
-        items = weightUnits,
+        items = units,
         selectedItem = selectedHeightUnit,
         onItemSelected = onHeightUnitSelected,
-        itemText = { it },
+        itemText = { it.label },
         visibleItemCount = 3,
-        modifier = Modifier.width(64.dp)
+        modifier = Modifier.width(36.dp)
     )
 }

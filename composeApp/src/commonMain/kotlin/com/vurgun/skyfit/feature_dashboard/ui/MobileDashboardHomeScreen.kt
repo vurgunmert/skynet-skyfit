@@ -1,19 +1,18 @@
 package com.vurgun.skyfit.feature_dashboard.ui
 
 import androidx.compose.runtime.Composable
-import com.vurgun.skyfit.core.domain.models.UserType
+import com.vurgun.skyfit.core.domain.model.UserType
 import moe.tlaster.precompose.navigation.Navigator
 
 //TODO: USER ROLE MANAGEMENT
-var unmanaged_role = UserType.USER
+var unmanaged_role: UserType = UserType.User
 
 @Composable
 fun MobileDashboardHomeScreen(rootNavigator: Navigator) {
     when (unmanaged_role) {
-        UserType.GUEST -> Unit
-        UserType.ADMIN -> Unit
-        UserType.USER -> MobileUserHomeScreen(rootNavigator)
-        UserType.TRAINER -> MobileTrainerHomeScreen(rootNavigator)
-        UserType.FACILITY_MANAGER -> MobileFacilityHomeScreen(rootNavigator)
+        is UserType.Guest -> Unit
+        is UserType.User -> MobileUserHomeScreen(rootNavigator)
+        is UserType.Trainer -> MobileTrainerHomeScreen(rootNavigator)
+        is UserType.Facility -> MobileFacilityHomeScreen(rootNavigator)
     }
 }

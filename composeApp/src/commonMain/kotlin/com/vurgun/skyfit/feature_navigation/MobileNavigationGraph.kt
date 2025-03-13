@@ -94,7 +94,7 @@ fun MobileNavigationGraph() {
 
     NavHost(
         navigator = rootNavigator,
-        initialRoute = NavigationRoute.CreatePassword.route
+        initialRoute = NavigationRoute.Onboarding.route
     ) {
         legalNavGraph(rootNavigator)
         authNavGraph(rootNavigator)

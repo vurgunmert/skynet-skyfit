@@ -10,3 +10,11 @@ fun formatPhoneNumber(phoneNumber: String): String {
         phoneNumber // Return as is if format is unexpected
     }
 }
+
+fun String.toSlug(): String {
+    return this.lowercase()
+        .trim() // Remove leading/trailing spaces
+        .replace(Regex("[^a-z0-9\\s-]"), "") // Remove special characters
+        .replace(Regex("\\s+"), "-") // Replace spaces with hyphens
+        .replace(Regex("-+"), "-") // Remove multiple consecutive hyphens
+}

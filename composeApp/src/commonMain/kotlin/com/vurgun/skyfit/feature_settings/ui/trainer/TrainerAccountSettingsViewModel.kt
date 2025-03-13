@@ -1,6 +1,7 @@
 package com.vurgun.skyfit.feature_settings.ui.trainer
 
 import androidx.lifecycle.ViewModel
+import com.vurgun.skyfit.core.domain.model.FitnessTagType
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.update
@@ -12,7 +13,7 @@ data class TrainerAccountState(
     val biography: String? = null,
     val profileImageUrl: String? = null,
     val backgroundImageUrl: String? = null,
-    val profileTags: List<String> = emptyList(),
+    val profileTags: List<FitnessTagType> = emptyList(),
     val isUpdated: Boolean = false
 )
 
@@ -30,7 +31,7 @@ class TrainerAccountSettingsViewModel : ViewModel() {
             email = "maxine@gmail.com",
             biography = "Whether you're a beginner or looking to advance, My balanced approach will guide you every step of the way. \uD83C\uDFC3\uD83C\uDFFD\u200D♂\uFE0F\n" +
                     "@ironstudio",
-            profileTags = listOf("Kardiyo", "Kas Gelişimi", "Fonksiyonel Antrenman"),
+            profileTags = listOf(FitnessTagType.CARDIO, FitnessTagType.FLEXIBILITY),
             profileImageUrl = null,
             backgroundImageUrl = null
         )
@@ -61,7 +62,7 @@ class TrainerAccountSettingsViewModel : ViewModel() {
         updateState { copy(biography = value) }
     }
 
-    fun updateTags(tags: List<String>) {
+    fun updateTags(tags: List<FitnessTagType>) {
         updateState { copy(profileTags = tags) }
     }
 

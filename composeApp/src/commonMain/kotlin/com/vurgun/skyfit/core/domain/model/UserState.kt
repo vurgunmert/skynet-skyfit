@@ -1,4 +1,4 @@
-package com.vurgun.skyfit.core.domain.models
+package com.vurgun.skyfit.core.domain.model
 
 enum class UserState {
     UNKNOWN,
