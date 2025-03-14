@@ -19,7 +19,7 @@ sealed class LoginViewEvent {
     data class ShowError(val message: String?) : LoginViewEvent()
 }
 
-class MobileLoginViewModel(
+class LoginViewModel(
     private val authRepository: AuthRepository
 ) : ViewModel() {
 
@@ -56,7 +56,7 @@ class MobileLoginViewModel(
         _isPasswordVisible.value = !_isPasswordVisible.value
     }
 
-    fun onLoginClicked() {
+    fun submitLogin() {
         if (_isLoading.value) return
 
         viewModelScope.launch {
@@ -64,9 +64,7 @@ class MobileLoginViewModel(
             try {
                 val event = when (val result = authRepository.login(_phoneNumber.value, _password.value)) {
                     is AuthLoginResult.Success -> LoginViewEvent.GoToDashboard
-                    is AuthLoginResult.AwaitingOTPRegister,
-                    is AuthLoginResult.AwaitingOTPLogin -> LoginViewEvent.GoToOTPVerification
-
+                    is AuthLoginResult.OTPVerificationRequired -> LoginViewEvent.GoToOTPVerification
                     is AuthLoginResult.Error -> LoginViewEvent.ShowError(result.message)
                 }
                 _uiEvents.emit(event)

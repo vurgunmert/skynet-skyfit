@@ -1,11 +1,14 @@
 package com.vurgun.skyfit.core.ui.components
 
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.widthIn
 import androidx.compose.material.Scaffold
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import com.vurgun.skyfit.core.ui.resources.SkyFitColor
 import com.vurgun.skyfit.core.ui.resources.SkyFitStyleGuide
@@ -30,20 +33,27 @@ fun SkyFitScaffold(
 
 @Composable
 fun SkyFitMobileScaffold(
-    modifier: Modifier = Modifier.fillMaxSize(),
+    modifier: Modifier = Modifier,
     topBar: @Composable () -> Unit = {},
     bottomBar: @Composable () -> Unit = {},
     content: @Composable (PaddingValues) -> Unit,
 ) {
+    Box(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(color = SkyFitColor.background.default),
+        contentAlignment = Alignment.TopCenter
+    ) {
+        Scaffold(
+            modifier = modifier
+                .widthIn(max = SkyFitStyleGuide.Mobile.maxWidth)
+                .fillMaxHeight(),
+            backgroundColor = SkyFitColor.background.default,
+            content = content,
+            topBar = topBar,
+            bottomBar = bottomBar
+        )
+    }
 
-    Scaffold(
-        modifier = modifier
-            .widthIn(max = SkyFitStyleGuide.Mobile.maxWidth)
-            .fillMaxHeight(),
-        backgroundColor = SkyFitColor.background.default,
-        content = content,
-        topBar = topBar,
-        bottomBar = bottomBar
-    )
 }
 

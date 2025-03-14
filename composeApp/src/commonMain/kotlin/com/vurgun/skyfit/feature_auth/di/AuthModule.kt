@@ -4,9 +4,12 @@ import androidx.lifecycle.SavedStateHandle
 import com.vurgun.skyfit.feature_auth.data.AuthRepositoryImpl
 import com.vurgun.skyfit.feature_auth.data.service.AuthApiService
 import com.vurgun.skyfit.feature_auth.domain.repositories.AuthRepository
-import com.vurgun.skyfit.feature_auth.ui.viewmodel.CreatePasswordScreenViewModel
+import com.vurgun.skyfit.feature_auth.ui.viewmodel.PasswordCreateViewModel
+import com.vurgun.skyfit.feature_auth.ui.viewmodel.ForgotPasswordVerifyOTPViewModel
+import com.vurgun.skyfit.feature_auth.ui.viewmodel.ForgotPasswordViewModel
 import com.vurgun.skyfit.feature_auth.ui.viewmodel.LoginOTPVerificationViewModel
-import com.vurgun.skyfit.feature_auth.ui.viewmodel.MobileLoginViewModel
+import com.vurgun.skyfit.feature_auth.ui.viewmodel.LoginViewModel
+import com.vurgun.skyfit.feature_auth.ui.viewmodel.PasswordResetViewModel
 import org.koin.dsl.module
 
 val authModule = module {
@@ -14,7 +17,10 @@ val authModule = module {
 
     single<AuthRepository> { AuthRepositoryImpl(get(), get(), get()) }
 
-    factory { MobileLoginViewModel(get()) }
-    factory { (handle: SavedStateHandle) -> CreatePasswordScreenViewModel(get(), handle) }
+    factory { LoginViewModel(get()) }
+    factory { ForgotPasswordViewModel(get()) }
+    factory { (handle: SavedStateHandle) -> PasswordCreateViewModel(get(), handle) }
+    factory { (handle: SavedStateHandle) -> PasswordResetViewModel(get(), handle) }
     factory { LoginOTPVerificationViewModel(get(), get()) }
+    factory { ForgotPasswordVerifyOTPViewModel(get(), get()) }
 }

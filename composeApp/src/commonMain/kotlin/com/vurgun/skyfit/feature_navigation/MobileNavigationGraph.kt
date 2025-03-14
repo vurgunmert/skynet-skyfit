@@ -5,11 +5,11 @@ import com.vurgun.skyfit.feature_appointments.ui.MobileUserAppointmentDetailScre
 import com.vurgun.skyfit.feature_appointments.ui.MobileUserAppointmentsScreen
 import com.vurgun.skyfit.feature_appointments.ui.trainer.MobileTrainerAppointmentDetailScreen
 import com.vurgun.skyfit.feature_appointments.ui.trainer.MobileTrainerAppointmentsScreen
-import com.vurgun.skyfit.feature_auth.ui.mobile.MobileForgotPasswordCodeScreen
+import com.vurgun.skyfit.feature_auth.ui.mobile.MobileForgotPasswordVerifyOTPScreen
 import com.vurgun.skyfit.feature_auth.ui.mobile.MobileForgotPasswordResetScreen
 import com.vurgun.skyfit.feature_auth.ui.mobile.MobileForgotPasswordScreen
 import com.vurgun.skyfit.feature_auth.ui.mobile.MobileLoginScreen
-import com.vurgun.skyfit.feature_auth.ui.mobile.MobileOTPVerificationScreen
+import com.vurgun.skyfit.feature_auth.ui.mobile.MobileLoginVerifyOTPScreen
 import com.vurgun.skyfit.feature_auth.ui.mobile.MobilePrivacyPolicyScreen
 import com.vurgun.skyfit.feature_auth.ui.mobile.MobileCreatePasswordScreen
 import com.vurgun.skyfit.feature_auth.ui.mobile.MobileSplashScreen
@@ -94,7 +94,7 @@ fun MobileNavigationGraph() {
 
     NavHost(
         navigator = rootNavigator,
-        initialRoute = NavigationRoute.Onboarding.route
+        initialRoute = NavigationRoute.Splash.route
     ) {
         legalNavGraph(rootNavigator)
         authNavGraph(rootNavigator)
@@ -117,10 +117,10 @@ private fun RouteBuilder.legalNavGraph(navigator: Navigator) {
 private fun RouteBuilder.authNavGraph(navigator: Navigator) {
     scene(NavigationRoute.Splash.route) { MobileSplashScreen(navigator) }
     scene(NavigationRoute.Login.route) { MobileLoginScreen(navigator) }
-    scene(NavigationRoute.LoginOTPVerification.route) { MobileOTPVerificationScreen(navigator) }
+    scene(NavigationRoute.LoginVerifyOTP.route) { MobileLoginVerifyOTPScreen(navigator) }
     scene(NavigationRoute.CreatePassword.route) { MobileCreatePasswordScreen(navigator) }
     scene(NavigationRoute.ForgotPassword.route) { MobileForgotPasswordScreen(navigator) }
-    scene(NavigationRoute.ForgotPasswordCode.route) { MobileForgotPasswordCodeScreen(navigator) }
+    scene(NavigationRoute.ForgotPasswordVerifyOTP.route) { MobileForgotPasswordVerifyOTPScreen(navigator) }
     scene(NavigationRoute.ForgotPasswordReset.route) { MobileForgotPasswordResetScreen(navigator) }
 }
 

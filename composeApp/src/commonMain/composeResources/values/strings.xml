@@ -10,6 +10,9 @@
     <string name="auth_enter_password">Şifrenizi girin</string>
     <string name="auth_enter_again_password">Şifrenizi tekrar girin</string>
     <string name="auth_forgot_password">Şifremi Unuttum</string>
+    <string name="auth_forgot_enter_phone">Şifrenizi sıfırlamak için Telefon Numaranızı girin</string>
+    <string name="auth_password_reset_title">Şifre Sıfırla</string>
+    <string name="auth_password_reset_message">Yeni şifreniz eskisinden farklı olmalıdır</string>
     <string name="auth_login">Giriş Yap</string>
     <string name="auth_register">Kayıt Ol</string>
     <string name="auth_verify">Onayla</string>
@@ -70,5 +73,6 @@
     <string name="body_type_meso">Mesomorph</string>
     <string name="body_type_endo">Endomorph</string>
     <string name="action_continue">Devam Et</string>
+    <string name="action_cancel">İptal</string>
 
 </resources>

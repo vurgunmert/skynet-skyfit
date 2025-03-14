@@ -13,7 +13,7 @@ sealed class CreatePasswordViewEvent {
     data class Error(val message: String?) : CreatePasswordViewEvent()
 }
 
-class CreatePasswordScreenViewModel(
+class PasswordCreateViewModel(
     private val authRepository: AuthRepository,
     private val savedStateHandle: SavedStateHandle
 ) : ViewModel() {

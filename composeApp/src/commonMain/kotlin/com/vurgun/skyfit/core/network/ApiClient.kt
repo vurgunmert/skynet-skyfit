@@ -21,7 +21,7 @@ class ApiClient(val client: HttpClient) {
             val response: HttpResponse = client.request {
                 apply(request)
             }
-
+            //TODO: IF RESPONSE BODY LOGOUT == 1 -> unauthorized access -> logout user
             when (response.status.value) {
                 in 200..299 -> {
                     val apiResponse: ApiResponse<T> = response.body()

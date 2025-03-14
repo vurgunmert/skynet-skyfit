@@ -36,7 +36,7 @@ import com.vurgun.skyfit.core.ui.resources.SkyFitStyleGuide
 import com.vurgun.skyfit.core.ui.resources.SkyFitTypography
 import com.vurgun.skyfit.core.utils.KeyboardState
 import com.vurgun.skyfit.core.utils.keyboardAsState
-import com.vurgun.skyfit.feature_auth.ui.viewmodel.CreatePasswordScreenViewModel
+import com.vurgun.skyfit.feature_auth.ui.viewmodel.PasswordCreateViewModel
 import com.vurgun.skyfit.feature_auth.ui.viewmodel.CreatePasswordViewEvent
 import com.vurgun.skyfit.feature_navigation.NavigationRoute
 import com.vurgun.skyfit.feature_navigation.jumpAndStay
@@ -53,7 +53,7 @@ import skyfit.composeapp.generated.resources.user_name
 
 @Composable
 fun MobileCreatePasswordScreen(navigator: Navigator) {
-    val viewModel: CreatePasswordScreenViewModel = koinViewModel()
+    val viewModel: PasswordCreateViewModel = koinViewModel()
 
     val username by viewModel.username.collectAsState()
     val password by viewModel.password.collectAsState()

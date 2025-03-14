@@ -49,7 +49,7 @@ import skyfit.composeapp.generated.resources.ota_code_resend_code
 import skyfit.composeapp.generated.resources.resend_code_timer
 
 @Composable
-fun MobileOTPVerificationScreen(navigator: Navigator) {
+fun MobileLoginVerifyOTPScreen(navigator: Navigator) {
     val viewModel: LoginOTPVerificationViewModel = koinInject()
 
     val enteredOtp by viewModel.enteredOtp.collectAsState()
@@ -64,11 +64,11 @@ fun MobileOTPVerificationScreen(navigator: Navigator) {
         viewModel.events.collectLatest { event ->
             when (event) {
                 is LoginOTPVerificationViewEvent.GoToRegister -> {
-                    navigator.jumpAndTakeover(from = NavigationRoute.LoginOTPVerification.route, to = NavigationRoute.CreatePassword.route)
+                    navigator.jumpAndTakeover(from = NavigationRoute.LoginVerifyOTP.route, to = NavigationRoute.CreatePassword.route)
                 }
 
                 is LoginOTPVerificationViewEvent.GoToDashboard -> {
-                    navigator.jumpAndTakeover(from = NavigationRoute.LoginOTPVerification, to = NavigationRoute.Dashboard)
+                    navigator.jumpAndTakeover(from = NavigationRoute.LoginVerifyOTP, to = NavigationRoute.Dashboard)
                 }
 
                 is LoginOTPVerificationViewEvent.ShowError -> {
@@ -121,7 +121,7 @@ private fun MobileOTPVerificationTextGroup(phoneNumber: String) {
 }
 
 @Composable
-private fun MobileOTPVerificationContentGroup(
+fun MobileOTPVerificationContentGroup(
     codeLength: Int = 4,
     onOtpCompleted: (String) -> Unit
 ) {
@@ -137,7 +137,7 @@ private fun MobileOTPVerificationContentGroup(
 }
 
 @Composable
-private fun MobileOTPVerificationActionGroup(
+fun MobileOTPVerificationActionGroup(
     onClickConfirm: () -> Unit,
     onClickResend: () -> Unit,
     isConfirmEnabled: Boolean,

@@ -102,9 +102,8 @@ fun PasswordTextInput(
                 decorationBox = { innerTextField ->
                     if (value.isBlank() && !isFocused) {
                         Text(text = hint, style = SkyFitTypography.bodyMediumRegular.copy(color = SkyFitColor.text.secondary))
-                    } else {
-                        innerTextField()
                     }
+                    innerTextField()
                 },
                 cursorBrush = SolidColor(SkyFitColor.text.default),
             )

@@ -6,12 +6,11 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
@@ -28,8 +27,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
 import com.vurgun.skyfit.core.ui.components.SkyFitLogoComponent
+import com.vurgun.skyfit.core.ui.components.SkyFitMobileScaffold
 import com.vurgun.skyfit.core.ui.components.SkyFitPasswordInputComponent
-import com.vurgun.skyfit.core.ui.components.SkyFitScaffold
 import com.vurgun.skyfit.core.ui.components.button.PrimaryLargeButton
 import com.vurgun.skyfit.core.ui.components.text.SecondaryMediumText
 import com.vurgun.skyfit.core.ui.components.text.SecondaryMediumUnderlinedText
@@ -40,7 +39,7 @@ import com.vurgun.skyfit.core.ui.resources.SkyFitTypography
 import com.vurgun.skyfit.core.utils.KeyboardState
 import com.vurgun.skyfit.core.utils.keyboardAsState
 import com.vurgun.skyfit.feature_auth.ui.viewmodel.LoginViewEvent
-import com.vurgun.skyfit.feature_auth.ui.viewmodel.MobileLoginViewModel
+import com.vurgun.skyfit.feature_auth.ui.viewmodel.LoginViewModel
 import com.vurgun.skyfit.feature_navigation.NavigationRoute
 import com.vurgun.skyfit.feature_navigation.jumpAndStay
 import com.vurgun.skyfit.feature_navigation.jumpAndTakeover
@@ -58,7 +57,7 @@ import skyfit.composeapp.generated.resources.phone_number
 
 @Composable
 fun MobileLoginScreen(navigator: Navigator) {
-    val viewModel: MobileLoginViewModel = koinInject()
+    val viewModel: LoginViewModel = koinInject()
     val phoneNumber by viewModel.phoneNumber.collectAsState()
     val password by viewModel.password.collectAsState()
     val isLoginEnabled by viewModel.isLoginEnabled.collectAsState()
@@ -84,7 +83,7 @@ fun MobileLoginScreen(navigator: Navigator) {
                 }
 
                 is LoginViewEvent.GoToOTPVerification -> {
-                    navigator.jumpAndStay(NavigationRoute.LoginOTPVerification.route + "?phone=$phoneNumber")
+                    navigator.jumpAndStay(NavigationRoute.LoginVerifyOTP.route)
                 }
 
                 is LoginViewEvent.ShowError -> {
@@ -94,12 +93,11 @@ fun MobileLoginScreen(navigator: Navigator) {
         }
     }
 
-    SkyFitScaffold {
+    SkyFitMobileScaffold {
         Column(
             modifier = Modifier
                 .padding(SkyFitStyleGuide.Padding.xLarge)
-                .widthIn(max = SkyFitStyleGuide.Mobile.maxWidth)
-                .fillMaxHeight()
+                .fillMaxSize()
                 .verticalScroll(scrollState)
                 .imePadding(),
             horizontalAlignment = Alignment.CenterHorizontally,
@@ -116,19 +114,19 @@ fun MobileLoginScreen(navigator: Navigator) {
                 onPasswordChanged = viewModel::onPasswordChanged,
                 onPasswordSubmit = {
                     errorMessage = null
-                    viewModel.onLoginClicked()
+                    viewModel.submitLogin()
                 },
                 onTogglePassword = viewModel::togglePasswordVisibility,
                 onClickPrivacyPolicy = { navigator.jumpAndStay(NavigationRoute.PrivacyPolicy) },
                 onClickTermsAndConditions = { navigator.jumpAndStay(NavigationRoute.TermsAndConditions) },
-                onClickForgotPassword = { }
+                onClickForgotPassword = { navigator.jumpAndStay(NavigationRoute.ForgotPassword) }
             )
             MobileLoginActionGroup(
                 isLoginEnabled = isLoginEnabled,
                 isLoading = isLoading,
                 onClickLogin = {
                     errorMessage = null
-                    viewModel.onLoginClicked()
+                    viewModel.submitLogin()
                 }
             )
         }

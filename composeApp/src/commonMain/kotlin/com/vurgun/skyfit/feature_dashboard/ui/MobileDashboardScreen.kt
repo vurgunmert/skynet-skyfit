@@ -21,6 +21,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
+import com.vurgun.skyfit.core.ui.components.SkyFitMobileScaffold
 import com.vurgun.skyfit.feature_chatbot.ui.ChatBotButtonComponent
 import com.vurgun.skyfit.core.ui.components.SkyFitScaffold
 import com.vurgun.skyfit.feature_navigation.NavigationRoute
@@ -75,7 +76,7 @@ fun MobileDashboardScreen(
     val currentRoute: String = currentBackStackEntry?.route?.route ?: initialRoute.route
 
 
-    SkyFitScaffold(
+    SkyFitMobileScaffold(
         bottomBar = {
             MobileDashboardBottomBar(
                 modifier = Modifier

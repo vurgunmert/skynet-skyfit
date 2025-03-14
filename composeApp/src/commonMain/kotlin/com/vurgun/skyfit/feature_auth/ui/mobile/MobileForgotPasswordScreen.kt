@@ -9,31 +9,65 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.widthIn
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.unit.dp
-import com.vurgun.skyfit.core.ui.resources.SkyFitStyleGuide
-import com.vurgun.skyfit.core.ui.components.ButtonVariant
-import com.vurgun.skyfit.core.ui.components.SkyFitButtonComponent
 import com.vurgun.skyfit.core.ui.components.SkyFitLogoComponent
 import com.vurgun.skyfit.core.ui.components.SkyFitScaffold
-import com.vurgun.skyfit.core.ui.components.SkyFitTextInputComponent
-import com.vurgun.skyfit.feature_navigation.NavigationRoute
-import com.vurgun.skyfit.feature_navigation.jumpAndStay
+import com.vurgun.skyfit.core.ui.components.button.PrimaryLargeButton
+import com.vurgun.skyfit.core.ui.components.button.SecondaryLargeButton
+import com.vurgun.skyfit.core.ui.components.text.input.PhoneNumberTextInput
 import com.vurgun.skyfit.core.ui.resources.SkyFitColor
+import com.vurgun.skyfit.core.ui.resources.SkyFitStyleGuide
 import com.vurgun.skyfit.core.ui.resources.SkyFitTypography
+import com.vurgun.skyfit.feature_auth.ui.viewmodel.ForgotPasswordViewEvent
+import com.vurgun.skyfit.feature_auth.ui.viewmodel.ForgotPasswordViewModel
+import com.vurgun.skyfit.feature_navigation.NavigationRoute
+import com.vurgun.skyfit.feature_navigation.jumpAndTakeover
+import kotlinx.coroutines.flow.collectLatest
 import moe.tlaster.precompose.navigation.Navigator
-import org.jetbrains.compose.resources.painterResource
+import org.jetbrains.compose.resources.stringResource
+import org.koin.compose.koinInject
 import skyfit.composeapp.generated.resources.Res
-import skyfit.composeapp.generated.resources.ic_envelope_closed
+import skyfit.composeapp.generated.resources.action_cancel
+import skyfit.composeapp.generated.resources.action_continue
+import skyfit.composeapp.generated.resources.auth_forgot_enter_phone
+import skyfit.composeapp.generated.resources.auth_forgot_password
 
 @Composable
 fun MobileForgotPasswordScreen(navigator: Navigator) {
-    var email by remember { mutableStateOf("") }
+    val viewModel: ForgotPasswordViewModel = koinInject()
+    val phoneNumber by viewModel.phoneNumber.collectAsState()
+    val isSubmitEnabled by viewModel.isSubmitEnabled.collectAsState()
+    val isLoading by viewModel.isLoading.collectAsState()
+
+    var errorMessage by remember { mutableStateOf<String?>(null) }
+    val focusRequester = remember { FocusRequester() }
+
+    LaunchedEffect(viewModel) {
+        viewModel.uiEvents.collectLatest { event ->
+            when (event) {
+                ForgotPasswordViewEvent.GoToOTPVerification -> {
+                    navigator.jumpAndTakeover(NavigationRoute.ForgotPasswordVerifyOTP)
+                }
+
+                is ForgotPasswordViewEvent.ShowError -> {
+                    errorMessage = event.message
+                }
+            }
+        }
+    }
+
+    LaunchedEffect(Unit) {
+        focusRequester.requestFocus()
+    }
 
     SkyFitScaffold {
         Column(
@@ -48,26 +82,28 @@ fun MobileForgotPasswordScreen(navigator: Navigator) {
             MobileForgotPasswordScreenTitleComponent()
             Spacer(Modifier.height(48.dp))
 
-            SkyFitTextInputComponent(
-                hint = "Email’inizi girin",
-                value = email,
-                onValueChange = { email = it },
-                leftIconPainter = painterResource(Res.drawable.ic_envelope_closed)
+            PhoneNumberTextInput(
+                value = phoneNumber,
+                onValueChange = viewModel::onPhoneNumberChanged,
+                focusRequester = focusRequester
             )
 
             Spacer(Modifier.weight(1f))
 
-            SkyFitButtonComponent(
-                text = "Devam Et",
+            PrimaryLargeButton(
                 modifier = Modifier.fillMaxWidth(),
-                onClick = { navigator.jumpAndStay(NavigationRoute.ForgotPasswordCode) },
-                variant = ButtonVariant.Primary,
+                text = stringResource(Res.string.action_continue),
+                onClick = viewModel::submitForgotPassword,
+                isLoading = isLoading,
+                isEnabled = isSubmitEnabled && !isLoading
             )
+
             Spacer(Modifier.height(14.dp))
-            SkyFitButtonComponent(
-                modifier = Modifier.fillMaxWidth(), text = "İptal",
-                onClick = { navigator.popBackStack() },
-                variant = ButtonVariant.Secondary
+
+            SecondaryLargeButton(
+                modifier = Modifier.fillMaxWidth(),
+                text = stringResource(Res.string.action_cancel),
+                onClick = { navigator.popBackStack() }
             )
         }
     }
@@ -77,12 +113,12 @@ fun MobileForgotPasswordScreen(navigator: Navigator) {
 @Composable
 private fun MobileForgotPasswordScreenTitleComponent() {
     Text(
-        text = "Şifremi Unuttum",
+        text = stringResource(Res.string.auth_forgot_password),
         style = SkyFitTypography.heading3
     )
     Spacer(Modifier.height(16.dp))
     Text(
-        text = "Şifrenizi sıfırlamak için E-postanızı girin",
+        text = stringResource(Res.string.auth_forgot_enter_phone),
         style = SkyFitTypography.bodyMediumRegular.copy(color = SkyFitColor.text.secondary)
     )
 }

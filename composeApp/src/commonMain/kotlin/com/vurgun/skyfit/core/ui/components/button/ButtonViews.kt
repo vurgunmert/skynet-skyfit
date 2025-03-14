@@ -38,6 +38,7 @@ fun SecondaryLargeButton(
     leftIconPainter: Painter? = null,
     rightIconPainter: Painter? = null,
     isEnabled: Boolean = true,
+    isLoading: Boolean = false,
     onClick: () -> Unit
 ) {
     SkyFitButtonComponent(
@@ -45,7 +46,7 @@ fun SecondaryLargeButton(
         onClick = onClick,
         variant = ButtonVariant.Secondary,
         size = ButtonSize.Large,
-        state = ButtonState.Rest,
+        state = if (isLoading) ButtonState.Loading else ButtonState.Rest,
         modifier = modifier,
         isEnabled = isEnabled,
         leftIconPainter = leftIconPainter
