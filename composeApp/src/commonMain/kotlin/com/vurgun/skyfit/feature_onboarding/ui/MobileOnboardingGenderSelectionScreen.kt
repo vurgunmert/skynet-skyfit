@@ -16,7 +16,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import com.vurgun.skyfit.core.domain.model.GenderType
+import com.vurgun.skyfit.core.domain.models.GenderType
 import com.vurgun.skyfit.core.ui.components.SkyFitScaffold
 import com.vurgun.skyfit.core.ui.components.SkyFitSelectableCardComponent
 import com.vurgun.skyfit.core.ui.resources.SkyFitTypography
@@ -39,7 +39,7 @@ fun MobileOnboardingGenderSelectionScreen(
     viewModel: OnboardingViewModel,
     navigator: Navigator
 ) {
-    val selectedGender = viewModel.state.collectAsState().value.gender ?: GenderType.MALE
+    val selectedGender = viewModel.state.collectAsState().value.gender
 
     SkyFitScaffold {
         Column(

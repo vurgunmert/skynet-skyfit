@@ -1,6 +1,6 @@
 package com.vurgun.skyfit.feature_body_analysis.domain
 
-import com.vurgun.skyfit.core.network.commonHttpClient
+import com.vurgun.skyfit.core.network.client.commonHttpClient
 import io.ktor.client.call.body
 import io.ktor.client.request.header
 import io.ktor.client.request.post

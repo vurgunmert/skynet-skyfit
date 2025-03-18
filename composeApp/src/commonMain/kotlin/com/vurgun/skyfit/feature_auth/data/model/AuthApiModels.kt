@@ -14,7 +14,8 @@ data class VerifyOTPRequest(val otpCode: String)
 @Serializable
 data class AuthorizationResponse(
     val token: String,
-    val isNewUser: Boolean? = null
+    val isNewUser: Boolean? = null,
+    val onboardingComplete: Boolean? = null
 )
 
 @Serializable

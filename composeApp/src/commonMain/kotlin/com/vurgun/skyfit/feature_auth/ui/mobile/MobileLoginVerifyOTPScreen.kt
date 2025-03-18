@@ -33,8 +33,8 @@ import com.vurgun.skyfit.core.ui.resources.SkyFitColor
 import com.vurgun.skyfit.core.ui.resources.SkyFitStyleGuide
 import com.vurgun.skyfit.core.ui.resources.SkyFitTypography
 import com.vurgun.skyfit.core.utils.formatPhoneNumber
-import com.vurgun.skyfit.feature_auth.ui.viewmodel.LoginOTPVerificationViewModel
 import com.vurgun.skyfit.feature_auth.ui.viewmodel.LoginOTPVerificationViewEvent
+import com.vurgun.skyfit.feature_auth.ui.viewmodel.LoginOTPVerificationViewModel
 import com.vurgun.skyfit.feature_navigation.NavigationRoute
 import com.vurgun.skyfit.feature_navigation.jumpAndTakeover
 import kotlinx.coroutines.flow.collectLatest
@@ -64,11 +64,15 @@ fun MobileLoginVerifyOTPScreen(navigator: Navigator) {
         viewModel.events.collectLatest { event ->
             when (event) {
                 is LoginOTPVerificationViewEvent.GoToRegister -> {
-                    navigator.jumpAndTakeover(from = NavigationRoute.LoginVerifyOTP.route, to = NavigationRoute.CreatePassword.route)
+                    navigator.jumpAndTakeover(NavigationRoute.CreatePassword)
                 }
 
                 is LoginOTPVerificationViewEvent.GoToDashboard -> {
-                    navigator.jumpAndTakeover(from = NavigationRoute.LoginVerifyOTP, to = NavigationRoute.Dashboard)
+                    navigator.jumpAndTakeover(NavigationRoute.Dashboard)
+                }
+
+                is LoginOTPVerificationViewEvent.GoToOnboarding -> {
+                    navigator.jumpAndTakeover(NavigationRoute.Onboarding)
                 }
 
                 is LoginOTPVerificationViewEvent.ShowError -> {

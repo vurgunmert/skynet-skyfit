@@ -1,7 +1,7 @@
 package com.vurgun.skyfit.feature_auth.di
 
 import androidx.lifecycle.SavedStateHandle
-import com.vurgun.skyfit.feature_auth.data.AuthRepositoryImpl
+import com.vurgun.skyfit.feature_auth.data.repository.AuthRepositoryImpl
 import com.vurgun.skyfit.feature_auth.data.service.AuthApiService
 import com.vurgun.skyfit.feature_auth.domain.repositories.AuthRepository
 import com.vurgun.skyfit.feature_auth.ui.viewmodel.PasswordCreateViewModel

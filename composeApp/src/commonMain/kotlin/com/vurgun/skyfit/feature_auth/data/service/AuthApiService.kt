@@ -1,6 +1,6 @@
 package com.vurgun.skyfit.feature_auth.data.service
 
-import com.vurgun.skyfit.core.network.ApiClient
+import com.vurgun.skyfit.core.network.client.ApiClient
 import com.vurgun.skyfit.core.network.model.ApiResult
 import com.vurgun.skyfit.core.network.model.EmptyDataResponse
 import com.vurgun.skyfit.feature_auth.data.model.CreatePasswordRequest

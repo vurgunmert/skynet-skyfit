@@ -11,7 +11,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import com.vurgun.skyfit.core.domain.model.UserType
+import com.vurgun.skyfit.core.domain.models.UserType
 import com.vurgun.skyfit.core.ui.components.SkyFitLogoComponent
 import com.vurgun.skyfit.core.ui.components.SkyFitScaffold
 import com.vurgun.skyfit.core.ui.components.SkyFitTextButton

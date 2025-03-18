@@ -1,6 +1,6 @@
 package com.vurgun.skyfit.feature_navigation
 
-import com.vurgun.skyfit.core.domain.model.UserType
+import com.vurgun.skyfit.core.domain.models.UserType
 
 sealed class NavigationRoute(
     private val baseRoute: String,

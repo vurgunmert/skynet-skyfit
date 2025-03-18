@@ -15,7 +15,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import com.vurgun.skyfit.core.domain.model.WeightUnitType
+import com.vurgun.skyfit.core.domain.models.WeightUnitType
 import com.vurgun.skyfit.core.ui.components.SkyFitScaffold
 import com.vurgun.skyfit.core.ui.components.SkyFitWheelPickerComponent
 import com.vurgun.skyfit.core.ui.resources.SkyFitColor

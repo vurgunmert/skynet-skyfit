@@ -79,11 +79,15 @@ fun MobileLoginScreen(navigator: Navigator) {
         viewModel.uiEvents.collectLatest { event ->
             when (event) {
                 is LoginViewEvent.GoToDashboard -> {
-                    navigator.jumpAndTakeover(NavigationRoute.Login, NavigationRoute.Dashboard)
+                    navigator.jumpAndTakeover(NavigationRoute.Dashboard)
+                }
+
+                is LoginViewEvent.GoToOnboarding -> {
+                    navigator.jumpAndTakeover(NavigationRoute.Onboarding)
                 }
 
                 is LoginViewEvent.GoToOTPVerification -> {
-                    navigator.jumpAndStay(NavigationRoute.LoginVerifyOTP.route)
+                    navigator.jumpAndStay(NavigationRoute.LoginVerifyOTP)
                 }
 
                 is LoginViewEvent.ShowError -> {

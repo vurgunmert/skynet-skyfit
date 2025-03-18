@@ -12,12 +12,10 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import com.vurgun.skyfit.core.domain.model.GoalType
+import com.vurgun.skyfit.core.domain.models.GoalType
 import com.vurgun.skyfit.core.ui.components.SkyFitMobileScaffold
-import com.vurgun.skyfit.core.ui.components.SkyFitScaffold
 import com.vurgun.skyfit.core.ui.components.SkyFitSelectableTextButton
 import com.vurgun.skyfit.feature_navigation.NavigationRoute.OnboardingCompleted
-import com.vurgun.skyfit.feature_navigation.NavigationRoute.OnboardingUserGoalSelection
 import com.vurgun.skyfit.feature_navigation.jumpAndTakeover
 import com.vurgun.skyfit.feature_onboarding.ui.viewmodel.OnboardingViewModel
 import moe.tlaster.precompose.navigation.Navigator

@@ -103,7 +103,6 @@ fun MobileDashboardHomeToolbarComponent(
 
 @Composable
 fun MobileDashboardHomeCharacterProgressComponent(
-    characterImageUrl: String = "https://ik.imagekit.io/skynet2skyfit/character_carrot.png?updatedAt=1738866664880",
     stepProgress: Float = 0.7f,
     distanceProgress: Float = 0.3f,
     waterProgress: Float = 0.2f,

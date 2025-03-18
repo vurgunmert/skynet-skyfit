@@ -12,11 +12,11 @@ object DependencyInjectionInitializer {
     fun initKoin(application: Application) {
         startKoin {
             androidContext(application)
-            modules(androidStorageModule + sharedModules)
+            modules(localStorageModule + sharedModules)
         }
     }
 
-    private val androidStorageModule = module {
+    private val localStorageModule = module {
         single<LocalSettingsStore> { provideLocalSettings(androidContext()) }
     }
 }

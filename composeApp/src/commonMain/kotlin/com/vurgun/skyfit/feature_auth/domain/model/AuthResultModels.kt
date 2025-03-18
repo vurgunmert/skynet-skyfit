@@ -3,12 +3,14 @@ package com.vurgun.skyfit.feature_auth.domain.model
 sealed class AuthLoginResult {
     data object Success : AuthLoginResult()
     data object OTPVerificationRequired : AuthLoginResult()
+    data object OnboardingRequired : AuthLoginResult()
     data class Error(val message: String?) : AuthLoginResult()
 }
 
 sealed class AuthorizationOTPResult {
     data object LoginSuccess : AuthorizationOTPResult()
     data object RegistrationRequired : AuthorizationOTPResult()
+    data object OnboardingRequired : AuthorizationOTPResult()
     data class Error(val message: String?) : AuthorizationOTPResult()
 }
 

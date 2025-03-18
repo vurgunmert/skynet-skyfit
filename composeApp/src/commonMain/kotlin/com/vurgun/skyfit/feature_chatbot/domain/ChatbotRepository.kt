@@ -1,6 +1,6 @@
 package com.vurgun.skyfit.feature_chatbot.domain
 
-import com.vurgun.skyfit.core.network.commonHttpClient
+import com.vurgun.skyfit.core.network.client.commonHttpClient
 import com.vurgun.skyfit.feature_chatbot.data.model.ChatbotRequest
 import com.vurgun.skyfit.feature_chatbot.data.model.ChatbotResponse
 import com.vurgun.skyfit.feature_chatbot.domain.usecases.ChatbotApiUseCase

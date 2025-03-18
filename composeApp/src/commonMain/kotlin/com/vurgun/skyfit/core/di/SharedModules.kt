@@ -8,10 +8,14 @@ import com.vurgun.skyfit.feature_notifications.di.notificationModule
 import com.vurgun.skyfit.feature_onboarding.di.onboardingModule
 import com.vurgun.skyfit.feature_profile.di.profileModule
 import com.vurgun.skyfit.feature_settings.di.settingsModule
+import com.vurgun.skyfit.feature_splash.di.splashModule
 import org.koin.core.module.Module
 
 val sharedModules: List<Module> = listOf(
-    appModule,
+    networkModule,
+    configModule,
+    userModule,
+    splashModule,
     authModule,
     onboardingModule,
     settingsModule,

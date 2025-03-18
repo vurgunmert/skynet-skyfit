@@ -16,6 +16,7 @@ import kotlinx.coroutines.launch
 sealed class LoginViewEvent {
     data object GoToDashboard : LoginViewEvent()
     data object GoToOTPVerification : LoginViewEvent()
+    data object GoToOnboarding : LoginViewEvent()
     data class ShowError(val message: String?) : LoginViewEvent()
 }
 
@@ -65,6 +66,7 @@ class LoginViewModel(
                 val event = when (val result = authRepository.login(_phoneNumber.value, _password.value)) {
                     is AuthLoginResult.Success -> LoginViewEvent.GoToDashboard
                     is AuthLoginResult.OTPVerificationRequired -> LoginViewEvent.GoToOTPVerification
+                    is AuthLoginResult.OnboardingRequired -> LoginViewEvent.GoToOnboarding
                     is AuthLoginResult.Error -> LoginViewEvent.ShowError(result.message)
                 }
                 _uiEvents.emit(event)

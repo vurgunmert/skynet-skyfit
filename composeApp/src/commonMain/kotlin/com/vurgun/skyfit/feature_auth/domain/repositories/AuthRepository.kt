@@ -10,7 +10,7 @@ import com.vurgun.skyfit.feature_auth.domain.model.SendOTPResult
 
 interface AuthRepository {
     suspend fun login(phoneNumber: String, password: String?): AuthLoginResult
-    suspend fun verifyAuthOTP(code: String): AuthorizationOTPResult
+    suspend fun verifyLoginOTP(code: String): AuthorizationOTPResult
     suspend fun forgotPassword(phoneNumber: String): ForgotPasswordResult
     suspend fun verifyForgotPasswordOTP(code: String): ForgotPasswordOTPResult
     suspend fun sendOTP(): SendOTPResult

@@ -3,15 +3,16 @@ package com.vurgun.skyfit.feature_onboarding.ui.viewmodel
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.vurgun.skyfit.core.domain.model.FitnessTagType
-import com.vurgun.skyfit.core.domain.model.GenderType
-import com.vurgun.skyfit.core.domain.model.GoalType
-import com.vurgun.skyfit.core.domain.model.HeightUnitType
-import com.vurgun.skyfit.core.domain.model.UserType
-import com.vurgun.skyfit.core.domain.model.WeightUnitType
+import com.vurgun.skyfit.core.domain.models.FitnessTagType
+import com.vurgun.skyfit.core.domain.models.GenderType
+import com.vurgun.skyfit.core.domain.models.GoalType
+import com.vurgun.skyfit.core.domain.models.HeightUnitType
+import com.vurgun.skyfit.core.domain.models.UserType
+import com.vurgun.skyfit.core.domain.models.WeightUnitType
 import com.vurgun.skyfit.core.ui.viewdata.BodyTypeViewData
 import com.vurgun.skyfit.core.ui.viewdata.CharacterTypeViewData
 import com.vurgun.skyfit.feature_onboarding.data.OnboardingRequest
+import com.vurgun.skyfit.feature_onboarding.domain.model.OnboardingResult
 import com.vurgun.skyfit.feature_onboarding.domain.repository.OnboardingRepository
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -146,10 +147,14 @@ class OnboardingViewModel(
 
         viewModelScope.launch {
             _isLoading.value = true
-            try {
-                onboardingRepository.completeOnboarding(request)
-            } finally {
-                _isLoading.value = false
+
+            when(onboardingRepository.completeOnboarding(request)) {
+                is OnboardingResult.Error -> {
+                    _isLoading.value = false
+                }
+                OnboardingResult.Success -> {
+                    _isLoading.value = false
+                }
             }
         }
     }
@@ -162,7 +167,7 @@ data class UserOnboardingState(
     val birthYear: Int? = null,
     val birthMonth: Int? = null,
     val birthDay: Int? = null,
-    val gender: GenderType? = null,
+    val gender: GenderType = GenderType.MALE,
     val weight: Int? = null,
     val weightUnit: WeightUnitType = WeightUnitType.KG,
     val height: Int? = null,

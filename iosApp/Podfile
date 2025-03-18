@@ -5,9 +5,4 @@ target 'iosApp' do
 
   # Shared Kotlin Multiplatform framework
   pod 'composeApp', :path => '../composeApp.podspec'
-
-  # Firebase pods
-  pod 'FirebaseAuth'
-  pod 'FirebaseFirestore'
-  pod 'FirebaseStorage'
 end

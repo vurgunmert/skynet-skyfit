@@ -13,11 +13,8 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import com.vurgun.skyfit.core.ui.components.ButtonSize
-import com.vurgun.skyfit.core.ui.components.ButtonState
-import com.vurgun.skyfit.core.ui.components.ButtonVariant
-import com.vurgun.skyfit.core.ui.components.SkyFitButtonComponent
 import com.vurgun.skyfit.core.ui.components.SkyFitMobileScaffold
+import com.vurgun.skyfit.core.ui.components.button.PrimaryLargeButton
 import com.vurgun.skyfit.core.ui.components.loader.AutoLoopingCircularProgressIndicator
 import com.vurgun.skyfit.feature_navigation.NavigationRoute
 import com.vurgun.skyfit.feature_navigation.jumpAndTakeover
@@ -36,7 +33,6 @@ fun MobileOnboardingCompletedScreen(
     viewModel: OnboardingViewModel,
     navigator: Navigator
 ) {
-
     val isLoading by viewModel.isLoading.collectAsState()
     val character = viewModel.state.collectAsState().value.character
 
@@ -65,14 +61,15 @@ fun MobileOnboardingCompletedScreen(
                         .aspectRatio(1f)
                 )
 
-
-                SkyFitButtonComponent(
+                PrimaryLargeButton(
+                    modifier = Modifier
+                        .align(Alignment.BottomStart)
+                        .padding(16.dp)
+                        .fillMaxWidth(),
                     text = stringResource(Res.string.onboarding_lets_get_started),
-                    modifier = Modifier.align(Alignment.BottomStart).fillMaxWidth(),
                     onClick = { navigator.jumpAndTakeover(NavigationRoute.Onboarding, NavigationRoute.Dashboard) },
-                    variant = ButtonVariant.Primary,
-                    size = ButtonSize.Large,
-                    state = ButtonState.Rest
+                    isLoading = isLoading,
+                    isEnabled = !isLoading
                 )
             }
         }

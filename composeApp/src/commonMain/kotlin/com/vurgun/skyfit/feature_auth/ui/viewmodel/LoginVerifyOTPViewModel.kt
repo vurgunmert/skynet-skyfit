@@ -13,6 +13,7 @@ import kotlinx.coroutines.launch
 sealed class LoginOTPVerificationViewEvent {
     data object GoToRegister : LoginOTPVerificationViewEvent()
     data object GoToDashboard : LoginOTPVerificationViewEvent()
+    data object GoToOnboarding : LoginOTPVerificationViewEvent()
     data class ShowError(val message: String?) : LoginOTPVerificationViewEvent()
 }
 
@@ -51,9 +52,10 @@ class LoginOTPVerificationViewModel(
             _isLoading.value = true
             try {
                 _events.emit(
-                    when (val result = authRepository.verifyAuthOTP(_enteredOtp.value)) {
+                    when (val result = authRepository.verifyLoginOTP(_enteredOtp.value)) {
                         is AuthorizationOTPResult.Error -> LoginOTPVerificationViewEvent.ShowError(result.message)
                         AuthorizationOTPResult.RegistrationRequired -> LoginOTPVerificationViewEvent.GoToRegister
+                        AuthorizationOTPResult.OnboardingRequired -> LoginOTPVerificationViewEvent.GoToOnboarding
                         AuthorizationOTPResult.LoginSuccess -> LoginOTPVerificationViewEvent.GoToDashboard
                     }
                 )

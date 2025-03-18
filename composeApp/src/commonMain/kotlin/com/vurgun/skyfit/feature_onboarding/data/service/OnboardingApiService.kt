@@ -1,6 +1,6 @@
 package com.vurgun.skyfit.feature_onboarding.data.service
 
-import com.vurgun.skyfit.core.network.ApiClient
+import com.vurgun.skyfit.core.network.client.ApiClient
 import com.vurgun.skyfit.core.network.model.ApiResult
 import com.vurgun.skyfit.core.utils.toSlug
 import com.vurgun.skyfit.feature_onboarding.data.OnboardingRequest
@@ -24,7 +24,7 @@ class OnboardingApiService(private val apiClient: ApiClient) {
             setBody(
                 MultiPartFormDataContent(
                     formData {
-                        append("userType", request.userType.toString())
+                        append("usertype", request.userType.toString())
                         request.characterId?.let { append("characterId", it.toString()) }
                         request.birthdate?.let { append("birthdate", it) }
                         request.gender?.let { append("gender", it.toString()) }
