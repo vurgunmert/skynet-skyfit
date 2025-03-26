@@ -10,6 +10,7 @@ import com.vurgun.skyfit.feature_auth.ui.viewmodel.ForgotPasswordViewModel
 import com.vurgun.skyfit.feature_auth.ui.viewmodel.LoginOTPVerificationViewModel
 import com.vurgun.skyfit.feature_auth.ui.viewmodel.LoginViewModel
 import com.vurgun.skyfit.feature_auth.ui.viewmodel.PasswordResetViewModel
+import org.koin.core.module.dsl.viewModel
 import org.koin.dsl.module
 
 val authModule = module {
@@ -19,8 +20,8 @@ val authModule = module {
 
     factory { LoginViewModel(get()) }
     factory { ForgotPasswordViewModel(get()) }
-    factory { (handle: SavedStateHandle) -> PasswordCreateViewModel(get(), handle) }
-    factory { (handle: SavedStateHandle) -> PasswordResetViewModel(get(), handle) }
+    factory { PasswordCreateViewModel(get()) }
+    factory { PasswordResetViewModel(get()) }
     factory { LoginOTPVerificationViewModel(get(), get()) }
     factory { ForgotPasswordVerifyOTPViewModel(get(), get()) }
 }

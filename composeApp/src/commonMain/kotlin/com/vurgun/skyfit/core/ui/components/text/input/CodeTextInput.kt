@@ -34,15 +34,14 @@ import com.vurgun.skyfit.core.ui.resources.SkyFitTypography
 
 @Composable
 fun CodeTextInput(
+    modifier: Modifier = Modifier.fillMaxWidth(),
     codeLength: Int = 4,
     onOtpCompleted: (String) -> Unit
 ) {
-    // Wrap in BoxWithConstraints to get the available width
     BoxWithConstraints(
-        modifier = Modifier.fillMaxWidth(),
+        modifier = modifier,
         contentAlignment = Alignment.Center
     ) {
-        // Dynamically compute box size based on the maxWidth from constraints
         val boxSize = (maxWidth / (codeLength + 1)).coerceIn(40.dp, 56.dp)
 
         val otpState = remember { mutableStateListOf(*Array(codeLength) { "" }) }

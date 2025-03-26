@@ -53,19 +53,20 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.vurgun.skyfit.core.domain.models.UserDetail
 import com.vurgun.skyfit.core.ui.components.ButtonSize
 import com.vurgun.skyfit.core.ui.components.ButtonState
 import com.vurgun.skyfit.core.ui.components.ButtonVariant
 import com.vurgun.skyfit.core.ui.components.SkyFitButtonComponent
-import com.vurgun.skyfit.feature_navigation.NavigationRoute
-import com.vurgun.skyfit.feature_navigation.jumpAndStay
 import com.vurgun.skyfit.core.ui.resources.SkyFitColor
 import com.vurgun.skyfit.core.ui.resources.SkyFitTypography
+import com.vurgun.skyfit.feature_navigation.NavigationRoute
+import com.vurgun.skyfit.feature_navigation.jumpAndStay
 import moe.tlaster.precompose.navigation.Navigator
 import kotlin.math.sign
 
 @Composable
-fun MobileTrainerHomeScreen(rootNavigator: Navigator) {
+fun MobileTrainerHomeScreen(userDetail: UserDetail, rootNavigator: Navigator) {
 
     Scaffold(
         backgroundColor = SkyFitColor.background.default,
@@ -78,9 +79,12 @@ fun MobileTrainerHomeScreen(rootNavigator: Navigator) {
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {
 
-            MobileDashboardHomeCharacterProgressComponent(
-                onClick = { rootNavigator.jumpAndStay(NavigationRoute.DashboardProfile) }
-            )
+            userDetail.characterType?.let {
+                MobileDashboardHomeCharacterProgressComponent(
+                    characterType = it,
+                    onClick = { rootNavigator.jumpAndStay(NavigationRoute.DashboardProfile) }
+                )
+            }
 
             Spacer(Modifier.height(24.dp))
 

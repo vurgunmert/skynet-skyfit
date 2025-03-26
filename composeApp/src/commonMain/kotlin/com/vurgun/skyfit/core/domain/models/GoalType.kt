@@ -1,20 +1,24 @@
 package com.vurgun.skyfit.core.domain.models
 
 sealed class GoalType(val id: Int, val label: String) {
-    data object LOSE_WEIGHT : GoalType(1, "Kilo Vermek")
-    data object STAY_FIT : GoalType(2, "Fit Olmak")
-    data object GAIN_MUSCLE : GoalType(3, "Kas Yapmak")
+    data object Slimming : GoalType(1, "Incelme")
+    data object Tightening : GoalType(2, "Sıkılaşma")
+    data object Strengthening : GoalType(3, "Güçlenme")
+    data object FixPosture : GoalType(4, "Postür Düzenlemek")
+    data object GainPerformance : GoalType(5, "Performans Geliştirme")
 
     companion object {
         fun from(id: Int): GoalType? {
             return when (id) {
-                1 -> LOSE_WEIGHT
-                2 -> STAY_FIT
-                3 -> GAIN_MUSCLE
+                1 -> Slimming
+                2 -> Tightening
+                3 -> Strengthening
+                4 -> FixPosture
+                5 -> GainPerformance
                 else -> null
             }
         }
 
-        fun getAllGoals(): List<GoalType> = listOf(LOSE_WEIGHT, STAY_FIT, GAIN_MUSCLE)
+        fun getAllGoals(): List<GoalType> = listOf(Slimming, Strengthening, FixPosture, GainPerformance)
     }
 }

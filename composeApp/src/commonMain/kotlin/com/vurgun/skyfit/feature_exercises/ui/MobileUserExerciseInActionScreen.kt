@@ -59,10 +59,10 @@ import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import chaintech.videoplayer.host.VideoPlayerHost
-import chaintech.videoplayer.model.PlayerSpeed
-import chaintech.videoplayer.model.ScreenResize
-import chaintech.videoplayer.ui.video.VideoPlayerComposable
+//import chaintech.videoplayer.host.VideoPlayerHost
+//import chaintech.videoplayer.model.PlayerSpeed
+//import chaintech.videoplayer.model.ScreenResize
+//import chaintech.videoplayer.ui.video.VideoPlayerComposable
 import coil3.compose.AsyncImage
 import com.vurgun.skyfit.core.ui.components.ButtonSize
 import com.vurgun.skyfit.core.ui.components.ButtonState
@@ -97,20 +97,20 @@ fun MobileUserExerciseInActionScreen(navigator: Navigator) {
     val showToolbar: Boolean = true
     var activePage by remember { mutableStateOf(MobileUserExerciseInActionScreenStep.SESSION) }
 
-    val playerHost = remember {
-        VideoPlayerHost(
-            url = "https://ik.imagekit.io/skynet2skyfit/283578378-people-fitness-and-exercise-ju.mp4?updatedAt=1739510522809",
-            isPaused = false,
-            isMuted = true,
-            initialSpeed = PlayerSpeed.X1_5,
-            initialVideoFitMode = ScreenResize.FILL,
-            isLooping = true,
-            startTimeInSeconds = 0
-        )
-    }
+//    val playerHost = remember {
+//        VideoPlayerHost(
+//            url = "https://ik.imagekit.io/skynet2skyfit/283578378-people-fitness-and-exercise-ju.mp4?updatedAt=1739510522809",
+//            isPaused = false,
+//            isMuted = true,
+//            initialSpeed = PlayerSpeed.X1_5,
+//            initialVideoFitMode = ScreenResize.FILL,
+//            isLooping = true,
+//            startTimeInSeconds = 0
+//        )
+//    }
 
     Box(Modifier.fillMaxSize()) {
-        MobileUserExerciseInActionGraphicComponent(playerHost)
+//        MobileUserExerciseInActionGraphicComponent(playerHost)
 
         if (showToolbar) {
             MobileUserExerciseInActionScreenToolbarComponent(
@@ -126,31 +126,31 @@ fun MobileUserExerciseInActionScreen(navigator: Navigator) {
             when (activePage) {
                 MobileUserExerciseInActionScreenStep.SESSION -> {
                     Spacer(Modifier.weight(1f))
-                    MobileUserExerciseInActionScreenActionsComponent(
-                        onClickPrevious = {  },
-                        onClickPause = {
-                            playerHost.pause()
-                            activePage = MobileUserExerciseInActionScreenStep.BREAK
-                        },
-                        onClickNext = {
-                            playerHost.pause()
-                            activePage = MobileUserExerciseInActionScreenStep.BREAK
-                        }
-                    )
+//                    MobileUserExerciseInActionScreenActionsComponent(
+//                        onClickPrevious = {  },
+//                        onClickPause = {
+//                            playerHost.pause()
+//                            activePage = MobileUserExerciseInActionScreenStep.BREAK
+//                        },
+//                        onClickNext = {
+//                            playerHost.pause()
+//                            activePage = MobileUserExerciseInActionScreenStep.BREAK
+//                        }
+//                    )
                 }
 
                 MobileUserExerciseInActionScreenStep.BREAK -> {
                     Spacer(Modifier.height(18.dp))
-                    MobileUserExerciseInActionScreenBreakComponent(
-                        onClickPause = {
-                            playerHost.play()
-                            activePage = MobileUserExerciseInActionScreenStep.SESSION
-                        },
-                        onClickSkip = {
-                            playerHost.pause()
-                            activePage = MobileUserExerciseInActionScreenStep.TROPHY
-                        }
-                    )
+//                    MobileUserExerciseInActionScreenBreakComponent(
+//                        onClickPause = {
+//                            playerHost.play()
+//                            activePage = MobileUserExerciseInActionScreenStep.SESSION
+//                        },
+//                        onClickSkip = {
+//                            playerHost.pause()
+//                            activePage = MobileUserExerciseInActionScreenStep.TROPHY
+//                        }
+//                    )
                 }
 
                 MobileUserExerciseInActionScreenStep.TROPHY -> {
@@ -176,14 +176,14 @@ fun MobileUserExerciseInActionScreen(navigator: Navigator) {
     }
 }
 
-@Composable
-private fun MobileUserExerciseInActionGraphicComponent(playerHost: VideoPlayerHost) {
-
-    VideoPlayerComposable(
-        modifier = Modifier.fillMaxSize(),
-        playerHost = playerHost
-    )
-}
+//@Composable
+//private fun MobileUserExerciseInActionGraphicComponent(playerHost: VideoPlayerHost) {
+//
+//    VideoPlayerComposable(
+//        modifier = Modifier.fillMaxSize(),
+//        playerHost = playerHost
+//    )
+//}
 
 
 @Composable

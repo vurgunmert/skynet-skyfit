@@ -10,14 +10,18 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import com.vurgun.skyfit.core.ui.resources.SkyFitStyleGuide
+import com.vurgun.skyfit.core.domain.models.UserDetail
 import com.vurgun.skyfit.core.ui.components.SkyFitScaffold
+import com.vurgun.skyfit.core.ui.resources.SkyFitStyleGuide
 import com.vurgun.skyfit.feature_navigation.NavigationRoute
 import com.vurgun.skyfit.feature_navigation.jumpAndStay
 import moe.tlaster.precompose.navigation.Navigator
 
 @Composable
-fun MobileUserHomeScreen(rootNavigator: Navigator) {
+fun MobileUserHomeScreen(
+    userDetail: UserDetail,
+    rootNavigator: Navigator
+) {
 
     SkyFitScaffold(
         topBar = {
@@ -38,10 +42,12 @@ fun MobileUserHomeScreen(rootNavigator: Navigator) {
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {
 
-            MobileDashboardHomeCharacterProgressComponent(
-                onClick = { rootNavigator.jumpAndStay(NavigationRoute.DashboardProfile) }
-            )
-
+            userDetail.characterType?.let { characterType ->
+                MobileDashboardHomeCharacterProgressComponent(
+                    characterType = characterType,
+                    onClick = { rootNavigator.jumpAndStay(NavigationRoute.DashboardProfile) }
+                )
+            }
             Spacer(Modifier.height(24.dp))
 
             MobileDashboardHomeTrophiesBarComponent(

@@ -15,8 +15,8 @@ class OnboardingRepositoryImpl(
     private val dispatchers: DispatcherProvider
 ) : OnboardingRepository {
 
-    override suspend fun completeOnboarding(request: OnboardingRequest) = withContext(dispatchers.io) {
-        val token = settingsStore.getToken() ?: return@withContext OnboardingResult.Error("Token not found")
+    override suspend fun submitOnboarding(request: OnboardingRequest) = withContext(dispatchers.io) {
+        val token = settingsStore.getToken() ?: return@withContext OnboardingResult.Unauthorized
 
         when (val response = apiService.onboardUser(request, token)) {
             is ApiResult.Error -> OnboardingResult.Error(response.message)
