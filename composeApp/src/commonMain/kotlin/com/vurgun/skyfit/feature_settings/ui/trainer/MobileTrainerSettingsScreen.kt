@@ -8,18 +8,23 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.vurgun.skyfit.core.ui.components.SkyFitMobileScaffold
-import com.vurgun.skyfit.core.ui.components.SkyFitScaffold
 import com.vurgun.skyfit.core.ui.components.SkyFitScreenHeader
 import com.vurgun.skyfit.core.ui.components.button.PrimaryLargeButton
 import com.vurgun.skyfit.feature_navigation.NavigationRoute
 import com.vurgun.skyfit.feature_navigation.jumpAndStay
+import com.vurgun.skyfit.feature_navigation.jumpAndTakeover
 import com.vurgun.skyfit.feature_settings.ui.MobileSettingsMenuItemComponent
 import com.vurgun.skyfit.feature_settings.ui.MobileSettingsMenuItemDividerComponent
+import com.vurgun.skyfit.feature_settings.ui.user.UserSettingsViewEvent
+import com.vurgun.skyfit.feature_settings.ui.user.UserSettingsViewModel
+import kotlinx.coroutines.flow.collectLatest
 import moe.tlaster.precompose.navigation.Navigator
 import org.jetbrains.compose.resources.stringResource
+import org.koin.compose.koinInject
 import skyfit.composeapp.generated.resources.Res
 import skyfit.composeapp.generated.resources.account_settings
 import skyfit.composeapp.generated.resources.action_logout
@@ -35,6 +40,18 @@ import skyfit.composeapp.generated.resources.support_and_assistance
 @Composable
 fun MobileTrainerSettingsScreen(navigator: Navigator) {
 
+    val viewModel: UserSettingsViewModel = koinInject()
+
+    LaunchedEffect(viewModel) {
+        viewModel.uiEvents.collectLatest {
+            when (it) {
+                UserSettingsViewEvent.GoToLogin -> {
+                    navigator.jumpAndTakeover(NavigationRoute.Login)
+                }
+            }
+        }
+    }
+
     SkyFitMobileScaffold(
         topBar = {
             SkyFitScreenHeader(title = stringResource(Res.string.settings), onClickBack = { navigator.popBackStack() })
@@ -43,7 +60,7 @@ fun MobileTrainerSettingsScreen(navigator: Navigator) {
             PrimaryLargeButton(
                 modifier = Modifier.fillMaxWidth().padding(24.dp),
                 text = stringResource(Res.string.action_logout),
-                onClick = { }
+                onClick = viewModel::onLogout
             )
         }
     ) {
