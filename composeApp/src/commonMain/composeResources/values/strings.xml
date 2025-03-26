@@ -74,5 +74,13 @@
     <string name="body_type_endo">Endomorph</string>
     <string name="action_continue">Devam Et</string>
     <string name="action_cancel">İptal</string>
+    <string name="action_logout">Oturumu Kapat</string>
+    <string name="settings">Ayarlar</string>
+    <string name="account_settings">Hesap Ayarları</string>
+    <string name="payment_history">Ödeme Geçmişi</string>
+    <string name="notifications">Bildirimler</string>
+    <string name="support_and_assistance">Destek ve Yardim</string>
+    <string name="members">Üyeler</string>
+    <string name="trainers">Eğitmenler</string>
 
 </resources>

@@ -2,61 +2,72 @@ package com.vurgun.skyfit.feature_settings.ui.facility
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import com.vurgun.skyfit.core.ui.components.ButtonSize
-import com.vurgun.skyfit.core.ui.components.ButtonState
-import com.vurgun.skyfit.core.ui.components.ButtonVariant
-import com.vurgun.skyfit.core.ui.components.SkyFitButtonComponent
+import com.vurgun.skyfit.core.ui.components.SkyFitMobileScaffold
 import com.vurgun.skyfit.core.ui.components.SkyFitScaffold
 import com.vurgun.skyfit.core.ui.components.SkyFitScreenHeader
-import com.vurgun.skyfit.feature_settings.ui.MobileSettingsMenuItemComponent
-import com.vurgun.skyfit.feature_settings.ui.MobileSettingsMenuItemDividerComponent
+import com.vurgun.skyfit.core.ui.components.button.PrimaryLargeButton
 import com.vurgun.skyfit.feature_navigation.NavigationRoute
 import com.vurgun.skyfit.feature_navigation.jumpAndStay
+import com.vurgun.skyfit.feature_settings.ui.MobileSettingsMenuItemComponent
+import com.vurgun.skyfit.feature_settings.ui.MobileSettingsMenuItemDividerComponent
 import moe.tlaster.precompose.navigation.Navigator
+import org.jetbrains.compose.resources.stringResource
 import skyfit.composeapp.generated.resources.Res
+import skyfit.composeapp.generated.resources.account_settings
+import skyfit.composeapp.generated.resources.action_logout
 import skyfit.composeapp.generated.resources.ic_athletic_performance
 import skyfit.composeapp.generated.resources.ic_bell
 import skyfit.composeapp.generated.resources.ic_credit_card
 import skyfit.composeapp.generated.resources.ic_posture_fill
 import skyfit.composeapp.generated.resources.ic_profile
 import skyfit.composeapp.generated.resources.ic_question_circle
+import skyfit.composeapp.generated.resources.members
+import skyfit.composeapp.generated.resources.notifications
+import skyfit.composeapp.generated.resources.payment_history
+import skyfit.composeapp.generated.resources.settings
+import skyfit.composeapp.generated.resources.support_and_assistance
+import skyfit.composeapp.generated.resources.trainers
 
 @Composable
 fun MobileFacilitySettingsScreen(navigator: Navigator) {
 
-    SkyFitScaffold(
+    SkyFitMobileScaffold(
         topBar = {
-            SkyFitScreenHeader(title = "Ayarlar", onClickBack = { navigator.popBackStack() })
+            SkyFitScreenHeader(title = stringResource(Res.string.settings), onClickBack = { navigator.popBackStack() })
         },
         bottomBar = {
-
-            SkyFitButtonComponent(
-                modifier = Modifier.fillMaxWidth().padding(24.dp), text = "Oturumu Kapat",
-                onClick = { },
-                variant = ButtonVariant.Primary,
-                size = ButtonSize.Large,
-                state = ButtonState.Rest
+            PrimaryLargeButton(
+                modifier = Modifier.fillMaxWidth().padding(24.dp),
+                text = stringResource(Res.string.action_logout),
+                onClick = { }
             )
         }
     ) {
         Column(
-            modifier = Modifier.fillMaxWidth().padding(top = 32.dp, start = 32.dp, end = 22.dp),
+            modifier = Modifier
+                .padding(start = 21.dp, end = 11.dp, top = 24.dp, bottom = 96.dp)
+                .fillMaxSize()
+                .padding(12.dp)
+                .verticalScroll(rememberScrollState()),
             verticalArrangement = Arrangement.spacedBy(32.dp)
         ) {
 
             MobileSettingsMenuItemComponent(
-                text = "Hesap Ayarlari",
+                text = stringResource(Res.string.account_settings),
                 iconRes = Res.drawable.ic_profile,
                 onClick = { navigator.jumpAndStay(NavigationRoute.FacilitySettingsAccount) }
             )
 
             MobileSettingsMenuItemComponent(
-                text = "Ödeme Geçmişi",
+                text = stringResource(Res.string.payment_history),
                 iconRes = Res.drawable.ic_credit_card,
                 onClick = { navigator.jumpAndStay(NavigationRoute.FacilitySettingsPaymentHistory) }
             )
@@ -64,7 +75,7 @@ fun MobileFacilitySettingsScreen(navigator: Navigator) {
             MobileSettingsMenuItemDividerComponent()
 
             MobileSettingsMenuItemComponent(
-                text = "Bildirimler",
+                text = stringResource(Res.string.notifications),
                 iconRes = Res.drawable.ic_bell,
                 onClick = { navigator.jumpAndStay(NavigationRoute.FacilitySettingsNotifications) }
             )
@@ -72,14 +83,13 @@ fun MobileFacilitySettingsScreen(navigator: Navigator) {
             MobileSettingsMenuItemDividerComponent()
 
             MobileSettingsMenuItemComponent(
-                text = "Üyeler",
+                text = stringResource(Res.string.members),
                 iconRes = Res.drawable.ic_posture_fill,
                 onClick = { navigator.jumpAndStay(NavigationRoute.FacilitySettingsSearchMembers) }
             )
 
-
             MobileSettingsMenuItemComponent(
-                text = "Eğitmenler",
+                text = stringResource(Res.string.trainers),
                 iconRes = Res.drawable.ic_athletic_performance,
                 onClick = { navigator.jumpAndStay(NavigationRoute.FacilitySettingsTrainers) }
             )
@@ -87,7 +97,7 @@ fun MobileFacilitySettingsScreen(navigator: Navigator) {
             MobileSettingsMenuItemDividerComponent()
 
             MobileSettingsMenuItemComponent(
-                text = "Destek ve Yardim",
+                text = stringResource(Res.string.support_and_assistance),
                 iconRes = Res.drawable.ic_question_circle,
                 onClick = { navigator.jumpAndStay(NavigationRoute.FacilitySettingsHelp) }
             )

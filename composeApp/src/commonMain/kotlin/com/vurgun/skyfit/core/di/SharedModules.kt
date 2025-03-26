@@ -3,6 +3,7 @@ package com.vurgun.skyfit.core.di
 import com.vurgun.skyfit.feature_appointments.di.appointmentModule
 import com.vurgun.skyfit.feature_auth.di.authModule
 import com.vurgun.skyfit.feature_chatbot.di.chatBotModule
+import com.vurgun.skyfit.feature_dashboard.di.dashboardModule
 import com.vurgun.skyfit.feature_messaging.di.messagingModule
 import com.vurgun.skyfit.feature_notifications.di.notificationModule
 import com.vurgun.skyfit.feature_onboarding.di.onboardingModule
@@ -15,6 +16,7 @@ val sharedModules: List<Module> = listOf(
     networkModule,
     configModule,
     userModule,
+    dashboardModule,
     splashModule,
     authModule,
     onboardingModule,

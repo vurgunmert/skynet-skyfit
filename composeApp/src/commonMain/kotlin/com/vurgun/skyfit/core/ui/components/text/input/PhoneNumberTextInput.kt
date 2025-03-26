@@ -87,9 +87,8 @@ fun PhoneNumberTextInput(
             decorationBox = { innerTextField ->
                 if (value.isBlank()) {
                     SecondaryMediumText(hint)
-                } else {
-                    innerTextField()
                 }
+                innerTextField()
             },
             cursorBrush = SolidColor(SkyFitColor.text.default),
         )

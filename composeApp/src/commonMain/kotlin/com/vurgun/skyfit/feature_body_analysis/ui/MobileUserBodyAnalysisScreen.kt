@@ -55,11 +55,11 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
-import com.preat.peekaboo.image.picker.toImageBitmap
-import com.preat.peekaboo.ui.camera.CameraMode
-import com.preat.peekaboo.ui.camera.PeekabooCamera
-import com.preat.peekaboo.ui.camera.PeekabooCameraState
-import com.preat.peekaboo.ui.camera.rememberPeekabooCameraState
+//import com.preat.peekaboo.image.picker.toImageBitmap
+//import com.preat.peekaboo.ui.camera.CameraMode
+//import com.preat.peekaboo.ui.camera.PeekabooCamera
+//import com.preat.peekaboo.ui.camera.PeekabooCameraState
+//import com.preat.peekaboo.ui.camera.rememberPeekabooCameraState
 import com.vurgun.skyfit.permission.requestCameraPermission
 import com.vurgun.skyfit.core.ui.components.ButtonSize
 import com.vurgun.skyfit.core.ui.components.ButtonState
@@ -100,13 +100,13 @@ fun MobileUserBodyAnalysisScreen(navigator: Navigator) {
     val uiState by viewModel.uiState.collectAsState()
     var capturedImage by remember { mutableStateOf<ByteArray?>(null) }
 
-    val cameraState = rememberPeekabooCameraState(
-        initialCameraMode = CameraMode.Back,
-        onCapture = { capturedByteArray ->
-            capturedImage = capturedByteArray
-            viewModel.startScanning(capturedImage?.encodeBase64())
-        }
-    )
+//    val cameraState = rememberPeekabooCameraState(
+//        initialCameraMode = CameraMode.Back,
+//        onCapture = { capturedByteArray ->
+//            capturedImage = capturedByteArray
+//            viewModel.startScanning(capturedImage?.encodeBase64())
+//        }
+//    )
 
     var permissionGranted by remember { mutableStateOf(false) }
     if (uiState is MobileUserBodyAnalysisState.CameraPreview) {
@@ -149,15 +149,15 @@ fun MobileUserBodyAnalysisScreen(navigator: Navigator) {
                 val state = uiState as MobileUserBodyAnalysisState.CameraPreview
 
                 if (permissionGranted) {
-                    MobileUserBodyAnalysisScreenCameraPreviewComponent(
-                        cameraState = cameraState,
-                        posture = state.postureType,
-                        showGuide = state.showGuide,
-                        onToggleGuide = { viewModel.toggleGuideVisibility(state.postureType, !state.showGuide) },
-                        onCapture = { viewModel.startScanning(capturedImage?.encodeBase64()) },
-                        onClickExit = { viewModel.showCaptureExitScreen() },
-                        onToggleInfo = { viewModel.showInfoScreen() }
-                    )
+//                    MobileUserBodyAnalysisScreenCameraPreviewComponent(
+//                        cameraState = cameraState,
+//                        posture = state.postureType,
+//                        showGuide = state.showGuide,
+//                        onToggleGuide = { viewModel.toggleGuideVisibility(state.postureType, !state.showGuide) },
+//                        onCapture = { viewModel.startScanning(capturedImage?.encodeBase64()) },
+//                        onClickExit = { viewModel.showCaptureExitScreen() },
+//                        onToggleInfo = { viewModel.showInfoScreen() }
+//                    )
                 } else {
                     Box(
                         modifier = Modifier.fillMaxSize(),
@@ -323,7 +323,7 @@ private fun PostureOptionItem(
 @Composable
 private fun MobileUserBodyAnalysisScreenMediaActionsComponent(
     modifier: Modifier,
-    cameraState: PeekabooCameraState,
+//    cameraState: PeekabooCameraState,
     onClickFlipCamera: () -> Unit,
     onClickCapture: () -> Unit,
     onClickPickImage: () -> Unit
@@ -339,21 +339,21 @@ private fun MobileUserBodyAnalysisScreenMediaActionsComponent(
         })
         Spacer(Modifier.width(48.dp))
 
-        if (!cameraState.isCapturing) {
-            SkyFitIconButton(painter = painterResource(Res.drawable.ic_camera), onClick = onClickCapture)
-        } else {
-            Box(
-                Modifier.size(64.dp)
-                    .background(SkyFitColor.specialty.buttonBgLoading, CircleShape),
-                contentAlignment = Alignment.Center
-            ) {
-                CircularProgressIndicator(
-                    modifier = Modifier.size(22.dp),
-                    color = SkyFitColor.icon.disabled,
-                    strokeWidth = 1.dp
-                )
-            }
-        }
+//        if (!cameraState.isCapturing) {
+//            SkyFitIconButton(painter = painterResource(Res.drawable.ic_camera), onClick = onClickCapture)
+//        } else {
+//            Box(
+//                Modifier.size(64.dp)
+//                    .background(SkyFitColor.specialty.buttonBgLoading, CircleShape),
+//                contentAlignment = Alignment.Center
+//            ) {
+//                CircularProgressIndicator(
+//                    modifier = Modifier.size(22.dp),
+//                    color = SkyFitColor.icon.disabled,
+//                    strokeWidth = 1.dp
+//                )
+//            }
+//        }
 
         Spacer(Modifier.width(48.dp))
         SkyFitIconButton(painter = painterResource(Res.drawable.ic_image), onClick = onClickPickImage)
@@ -362,7 +362,7 @@ private fun MobileUserBodyAnalysisScreenMediaActionsComponent(
 
 @Composable
 fun MobileUserBodyAnalysisScreenCameraPreviewComponent(
-    cameraState: PeekabooCameraState,
+//    cameraState: PeekabooCameraState,
     posture: PostureType,
     showGuide: Boolean,
     onClickExit: () -> Unit,
@@ -375,22 +375,22 @@ fun MobileUserBodyAnalysisScreenCameraPreviewComponent(
     Box(modifier = Modifier.fillMaxSize()) {
         // Camera View
         if (showPreview) {
-            PeekabooCamera(
-                state = cameraState,
-                modifier = Modifier.fillMaxSize(),
-                permissionDeniedContent = {
-                    Box(
-                        modifier = Modifier.fillMaxSize(),
-                        contentAlignment = Alignment.Center
-                    ) {
-                        Text(
-                            text = "Kamera erişimi reddedildi",
-                            style = SkyFitTypography.bodyLargeMedium,
-                            color = Color.White
-                        )
-                    }
-                }
-            )
+//            PeekabooCamera(
+//                state = cameraState,
+//                modifier = Modifier.fillMaxSize(),
+//                permissionDeniedContent = {
+//                    Box(
+//                        modifier = Modifier.fillMaxSize(),
+//                        contentAlignment = Alignment.Center
+//                    ) {
+//                        Text(
+//                            text = "Kamera erişimi reddedildi",
+//                            style = SkyFitTypography.bodyLargeMedium,
+//                            color = Color.White
+//                        )
+//                    }
+//                }
+//            )
         }
 
         if (showGuide) {
@@ -404,15 +404,15 @@ fun MobileUserBodyAnalysisScreenCameraPreviewComponent(
             onClickInfo = onToggleInfo
         )
 
-        MobileUserBodyAnalysisScreenMediaActionsComponent(
-            modifier = Modifier
-                .padding(bottom = 32.dp)
-                .align(Alignment.BottomCenter),
-            cameraState = cameraState,
-            onClickFlipCamera = { cameraState.toggleCamera() },
-            onClickCapture = { cameraState.capture() },
-            onClickPickImage = { showPreview = !showPreview }
-        )
+//        MobileUserBodyAnalysisScreenMediaActionsComponent(
+//            modifier = Modifier
+//                .padding(bottom = 32.dp)
+//                .align(Alignment.BottomCenter),
+//            cameraState = cameraState,
+//            onClickFlipCamera = { cameraState.toggleCamera() },
+//            onClickCapture = { cameraState.capture() },
+//            onClickPickImage = { showPreview = !showPreview }
+//        )
     }
 }
 
@@ -436,13 +436,13 @@ fun MobileUserBodyAnalysisScreenCaptureResultComponent(
 ) {
     Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
         if (capturedImage != null) {
-            val bitmap = capturedImage.toImageBitmap()
-            Image(
-                painter = BitmapPainter(bitmap),
-                contentDescription = "Captured Image",
-                contentScale = ContentScale.Crop,
-                modifier = Modifier.fillMaxSize()
-            )
+//            val bitmap = capturedImage.toImageBitmap()
+//            Image(
+//                painter = BitmapPainter(bitmap),
+//                contentDescription = "Captured Image",
+//                contentScale = ContentScale.Crop,
+//                modifier = Modifier.fillMaxSize()
+//            )
             Image(
                 painter = painterResource(Res.drawable.body_analysis_scan_result_fake),
                 contentDescription = "Captured Image",
@@ -471,13 +471,13 @@ fun MobileUserBodyAnalysisScreenCaptureResultInsightComponent(
 
     Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
         if (capturedImage != null) {
-            val bitmap = capturedImage.toImageBitmap()
-            Image(
-                painter = BitmapPainter(bitmap),
-                contentDescription = "Captured Image",
-                contentScale = ContentScale.Crop,
-                modifier = Modifier.fillMaxSize()
-            )
+//            val bitmap = capturedImage.toImageBitmap()
+//            Image(
+//                painter = BitmapPainter(bitmap),
+//                contentDescription = "Captured Image",
+//                contentScale = ContentScale.Crop,
+//                modifier = Modifier.fillMaxSize()
+//            )
         }
 
         FlowRow(
@@ -766,13 +766,13 @@ fun MobileUserBodyAnalysisScreenScanningComponent(
         contentAlignment = Alignment.Center
     ) {
         if (capturedImage != null) {
-            val bitmap = capturedImage.toImageBitmap()
-            Image(
-                painter = BitmapPainter(bitmap),
-                contentDescription = "Captured Image",
-                contentScale = ContentScale.Crop,
-                modifier = Modifier.fillMaxSize()
-            )
+//            val bitmap = capturedImage.toImageBitmap()
+//            Image(
+//                painter = BitmapPainter(bitmap),
+//                contentDescription = "Captured Image",
+//                contentScale = ContentScale.Crop,
+//                modifier = Modifier.fillMaxSize()
+//            )
         }
         HoloScanningEffect()
     }

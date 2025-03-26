@@ -50,7 +50,7 @@ sealed class NavigationRoute(
     data object OnboardingHeightSelection : NavigationRoute("onboarding/height_selection")
     data object OnboardingUserGoalSelection : NavigationRoute("onboarding/goal_selection")
     data object OnboardingBodyTypeSelection : NavigationRoute("onboarding/body_type_selection")
-    data object OnboardingTrainerDetails : NavigationRoute("onboarding/trainer_details")
+    data object OnboardingEnterProfile : NavigationRoute("onboarding/enter_profile")
     data object OnboardingFacilityDetails : NavigationRoute("onboarding/facility_details")
     data object OnboardingFacilityProfileTags : NavigationRoute("onboarding/facility_profile_tags")
     data object OnboardingCompleted : NavigationRoute("onboarding/completed")

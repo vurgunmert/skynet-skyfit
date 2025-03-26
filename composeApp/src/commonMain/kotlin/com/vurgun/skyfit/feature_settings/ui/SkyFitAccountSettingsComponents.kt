@@ -35,6 +35,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
+import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.graphics.painter.BitmapPainter
 import androidx.compose.ui.layout.ContentScale
@@ -44,9 +45,10 @@ import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import coil3.compose.AsyncImage
-import com.preat.peekaboo.image.picker.SelectionMode
-import com.preat.peekaboo.image.picker.rememberImagePickerLauncher
-import com.preat.peekaboo.image.picker.toImageBitmap
+import com.mohamedrejeb.calf.picker.toImageBitmap
+//import com.preat.peekaboo.image.picker.SelectionMode
+//import com.preat.peekaboo.image.picker.rememberImagePickerLauncher
+//import com.preat.peekaboo.image.picker.toImageBitmap
 import com.vurgun.skyfit.core.domain.models.FitnessTagType
 import com.vurgun.skyfit.core.ui.components.ButtonSize
 import com.vurgun.skyfit.core.ui.components.ButtonState
@@ -54,6 +56,7 @@ import com.vurgun.skyfit.core.ui.components.ButtonVariant
 import com.vurgun.skyfit.core.ui.components.FitnessTagPickerDialog
 import com.vurgun.skyfit.core.ui.components.SkyFitAccountSettingsProfileTagItemComponent
 import com.vurgun.skyfit.core.ui.components.SkyFitButtonComponent
+import com.vurgun.skyfit.core.ui.components.image.SkyFitPickImageWrapper
 import com.vurgun.skyfit.core.ui.resources.SkyFitColor
 import com.vurgun.skyfit.core.ui.resources.SkyFitTypography
 import org.jetbrains.compose.resources.DrawableResource
@@ -71,19 +74,7 @@ fun MobileUserSettingsScreenPhotoEditComponent(
     label: String,
     onImagePicked: (ByteArray) -> Unit
 ) {
-    val scope = rememberCoroutineScope()
-    var selectedImage by remember { mutableStateOf<ByteArray?>(null) }
-
-    val imagePickerLauncher = rememberImagePickerLauncher(
-        selectionMode = SelectionMode.Single,
-        scope = scope,
-        onResult = { images ->
-            if (images.isNotEmpty()) {
-                selectedImage = images.first()
-                onImagePicked(images.first())
-            }
-        }
-    )
+    var selectedImage by remember { mutableStateOf<ImageBitmap?>(null) }
 
     Row(
         Modifier
@@ -91,40 +82,58 @@ fun MobileUserSettingsScreenPhotoEditComponent(
             .height(64.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
+
         if (selectedImage != null) {
-            Image(
-                painter = BitmapPainter(selectedImage!!.toImageBitmap()),
-                contentDescription = "Picked Image",
-                contentScale = ContentScale.Crop,
-                modifier = Modifier
-                    .size(64.dp)
-                    .clip(RoundedCornerShape(20.dp))
-                    .clickable { imagePickerLauncher.launch() },
-            )
+            SkyFitPickImageWrapper(
+                onImagesSelected = {
+                    selectedImage = it.firstOrNull()?.toImageBitmap()
+                }
+            ) {
+                Image(
+                    painter = BitmapPainter(image = selectedImage!!),
+                    contentDescription = "Image",
+                    contentScale = ContentScale.Crop,
+                    modifier = Modifier
+                        .size(64.dp)
+                        .background(SkyFitColor.background.surfaceSecondary)
+                        .clip(RoundedCornerShape(20.dp))
+                )
+            }
         } else {
-            AsyncImage(
-                model = urlString,
-                contentDescription = null,
-                contentScale = ContentScale.Crop,
-                modifier = Modifier
-                    .size(64.dp)
-                    .clip(RoundedCornerShape(20.dp))
-                    .background(SkyFitColor.background.surfaceSecondary)
-                    .clickable { imagePickerLauncher.launch() },
-            )
+            SkyFitPickImageWrapper(
+                onImagesSelected = {
+                    selectedImage = it.firstOrNull()?.toImageBitmap()
+                }
+            ) {
+                AsyncImage(
+                    model = urlString,
+                    contentDescription = null,
+                    contentScale = ContentScale.Crop,
+                    modifier = Modifier
+                        .size(64.dp)
+                        .clip(RoundedCornerShape(20.dp))
+                        .background(SkyFitColor.background.surfaceSecondary)
+                )
+            }
         }
 
         Spacer(Modifier.width(16.dp))
 
-        SkyFitButtonComponent(
-            modifier = Modifier.wrapContentWidth(),
-            text = label,
-            onClick = { imagePickerLauncher.launch() },
-            variant = ButtonVariant.Secondary,
-            size = ButtonSize.Medium,
-            state = ButtonState.Rest,
-            rightIconPainter = painterResource(Res.drawable.ic_pencil)
-        )
+        SkyFitPickImageWrapper(
+            onImagesSelected = {
+                selectedImage = it.firstOrNull()?.toImageBitmap()
+            }
+        ) {
+            SkyFitButtonComponent(
+                modifier = Modifier.wrapContentWidth(),
+                text = label,
+                onClick = { },
+                variant = ButtonVariant.Secondary,
+                size = ButtonSize.Medium,
+                state = ButtonState.Rest,
+                rightIconPainter = painterResource(Res.drawable.ic_pencil)
+            )
+        }
     }
 }
 

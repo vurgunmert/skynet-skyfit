@@ -1,22 +1,14 @@
 package com.vurgun.skyfit.permission
 
-import android.Manifest
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.SideEffect
-import com.google.accompanist.permissions.ExperimentalPermissionsApi
-import com.google.accompanist.permissions.isGranted
-import com.google.accompanist.permissions.rememberPermissionState
+import com.mohamedrejeb.calf.permissions.ExperimentalPermissionsApi
+import com.mohamedrejeb.calf.permissions.Permission
+import com.mohamedrejeb.calf.permissions.isGranted
+import com.mohamedrejeb.calf.permissions.rememberPermissionState
 
 @OptIn(ExperimentalPermissionsApi::class)
 @Composable
 actual fun requestCameraPermission(): Boolean {
-    val cameraPermissionState = rememberPermissionState(Manifest.permission.CAMERA)
-
-    SideEffect {
-        if (!cameraPermissionState.status.isGranted) {
-            cameraPermissionState.launchPermissionRequest()
-        }
-    }
-
+    val cameraPermissionState = rememberPermissionState(Permission.Camera)
     return cameraPermissionState.status.isGranted
 }

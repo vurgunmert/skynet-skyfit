@@ -158,7 +158,13 @@ object SkyFitAsset {
     enum class CharacterIcon(val id: String, val res: DrawableResource) {
         CARROT("ic_character_carrot", Res.drawable.ic_character_carrot),
         KOALA("ic_character_koala", Res.drawable.ic_character_koala),
-        PANDA("ic_character_panda", Res.drawable.ic_character_panda)
+        PANDA("ic_character_panda", Res.drawable.ic_character_panda);
+
+        companion object {
+            fun findById(id: String): CharacterIcon? {
+                return entries.firstOrNull { it.id == id }
+            }
+        }
     }
 
     enum class BodyTypeIcon(val id: String, val res: DrawableResource) {
@@ -167,7 +173,13 @@ object SkyFitAsset {
         MALE_ENDO("ic_male_body_type_endo", Res.drawable.ic_male_body_type_endo),
         FEMALE_ECTO("ic_female_body_type_ecto", Res.drawable.ic_female_body_type_ecto),
         FEMALE_MESO("ic_female_body_type_meso", Res.drawable.ic_female_body_type_meso),
-        FEMALE_ENDO("ic_female_body_type_endo", Res.drawable.ic_female_body_type_endo),
+        FEMALE_ENDO("ic_female_body_type_endo", Res.drawable.ic_female_body_type_endo);
+
+        companion object {
+            fun findById(id: String): BodyTypeIcon? {
+                return entries.firstOrNull { it.id == id }
+            }
+        }
     }
 
 }
