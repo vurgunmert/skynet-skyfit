@@ -74,5 +74,21 @@
     <string name="body_type_endo">Endomorph</string>
     <string name="action_continue">Devam Et</string>
     <string name="action_cancel">İptal</string>
+    <string name="lessons">Dersler</string>
+    <string name="out_of_use">Kullanım dışı</string>
+    <string name="activate">Aktifleştir</string>
+    <string name="edit">Düzenle</string>
+    <string name="edit_lesson">Dersi Düzenle</string>
+    <string name="delete">Sil</string>
+    <string name="disable">Devre dışı bırak</string>
+    <string name="description">Açıklama</string>
+    <string name="add_description_hint">Açıklama ekle</string>
+    <string name="trainer_note">Eğitmenin Notu</string>
+    <string name="add_trainer_note_hint">Try to arrive 5-10 minutes early to warm up and settle in before the class starts.</string>
+    <string name="icon">İkon</string>
+    <string name="open">Aç</string>
+    <string name="close">Kapat</string>
+
+
 
 </resources>

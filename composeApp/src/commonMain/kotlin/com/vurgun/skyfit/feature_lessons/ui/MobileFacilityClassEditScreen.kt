@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.heightIn
@@ -59,6 +60,7 @@ import com.vurgun.skyfit.core.ui.components.DatePickerDialog
 import com.vurgun.skyfit.core.ui.components.SkyFitButtonComponent
 import com.vurgun.skyfit.core.ui.components.SkyFitCheckBoxComponent
 import com.vurgun.skyfit.core.ui.components.SkyFitDropdownComponent
+import com.vurgun.skyfit.core.ui.components.SkyFitMobileScaffold
 import com.vurgun.skyfit.core.ui.components.SkyFitRadioButtonComponent
 import com.vurgun.skyfit.core.ui.components.SkyFitScaffold
 import com.vurgun.skyfit.core.ui.components.SkyFitScreenHeader
@@ -74,12 +76,20 @@ import com.vurgun.skyfit.core.utils.now
 import kotlinx.datetime.LocalDate
 import moe.tlaster.precompose.navigation.Navigator
 import org.jetbrains.compose.resources.painterResource
+import org.jetbrains.compose.resources.stringResource
 import skyfit.composeapp.generated.resources.Res
+import skyfit.composeapp.generated.resources.add_description_hint
+import skyfit.composeapp.generated.resources.add_trainer_note_hint
+import skyfit.composeapp.generated.resources.description
+import skyfit.composeapp.generated.resources.edit_lesson
 import skyfit.composeapp.generated.resources.ic_calendar_dots
 import skyfit.composeapp.generated.resources.ic_check
 import skyfit.composeapp.generated.resources.ic_chevron_down
 import skyfit.composeapp.generated.resources.ic_exercises
+import skyfit.composeapp.generated.resources.icon
 import skyfit.composeapp.generated.resources.logo_skyfit
+import skyfit.composeapp.generated.resources.open
+import skyfit.composeapp.generated.resources.trainer_note
 
 @Composable
 fun MobileFacilityClassEditScreen(navigator: Navigator) {
@@ -91,9 +101,9 @@ fun MobileFacilityClassEditScreen(navigator: Navigator) {
         viewModel.loadClass("facilityId", "null")
     }
 
-    SkyFitScaffold(
+    SkyFitMobileScaffold(
         topBar = {
-            SkyFitScreenHeader("Dersi Düzenle", onClickBack = {
+            SkyFitScreenHeader(stringResource(Res.string.edit_lesson), onClickBack = {
                 if (facilityClass.isSaveButtonEnabled) {
                     viewModel.updateShowCancelDialog(true)
                 } else {
@@ -114,7 +124,7 @@ fun MobileFacilityClassEditScreen(navigator: Navigator) {
     ) {
         Column(
             modifier = Modifier
-                .widthIn(max = SkyFitStyleGuide.Mobile.maxWidth)
+                .fillMaxSize()
                 .padding(SkyFitStyleGuide.Padding.large)
                 .verticalScroll(rememberScrollState()),
             verticalArrangement = Arrangement.spacedBy(24.dp)
@@ -136,15 +146,15 @@ fun MobileFacilityClassEditScreen(navigator: Navigator) {
             )
 
             SkyFitSelectToEnterMultilineInputComponent(
-                title = "Açıklama",
-                hint = "Açıklama ekle",
+                title = stringResource(Res.string.description),
+                hint = stringResource(Res.string.add_description_hint),
                 value = facilityClass.description,
                 onValueChange = { viewModel.updateDescription(it) }
             )
 
             SkyFitSelectToEnterMultilineInputComponent(
-                title = "Eğitmenin Notu",
-                hint = "Try to arrive 5-10 minutes early to warm up and settle in before the class starts.",
+                title = stringResource(Res.string.trainer_note),
+                hint = stringResource(Res.string.add_trainer_note_hint),
                 value = facilityClass.trainerNote,
                 onValueChange = viewModel::updateTrainerNote
             )
@@ -231,7 +241,7 @@ private fun FacilityClassHeadInfoInputGroup(
         ) {
             Column {
                 Text(
-                    text = "İkon",
+                    text = stringResource(Res.string.icon),
                     style = SkyFitTypography.bodyMediumSemibold,
                     modifier = Modifier.padding(start = 8.dp)
                 )
@@ -252,7 +262,7 @@ private fun FacilityClassHeadInfoInputGroup(
                     Spacer(Modifier.width(16.dp))
                     Icon(
                         painter = painterResource(Res.drawable.ic_chevron_down),
-                        contentDescription = "Arrow",
+                        contentDescription = stringResource(Res.string.open),
                         tint = SkyFitColor.icon.default,
                         modifier = Modifier.size(16.dp)
                     )
@@ -322,14 +332,14 @@ private fun FacilityClassTrainerNoteInputGroup(
             .wrapContentHeight()
     ) {
         Text(
-            text = "Eğitmenin Notu",
+            text = stringResource(Res.string.trainer_note),
             style = SkyFitTypography.bodyMediumSemibold,
             modifier = Modifier.padding(start = 8.dp)
         )
         TextField(
             placeholder = {
                 Text(
-                    "Açıklama ekle",
+                    stringResource(Res.string.add_description_hint),
                     style = SkyFitTypography.bodyMediumRegular,
                     color = SkyFitColor.text.secondary
                 )

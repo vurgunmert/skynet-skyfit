@@ -42,14 +42,21 @@ import com.vurgun.skyfit.feature_navigation.jumpAndStay
 import kotlinx.datetime.LocalDate
 import moe.tlaster.precompose.navigation.Navigator
 import org.jetbrains.compose.resources.painterResource
+import org.jetbrains.compose.resources.stringResource
 import skyfit.composeapp.generated.resources.Res
+import skyfit.composeapp.generated.resources.activate
+import skyfit.composeapp.generated.resources.delete
+import skyfit.composeapp.generated.resources.disable
+import skyfit.composeapp.generated.resources.edit
 import skyfit.composeapp.generated.resources.ic_check_circle
 import skyfit.composeapp.generated.resources.ic_close_circle
 import skyfit.composeapp.generated.resources.ic_delete
 import skyfit.composeapp.generated.resources.ic_pencil
+import skyfit.composeapp.generated.resources.lessons
+import skyfit.composeapp.generated.resources.out_of_use
 
 @Composable
-fun MobileFacilityClassesScreen(navigator: Navigator) {
+fun MobileFacilityLessonsScreen(navigator: Navigator) {
     val viewModel = remember { FacilityClassesViewModel() }
     val activeClasses by viewModel.activeClasses.collectAsState()
     val inactiveClasses by viewModel.inactiveClasses.collectAsState()
@@ -62,7 +69,7 @@ fun MobileFacilityClassesScreen(navigator: Navigator) {
     Scaffold(
         backgroundColor = SkyFitColor.background.default,
         topBar = {
-            SkyFitScreenHeader("Dersler", onClickBack = { navigator.popBackStack() })
+            SkyFitScreenHeader(stringResource(Res.string.lessons), onClickBack = { navigator.popBackStack() })
         }
     ) { paddingValues ->
 
@@ -159,7 +166,7 @@ private fun InactiveSessionItemsColumn(
             modifier = Modifier.fillMaxWidth().padding(horizontal = 8.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
-            Text(text = "Kullanım dışı", style = SkyFitTypography.heading5)
+            Text(text = stringResource(Res.string.out_of_use), style = SkyFitTypography.heading5)
             Spacer(Modifier.weight(1f))
         }
 
@@ -221,12 +228,12 @@ private fun FacilityClassOptionsMenuPopup(
                                     horizontalArrangement = Arrangement.SpaceBetween
                                 ) {
                                     Text(
-                                        text = "Devre dışı bırak",
+                                        text = stringResource(Res.string.disable),
                                         style = SkyFitTypography.bodyMediumRegular
                                     )
                                     Icon(
                                         painter = painterResource(Res.drawable.ic_close_circle),
-                                        contentDescription = "Add Event",
+                                        contentDescription = stringResource(Res.string.disable),
                                         tint = SkyFitColor.icon.default,
                                         modifier = Modifier.size(16.dp)
                                     )
@@ -253,12 +260,12 @@ private fun FacilityClassOptionsMenuPopup(
                                     horizontalArrangement = Arrangement.SpaceBetween
                                 ) {
                                     Text(
-                                        text = "Aktifleştir",
+                                        text = stringResource(Res.string.activate),
                                         style = SkyFitTypography.bodyMediumRegular
                                     )
                                     Icon(
                                         painter = painterResource(Res.drawable.ic_check_circle),
-                                        contentDescription = "Activate",
+                                        contentDescription = stringResource(Res.string.activate),
                                         tint = SkyFitColor.icon.default,
                                         modifier = Modifier.size(16.dp)
                                     )
@@ -284,12 +291,12 @@ private fun FacilityClassOptionsMenuPopup(
                                 horizontalArrangement = Arrangement.SpaceBetween
                             ) {
                                 Text(
-                                    text = "Düzenle",
+                                    text = stringResource(Res.string.edit),
                                     style = SkyFitTypography.bodyMediumRegular
                                 )
                                 Icon(
                                     painter = painterResource(Res.drawable.ic_pencil),
-                                    contentDescription = "Edit",
+                                    contentDescription = stringResource(Res.string.edit),
                                     tint = SkyFitColor.icon.default,
                                     modifier = Modifier.size(16.dp)
                                 )
@@ -314,13 +321,13 @@ private fun FacilityClassOptionsMenuPopup(
                                 horizontalArrangement = Arrangement.SpaceBetween
                             ) {
                                 Text(
-                                    text = "Sil",
+                                    text = stringResource(Res.string.delete),
                                     style = SkyFitTypography.bodyMediumRegular,
                                     color = SkyFitColor.text.criticalOnBgFill
                                 )
                                 Icon(
                                     painter = painterResource(Res.drawable.ic_delete),
-                                    contentDescription = "Delete",
+                                    contentDescription = stringResource(Res.string.delete),
                                     tint = SkyFitColor.icon.critical,
                                     modifier = Modifier.size(16.dp)
                                 )
