@@ -4,11 +4,15 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import com.vurgun.skyfit.core.domain.models.CharacterType
 
 @Composable
-actual fun UserCharacterComponent(modifier: Modifier) {
+actual fun UserCharacterComponent(
+    modifier: Modifier,
+    characterType: CharacterType
+) {
     SkyFitImageComponent(
-        url =  "https://ik.imagekit.io/skynet2skyfit/character_carrot.png?updatedAt=1738866664880",
+        url =  characterType,
         modifier = modifier.size(240.dp)
     )
 }

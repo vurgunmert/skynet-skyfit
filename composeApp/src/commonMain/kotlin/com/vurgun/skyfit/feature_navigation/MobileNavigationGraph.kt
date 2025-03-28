@@ -51,7 +51,7 @@ import com.vurgun.skyfit.feature_notifications.ui.MobileUserNotificationsScreen
 import com.vurgun.skyfit.feature_nutrition.ui.MobileUserMealDetailAddPhotoScreen
 import com.vurgun.skyfit.feature_nutrition.ui.MobileUserMealDetailAddScreen
 import com.vurgun.skyfit.feature_nutrition.ui.MobileUserMealDetailScreen
-import com.vurgun.skyfit.feature_onboarding.ui.MobileOnboardingNavGraph
+import com.vurgun.skyfit.feature_onboarding.ui.MobileOnboardingFlowNavGraph
 import com.vurgun.skyfit.feature_payment.ui.MobileUserPaymentProcessScreen
 import com.vurgun.skyfit.feature_profile.domain.model.ProfileViewMode
 import com.vurgun.skyfit.feature_profile.ui.facility.MobileFacilityPhotoDiaryScreen
@@ -98,8 +98,8 @@ fun MobileNavigationGraph() {
     ) {
         scene(NavigationRoute.Splash.route) { SplashScreen(navigator) }
 
-        authNavGraph(navigator)
-        onboardingNavGraph(navigator)
+        mobileAuthNavGraph(navigator)
+        mobileOnboardingNavGraph(navigator)
         dashboardNavGraph(navigator)
         exploreNavGraph(navigator)
         exerciseNavGraph(navigator)
@@ -110,7 +110,7 @@ fun MobileNavigationGraph() {
     }
 }
 
-private fun RouteBuilder.authNavGraph(navigator: Navigator) {
+private fun RouteBuilder.mobileAuthNavGraph(navigator: Navigator) {
     scene(NavigationRoute.Login.route) { MobileLoginScreen(navigator) }
     scene(NavigationRoute.LoginVerifyOTP.route) { MobileLoginVerifyOTPScreen(navigator) }
     scene(NavigationRoute.CreatePassword.route) { MobileCreatePasswordScreen(navigator) }
@@ -121,8 +121,8 @@ private fun RouteBuilder.authNavGraph(navigator: Navigator) {
     scene(NavigationRoute.TermsAndConditions.route) { MobileTermsAndConditionsScreen(navigator) }
 }
 
-private fun RouteBuilder.onboardingNavGraph(navigator: Navigator) {
-    scene(NavigationRoute.Onboarding.route) { MobileOnboardingNavGraph(navigator) }
+private fun RouteBuilder.mobileOnboardingNavGraph(navigator: Navigator) {
+    scene(NavigationRoute.Onboarding.route) { MobileOnboardingFlowNavGraph(navigator) }
 }
 
 private fun RouteBuilder.dashboardNavGraph(navigator: Navigator) {

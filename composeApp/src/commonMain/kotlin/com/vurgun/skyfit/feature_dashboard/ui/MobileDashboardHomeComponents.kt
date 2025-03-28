@@ -45,6 +45,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil3.compose.AsyncImage
+import com.vurgun.skyfit.core.domain.models.CharacterType
 import com.vurgun.skyfit.core.ui.components.UserCharacterComponent
 import com.vurgun.skyfit.feature_calendar.ui.MobileUserActivityHourlyCalendarComponent
 import com.vurgun.skyfit.feature_profile.ui.user.MobileUserTrophyItemComponent
@@ -103,6 +104,7 @@ fun MobileDashboardHomeToolbarComponent(
 
 @Composable
 fun MobileDashboardHomeCharacterProgressComponent(
+    characterType: CharacterType,
     stepProgress: Float = 0.7f,
     distanceProgress: Float = 0.3f,
     waterProgress: Float = 0.2f,
@@ -118,7 +120,10 @@ fun MobileDashboardHomeCharacterProgressComponent(
             .clickable(onClick = onClick)
             .padding(horizontal = 16.dp, vertical = 24.dp)
     ) {
-        UserCharacterComponent(Modifier.align(Alignment.Center))
+        UserCharacterComponent(
+            modifier = Modifier.align(Alignment.TopCenter).size(240.dp),
+            characterType = characterType
+        )
 
         SkyFitCircularProgressIconButton(
             painter = painterResource(Res.drawable.ic_steps),

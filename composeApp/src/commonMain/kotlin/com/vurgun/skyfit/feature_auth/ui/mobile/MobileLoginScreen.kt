@@ -183,7 +183,8 @@ private fun MobileLoginWithPhoneContentGroup(
             Text(
                 text = it,
                 style = SkyFitTypography.bodyMediumRegular,
-                color = SkyFitColor.text.criticalOnBgFill
+                color = SkyFitColor.text.criticalOnBgFill,
+                modifier = Modifier.padding(start = 8.dp)
             )
         }
 

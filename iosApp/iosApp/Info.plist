@@ -23,7 +23,7 @@
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
 	<key>NSCameraUsageDescription</key>
-	<string>Kameraya erişmek için izin gereklidir.</string>
+	<string>Camera permission is required to take pictures</string>
 	<key>UIApplicationSceneManifest</key>
 	<dict>
 		<key>UIApplicationSupportsMultipleScenes</key>
@@ -43,6 +43,13 @@
 		<string>UIInterfaceOrientationPortraitUpsideDown</string>
 	</array>
 	<key>UIViewControllerBasedStatusBarAppearance</key>
-	<true/>
+	<false/>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>Gallery permission is required to pick images</string>
+	<key>NSAppTransportSecurity</key>
+	<dict>
+    <key>NSAllowsArbitraryLoads</key>
+    <true/>
+</dict>
 </dict>
 </plist>

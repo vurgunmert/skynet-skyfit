@@ -21,12 +21,14 @@ sealed class PasswordResetViewEvent {
 }
 
 class PasswordResetViewModel(
-    private val authRepository: AuthRepository,
-    private val savedStateHandle: SavedStateHandle
+    private val authRepository: AuthRepository
 ) : ViewModel() {
 
-    val password = savedStateHandle.getStateFlow("password", "")
-    val confirmPassword = savedStateHandle.getStateFlow("confirmPassword", "")
+    private val _password = MutableStateFlow("")
+    val password: StateFlow<String> = _password
+
+    private val _confirmPassword = MutableStateFlow("")
+    val confirmPassword: StateFlow<String> = _confirmPassword
 
     private val _isLoading = MutableStateFlow(false)
     val isLoading: StateFlow<Boolean> = _isLoading.asStateFlow()
@@ -39,11 +41,11 @@ class PasswordResetViewModel(
     }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), false)
 
     fun setPassword(pass: String) {
-        savedStateHandle["password"] = pass
+        _password.value = pass
     }
 
     fun setConfirmPassword(confirmPass: String) {
-        savedStateHandle["confirmPassword"] = confirmPass
+        _confirmPassword.value = confirmPass
     }
 
     fun submitPasswordReset() {

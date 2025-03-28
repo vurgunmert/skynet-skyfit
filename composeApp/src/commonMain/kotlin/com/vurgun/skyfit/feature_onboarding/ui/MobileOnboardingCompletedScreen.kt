@@ -2,23 +2,22 @@ package com.vurgun.skyfit.feature_onboarding.ui
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.vurgun.skyfit.core.ui.components.SkyFitMobileScaffold
 import com.vurgun.skyfit.core.ui.components.button.PrimaryLargeButton
-import com.vurgun.skyfit.core.ui.components.loader.AutoLoopingCircularProgressIndicator
 import com.vurgun.skyfit.feature_navigation.NavigationRoute
 import com.vurgun.skyfit.feature_navigation.jumpAndTakeover
-import com.vurgun.skyfit.feature_onboarding.ui.viewmodel.OnboardingViewModel
+import com.vurgun.skyfit.feature_onboarding.domain.viewmodel.OnboardingViewModel
 import moe.tlaster.precompose.navigation.Navigator
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
@@ -33,45 +32,34 @@ fun MobileOnboardingCompletedScreen(
     viewModel: OnboardingViewModel,
     navigator: Navigator
 ) {
-    val isLoading by viewModel.isLoading.collectAsState()
-    val character = viewModel.state.collectAsState().value.character
-
-    LaunchedEffect(viewModel) {
-        viewModel.submitFields()
-    }
+    val character = viewModel.uiState.collectAsState().value.character
 
     SkyFitMobileScaffold {
-        if (isLoading) {
-            Box(Modifier.fillMaxSize()) {
-                AutoLoopingCircularProgressIndicator(Modifier.align(Alignment.Center))
-            }
-        } else {
-            Box(modifier = Modifier.fillMaxSize()) {
-                OnboardingTitleGroupComponent(
-                    title = stringResource(Res.string.onboarding_ready_title),
-                    subtitle = stringResource(Res.string.onboarding_ready_message),
-                    modifier = Modifier.align(Alignment.TopStart).padding(top = 110.dp)
-                )
+        Box(modifier = Modifier.fillMaxSize()) {
+            OnboardingTitleGroupComponent(
+                title = stringResource(Res.string.onboarding_ready_title),
+                subtitle = stringResource(Res.string.onboarding_ready_message),
+                modifier = Modifier.align(Alignment.TopStart).padding(top = 110.dp)
+            )
 
-                Image(
-                    painter = painterResource(character?.icon?.res ?: Res.drawable.logo_skyfit),
-                    contentDescription = null,
-                    modifier = Modifier.align(Alignment.Center)
-                        .fillMaxWidth(0.7f)
-                        .aspectRatio(1f)
-                )
+            Image(
+                painter = painterResource(character?.icon?.res ?: Res.drawable.logo_skyfit),
+                contentDescription = null,
+                modifier = Modifier.align(Alignment.Center)
+                    .fillMaxWidth(0.7f)
+                    .aspectRatio(1f)
+            )
 
-                PrimaryLargeButton(
-                    modifier = Modifier
-                        .align(Alignment.BottomStart)
-                        .padding(16.dp)
-                        .fillMaxWidth(),
-                    text = stringResource(Res.string.onboarding_lets_get_started),
-                    onClick = { navigator.jumpAndTakeover(NavigationRoute.Onboarding, NavigationRoute.Dashboard) },
-                    isLoading = isLoading,
-                    isEnabled = !isLoading
-                )
-            }
+            PrimaryLargeButton(
+                modifier = Modifier
+                    .align(Alignment.BottomStart)
+                    .padding(16.dp)
+                    .fillMaxWidth(),
+                text = stringResource(Res.string.onboarding_lets_get_started),
+                onClick = { navigator.jumpAndTakeover(NavigationRoute.Dashboard) },
+            )
+
+            Spacer(Modifier.height(20.dp))
         }
     }
 }

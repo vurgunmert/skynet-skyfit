@@ -7,7 +7,6 @@ import com.vurgun.skyfit.core.domain.repository.UserRepository
 import com.vurgun.skyfit.core.network.model.ApiResult
 import com.vurgun.skyfit.core.storage.LocalSettingsStore
 import com.vurgun.skyfit.core.utils.DispatcherProvider
-import com.vurgun.skyfit.feature_dashboard.ui.unmanagedUser
 import kotlinx.coroutines.withContext
 
 class UserRepositoryImpl(
@@ -28,7 +27,6 @@ class UserRepositoryImpl(
                 is ApiResult.Exception -> Result.failure(response.exception)
                 is ApiResult.Success -> {
                     val user = response.data.toDomain()
-                    unmanagedUser = user
                     return@withContext Result.success(user)
                 }
             }

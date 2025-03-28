@@ -36,7 +36,7 @@ import com.vurgun.skyfit.core.ui.components.SkyFitButtonComponent
 import com.vurgun.skyfit.core.ui.components.button.SkyFitPrimaryCircularBackButton
 import com.vurgun.skyfit.core.ui.components.button.SkyFitSecondaryIconButton
 import com.vurgun.skyfit.core.ui.components.divider.VerticalDivider
-import com.vurgun.skyfit.core.ui.components.loader.AutoLoopingCircularProgressIndicator
+import com.vurgun.skyfit.core.ui.components.loader.CircularLoader
 import com.vurgun.skyfit.core.ui.components.special.RatingStarComponent
 import com.vurgun.skyfit.core.ui.resources.SkyFitColor
 import com.vurgun.skyfit.core.ui.resources.SkyFitStyleGuide
@@ -106,7 +106,7 @@ fun MobileFacilityProfileScreen(
         val imageHeight = width * 9 / 16
 
         if (infoViewData == null) {
-            AutoLoopingCircularProgressIndicator(Modifier.align(Alignment.Center))
+            CircularLoader(Modifier.align(Alignment.Center))
         } else {
             MobileProfileBackgroundImage(
                 imageUrl = infoViewData.backgroundUrl,

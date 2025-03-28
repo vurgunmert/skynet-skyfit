@@ -1,4 +1,6 @@
+import org.jetbrains.compose.desktop.application.dsl.TargetFormat
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
+import org.gradle.api.file.DuplicatesStrategy
 
 plugins {
     alias(libs.plugins.kotlinMultiplatform)
@@ -32,7 +34,24 @@ kotlin {
     }
     //endregion Target: iOS
 
+    //region Target: Desktop
+    jvm("desktop")
+    //endregion Target: Desktop
+
+    //region Target: Web-IR
+    js(IR) {
+        browser {
+            commonWebpackConfig {
+                outputFileName = "composeApp.js"
+            }
+        }
+        binaries.executable()
+    }
+    //endregion Target:  Web-IR
+
     sourceSets {
+        val desktopMain by getting
+
         commonMain.dependencies {
             // Compose Multiplatform libraries
             implementation(compose.runtime)
@@ -43,7 +62,7 @@ kotlin {
             implementation(compose.components.resources)
 
             // Compose Components
-            implementation("com.google.accompanist:accompanist-permissions:0.37.2")
+//            implementation("com.google.accompanist:accompanist-permissions:0.37.2")
 
             // Kotlinx
             implementation(libs.kotlinx.coroutines.core)
@@ -63,23 +82,26 @@ kotlin {
 
 
             // peekaboo for Camera work
-            implementation(libs.peekaboo.ui)
-            implementation(libs.peekaboo.image.picker)
+//            implementation(libs.peekaboo.ui)
+//            implementation(libs.peekaboo.image.picker)
 
             // Coil for image loading
             implementation(libs.coil.compose)
             implementation(libs.coil.network.ktor)
-            implementation("network.chaintech:compose-multiplatform-media-player:1.0.30")
+//            implementation("network.chaintech:compose-multiplatform-media-player:1.0.30")
 
             // PreCompose for multiplatform navigation
             implementation(libs.precompose)
             implementation(libs.precompose.koin)
+
+//            // FilePicker
+            implementation(libs.calf.filepicker)
         }
 
         androidMain.dependencies {
-            implementation(compose.preview)
             implementation(libs.androidx.activity.compose)
             implementation(libs.ktor.client.okhttp)
+            implementation(libs.calf.permissions)
 
             implementation("app.rive:rive-android:9.6.5")
             implementation("androidx.startup:startup-runtime:1.2.0")
@@ -87,6 +109,24 @@ kotlin {
 
         iosMain.dependencies {
             implementation(libs.ktor.client.darwin)
+            implementation(libs.calf.permissions)
+        }
+
+        desktopMain.dependencies {
+            implementation(compose.desktop.currentOs)
+            implementation(libs.kotlinx.coroutines.swing)
+            implementation(libs.ktor.client.cio)
+        }
+
+        val jsMain by getting {
+            dependencies {
+                implementation(compose.foundation)
+                implementation(compose.animation)
+                implementation(compose.material)
+                implementation(compose.html.core)
+                implementation(libs.skiko.js)
+                implementation(libs.ktor.client.js)
+            }
         }
     }
 }
@@ -117,5 +157,25 @@ android {
         sourceCompatibility = JavaVersion.VERSION_11
         targetCompatibility = JavaVersion.VERSION_11
     }
+
+    testOptions {
+        unitTests.isIncludeAndroidResources = true
+    }
 }
 //endregion Project: Android
+
+compose.desktop {
+    application {
+        mainClass = "com.vurgun.skyfit.MainKt"
+
+        nativeDistributions {
+            targetFormats(TargetFormat.Dmg, TargetFormat.Msi, TargetFormat.Deb)
+            packageName = "com.vurgun.skyfit"
+            packageVersion = "1.0.0"
+        }
+    }
+}
+
+tasks.withType<ProcessResources>().configureEach {
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+}
