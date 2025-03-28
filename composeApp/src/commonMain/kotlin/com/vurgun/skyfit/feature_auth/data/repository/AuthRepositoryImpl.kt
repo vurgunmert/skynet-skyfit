@@ -36,7 +36,7 @@ class AuthRepositoryImpl(
                     settingsStore.saveToken(response.data.token)
 
                     when {
-                        response.data.isNewUser == true -> AuthLoginResult.OTPVerificationRequired
+                        password.isNullOrEmpty() || response.data.isNewUser == true -> AuthLoginResult.OTPVerificationRequired
                         response.data.onboardingComplete == false -> AuthLoginResult.OnboardingRequired
                         else -> AuthLoginResult.Success
                     }
