@@ -12,7 +12,7 @@ actual fun UserCharacterComponent(
     characterType: CharacterType
 ) {
     SkyFitImageComponent(
-        url =  characterType,
+        url =  characterType.toString(), //TODO: Replace
         modifier = modifier.size(240.dp)
     )
 }

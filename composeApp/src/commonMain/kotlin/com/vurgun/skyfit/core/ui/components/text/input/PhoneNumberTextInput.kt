@@ -61,7 +61,11 @@ fun PhoneNumberTextInput(
         Text(
             text = "+90",
             style = SkyFitTypography.bodyMediumRegular,
-            color = if (isEnabled) SkyFitColor.text.default else SkyFitColor.text.disabled
+            color = when {
+                !isEnabled -> SkyFitColor.text.disabled
+                value.isEmpty() -> SkyFitColor.text.secondary
+                else -> SkyFitColor.text.default
+            }
         )
 
         BasicTextField(
