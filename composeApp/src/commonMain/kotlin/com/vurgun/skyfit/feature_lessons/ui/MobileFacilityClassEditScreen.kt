@@ -17,7 +17,6 @@ import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.lazy.LazyColumn
@@ -62,7 +61,6 @@ import com.vurgun.skyfit.core.ui.components.SkyFitCheckBoxComponent
 import com.vurgun.skyfit.core.ui.components.SkyFitDropdownComponent
 import com.vurgun.skyfit.core.ui.components.SkyFitMobileScaffold
 import com.vurgun.skyfit.core.ui.components.SkyFitRadioButtonComponent
-import com.vurgun.skyfit.core.ui.components.SkyFitScaffold
 import com.vurgun.skyfit.core.ui.components.SkyFitScreenHeader
 import com.vurgun.skyfit.feature_settings.ui.AccountSettingsSelectToSetInputComponent
 import com.vurgun.skyfit.feature_settings.ui.SkyFitSelectToEnterInputComponent
@@ -116,8 +114,8 @@ fun MobileFacilityClassEditScreen(navigator: Navigator) {
                 enabled = facilityClass.isSaveButtonEnabled,
                 onClick = {
                     navigator.jumpAndTakeover(
-                        NavigationRoute.FacilityManageLessons,
-                        NavigationRoute.FacilityClassEditCompleted
+                        NavigationRoute.FacilityLessons,
+                        NavigationRoute.FacilityLessonCreated
                     )
                 })
         }

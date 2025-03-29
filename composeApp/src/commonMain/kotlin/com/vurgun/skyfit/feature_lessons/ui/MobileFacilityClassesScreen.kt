@@ -32,10 +32,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import com.vurgun.skyfit.core.ui.components.SkyFitScreenHeader
+import com.vurgun.skyfit.core.ui.components.event.EditableLessonEventItem
 import com.vurgun.skyfit.core.ui.resources.SkyFitColor
 import com.vurgun.skyfit.core.ui.resources.SkyFitTypography
 import com.vurgun.skyfit.core.utils.now
-import com.vurgun.skyfit.feature_lessons.ui.components.LessonSessionColumnItem
 import com.vurgun.skyfit.feature_lessons.ui.components.viewdata.LessonSessionItemViewData
 import com.vurgun.skyfit.feature_navigation.NavigationRoute
 import com.vurgun.skyfit.feature_navigation.jumpAndStay
@@ -81,8 +81,8 @@ fun MobileFacilityLessonsScreen(navigator: Navigator) {
         ) {
             ActiveSessionItemsColumn(
                 items = activeClasses,
-                onClickNew = { navigator.jumpAndStay(NavigationRoute.FacilityClassEdit) },
-                onEdit = { navigator.jumpAndStay(NavigationRoute.FacilityClassEdit) },
+                onClickNew = { navigator.jumpAndStay(NavigationRoute.FacilityLessonEdit) },
+                onEdit = { navigator.jumpAndStay(NavigationRoute.FacilityLessonEdit) },
                 onDeactivate = { viewModel.toggleClassStatus(it.sessionId) },
                 onDelete = { viewModel.deleteClass(it.sessionId) }
             )
@@ -91,8 +91,8 @@ fun MobileFacilityLessonsScreen(navigator: Navigator) {
 
             InactiveSessionItemsColumn(
                 items = inactiveClasses,
-                onClickNew = { navigator.jumpAndStay(NavigationRoute.FacilityClassEdit) },
-                onEdit = { navigator.jumpAndStay(NavigationRoute.FacilityClassEdit) },
+                onClickNew = { navigator.jumpAndStay(NavigationRoute.FacilityLessonEdit) },
+                onEdit = { navigator.jumpAndStay(NavigationRoute.FacilityLessonEdit) },
                 onActivate = { viewModel.toggleClassStatus(it.sessionId) },
                 onDelete = { viewModel.deleteClass(it.sessionId) }
             )
@@ -129,11 +129,16 @@ private fun ActiveSessionItemsColumn(
         }
 
         items.forEach { item ->
-            LessonSessionColumnItem(
-                item = item,
+            EditableLessonEventItem(
+                title = item.title,
+                iconId = item.iconId,
+                date = item.date.toString(),
+                timePeriod = item.hours.toString(),
+                location = item.location.toString(),
+                trainer = item.trainer.toString(),
+                note = item.note,
                 isMenuOpen = openMenuItemId == item.sessionId,
                 onMenuToggle = { isOpen -> openMenuItemId = if (isOpen) item.sessionId else null },
-                onClickItem = {},
                 menuContent = {
                     FacilityClassOptionsMenuPopup(
                         isOpen = openMenuItemId == item.sessionId,
@@ -171,11 +176,17 @@ private fun InactiveSessionItemsColumn(
         }
 
         items.forEach { item ->
-            LessonSessionColumnItem(
-                item = item,
+
+            EditableLessonEventItem(
+                title = item.title,
+                iconId = item.iconId,
+                date = item.date.toString(),
+                timePeriod = item.hours.toString(),
+                location = item.location.toString(),
+                trainer = item.trainer.toString(),
+                note = item.note,
                 isMenuOpen = openMenuItemId == item.sessionId,
                 onMenuToggle = { isOpen -> openMenuItemId = if (isOpen) item.sessionId else null },
-                onClickItem = {},
                 menuContent = {
                     FacilityClassOptionsMenuPopup(
                         isOpen = openMenuItemId == item.sessionId,

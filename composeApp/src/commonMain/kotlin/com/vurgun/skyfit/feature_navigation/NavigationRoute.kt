@@ -14,7 +14,7 @@ sealed class NavigationRoute(
 
     // Enum for route parameters
     enum class Param(val key: String) {
-        User_ID("userId"),
+        USER_ID("userId"),
         FACILITY_ID("facilityId"),
         Trainer_ID("trainerId"),
         CLASS_ID("classId"),
@@ -204,13 +204,13 @@ sealed class NavigationRoute(
     )
 
     // - Classes
-    data object FacilityManageLessons : NavigationRoute("facility_classes/owner", roles = listOf(UserType.Facility))
+    data object FacilityLessons : NavigationRoute("facility_classes/owner", roles = listOf(UserType.Facility))
     data object FacilityClassesVisited : NavigationRoute("facility_classes/Guest", roles = listOf(UserType.User))
 
-    data object FacilityClassEdit :
+    data object FacilityLessonEdit :
         NavigationRoute("facility_class/edit/{classId}", roles = listOf(UserType.Facility), Param.CLASS_ID)
 
-    data object FacilityClassEditCompleted :
+    data object FacilityLessonCreated :
         NavigationRoute("facility_class/edit/completed/{classId}", roles = listOf(UserType.Facility), Param.CLASS_ID)
 
     data object FacilityClassDetail : NavigationRoute(
@@ -218,10 +218,6 @@ sealed class NavigationRoute(
         roles = listOf(UserType.Facility),
         Param.CLASS_ID
     )
-
-    data object FacilityClassDetailVisited :
-        NavigationRoute("facility_class/detail/visited/{classId}", roles = listOf(UserType.User), Param.CLASS_ID)
-
     // - Settings
     data object FacilitySettings : NavigationRoute("facility/settings", roles = listOf(UserType.Facility))
     data object FacilitySettingsAccount : NavigationRoute("facility/settings/account", roles = listOf(UserType.Facility))

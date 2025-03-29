@@ -5,14 +5,13 @@ import com.vurgun.skyfit.feature_appointments.ui.MobileUserAppointmentDetailScre
 import com.vurgun.skyfit.feature_appointments.ui.MobileUserAppointmentsScreen
 import com.vurgun.skyfit.feature_appointments.ui.trainer.MobileTrainerAppointmentDetailScreen
 import com.vurgun.skyfit.feature_appointments.ui.trainer.MobileTrainerAppointmentsScreen
-import com.vurgun.skyfit.feature_auth.ui.mobile.MobileForgotPasswordVerifyOTPScreen
+import com.vurgun.skyfit.feature_auth.ui.mobile.MobileCreatePasswordScreen
 import com.vurgun.skyfit.feature_auth.ui.mobile.MobileForgotPasswordResetScreen
 import com.vurgun.skyfit.feature_auth.ui.mobile.MobileForgotPasswordScreen
+import com.vurgun.skyfit.feature_auth.ui.mobile.MobileForgotPasswordVerifyOTPScreen
 import com.vurgun.skyfit.feature_auth.ui.mobile.MobileLoginScreen
 import com.vurgun.skyfit.feature_auth.ui.mobile.MobileLoginVerifyOTPScreen
 import com.vurgun.skyfit.feature_auth.ui.mobile.MobilePrivacyPolicyScreen
-import com.vurgun.skyfit.feature_auth.ui.mobile.MobileCreatePasswordScreen
-import com.vurgun.skyfit.feature_splash.presentation.view.SplashScreen
 import com.vurgun.skyfit.feature_auth.ui.mobile.MobileTermsAndConditionsScreen
 import com.vurgun.skyfit.feature_body_analysis.ui.MobileUserBodyAnalysisScreen
 import com.vurgun.skyfit.feature_calendar.ui.MobileUserActivityCalendarAddActivityScreen
@@ -37,7 +36,6 @@ import com.vurgun.skyfit.feature_explore.ui.MobileExploreFacilitiesScreen
 import com.vurgun.skyfit.feature_explore.ui.MobileExploreTrainersScreen
 import com.vurgun.skyfit.feature_lessons.ui.MobileFacilityCalendarScreen
 import com.vurgun.skyfit.feature_lessons.ui.MobileFacilityCalendarVisitedScreen
-import com.vurgun.skyfit.feature_lessons.ui.MobileFacilityClassDetailVisitedScreen
 import com.vurgun.skyfit.feature_lessons.ui.MobileFacilityClassEditCompletedScreen
 import com.vurgun.skyfit.feature_lessons.ui.MobileFacilityClassEditScreen
 import com.vurgun.skyfit.feature_lessons.ui.MobileFacilityLessonsScreen
@@ -83,6 +81,7 @@ import com.vurgun.skyfit.feature_settings.ui.user.MobileUserSettingsNotification
 import com.vurgun.skyfit.feature_settings.ui.user.MobileUserSettingsPaymentHistoryScreen
 import com.vurgun.skyfit.feature_settings.ui.user.MobileUserSettingsScreen
 import com.vurgun.skyfit.feature_social.ui.MobileUserSocialMediaNewPostScreen
+import com.vurgun.skyfit.feature_splash.presentation.view.SplashScreen
 import moe.tlaster.precompose.navigation.NavHost
 import moe.tlaster.precompose.navigation.Navigator
 import moe.tlaster.precompose.navigation.RouteBuilder
@@ -94,7 +93,7 @@ fun MobileNavigationGraph() {
 
     NavHost(
         navigator = navigator,
-        initialRoute = NavigationRoute.Login.route
+        initialRoute = NavigationRoute.FacilityLessonCreated.route
     ) {
         mobileAuthNavGraph(navigator)
         mobileOnboardingNavGraph(navigator)
@@ -227,10 +226,10 @@ private fun RouteBuilder.facilityNavGraph(navigator: Navigator) {
     scene(NavigationRoute.FacilityCalendar.route) { MobileFacilityCalendarScreen(navigator) }
     scene(NavigationRoute.FacilityCalendarVisited.route) { MobileFacilityCalendarVisitedScreen(navigator) }
     //Facility - Classes
-    scene(NavigationRoute.FacilityManageLessons.route) { MobileFacilityLessonsScreen(navigator) }
-    scene(NavigationRoute.FacilityClassEdit.route) { MobileFacilityClassEditScreen(navigator) }
-    scene(NavigationRoute.FacilityClassEditCompleted.route) { MobileFacilityClassEditCompletedScreen(navigator) }
-    scene(NavigationRoute.FacilityClassDetailVisited.route) { MobileFacilityClassDetailVisitedScreen(navigator) }
+    scene(NavigationRoute.FacilityLessons.route) { MobileFacilityLessonsScreen(navigator) }
+    scene(NavigationRoute.FacilityLessonEdit.route) { MobileFacilityClassEditScreen(navigator) }
+    scene(NavigationRoute.FacilityLessonCreated.route) { MobileFacilityClassEditCompletedScreen(navigator) }
+
     //Facility - Settings
     scene(NavigationRoute.FacilitySettings.route) { MobileFacilitySettingsScreen(navigator) }
     scene(NavigationRoute.FacilitySettingsAccount.route) { MobileFacilitySettingsAccountScreen(navigator) }

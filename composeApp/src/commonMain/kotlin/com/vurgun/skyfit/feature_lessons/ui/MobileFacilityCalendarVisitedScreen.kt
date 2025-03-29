@@ -34,7 +34,10 @@ import com.vurgun.skyfit.feature_navigation.jumpAndStay
 import kotlinx.datetime.LocalDate
 import moe.tlaster.precompose.navigation.Navigator
 import org.jetbrains.compose.resources.painterResource
+import org.jetbrains.compose.resources.stringResource
 import skyfit.composeapp.generated.resources.Res
+import skyfit.composeapp.generated.resources.appointment_book_action
+import skyfit.composeapp.generated.resources.appointment_create_action
 import skyfit.composeapp.generated.resources.ic_check
 
 @Composable
@@ -52,7 +55,7 @@ fun MobileFacilityCalendarVisitedScreen(navigator: Navigator) {
     LaunchedEffect(navigationEvent) {
         when (navigationEvent) {
             FacilityCalendarVisitedEvent.GoToSessionDetail -> {
-                navigator.jumpAndStay(NavigationRoute.FacilityClassDetailVisited)
+
             }
 
             null -> Unit
@@ -62,7 +65,7 @@ fun MobileFacilityCalendarVisitedScreen(navigator: Navigator) {
     Scaffold(
         backgroundColor = SkyFitColor.background.default,
         topBar = {
-            SkyFitScreenHeader("Randevu Al", onClickBack = { navigator.popBackStack() })
+            SkyFitScreenHeader(stringResource(Res.string.appointment_book_action), onClickBack = { navigator.popBackStack() })
         },
         bottomBar = {
             if (isAppointmentAllowed) {
@@ -96,7 +99,7 @@ fun MobileFacilityCalendarVisitedScreen(navigator: Navigator) {
 fun MobileFacilityCalendarVisitedScreenCreateActionComponent(onClick: () -> Unit) {
     Box(Modifier.fillMaxWidth().padding(32.dp)) {
         SkyFitButtonComponent(
-            modifier = Modifier.fillMaxWidth(), text = "Randevu Olustur",
+            modifier = Modifier.fillMaxWidth(), text = stringResource(Res.string.appointment_create_action),
             onClick = onClick,
             variant = ButtonVariant.Secondary,
             size = ButtonSize.Large,

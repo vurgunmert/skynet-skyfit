@@ -361,11 +361,11 @@ private fun MobileFacilityProfileLessonSection(
 ) {
     if (lessonSessionColumnViewData == null) {
         MobileFacilityLessonsEmptyCard(
-            onClickAdd = { navigator.jumpAndStay(NavigationRoute.FacilityManageLessons) }
+            onClickAdd = { navigator.jumpAndStay(NavigationRoute.FacilityLessons) }
         )
     } else {
         val actionVisitCalendar: () -> Unit = { navigator.jumpAndStay(NavigationRoute.FacilityCalendarVisited) }
-        val actionManageLessons: () -> Unit = { navigator.jumpAndStay(NavigationRoute.FacilityManageLessons) }
+        val actionManageLessons: () -> Unit = { navigator.jumpAndStay(NavigationRoute.FacilityLessons) }
         LessonSessionColumn(
             viewData = lessonSessionColumnViewData,
             onClickShowAll = if (viewMode == ProfileViewMode.VISITOR) null else actionManageLessons,

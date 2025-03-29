@@ -100,4 +100,10 @@
     <string name="trainers">Eğitmenler</string>
     <string name="branches">Şubeler</string>
 
+    <string name="completed">Tamamlandı</string>
+    <string name="missing">Eksik</string>
+    <string name="course_created">Ders Oluşturuldu</string>
+    <string name="appointment_book_action">Randevu Al</string>
+    <string name="appointment_create_action">Randevu Olustur</string>
+
 </resources>

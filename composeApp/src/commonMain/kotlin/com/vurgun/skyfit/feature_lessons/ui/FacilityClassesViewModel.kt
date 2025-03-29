@@ -28,8 +28,10 @@ class FacilityClassesViewModel : ViewModel() {
                 LessonSessionItemViewData(
                     iconId = SkyFitAsset.SkyFitIcon.PUSH_UP.id,
                     title = "Shoulders and Abs",
-                    date = "08:00 - 09:00",
+                    date = "18/11/2024",
+                    hours = "08:00 - 09:00",
                     trainer = "Micheal Blake",
+                    location = "@ironstudio (İzmir - Bornova)",
                     note = "Try to arrive 5-10 minutes early to warm up and settle in before the class starts.",
                     enabled = true,
                     sessionId = "1111"
@@ -38,15 +40,20 @@ class FacilityClassesViewModel : ViewModel() {
                     iconId = SkyFitAsset.SkyFitIcon.HIGH_INTENSITY_TRAINING.id,
                     title = "Reformer Pilates",
                     trainer = "Micheal Blake",
+                    date = "18/11/2024",
+                    hours = "08:00 - 09:00",
                     category = "Pilates",
+                    location = "@ironstudio (İzmir - Bornova)",
                     enabled = false,
                     sessionId = "2222"
                 ),
                 LessonSessionItemViewData(
                     iconId = SkyFitAsset.SkyFitIcon.BICEPS_FORCE.id,
                     title = "Fitness",
-                    date = "09:00 - 10:00",
+                    date = "18/11/2024",
+                    hours = "08:00 - 09:00",
                     trainer = "Micheal Blake",
+                    location = "@ironstudio (İzmir - Bornova)",
                     category = "PT",
                     enabled = true,
                     sessionId = "3333"

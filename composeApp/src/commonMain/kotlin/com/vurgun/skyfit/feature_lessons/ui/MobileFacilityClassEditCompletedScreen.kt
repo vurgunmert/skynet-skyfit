@@ -1,6 +1,7 @@
 package com.vurgun.skyfit.feature_lessons.ui
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -16,16 +17,16 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import com.vurgun.skyfit.feature_appointments.ui.AppointmentCardViewData
-import com.vurgun.skyfit.feature_appointments.ui.AppointmentCardItemComponent
 import com.vurgun.skyfit.core.ui.components.ButtonSize
 import com.vurgun.skyfit.core.ui.components.ButtonState
 import com.vurgun.skyfit.core.ui.components.ButtonVariant
 import com.vurgun.skyfit.core.ui.components.SkyFitButtonComponent
-import com.vurgun.skyfit.core.ui.components.SkyFitScaffold
+import com.vurgun.skyfit.core.ui.components.SkyFitMobileScaffold
+import com.vurgun.skyfit.core.ui.resources.SkyFitTypography
+import com.vurgun.skyfit.feature_appointments.ui.AppointmentCardItemComponent
+import com.vurgun.skyfit.feature_appointments.ui.AppointmentCardViewData
 import com.vurgun.skyfit.feature_navigation.NavigationRoute
 import com.vurgun.skyfit.feature_navigation.jumpAndTakeover
-import com.vurgun.skyfit.core.ui.resources.SkyFitTypography
 import moe.tlaster.precompose.navigation.Navigator
 import org.jetbrains.compose.resources.painterResource
 import skyfit.composeapp.generated.resources.Res
@@ -34,18 +35,18 @@ import skyfit.composeapp.generated.resources.img_check_mark_blue_box
 @Composable
 fun MobileFacilityClassEditCompletedScreen(navigator: Navigator) {
 
-    SkyFitScaffold {
+    SkyFitMobileScaffold {
         Column(
-            modifier = Modifier.fillMaxSize().verticalScroll(rememberScrollState()),
-            horizontalAlignment = Alignment.CenterHorizontally,
+            modifier = Modifier.padding(it).fillMaxSize().verticalScroll(rememberScrollState()),
+            horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Spacer(Modifier.height(60.dp))
             MobileFacilityClassEditCompletedComponent(
                 onClickProfile = {
-                    navigator.jumpAndTakeover(NavigationRoute.FacilityClassEdit, NavigationRoute.DashboardProfile)
+                    navigator.jumpAndTakeover(NavigationRoute.FacilityLessonEdit, NavigationRoute.DashboardProfile)
                 },
                 onClickDashboard = {
-                    navigator.jumpAndTakeover(NavigationRoute.FacilityClassEdit, NavigationRoute.Dashboard)
+                    navigator.jumpAndTakeover(NavigationRoute.FacilityLessonEdit, NavigationRoute.Dashboard)
                 }
             )
         }
