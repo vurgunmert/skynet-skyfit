@@ -15,27 +15,27 @@ import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.stateIn
+import kotlinx.coroutines.flow.update
+
+data class UserProfileUiState(
+    val profileData: TopBarGroupViewData = TopBarGroupViewData(),
+    val posts: List<SocialPostItemViewData> = emptyList(),
+    val appointments: LessonSessionColumnViewData? = null,
+    val showPosts: Boolean = true,
+    val showInfoMini: Boolean = false,
+    val exercises: LifestyleActionRowViewData? = null,
+    val habits: LifestyleActionRowViewData? = null,
+    val photoDiary: PhotoGalleryStackViewData? = null
+)
+
 
 class SkyFitUserProfileViewModel : ViewModel() {
-
-    // User Profile Data
-    private val _profileData = MutableStateFlow<TopBarGroupViewData>(TopBarGroupViewData())
-    val profileData: StateFlow<TopBarGroupViewData> get() = _profileData
 
     private val _posts = MutableStateFlow<List<SocialPostItemViewData>>(emptyList())
     val posts: StateFlow<List<SocialPostItemViewData>> get() = _posts
 
-    private val _appointmentsColumViewData = MutableStateFlow<LessonSessionColumnViewData?>(null)
-    val appointmentsColumViewData: StateFlow<LessonSessionColumnViewData?> get() = _appointmentsColumViewData
-
-    private val _exercisesRowViewData = MutableStateFlow<LifestyleActionRowViewData?>(null)
-    val exercisesRowViewData: StateFlow<LifestyleActionRowViewData?> get() = _exercisesRowViewData
-
-    private val _habitsRowViewData = MutableStateFlow<LifestyleActionRowViewData?>(null)
-    val habitsRowViewData: StateFlow<LifestyleActionRowViewData?> get() = _habitsRowViewData
-
-    private val _photoDiary = MutableStateFlow<PhotoGalleryStackViewData?>(null)
-    val photoDiary: StateFlow<PhotoGalleryStackViewData?> get() = _photoDiary
+    private val _uiState = MutableStateFlow(UserProfileUiState())
+    val uiState: StateFlow<UserProfileUiState> get() = _uiState
 
     // UI State
     private val _showPosts = MutableStateFlow(false)
@@ -50,38 +50,7 @@ class SkyFitUserProfileViewModel : ViewModel() {
     }.stateIn(viewModelScope, SharingStarted.Lazily, false)
 
     init {
-        loadProfileData()
-        loadPosts()
-        loadAppointments()
-        _photoDiary.value = PhotoGalleryStackViewData()
-
-        val exercisesViewData = listOf(
-            LifestyleActionItemViewData(SkyFitAsset.SkyFitIcon.PUSH_UP.id, "Şınav"),
-            LifestyleActionItemViewData(SkyFitAsset.SkyFitIcon.YOGA.id, "Yoga"),
-            LifestyleActionItemViewData(SkyFitAsset.SkyFitIcon.PULL_UP_BAR.id, "Pull up"),
-            LifestyleActionItemViewData(SkyFitAsset.SkyFitIcon.SIT_UP.id, "Mekik"),
-            LifestyleActionItemViewData(SkyFitAsset.SkyFitIcon.JUMPING_ROPE.id, "İp atlama")
-        )
-        _exercisesRowViewData.value = LifestyleActionRowViewData(
-            iconId = SkyFitAsset.SkyFitIcon.CLOCK.id,
-            title = "Egzersiz Geçmişi",
-            items = exercisesViewData
-        )
-
-        val habitsViewData = listOf(
-            LifestyleActionItemViewData(SkyFitAsset.SkyFitIcon.SLEEP.id, "Düzensiz Uyku"),
-            LifestyleActionItemViewData(SkyFitAsset.SkyFitIcon.FAST_FOOD.id, "Fast Food"),
-            LifestyleActionItemViewData(SkyFitAsset.SkyFitIcon.SMOKING.id, "Smoking")
-        )
-        _habitsRowViewData.value = LifestyleActionRowViewData(
-            iconId = SkyFitAsset.SkyFitIcon.YOGA.id,
-            title = "Alışkanlıklar",
-            items = habitsViewData
-        )
-    }
-
-    private fun loadProfileData() {
-        _profileData.value = TopBarGroupViewData(
+        val profileViewData = TopBarGroupViewData(
             name = "Dexter Moore",
             social = "@dexteretymo",
             imageUrl = "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSJq8Cfy_pOdcJOYIQew3rWrnwwxfc8bZIarg&s",
@@ -92,35 +61,75 @@ class SkyFitUserProfileViewModel : ViewModel() {
             ),
             showInfoMini = false
         )
-    }
 
-    private fun loadPosts() {
-        _posts.value = fakePosts
-    }
-
-    private fun loadAppointments() {
         val appointmentsViewData = listOf(
             LessonSessionItemViewData(
                 iconId = SkyFitAsset.SkyFitIcon.PUSH_UP.id,
                 title = "Fonksiyonel hareket ve esneklik geliştirme",
                 duration = "60 dakika",
+                date = "18/11/2024",
+                hours = "08:00 - 09:00",
                 location = "@ironstudio",
                 trainer = "Micheal Blake"
             ),
             LessonSessionItemViewData(
                 iconId = SkyFitAsset.SkyFitIcon.BICEPS_FORCE.id,
                 title = "Kişisel kuvvet antrenmanı",
+                date = "18/11/2024",
+                hours = "08:00 - 09:00",
                 duration = "60 dakika",
                 location = "@ironstudio",
                 trainer = "Micheal Blake"
             )
         )
 
-        _appointmentsColumViewData.value = LessonSessionColumnViewData(
+        val appointmentsColumnViewData = LessonSessionColumnViewData(
             iconId = SkyFitAsset.SkyFitIcon.EXERCISES.id,
             title = "Randevularım",
             items = appointmentsViewData
         )
+
+        val photoDiaryViewData = PhotoGalleryStackViewData()
+
+        val exercisesViewData = listOf(
+            LifestyleActionItemViewData(SkyFitAsset.SkyFitIcon.PUSH_UP.id, "Şınav"),
+            LifestyleActionItemViewData(SkyFitAsset.SkyFitIcon.YOGA.id, "Yoga"),
+            LifestyleActionItemViewData(SkyFitAsset.SkyFitIcon.PULL_UP_BAR.id, "Pull up"),
+            LifestyleActionItemViewData(SkyFitAsset.SkyFitIcon.SIT_UP.id, "Mekik"),
+            LifestyleActionItemViewData(SkyFitAsset.SkyFitIcon.JUMPING_ROPE.id, "İp atlama")
+        )
+        val exercisesRowViewData= LifestyleActionRowViewData(
+            iconId = SkyFitAsset.SkyFitIcon.CLOCK.id,
+            title = "Egzersiz Geçmişi",
+            items = exercisesViewData
+        )
+
+        val habitsViewData = listOf(
+            LifestyleActionItemViewData(SkyFitAsset.SkyFitIcon.SLEEP.id, "Düzensiz Uyku"),
+            LifestyleActionItemViewData(SkyFitAsset.SkyFitIcon.FAST_FOOD.id, "Fast Food"),
+            LifestyleActionItemViewData(SkyFitAsset.SkyFitIcon.SMOKING.id, "Smoking")
+        )
+        val habitsRowViewData = LifestyleActionRowViewData(
+            iconId = SkyFitAsset.SkyFitIcon.YOGA.id,
+            title = "Alışkanlıklar",
+            items = habitsViewData
+        )
+
+        loadPosts()
+
+        _uiState.update {
+            it.copy(
+                profileData = profileViewData,
+                appointments = appointmentsColumnViewData,
+                exercises = exercisesRowViewData,
+                habits = habitsRowViewData,
+                photoDiary = photoDiaryViewData
+            )
+        }
+    }
+
+    private fun loadPosts() {
+        _posts.value = fakePosts
     }
 
     fun updateScroll(scrollValue: Int, firstItemIndex: Int) {

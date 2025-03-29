@@ -40,7 +40,7 @@ import com.vurgun.skyfit.feature_settings.ui.SkyFitSelectToEnterMultilineInputCo
 import moe.tlaster.precompose.navigation.Navigator
 import org.jetbrains.compose.resources.stringResource
 import skyfit.composeapp.generated.resources.Res
-import skyfit.composeapp.generated.resources.action_continue
+import skyfit.composeapp.generated.resources.continue_action
 import skyfit.composeapp.generated.resources.biography_hint
 import skyfit.composeapp.generated.resources.first_name_hint
 import skyfit.composeapp.generated.resources.first_name_mandatory
@@ -150,7 +150,7 @@ fun MobileOnboardingEnterProfileScreen(
 
                     SkyFitButtonComponent(
                         modifier = Modifier.padding(16.dp).fillMaxWidth(),
-                        text = stringResource(Res.string.action_continue),
+                        text = stringResource(Res.string.continue_action),
                         onClick = {
                             if (isContinueEnabled) {
                                 viewModel.submitRequest()

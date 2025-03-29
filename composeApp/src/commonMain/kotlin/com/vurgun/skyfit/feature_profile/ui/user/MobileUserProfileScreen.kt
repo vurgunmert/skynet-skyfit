@@ -19,17 +19,17 @@ import androidx.compose.ui.unit.dp
 import com.vurgun.skyfit.core.ui.components.SkyFitScaffold
 import com.vurgun.skyfit.feature_exercises.ui.components.FindExercisesCard
 import com.vurgun.skyfit.feature_lessons.ui.components.LessonSessionColumn
+import com.vurgun.skyfit.feature_navigation.NavigationRoute
+import com.vurgun.skyfit.feature_navigation.jumpAndStay
 import com.vurgun.skyfit.feature_profile.ui.components.LifestyleActionRow
 import com.vurgun.skyfit.feature_profile.ui.components.MobileMeasurementsActionCard
 import com.vurgun.skyfit.feature_profile.ui.components.MobileProfileActionsRow
 import com.vurgun.skyfit.feature_profile.ui.components.MobileProfileHeader
 import com.vurgun.skyfit.feature_profile.ui.components.PhotoGalleryEmptyStackCard
 import com.vurgun.skyfit.feature_profile.ui.components.PhotoGalleryStackCard
+import com.vurgun.skyfit.feature_profile.ui.user.viewmodel.SkyFitUserProfileViewModel
 import com.vurgun.skyfit.feature_social.ui.components.SocialPostCard
 import com.vurgun.skyfit.feature_social.ui.components.SocialQuickPostInputCard
-import com.vurgun.skyfit.feature_navigation.NavigationRoute
-import com.vurgun.skyfit.feature_navigation.jumpAndStay
-import com.vurgun.skyfit.feature_profile.ui.user.viewmodel.SkyFitUserProfileViewModel
 import moe.tlaster.precompose.navigation.Navigator
 
 @Composable
@@ -37,14 +37,10 @@ fun MobileUserProfileScreen(navigator: Navigator) {
     val viewModel = remember { SkyFitUserProfileViewModel() }
 
     // Observing state from ViewModel
-    val profileData by viewModel.profileData.collectAsState()
+    val uiState by viewModel.uiState.collectAsState()
     val posts by viewModel.posts.collectAsState()
-    val appointmentsColumViewData by viewModel.appointmentsColumViewData.collectAsState()
     val showPosts by viewModel.showPosts.collectAsState()
     val showInfoMini by viewModel.showInfoMini.collectAsState()
-    val exercisesRowViewData by viewModel.exercisesRowViewData.collectAsState()
-    val habitsRowData by viewModel.habitsRowViewData.collectAsState()
-    val photoDiary by viewModel.photoDiary.collectAsState()
 
     var showMeasurements: Boolean = true
 
@@ -65,7 +61,7 @@ fun MobileUserProfileScreen(navigator: Navigator) {
         ) {
 
             item(key = "Header") {
-                MobileProfileHeader(viewData = profileData.copy(showInfoMini = showInfoMini))
+                MobileProfileHeader(viewData = uiState.profileData.copy(showInfoMini = showInfoMini))
             }
 
             item(key = "ActionGroup") {
@@ -94,7 +90,7 @@ fun MobileUserProfileScreen(navigator: Navigator) {
                     )
                 }
             } else {
-                appointmentsColumViewData?.let {
+                uiState.appointments?.let {
                     item(key = "Appointments") {
                         LessonSessionColumn(
                             viewData = it,
@@ -113,7 +109,7 @@ fun MobileUserProfileScreen(navigator: Navigator) {
                 }
 
                 item(key = "ExerciseHistory") {
-                    exercisesRowViewData?.let {
+                    uiState.exercises?.let {
                         LifestyleActionRow(modifier = Modifier.padding(horizontal = 16.dp), viewData = it)
                     } ?: FindExercisesCard(modifier = Modifier.padding(horizontal = 16.dp)) {
                         navigator.jumpAndStay(NavigationRoute.ExploreExercises)
@@ -121,14 +117,14 @@ fun MobileUserProfileScreen(navigator: Navigator) {
                 }
 
                 item(key = "PhotoDiary") {
-                    photoDiary?.let {
+                    uiState.photoDiary?.let {
                         PhotoGalleryStackCard(modifier = Modifier.padding(horizontal = 16.dp), viewData = it)
                     } ?: PhotoGalleryEmptyStackCard(modifier = Modifier.padding(horizontal = 16.dp)) {
                         navigator.jumpAndStay(NavigationRoute.UserPhotoDiary)
                     }
                 }
 
-                habitsRowData?.let {
+                uiState.habits?.let {
                     item(key = "Habits") { LifestyleActionRow(modifier = Modifier.padding(horizontal = 16.dp), viewData = it) }
                 }
             }

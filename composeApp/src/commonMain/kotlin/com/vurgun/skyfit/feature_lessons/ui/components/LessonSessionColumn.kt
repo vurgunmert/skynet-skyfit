@@ -21,6 +21,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
+import com.vurgun.skyfit.core.ui.components.event.BasicLessonEventItem
 import com.vurgun.skyfit.core.ui.resources.SkyFitAsset
 import com.vurgun.skyfit.core.ui.resources.SkyFitColor
 import com.vurgun.skyfit.core.ui.resources.SkyFitTypography
@@ -81,7 +82,15 @@ fun LessonSessionColumn(
             verticalArrangement = Arrangement.spacedBy(16.dp)
         ) {
             viewData.items.forEach { item ->
-                LessonSessionColumnItem(item, onClickItem)
+                BasicLessonEventItem(
+                    title = item.title,
+                    iconId = item.iconId,
+                    date = item.date.toString(),
+                    timePeriod = item.hours.toString(),
+                    location = item.location.toString(),
+                    trainer = item.trainer.toString(),
+                    note = item.note
+                )
             }
         }
     }

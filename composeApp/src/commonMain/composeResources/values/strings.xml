@@ -72,8 +72,8 @@
     <string name="body_type_ecto">Ectomorph</string>
     <string name="body_type_meso">Mesomorph</string>
     <string name="body_type_endo">Endomorph</string>
-    <string name="action_continue">Devam Et</string>
-    <string name="action_cancel">İptal</string>
+    <string name="continue_action">Devam Et</string>
+    <string name="cancel_action">İptal</string>
 
     <string name="lessons">Dersler</string>
     <string name="out_of_use">Kullanım dışı</string>
@@ -90,7 +90,7 @@
     <string name="open">Aç</string>
     <string name="close">Kapat</string>
 
-    <string name="action_logout">Oturumu Kapat</string>
+    <string name="logout_action">Oturumu Kapat</string>
     <string name="settings">Ayarlar</string>
     <string name="account_settings">Hesap Ayarları</string>
     <string name="payment_history">Ödeme Geçmişi</string>
@@ -100,10 +100,32 @@
     <string name="trainers">Eğitmenler</string>
     <string name="branches">Şubeler</string>
 
-    <string name="completed">Tamamlandı</string>
-    <string name="missing">Eksik</string>
-    <string name="course_created">Ders Oluşturuldu</string>
+    <string name="lesson_status_completed">Tamamlandı</string>
+    <string name="lesson_status_missing">Eksik</string>
+    <string name="lesson_create_action">Yeni Ders Oluştur</string>
+    <string name="lesson_created_message">Ders Oluşturuldu</string>
+
+    <string name="back_to_lessons_action">Dersler'e Dön</string>
+    <string name="go_to_home_action">Ana Sayfa</string>
+
+    <!-- Appointments -->
     <string name="appointment_book_action">Randevu Al</string>
-    <string name="appointment_create_action">Randevu Olustur</string>
+    <string name="appointment_create_action">Randevu Oluştur</string>
+
 
 </resources>
+
+<!--    Use snake_case + purpose-based suffixes:-->
+
+<!--    *_action → for actions/buttons (e.g. logout_action)-->
+
+<!--    *_label → for static labels/tabs (e.g. notifications_label)-->
+
+<!--    *_title → for screen titles (e.g. settings_title)-->
+
+<!--    *_desc → for helper text/tooltips-->
+
+<!--    *_message → for messages or alerts-->
+
+<!--    *_error → for error texts-->
+

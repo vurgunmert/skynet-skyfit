@@ -36,8 +36,8 @@ import moe.tlaster.precompose.navigation.Navigator
 import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.koinInject
 import skyfit.composeapp.generated.resources.Res
-import skyfit.composeapp.generated.resources.action_cancel
-import skyfit.composeapp.generated.resources.action_continue
+import skyfit.composeapp.generated.resources.cancel_action
+import skyfit.composeapp.generated.resources.continue_action
 import skyfit.composeapp.generated.resources.auth_forgot_enter_phone
 import skyfit.composeapp.generated.resources.auth_forgot_password
 
@@ -92,7 +92,7 @@ fun MobileForgotPasswordScreen(navigator: Navigator) {
 
             PrimaryLargeButton(
                 modifier = Modifier.fillMaxWidth(),
-                text = stringResource(Res.string.action_continue),
+                text = stringResource(Res.string.continue_action),
                 onClick = viewModel::submitForgotPassword,
                 isLoading = isLoading,
                 isEnabled = isSubmitEnabled && !isLoading
@@ -102,7 +102,7 @@ fun MobileForgotPasswordScreen(navigator: Navigator) {
 
             SecondaryLargeButton(
                 modifier = Modifier.fillMaxWidth(),
-                text = stringResource(Res.string.action_cancel),
+                text = stringResource(Res.string.cancel_action),
                 onClick = { navigator.popBackStack() }
             )
         }

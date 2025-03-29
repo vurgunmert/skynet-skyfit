@@ -39,7 +39,7 @@ data class FacilityClassViewData(
 )
 // endregion
 
-val classRepeatPeriodOptions = listOf("Hergün", "Haftada belirli günler", "Ayda bir kez", "Tekrar yok")
+val classRepeatPeriodOptions = listOf("Hergün", "Haftada belirli günler", "Tekrar yok")
 val classRepeatMonthlyOptions = listOf("Her ayın ilk pazartesi", "Her ayın 15. günü")
 val classRepeatDaysOfWeek = listOf("Pazartesi", "Salı", "Çarşamba", "Perşembe", "Cuma", "Cumartesi", "Pazar")
 

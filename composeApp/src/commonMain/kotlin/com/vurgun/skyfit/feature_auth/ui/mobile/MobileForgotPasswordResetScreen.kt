@@ -39,8 +39,8 @@ import moe.tlaster.precompose.navigation.Navigator
 import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.viewmodel.koinViewModel
 import skyfit.composeapp.generated.resources.Res
-import skyfit.composeapp.generated.resources.action_cancel
-import skyfit.composeapp.generated.resources.action_continue
+import skyfit.composeapp.generated.resources.cancel_action
+import skyfit.composeapp.generated.resources.continue_action
 import skyfit.composeapp.generated.resources.auth_enter_again_password
 import skyfit.composeapp.generated.resources.auth_enter_password
 import skyfit.composeapp.generated.resources.auth_password_reset_message
@@ -171,7 +171,7 @@ private fun MobileForgotPasswordResetScreenActionsComponent(
     ) {
         PrimaryLargeButton(
             modifier = Modifier.fillMaxWidth(),
-            text = stringResource(Res.string.action_continue),
+            text = stringResource(Res.string.continue_action),
             onClick = onClickContinue,
             isLoading = isLoading,
             isEnabled = isEnabled && !isLoading
@@ -181,7 +181,7 @@ private fun MobileForgotPasswordResetScreenActionsComponent(
 
         SecondaryLargeButton(
             modifier = Modifier.fillMaxWidth(),
-            text = stringResource(Res.string.action_cancel),
+            text = stringResource(Res.string.cancel_action),
             onClick = onClickCancel
         )
     }

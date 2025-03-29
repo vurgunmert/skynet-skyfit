@@ -140,7 +140,32 @@ private fun EventItemColumn(
 
 
 @Composable
-fun NewLessonEventItem(
+fun BasicLessonEventItem(
+    title: String,
+    iconId: String,
+    date: String,
+    timePeriod: String,
+    location: String,
+    trainer: String,
+    note: String? = null
+) {
+    EventItemColumn {
+        BasicAppointmentEventTitleRow(title, iconId, date)
+        Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+            EventTimeText(timePeriod, modifier = Modifier.weight(1f))
+            EventTrainerText(trainer, modifier = Modifier.weight(1f))
+        }
+        EventLocationText(location)
+
+        note.takeUnless { it.isNullOrEmpty() }?.let {
+            EventNoteText(it)
+        }
+    }
+}
+
+
+@Composable
+fun DetailedLessonEventItem(
     title: String,
     iconId: String,
     date: String,
@@ -154,16 +179,16 @@ fun NewLessonEventItem(
     EventItemColumn {
         BasicAppointmentEventTitleRow(title, iconId, date)
         Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-            EventTimeText(timePeriod)
-            EventCapacityText(category)
+            EventTimeText(timePeriod, modifier = Modifier.weight(1f))
+            EventCapacityText(category, modifier = Modifier.weight(1f))
         }
         Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-            EventLocationText(location)
-            EventTrainerText(trainer)
+            EventLocationText(location, modifier = Modifier.weight(1f))
+            EventTrainerText(trainer, modifier = Modifier.weight(1f))
         }
         Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-            EventCapacityText(capacity)
-            EventCostText(cost)
+            EventCapacityText(capacity, modifier = Modifier.weight(1f))
+            EventCostText(cost, modifier = Modifier.weight(1f))
         }
     }
 }

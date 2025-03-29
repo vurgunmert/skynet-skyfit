@@ -581,11 +581,6 @@ fun FacilityClassCalendarRepeaterInputGroup(
                 selectedDays = selectedDaysOfWeek,
                 onDaySelected = onDaySelected
             )
-
-            "Ayda bir kez" -> MonthlySelectionGroup(
-                selectedOption = selectedMonthlyOption,
-                onOptionSelected = onMonthlyOptionSelected
-            )
         }
     }
 }

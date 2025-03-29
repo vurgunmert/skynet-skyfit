@@ -27,7 +27,7 @@ import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.koinInject
 import skyfit.composeapp.generated.resources.Res
 import skyfit.composeapp.generated.resources.account_settings
-import skyfit.composeapp.generated.resources.action_logout
+import skyfit.composeapp.generated.resources.logout_action
 import skyfit.composeapp.generated.resources.ic_bell
 import skyfit.composeapp.generated.resources.ic_credit_card
 import skyfit.composeapp.generated.resources.ic_profile
@@ -59,7 +59,7 @@ fun MobileTrainerSettingsScreen(navigator: Navigator) {
         bottomBar = {
             PrimaryLargeButton(
                 modifier = Modifier.fillMaxWidth().padding(24.dp),
-                text = stringResource(Res.string.action_logout),
+                text = stringResource(Res.string.logout_action),
                 onClick = viewModel::onLogout
             )
         }

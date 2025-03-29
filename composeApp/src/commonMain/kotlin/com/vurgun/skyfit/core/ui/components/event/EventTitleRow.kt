@@ -17,8 +17,8 @@ import com.vurgun.skyfit.core.ui.resources.SkyFitAsset
 import com.vurgun.skyfit.core.ui.resources.SkyFitColor
 import org.jetbrains.compose.resources.stringResource
 import skyfit.composeapp.generated.resources.Res
-import skyfit.composeapp.generated.resources.completed
-import skyfit.composeapp.generated.resources.missing
+import skyfit.composeapp.generated.resources.lesson_status_completed
+import skyfit.composeapp.generated.resources.lesson_status_missing
 
 @Composable
 fun EventTitleRow(
@@ -86,9 +86,9 @@ fun AttendanceAppointmentEventTitleRow(title: String, iconId: String? = null, da
     EventTitleRow(title = title, iconId = iconId, endContent = {
         BodyMediumSemiboldText(text = date, color = SkyFitColor.text.secondary)
         if (isCompleted) {
-            EventBadge(value = stringResource(Res.string.completed), state = BadgeState.Success)
+            EventBadge(value = stringResource(Res.string.lesson_status_completed), state = BadgeState.Success)
         } else {
-            EventBadge(value = stringResource(Res.string.missing), state = BadgeState.Error)
+            EventBadge(value = stringResource(Res.string.lesson_status_missing), state = BadgeState.Error)
         }
     })
 }

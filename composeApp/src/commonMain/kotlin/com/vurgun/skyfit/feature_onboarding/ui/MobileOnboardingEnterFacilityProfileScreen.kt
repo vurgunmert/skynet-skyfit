@@ -36,7 +36,7 @@ import com.vurgun.skyfit.feature_settings.ui.SkyFitSelectToEnterMultilineInputCo
 import moe.tlaster.precompose.navigation.Navigator
 import org.jetbrains.compose.resources.stringResource
 import skyfit.composeapp.generated.resources.Res
-import skyfit.composeapp.generated.resources.action_continue
+import skyfit.composeapp.generated.resources.continue_action
 import skyfit.composeapp.generated.resources.ic_pencil
 import skyfit.composeapp.generated.resources.mandatory_address
 import skyfit.composeapp.generated.resources.mandatory_biography
@@ -137,7 +137,7 @@ fun MobileOnboardingFacilityDetailsScreen(
 
             SkyFitButtonComponent(
                 modifier = Modifier.padding(16.dp).fillMaxWidth(),
-                text = stringResource(Res.string.action_continue),
+                text = stringResource(Res.string.continue_action),
                 onClick = {
                     if (isContinueEnabled) {
                         navigator.jumpAndStay(NavigationRoute.OnboardingFacilityProfileTags)
