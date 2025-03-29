@@ -29,6 +29,7 @@ import com.vurgun.skyfit.core.ui.resources.SkyFitTypography
 import com.vurgun.skyfit.core.utils.KeyboardState
 import com.vurgun.skyfit.core.utils.formatPhoneNumber
 import com.vurgun.skyfit.core.utils.keyboardAsState
+import com.vurgun.skyfit.feature_auth.ui.component.OTPInputTextField
 import com.vurgun.skyfit.feature_auth.ui.viewmodel.ForgotPasswordVerifyOTPViewEvent
 import com.vurgun.skyfit.feature_auth.ui.viewmodel.ForgotPasswordVerifyOTPViewModel
 import com.vurgun.skyfit.feature_navigation.NavigationRoute
@@ -49,7 +50,6 @@ fun MobileForgotPasswordVerifyOTPScreen(navigator: Navigator) {
     val isLoading by viewModel.isLoading.collectAsState()
     val isResendEnabled by viewModel.isResendEnabled.collectAsState()
     val countdownTime by viewModel.countdownTime.collectAsState()
-    val otpLength = viewModel.otpLength
 
     var errorMessage by remember { mutableStateOf<String?>(null) }
 
@@ -89,12 +89,12 @@ fun MobileForgotPasswordVerifyOTPScreen(navigator: Navigator) {
 
             MobileForgotPasswordCodeTextGroup(viewModel.phoneNumber)
 
-            MobileOTPVerificationContentGroup(otpLength, onOtpCompleted = viewModel::onOtpChanged)
+            OTPInputTextField(onCodeReady = viewModel::onOtpChanged)
 
             MobileOTPVerificationActionGroup(
                 onClickConfirm = viewModel::onConfirmClicked,
                 onClickResend = viewModel::resendOTP,
-                isConfirmEnabled = enteredOtp.length == otpLength && !isLoading,
+                isConfirmEnabled = enteredOtp.length == 6 && !isLoading,
                 isResendEnabled = isResendEnabled,
                 isLoading = isLoading,
                 countdownTime = countdownTime,

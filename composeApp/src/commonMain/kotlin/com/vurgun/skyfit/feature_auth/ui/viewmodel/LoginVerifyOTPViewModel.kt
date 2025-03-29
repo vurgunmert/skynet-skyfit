@@ -42,10 +42,10 @@ class LoginOTPVerificationViewModel(
 
     fun onOtpChanged(otp: String) {
         _enteredOtp.value = otp
-        if (otp.length == otpLength) onConfirmClicked()
+        if (otp.length == otpLength) submitCode()
     }
 
-    fun onConfirmClicked() {
+    fun submitCode() {
         if (_isLoading.value || _enteredOtp.value.length != otpLength) return
 
         viewModelScope.launch {

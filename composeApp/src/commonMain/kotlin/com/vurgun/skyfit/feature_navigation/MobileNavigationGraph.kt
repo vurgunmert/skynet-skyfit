@@ -94,10 +94,8 @@ fun MobileNavigationGraph() {
 
     NavHost(
         navigator = navigator,
-        initialRoute = NavigationRoute.Splash.route
+        initialRoute = NavigationRoute.Login.route
     ) {
-        scene(NavigationRoute.Splash.route) { SplashScreen(navigator) }
-
         mobileAuthNavGraph(navigator)
         mobileOnboardingNavGraph(navigator)
         dashboardNavGraph(navigator)
@@ -111,6 +109,7 @@ fun MobileNavigationGraph() {
 }
 
 private fun RouteBuilder.mobileAuthNavGraph(navigator: Navigator) {
+    scene(NavigationRoute.Splash.route) { SplashScreen(navigator) }
     scene(NavigationRoute.Login.route) { MobileLoginScreen(navigator) }
     scene(NavigationRoute.LoginVerifyOTP.route) { MobileLoginVerifyOTPScreen(navigator) }
     scene(NavigationRoute.CreatePassword.route) { MobileCreatePasswordScreen(navigator) }

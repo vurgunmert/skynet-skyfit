@@ -40,6 +40,7 @@ import skyfit.composeapp.generated.resources.ic_lock
 import skyfit.composeapp.generated.resources.ic_visibility_hide
 import skyfit.composeapp.generated.resources.ic_visibility_show
 
+// TODO: Combine with SkyFitPasswordInputComponent
 @Composable
 fun PasswordTextInput(
     value: String,
@@ -105,7 +106,7 @@ fun PasswordTextInput(
                     }
                     innerTextField()
                 },
-                cursorBrush = SolidColor(SkyFitColor.text.default),
+                cursorBrush = SolidColor(SkyFitColor.text.default)
             )
 
             Icon(

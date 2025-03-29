@@ -5,11 +5,11 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Text
@@ -24,15 +24,15 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.vurgun.skyfit.core.ui.components.SkyFitLogoComponent
-import com.vurgun.skyfit.core.ui.components.SkyFitScaffold
+import com.vurgun.skyfit.core.ui.components.SkyFitMobileScaffold
 import com.vurgun.skyfit.core.ui.components.button.PrimaryLargeButton
 import com.vurgun.skyfit.core.ui.components.text.SecondaryMediumText
 import com.vurgun.skyfit.core.ui.components.text.SecondaryMediumUnderlinedText
-import com.vurgun.skyfit.core.ui.components.text.input.CodeTextInput
 import com.vurgun.skyfit.core.ui.resources.SkyFitColor
 import com.vurgun.skyfit.core.ui.resources.SkyFitStyleGuide
 import com.vurgun.skyfit.core.ui.resources.SkyFitTypography
 import com.vurgun.skyfit.core.utils.formatPhoneNumber
+import com.vurgun.skyfit.feature_auth.ui.component.OTPInputTextField
 import com.vurgun.skyfit.feature_auth.ui.viewmodel.LoginOTPVerificationViewEvent
 import com.vurgun.skyfit.feature_auth.ui.viewmodel.LoginOTPVerificationViewModel
 import com.vurgun.skyfit.feature_navigation.NavigationRoute
@@ -82,11 +82,11 @@ fun MobileLoginVerifyOTPScreen(navigator: Navigator) {
         }
     }
 
-    SkyFitScaffold {
+    SkyFitMobileScaffold {
         Column(
             modifier = Modifier
+                .fillMaxSize()
                 .padding(SkyFitStyleGuide.Padding.xLarge)
-                .widthIn(max = SkyFitStyleGuide.Mobile.maxWidth)
                 .verticalScroll(rememberScrollState())
                 .imePadding(),
             horizontalAlignment = Alignment.CenterHorizontally,
@@ -95,10 +95,10 @@ fun MobileLoginVerifyOTPScreen(navigator: Navigator) {
 
             MobileOTPVerificationTextGroup(viewModel.phoneNumber)
 
-            MobileOTPVerificationContentGroup(otpLength, onOtpCompleted = viewModel::onOtpChanged)
+            OTPInputTextField(onCodeReady = viewModel::onOtpChanged)
 
             MobileOTPVerificationActionGroup(
-                onClickConfirm = viewModel::onConfirmClicked,
+                onClickConfirm = viewModel::submitCode,
                 onClickResend = viewModel::resendOTP,
                 isConfirmEnabled = enteredOtp.length == otpLength && !isLoading,
                 isResendEnabled = isResendEnabled,
@@ -121,22 +121,6 @@ private fun MobileOTPVerificationTextGroup(phoneNumber: String) {
 
         Spacer(Modifier.height(36.dp))
         SecondaryMediumText(text = stringResource(Res.string.auth_code_sent_to_phone, formatPhoneNumber(phoneNumber)))
-    }
-}
-
-@Composable
-fun MobileOTPVerificationContentGroup(
-    codeLength: Int = 4,
-    onOtpCompleted: (String) -> Unit
-) {
-    Column(
-        modifier = Modifier.fillMaxWidth(),
-        horizontalAlignment = Alignment.CenterHorizontally
-    ) {
-        CodeTextInput(
-            codeLength = codeLength,
-            onOtpCompleted = onOtpCompleted
-        )
     }
 }
 
