@@ -23,11 +23,11 @@ import com.vurgun.skyfit.feature_onboarding.domain.viewmodel.OnboardingViewModel
 import moe.tlaster.precompose.navigation.Navigator
 import org.jetbrains.compose.resources.stringResource
 import skyfit.composeapp.generated.resources.Res
-import skyfit.composeapp.generated.resources.facility
-import skyfit.composeapp.generated.resources.onboarding_select_user_type_message
-import skyfit.composeapp.generated.resources.onboarding_select_user_type_title
-import skyfit.composeapp.generated.resources.trainer
-import skyfit.composeapp.generated.resources.user
+import skyfit.composeapp.generated.resources.onboarding_welcome_message
+import skyfit.composeapp.generated.resources.onboarding_welcome_title
+import skyfit.composeapp.generated.resources.user_type_facility
+import skyfit.composeapp.generated.resources.user_type_trainer
+import skyfit.composeapp.generated.resources.user_type_user
 
 @Composable
 fun OnboardingUserTypeSelectionScreen(
@@ -49,8 +49,8 @@ fun OnboardingUserTypeSelectionScreen(
                 SkyFitLogoComponent()
                 Spacer(Modifier.height(56.dp))
                 OnboardingTitleGroupComponent(
-                    title = stringResource(Res.string.onboarding_select_user_type_title),
-                    subtitle = stringResource(Res.string.onboarding_select_user_type_message)
+                    title = stringResource(Res.string.onboarding_welcome_title),
+                    subtitle = stringResource(Res.string.onboarding_welcome_message)
                 )
                 Spacer(Modifier.height(64.dp))
                 MobileOnboardingUserTypeSelectionComponent(onSelected = { userType ->
@@ -78,17 +78,17 @@ private fun MobileOnboardingUserTypeSelectionComponent(
     ) {
 
         SkyFitTextButton(
-            text = stringResource(Res.string.user),
+            text = stringResource(Res.string.user_type_user),
             onClick = { onSelected(UserType.User) }
         )
         Spacer(Modifier.height(24.dp))
         SkyFitTextButton(
-            text = stringResource(Res.string.trainer),
+            text = stringResource(Res.string.user_type_trainer),
             onClick = { onSelected(UserType.Trainer) }
         )
         Spacer(Modifier.height(24.dp))
         SkyFitTextButton(
-            text = stringResource(Res.string.facility),
+            text = stringResource(Res.string.user_type_facility),
             onClick = { onSelected(UserType.Facility) }
         )
     }

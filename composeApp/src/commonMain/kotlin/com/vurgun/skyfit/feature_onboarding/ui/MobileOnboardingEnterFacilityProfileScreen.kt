@@ -38,11 +38,13 @@ import org.jetbrains.compose.resources.stringResource
 import skyfit.composeapp.generated.resources.Res
 import skyfit.composeapp.generated.resources.continue_action
 import skyfit.composeapp.generated.resources.ic_pencil
-import skyfit.composeapp.generated.resources.mandatory_address
-import skyfit.composeapp.generated.resources.mandatory_biography
-import skyfit.composeapp.generated.resources.mandatory_work_place_name
-import skyfit.composeapp.generated.resources.onboarding_facility_complete_profile_message
-import skyfit.composeapp.generated.resources.onboarding_facility_complete_profile_title
+import skyfit.composeapp.generated.resources.onboarding_facility_profile_message
+import skyfit.composeapp.generated.resources.onboarding_facility_profile_title
+import skyfit.composeapp.generated.resources.user_address_mandatory_label
+import skyfit.composeapp.generated.resources.user_biography_hint
+import skyfit.composeapp.generated.resources.user_biography_mandatory_label
+import skyfit.composeapp.generated.resources.user_workplace_mandatory_label
+import skyfit.composeapp.generated.resources.user_workplace_name_mandatory_label
 
 @Composable
 fun MobileOnboardingFacilityDetailsScreen(
@@ -83,8 +85,8 @@ fun MobileOnboardingFacilityDetailsScreen(
             Spacer(Modifier.weight(1f))
 
             OnboardingTitleGroupComponent(
-                title = stringResource(Res.string.onboarding_facility_complete_profile_title),
-                subtitle = stringResource(Res.string.onboarding_facility_complete_profile_message)
+                title = stringResource(Res.string.onboarding_facility_profile_title),
+                subtitle = stringResource(Res.string.onboarding_facility_profile_message)
             )
 
             Column(
@@ -101,8 +103,8 @@ fun MobileOnboardingFacilityDetailsScreen(
                 Spacer(Modifier.height(24.dp))
 
                 SkyFitSelectToEnterInputComponent(
-                    title = stringResource(Res.string.mandatory_work_place_name),
-                    hint = stringResource(Res.string.mandatory_work_place_name),
+                    title = stringResource(Res.string.user_workplace_mandatory_label),
+                    hint = stringResource(Res.string.user_workplace_name_mandatory_label),
                     value = name,
                     onValueChange = { viewModel.updateFacilityName(it) },
                     rightIconRes = Res.drawable.ic_pencil,
@@ -112,8 +114,8 @@ fun MobileOnboardingFacilityDetailsScreen(
 
                 Spacer(Modifier.height(16.dp))
                 SkyFitSelectToEnterMultilineInputComponent(
-                    title = stringResource(Res.string.mandatory_address),
-                    hint = stringResource(Res.string.mandatory_address),
+                    title = stringResource(Res.string.user_address_mandatory_label),
+                    hint = stringResource(Res.string.user_address_mandatory_label),
                     value = address,
                     onValueChange = { viewModel.updateFacilityAddress(it) },
                     rightIconRes = Res.drawable.ic_pencil,
@@ -123,8 +125,8 @@ fun MobileOnboardingFacilityDetailsScreen(
 
                 Spacer(Modifier.height(16.dp))
                 SkyFitSelectToEnterMultilineInputComponent(
-                    title = stringResource(Res.string.mandatory_biography),
-                    hint = stringResource(Res.string.mandatory_biography),
+                    title = stringResource(Res.string.user_biography_mandatory_label),
+                    hint = stringResource(Res.string.user_biography_hint),
                     value = biography,
                     onValueChange = { viewModel.updateFacilityBiography(it) },
                     rightIconRes = Res.drawable.ic_pencil,

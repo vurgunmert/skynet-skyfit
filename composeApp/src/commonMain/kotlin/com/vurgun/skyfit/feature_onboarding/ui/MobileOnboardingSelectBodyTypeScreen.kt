@@ -31,8 +31,8 @@ import moe.tlaster.precompose.navigation.Navigator
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
 import skyfit.composeapp.generated.resources.Res
-import skyfit.composeapp.generated.resources.onboarding_select_body_type_message
-import skyfit.composeapp.generated.resources.onboarding_select_body_type_title
+import skyfit.composeapp.generated.resources.onboarding_body_type_message
+import skyfit.composeapp.generated.resources.onboarding_body_type_title
 
 @Composable
 fun MobileOnboardingBodyTypeSelectionScreen(
@@ -54,8 +54,8 @@ fun MobileOnboardingBodyTypeSelectionScreen(
             Spacer(Modifier.height(120.dp))
 
             OnboardingTitleGroupComponent(
-                title = stringResource(Res.string.onboarding_select_body_type_title),
-                subtitle = stringResource(Res.string.onboarding_select_body_type_message)
+                title = stringResource(Res.string.onboarding_body_type_title),
+                subtitle = stringResource(Res.string.onboarding_body_type_message)
             )
             Spacer(Modifier.height(16.dp))
 

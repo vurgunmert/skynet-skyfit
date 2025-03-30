@@ -93,7 +93,7 @@ fun MobileNavigationGraph() {
 
     NavHost(
         navigator = navigator,
-        initialRoute = NavigationRoute.UserProfile.route
+        initialRoute = NavigationRoute.UserAppointments.route
     ) {
         mobileAuthNavGraph(navigator)
         mobileOnboardingNavGraph(navigator)
@@ -186,7 +186,7 @@ private fun RouteBuilder.userNavGraph(navigator: Navigator) {
     scene(NavigationRoute.UserToFacilityChat.route) { MobileUserToFacilityChatScreen(navigator) }
     //User - Profile
     scene(NavigationRoute.UserProfile.route) { MobileUserProfileScreen(navigator) }
-    scene(NavigationRoute.UserProfileVisited.route) { MobileUserProfileVisitedScreen(navigator) }
+    scene(NavigationRoute.UserProfileVisited.route) { MobileUserProfileScreen(navigator) }
     scene(NavigationRoute.UserPhotoDiary.route) { MobileUserPhotoDiaryScreen(navigator) }
     scene(NavigationRoute.UserMeasurements.route) { MobileUserMeasurementsScreen(navigator) }
     scene(NavigationRoute.UserBodyAnalysis.route) { MobileUserBodyAnalysisScreen(navigator) }

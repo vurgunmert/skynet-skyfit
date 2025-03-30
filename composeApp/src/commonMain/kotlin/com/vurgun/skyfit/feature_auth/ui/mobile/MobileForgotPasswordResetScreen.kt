@@ -39,12 +39,12 @@ import moe.tlaster.precompose.navigation.Navigator
 import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.viewmodel.koinViewModel
 import skyfit.composeapp.generated.resources.Res
-import skyfit.composeapp.generated.resources.cancel_action
-import skyfit.composeapp.generated.resources.continue_action
-import skyfit.composeapp.generated.resources.auth_enter_again_password
-import skyfit.composeapp.generated.resources.auth_enter_password
+import skyfit.composeapp.generated.resources.auth_password_input_hint
+import skyfit.composeapp.generated.resources.auth_password_repeat_input_hint
 import skyfit.composeapp.generated.resources.auth_password_reset_message
 import skyfit.composeapp.generated.resources.auth_password_reset_title
+import skyfit.composeapp.generated.resources.cancel_action
+import skyfit.composeapp.generated.resources.continue_action
 
 @Composable
 fun MobileForgotPasswordResetScreen(navigator: Navigator) {
@@ -102,7 +102,7 @@ fun MobileForgotPasswordResetScreen(navigator: Navigator) {
                 PasswordTextInput(
                     value = password,
                     onValueChange = viewModel::setPassword,
-                    hint = stringResource(Res.string.auth_enter_password),
+                    hint = stringResource(Res.string.auth_password_input_hint),
                     focusRequester = passwordFocusRequester,
                     onKeyboardNextAction = {
                         confirmPasswordFocusRequester.requestFocus()
@@ -119,7 +119,7 @@ fun MobileForgotPasswordResetScreen(navigator: Navigator) {
                 PasswordTextInput(
                     value = confirmPassword,
                     onValueChange = viewModel::setConfirmPassword,
-                    hint = stringResource(Res.string.auth_enter_again_password),
+                    hint = stringResource(Res.string.auth_password_repeat_input_hint),
                     focusRequester = confirmPasswordFocusRequester,
                     onKeyboardDoneAction = {
                         keyboardController?.hide()

@@ -39,8 +39,8 @@ import moe.tlaster.precompose.navigation.Navigator
 import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.koinInject
 import skyfit.composeapp.generated.resources.Res
-import skyfit.composeapp.generated.resources.auth_code_sent_to_phone
-import skyfit.composeapp.generated.resources.auth_forgot_password
+import skyfit.composeapp.generated.resources.auth_code_sent_message
+import skyfit.composeapp.generated.resources.auth_forgot_password_action
 
 @Composable
 fun MobileForgotPasswordVerifyOTPScreen(navigator: Navigator) {
@@ -116,11 +116,11 @@ private fun MobileForgotPasswordCodeTextGroup(phoneNumber: String) {
         Spacer(Modifier.height(36.dp))
 
         Text(
-            text = stringResource(Res.string.auth_forgot_password),
+            text = stringResource(Res.string.auth_forgot_password_action),
             style = SkyFitTypography.heading3
         )
         Spacer(Modifier.height(16.dp))
 
-        SecondaryMediumText(text = stringResource(Res.string.auth_code_sent_to_phone, formatPhoneNumber(phoneNumber)))
+        SecondaryMediumText(text = stringResource(Res.string.auth_code_sent_message, formatPhoneNumber(phoneNumber)))
     }
 }

@@ -41,15 +41,15 @@ import moe.tlaster.precompose.navigation.Navigator
 import org.jetbrains.compose.resources.stringResource
 import skyfit.composeapp.generated.resources.Res
 import skyfit.composeapp.generated.resources.continue_action
-import skyfit.composeapp.generated.resources.biography_hint
-import skyfit.composeapp.generated.resources.first_name_hint
-import skyfit.composeapp.generated.resources.first_name_mandatory
 import skyfit.composeapp.generated.resources.ic_pencil
-import skyfit.composeapp.generated.resources.last_name_hint
-import skyfit.composeapp.generated.resources.last_name_mandatory
-import skyfit.composeapp.generated.resources.mandatory_biography
-import skyfit.composeapp.generated.resources.onboarding_trainer_complete_profile_message
-import skyfit.composeapp.generated.resources.onboarding_trainer_complete_profile_title
+import skyfit.composeapp.generated.resources.onboarding_trainer_profile_message
+import skyfit.composeapp.generated.resources.onboarding_trainer_profile_title
+import skyfit.composeapp.generated.resources.user_biography_hint
+import skyfit.composeapp.generated.resources.user_biography_mandatory_label
+import skyfit.composeapp.generated.resources.user_first_name_hint
+import skyfit.composeapp.generated.resources.user_first_name_mandatory_label
+import skyfit.composeapp.generated.resources.user_last_name_hint
+import skyfit.composeapp.generated.resources.user_last_name_mandatory_label
 
 @Composable
 fun MobileOnboardingEnterProfileScreen(
@@ -102,8 +102,8 @@ fun MobileOnboardingEnterProfileScreen(
 
 
                     OnboardingTitleGroupComponent(
-                        title = stringResource(Res.string.onboarding_trainer_complete_profile_title),
-                        subtitle = stringResource(Res.string.onboarding_trainer_complete_profile_message)
+                        title = stringResource(Res.string.onboarding_trainer_profile_title),
+                        subtitle = stringResource(Res.string.onboarding_trainer_profile_message)
                     )
 
                     Spacer(Modifier.height(24.dp))
@@ -111,8 +111,8 @@ fun MobileOnboardingEnterProfileScreen(
                     Row(modifier = Modifier.padding(horizontal = 22.dp).fillMaxWidth()) {
                         SkyFitSelectToEnterInputComponent(
                             modifier = Modifier.weight(1f),
-                            title = stringResource(Res.string.first_name_mandatory),
-                            hint = stringResource(Res.string.first_name_hint),
+                            title = stringResource(Res.string.user_first_name_mandatory_label),
+                            hint = stringResource(Res.string.user_first_name_hint),
                             value = firstName,
                             onValueChange = { viewModel.updateFirstName(it) },
                             rightIconRes = Res.drawable.ic_pencil,
@@ -122,8 +122,8 @@ fun MobileOnboardingEnterProfileScreen(
                         Spacer(Modifier.width(16.dp))
                         SkyFitSelectToEnterInputComponent(
                             modifier = Modifier.weight(1f),
-                            title = stringResource(Res.string.last_name_mandatory),
-                            hint = stringResource(Res.string.last_name_hint),
+                            title = stringResource(Res.string.user_last_name_mandatory_label),
+                            hint = stringResource(Res.string.user_last_name_hint),
                             value = lastName,
                             onValueChange = { viewModel.updateLastName(it) },
                             rightIconRes = Res.drawable.ic_pencil,
@@ -137,8 +137,8 @@ fun MobileOnboardingEnterProfileScreen(
                     if (userType == UserType.Trainer) {
                         SkyFitSelectToEnterMultilineInputComponent(
                             modifier = Modifier.padding(horizontal = 22.dp),
-                            title = stringResource(Res.string.mandatory_biography),
-                            hint = stringResource(Res.string.biography_hint),
+                            title = stringResource(Res.string.user_biography_mandatory_label),
+                            hint = stringResource(Res.string.user_biography_hint),
                             value = biography,
                             onValueChange = { viewModel.updateBiography(it) },
                             rightIconRes = Res.drawable.ic_pencil,

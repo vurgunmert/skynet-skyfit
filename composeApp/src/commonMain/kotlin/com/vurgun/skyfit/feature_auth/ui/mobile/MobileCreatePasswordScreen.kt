@@ -36,8 +36,8 @@ import com.vurgun.skyfit.core.ui.resources.SkyFitStyleGuide
 import com.vurgun.skyfit.core.ui.resources.SkyFitTypography
 import com.vurgun.skyfit.core.utils.KeyboardState
 import com.vurgun.skyfit.core.utils.keyboardAsState
-import com.vurgun.skyfit.feature_auth.ui.viewmodel.PasswordCreateViewModel
 import com.vurgun.skyfit.feature_auth.ui.viewmodel.CreatePasswordViewEvent
+import com.vurgun.skyfit.feature_auth.ui.viewmodel.PasswordCreateViewModel
 import com.vurgun.skyfit.feature_navigation.NavigationRoute
 import com.vurgun.skyfit.feature_navigation.jumpAndStay
 import com.vurgun.skyfit.feature_navigation.jumpAndTakeover
@@ -46,10 +46,10 @@ import moe.tlaster.precompose.navigation.Navigator
 import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.viewmodel.koinViewModel
 import skyfit.composeapp.generated.resources.Res
-import skyfit.composeapp.generated.resources.auth_enter_again_password
-import skyfit.composeapp.generated.resources.auth_enter_password
-import skyfit.composeapp.generated.resources.auth_register
-import skyfit.composeapp.generated.resources.user_name
+import skyfit.composeapp.generated.resources.auth_password_input_hint
+import skyfit.composeapp.generated.resources.auth_password_repeat_input_hint
+import skyfit.composeapp.generated.resources.auth_register_action
+import skyfit.composeapp.generated.resources.user_username_label
 
 @Composable
 fun MobileCreatePasswordScreen(navigator: Navigator) {
@@ -155,7 +155,7 @@ private fun MobileRegisterInputGroupComponent(
     ) {
 
         PersonNameTextInput(
-            hint = stringResource(Res.string.user_name),
+            hint = stringResource(Res.string.user_username_label),
             value = username,
             onValueChange = onFullNameChanged,
             focusRequester = nameFocusRequester,
@@ -167,7 +167,7 @@ private fun MobileRegisterInputGroupComponent(
         PasswordTextInput(
             value = password,
             onValueChange = onPasswordChanged,
-            hint = stringResource(Res.string.auth_enter_password),
+            hint = stringResource(Res.string.auth_password_input_hint),
             error = passwordError,
             focusRequester = passwordFocusRequester,
             onKeyboardNextAction = {
@@ -178,7 +178,7 @@ private fun MobileRegisterInputGroupComponent(
         PasswordTextInput(
             value = confirmPassword,
             onValueChange = onConfirmPasswordChanged,
-            hint = stringResource(Res.string.auth_enter_again_password),
+            hint = stringResource(Res.string.auth_password_repeat_input_hint),
             focusRequester = confirmPasswordFocusRequester,
             onKeyboardDoneAction = {
                 keyboardController?.hide()
@@ -196,7 +196,7 @@ private fun MobileRegisterScreenActionComponent(
 ) {
     PrimaryLargeButton(
         modifier = Modifier.fillMaxWidth(),
-        text = stringResource(Res.string.auth_register),
+        text = stringResource(Res.string.auth_register_action),
         onClick = onClickRegister,
         isLoading = isLoading,
         isEnabled = isRegisterEnabled && !isLoading

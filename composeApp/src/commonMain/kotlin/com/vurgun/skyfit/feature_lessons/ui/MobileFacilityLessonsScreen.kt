@@ -44,16 +44,16 @@ import moe.tlaster.precompose.navigation.Navigator
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
 import skyfit.composeapp.generated.resources.Res
-import skyfit.composeapp.generated.resources.activate
-import skyfit.composeapp.generated.resources.delete
-import skyfit.composeapp.generated.resources.disable
-import skyfit.composeapp.generated.resources.edit
+import skyfit.composeapp.generated.resources.activate_action
+import skyfit.composeapp.generated.resources.delete_action
+import skyfit.composeapp.generated.resources.disable_action
+import skyfit.composeapp.generated.resources.edit_action
 import skyfit.composeapp.generated.resources.ic_check_circle
 import skyfit.composeapp.generated.resources.ic_close_circle
 import skyfit.composeapp.generated.resources.ic_delete
 import skyfit.composeapp.generated.resources.ic_pencil
-import skyfit.composeapp.generated.resources.lessons
-import skyfit.composeapp.generated.resources.out_of_use
+import skyfit.composeapp.generated.resources.lessons_label
+import skyfit.composeapp.generated.resources.status_out_of_use
 
 @Composable
 fun MobileFacilityLessonsScreen(navigator: Navigator) {
@@ -69,7 +69,7 @@ fun MobileFacilityLessonsScreen(navigator: Navigator) {
     Scaffold(
         backgroundColor = SkyFitColor.background.default,
         topBar = {
-            SkyFitScreenHeader(stringResource(Res.string.lessons), onClickBack = { navigator.popBackStack() })
+            SkyFitScreenHeader(stringResource(Res.string.lessons_label), onClickBack = { navigator.popBackStack() })
         }
     ) { paddingValues ->
 
@@ -171,7 +171,7 @@ private fun InactiveSessionItemsColumn(
             modifier = Modifier.fillMaxWidth().padding(horizontal = 8.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
-            Text(text = stringResource(Res.string.out_of_use), style = SkyFitTypography.heading5)
+            Text(text = stringResource(Res.string.status_out_of_use), style = SkyFitTypography.heading5)
             Spacer(Modifier.weight(1f))
         }
 
@@ -239,12 +239,12 @@ private fun FacilityClassOptionsMenuPopup(
                                     horizontalArrangement = Arrangement.SpaceBetween
                                 ) {
                                     Text(
-                                        text = stringResource(Res.string.disable),
+                                        text = stringResource(Res.string.disable_action),
                                         style = SkyFitTypography.bodyMediumRegular
                                     )
                                     Icon(
                                         painter = painterResource(Res.drawable.ic_close_circle),
-                                        contentDescription = stringResource(Res.string.disable),
+                                        contentDescription = stringResource(Res.string.disable_action),
                                         tint = SkyFitColor.icon.default,
                                         modifier = Modifier.size(16.dp)
                                     )
@@ -271,12 +271,12 @@ private fun FacilityClassOptionsMenuPopup(
                                     horizontalArrangement = Arrangement.SpaceBetween
                                 ) {
                                     Text(
-                                        text = stringResource(Res.string.activate),
+                                        text = stringResource(Res.string.activate_action),
                                         style = SkyFitTypography.bodyMediumRegular
                                     )
                                     Icon(
                                         painter = painterResource(Res.drawable.ic_check_circle),
-                                        contentDescription = stringResource(Res.string.activate),
+                                        contentDescription = stringResource(Res.string.activate_action),
                                         tint = SkyFitColor.icon.default,
                                         modifier = Modifier.size(16.dp)
                                     )
@@ -302,12 +302,12 @@ private fun FacilityClassOptionsMenuPopup(
                                 horizontalArrangement = Arrangement.SpaceBetween
                             ) {
                                 Text(
-                                    text = stringResource(Res.string.edit),
+                                    text = stringResource(Res.string.edit_action),
                                     style = SkyFitTypography.bodyMediumRegular
                                 )
                                 Icon(
                                     painter = painterResource(Res.drawable.ic_pencil),
-                                    contentDescription = stringResource(Res.string.edit),
+                                    contentDescription = stringResource(Res.string.edit_action),
                                     tint = SkyFitColor.icon.default,
                                     modifier = Modifier.size(16.dp)
                                 )
@@ -332,13 +332,13 @@ private fun FacilityClassOptionsMenuPopup(
                                 horizontalArrangement = Arrangement.SpaceBetween
                             ) {
                                 Text(
-                                    text = stringResource(Res.string.delete),
+                                    text = stringResource(Res.string.delete_action),
                                     style = SkyFitTypography.bodyMediumRegular,
                                     color = SkyFitColor.text.criticalOnBgFill
                                 )
                                 Icon(
                                     painter = painterResource(Res.drawable.ic_delete),
-                                    contentDescription = stringResource(Res.string.delete),
+                                    contentDescription = stringResource(Res.string.delete_action),
                                     tint = SkyFitColor.icon.critical,
                                     modifier = Modifier.size(16.dp)
                                 )

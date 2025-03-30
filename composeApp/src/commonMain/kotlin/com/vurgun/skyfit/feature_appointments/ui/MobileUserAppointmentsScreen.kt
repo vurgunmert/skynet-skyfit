@@ -40,6 +40,9 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import com.vurgun.skyfit.core.ui.components.SkyFitBadgeTabBarComponent
 import com.vurgun.skyfit.core.ui.components.SkyFitScreenHeader
+import com.vurgun.skyfit.core.ui.components.event.ActiveAppointmentEventItem
+import com.vurgun.skyfit.core.ui.components.event.AttendanceAppointmentEventItem
+import com.vurgun.skyfit.core.ui.components.event.BasicAppointmentEventItem
 import com.vurgun.skyfit.feature_navigation.NavigationRoute
 import com.vurgun.skyfit.feature_navigation.jumpAndStay
 import com.vurgun.skyfit.core.ui.resources.SkyFitColor
@@ -47,8 +50,10 @@ import com.vurgun.skyfit.core.ui.resources.SkyFitIcon
 import com.vurgun.skyfit.core.ui.resources.SkyFitTypography
 import moe.tlaster.precompose.navigation.Navigator
 import org.jetbrains.compose.resources.painterResource
+import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.koinInject
 import skyfit.composeapp.generated.resources.Res
+import skyfit.composeapp.generated.resources.appointments_title
 import skyfit.composeapp.generated.resources.ic_clock
 import skyfit.composeapp.generated.resources.ic_dashboard
 import skyfit.composeapp.generated.resources.ic_delete
@@ -78,7 +83,7 @@ fun MobileUserAppointmentsScreen(navigator: Navigator) {
         backgroundColor = SkyFitColor.background.default,
         topBar = {
             Column {
-                SkyFitScreenHeader("Randevularım", onClickBack = { navigator.popBackStack() })
+                SkyFitScreenHeader(stringResource(Res.string.appointments_title), onClickBack = { navigator.popBackStack() })
 
                 SkyFitBadgeTabBarComponent(
                     titles = tabTitles,
@@ -97,15 +102,50 @@ fun MobileUserAppointmentsScreen(navigator: Navigator) {
             verticalArrangement = Arrangement.spacedBy(16.dp)
         ) {
             items(appointments) { appointment ->
-                BookedAppointmentCardItemComponent(
-                    item = appointment,
-                    modifier = Modifier.fillMaxWidth(),
-                    onClick = { navigator.jumpAndStay(NavigationRoute.UserAppointmentDetail) },
-                    onDeleteClick = {
-                        appointmentToDelete = appointment
-                        showDeleteDialog = true
+
+                when(activeTab) {
+                    0 -> {
+                        ActiveAppointmentEventItem(
+                            title = appointment.title,
+                            iconId = appointment.iconId,
+                            date = appointment.date,
+                            timePeriod = appointment.hours,
+                            location = appointment.location,
+                            trainer = appointment.trainer,
+                            note = appointment.note,
+                            onDelete = {
+                                appointmentToDelete = appointment
+                                showDeleteDialog = true
+                            },
+                            onClick = { navigator.jumpAndStay(NavigationRoute.UserAppointmentDetail) }
+                        )
                     }
-                )
+                    1 -> {
+                        BasicAppointmentEventItem(
+                            title = appointment.title,
+                            iconId = appointment.iconId,
+                            date = appointment.date,
+                            timePeriod = appointment.hours,
+                            location = appointment.location,
+                            trainer = appointment.trainer,
+                            note = appointment.note,
+                            onClick = { navigator.jumpAndStay(NavigationRoute.UserAppointmentDetail) }
+                        )
+                    }
+                    2 -> {
+                        AttendanceAppointmentEventItem(
+                            title = appointment.title,
+                            iconId = appointment.iconId,
+                            date = appointment.date,
+                            timePeriod = appointment.hours,
+                            location = appointment.location,
+                            trainer = appointment.trainer,
+                            note = appointment.note,
+                            isCompleted = appointment.attended,
+                            onClick = { navigator.jumpAndStay(NavigationRoute.UserAppointmentDetail) }
+                        )
+                    }
+                }
             }
         }
     }
@@ -133,149 +173,6 @@ fun MobileUserAppointmentsScreen(navigator: Navigator) {
     )
 }
 
-
-@Composable
-fun BookedAppointmentCardItemComponent(
-    item: AppointmentCardViewData,
-    modifier: Modifier = Modifier,
-    onClick: (() -> Unit)? = null,
-    onDeleteClick: (() -> Unit)? = null
-) {
-    Column(
-        modifier
-            .fillMaxWidth()
-            .background(SkyFitColor.background.fillTransparentSecondary, RoundedCornerShape(16.dp))
-            .clickable { onClick?.invoke() }
-            .padding(12.dp)
-    ) {
-        // Title Row: Icon + Title + Date + Status/Delete
-        Row(Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
-            // Exercise Icon
-            Icon(
-                painter = SkyFitIcon.getIconResourcePainter(item.iconId, defaultRes = Res.drawable.ic_exercises),
-                contentDescription = item.title,
-                tint = SkyFitColor.icon.default,
-                modifier = Modifier.size(24.dp)
-            )
-            Spacer(Modifier.width(8.dp))
-
-            // Title
-            Text(
-                modifier = Modifier.weight(1f),
-                text = item.title,
-                maxLines = 1,
-                style = SkyFitTypography.bodyMediumSemibold
-            )
-
-            // Date
-            Text(
-                text = item.date,
-                style = SkyFitTypography.bodyMediumSemibold,
-                color = SkyFitColor.text.secondary
-            )
-
-            Spacer(Modifier.width(8.dp))
-            // Status OR Delete Icon
-            if (item.status == "Planlanan") {
-                Box(
-                    Modifier.size(32.dp).border(1.dp, SkyFitColor.border.critical, CircleShape),
-                    contentAlignment = Alignment.Center
-                ) {
-                    Icon(
-                        painter = painterResource(Res.drawable.ic_delete),
-                        contentDescription = "Delete",
-                        tint = Color.Red,
-                        modifier = Modifier
-                            .size(20.dp)
-                            .clickable { onDeleteClick?.invoke() }
-                    )
-                }
-            } else {
-                Text(
-                    text = item.status ?: "",
-                    style = SkyFitTypography.bodyMediumSemibold,
-                    color = when (item.status) {
-                        "Tamamlandı" -> Color.Green
-                        "Eksik" -> Color.Red
-                        "İptal" -> Color.Gray
-                        else -> SkyFitColor.text.secondary
-                    }
-                )
-            }
-        }
-
-        Spacer(Modifier.height(8.dp))
-
-        // Time & Category
-        Row(Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
-            AppointmentSingleDataBoxComponent(
-                text = item.hours,
-                iconRes = Res.drawable.ic_clock,
-                modifier = Modifier.weight(1f)
-            )
-            Spacer(Modifier.width(8.dp))
-            AppointmentSingleDataBoxComponent(
-                item.category,
-                iconRes = Res.drawable.ic_dashboard,
-                modifier = Modifier.weight(1f)
-            )
-        }
-
-        Spacer(Modifier.height(8.dp))
-
-        // Location & Trainer
-        Row {
-            AppointmentSingleDataBoxComponent(
-                text = item.location,
-                iconRes = Res.drawable.ic_location_pin,
-                modifier = Modifier.weight(1f)
-            )
-            Spacer(Modifier.width(8.dp))
-            AppointmentSingleDataBoxComponent(
-                item.trainer,
-                iconRes = Res.drawable.ic_profile_fill,
-                modifier = Modifier.weight(1f)
-            )
-        }
-
-        // Capacity & Cost
-        if (item.capacity != null && item.cost != null) {
-            Spacer(Modifier.height(8.dp))
-            Row {
-                AppointmentSingleDataBoxComponent(
-                    item.capacity,
-                    iconRes = Res.drawable.ic_posture_fill,
-                    modifier = Modifier.weight(1f)
-                )
-                Spacer(Modifier.width(8.dp))
-                AppointmentSingleDataBoxComponent(
-                    item.cost,
-                    iconRes = Res.drawable.ic_lira,
-                    modifier = Modifier.weight(1f)
-                )
-            }
-        }
-
-        // Class Notes
-        item.note?.let {
-            Spacer(Modifier.height(8.dp))
-            Row(Modifier.fillMaxWidth(), verticalAlignment = Alignment.Top) {
-                Icon(
-                    imageVector = Icons.Default.Info,
-                    contentDescription = "Note",
-                    tint = SkyFitColor.icon.default,
-                    modifier = Modifier.size(16.dp)
-                )
-                Spacer(Modifier.width(8.dp))
-                Text(
-                    modifier = Modifier.weight(1f),
-                    text = it,
-                    style = SkyFitTypography.bodyMediumRegular.copy(color = SkyFitColor.text.secondary)
-                )
-            }
-        }
-    }
-}
 
 @Composable
 private fun AppointmentDeleteDialog(

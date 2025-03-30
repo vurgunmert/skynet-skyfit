@@ -31,8 +31,8 @@ import skyfit.composeapp.generated.resources.gender_female
 import skyfit.composeapp.generated.resources.gender_male
 import skyfit.composeapp.generated.resources.ic_gender_female
 import skyfit.composeapp.generated.resources.ic_gender_male
-import skyfit.composeapp.generated.resources.onboarding_select_gender_message
-import skyfit.composeapp.generated.resources.onboarding_select_gender_title
+import skyfit.composeapp.generated.resources.onboarding_gender_message
+import skyfit.composeapp.generated.resources.onboarding_gender_title
 
 @Composable
 fun MobileOnboardingGenderSelectionScreen(
@@ -49,8 +49,8 @@ fun MobileOnboardingGenderSelectionScreen(
             OnboardingStepProgressComponent(totalSteps = 8, currentStep = 3)
             Spacer(Modifier.height(178.dp))
             OnboardingTitleGroupComponent(
-                title = stringResource(Res.string.onboarding_select_gender_title),
-                subtitle = stringResource(Res.string.onboarding_select_gender_message)
+                title = stringResource(Res.string.onboarding_gender_title),
+                subtitle = stringResource(Res.string.onboarding_gender_message)
             )
             Spacer(Modifier.height(16.dp))
             OnboardingGenderSelectorComponent(

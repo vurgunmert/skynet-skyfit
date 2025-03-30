@@ -26,9 +26,8 @@ import moe.tlaster.precompose.navigation.Navigator
 import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.koinInject
 import skyfit.composeapp.generated.resources.Res
-import skyfit.composeapp.generated.resources.account_settings
+import skyfit.composeapp.generated.resources.branches_label
 import skyfit.composeapp.generated.resources.logout_action
-import skyfit.composeapp.generated.resources.branches
 import skyfit.composeapp.generated.resources.ic_athletic_performance
 import skyfit.composeapp.generated.resources.ic_bell
 import skyfit.composeapp.generated.resources.ic_building
@@ -36,12 +35,13 @@ import skyfit.composeapp.generated.resources.ic_credit_card
 import skyfit.composeapp.generated.resources.ic_posture_fill
 import skyfit.composeapp.generated.resources.ic_profile
 import skyfit.composeapp.generated.resources.ic_question_circle
-import skyfit.composeapp.generated.resources.members
-import skyfit.composeapp.generated.resources.notifications
-import skyfit.composeapp.generated.resources.payment_history
-import skyfit.composeapp.generated.resources.settings
-import skyfit.composeapp.generated.resources.support_and_assistance
-import skyfit.composeapp.generated.resources.trainers
+import skyfit.composeapp.generated.resources.members_label
+import skyfit.composeapp.generated.resources.settings_account_label
+import skyfit.composeapp.generated.resources.settings_notifications_label
+import skyfit.composeapp.generated.resources.settings_payment_history_label
+import skyfit.composeapp.generated.resources.settings_support_label
+import skyfit.composeapp.generated.resources.settings_title
+import skyfit.composeapp.generated.resources.trainers_label
 
 @Composable
 fun MobileFacilitySettingsScreen(navigator: Navigator) {
@@ -60,7 +60,7 @@ fun MobileFacilitySettingsScreen(navigator: Navigator) {
 
     SkyFitMobileScaffold(
         topBar = {
-            SkyFitScreenHeader(title = stringResource(Res.string.settings), onClickBack = { navigator.popBackStack() })
+            SkyFitScreenHeader(title = stringResource(Res.string.settings_title), onClickBack = { navigator.popBackStack() })
         },
         bottomBar = {
             PrimaryLargeButton(
@@ -80,13 +80,13 @@ fun MobileFacilitySettingsScreen(navigator: Navigator) {
         ) {
 
             MobileSettingsMenuItemComponent(
-                text = stringResource(Res.string.account_settings),
+                text = stringResource(Res.string.settings_account_label),
                 iconRes = Res.drawable.ic_profile,
                 onClick = { navigator.jumpAndStay(NavigationRoute.FacilitySettingsAccount) }
             )
 
             MobileSettingsMenuItemComponent(
-                text = stringResource(Res.string.payment_history),
+                text = stringResource(Res.string.settings_payment_history_label),
                 iconRes = Res.drawable.ic_credit_card,
                 onClick = { navigator.jumpAndStay(NavigationRoute.FacilitySettingsPaymentHistory) }
             )
@@ -94,7 +94,7 @@ fun MobileFacilitySettingsScreen(navigator: Navigator) {
             MobileSettingsMenuItemDividerComponent()
 
             MobileSettingsMenuItemComponent(
-                text = stringResource(Res.string.notifications),
+                text = stringResource(Res.string.settings_notifications_label),
                 iconRes = Res.drawable.ic_bell,
                 onClick = { navigator.jumpAndStay(NavigationRoute.FacilitySettingsNotifications) }
             )
@@ -102,19 +102,19 @@ fun MobileFacilitySettingsScreen(navigator: Navigator) {
             MobileSettingsMenuItemDividerComponent()
 
             MobileSettingsMenuItemComponent(
-                text = stringResource(Res.string.members),
+                text = stringResource(Res.string.members_label),
                 iconRes = Res.drawable.ic_posture_fill,
                 onClick = { navigator.jumpAndStay(NavigationRoute.FacilitySettingsSearchMembers) }
             )
 
             MobileSettingsMenuItemComponent(
-                text = stringResource(Res.string.trainers),
+                text = stringResource(Res.string.trainers_label),
                 iconRes = Res.drawable.ic_athletic_performance,
                 onClick = { navigator.jumpAndStay(NavigationRoute.FacilitySettingsTrainers) }
             )
 
             MobileSettingsMenuItemComponent(
-                text = stringResource(Res.string.branches),
+                text = stringResource(Res.string.branches_label),
                 iconRes = Res.drawable.ic_building,
                 onClick = { navigator.jumpAndStay(NavigationRoute.FacilitySettingsTrainers) }
             )
@@ -122,7 +122,7 @@ fun MobileFacilitySettingsScreen(navigator: Navigator) {
             MobileSettingsMenuItemDividerComponent()
 
             MobileSettingsMenuItemComponent(
-                text = stringResource(Res.string.support_and_assistance),
+                text = stringResource(Res.string.settings_support_label),
                 iconRes = Res.drawable.ic_question_circle,
                 onClick = { navigator.jumpAndStay(NavigationRoute.FacilitySettingsHelp) }
             )

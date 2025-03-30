@@ -15,14 +15,14 @@ import com.vurgun.skyfit.core.ui.resources.SkyFitColor
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
 import skyfit.composeapp.generated.resources.Res
-import skyfit.composeapp.generated.resources.delete
+import skyfit.composeapp.generated.resources.delete_action
 import skyfit.composeapp.generated.resources.ic_delete
 
 @Composable
 fun DeleteIcon() {
     Icon(
         painter = painterResource(Res.drawable.ic_delete),
-        contentDescription = stringResource(Res.string.delete),
+        contentDescription = stringResource(Res.string.delete_action),
         tint = SkyFitColor.icon.critical,
         modifier = Modifier.size(16.dp)
     )
@@ -32,9 +32,9 @@ fun DeleteIcon() {
 fun CircularDeleteIcon(onClick: () -> Unit) {
     Box(
         Modifier
-            .size(24.dp)
             .clip(CircleShape)
             .border(1.dp, SkyFitColor.border.critical)
+            .size(32.dp)
             .clickable(onClick = onClick),
         contentAlignment = Alignment.Center
     ) {

@@ -23,7 +23,7 @@ import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
 import skyfit.composeapp.generated.resources.Res
 import skyfit.composeapp.generated.resources.logo_skyfit
-import skyfit.composeapp.generated.resources.onboarding_lets_get_started
+import skyfit.composeapp.generated.resources.onboarding_get_started_action
 import skyfit.composeapp.generated.resources.onboarding_ready_message
 import skyfit.composeapp.generated.resources.onboarding_ready_title
 
@@ -55,7 +55,7 @@ fun MobileOnboardingCompletedScreen(
                     .align(Alignment.BottomStart)
                     .padding(16.dp)
                     .fillMaxWidth(),
-                text = stringResource(Res.string.onboarding_lets_get_started),
+                text = stringResource(Res.string.onboarding_get_started_action),
                 onClick = { navigator.jumpAndTakeover(NavigationRoute.Dashboard) },
             )
 

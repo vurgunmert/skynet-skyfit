@@ -25,8 +25,8 @@ import com.vurgun.skyfit.feature_onboarding.domain.viewmodel.OnboardingViewModel
 import moe.tlaster.precompose.navigation.Navigator
 import org.jetbrains.compose.resources.stringResource
 import skyfit.composeapp.generated.resources.Res
-import skyfit.composeapp.generated.resources.onboarding_select_height_message
-import skyfit.composeapp.generated.resources.onboarding_select_height_title
+import skyfit.composeapp.generated.resources.onboarding_height_message
+import skyfit.composeapp.generated.resources.onboarding_height_title
 
 @Composable
 fun MobileOnboardingHeightSelectionScreen(
@@ -44,8 +44,8 @@ fun MobileOnboardingHeightSelectionScreen(
             OnboardingStepProgressComponent(totalSteps = 8, currentStep = 5)
             Spacer(Modifier.height(178.dp))
             OnboardingTitleGroupComponent(
-                title = stringResource(Res.string.onboarding_select_height_title),
-                subtitle = stringResource(Res.string.onboarding_select_height_message)
+                title = stringResource(Res.string.onboarding_height_title),
+                subtitle = stringResource(Res.string.onboarding_height_message)
             )
             Spacer(Modifier.height(16.dp))
 

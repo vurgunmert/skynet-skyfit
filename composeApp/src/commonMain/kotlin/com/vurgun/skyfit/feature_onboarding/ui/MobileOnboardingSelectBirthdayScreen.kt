@@ -26,8 +26,8 @@ import kotlinx.datetime.LocalDate
 import moe.tlaster.precompose.navigation.Navigator
 import org.jetbrains.compose.resources.stringResource
 import skyfit.composeapp.generated.resources.Res
-import skyfit.composeapp.generated.resources.onboarding_select_date_of_birth_message
-import skyfit.composeapp.generated.resources.onboarding_select_date_of_birth_title
+import skyfit.composeapp.generated.resources.onboarding_birth_date_message
+import skyfit.composeapp.generated.resources.onboarding_birth_date_title
 
 @Composable
 fun MobileOnboardingBirthdaySelectionScreen(
@@ -47,8 +47,8 @@ fun MobileOnboardingBirthdaySelectionScreen(
             OnboardingStepProgressComponent(totalSteps = 8, currentStep = 2)
             Spacer(Modifier.weight(1f))
             OnboardingTitleGroupComponent(
-                title = stringResource(Res.string.onboarding_select_date_of_birth_title),
-                subtitle = stringResource(Res.string.onboarding_select_date_of_birth_message)
+                title = stringResource(Res.string.onboarding_birth_date_title),
+                subtitle = stringResource(Res.string.onboarding_birth_date_message)
             )
             Spacer(Modifier.height(16.dp))
 

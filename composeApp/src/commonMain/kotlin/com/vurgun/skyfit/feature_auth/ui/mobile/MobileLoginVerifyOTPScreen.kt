@@ -42,11 +42,11 @@ import moe.tlaster.precompose.navigation.Navigator
 import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.koinInject
 import skyfit.composeapp.generated.resources.Res
-import skyfit.composeapp.generated.resources.auth_code_sent_to_phone
-import skyfit.composeapp.generated.resources.auth_verify
-import skyfit.composeapp.generated.resources.ota_code_not_received
-import skyfit.composeapp.generated.resources.ota_code_resend_code
-import skyfit.composeapp.generated.resources.resend_code_timer
+import skyfit.composeapp.generated.resources.auth_code_not_received_message
+import skyfit.composeapp.generated.resources.auth_code_sent_message
+import skyfit.composeapp.generated.resources.auth_resend_code_action
+import skyfit.composeapp.generated.resources.auth_resend_timer_message
+import skyfit.composeapp.generated.resources.auth_verify_action
 
 @Composable
 fun MobileLoginVerifyOTPScreen(navigator: Navigator) {
@@ -120,7 +120,7 @@ private fun MobileOTPVerificationTextGroup(phoneNumber: String) {
         SkyFitLogoComponent()
 
         Spacer(Modifier.height(36.dp))
-        SecondaryMediumText(text = stringResource(Res.string.auth_code_sent_to_phone, formatPhoneNumber(phoneNumber)))
+        SecondaryMediumText(text = stringResource(Res.string.auth_code_sent_message, formatPhoneNumber(phoneNumber)))
     }
 }
 
@@ -140,7 +140,7 @@ fun MobileOTPVerificationActionGroup(
     ) {
         PrimaryLargeButton(
             modifier = Modifier.fillMaxWidth(),
-            text = stringResource(Res.string.auth_verify),
+            text = stringResource(Res.string.auth_verify_action),
             onClick = onClickConfirm,
             isEnabled = isConfirmEnabled,
             isLoading = isLoading
@@ -157,12 +157,12 @@ fun MobileOTPVerificationActionGroup(
         Spacer(Modifier.height(16.dp))
 
         if (!isResendEnabled) {
-            SecondaryMediumText(text = stringResource(Res.string.resend_code_timer, countdownTime))
+            SecondaryMediumText(text = stringResource(Res.string.auth_resend_timer_message, countdownTime))
         } else {
             Row {
-                SecondaryMediumText(text = stringResource(Res.string.ota_code_not_received))
+                SecondaryMediumText(text = stringResource(Res.string.auth_code_not_received_message))
                 SecondaryMediumUnderlinedText(
-                    text = stringResource(Res.string.ota_code_resend_code),
+                    text = stringResource(Res.string.auth_resend_code_action),
                     modifier = Modifier.clickable(onClick = onClickResend)
                 )
             }

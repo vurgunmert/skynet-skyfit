@@ -48,12 +48,12 @@ import moe.tlaster.precompose.navigation.Navigator
 import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.koinInject
 import skyfit.composeapp.generated.resources.Res
-import skyfit.composeapp.generated.resources.auth_enter_password
-import skyfit.composeapp.generated.resources.auth_forgot_password
-import skyfit.composeapp.generated.resources.auth_login
-import skyfit.composeapp.generated.resources.auth_login_via_password
+import skyfit.composeapp.generated.resources.auth_forgot_password_action
+import skyfit.composeapp.generated.resources.auth_login_action
+import skyfit.composeapp.generated.resources.auth_login_password_action
+import skyfit.composeapp.generated.resources.auth_password_input_hint
 import skyfit.composeapp.generated.resources.auth_welcome_message
-import skyfit.composeapp.generated.resources.phone_number
+import skyfit.composeapp.generated.resources.user_phone_number_label
 
 @Composable
 fun MobileLoginScreen(navigator: Navigator) {
@@ -170,7 +170,7 @@ private fun MobileLoginWithPhoneContentGroup(
     Column(modifier = Modifier.fillMaxWidth()) {
 
         Text(
-            text = stringResource(Res.string.phone_number),
+            text = stringResource(Res.string.user_phone_number_label),
             modifier = Modifier.fillMaxWidth().padding(start = 8.dp),
             style = SkyFitTypography.bodySmallSemibold
         )
@@ -195,13 +195,13 @@ private fun MobileLoginWithPhoneContentGroup(
         if (!isPasswordEnabled) {
             Box(Modifier.fillMaxWidth()) {
                 SecondaryMediumUnderlinedText(
-                    text = stringResource(Res.string.auth_login_via_password),
+                    text = stringResource(Res.string.auth_login_password_action),
                     modifier = Modifier.align(Alignment.Center).clickable(onClick = onTogglePassword)
                 )
             }
         } else {
             SkyFitPasswordInputComponent(
-                hint = stringResource(Res.string.auth_enter_password),
+                hint = stringResource(Res.string.auth_password_input_hint),
                 value = password,
                 keyboardOptions = KeyboardOptions.Default.copy(imeAction = ImeAction.Go),
                 onKeyboardGoAction = onPasswordSubmit,
@@ -210,7 +210,7 @@ private fun MobileLoginWithPhoneContentGroup(
             Spacer(Modifier.height(16.dp))
             Box(Modifier.fillMaxWidth()) {
                 SecondaryMediumUnderlinedText(
-                    text = stringResource(Res.string.auth_forgot_password),
+                    text = stringResource(Res.string.auth_forgot_password_action),
                     modifier = Modifier.align(Alignment.Center).clickable(onClick = onClickForgotPassword)
                 )
             }
@@ -242,7 +242,7 @@ private fun MobileLoginActionGroup(
 ) {
     PrimaryLargeButton(
         modifier = Modifier.fillMaxWidth(),
-        text = stringResource(Res.string.auth_login),
+        text = stringResource(Res.string.auth_login_action),
         onClick = { if (isLoginEnabled) onClickLogin.invoke() },
         isLoading = isLoading,
         isEnabled = isLoginEnabled && !isLoading

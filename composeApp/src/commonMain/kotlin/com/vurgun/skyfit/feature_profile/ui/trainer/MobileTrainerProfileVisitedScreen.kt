@@ -45,11 +45,11 @@ import com.vurgun.skyfit.feature_profile.ui.components.LifestyleActionRow
 import com.vurgun.skyfit.feature_profile.ui.components.MobileProfileActionTabsRow
 import com.vurgun.skyfit.feature_profile.ui.components.UserProfileCardPreferenceRow
 import com.vurgun.skyfit.feature_profile.ui.components.viewdata.LifestyleActionRowViewData
-import com.vurgun.skyfit.feature_profile.ui.user.MobileVisitedProfileActionsComponent
 import com.vurgun.skyfit.feature_profile.ui.user.viewmodel.TopBarGroupViewData
 import com.vurgun.skyfit.feature_social.ui.components.LazySocialPostsColumn
 import com.vurgun.skyfit.feature_navigation.NavigationRoute
 import com.vurgun.skyfit.feature_navigation.jumpAndStay
+import com.vurgun.skyfit.feature_profile.ui.components.MobileVisitedProfileActionsComponent
 import com.vurgun.skyfit.feature_profile.ui.trainer.viewmodel.SkyFitTrainerProfileViewModel
 import moe.tlaster.precompose.navigation.Navigator
 import org.jetbrains.compose.resources.painterResource

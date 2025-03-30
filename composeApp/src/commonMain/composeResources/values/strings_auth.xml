@@ -1,0 +1,32 @@
+<resources>
+    <!--  General -->
+    <string name="auth_welcome_message">Skyfit’e Hoşgeldin 👋🏼</string>
+    <string name="auth_login_action">Giriş Yap</string>
+    <string name="auth_register_action">Kayıt Ol</string>
+    <string name="auth_verify_action">Onayla</string>
+
+    <!-- Login Methods -->
+    <string name="auth_login_google_action">Google ile giriş yap</string>
+    <string name="auth_login_facebook_action">Facebook ile giriş yap</string>
+    <string name="auth_login_apple_action">Apple ile giriş yap</string>
+    <string name="auth_login_password_action">Şifre ile giriş yap</string>
+    <string name="auth_continue_email_label">ya da email ile devam et</string>
+
+    <!-- Input Fields -->
+    <string name="auth_email_input_hint">Email’inizi girin</string>
+    <string name="auth_password_input_hint">Şifrenizi girin</string>
+    <string name="auth_password_repeat_input_hint">Şifrenizi tekrar girin</string>
+
+    <!-- Forgot Password -->
+    <string name="auth_forgot_password_action">Şifremi Unuttum</string>
+    <string name="auth_forgot_password_prompt">Şifrenizi sıfırlamak için Telefon Numaranızı girin</string>
+    <string name="auth_password_reset_title">Şifre Sıfırla</string>
+    <string name="auth_password_reset_message">Yeni şifreniz eskisinden farklı olmalıdır</string>
+
+    <!-- Verification -->
+    <string name="auth_code_sent_message">Lütfen %1$s numarasına gelen kodu girin</string>
+    <string name="auth_resend_timer_message">Yeni kod göndermek için %1$d saniye bekleyin</string>
+    <string name="auth_code_not_received_message">Herhangi bir kod iletilmedi mi?</string>
+    <string name="auth_resend_code_action">Tekrar Gönder</string>
+
+</resources>

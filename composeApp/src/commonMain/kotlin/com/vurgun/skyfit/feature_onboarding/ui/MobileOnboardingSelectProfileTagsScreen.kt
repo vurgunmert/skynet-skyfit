@@ -25,8 +25,8 @@ import com.vurgun.skyfit.feature_settings.ui.FitnessTagPickerComponent
 import moe.tlaster.precompose.navigation.Navigator
 import org.jetbrains.compose.resources.stringResource
 import skyfit.composeapp.generated.resources.Res
-import skyfit.composeapp.generated.resources.onboarding_facility_complete_profile_message
-import skyfit.composeapp.generated.resources.onboarding_facility_complete_profile_title
+import skyfit.composeapp.generated.resources.onboarding_facility_profile_message
+import skyfit.composeapp.generated.resources.onboarding_facility_profile_title
 
 @Composable
 fun MobileOnboardingFacilityProfileTagsScreen(
@@ -76,8 +76,8 @@ private fun ProfileTagsContent(selectedTags: List<FitnessTagType>,
         Spacer(Modifier.weight(1f))
 
         OnboardingTitleGroupComponent(
-            title = stringResource(Res.string.onboarding_facility_complete_profile_title),
-            subtitle = stringResource(Res.string.onboarding_facility_complete_profile_message)
+            title = stringResource(Res.string.onboarding_facility_profile_title),
+            subtitle = stringResource(Res.string.onboarding_facility_profile_message)
         )
 
         Spacer(Modifier.height(24.dp))

@@ -1,117 +1,111 @@
 <resources>
+    <!-- 🔷 App -->
     <string name="app_name">SkyFit</string>
-    <string name="auth_welcome_message">Skyfit’e Hoşgeldin 👋🏼</string>
-    <string name="auth_login_via_google">Google ile giriş yap</string>
-    <string name="auth_login_via_facebook">Facebook ile giriş yap</string>
-    <string name="auth_login_via_apple">Apple ile giriş yap</string>
-    <string name="auth_login_via_password">Şifre ile Giriş Yap</string>
-    <string name="auth_continue_via_email">ya da email ile devam et</string>
-    <string name="auth_enter_email">Email’inizi girin</string>
-    <string name="auth_enter_password">Şifrenizi girin</string>
-    <string name="auth_enter_again_password">Şifrenizi tekrar girin</string>
-    <string name="auth_forgot_password">Şifremi Unuttum</string>
-    <string name="auth_forgot_enter_phone">Şifrenizi sıfırlamak için Telefon Numaranızı girin</string>
-    <string name="auth_password_reset_title">Şifre Sıfırla</string>
-    <string name="auth_password_reset_message">Yeni şifreniz eskisinden farklı olmalıdır</string>
-    <string name="auth_login">Giriş Yap</string>
-    <string name="auth_register">Kayıt Ol</string>
-    <string name="auth_verify">Onayla</string>
-    <string name="auth_code_sent_to_phone">Lütfen %1$s numarasına gelen kodu girin</string>
-    <string name="resend_code_timer">Yeni kod göndermek için %1$d saniye bekleyin</string>
-    <string name="ota_code_not_received">Herhangi bir kod iletilmedi mi? </string>
-    <string name="ota_code_resend_code">Tekrar Gönder</string>
 
-    <!--Onboarding-->
-    <string name="onboarding_select_user_type_title">Skyfit’e Hoş Geldin!</string>
-    <string name="onboarding_select_user_type_message">Uygulamaya nasıl devam etmek istersin</string>
-    <string name="onboarding_select_character_title">Karakter Seçiniz</string>
-    <string name="onboarding_select_character_message">Seçtiğiniz karakter ana ekranda görüntülenecek</string>
-    <string name="onboarding_select_date_of_birth_title">Doğum Tarihiniz</string>
-    <string name="onboarding_select_date_of_birth_message">Seçiminiz profilinizde görüntülenecek</string>
-    <string name="onboarding_select_gender_title">Cinsiyet Seçiniz</string>
-    <string name="onboarding_select_gender_message">Seçiminiz profilinizde görüntülenecek</string>
-    <string name="onboarding_select_weight_title">Kilonuz</string>
-    <string name="onboarding_select_weight_message">Seçiminiz profilinizde görüntülenecek</string>
-    <string name="onboarding_select_height_title">Boyunuz</string>
-    <string name="onboarding_select_height_message">Seçiminiz profilinizde görüntülenecek</string>
-    <string name="onboarding_select_body_type_title">Vücut Tipiniz</string>
-    <string name="onboarding_select_body_type_message">Seçiminiz profilinizde görüntülenecek</string>
-    <string name="onboarding_user_select_goal_title">Ne için buradasınız</string>
-    <string name="onboarding_user_select_goal_message">Seçiminize göre özel antrenmanlara ulaş</string>
-    <string name="onboarding_trainer_complete_profile_title">Profilini Tamamla</string>
-    <string name="onboarding_trainer_complete_profile_message">Seçiminize göre özel antrenmanlara ulaş</string>
-    <string name="onboarding_facility_complete_profile_title">Profilini Tamamla</string>
-    <string name="onboarding_facility_complete_profile_message">Seçiminize göre özel antrenmanlara ulaş</string>
-    <string name="onboarding_ready_title">Hazırsınız 🚀</string>
-    <string name="onboarding_ready_message">Vakit ayırdığınız için teşekkür ederiz uygulamayı sizin içn hazırlıyoruz</string>
-    <string name="onboarding_lets_get_started">Haydi Başla</string>
+    <!-- 🔹 User Fields -->
+    <string name="user_username_label">Kullanıcı Adı</string>
+    <string name="user_phone_number_label">Telefon Numarası</string>
 
-    <string name="user_name">Kullanıcı Adı</string>
-    <string name="phone_number">Telefon Numarası</string>
-    <string name="firstname_lastname">Ad Soyad</string>
-    <string name="mandatory_firstname_lastname">Ad Soyad *</string>
-    <string name="mandatory_work_place">İş Yeri *</string>
-    <string name="mandatory_work_place_name">İş Yeri Adı *</string>
-    <string name="mandatory_biography">Biyografi *</string>
-    <string name="mandatory_address">Adres *</string>
-    <string name="goal_to_lose_weight">Kilo Vermek</string>
-    <string name="goal_to_be_fit">Fit Olmak</string>
-    <string name="goal_to_gain_muscle">Kas Yapmak</string>
-    <string name="biography_hint">Whether you're a beginner or looking to advance, My balanced approach will guide you every step of the way. 🏃🏽‍♂️</string>
-    <string name="first_name_mandatory">Ad *</string>
-    <string name="last_name_mandatory">Soyad *</string>
-    <string name="first_name_hint">Adınızı girin️</string>
-    <string name="last_name_hint">Soyadınızı girin️</string>
+    <!-- 🔹 Name Fields -->
+    <string name="user_first_name_label">Ad</string>
+    <string name="user_last_name_label">Soyad</string>
+    <string name="user_full_name_label">Ad Soyad</string>
 
-    <string name="user">Kullanıcı</string>
-    <string name="trainer">Antrenör</string>
-    <string name="facility">İşletme</string>
-    <string name="skip">Atla</string>
+    <!-- 🔹 Mandatory Labels -->
+    <string name="user_full_name_mandatory_label">Ad Soyad *</string>
+    <string name="user_first_name_mandatory_label">Ad *</string>
+    <string name="user_last_name_mandatory_label">Soyad *</string>
+    <string name="user_workplace_mandatory_label">İş Yeri *</string>
+    <string name="user_workplace_name_mandatory_label">İş Yeri Adı *</string>
+    <string name="user_biography_mandatory_label">Biyografi *</string>
+    <string name="user_address_mandatory_label">Adres *</string>
+
+    <!-- 🔹 Hints -->
+    <string name="user_first_name_hint">Adınızı girin</string>
+    <string name="user_last_name_hint">Soyadınızı girin</string>
+    <string name="user_biography_hint">
+    Whether you're a beginner or looking to advance, my balanced approach will guide you every step of the way. 🏃🏽‍♂️
+</string>
+
+    <!-- 🔹 Goals -->
+    <string name="goal_lose_weight_label">Kilo Vermek</string>
+    <string name="goal_be_fit_label">Fit Olmak</string>
+    <string name="goal_gain_muscle_label">Kas Yapmak</string>
+
+
+    <!-- 🔷 User Types -->
+    <string name="user_type_user">Kullanıcı</string>
+    <string name="user_type_trainer">Antrenör</string>
+    <string name="user_type_facility">İşletme</string>
+
+    <!-- 🔷 Common Actions -->
+    <string name="skip_action">Atla</string>
+    <string name="continue_action">Devam Et</string>
+    <string name="cancel_action">İptal</string>
+    <string name="edit_action">Düzenle</string>
+    <string name="delete_action">Sil</string>
+    <string name="open_action">Aç</string>
+    <string name="close_action">Kapat</string>
+    <string name="activate_action">Aktifleştir</string>
+    <string name="disable_action">Devre Dışı Bırak</string>
+    <string name="logout_action">Oturumu Kapat</string>
+
+    <!-- 🔷 Gender Options -->
     <string name="gender_female">Kadın</string>
     <string name="gender_male">Erkek</string>
+
+    <!-- 🔷 Body Type Options -->
     <string name="body_type_ecto">Ectomorph</string>
     <string name="body_type_meso">Mesomorph</string>
     <string name="body_type_endo">Endomorph</string>
-    <string name="continue_action">Devam Et</string>
-    <string name="cancel_action">İptal</string>
 
-    <string name="lessons">Dersler</string>
-    <string name="out_of_use">Kullanım dışı</string>
-    <string name="activate">Aktifleştir</string>
-    <string name="edit">Düzenle</string>
-    <string name="edit_lesson">Dersi Düzenle</string>
-    <string name="delete">Sil</string>
-    <string name="disable">Devre dışı bırak</string>
-    <string name="description">Açıklama</string>
-    <string name="add_description_hint">Açıklama ekle</string>
-    <string name="trainer_note">Eğitmenin Notu</string>
-    <string name="add_trainer_note_hint">Try to arrive 5-10 minutes early to warm up and settle in before the class starts.</string>
-    <string name="icon">İkon</string>
-    <string name="open">Aç</string>
-    <string name="close">Kapat</string>
+    <!-- 🔷 Navigation & Settings -->
+    <string name="go_to_home_action">Ana Sayfa</string>
+    <string name="back_to_lessons_action">Dersler'e Dön</string>
+    <string name="settings_title">Ayarlar</string>
+    <string name="settings_account_label">Hesap Ayarları</string>
+    <string name="settings_payment_history_label">Ödeme Geçmişi</string>
+    <string name="settings_notifications_label">Bildirimler</string>
+    <string name="settings_support_label">Destek ve Yardım</string>
 
-    <string name="logout_action">Oturumu Kapat</string>
-    <string name="settings">Ayarlar</string>
-    <string name="account_settings">Hesap Ayarları</string>
-    <string name="payment_history">Ödeme Geçmişi</string>
-    <string name="notifications">Bildirimler</string>
-    <string name="support_and_assistance">Destek ve Yardim</string>
-    <string name="members">Üyeler</string>
-    <string name="trainers">Eğitmenler</string>
-    <string name="branches">Şubeler</string>
+    <!-- 🔷 Sections / Labels -->
+    <string name="members_label">Üyeler</string>
+    <string name="trainers_label">Eğitmenler</string>
+    <string name="branches_label">Şubeler</string>
+    <string name="lessons_label">Dersler</string>
 
+    <!-- 🔷 Lesson Related -->
     <string name="lesson_status_completed">Tamamlandı</string>
     <string name="lesson_status_missing">Eksik</string>
     <string name="lesson_create_action">Yeni Ders Oluştur</string>
     <string name="lesson_created_message">Ders Oluşturuldu</string>
+    <string name="lesson_edit_action">Dersi Düzenle</string>
 
-    <string name="back_to_lessons_action">Dersler'e Dön</string>
-    <string name="go_to_home_action">Ana Sayfa</string>
+    <!-- 🔷 Descriptions / Notes -->
+    <string name="description_label">Açıklama</string>
+    <string name="description_hint_add">Açıklama ekle</string>
+    <string name="trainer_note_label">Eğitmenin Notu</string>
+    <string name="trainer_note_hint_add">Try to arrive 5-10 minutes early to warm up and settle in before the class starts.</string>
+
+    <!-- 🔷 Misc -->
+    <string name="icon_label">İkon</string>
+    <string name="status_out_of_use">Kullanım dışı</string>
 
     <!-- Appointments -->
+    <!-- Titles & Actions -->
+    <string name="appointments_title">Randevularım</string>
     <string name="appointment_book_action">Randevu Al</string>
     <string name="appointment_create_action">Randevu Oluştur</string>
 
+    <!-- Cancel Appointment Dialog -->
+    <string name="appointment_cancel_title">Randevuyu İptal Et</string>
+    <string name="appointment_cancel_message">Randevunuzu iptal etmek istiyor musunuz?</string>
+    <string name="appointment_cancel_confirm">Evet, İptal Et</string>
+    <string name="appointment_cancel_dismiss">Hayır, Geri Dön</string>
+
+    <!-- Delete All Appointments Dialog -->
+    <string name="appointment_delete_all_title">Tüm Randevuları Sil</string>
+    <string name="appointment_delete_all_message">Tüm randevuları silmek istediğinize emin misiniz?</string>
 
 </resources>
 

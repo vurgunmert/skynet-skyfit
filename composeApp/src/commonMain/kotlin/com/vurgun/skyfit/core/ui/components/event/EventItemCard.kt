@@ -163,6 +163,72 @@ fun BasicLessonEventItem(
     }
 }
 
+@Composable
+fun BasicAppointmentEventItem(
+    title: String,
+    iconId: String,
+    date: String,
+    timePeriod: String,
+    location: String,
+    trainer: String,
+    note: String? = null,
+    onClick: () -> Unit
+) {
+    BasicLessonEventItem(title, iconId, date, timePeriod, location, trainer, note)
+}
+
+@Composable
+fun ActiveAppointmentEventItem(
+    title: String,
+    iconId: String,
+    date: String,
+    timePeriod: String,
+    location: String,
+    trainer: String,
+    note: String? = null,
+    onDelete: () -> Unit,
+    onClick: () -> Unit
+) {
+    EventItemColumn(modifier = Modifier.clickable(onClick = onClick)) {
+        ActiveAppointmentEventTitleRow(title, iconId, date, onDelete = onDelete)
+        Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+            EventTimeText(timePeriod, modifier = Modifier.weight(1f))
+            EventTrainerText(trainer, modifier = Modifier.weight(1f))
+        }
+        EventLocationText(location)
+
+        note.takeUnless { it.isNullOrEmpty() }?.let {
+            EventNoteText(it)
+        }
+    }
+}
+
+@Composable
+fun AttendanceAppointmentEventItem(
+    title: String,
+    iconId: String,
+    date: String,
+    timePeriod: String,
+    location: String,
+    trainer: String,
+    note: String? = null,
+    isCompleted: Boolean,
+    onClick: () -> Unit
+) {
+    EventItemColumn(modifier = Modifier.clickable(onClick = onClick)) {
+        AttendanceAppointmentEventTitleRow(title, iconId, date, isCompleted)
+        Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+            EventTimeText(timePeriod, modifier = Modifier.weight(1f))
+            EventTrainerText(trainer, modifier = Modifier.weight(1f))
+        }
+        EventLocationText(location)
+
+        note.takeUnless { it.isNullOrEmpty() }?.let {
+            EventNoteText(it)
+        }
+    }
+}
+
 
 @Composable
 fun DetailedLessonEventItem(

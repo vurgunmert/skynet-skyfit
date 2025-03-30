@@ -25,8 +25,8 @@ import com.vurgun.skyfit.feature_onboarding.domain.viewmodel.OnboardingViewModel
 import moe.tlaster.precompose.navigation.Navigator
 import org.jetbrains.compose.resources.stringResource
 import skyfit.composeapp.generated.resources.Res
-import skyfit.composeapp.generated.resources.onboarding_select_weight_message
-import skyfit.composeapp.generated.resources.onboarding_select_weight_title
+import skyfit.composeapp.generated.resources.onboarding_weight_message
+import skyfit.composeapp.generated.resources.onboarding_weight_title
 
 @Composable
 fun MobileOnboardingWeightSelectionScreen(
@@ -44,8 +44,8 @@ fun MobileOnboardingWeightSelectionScreen(
             OnboardingStepProgressComponent(totalSteps = 8, currentStep = 4)
             Spacer(Modifier.height(178.dp))
             OnboardingTitleGroupComponent(
-                title = stringResource(Res.string.onboarding_select_weight_title),
-                subtitle = stringResource(Res.string.onboarding_select_weight_message)
+                title = stringResource(Res.string.onboarding_weight_title),
+                subtitle = stringResource(Res.string.onboarding_weight_message)
             )
             Spacer(Modifier.height(16.dp))
 

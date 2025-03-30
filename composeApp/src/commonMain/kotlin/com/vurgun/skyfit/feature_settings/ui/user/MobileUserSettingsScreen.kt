@@ -9,37 +9,31 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import com.vurgun.skyfit.core.ui.components.ButtonSize
-import com.vurgun.skyfit.core.ui.components.ButtonState
-import com.vurgun.skyfit.core.ui.components.ButtonVariant
-import com.vurgun.skyfit.core.ui.components.SkyFitButtonComponent
 import com.vurgun.skyfit.core.ui.components.SkyFitMobileScaffold
-import com.vurgun.skyfit.core.ui.components.SkyFitScaffold
 import com.vurgun.skyfit.core.ui.components.SkyFitScreenHeader
 import com.vurgun.skyfit.core.ui.components.button.PrimaryLargeButton
-import com.vurgun.skyfit.feature_settings.ui.MobileSettingsMenuItemComponent
-import com.vurgun.skyfit.feature_settings.ui.MobileSettingsMenuItemDividerComponent
 import com.vurgun.skyfit.feature_navigation.NavigationRoute
 import com.vurgun.skyfit.feature_navigation.jumpAndStay
 import com.vurgun.skyfit.feature_navigation.jumpAndTakeover
+import com.vurgun.skyfit.feature_settings.ui.MobileSettingsMenuItemComponent
+import com.vurgun.skyfit.feature_settings.ui.MobileSettingsMenuItemDividerComponent
 import kotlinx.coroutines.flow.collectLatest
 import moe.tlaster.precompose.navigation.Navigator
 import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.koinInject
 import skyfit.composeapp.generated.resources.Res
-import skyfit.composeapp.generated.resources.account_settings
-import skyfit.composeapp.generated.resources.logout_action
 import skyfit.composeapp.generated.resources.ic_bell
 import skyfit.composeapp.generated.resources.ic_credit_card
 import skyfit.composeapp.generated.resources.ic_profile
 import skyfit.composeapp.generated.resources.ic_question_circle
-import skyfit.composeapp.generated.resources.notifications
-import skyfit.composeapp.generated.resources.payment_history
-import skyfit.composeapp.generated.resources.settings
-import skyfit.composeapp.generated.resources.support_and_assistance
+import skyfit.composeapp.generated.resources.logout_action
+import skyfit.composeapp.generated.resources.settings_account_label
+import skyfit.composeapp.generated.resources.settings_notifications_label
+import skyfit.composeapp.generated.resources.settings_payment_history_label
+import skyfit.composeapp.generated.resources.settings_support_label
+import skyfit.composeapp.generated.resources.settings_title
 
 @Composable
 fun MobileUserSettingsScreen(navigator: Navigator) {
@@ -58,7 +52,7 @@ fun MobileUserSettingsScreen(navigator: Navigator) {
 
     SkyFitMobileScaffold(
         topBar = {
-            SkyFitScreenHeader(title = stringResource(Res.string.settings), onClickBack = { navigator.popBackStack() })
+            SkyFitScreenHeader(title = stringResource(Res.string.settings_title), onClickBack = { navigator.popBackStack() })
         },
         bottomBar = {
             PrimaryLargeButton(
@@ -78,13 +72,13 @@ fun MobileUserSettingsScreen(navigator: Navigator) {
         ) {
 
             MobileSettingsMenuItemComponent(
-                text = stringResource(Res.string.account_settings),
+                text = stringResource(Res.string.settings_account_label),
                 iconRes = Res.drawable.ic_profile,
                 onClick = { navigator.jumpAndStay(NavigationRoute.UserSettingsAccount) }
             )
 
             MobileSettingsMenuItemComponent(
-                text = stringResource(Res.string.payment_history),
+                text = stringResource(Res.string.settings_payment_history_label),
                 iconRes = Res.drawable.ic_credit_card,
                 onClick = { navigator.jumpAndStay(NavigationRoute.UserSettingsPaymentHistory) }
             )
@@ -92,7 +86,7 @@ fun MobileUserSettingsScreen(navigator: Navigator) {
             MobileSettingsMenuItemDividerComponent()
 
             MobileSettingsMenuItemComponent(
-                text = stringResource(Res.string.notifications),
+                text = stringResource(Res.string.settings_notifications_label),
                 iconRes = Res.drawable.ic_bell,
                 onClick = { navigator.jumpAndStay(NavigationRoute.UserSettingsNotifications) }
             )
@@ -100,7 +94,7 @@ fun MobileUserSettingsScreen(navigator: Navigator) {
             MobileSettingsMenuItemDividerComponent()
 
             MobileSettingsMenuItemComponent(
-                text = stringResource(Res.string.support_and_assistance),
+                text = stringResource(Res.string.settings_support_label),
                 iconRes = Res.drawable.ic_question_circle,
                 onClick = { navigator.jumpAndStay(NavigationRoute.UserSettingsHelp) }
             )

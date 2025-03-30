@@ -36,10 +36,10 @@ import moe.tlaster.precompose.navigation.Navigator
 import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.koinInject
 import skyfit.composeapp.generated.resources.Res
+import skyfit.composeapp.generated.resources.auth_forgot_password_action
+import skyfit.composeapp.generated.resources.auth_forgot_password_prompt
 import skyfit.composeapp.generated.resources.cancel_action
 import skyfit.composeapp.generated.resources.continue_action
-import skyfit.composeapp.generated.resources.auth_forgot_enter_phone
-import skyfit.composeapp.generated.resources.auth_forgot_password
 
 @Composable
 fun MobileForgotPasswordScreen(navigator: Navigator) {
@@ -113,12 +113,12 @@ fun MobileForgotPasswordScreen(navigator: Navigator) {
 @Composable
 private fun MobileForgotPasswordScreenTitleComponent() {
     Text(
-        text = stringResource(Res.string.auth_forgot_password),
+        text = stringResource(Res.string.auth_forgot_password_action),
         style = SkyFitTypography.heading3
     )
     Spacer(Modifier.height(16.dp))
     Text(
-        text = stringResource(Res.string.auth_forgot_enter_phone),
+        text = stringResource(Res.string.auth_forgot_password_prompt),
         style = SkyFitTypography.bodyMediumRegular.copy(color = SkyFitColor.text.secondary)
     )
 }

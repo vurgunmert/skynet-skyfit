@@ -74,7 +74,7 @@ fun BasicAppointmentEventTitleRow(title: String, iconId: String? = null, date: S
 }
 
 @Composable
-fun ActiveAppointmentEventTitleRow(title: String, iconId: String? = null, date: String, capacity: String, onDelete: () -> Unit) {
+fun ActiveAppointmentEventTitleRow(title: String, iconId: String? = null, date: String, onDelete: () -> Unit) {
     EventTitleRow(title = title, iconId = iconId, endContent = {
         BodyMediumSemiboldText(text = date, color = SkyFitColor.text.secondary)
         CircularDeleteIcon(onClick = onDelete)

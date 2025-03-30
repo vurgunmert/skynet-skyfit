@@ -51,7 +51,6 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import coil3.compose.AsyncImage
-import com.vurgun.skyfit.core.ui.resources.SkyFitStyleGuide
 import com.vurgun.skyfit.core.ui.components.ButtonSize
 import com.vurgun.skyfit.core.ui.components.ButtonState
 import com.vurgun.skyfit.core.ui.components.ButtonVariant
@@ -62,32 +61,33 @@ import com.vurgun.skyfit.core.ui.components.SkyFitDropdownComponent
 import com.vurgun.skyfit.core.ui.components.SkyFitMobileScaffold
 import com.vurgun.skyfit.core.ui.components.SkyFitRadioButtonComponent
 import com.vurgun.skyfit.core.ui.components.SkyFitScreenHeader
+import com.vurgun.skyfit.core.ui.resources.SkyFitColor
+import com.vurgun.skyfit.core.ui.resources.SkyFitIcon
+import com.vurgun.skyfit.core.ui.resources.SkyFitStyleGuide
+import com.vurgun.skyfit.core.ui.resources.SkyFitTypography
+import com.vurgun.skyfit.core.utils.now
+import com.vurgun.skyfit.feature_navigation.NavigationRoute
+import com.vurgun.skyfit.feature_navigation.jumpAndTakeover
 import com.vurgun.skyfit.feature_settings.ui.AccountSettingsSelectToSetInputComponent
 import com.vurgun.skyfit.feature_settings.ui.SkyFitSelectToEnterInputComponent
 import com.vurgun.skyfit.feature_settings.ui.SkyFitSelectToEnterMultilineInputComponent
-import com.vurgun.skyfit.feature_navigation.NavigationRoute
-import com.vurgun.skyfit.feature_navigation.jumpAndTakeover
-import com.vurgun.skyfit.core.ui.resources.SkyFitColor
-import com.vurgun.skyfit.core.ui.resources.SkyFitIcon
-import com.vurgun.skyfit.core.ui.resources.SkyFitTypography
-import com.vurgun.skyfit.core.utils.now
 import kotlinx.datetime.LocalDate
 import moe.tlaster.precompose.navigation.Navigator
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
 import skyfit.composeapp.generated.resources.Res
-import skyfit.composeapp.generated.resources.add_description_hint
-import skyfit.composeapp.generated.resources.add_trainer_note_hint
-import skyfit.composeapp.generated.resources.description
-import skyfit.composeapp.generated.resources.edit_lesson
+import skyfit.composeapp.generated.resources.description_hint_add
+import skyfit.composeapp.generated.resources.description_label
 import skyfit.composeapp.generated.resources.ic_calendar_dots
 import skyfit.composeapp.generated.resources.ic_check
 import skyfit.composeapp.generated.resources.ic_chevron_down
 import skyfit.composeapp.generated.resources.ic_exercises
-import skyfit.composeapp.generated.resources.icon
+import skyfit.composeapp.generated.resources.icon_label
+import skyfit.composeapp.generated.resources.lesson_edit_action
 import skyfit.composeapp.generated.resources.logo_skyfit
-import skyfit.composeapp.generated.resources.open
-import skyfit.composeapp.generated.resources.trainer_note
+import skyfit.composeapp.generated.resources.open_action
+import skyfit.composeapp.generated.resources.trainer_note_hint_add
+import skyfit.composeapp.generated.resources.trainer_note_label
 
 @Composable
 fun MobileFacilityClassEditScreen(navigator: Navigator) {
@@ -101,7 +101,7 @@ fun MobileFacilityClassEditScreen(navigator: Navigator) {
 
     SkyFitMobileScaffold(
         topBar = {
-            SkyFitScreenHeader(stringResource(Res.string.edit_lesson), onClickBack = {
+            SkyFitScreenHeader(stringResource(Res.string.lesson_edit_action), onClickBack = {
                 if (facilityClass.isSaveButtonEnabled) {
                     viewModel.updateShowCancelDialog(true)
                 } else {
@@ -144,15 +144,15 @@ fun MobileFacilityClassEditScreen(navigator: Navigator) {
             )
 
             SkyFitSelectToEnterMultilineInputComponent(
-                title = stringResource(Res.string.description),
-                hint = stringResource(Res.string.add_description_hint),
+                title = stringResource(Res.string.description_label),
+                hint = stringResource(Res.string.description_hint_add),
                 value = facilityClass.description,
                 onValueChange = { viewModel.updateDescription(it) }
             )
 
             SkyFitSelectToEnterMultilineInputComponent(
-                title = stringResource(Res.string.trainer_note),
-                hint = stringResource(Res.string.add_trainer_note_hint),
+                title = stringResource(Res.string.trainer_note_label),
+                hint = stringResource(Res.string.trainer_note_hint_add),
                 value = facilityClass.trainerNote,
                 onValueChange = viewModel::updateTrainerNote
             )
@@ -239,7 +239,7 @@ private fun FacilityClassHeadInfoInputGroup(
         ) {
             Column {
                 Text(
-                    text = stringResource(Res.string.icon),
+                    text = stringResource(Res.string.icon_label),
                     style = SkyFitTypography.bodyMediumSemibold,
                     modifier = Modifier.padding(start = 8.dp)
                 )
@@ -260,7 +260,7 @@ private fun FacilityClassHeadInfoInputGroup(
                     Spacer(Modifier.width(16.dp))
                     Icon(
                         painter = painterResource(Res.drawable.ic_chevron_down),
-                        contentDescription = stringResource(Res.string.open),
+                        contentDescription = stringResource(Res.string.open_action),
                         tint = SkyFitColor.icon.default,
                         modifier = Modifier.size(16.dp)
                     )
@@ -330,14 +330,14 @@ private fun FacilityClassTrainerNoteInputGroup(
             .wrapContentHeight()
     ) {
         Text(
-            text = stringResource(Res.string.trainer_note),
+            text = stringResource(Res.string.trainer_note_label),
             style = SkyFitTypography.bodyMediumSemibold,
             modifier = Modifier.padding(start = 8.dp)
         )
         TextField(
             placeholder = {
                 Text(
-                    stringResource(Res.string.add_description_hint),
+                    stringResource(Res.string.trainer_note_hint_add),
                     style = SkyFitTypography.bodyMediumRegular,
                     color = SkyFitColor.text.secondary
                 )

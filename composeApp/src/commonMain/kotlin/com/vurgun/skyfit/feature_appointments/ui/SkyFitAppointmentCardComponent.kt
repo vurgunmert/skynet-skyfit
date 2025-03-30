@@ -52,6 +52,7 @@ data class AppointmentCardViewData(
     val isFull: Boolean? = null,
     val canNotify: Boolean = true,
     val status: String? = null,
+    val attended: Boolean = false
 )
 
 @Composable
