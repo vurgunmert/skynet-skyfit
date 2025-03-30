@@ -27,6 +27,7 @@ import com.vurgun.skyfit.core.ui.components.SkyFitScreenHeader
 import com.vurgun.skyfit.core.ui.components.UserCircleAvatarItem
 import com.vurgun.skyfit.core.ui.resources.SkyFitColor
 import com.vurgun.skyfit.core.ui.resources.SkyFitTypography
+import com.vurgun.skyfit.designsystem.components.calendar.monthly.CalendarRangeDateSelectorCard
 import com.vurgun.skyfit.feature_lessons.ui.components.viewdata.LessonSessionColumnViewData
 import moe.tlaster.precompose.navigation.Navigator
 import org.jetbrains.compose.resources.painterResource
@@ -57,7 +58,13 @@ fun MobileTrainerCalendarVisitedScreen(navigator: Navigator) {
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {
             MobileTrainerCalendarVisitedScreenInfoComponent()
-            MobileTrainerCalendarVisitedScreenCalendarGridComponent()
+
+            CalendarRangeDateSelectorCard(
+                onSelectionChanged = { start, end ->
+                    // TODO: Set date
+                }
+            )
+
             MobileTrainerCalendarVisitedScreenPrivateClassesComponent(lessonsColumnViewData)
         }
     }
@@ -123,11 +130,6 @@ private fun MobileTrainerCalendarVisitedScreenInfoComponent() {
             }
         }
     }
-}
-
-@Composable
-private fun MobileTrainerCalendarVisitedScreenCalendarGridComponent() {
-    MobileFacilityCalendarVisitedScreenCalendarGridComponent()
 }
 
 @Composable

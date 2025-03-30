@@ -97,7 +97,7 @@ fun SkyFitColoredCalendarComponent() {
             // Headers
             Row {
                 listOf("Pzt", "Sal", "Çar", "Per", "Cum", "Cmrt", "Paz").forEach { day ->
-                    DayCell(day, DayCellStyle.Label, calculatedSize)
+                    DaySelectorDayItem(day, DayCellStyle.Label, calculatedSize)
                 }
             }
             Spacer(modifier = Modifier.height(8.dp))
@@ -106,7 +106,7 @@ fun SkyFitColoredCalendarComponent() {
             dayList.chunked(7).forEach { week ->
                 Row {
                     week.forEach { (day, style) ->
-                        DayCell(day, style, calculatedSize)
+                        DaySelectorDayItem(day, style, calculatedSize)
                     }
                 }
             }
@@ -116,7 +116,7 @@ fun SkyFitColoredCalendarComponent() {
 
 
 @Composable
-private fun DayCell(value: String, style: DayCellStyle, size: Dp) {
+private fun DaySelectorDayItem(value: String, style: DayCellStyle, size: Dp) {
     Box(
         modifier = Modifier
             .size(size) // Dynamic size between 40dp - 60dp

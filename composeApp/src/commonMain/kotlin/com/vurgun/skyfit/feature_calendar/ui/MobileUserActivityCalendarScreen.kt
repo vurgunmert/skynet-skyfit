@@ -15,7 +15,7 @@ import androidx.compose.ui.Modifier
 import com.vurgun.skyfit.core.ui.components.SkyFitScreenHeader
 import com.vurgun.skyfit.core.ui.components.calendar.SkyFitDailyActivityCanvas
 import com.vurgun.skyfit.core.ui.components.calendar.SkyFitDailyActivityItem
-import com.vurgun.skyfit.core.ui.components.calendar.SkyFitCalendarGridComponent
+import com.vurgun.skyfit.core.ui.components.calendar.LegacySkyFitCalendarGridComponent
 import com.vurgun.skyfit.core.ui.resources.SkyFitColor
 import com.vurgun.skyfit.core.utils.now
 import kotlinx.datetime.LocalDate
@@ -44,7 +44,7 @@ fun MobileUserActivityCalendarScreen(navigator: Navigator) {
 private fun MobileUserActivityGridCalendarComponent() {
     var selectedDate by remember { mutableStateOf(LocalDate.now()) }
 
-    SkyFitCalendarGridComponent(
+    LegacySkyFitCalendarGridComponent(
         initialSelectedDate = selectedDate,
         isSingleSelect = true,
         onDateSelected = { selectedDate = it }

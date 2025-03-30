@@ -29,9 +29,9 @@ import com.vurgun.skyfit.core.ui.components.SkyFitScreenHeader
 import com.vurgun.skyfit.core.ui.components.button.SecondaryMediumButton
 import com.vurgun.skyfit.core.ui.resources.SkyFitColor
 import com.vurgun.skyfit.core.ui.resources.SkyFitTypography
-import com.vurgun.skyfit.designsystem.components.calendar.weekdayselector.WeekDaySelector
-import com.vurgun.skyfit.designsystem.components.calendar.weekdayselector.WeekDaySelectorViewModel
-import com.vurgun.skyfit.designsystem.components.calendar.weekdayselector.rememberWeekDaySelectorState
+import com.vurgun.skyfit.designsystem.components.calendar.weekly.CalendarWeekDaySelector
+import com.vurgun.skyfit.designsystem.components.calendar.weekly.CalendarWeekDaySelectorViewModel
+import com.vurgun.skyfit.designsystem.components.calendar.weekly.rememberWeekDaySelectorState
 import com.vurgun.skyfit.designsystem.components.event.EditableLessonEventItem
 import com.vurgun.skyfit.designsystem.components.loader.FullScreenLoader
 import com.vurgun.skyfit.designsystem.components.popup.LessonEventItemPopupMenu
@@ -53,7 +53,7 @@ fun MobileFacilityLessonListScreen(navigator: Navigator) {
     val viewModel = remember { FacilityLessonListViewModel() }
     val uiState by viewModel.uiState.collectAsState()
 
-    val calendarViewModel: WeekDaySelectorViewModel = viewModel()
+    val calendarViewModel: CalendarWeekDaySelectorViewModel = viewModel()
     val calendarUiState = rememberWeekDaySelectorState(calendarViewModel)
 
     LaunchedEffect(calendarUiState.selectedDate) {
@@ -72,7 +72,7 @@ fun MobileFacilityLessonListScreen(navigator: Navigator) {
                 .verticalScroll(rememberScrollState())
         ) {
 
-            WeekDaySelector(
+            CalendarWeekDaySelector(
                 daysOfWeek = calendarUiState.weekDays,
                 onDaySelected = calendarViewModel::setSelectedDate,
                 onPreviousWeek = calendarViewModel::loadPreviousWeek,

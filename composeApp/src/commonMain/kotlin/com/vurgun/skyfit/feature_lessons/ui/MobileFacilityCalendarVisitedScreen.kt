@@ -14,9 +14,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
@@ -25,9 +23,9 @@ import com.vurgun.skyfit.core.ui.components.ButtonState
 import com.vurgun.skyfit.core.ui.components.ButtonVariant
 import com.vurgun.skyfit.core.ui.components.SkyFitButtonComponent
 import com.vurgun.skyfit.core.ui.components.SkyFitScreenHeader
-import com.vurgun.skyfit.core.ui.components.calendar.SkyFitCalendarGridComponent
 import com.vurgun.skyfit.core.ui.resources.SkyFitColor
 import com.vurgun.skyfit.core.utils.now
+import com.vurgun.skyfit.designsystem.components.calendar.monthly.CalendarRangeDateSelectorCard
 import com.vurgun.skyfit.feature_lessons.ui.components.LessonSessionColumn
 import com.vurgun.skyfit.feature_navigation.NavigationRoute
 import com.vurgun.skyfit.feature_navigation.jumpAndStay
@@ -77,11 +75,16 @@ fun MobileFacilityCalendarVisitedScreen(navigator: Navigator) {
     ) {
         Column(
             modifier = Modifier
+                .padding(16.dp)
                 .fillMaxSize()
                 .verticalScroll(rememberScrollState()),
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {
-            MobileFacilityCalendarVisitedScreenCalendarGridComponent()
+            CalendarRangeDateSelectorCard(
+                onSelectionChanged = { start, end ->
+                    // TODO: Set date
+                }
+            )
 
             lessonsColumnViewData?.let {
                 LessonSessionColumn(
@@ -107,15 +110,4 @@ fun MobileFacilityCalendarVisitedScreenCreateActionComponent(onClick: () -> Unit
             leftIconPainter = painterResource(Res.drawable.ic_check)
         )
     }
-}
-
-@Composable
-fun MobileFacilityCalendarVisitedScreenCalendarGridComponent() {
-    var selectedDate by remember { mutableStateOf(LocalDate.now()) }
-
-    SkyFitCalendarGridComponent(
-        initialSelectedDate = selectedDate,
-        isSingleSelect = true,
-        onDateSelected = { selectedDate = it }
-    )
 }

@@ -115,6 +115,13 @@
     <string name="lesson_add_action">Ders Ekle</string>
     <string name="lesson_active_label">Aktif</string>
     <string name="lesson_deactivated_label">Kullanım dışı</string>
+
+
+
+    <string name="calendar_select_date">Tarih Belirle</string>
+    <string name="calendar_select_date_range">Tarih Aralığı Belirle</string>
+
+
 </resources>
 
 <!--    Use snake_case + purpose-based suffixes:-->

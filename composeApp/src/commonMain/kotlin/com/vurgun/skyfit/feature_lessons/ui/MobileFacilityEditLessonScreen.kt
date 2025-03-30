@@ -425,13 +425,14 @@ fun FacilityClassSelectTrainerInputComponent(
 //region Date Time Components
 @Composable
 fun FacilityClassStartDateInputGroup(
+    modifier: Modifier = Modifier,
     selectedDate: LocalDate = LocalDate.now(),
     onDateSelected: (LocalDate) -> Unit = {}
 ) {
     var isDatePickerOpen by remember { mutableStateOf(false) }
     var selected by remember { mutableStateOf(selectedDate) }
 
-    Column(modifier = Modifier.fillMaxWidth()) {
+    Column(modifier = modifier.fillMaxWidth()) {
         // Title
         Text(
             text = "Başlangıç Tarihi",

@@ -1,4 +1,4 @@
-package com.vurgun.skyfit.designsystem.components.calendar.weekdayselector
+package com.vurgun.skyfit.designsystem.components.calendar.weekly
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -16,17 +16,17 @@ import kotlinx.datetime.DateTimeUnit
 import kotlinx.datetime.LocalDate
 import kotlinx.datetime.plus
 
-data class WeekDaySelectorState(
+data class CalendarWeekDaySelectorState(
     val selectedDate: LocalDate,
-    val weekDays: List<WeekDayUiModel>
+    val weekDays: List<CalendarWeekDayItemModel>
 )
 
-class WeekDaySelectorViewModel : ViewModel() {
+class CalendarWeekDaySelectorViewModel : ViewModel() {
 
     private val _selectedDate = MutableStateFlow(LocalDate.now())
     val selectedDate: StateFlow<LocalDate> = _selectedDate
 
-    val weekDays: StateFlow<List<WeekDayUiModel>> = _selectedDate.map { generateWeekDays(it) }
+    val weekDays: StateFlow<List<CalendarWeekDayItemModel>> = _selectedDate.map { generateWeekDays(it) }
         .stateIn(viewModelScope, SharingStarted.Eagerly, generateWeekDays(LocalDate.now()))
 
     fun setSelectedDate(date: LocalDate) {
@@ -41,11 +41,11 @@ class WeekDaySelectorViewModel : ViewModel() {
         _selectedDate.value = _selectedDate.value.nextWeek()
     }
 
-    private fun generateWeekDays(selectedDate: LocalDate): List<WeekDayUiModel> {
+    private fun generateWeekDays(selectedDate: LocalDate): List<CalendarWeekDayItemModel> {
         val startOfWeek = getStartOfWeek(selectedDate)
         return List(7) { i ->
             val date = startOfWeek.plus(i, DateTimeUnit.DAY)
-            WeekDayUiModel(
+            CalendarWeekDayItemModel(
                 date = date,
                 dayName = getTurkishDayAbbreviation(date),
                 isSelected = date == selectedDate

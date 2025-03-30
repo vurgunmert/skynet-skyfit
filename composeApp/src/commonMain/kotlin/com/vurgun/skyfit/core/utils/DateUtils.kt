@@ -10,7 +10,7 @@ import kotlinx.datetime.plus
 import kotlinx.datetime.toLocalDateTime
 
 // Helpers for LocalDate
-fun generateDaysInMonth(month: LocalDate): List<LocalDate?> {
+fun generateDaysInMonth(month: LocalDate): List<LocalDate> {
     val firstDay = LocalDate(month.year, month.monthNumber, 1)
     val totalDays = getDaysInMonth(firstDay)
     val startDayOffset = (firstDay.dayOfWeek.isoDayNumber - 1) % 7

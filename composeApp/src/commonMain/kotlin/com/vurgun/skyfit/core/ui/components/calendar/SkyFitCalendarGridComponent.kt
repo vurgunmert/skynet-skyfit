@@ -49,7 +49,7 @@ import skyfit.composeapp.generated.resources.ic_chevron_left
 import skyfit.composeapp.generated.resources.ic_chevron_right
 
 @Composable
-fun SkyFitCalendarGridComponent(
+fun LegacySkyFitCalendarGridComponent(
     initialSelectedDate: LocalDate = LocalDate.now(),
     enabledStartDate: LocalDate? = null,
     enabledEndDate: LocalDate? = null,

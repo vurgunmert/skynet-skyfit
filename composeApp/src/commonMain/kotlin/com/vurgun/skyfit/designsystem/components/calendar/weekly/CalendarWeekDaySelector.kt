@@ -1,4 +1,4 @@
-package com.vurgun.skyfit.designsystem.components.calendar.weekdayselector
+package com.vurgun.skyfit.designsystem.components.calendar.weekly
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -31,15 +31,15 @@ import skyfit.composeapp.generated.resources.Res
 import skyfit.composeapp.generated.resources.ic_chevron_left
 import skyfit.composeapp.generated.resources.ic_chevron_right
 
-data class WeekDayUiModel(
+data class CalendarWeekDayItemModel(
     val date: LocalDate,
     val dayName: String,  // "Pzt", "Sal", etc.
     val isSelected: Boolean
 )
 
 @Composable
-fun WeekDaySelector(
-    daysOfWeek: List<WeekDayUiModel>,
+fun CalendarWeekDaySelector(
+    daysOfWeek: List<CalendarWeekDayItemModel>,
     onDaySelected: (LocalDate) -> Unit,
     onPreviousWeek: () -> Unit,
     onNextWeek: () -> Unit
@@ -77,7 +77,7 @@ fun WeekDaySelector(
             )
 
             daysOfWeek.forEach { day ->
-                WeekDaySelectorDayItem(
+                DaySelectorDayItem(
                     dayOfMonth = day.date.dayOfMonth,
                     selected = day.isSelected,
                     onClick = { onDaySelected(day.date) }
@@ -94,7 +94,7 @@ fun WeekDaySelector(
 }
 
 @Composable
-fun WeekDaySelectorDayItem(dayOfMonth: Int, selected: Boolean, onClick: () -> Unit) {
+private fun DaySelectorDayItem(dayOfMonth: Int, selected: Boolean, onClick: () -> Unit)     {
     Box(
         modifier = Modifier
             .size(40.dp)
@@ -122,8 +122,8 @@ fun WeekDaySelectorDayItem(dayOfMonth: Int, selected: Boolean, onClick: () -> Un
 }
 
 @Composable
-fun rememberWeekDaySelectorState(viewModel: WeekDaySelectorViewModel): WeekDaySelectorState {
+fun rememberWeekDaySelectorState(viewModel: CalendarWeekDaySelectorViewModel): CalendarWeekDaySelectorState {
     val selectedDate by viewModel.selectedDate.collectAsState()
     val weekDays by viewModel.weekDays.collectAsState()
-    return WeekDaySelectorState(selectedDate, weekDays)
+    return CalendarWeekDaySelectorState(selectedDate, weekDays)
 }
