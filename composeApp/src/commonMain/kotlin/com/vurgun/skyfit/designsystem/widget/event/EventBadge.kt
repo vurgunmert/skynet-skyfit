@@ -1,5 +1,6 @@
-package com.vurgun.skyfit.core.ui.components.event
+package com.vurgun.skyfit.designsystem.widget.event
 
+import androidx.compose.desktop.ui.tooling.preview.Preview
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -9,6 +10,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.vurgun.skyfit.core.ui.resources.SkyFitColor
 import com.vurgun.skyfit.core.ui.resources.SkyFitTypography
+import com.vurgun.skyfit.designsystem.utils.PreviewMobileScaffoldColumn
 
 
 sealed interface BadgeState {
@@ -43,4 +45,15 @@ fun EventBadge(
             .padding(horizontal = 8.dp, vertical = 4.dp),
         style = SkyFitTypography.bodyMediumMedium.copy(color = textColor)
     )
+}
+
+@Preview
+@Composable
+private fun EventBadge_Previews() {
+    PreviewMobileScaffoldColumn {
+        EventBadge("Default")
+        EventBadge("Error", state = BadgeState.Error)
+        EventBadge("Warning", state = BadgeState.Warning)
+        EventBadge("Success", state = BadgeState.Success)
+    }
 }

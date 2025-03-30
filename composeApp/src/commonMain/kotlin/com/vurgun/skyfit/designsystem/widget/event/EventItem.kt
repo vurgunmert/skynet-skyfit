@@ -1,127 +1,29 @@
-package com.vurgun.skyfit.core.ui.components.event
+package com.vurgun.skyfit.designsystem.widget.event
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Icon
-import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.unit.dp
+import com.vurgun.skyfit.core.ui.components.SkyFitCheckBoxComponent
 import com.vurgun.skyfit.core.ui.components.text.BodyMediumSemiboldText
-import com.vurgun.skyfit.core.ui.resources.SkyFitAsset
 import com.vurgun.skyfit.core.ui.resources.SkyFitColor
-import com.vurgun.skyfit.core.ui.resources.SkyFitTypography
-import com.vurgun.skyfit.feature_lessons.ui.components.viewdata.LessonSessionItemViewData
 import org.jetbrains.compose.resources.painterResource
+import org.jetbrains.compose.resources.stringResource
 import skyfit.composeapp.generated.resources.Res
-import skyfit.composeapp.generated.resources.ic_clock
 import skyfit.composeapp.generated.resources.ic_dots_vertical
-import skyfit.composeapp.generated.resources.ic_location_pin
-import skyfit.composeapp.generated.resources.ic_note
-
-
-@Composable
-fun EventItem(
-    item: LessonSessionItemViewData,
-    onClickItem: ((LessonSessionItemViewData) -> Unit)? = null,
-    isMenuOpen: Boolean = false,
-    onMenuToggle: ((Boolean) -> Unit)? = null,
-    menuContent: (@Composable (() -> Unit))? = null
-) {
-    val textColor = if (item.enabled) SkyFitColor.text.default else SkyFitColor.text.disabled
-    val subTextColor = if (item.enabled) SkyFitColor.text.secondary else SkyFitColor.text.disabled
-    val iconColor = if (item.enabled) SkyFitColor.icon.default else SkyFitColor.icon.disabled
-
-    Column(
-        Modifier.fillMaxWidth()
-            .background(SkyFitColor.background.fillTransparentSecondary, RoundedCornerShape(16.dp))
-            .then(
-                if (item.selected) {
-                    Modifier.border(
-                        width = 1.dp,
-                        color = SkyFitColor.border.secondaryButton,
-                        shape = RoundedCornerShape(16.dp)
-                    )
-                } else Modifier
-            )
-            .clickable(enabled = onClickItem != null, onClick = { onClickItem?.invoke(item) })
-            .padding(12.dp)
-    ) {
-
-        Row(verticalAlignment = Alignment.CenterVertically) {
-            Icon(
-                painter = SkyFitAsset.getPainter(item.iconId),
-                contentDescription = item.title,
-                modifier = Modifier.size(24.dp),
-                tint = iconColor
-            )
-            Text(
-                text = item.title,
-                style = SkyFitTypography.bodyMediumSemibold,
-                modifier = Modifier.padding(start = 8.dp),
-                color = textColor
-            )
-            Spacer(Modifier.weight(1f))
-
-            if (menuContent != null) {
-                Box {
-                    Icon(
-                        painter = painterResource(Res.drawable.ic_dots_vertical),
-                        contentDescription = "Menu",
-                        tint = SkyFitColor.icon.default,
-                        modifier = Modifier.size(16.dp).clickable { onMenuToggle?.invoke(!isMenuOpen) }
-                    )
-                    if (isMenuOpen) {
-                        menuContent()
-                    }
-                }
-            }
-
-            if (item.enrolledCount != null && item.maxCapacity != null) {
-                Text(
-                    text = "(${item.enrolledCount}/${item.maxCapacity})",
-                    style = SkyFitTypography.bodyLargeSemibold,
-                    modifier = Modifier.padding(start = 8.dp),
-                    color = textColor,
-                )
-            }
-        }
-
-        item.hours?.let {
-            Spacer(Modifier.height(8.dp))
-            EventFieldTextCard(it, iconRes = Res.drawable.ic_clock)
-        }
-
-        item.duration?.let {
-            Spacer(Modifier.height(8.dp))
-            EventFieldTextCard(it, iconRes = Res.drawable.ic_clock)
-        }
-
-        item.location?.let {
-            Spacer(Modifier.height(8.dp))
-            EventFieldTextCard(it, iconRes = Res.drawable.ic_location_pin)
-        }
-
-        item.note?.let {
-            Spacer(Modifier.height(8.dp))
-            EventFieldTextCard(it, iconRes = Res.drawable.ic_note)
-        }
-    }
-}
-
+import skyfit.composeapp.generated.resources.lesson_notify_me_action
 
 @Composable
 private fun EventItemColumn(
@@ -138,19 +40,36 @@ private fun EventItemColumn(
     }
 }
 
+//region ActivityCalendarEvents
+@Composable
+fun BasicActivityCalendarEventItem(
+    title: String,
+    iconId: String?,
+    timePeriod: String,
+    enabled: Boolean = true
+) {
+    EventItemColumn(
+        Modifier.alpha(if (enabled) 1f else 0.4f)
+    ) {
+        BasicActivityEventTitleRow(title, iconId, timePeriod)
+    }
+}
 
 @Composable
-fun BasicLessonEventItem(
+fun BookedActivityCalendarEventItem(
     title: String,
     iconId: String,
     date: String,
     timePeriod: String,
     location: String,
     trainer: String,
-    note: String? = null
+    note: String? = null,
+    enabled: Boolean = true
 ) {
-    EventItemColumn {
-        BasicAppointmentEventTitleRow(title, iconId, date)
+    EventItemColumn(
+        Modifier.alpha(if (enabled) 1f else 0.4f)
+    ) {
+        BookedActivityEventTitleRow(title, iconId, timePeriod)
         Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
             EventTimeText(timePeriod, modifier = Modifier.weight(1f))
             EventTrainerText(trainer, modifier = Modifier.weight(1f))
@@ -163,6 +82,79 @@ fun BasicLessonEventItem(
     }
 }
 
+@Composable
+fun PaidActivityCalendarEventItem(
+    title: String,
+    iconId: String,
+    date: String,
+    timePeriod: String,
+    location: String,
+    trainer: String,
+    capacity: String,
+    cost: String,
+    note: String? = null,
+    enabled: Boolean = true
+) {
+    EventItemColumn(
+        Modifier.alpha(if (enabled) 1f else 0.4f)
+    ) {
+        BasicAppointmentEventTitleRow(title, iconId, date)
+        Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+            EventTimeText(timePeriod, modifier = Modifier.weight(1f))
+            EventTrainerText(trainer, modifier = Modifier.weight(1f))
+        }
+        EventLocationText(location)
+        Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+            EventCapacityText(capacity, modifier = Modifier.weight(1f))
+            EventCostText(cost, modifier = Modifier.weight(1f))
+        }
+        note.takeUnless { it.isNullOrEmpty() }?.let {
+            EventNoteText(it)
+        }
+    }
+}
+
+@Composable
+fun AvailableActivityCalendarEventItem(
+    title: String,
+    iconId: String,
+    date: String,
+    timePeriod: String,
+    location: String,
+    trainer: String,
+    capacity: String,
+    note: String? = null,
+    isFull: Boolean = false,
+    isNotifyMeEnabled: Boolean = false,
+    onNotifyMeChanged: ((enabled: Boolean) -> Unit)? = null
+) {
+    EventItemColumn {
+        AvailableActivityEventTitleRow(title, iconId, date, capacity, isFull)
+        Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+            EventTimeText(timePeriod, modifier = Modifier.weight(1f))
+            EventTrainerText(trainer, modifier = Modifier.weight(1f))
+        }
+        EventLocationText(location)
+
+        note.takeUnless { it.isNullOrEmpty() }?.let {
+            EventNoteText(it)
+        }
+
+        if (isFull) {
+            SkyFitCheckBoxComponent(
+                checked = isNotifyMeEnabled,
+                onCheckedChange = { onNotifyMeChanged?.invoke(it) },
+                label = stringResource(Res.string.lesson_notify_me_action),
+                modifier = Modifier.fillMaxWidth().background(SkyFitColor.background.surfaceCriticalActive, RoundedCornerShape(8.dp))
+                    .padding(8.dp)
+            )
+        }
+    }
+}
+
+//endregion ActivityCalendarEvents
+
+//region Appointment Events
 @Composable
 fun BasicAppointmentEventItem(
     title: String,
@@ -228,7 +220,32 @@ fun AttendanceAppointmentEventItem(
         }
     }
 }
+//endregion AppointmentEvents
 
+//region LessonEvents
+@Composable
+fun BasicLessonEventItem(
+    title: String,
+    iconId: String,
+    date: String,
+    timePeriod: String,
+    location: String,
+    trainer: String,
+    note: String? = null
+) {
+    EventItemColumn {
+        BasicAppointmentEventTitleRow(title, iconId, date)
+        Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+            EventTimeText(timePeriod, modifier = Modifier.weight(1f))
+            EventTrainerText(trainer, modifier = Modifier.weight(1f))
+        }
+        EventLocationText(location)
+
+        note.takeUnless { it.isNullOrEmpty() }?.let {
+            EventNoteText(it)
+        }
+    }
+}
 
 @Composable
 fun DetailedLessonEventItem(
@@ -246,7 +263,7 @@ fun DetailedLessonEventItem(
         BasicAppointmentEventTitleRow(title, iconId, date)
         Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
             EventTimeText(timePeriod, modifier = Modifier.weight(1f))
-            EventCapacityText(category, modifier = Modifier.weight(1f))
+            EventCategoryText(category, modifier = Modifier.weight(1f))
         }
         Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
             EventLocationText(location, modifier = Modifier.weight(1f))
@@ -302,3 +319,4 @@ fun EditableLessonEventItem(
         }
     }
 }
+//endregion LessonEvents

@@ -20,7 +20,7 @@ import androidx.compose.ui.unit.dp
 import com.vurgun.skyfit.core.ui.components.SkyFitMobileScaffold
 import com.vurgun.skyfit.core.ui.components.button.PrimaryLargeButton
 import com.vurgun.skyfit.core.ui.components.button.SecondaryLargeButton
-import com.vurgun.skyfit.core.ui.components.event.DetailedLessonEventItem
+import com.vurgun.skyfit.designsystem.widget.event.DetailedLessonEventItem
 import com.vurgun.skyfit.core.ui.resources.SkyFitTypography
 import com.vurgun.skyfit.feature_appointments.ui.AppointmentCardViewData
 import com.vurgun.skyfit.feature_navigation.NavigationRoute

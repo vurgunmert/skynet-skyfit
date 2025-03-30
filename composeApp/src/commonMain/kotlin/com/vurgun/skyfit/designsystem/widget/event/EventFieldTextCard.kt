@@ -1,4 +1,4 @@
-package com.vurgun.skyfit.core.ui.components.event
+package com.vurgun.skyfit.designsystem.widget.event
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Row
@@ -24,7 +24,7 @@ import skyfit.composeapp.generated.resources.ic_dashboard
 import skyfit.composeapp.generated.resources.ic_lira
 import skyfit.composeapp.generated.resources.ic_location_pin
 import skyfit.composeapp.generated.resources.ic_note
-import skyfit.composeapp.generated.resources.ic_posture_fill
+import skyfit.composeapp.generated.resources.ic_posture
 import skyfit.composeapp.generated.resources.ic_profile_fill
 
 @Composable
@@ -80,7 +80,7 @@ fun EventTrainerText(value: String, modifier: Modifier = Modifier) {
 
 @Composable
 fun EventCapacityText(value: String, modifier: Modifier = Modifier) {
-    EventFieldTextCard(value, iconRes = Res.drawable.ic_posture_fill, modifier = modifier)
+    EventFieldTextCard(value, iconRes = Res.drawable.ic_posture, modifier = modifier)
 }
 
 @Composable

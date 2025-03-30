@@ -3,6 +3,7 @@ package com.vurgun.skyfit.core.ui.components
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentWidth
@@ -40,7 +41,7 @@ fun SkyFitCheckBoxComponent(
             onCheckedChange = onCheckedChange,
             enabled = enabled,
             colors = colors,
-            modifier = Modifier.size(16.dp)
+            modifier = Modifier.size(16.dp).padding(2.dp)
         )
         Spacer(Modifier.width(8.dp))
         Text(label, style = SkyFitTypography.bodyMediumRegular)

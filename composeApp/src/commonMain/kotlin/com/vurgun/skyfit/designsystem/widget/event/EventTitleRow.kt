@@ -1,4 +1,4 @@
-package com.vurgun.skyfit.core.ui.components.event
+package com.vurgun.skyfit.designsystem.widget.event
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
@@ -59,10 +59,17 @@ fun BasicActivityEventTitleRow(title: String, iconId: String? = null, timePeriod
 }
 
 @Composable
-fun AvailableActivityEventTitleRow(title: String, iconId: String? = null, date: String, capacity: String) {
+fun BookedActivityEventTitleRow(title: String, iconId: String? = null, timePeriod: String) {
+    EventTitleRow(title = title, iconId = iconId, endContent = {
+        EventBadge(value = timePeriod)
+    })
+}
+
+@Composable
+fun AvailableActivityEventTitleRow(title: String, iconId: String? = null, date: String, capacity: String, isFull: Boolean) {
     EventTitleRow(title = title, iconId = iconId, endContent = {
         BodySmallRegularText(text = date)
-        EventBadge(value = capacity)
+        EventBadge(value = capacity, state = if (isFull) BadgeState.Warning else BadgeState.Default)
     })
 }
 

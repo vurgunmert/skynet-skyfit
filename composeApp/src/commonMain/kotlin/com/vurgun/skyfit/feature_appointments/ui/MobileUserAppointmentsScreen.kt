@@ -13,17 +13,14 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Icon
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Close
-import androidx.compose.material.icons.filled.Info
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -34,34 +31,23 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import com.vurgun.skyfit.core.ui.components.SkyFitBadgeTabBarComponent
 import com.vurgun.skyfit.core.ui.components.SkyFitScreenHeader
-import com.vurgun.skyfit.core.ui.components.event.ActiveAppointmentEventItem
-import com.vurgun.skyfit.core.ui.components.event.AttendanceAppointmentEventItem
-import com.vurgun.skyfit.core.ui.components.event.BasicAppointmentEventItem
+import com.vurgun.skyfit.designsystem.widget.event.ActiveAppointmentEventItem
+import com.vurgun.skyfit.designsystem.widget.event.AttendanceAppointmentEventItem
+import com.vurgun.skyfit.designsystem.widget.event.BasicAppointmentEventItem
 import com.vurgun.skyfit.feature_navigation.NavigationRoute
 import com.vurgun.skyfit.feature_navigation.jumpAndStay
 import com.vurgun.skyfit.core.ui.resources.SkyFitColor
-import com.vurgun.skyfit.core.ui.resources.SkyFitIcon
 import com.vurgun.skyfit.core.ui.resources.SkyFitTypography
 import moe.tlaster.precompose.navigation.Navigator
-import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.koinInject
 import skyfit.composeapp.generated.resources.Res
 import skyfit.composeapp.generated.resources.appointments_title
-import skyfit.composeapp.generated.resources.ic_clock
-import skyfit.composeapp.generated.resources.ic_dashboard
-import skyfit.composeapp.generated.resources.ic_delete
-import skyfit.composeapp.generated.resources.ic_exercises
-import skyfit.composeapp.generated.resources.ic_lira
-import skyfit.composeapp.generated.resources.ic_location_pin
-import skyfit.composeapp.generated.resources.ic_posture_fill
-import skyfit.composeapp.generated.resources.ic_profile_fill
 
 @Composable
 fun MobileUserAppointmentsScreen(navigator: Navigator) {

@@ -102,6 +102,7 @@ kotlin {
             implementation(libs.androidx.activity.compose)
             implementation(libs.ktor.client.okhttp)
             implementation(libs.calf.permissions)
+            implementation(libs.androidx.ui.tooling.preview.android)
 
             implementation("app.rive:rive-android:9.6.5")
             implementation("androidx.startup:startup-runtime:1.2.0")
@@ -161,6 +162,9 @@ android {
     testOptions {
         unitTests.isIncludeAndroidResources = true
     }
+}
+dependencies {
+    debugImplementation(libs.androidx.ui.tooling)
 }
 //endregion Project: Android
 

@@ -107,6 +107,10 @@
     <string name="appointment_delete_all_title">Tüm Randevuları Sil</string>
     <string name="appointment_delete_all_message">Tüm randevuları silmek istediğinize emin misiniz?</string>
 
+    <!-- When offering notification about open spot -->
+    <string name="lesson_notify_me_action">Kontenjan açıldığında bildirim almak istiyorum.</string>
+
+
 </resources>
 
 <!--    Use snake_case + purpose-based suffixes:-->
