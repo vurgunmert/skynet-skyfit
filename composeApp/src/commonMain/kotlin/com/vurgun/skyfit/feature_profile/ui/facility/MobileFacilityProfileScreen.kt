@@ -36,7 +36,7 @@ import com.vurgun.skyfit.core.ui.components.SkyFitButtonComponent
 import com.vurgun.skyfit.core.ui.components.button.SkyFitPrimaryCircularBackButton
 import com.vurgun.skyfit.core.ui.components.button.SkyFitSecondaryIconButton
 import com.vurgun.skyfit.core.ui.components.divider.VerticalDivider
-import com.vurgun.skyfit.core.ui.components.loader.CircularLoader
+import com.vurgun.skyfit.designsystem.components.loader.CircularLoader
 import com.vurgun.skyfit.core.ui.components.special.RatingStarComponent
 import com.vurgun.skyfit.core.ui.resources.SkyFitColor
 import com.vurgun.skyfit.core.ui.resources.SkyFitStyleGuide

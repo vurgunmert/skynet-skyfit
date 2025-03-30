@@ -1,4 +1,4 @@
-package com.vurgun.skyfit.core.ui.components.loader
+package com.vurgun.skyfit.designsystem.components.loader
 
 
 import androidx.compose.animation.core.LinearEasing

@@ -3,9 +3,9 @@ package com.vurgun.skyfit.previews
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.tooling.preview.Preview
 import com.vurgun.skyfit.designsystem.utils.PreviewBox
-import com.vurgun.skyfit.designsystem.widget.event.ActiveAppointmentEventItem
-import com.vurgun.skyfit.designsystem.widget.event.AttendanceAppointmentEventItem
-import com.vurgun.skyfit.designsystem.widget.event.BasicAppointmentEventItem
+import com.vurgun.skyfit.designsystem.components.event.ActiveAppointmentEventItem
+import com.vurgun.skyfit.designsystem.components.event.AttendanceAppointmentEventItem
+import com.vurgun.skyfit.designsystem.components.event.BasicAppointmentEventItem
 
 @Preview(name = "Appointment - Basic")
 @Composable

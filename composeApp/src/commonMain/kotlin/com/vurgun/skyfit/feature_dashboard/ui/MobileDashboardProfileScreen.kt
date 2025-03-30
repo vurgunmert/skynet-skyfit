@@ -11,7 +11,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.vurgun.skyfit.core.domain.models.UserType
 import com.vurgun.skyfit.core.ui.components.SkyFitMobileScaffold
-import com.vurgun.skyfit.core.ui.components.loader.CircularLoader
+import com.vurgun.skyfit.designsystem.components.loader.CircularLoader
 import com.vurgun.skyfit.feature_profile.ui.facility.MobileFacilityProfileScreen
 import com.vurgun.skyfit.feature_profile.ui.trainer.MobileTrainerProfileScreen
 import com.vurgun.skyfit.feature_profile.ui.user.MobileUserProfileScreen

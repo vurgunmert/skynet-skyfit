@@ -6,7 +6,6 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -16,7 +15,7 @@ import androidx.compose.ui.unit.dp
 import com.vurgun.skyfit.core.domain.models.FitnessTagType
 import com.vurgun.skyfit.core.ui.components.SkyFitMobileScaffold
 import com.vurgun.skyfit.core.ui.components.error.ErrorDialog
-import com.vurgun.skyfit.core.ui.components.loader.CircularLoader
+import com.vurgun.skyfit.designsystem.components.loader.CircularLoader
 import com.vurgun.skyfit.feature_navigation.NavigationRoute
 import com.vurgun.skyfit.feature_navigation.jumpAndTakeover
 import com.vurgun.skyfit.feature_onboarding.domain.viewmodel.OnboardingViewEvent

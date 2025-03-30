@@ -111,6 +111,10 @@
     <string name="lesson_notify_me_action">Kontenjan açıldığında bildirim almak istiyorum.</string>
 
 
+    <string name="new_label">Yeni</string>
+    <string name="lesson_add_action">Ders Ekle</string>
+    <string name="lesson_active_label">Aktif</string>
+    <string name="lesson_deactivated_label">Kullanım dışı</string>
 </resources>
 
 <!--    Use snake_case + purpose-based suffixes:-->

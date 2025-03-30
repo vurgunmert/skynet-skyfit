@@ -1,4 +1,4 @@
-package com.vurgun.skyfit.designsystem.widget.event
+package com.vurgun.skyfit.designsystem.components.event
 
 import androidx.compose.desktop.ui.tooling.preview.Preview
 import androidx.compose.foundation.layout.Arrangement

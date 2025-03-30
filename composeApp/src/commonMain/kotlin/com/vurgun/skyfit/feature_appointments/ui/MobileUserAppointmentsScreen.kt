@@ -36,9 +36,9 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import com.vurgun.skyfit.core.ui.components.SkyFitBadgeTabBarComponent
 import com.vurgun.skyfit.core.ui.components.SkyFitScreenHeader
-import com.vurgun.skyfit.designsystem.widget.event.ActiveAppointmentEventItem
-import com.vurgun.skyfit.designsystem.widget.event.AttendanceAppointmentEventItem
-import com.vurgun.skyfit.designsystem.widget.event.BasicAppointmentEventItem
+import com.vurgun.skyfit.designsystem.components.event.ActiveAppointmentEventItem
+import com.vurgun.skyfit.designsystem.components.event.AttendanceAppointmentEventItem
+import com.vurgun.skyfit.designsystem.components.event.BasicAppointmentEventItem
 import com.vurgun.skyfit.feature_navigation.NavigationRoute
 import com.vurgun.skyfit.feature_navigation.jumpAndStay
 import com.vurgun.skyfit.core.ui.resources.SkyFitColor

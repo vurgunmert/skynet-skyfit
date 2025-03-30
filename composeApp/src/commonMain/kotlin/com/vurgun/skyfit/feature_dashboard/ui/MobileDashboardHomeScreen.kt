@@ -7,11 +7,10 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import com.vurgun.skyfit.core.domain.models.UserDetail
 import com.vurgun.skyfit.core.domain.models.UserType
 import com.vurgun.skyfit.core.ui.components.SkyFitMobileScaffold
 import com.vurgun.skyfit.core.ui.components.error.ErrorDialog
-import com.vurgun.skyfit.core.ui.components.loader.CircularLoader
+import com.vurgun.skyfit.designsystem.components.loader.CircularLoader
 import moe.tlaster.precompose.flow.collectAsStateWithLifecycle
 import moe.tlaster.precompose.navigation.Navigator
 import org.koin.compose.koinInject

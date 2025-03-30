@@ -38,7 +38,7 @@ import com.vurgun.skyfit.feature_lessons.ui.MobileFacilityCalendarScreen
 import com.vurgun.skyfit.feature_lessons.ui.MobileFacilityCalendarVisitedScreen
 import com.vurgun.skyfit.feature_lessons.ui.MobileFacilityEditLessonFeedbackScreen
 import com.vurgun.skyfit.feature_lessons.ui.MobileFacilityClassEditScreen
-import com.vurgun.skyfit.feature_lessons.ui.MobileFacilityLessonsScreen
+import com.vurgun.skyfit.feature_lessons.ui.MobileFacilityLessonListScreen
 import com.vurgun.skyfit.feature_lessons.ui.MobileTrainerCalendarVisitedScreen
 import com.vurgun.skyfit.feature_messaging.ui.MobileUserConversationsScreen
 import com.vurgun.skyfit.feature_messaging.ui.MobileUserToFacilityChatScreen
@@ -59,7 +59,6 @@ import com.vurgun.skyfit.feature_profile.ui.trainer.MobileTrainerProfileVisitedS
 import com.vurgun.skyfit.feature_profile.ui.user.MobileUserMeasurementsScreen
 import com.vurgun.skyfit.feature_profile.ui.user.MobileUserPhotoDiaryScreen
 import com.vurgun.skyfit.feature_profile.ui.user.MobileUserProfileScreen
-import com.vurgun.skyfit.feature_profile.ui.user.MobileUserProfileVisitedScreen
 import com.vurgun.skyfit.feature_profile.ui.user.MobileUserTrophiesScreen
 import com.vurgun.skyfit.feature_settings.ui.facility.MobileFacilitySettingsAccountScreen
 import com.vurgun.skyfit.feature_settings.ui.facility.MobileFacilitySettingsAddMembersScreen
@@ -93,7 +92,7 @@ fun MobileNavigationGraph() {
 
     NavHost(
         navigator = navigator,
-        initialRoute = NavigationRoute.UserAppointments.route
+        initialRoute = NavigationRoute.FacilityLessons.route
     ) {
         mobileAuthNavGraph(navigator)
         mobileOnboardingNavGraph(navigator)
@@ -226,7 +225,7 @@ private fun RouteBuilder.facilityNavGraph(navigator: Navigator) {
     scene(NavigationRoute.FacilityCalendar.route) { MobileFacilityCalendarScreen(navigator) }
     scene(NavigationRoute.FacilityCalendarVisited.route) { MobileFacilityCalendarVisitedScreen(navigator) }
     //Facility - Classes
-    scene(NavigationRoute.FacilityLessons.route) { MobileFacilityLessonsScreen(navigator) }
+    scene(NavigationRoute.FacilityLessons.route) { MobileFacilityLessonListScreen(navigator) }
     scene(NavigationRoute.FacilityLessonEdit.route) { MobileFacilityClassEditScreen(navigator) }
     scene(NavigationRoute.FacilityLessonCreated.route) { MobileFacilityEditLessonFeedbackScreen(navigator) }
 

@@ -93,6 +93,19 @@ fun getTurkishMonthName(month: Int): String {
     }
 }
 
+fun getTurkishDayAbbreviation(date: LocalDate): String {
+    return when (date.dayOfWeek.isoDayNumber) {
+        1 -> "Pzt"
+        2 -> "Sal"
+        3 -> "Çar"
+        4 -> "Per"
+        5 -> "Cum"
+        6 -> "Cmrt"
+        7 -> "Paz"
+        else -> ""
+    }
+}
+
 fun getDaysInMonth(month: Int, year: Int): Int {
     return when (month) {
         4, 6, 9, 11 -> 30 // April, June, September, November
@@ -104,3 +117,11 @@ fun getDaysInMonth(month: Int, year: Int): Int {
 fun isLeapYear(year: Int): Boolean {
     return (year % 4 == 0 && year % 100 != 0) || (year % 400 == 0)
 }
+
+fun getStartOfWeek(date: LocalDate): LocalDate {
+    val offset = (date.dayOfWeek.isoDayNumber - 1) % 7
+    return date.minus(offset, DateTimeUnit.DAY)
+}
+
+fun LocalDate.previousWeek(): LocalDate = this.minus(7, DateTimeUnit.DAY)
+fun LocalDate.nextWeek(): LocalDate = this.plus(7, DateTimeUnit.DAY)

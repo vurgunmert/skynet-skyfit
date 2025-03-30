@@ -28,7 +28,7 @@ import com.vurgun.skyfit.core.ui.components.ButtonVariant
 import com.vurgun.skyfit.core.ui.components.SkyFitButtonComponent
 import com.vurgun.skyfit.core.ui.components.SkyFitMobileScaffold
 import com.vurgun.skyfit.core.ui.components.error.ErrorDialog
-import com.vurgun.skyfit.core.ui.components.loader.CircularLoader
+import com.vurgun.skyfit.designsystem.components.loader.CircularLoader
 import com.vurgun.skyfit.core.utils.KeyboardState
 import com.vurgun.skyfit.core.utils.keyboardAsState
 import com.vurgun.skyfit.feature_navigation.NavigationRoute

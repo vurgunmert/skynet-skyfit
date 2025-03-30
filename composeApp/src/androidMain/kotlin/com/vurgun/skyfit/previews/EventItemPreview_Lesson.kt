@@ -3,9 +3,9 @@ package com.vurgun.skyfit.previews
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.tooling.preview.Preview
 import com.vurgun.skyfit.designsystem.utils.PreviewBox
-import com.vurgun.skyfit.designsystem.widget.event.BasicLessonEventItem
-import com.vurgun.skyfit.designsystem.widget.event.DetailedLessonEventItem
-import com.vurgun.skyfit.designsystem.widget.event.EditableLessonEventItem
+import com.vurgun.skyfit.designsystem.components.event.BasicLessonEventItem
+import com.vurgun.skyfit.designsystem.components.event.DetailedLessonEventItem
+import com.vurgun.skyfit.designsystem.components.event.EditableLessonEventItem
 
 
 @Preview(name = "Lesson - Basic")

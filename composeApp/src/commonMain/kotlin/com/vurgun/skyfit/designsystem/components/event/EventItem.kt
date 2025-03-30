@@ -1,4 +1,4 @@
-package com.vurgun.skyfit.designsystem.widget.event
+package com.vurgun.skyfit.designsystem.components.event
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
