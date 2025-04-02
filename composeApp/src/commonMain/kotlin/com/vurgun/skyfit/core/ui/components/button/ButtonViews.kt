@@ -53,6 +53,7 @@ fun SecondaryLargeButton(
         rightIconPainter = rightIconPainter
     )
 }
+
 @Composable
 fun SecondaryMediumButton(
     text: String,
@@ -68,6 +69,52 @@ fun SecondaryMediumButton(
         onClick = onClick,
         variant = ButtonVariant.Secondary,
         size = ButtonSize.Medium,
+        state = if (isLoading) ButtonState.Loading else ButtonState.Rest,
+        modifier = modifier,
+        isEnabled = isEnabled,
+        leftIconPainter = leftIconPainter,
+        rightIconPainter = rightIconPainter
+    )
+}
+
+@Composable
+fun PrimaryDialogButton(
+    text: String,
+    modifier: Modifier = Modifier.wrapContentWidth(),
+    leftIconPainter: Painter? = null,
+    rightIconPainter: Painter? = null,
+    isEnabled: Boolean = true,
+    isLoading: Boolean = false,
+    onClick: () -> Unit
+) {
+    SkyFitButtonComponent(
+        text = text,
+        onClick = onClick,
+        variant = ButtonVariant.Primary,
+        size = ButtonSize.MediumDialog,
+        state = if (isLoading) ButtonState.Loading else ButtonState.Rest,
+        modifier = modifier,
+        isEnabled = isEnabled,
+        leftIconPainter = leftIconPainter,
+        rightIconPainter = rightIconPainter
+    )
+}
+
+@Composable
+fun SecondaryDialogButton(
+    text: String,
+    modifier: Modifier = Modifier.wrapContentWidth(),
+    leftIconPainter: Painter? = null,
+    rightIconPainter: Painter? = null,
+    isEnabled: Boolean = true,
+    isLoading: Boolean = false,
+    onClick: () -> Unit
+) {
+    SkyFitButtonComponent(
+        text = text,
+        onClick = onClick,
+        variant = ButtonVariant.Secondary,
+        size = ButtonSize.MediumDialog,
         state = if (isLoading) ButtonState.Loading else ButtonState.Rest,
         modifier = modifier,
         isEnabled = isEnabled,

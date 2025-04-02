@@ -148,13 +148,6 @@ object SkyFitAsset {
         "ic_smoking" to Res.drawable.ic_smoking,
     )
 
-    /** 🔹 CHARACTER ICONS **/
-    val CharacterIcons = mapOf(
-        "ic_character_carrot" to Res.drawable.ic_character_carrot,
-        "ic_character_koala" to Res.drawable.ic_character_koala,
-        "ic_character_panda" to Res.drawable.ic_character_panda
-    )
-
     enum class CharacterIcon(val id: String, val res: DrawableResource) {
         CARROT("ic_character_carrot", Res.drawable.ic_character_carrot),
         KOALA("ic_character_koala", Res.drawable.ic_character_koala),

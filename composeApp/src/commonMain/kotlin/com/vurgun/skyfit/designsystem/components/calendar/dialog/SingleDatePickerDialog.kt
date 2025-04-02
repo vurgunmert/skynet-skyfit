@@ -1,4 +1,4 @@
-package com.vurgun.skyfit.core.ui.components
+package com.vurgun.skyfit.designsystem.components.calendar.dialog
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -32,7 +32,7 @@ import skyfit.composeapp.generated.resources.cancel_action
 import skyfit.composeapp.generated.resources.confirm_action
 
 @Composable
-fun DatePickerDialog(
+fun SingleDatePickerDialog(
     selectedDate: LocalDate = LocalDate.now(),
     isOpen: Boolean,
     onDismiss: () -> Unit,

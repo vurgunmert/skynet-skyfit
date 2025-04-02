@@ -1,7 +1,9 @@
 package com.vurgun.skyfit.feature_lessons.ui
 
 import androidx.lifecycle.ViewModel
+import com.vurgun.skyfit.core.domain.models.CalendarRecurrence
 import com.vurgun.skyfit.core.utils.now
+import com.vurgun.skyfit.designsystem.components.popup.SelectableTrainerMenuItemModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.update
@@ -22,16 +24,18 @@ data class FacilityClassViewData(
     val icon: String? = null,
     val selectedTrainer: FacilityTrainerViewData? = null, // Nullable to allow selection
     val trainers: List<FacilityTrainerViewData> = fakeFacilityTrainers,
-    val selectedDate: LocalDate = LocalDate.now(),
+    val trainerItems: List<SelectableTrainerMenuItemModel> = fakeTrainerMenuItems,
+    val startDate: LocalDate = LocalDate.now(),
+    val endDate: LocalDate = LocalDate.now(),
     val startTime: String = "08:00",
     val endTime: String = "08:30",
+    val recurrence: CalendarRecurrence = CalendarRecurrence.Never,
     val repeatOption: String = "Hergün",
     val selectedDaysOfWeek: List<String> = emptyList(),
-    val monthlyOption: String = classRepeatMonthlyOptions.first(),
     val isAppointmentMandatory: Boolean = false,
     val isPaymentMandatory: Boolean = false,
     val price: String = "0.00",
-    val capacity: String = "5",
+    val capacity: Int = 5,
     val userGroup: String = "Herkes",
     val trainerNote: String = "",
     val isSaveButtonEnabled: Boolean = false,
@@ -40,18 +44,50 @@ data class FacilityClassViewData(
 // endregion
 
 val classRepeatPeriodOptions = listOf("Hergün", "Haftada belirli günler", "Tekrar yok")
-val classRepeatMonthlyOptions = listOf("Her ayın ilk pazartesi", "Her ayın 15. günü")
 val classRepeatDaysOfWeek = listOf("Pazartesi", "Salı", "Çarşamba", "Perşembe", "Cuma", "Cumartesi", "Pazar")
 
 
 // Simulated function to load a class
 private val fakeFacilityTrainers = listOf(
-    FacilityTrainerViewData("1","Sude Kale", "https://ik.imagekit.io/skynet2skyfit/avatar_sample.png?updatedAt=1738866499680"),
-    FacilityTrainerViewData("2","Alex Lang", "https://ik.imagekit.io/skynet2skyfit/avatar_sample.png?updatedAt=1738866499680"),
-    FacilityTrainerViewData("3","Sophia Hawl", "https://example.com/sophia.jpg"),
-    FacilityTrainerViewData("4","Cenk Kar", "https://ik.imagekit.io/skynet2skyfit/avatar_sample.png?updatedAt=1738866499680"),
-    FacilityTrainerViewData("5","Racheal Lee", "https://example.com/racheal.jpg"),
-    FacilityTrainerViewData("6","Karen Maroon", "https://example.com/karen.jpg")
+    FacilityTrainerViewData("1", "Sude Kale", "https://ik.imagekit.io/skynet2skyfit/avatar_sample.png?updatedAt=1738866499680"),
+    FacilityTrainerViewData("2", "Alex Lang", "https://ik.imagekit.io/skynet2skyfit/avatar_sample.png?updatedAt=1738866499680"),
+    FacilityTrainerViewData("3", "Sophia Hawl", "https://example.com/sophia.jpg"),
+    FacilityTrainerViewData("4", "Cenk Kar", "https://ik.imagekit.io/skynet2skyfit/avatar_sample.png?updatedAt=1738866499680"),
+    FacilityTrainerViewData("5", "Racheal Lee", "https://example.com/racheal.jpg"),
+    FacilityTrainerViewData("6", "Karen Maroon", "https://example.com/karen.jpg")
+)
+
+private val fakeTrainerMenuItems = listOf<SelectableTrainerMenuItemModel>(
+    SelectableTrainerMenuItemModel(
+        1,
+        "Sude Kale",
+        "https://cdn4.iconfinder.com/data/icons/diversity-v2-0-volume-05/64/fitness-trainer-black-male-512.png"
+    ),
+    SelectableTrainerMenuItemModel(
+        2,
+        "Alex Lang",
+        "https://cdn4.iconfinder.com/data/icons/diversity-v2-0-volume-05/64/fitness-trainer-black-male-512.png"
+    ),
+    SelectableTrainerMenuItemModel(
+        3,
+        "Sophia Hawl",
+        "https://cdn4.iconfinder.com/data/icons/diversity-v2-0-volume-05/64/fitness-trainer-black-male-512.png"
+    ),
+    SelectableTrainerMenuItemModel(
+        4,
+        "Cenk Kar",
+        "https://cdn4.iconfinder.com/data/icons/diversity-v2-0-volume-05/64/fitness-trainer-black-male-512.png"
+    ),
+    SelectableTrainerMenuItemModel(
+        5,
+        "Racheal Lee",
+        "https://cdn4.iconfinder.com/data/icons/diversity-v2-0-volume-05/64/fitness-trainer-black-male-512.png"
+    ),
+    SelectableTrainerMenuItemModel(
+        6,
+        "Karen Maroon",
+        "https://cdn4.iconfinder.com/data/icons/diversity-v2-0-volume-05/64/fitness-trainer-black-male-512.png"
+    )
 )
 
 class MobileFacilityClassEditScreenViewModel : ViewModel() {
@@ -60,7 +96,6 @@ class MobileFacilityClassEditScreenViewModel : ViewModel() {
     val facilityClassState: StateFlow<FacilityClassViewData> = _facilityClassState
 
     private var initialState: FacilityClassViewData? = null // To track modifications
-
 
 
     fun loadClass(facilityId: String, classId: String?) {
@@ -90,13 +125,11 @@ class MobileFacilityClassEditScreenViewModel : ViewModel() {
         checkIfModified()
     }
 
-    fun updateDescription(description: String) {
-        _facilityClassState.update { it.copy(description = description) }
-        checkIfModified()
-    }
-
-    fun updateSelectedTrainer(trainer: FacilityTrainerViewData) {
-        _facilityClassState.update { it.copy(selectedTrainer = trainer) }
+    fun updateSelectedTrainer(trainer: SelectableTrainerMenuItemModel) {
+        val updatedTrainers = _facilityClassState.value.trainerItems.map {
+            it.copy(selected = it.id == trainer.id)
+        }
+        _facilityClassState.update { it.copy(trainerItems = updatedTrainers) }
         checkIfModified()
     }
 
@@ -105,8 +138,13 @@ class MobileFacilityClassEditScreenViewModel : ViewModel() {
         checkIfModified()
     }
 
-    fun updateSelectedDate(date: LocalDate) {
-        _facilityClassState.update { it.copy(selectedDate = date) }
+    fun updateStartDate(date: LocalDate) {
+        _facilityClassState.update { it.copy(startDate = date) }
+        checkIfModified()
+    }
+
+    fun updateEndDate(date: LocalDate) {
+        _facilityClassState.update { it.copy(startDate = date) }
         checkIfModified()
     }
 
@@ -117,6 +155,11 @@ class MobileFacilityClassEditScreenViewModel : ViewModel() {
 
     fun updateEndTime(time: String) {
         _facilityClassState.update { it.copy(endTime = time) }
+        checkIfModified()
+    }
+
+    fun updateRecurrence(option: CalendarRecurrence) {
+        _facilityClassState.update { it.copy(recurrence = option) }
         checkIfModified()
     }
 
@@ -137,12 +180,7 @@ class MobileFacilityClassEditScreenViewModel : ViewModel() {
         checkIfModified()
     }
 
-    fun updateMonthlyOption(option: String) {
-        _facilityClassState.update { it.copy(monthlyOption = option) }
-        checkIfModified()
-    }
-
-    fun updateCapacity(capacity: String) {
+    fun updateCapacity(capacity: Int) {
         _facilityClassState.update { it.copy(capacity = capacity) }
         checkIfModified()
     }
@@ -175,16 +213,16 @@ class MobileFacilityClassEditScreenViewModel : ViewModel() {
     private fun fakeFetchClassData(facilityId: String, classId: String): FacilityClassViewData {
         return FacilityClassViewData(
             title = "Example Class",
-            selectedTrainer = FacilityTrainerViewData("1","Sude Kale", "https://example.com/sude.jpg"),
+            selectedTrainer = FacilityTrainerViewData("1", "Sude Kale", "https://example.com/sude.jpg"),
             trainers = fakeFacilityTrainers,
             trainerNote = "Be sure to stretch before class!",
-            selectedDate = LocalDate(2024, 12, 24),
+            startDate = LocalDate(2024, 12, 24),
+            endDate = LocalDate(2024, 12, 24),
             startTime = "09:00",
             endTime = "10:30",
             repeatOption = "Haftada belirli günler",
             selectedDaysOfWeek = listOf("Pazartesi", "Çarşamba"),
-            monthlyOption = "Her ayın ilk pazartesi",
-            capacity = "10",
+            capacity = 10,
             userGroup = "Herkes",
             isAppointmentMandatory = false,
             isPaymentMandatory = false,

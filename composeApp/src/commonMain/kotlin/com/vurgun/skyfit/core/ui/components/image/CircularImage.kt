@@ -23,7 +23,7 @@ import coil3.compose.AsyncImagePainter
 
 @Composable
 fun CircularImage(
-    avatarUrl: String,
+    url: String,
     modifier: Modifier = Modifier.size(32.dp),
     isAnimated: Boolean = true
 ) {
@@ -34,10 +34,10 @@ fun CircularImage(
             visible = isImageLoaded,
             enter = fadeIn(animationSpec = tween(500))
         ) {
-            CircularImageContent(avatarUrl, modifier) { isImageLoaded = true }
+            CircularImageContent(url, modifier) { isImageLoaded = true }
         }
     } else {
-        CircularImageContent(avatarUrl, modifier) { isImageLoaded = true }
+        CircularImageContent(url, modifier) { isImageLoaded = true }
     }
 }
 

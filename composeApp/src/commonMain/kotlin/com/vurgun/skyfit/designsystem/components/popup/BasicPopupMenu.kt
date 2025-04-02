@@ -16,6 +16,7 @@ import com.vurgun.skyfit.core.ui.resources.SkyFitColor
 
 @Composable
 fun BasicPopupMenu(
+    modifier: Modifier = Modifier.width(160.dp),
     isOpen: Boolean,
     onDismiss: () -> Unit,
     content: @Composable ColumnScope.() -> Unit
@@ -29,9 +30,7 @@ fun BasicPopupMenu(
         DropdownMenu(
             expanded = isOpen,
             onDismissRequest = { onDismiss() },
-            modifier = Modifier
-                .width(160.dp)
-                .background(Color.Transparent) // Prevents overriding the rounded shape
+            modifier = modifier.background(Color.Transparent)
         ) {
             Surface(elevation = 8.dp) {
                 Column(content = content)

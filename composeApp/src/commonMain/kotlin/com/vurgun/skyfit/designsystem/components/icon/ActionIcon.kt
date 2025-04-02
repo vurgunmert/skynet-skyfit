@@ -14,11 +14,12 @@ import org.jetbrains.compose.resources.painterResource
 fun ActionIcon(
     res: DrawableResource,
     modifier: Modifier = Modifier.size(16.dp),
+    contentDescription: String? = null,
     onClick: () -> Unit
 ) {
     Icon(
         painter = painterResource(res),
-        contentDescription = null,
+        contentDescription = contentDescription,
         modifier = modifier.clickable(onClick = onClick),
         tint = SkyFitColor.icon.default
     )

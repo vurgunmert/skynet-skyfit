@@ -178,19 +178,19 @@ private fun MobileExploreActiveChallengeItemComponent(onClick: () -> Unit) {
             Box(Modifier.fillMaxWidth()) {
                 Row(Modifier.align(Alignment.CenterStart)) {
                     CircularImage(
-                        avatarUrl = "https://ik.imagekit.io/skynet2skyfit/avatar_sample.png?updatedAt=1738866499680",
+                        url = "https://ik.imagekit.io/skynet2skyfit/avatar_sample.png?updatedAt=1738866499680",
                         modifier = Modifier.size(24.dp)
                     )
                     CircularImage(
-                        avatarUrl = "https://ik.imagekit.io/skynet2skyfit/avatar_sample.png?updatedAt=1738866499680",
+                        url = "https://ik.imagekit.io/skynet2skyfit/avatar_sample.png?updatedAt=1738866499680",
                         modifier = Modifier.size(24.dp).offset(x = (-16).dp)
                     )
                     CircularImage(
-                        avatarUrl = "https://ik.imagekit.io/skynet2skyfit/Profile%20Photo.png?updatedAt=1739703080462",
+                        url = "https://ik.imagekit.io/skynet2skyfit/Profile%20Photo.png?updatedAt=1739703080462",
                         modifier = Modifier.size(24.dp).offset(x = (-32).dp)
                     )
                     CircularImage(
-                        avatarUrl = "https://ik.imagekit.io/skynet2skyfit/download-5.jpg?updatedAt=1740259432295",
+                        url = "https://ik.imagekit.io/skynet2skyfit/download-5.jpg?updatedAt=1740259432295",
                         modifier = Modifier.size(24.dp).offset(x = (-48).dp)
                     )
                 }

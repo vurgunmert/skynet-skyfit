@@ -39,6 +39,7 @@ import com.vurgun.skyfit.core.ui.resources.SkyFitTypography
 import moe.tlaster.precompose.navigation.Navigator
 import org.jetbrains.compose.resources.DrawableResource
 import org.jetbrains.compose.resources.painterResource
+import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.koinInject
 import skyfit.composeapp.generated.resources.Res
 import skyfit.composeapp.generated.resources.ic_check_circle
@@ -46,6 +47,7 @@ import skyfit.composeapp.generated.resources.ic_chevron_left
 import skyfit.composeapp.generated.resources.ic_clock
 import skyfit.composeapp.generated.resources.ic_location_pin
 import skyfit.composeapp.generated.resources.ic_profile
+import skyfit.composeapp.generated.resources.trainer_note_label
 
 @Composable
 fun MobileUserAppointmentDetailScreen(navigator: Navigator) {
@@ -202,7 +204,7 @@ fun AppointmentDetailItemCard(
 fun MobileUserAppointmentDetailScreenNoteComponent(note: String?) {
     if (!note.isNullOrEmpty()) {
         Text(
-            text = "Eğitmenin Notu",
+            text = stringResource(Res.string.trainer_note_label),
             style = SkyFitTypography.bodyMediumSemibold,
             modifier = Modifier.padding(top = 16.dp, start = 8.dp)
         )

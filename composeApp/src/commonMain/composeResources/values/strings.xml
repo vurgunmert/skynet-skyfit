@@ -49,6 +49,7 @@
     <string name="activate_action">Aktifleştir</string>
     <string name="disable_action">Devre Dışı Bırak</string>
     <string name="logout_action">Oturumu Kapat</string>
+    <string name="confirm_action">Onayla</string>
 
     <!-- 🔷 Gender Options -->
     <string name="gender_female">Kadın</string>
@@ -121,6 +122,31 @@
     <string name="calendar_select_date">Tarih Belirle</string>
     <string name="calendar_select_date_range">Tarih Aralığı Belirle</string>
 
+
+    <string name="lesson_exercise_title">Antrenman Başlığı</string>
+    <string name="lesson_exercise_title_hint">Shoulders and Abs</string>
+    <string name="lesson_trainer_label">Eğitmen</string>
+    <string name="lesson_start_date_label">Başlangıç Tarihi</string>
+    <string name="lesson_date_hint">GG / AA / YYYY</string>
+    <string name="lesson_end_date_label">Bitiş Tarihi</string>
+    <string name="lesson_start_hour_label">Başlangıç Saati</string>
+    <string name="lesson_start_hour_hint">08:00</string>
+    <string name="lesson_end_hour_label">Bitiş Saati</string>
+    <string name="lesson_end_hour_hint">08:30</string>
+    <string name="lesson_repeat_label">Ders Tekrarı</string>
+    <string name="lesson_capacity_label">Kontenjan</string>
+
+    <string name="recurrence_none_label">Tekrar yok</string>
+    <string name="recurrence_daily_label">Her gün</string>
+    <string name="recurrence_weekly_label">Haftada belirli günler</string>
+
+    <string name="day_monday_label">Pazartesi</string>
+    <string name="day_tuesday_label">Salı</string>
+    <string name="day_wednesday_label">Çarşamba</string>
+    <string name="day_thursday_label">Perşembe</string>
+    <string name="day_friday_label">Cuma</string>
+    <string name="day_saturday_label">Cumartesi</string>
+    <string name="day_sunday_label">Pazar</string>
 
 </resources>
 

@@ -37,7 +37,7 @@ import com.vurgun.skyfit.feature_explore.ui.MobileExploreTrainersScreen
 import com.vurgun.skyfit.feature_lessons.ui.MobileFacilityCalendarScreen
 import com.vurgun.skyfit.feature_lessons.ui.MobileFacilityCalendarVisitedScreen
 import com.vurgun.skyfit.feature_lessons.ui.MobileFacilityEditLessonFeedbackScreen
-import com.vurgun.skyfit.feature_lessons.ui.MobileFacilityClassEditScreen
+import com.vurgun.skyfit.feature_lessons.ui.MobileFacilityEditLessonScreen
 import com.vurgun.skyfit.feature_lessons.ui.MobileFacilityLessonListScreen
 import com.vurgun.skyfit.feature_lessons.ui.MobileTrainerCalendarVisitedScreen
 import com.vurgun.skyfit.feature_messaging.ui.MobileUserConversationsScreen
@@ -92,7 +92,7 @@ fun MobileNavigationGraph() {
 
     NavHost(
         navigator = navigator,
-        initialRoute = NavigationRoute.FacilityCalendarVisited.route
+        initialRoute = NavigationRoute.FacilityLessonEdit.route
     ) {
         mobileAuthNavGraph(navigator)
         mobileOnboardingNavGraph(navigator)
@@ -226,7 +226,7 @@ private fun RouteBuilder.facilityNavGraph(navigator: Navigator) {
     scene(NavigationRoute.FacilityCalendarVisited.route) { MobileFacilityCalendarVisitedScreen(navigator) }
     //Facility - Classes
     scene(NavigationRoute.FacilityLessons.route) { MobileFacilityLessonListScreen(navigator) }
-    scene(NavigationRoute.FacilityLessonEdit.route) { MobileFacilityClassEditScreen(navigator) }
+    scene(NavigationRoute.FacilityLessonEdit.route) { MobileFacilityEditLessonScreen(navigator) }
     scene(NavigationRoute.FacilityLessonCreated.route) { MobileFacilityEditLessonFeedbackScreen(navigator) }
 
     //Facility - Settings

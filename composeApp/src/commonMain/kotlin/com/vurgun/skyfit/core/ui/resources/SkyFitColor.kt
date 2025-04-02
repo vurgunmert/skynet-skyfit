@@ -99,6 +99,7 @@ object SkyFitColor {
         val caution = Color(0xFF998A00)  // icon-caution
         val warning = Color(0xFFB28400)  // icon-warning
         val critical = Color(0xFFEf4D2F)  // icon-critical
+        val linkInverse = Color(0xFF2D88FF) //icon-link-inverse
         val inverse = Color(0xFF4A4A4A)  // icon-inverse
         val inverseSecondary = Color(0xFF303030)  // icon-inverse-secondary
     }

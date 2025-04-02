@@ -104,7 +104,7 @@ fun VerticalExerciseCardItemComponent(
 
                     participants.take(4).forEachIndexed { index, avatarUrl ->
                         CircularImage(
-                            avatarUrl = avatarUrl,
+                            url = avatarUrl,
                             modifier = Modifier.size(32.dp).offset(x = (-10 * index).dp)
                         )
                     }

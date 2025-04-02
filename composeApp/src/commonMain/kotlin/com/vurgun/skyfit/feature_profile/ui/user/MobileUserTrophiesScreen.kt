@@ -60,7 +60,7 @@ fun MobileUserTrophiesScreen(navigator: Navigator) {
 private fun MobileUserTrophiesUserInfoComponent() {
     Column(horizontalAlignment = Alignment.CenterHorizontally) {
         CircularImage(
-            avatarUrl = "https://ik.imagekit.io/skynet2skyfit/Profile%20Photo.png?updatedAt=1739703080462",
+            url = "https://ik.imagekit.io/skynet2skyfit/Profile%20Photo.png?updatedAt=1739703080462",
             modifier = Modifier.size(64.dp)
         )
         Spacer(Modifier.height(4.dp))

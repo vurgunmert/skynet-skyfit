@@ -71,3 +71,18 @@ fun CalendarSingleDateSelectorFilter(
         Divider(Modifier.fillMaxWidth(), color = SkyFitColor.border.default)
     }
 }
+
+@Composable
+fun CalendarSingleDateSelector(
+    onSelectionChanged: (start: LocalDate) -> Unit
+) {
+    val viewModel = remember { CalendarDateSelectorViewModel(CalendarSelectionMode.Single) }
+
+    val state by viewModel.state.collectAsState()
+
+    LaunchedEffect(state.selectedStartDate) {
+        onSelectionChanged(state.selectedStartDate)
+    }
+
+    CalendarDateSelector(viewModel) { _, _ -> }
+}

@@ -17,7 +17,6 @@ import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -32,7 +31,6 @@ import androidx.compose.material.ButtonDefaults
 import androidx.compose.material.Icon
 import androidx.compose.material.Text
 import androidx.compose.material.TextButton
-import androidx.compose.material.TextField
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -51,6 +49,8 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import coil3.compose.AsyncImage
+import com.vurgun.skyfit.core.domain.models.CalendarRecurrence
+import com.vurgun.skyfit.core.domain.models.CalendarRecurrenceType
 import com.vurgun.skyfit.core.ui.components.ButtonSize
 import com.vurgun.skyfit.core.ui.components.ButtonState
 import com.vurgun.skyfit.core.ui.components.ButtonVariant
@@ -61,36 +61,64 @@ import com.vurgun.skyfit.core.ui.components.SkyFitDropdownComponent
 import com.vurgun.skyfit.core.ui.components.SkyFitMobileScaffold
 import com.vurgun.skyfit.core.ui.components.SkyFitRadioButtonComponent
 import com.vurgun.skyfit.core.ui.components.SkyFitScreenHeader
+import com.vurgun.skyfit.core.ui.components.text.BodyMediumRegularText
 import com.vurgun.skyfit.core.ui.resources.SkyFitColor
 import com.vurgun.skyfit.core.ui.resources.SkyFitIcon
 import com.vurgun.skyfit.core.ui.resources.SkyFitStyleGuide
 import com.vurgun.skyfit.core.ui.resources.SkyFitTypography
-import com.vurgun.skyfit.core.utils.now
+import com.vurgun.skyfit.designsystem.components.button.RadioButton
+import com.vurgun.skyfit.designsystem.components.icon.ActionIcon
+import com.vurgun.skyfit.designsystem.components.image.CircleNetworkImage
+import com.vurgun.skyfit.designsystem.components.popup.LessonSelectCapacityPopupMenu
+import com.vurgun.skyfit.designsystem.components.popup.LessonSelectRecurrenceTypePopupMenu
+import com.vurgun.skyfit.designsystem.components.popup.LessonSelectTrainerPopupMenu
+import com.vurgun.skyfit.designsystem.components.popup.SelectableTrainerMenuItemModel
+import com.vurgun.skyfit.designsystem.components.text.MultiLineInputText
+import com.vurgun.skyfit.designsystem.components.text.TitledMediumRegularText
 import com.vurgun.skyfit.feature_navigation.NavigationRoute
 import com.vurgun.skyfit.feature_navigation.jumpAndTakeover
-import com.vurgun.skyfit.feature_settings.ui.AccountSettingsSelectToSetInputComponent
 import com.vurgun.skyfit.feature_settings.ui.SkyFitSelectToEnterInputComponent
-import com.vurgun.skyfit.feature_settings.ui.SkyFitSelectToEnterMultilineInputComponent
+import kotlinx.datetime.DayOfWeek
 import kotlinx.datetime.LocalDate
 import moe.tlaster.precompose.navigation.Navigator
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
 import skyfit.composeapp.generated.resources.Res
-import skyfit.composeapp.generated.resources.description_hint_add
-import skyfit.composeapp.generated.resources.description_label
+import skyfit.composeapp.generated.resources.day_friday_label
+import skyfit.composeapp.generated.resources.day_monday_label
+import skyfit.composeapp.generated.resources.day_saturday_label
+import skyfit.composeapp.generated.resources.day_sunday_label
+import skyfit.composeapp.generated.resources.day_thursday_label
+import skyfit.composeapp.generated.resources.day_tuesday_label
+import skyfit.composeapp.generated.resources.day_wednesday_label
 import skyfit.composeapp.generated.resources.ic_calendar_dots
 import skyfit.composeapp.generated.resources.ic_check
 import skyfit.composeapp.generated.resources.ic_chevron_down
 import skyfit.composeapp.generated.resources.ic_exercises
 import skyfit.composeapp.generated.resources.icon_label
+import skyfit.composeapp.generated.resources.lesson_capacity_label
+import skyfit.composeapp.generated.resources.lesson_date_hint
 import skyfit.composeapp.generated.resources.lesson_edit_action
+import skyfit.composeapp.generated.resources.lesson_end_date_label
+import skyfit.composeapp.generated.resources.lesson_end_hour_hint
+import skyfit.composeapp.generated.resources.lesson_end_hour_label
+import skyfit.composeapp.generated.resources.lesson_exercise_title
+import skyfit.composeapp.generated.resources.lesson_exercise_title_hint
+import skyfit.composeapp.generated.resources.lesson_repeat_label
+import skyfit.composeapp.generated.resources.lesson_start_date_label
+import skyfit.composeapp.generated.resources.lesson_start_hour_hint
+import skyfit.composeapp.generated.resources.lesson_start_hour_label
+import skyfit.composeapp.generated.resources.lesson_trainer_label
 import skyfit.composeapp.generated.resources.logo_skyfit
 import skyfit.composeapp.generated.resources.open_action
+import skyfit.composeapp.generated.resources.recurrence_daily_label
+import skyfit.composeapp.generated.resources.recurrence_none_label
+import skyfit.composeapp.generated.resources.recurrence_weekly_label
 import skyfit.composeapp.generated.resources.trainer_note_hint_add
 import skyfit.composeapp.generated.resources.trainer_note_label
 
 @Composable
-fun MobileFacilityClassEditScreen(navigator: Navigator) {
+fun MobileFacilityEditLessonScreen(navigator: Navigator) {
 
     val viewModel = remember { MobileFacilityClassEditScreenViewModel() }
     val facilityClass = viewModel.facilityClassState.collectAsState().value
@@ -120,6 +148,7 @@ fun MobileFacilityClassEditScreen(navigator: Navigator) {
                 })
         }
     ) {
+
         Column(
             modifier = Modifier
                 .fillMaxSize()
@@ -128,7 +157,7 @@ fun MobileFacilityClassEditScreen(navigator: Navigator) {
             verticalArrangement = Arrangement.spacedBy(24.dp)
         ) {
             // region: Head Info (Icon + Title)
-            FacilityClassHeadInfoInputGroup(
+            EditLessonSubjectItem(
                 selectedIcon = facilityClass.icon,
                 title = facilityClass.title,
                 onIconSelected = viewModel::updateIcon,
@@ -137,54 +166,52 @@ fun MobileFacilityClassEditScreen(navigator: Navigator) {
             // endregion
 
             // region: Trainer Selection + Trainer Note
-            FacilityClassSelectTrainerInputComponent(
-                trainers = facilityClass.trainers,
-                initialTrainer = facilityClass.selectedTrainer,
-                onTrainerSelected = viewModel::updateSelectedTrainer
+            EditLessonTrainerRow(
+                trainers = facilityClass.trainerItems,
+                onSelected = viewModel::updateSelectedTrainer
             )
 
-            SkyFitSelectToEnterMultilineInputComponent(
-                title = stringResource(Res.string.description_label),
-                hint = stringResource(Res.string.description_hint_add),
-                value = facilityClass.description,
-                onValueChange = { viewModel.updateDescription(it) }
-            )
-
-            SkyFitSelectToEnterMultilineInputComponent(
-                title = stringResource(Res.string.trainer_note_label),
-                hint = stringResource(Res.string.trainer_note_hint_add),
-                value = facilityClass.trainerNote,
-                onValueChange = viewModel::updateTrainerNote
+            LessonEditNoteRow(
+                note = facilityClass.trainerNote,
+                onChanged = viewModel::updateTrainerNote
             )
             // endregion
 
             // region: Date & Time Selection
-            FacilityClassStartDateInputGroup(
-                selectedDate = facilityClass.selectedDate,
-                onDateSelected = viewModel::updateSelectedDate
+            EditLessonDatesRow(
+                startDate = facilityClass.startDate,
+                endDate = facilityClass.endDate,
+                onStartDateSelected = viewModel::updateStartDate,
+                onEndDateSelected = viewModel::updateEndDate
             )
 
-            FacilityClassTimeInputGroup(
+            LessonEditHoursRow(
                 selectedStartTime = facilityClass.startTime,
-                onStartTimeSelected = viewModel::updateStartTime,
                 selectedEndTime = facilityClass.endTime,
+                onStartTimeSelected = viewModel::updateStartTime,
                 onEndTimeSelected = viewModel::updateEndTime
             )
             // endregion
 
             // region: Repeat Options
-            FacilityClassCalendarRepeaterInputGroup(
-                selectedOption = facilityClass.repeatOption,
-                onOptionSelected = viewModel::updateRepeatOption,
-                selectedDaysOfWeek = facilityClass.selectedDaysOfWeek,
-                onDaySelected = viewModel::toggleDaySelection,
-                selectedMonthlyOption = facilityClass.monthlyOption,
-                onMonthlyOptionSelected = viewModel::updateMonthlyOption
+//            FacilityClassCalendarRepeaterInputGroup(
+//                selectedOption = facilityClass.repeatOption,
+//                onOptionSelected = viewModel::updateRepeatOption,
+//                selectedDaysOfWeek = facilityClass.selectedDaysOfWeek,
+//                onDaySelected = viewModel::toggleDaySelection,
+//                selectedMonthlyOption = facilityClass.monthlyOption,
+//                onMonthlyOptionSelected = viewModel::updateMonthlyOption
+//            )
+            LessonEditRecurrenceRow(
+                selectedRecurrence = facilityClass.recurrence,
+                onChanged = viewModel::updateRecurrence
             )
             // endregion
 
             // region: Capacity & User Group
-            MobileFacilityClassEditCapacityInputGroup(
+
+
+            LessonEditCapacityRow(
                 selectedCapacity = facilityClass.capacity,
                 onCapacitySelected = viewModel::updateCapacity
             )
@@ -223,7 +250,7 @@ fun MobileFacilityClassEditScreen(navigator: Navigator) {
 
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
-private fun FacilityClassHeadInfoInputGroup(
+private fun EditLessonSubjectItem(
     selectedIcon: String?,
     title: String?,
     onIconSelected: (String) -> Unit,
@@ -268,8 +295,8 @@ private fun FacilityClassHeadInfoInputGroup(
             }
 
             SkyFitSelectToEnterInputComponent(
-                title = "Antreman Başlığı",
-                hint = "Shoulders and Abs",
+                title = stringResource(Res.string.lesson_exercise_title),
+                hint = stringResource(Res.string.lesson_exercise_title_hint),
                 value = title,
                 onValueChange = onTitleChanged
             )
@@ -321,38 +348,19 @@ private fun FacilityClassHeadInfoInputGroup(
 
 //region Trainer
 @Composable
-private fun FacilityClassTrainerNoteInputGroup(
-    trainerNote: String,
-    onNoteChanged: (String) -> Unit
+private fun LessonEditNoteRow(
+    note: String?,
+    onChanged: (String) -> Unit
 ) {
-    Column(
-        Modifier.fillMaxWidth()
-            .wrapContentHeight()
-    ) {
-        Text(
-            text = stringResource(Res.string.trainer_note_label),
-            style = SkyFitTypography.bodyMediumSemibold,
-            modifier = Modifier.padding(start = 8.dp)
-        )
-        TextField(
-            placeholder = {
-                Text(
-                    stringResource(Res.string.trainer_note_hint_add),
-                    style = SkyFitTypography.bodyMediumRegular,
-                    color = SkyFitColor.text.secondary
-                )
-            },
-            value = trainerNote,
-            onValueChange = onNoteChanged,
-            modifier = Modifier
-                .fillMaxWidth()
-                .background(SkyFitColor.background.surfaceSecondary, RoundedCornerShape(12.dp))
-                .padding(vertical = 12.dp, horizontal = 16.dp)
-        )
-    }
+    MultiLineInputText(
+        title = stringResource(Res.string.trainer_note_label),
+        hint = stringResource(Res.string.trainer_note_hint_add),
+        value = note,
+        onValueChange = onChanged
+    )
 }
 
-@Composable
+@Composable //TODO: Remove legacy
 fun FacilityClassSelectTrainerInputComponent(
     trainers: List<FacilityTrainerViewData>,
     initialTrainer: FacilityTrainerViewData?,
@@ -420,85 +428,138 @@ fun FacilityClassSelectTrainerInputComponent(
     }
 }
 
-//endregion Trainer
-
-//region Date Time Components
 @Composable
-fun FacilityClassStartDateInputGroup(
-    modifier: Modifier = Modifier,
-    selectedDate: LocalDate = LocalDate.now(),
-    onDateSelected: (LocalDate) -> Unit = {}
+private fun EditLessonTrainerRow(
+    trainers: List<SelectableTrainerMenuItemModel>,
+    onSelected: (SelectableTrainerMenuItemModel) -> Unit
 ) {
-    var isDatePickerOpen by remember { mutableStateOf(false) }
-    var selected by remember { mutableStateOf(selectedDate) }
+    var isDialogOpen by remember { mutableStateOf(false) }
+    val selectedTrainer = trainers.firstOrNull { it.selected }
 
-    Column(modifier = modifier.fillMaxWidth()) {
+    Column(modifier = Modifier.fillMaxWidth()) {
         // Title
         Text(
-            text = "Başlangıç Tarihi",
+            text = stringResource(Res.string.lesson_trainer_label),
             style = SkyFitTypography.bodyMediumSemibold,
             modifier = Modifier.padding(start = 8.dp, bottom = 4.dp)
         )
 
-        // Date Input Row (Triggers Date Picker)
+        // Dropdown Selection Box
         Row(
             modifier = Modifier
                 .fillMaxWidth()
                 .clip(RoundedCornerShape(50))
                 .background(SkyFitColor.background.surfaceSecondary)
-                .clickable { isDatePickerOpen = true }
+                .clickable { isDialogOpen = true }
                 .padding(horizontal = 16.dp, vertical = 12.dp),
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
-            Text(
-                text = selected.classDateFormatToDisplay(),
-                style = SkyFitTypography.bodyMediumRegular,
-                color = SkyFitColor.text.secondary,
-                modifier = Modifier.weight(1f)
-            )
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.spacedBy(16.dp)
+            ) {
+                CircleNetworkImage(selectedTrainer?.imageUrl)
+                BodyMediumRegularText(selectedTrainer?.name.orEmpty(), modifier = Modifier.weight(1f))
+                ActionIcon(res = Res.drawable.ic_chevron_down) { isDialogOpen = true }
+            }
+        }
 
-            Icon(
-                painter = painterResource(Res.drawable.ic_calendar_dots),
-                contentDescription = "Pick Date",
-                tint = SkyFitColor.icon.default,
-                modifier = Modifier.size(16.dp)
+        if (isDialogOpen) {
+            Spacer(Modifier.height(6.dp))
+            LessonSelectTrainerPopupMenu(
+                modifier = Modifier.fillMaxWidth(),
+                isOpen = isDialogOpen,
+                onDismiss = { isDialogOpen = false },
+                trainers = trainers,
+                onSelectionChanged = onSelected
             )
         }
     }
+}
 
-    // Show Date Picker Dialog
-    if (isDatePickerOpen) {
+//endregion Trainer
+
+//region Date Time Components
+@Composable
+private fun EditLessonDatesRow(
+    modifier: Modifier = Modifier,
+    startDate: LocalDate? = null,
+    endDate: LocalDate? = null,
+    onStartDateSelected: (LocalDate) -> Unit = {},
+    onEndDateSelected: (LocalDate) -> Unit = {}
+) {
+    var isStartDatePickerOpen by remember { mutableStateOf(false) }
+    var isEndDatePickerOpen by remember { mutableStateOf(false) }
+    var mutableStartDate by remember { mutableStateOf(startDate) }
+    var mutableEndDate by remember { mutableStateOf(endDate) }
+
+    Row(
+        modifier = Modifier.fillMaxWidth(),
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.spacedBy(16.dp)
+    ) {
+        TitledMediumRegularText(
+            modifier = Modifier.weight(1f).clickable { isStartDatePickerOpen = true },
+            title = stringResource(Res.string.lesson_start_date_label),
+            hint = stringResource(Res.string.lesson_date_hint),
+            value = mutableStartDate?.classDateFormatToDisplay(),
+            rightIconRes = Res.drawable.ic_calendar_dots
+        )
+
+        TitledMediumRegularText(
+            modifier = Modifier.weight(1f).clickable { isEndDatePickerOpen = true },
+            title = stringResource(Res.string.lesson_end_date_label),
+            hint = stringResource(Res.string.lesson_date_hint),
+            value = mutableEndDate?.classDateFormatToDisplay(),
+            rightIconRes = Res.drawable.ic_calendar_dots
+        )
+    }
+
+    if (isStartDatePickerOpen) {
         DatePickerDialog(
-            isOpen = isDatePickerOpen,
-            onDateSelected = {
-                selected = it
-                onDateSelected(it)
-                isDatePickerOpen = false
+            isOpen = isStartDatePickerOpen,
+            onConfirm = {
+                mutableStartDate = it
+                onStartDateSelected(it)
+                isStartDatePickerOpen = false
             },
-            onDismiss = { isDatePickerOpen = false }
+            onDismiss = { isStartDatePickerOpen = false }
+        )
+    }
+
+    if (isEndDatePickerOpen) {
+        DatePickerDialog(
+            isOpen = isEndDatePickerOpen,
+            onConfirm = {
+                mutableEndDate = it
+                onEndDateSelected(it)
+                isEndDatePickerOpen = false
+            },
+            onDismiss = { isEndDatePickerOpen = false }
         )
     }
 }
 
 
 @Composable
-private fun FacilityClassTimeInputGroup(
+private fun LessonEditHoursRow(
     selectedStartTime: String,
-    onStartTimeSelected: (String) -> Unit,
     selectedEndTime: String,
+    onStartTimeSelected: (String) -> Unit,
     onEndTimeSelected: (String) -> Unit
 ) {
     var isStartDialogOpen by remember { mutableStateOf(false) }
     var isEndDialogOpen by remember { mutableStateOf(false) }
-    var startTimeOptions by remember { mutableStateOf(generateTimeSlots(8, 22, 30)) }
-    var endTimeOptions by remember { mutableStateOf(generateTimeSlots(8, 22, 30)) }
+    var startTimeOptions by remember { mutableStateOf(generateHourSlots(8, 22, 30)) }
+    var endTimeOptions by remember { mutableStateOf(generateHourSlots(8, 22, 30)) }
 
     // Update end time options when start time changes
     LaunchedEffect(selectedStartTime) {
-        val startIndex = generateTimeSlots(8, 22, 30).indexOf(selectedStartTime)
+        val startIndex = generateHourSlots(8, 22, 30).indexOf(selectedStartTime)
         if (startIndex != -1) {
-            endTimeOptions = generateTimeSlots(8, 22, 30).drop(startIndex + 1) // Ensure no earlier time is selectable
+            endTimeOptions = generateHourSlots(8, 22, 30).drop(startIndex + 1) // Ensure no earlier time is selectable
         }
         if (!endTimeOptions.contains(selectedEndTime)) {
             onEndTimeSelected(endTimeOptions.first()) // Adjust end time if no longer valid
@@ -507,17 +568,20 @@ private fun FacilityClassTimeInputGroup(
 
     Row(
         modifier = Modifier.fillMaxWidth(),
-        horizontalArrangement = Arrangement.spacedBy(8.dp)
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.spacedBy(16.dp)
     ) {
-        AccountSettingsSelectToSetInputComponent(
+        TitledMediumRegularText(
             modifier = Modifier.weight(1f).clickable { isStartDialogOpen = true },
-            title = "Başlangıç Saati",
+            title = stringResource(Res.string.lesson_start_hour_label),
+            hint = stringResource(Res.string.lesson_start_hour_hint),
             value = selectedStartTime,
             rightIconRes = Res.drawable.ic_chevron_down
         )
-        AccountSettingsSelectToSetInputComponent(
+        TitledMediumRegularText(
             modifier = Modifier.weight(1f).clickable { isEndDialogOpen = true },
-            title = "Bitiş Saati",
+            title = stringResource(Res.string.lesson_end_hour_label),
+            hint = stringResource(Res.string.lesson_end_hour_hint),
             value = selectedEndTime,
             rightIconRes = Res.drawable.ic_chevron_down
         )
@@ -537,7 +601,7 @@ private fun FacilityClassTimeInputGroup(
         TimePickerDialog(
             isOpen = isEndDialogOpen,
             initialTime = selectedEndTime,
-            startTime = selectedStartTime, // ✅ Pass selected start time
+            startTime = selectedStartTime,
             onDismiss = { isEndDialogOpen = false },
             onTimeSelected = onEndTimeSelected
         )
@@ -547,7 +611,7 @@ private fun FacilityClassTimeInputGroup(
 /**
  * Generates a list of time slots with the given interval (e.g., 08:00, 08:30, 09:00...).
  */
-private fun generateTimeSlots(startHour: Int, endHour: Int, intervalMinutes: Int): List<String> {
+private fun generateHourSlots(startHour: Int, endHour: Int, intervalMinutes: Int): List<String> {
     val times = mutableListOf<String>()
     for (hour in startHour until endHour) {
         times.add("${hour.toString().padStart(2, '0')}:00")
@@ -558,7 +622,7 @@ private fun generateTimeSlots(startHour: Int, endHour: Int, intervalMinutes: Int
     return times
 }
 
-@Composable
+@Composable //TODO: REMOVE
 fun FacilityClassCalendarRepeaterInputGroup(
     selectedOption: String,
     onOptionSelected: (String) -> Unit,
@@ -585,6 +649,118 @@ fun FacilityClassCalendarRepeaterInputGroup(
         }
     }
 }
+
+@OptIn(ExperimentalLayoutApi::class)
+@Composable
+fun LessonEditRecurrenceRow(
+    selectedRecurrence: CalendarRecurrence,
+    onChanged: (CalendarRecurrence) -> Unit
+) {
+    val dayOfWeekLabels = mapOf(
+        DayOfWeek.MONDAY to stringResource(Res.string.day_monday_label),
+        DayOfWeek.TUESDAY to stringResource(Res.string.day_tuesday_label),
+        DayOfWeek.WEDNESDAY to stringResource(Res.string.day_wednesday_label),
+        DayOfWeek.THURSDAY to stringResource(Res.string.day_thursday_label),
+        DayOfWeek.FRIDAY to stringResource(Res.string.day_friday_label),
+        DayOfWeek.SATURDAY to stringResource(Res.string.day_saturday_label),
+        DayOfWeek.SUNDAY to stringResource(Res.string.day_sunday_label)
+    )
+
+    var selectedDays by remember {
+        mutableStateOf(
+            if (selectedRecurrence is CalendarRecurrence.SomeDays) selectedRecurrence.days
+            else listOf()
+        )
+    }
+
+    var isRecurrencePopupOpened by remember { mutableStateOf(false) }
+    var isWeekDaysOpened by remember {
+        mutableStateOf(selectedRecurrence is CalendarRecurrence.SomeDays)
+    }
+
+    val recurrenceLabel = when (selectedRecurrence.type) {
+        CalendarRecurrenceType.NEVER -> stringResource(Res.string.recurrence_none_label)
+        CalendarRecurrenceType.DAILY -> stringResource(Res.string.recurrence_daily_label)
+        CalendarRecurrenceType.SOMEDAYS -> stringResource(Res.string.recurrence_weekly_label)
+    }
+
+    fun onDaySelected(day: DayOfWeek) {
+        val newList = selectedDays.toMutableList()
+        if (newList.contains(day)) {
+            newList.remove(day)
+        } else {
+            newList.add(day)
+        }
+
+        // Rule: Must have at least one selected
+        if (newList.isNotEmpty()) {
+            selectedDays = newList
+            onChanged(CalendarRecurrence.SomeDays(newList))
+        }
+    }
+
+    Column {
+        TitledMediumRegularText(
+            modifier = Modifier
+                .fillMaxWidth()
+                .clickable { isRecurrencePopupOpened = true },
+            title = stringResource(Res.string.lesson_repeat_label),
+            hint = stringResource(Res.string.recurrence_none_label),
+            value = recurrenceLabel,
+            rightIconRes = Res.drawable.ic_chevron_down
+        )
+
+        if (isWeekDaysOpened) {
+            Spacer(Modifier.height(16.dp))
+            FlowRow(
+                modifier = Modifier.fillMaxWidth().padding(8.dp),
+                horizontalArrangement = Arrangement.spacedBy(24.dp),
+                verticalArrangement = Arrangement.spacedBy(24.dp)
+            ) {
+                DayOfWeek.entries.forEach { day ->
+                    val isChecked = selectedDays.contains(day)
+                    Row(
+                        verticalAlignment = Alignment.CenterVertically,
+                        modifier = Modifier.clickable { onDaySelected(day) }
+                    ) {
+                        RadioButton(
+                            text = dayOfWeekLabels[day] ?: day.name,
+                            selected = isChecked,
+                            onClick = { onDaySelected(day) }
+                        )
+                    }
+                }
+            }
+        }
+
+        if (isRecurrencePopupOpened) {
+            Spacer(Modifier.height(6.dp))
+            LessonSelectRecurrenceTypePopupMenu(
+                modifier = Modifier.fillMaxWidth(),
+                isOpen = isRecurrencePopupOpened,
+                onDismiss = { isRecurrencePopupOpened = false },
+                selectedRecurrenceType = selectedRecurrence.type,
+                onSelectionChanged = { newType ->
+                    isRecurrencePopupOpened = false
+                    isWeekDaysOpened = newType == CalendarRecurrenceType.SOMEDAYS
+
+                    when (newType) {
+                        CalendarRecurrenceType.NEVER -> onChanged(CalendarRecurrence.Never)
+                        CalendarRecurrenceType.DAILY -> onChanged(CalendarRecurrence.Daily)
+                        CalendarRecurrenceType.SOMEDAYS -> {
+                            if (selectedDays.isEmpty()) {
+                                // Start with default day to avoid empty invalid state
+                                selectedDays = mutableListOf(DayOfWeek.MONDAY)
+                            }
+                            onChanged(CalendarRecurrence.SomeDays(selectedDays))
+                        }
+                    }
+                }
+            )
+        }
+    }
+}
+
 
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
@@ -617,7 +793,7 @@ private fun WeeklySelectionGroup(
     }
 }
 
-@Composable
+@Composable //TODO: REMOVE
 private fun MonthlySelectionGroup(
     selectedOption: String,
     onOptionSelected: (String) -> Unit
@@ -627,34 +803,57 @@ private fun MonthlySelectionGroup(
         Text("Lütfen dersin her ay tekrarını hangi formatta yapmak istediğinizi seçin.", color = SkyFitColor.text.secondary)
         Spacer(Modifier.height(8.dp))
 
-        classRepeatMonthlyOptions.forEach { option ->
-            Row(
-                verticalAlignment = Alignment.CenterVertically,
-                modifier = Modifier.clickable { onOptionSelected(option) }
-            ) {
-                SkyFitRadioButtonComponent(
-                    text = option,
-                    selected = selectedOption == option,
-                    onOptionSelected = { onOptionSelected(option) }
-                )
-            }
-        }
+//        classRepeatMonthlyOptions.forEach { option ->
+//            Row(
+//                verticalAlignment = Alignment.CenterVertically,
+//                modifier = Modifier.clickable { onOptionSelected(option) }
+//            ) {
+//                SkyFitRadioButtonComponent(
+//                    text = option,
+//                    selected = selectedOption == option,
+//                    onOptionSelected = { onOptionSelected(option) }
+//                )
+//            }
+//        }
     }
 }
 
 //endregion Date Time Components
 
 @Composable
-private fun MobileFacilityClassEditCapacityInputGroup(
-    selectedCapacity: String,
-    onCapacitySelected: (String) -> Unit
+private fun LessonEditCapacityRow(
+    selectedCapacity: Int,
+    onCapacitySelected: (Int) -> Unit
 ) {
-    SkyFitDropdownComponent(
-        title = "Kontenjan",
-        options = (1..50).map { it.toString() }, // Generates "1" to "50"
-        selectedOption = selectedCapacity,
-        onOptionSelected = onCapacitySelected
-    )
+    var isCapacityPopupOpened by remember { mutableStateOf(false) }
+
+    Column {
+        TitledMediumRegularText(
+            modifier = Modifier
+                .fillMaxWidth()
+                .clickable { isCapacityPopupOpened = true },
+            title = stringResource(Res.string.lesson_capacity_label),
+            value = selectedCapacity.toString(),
+            rightIconRes = Res.drawable.ic_chevron_down
+        )
+
+        if (isCapacityPopupOpened) {
+            LessonSelectCapacityPopupMenu(
+                modifier = Modifier.fillMaxWidth(),
+                isOpen = isCapacityPopupOpened,
+                onDismiss = { isCapacityPopupOpened = false },
+                selectedCapacity = selectedCapacity,
+                onSelectionChanged = onCapacitySelected
+            )
+        }
+    }
+
+//    SkyFitDropdownComponent(
+//        title = "Kontenjan",
+//        options = (1..50).map { it.toString() }, // Generates "1" to "50"
+//        selectedOption = selectedCapacity,
+//        onOptionSelected = onCapacitySelected
+//    )
 }
 
 
@@ -980,7 +1179,7 @@ fun TimePickerDialog(
         val startMinute = startTime?.split(":")?.get(1)?.toIntOrNull() ?: 0
 
         // ✅ Generate time slots **AFTER** the selected start time
-        val allSlots = generateTimeSlots(startHour, 22, selectedInterval)
+        val allSlots = generateHourSlots(startHour, 22, selectedInterval)
             .filter { it > startTime.orEmpty() } // ✅ Filter out times before the start time
 
         filteredTimeOptions = allSlots
