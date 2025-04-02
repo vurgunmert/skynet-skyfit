@@ -1,30 +1,23 @@
 package com.vurgun.skyfit.designsystem.components.popup
 
+
 import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.width
 import androidx.compose.material.Divider
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.unit.dp
 import com.vurgun.skyfit.core.ui.components.text.BodyMediumRegularText
 import com.vurgun.skyfit.core.ui.resources.SkyFitColor
-import com.vurgun.skyfit.designsystem.components.image.CircleNetworkImage
-
-data class SelectableTrainerMenuItemModel(
-    val id: Int,
-    val name: String,
-    val imageUrl: String? = null,
-    val selected: Boolean = false
-)
 
 @Composable
-fun LessonSelectTrainerPopupMenu(
+fun LessonSelectCancelDurationPopupMenu(
     modifier: Modifier = Modifier,
     isOpen: Boolean,
     onDismiss: () -> Unit,
-    trainers: List<SelectableTrainerMenuItemModel>,
-    onSelectionChanged: (SelectableTrainerMenuItemModel) -> Unit
+    selectedDuration: Int = 24,
+    hours: List<Int> = listOf(8, 12, 16, 24, 36, 48),
+    onSelectionChanged: (Int) -> Unit
 ) {
     BoxWithConstraints(modifier.fillMaxWidth()) {
         BasicPopupMenu(
@@ -32,19 +25,18 @@ fun LessonSelectTrainerPopupMenu(
             isOpen = isOpen,
             onDismiss = onDismiss
         ) {
-            trainers.forEachIndexed { index, item ->
+            hours.forEachIndexed { index, value ->
                 SelectablePopupMenuItem(
-                    selected = item.selected,
+                    selected = value == selectedDuration,
                     onSelect = {
-                        onSelectionChanged(item)
+                        onSelectionChanged(value)
                         onDismiss()
                     },
                     content = {
-                        CircleNetworkImage(item.imageUrl, size = 24.dp)
-                        BodyMediumRegularText(item.name, modifier = Modifier.weight(1f))
+                        BodyMediumRegularText("$value saat kala", modifier = Modifier.weight(1f))
                     }
                 )
-                if (index != trainers.lastIndex) {
+                if (index != hours.lastIndex) {
                     Divider(Modifier.fillMaxWidth(), color = SkyFitColor.border.default)
                 }
             }

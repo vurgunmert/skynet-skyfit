@@ -36,6 +36,7 @@ data class FacilityClassViewData(
     val isPaymentMandatory: Boolean = false,
     val price: String = "0.00",
     val capacity: Int = 5,
+    val cancelDurationHour: Int = 24,
     val userGroup: String = "Herkes",
     val trainerNote: String = "",
     val isSaveButtonEnabled: Boolean = false,
@@ -182,6 +183,11 @@ class MobileFacilityClassEditScreenViewModel : ViewModel() {
 
     fun updateCapacity(capacity: Int) {
         _facilityClassState.update { it.copy(capacity = capacity) }
+        checkIfModified()
+    }
+
+    fun updateCancelDurationHour(value: Int) {
+        _facilityClassState.update { it.copy(cancelDurationHour = value) }
         checkIfModified()
     }
 

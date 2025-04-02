@@ -36,7 +36,7 @@ fun LessonSelectRecurrenceTypePopupMenu(
             isOpen = isOpen,
             onDismiss = onDismiss
         ) {
-            recurrenceOptions.forEach { (type, label) ->
+            recurrenceOptions.forEachIndexed { index, (type, label) ->
                 SelectablePopupMenuItem(
                     selected = selectedRecurrenceType == type,
                     onSelect = {
@@ -47,7 +47,9 @@ fun LessonSelectRecurrenceTypePopupMenu(
                         BodyMediumRegularText(label, modifier = Modifier.weight(1f))
                     }
                 )
-                Divider(Modifier.fillMaxWidth(), color = SkyFitColor.border.default)
+                if (index != recurrenceOptions.lastIndex) {
+                    Divider(Modifier.fillMaxWidth(), color = SkyFitColor.border.default)
+                }
             }
         }
     }

@@ -69,6 +69,7 @@ import com.vurgun.skyfit.core.ui.resources.SkyFitTypography
 import com.vurgun.skyfit.designsystem.components.button.RadioButton
 import com.vurgun.skyfit.designsystem.components.icon.ActionIcon
 import com.vurgun.skyfit.designsystem.components.image.CircleNetworkImage
+import com.vurgun.skyfit.designsystem.components.popup.LessonSelectCancelDurationPopupMenu
 import com.vurgun.skyfit.designsystem.components.popup.LessonSelectCapacityPopupMenu
 import com.vurgun.skyfit.designsystem.components.popup.LessonSelectRecurrenceTypePopupMenu
 import com.vurgun.skyfit.designsystem.components.popup.LessonSelectTrainerPopupMenu
@@ -112,6 +113,7 @@ import skyfit.composeapp.generated.resources.lesson_trainer_label
 import skyfit.composeapp.generated.resources.logo_skyfit
 import skyfit.composeapp.generated.resources.open_action
 import skyfit.composeapp.generated.resources.recurrence_daily_label
+import skyfit.composeapp.generated.resources.recurrence_last_cancel_duration_label
 import skyfit.composeapp.generated.resources.recurrence_none_label
 import skyfit.composeapp.generated.resources.recurrence_weekly_label
 import skyfit.composeapp.generated.resources.trainer_note_hint_add
@@ -213,7 +215,12 @@ fun MobileFacilityEditLessonScreen(navigator: Navigator) {
 
             LessonEditCapacityRow(
                 selectedCapacity = facilityClass.capacity,
-                onCapacitySelected = viewModel::updateCapacity
+                onSelectionChanged = viewModel::updateCapacity
+            )
+
+            LessonEditCancelDurationRow(
+                selectedHour = facilityClass.cancelDurationHour,
+                onSelectionChanged = viewModel::updateCancelDurationHour
             )
 
             MobileFacilityClassEditSelectUserGroupComponent(
@@ -823,7 +830,7 @@ private fun MonthlySelectionGroup(
 @Composable
 private fun LessonEditCapacityRow(
     selectedCapacity: Int,
-    onCapacitySelected: (Int) -> Unit
+    onSelectionChanged: (Int) -> Unit
 ) {
     var isCapacityPopupOpened by remember { mutableStateOf(false) }
 
@@ -843,17 +850,40 @@ private fun LessonEditCapacityRow(
                 isOpen = isCapacityPopupOpened,
                 onDismiss = { isCapacityPopupOpened = false },
                 selectedCapacity = selectedCapacity,
-                onSelectionChanged = onCapacitySelected
+                onSelectionChanged = onSelectionChanged
             )
         }
     }
+}
 
-//    SkyFitDropdownComponent(
-//        title = "Kontenjan",
-//        options = (1..50).map { it.toString() }, // Generates "1" to "50"
-//        selectedOption = selectedCapacity,
-//        onOptionSelected = onCapacitySelected
-//    )
+
+@Composable
+private fun LessonEditCancelDurationRow(
+    selectedHour: Int,
+    onSelectionChanged: (Int) -> Unit
+) {
+    var isHourPopupOpened by remember { mutableStateOf(false) }
+
+    Column {
+        TitledMediumRegularText(
+            modifier = Modifier
+                .fillMaxWidth()
+                .clickable { isHourPopupOpened = true },
+            title = stringResource(Res.string.recurrence_last_cancel_duration_label),
+            value = "$selectedHour saat kala",
+            rightIconRes = Res.drawable.ic_chevron_down
+        )
+
+        if (isHourPopupOpened) {
+            LessonSelectCancelDurationPopupMenu(
+                modifier = Modifier.fillMaxWidth(),
+                isOpen = isHourPopupOpened,
+                onDismiss = { isHourPopupOpened = false },
+                selectedDuration = selectedHour,
+                onSelectionChanged = onSelectionChanged
+            )
+        }
+    }
 }
 
 

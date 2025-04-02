@@ -139,6 +139,7 @@
     <string name="recurrence_none_label">Tekrar yok</string>
     <string name="recurrence_daily_label">Her gün</string>
     <string name="recurrence_weekly_label">Haftada belirli günler</string>
+    <string name="recurrence_last_cancel_duration_label">Son İptal Süresi</string>
 
     <string name="day_monday_label">Pazartesi</string>
     <string name="day_tuesday_label">Salı</string>
