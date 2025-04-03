@@ -50,6 +50,10 @@
     <string name="disable_action">Devre Dışı Bırak</string>
     <string name="logout_action">Oturumu Kapat</string>
     <string name="confirm_action">Onayla</string>
+    <string name="yes_action">Evet</string>
+    <string name="no_action">Hayır</string>
+    <string name="apply_action">Uygula</string>
+    <string name="save_action">Kaydet</string>
 
     <!-- 🔷 Gender Options -->
     <string name="gender_female">Kadın</string>
@@ -117,8 +121,6 @@
     <string name="lesson_active_label">Aktif</string>
     <string name="lesson_deactivated_label">Kullanım dışı</string>
 
-
-
     <string name="calendar_select_date">Tarih Belirle</string>
     <string name="calendar_select_date_range">Tarih Aralığı Belirle</string>
 
@@ -135,6 +137,9 @@
     <string name="lesson_end_hour_hint">08:30</string>
     <string name="lesson_repeat_label">Ders Tekrarı</string>
     <string name="lesson_capacity_label">Kontenjan</string>
+    <string name="lesson_mandatory_appointment_booking_label">Zorunlu randevu alımı</string>
+    <string name="lesson_cost_label">Ücret</string>
+    <string name="lesson_create_private_action">Özel Ders Oluştur</string>
 
     <string name="recurrence_none_label">Tekrar yok</string>
     <string name="recurrence_daily_label">Her gün</string>

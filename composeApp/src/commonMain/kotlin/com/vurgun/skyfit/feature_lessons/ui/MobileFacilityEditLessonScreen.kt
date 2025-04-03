@@ -14,6 +14,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.heightIn
+import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
@@ -42,26 +43,24 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
-import coil3.compose.AsyncImage
 import com.vurgun.skyfit.core.domain.models.CalendarRecurrence
 import com.vurgun.skyfit.core.domain.models.CalendarRecurrenceType
 import com.vurgun.skyfit.core.ui.components.ButtonSize
-import com.vurgun.skyfit.core.ui.components.ButtonState
 import com.vurgun.skyfit.core.ui.components.ButtonVariant
 import com.vurgun.skyfit.core.ui.components.DatePickerDialog
 import com.vurgun.skyfit.core.ui.components.SkyFitButtonComponent
 import com.vurgun.skyfit.core.ui.components.SkyFitCheckBoxComponent
-import com.vurgun.skyfit.core.ui.components.SkyFitDropdownComponent
 import com.vurgun.skyfit.core.ui.components.SkyFitMobileScaffold
-import com.vurgun.skyfit.core.ui.components.SkyFitRadioButtonComponent
 import com.vurgun.skyfit.core.ui.components.SkyFitScreenHeader
+import com.vurgun.skyfit.core.ui.components.button.PrimaryLargeButton
 import com.vurgun.skyfit.core.ui.components.text.BodyMediumRegularText
+import com.vurgun.skyfit.core.ui.components.text.BodyMediumSemiboldText
 import com.vurgun.skyfit.core.ui.resources.SkyFitColor
 import com.vurgun.skyfit.core.ui.resources.SkyFitIcon
 import com.vurgun.skyfit.core.ui.resources.SkyFitStyleGuide
@@ -85,6 +84,7 @@ import moe.tlaster.precompose.navigation.Navigator
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
 import skyfit.composeapp.generated.resources.Res
+import skyfit.composeapp.generated.resources.apply_action
 import skyfit.composeapp.generated.resources.day_friday_label
 import skyfit.composeapp.generated.resources.day_monday_label
 import skyfit.composeapp.generated.resources.day_saturday_label
@@ -98,6 +98,8 @@ import skyfit.composeapp.generated.resources.ic_chevron_down
 import skyfit.composeapp.generated.resources.ic_exercises
 import skyfit.composeapp.generated.resources.icon_label
 import skyfit.composeapp.generated.resources.lesson_capacity_label
+import skyfit.composeapp.generated.resources.lesson_cost_label
+import skyfit.composeapp.generated.resources.lesson_create_private_action
 import skyfit.composeapp.generated.resources.lesson_date_hint
 import skyfit.composeapp.generated.resources.lesson_edit_action
 import skyfit.composeapp.generated.resources.lesson_end_date_label
@@ -105,19 +107,23 @@ import skyfit.composeapp.generated.resources.lesson_end_hour_hint
 import skyfit.composeapp.generated.resources.lesson_end_hour_label
 import skyfit.composeapp.generated.resources.lesson_exercise_title
 import skyfit.composeapp.generated.resources.lesson_exercise_title_hint
+import skyfit.composeapp.generated.resources.lesson_mandatory_appointment_booking_label
 import skyfit.composeapp.generated.resources.lesson_repeat_label
 import skyfit.composeapp.generated.resources.lesson_start_date_label
 import skyfit.composeapp.generated.resources.lesson_start_hour_hint
 import skyfit.composeapp.generated.resources.lesson_start_hour_label
 import skyfit.composeapp.generated.resources.lesson_trainer_label
 import skyfit.composeapp.generated.resources.logo_skyfit
+import skyfit.composeapp.generated.resources.no_action
 import skyfit.composeapp.generated.resources.open_action
 import skyfit.composeapp.generated.resources.recurrence_daily_label
 import skyfit.composeapp.generated.resources.recurrence_last_cancel_duration_label
 import skyfit.composeapp.generated.resources.recurrence_none_label
 import skyfit.composeapp.generated.resources.recurrence_weekly_label
+import skyfit.composeapp.generated.resources.save_action
 import skyfit.composeapp.generated.resources.trainer_note_hint_add
 import skyfit.composeapp.generated.resources.trainer_note_label
+import skyfit.composeapp.generated.resources.yes_action
 
 @Composable
 fun MobileFacilityEditLessonScreen(navigator: Navigator) {
@@ -129,6 +135,8 @@ fun MobileFacilityEditLessonScreen(navigator: Navigator) {
         viewModel.loadClass("facilityId", "null")
     }
 
+    val scrollState = rememberScrollState()
+
     SkyFitMobileScaffold(
         topBar = {
             SkyFitScreenHeader(stringResource(Res.string.lesson_edit_action), onClickBack = {
@@ -138,24 +146,15 @@ fun MobileFacilityEditLessonScreen(navigator: Navigator) {
                     navigator.popBackStack()
                 }
             })
-        },
-        bottomBar = {
-            MobileFacilityClassEditScreenActionComponent(
-                enabled = facilityClass.isSaveButtonEnabled,
-                onClick = {
-                    navigator.jumpAndTakeover(
-                        NavigationRoute.FacilityLessons,
-                        NavigationRoute.FacilityLessonCreated
-                    )
-                })
         }
     ) {
 
         Column(
             modifier = Modifier
-                .fillMaxSize()
                 .padding(SkyFitStyleGuide.Padding.large)
-                .verticalScroll(rememberScrollState()),
+                .fillMaxSize()
+                .imePadding()
+                .verticalScroll(scrollState),
             verticalArrangement = Arrangement.spacedBy(24.dp)
         ) {
             // region: Head Info (Icon + Title)
@@ -170,7 +169,7 @@ fun MobileFacilityEditLessonScreen(navigator: Navigator) {
             // region: Trainer Selection + Trainer Note
             EditLessonTrainerRow(
                 trainers = facilityClass.trainerItems,
-                onSelected = viewModel::updateSelectedTrainer
+                onSelectionChanged = viewModel::updateSelectedTrainer
             )
 
             LessonEditNoteRow(
@@ -195,66 +194,66 @@ fun MobileFacilityEditLessonScreen(navigator: Navigator) {
             )
             // endregion
 
-            // region: Repeat Options
-//            FacilityClassCalendarRepeaterInputGroup(
-//                selectedOption = facilityClass.repeatOption,
-//                onOptionSelected = viewModel::updateRepeatOption,
-//                selectedDaysOfWeek = facilityClass.selectedDaysOfWeek,
-//                onDaySelected = viewModel::toggleDaySelection,
-//                selectedMonthlyOption = facilityClass.monthlyOption,
-//                onMonthlyOptionSelected = viewModel::updateMonthlyOption
-//            )
+            // region: Recurrence
             LessonEditRecurrenceRow(
                 selectedRecurrence = facilityClass.recurrence,
-                onChanged = viewModel::updateRecurrence
+                onSelectionChanged = viewModel::updateRecurrence
             )
             // endregion
 
-            // region: Capacity & User Group
-
-
+            // region: Capacity
             LessonEditCapacityRow(
                 selectedCapacity = facilityClass.capacity,
                 onSelectionChanged = viewModel::updateCapacity
             )
+            // endregion
 
+            // region: Cancel Duration
             LessonEditCancelDurationRow(
                 selectedHour = facilityClass.cancelDurationHour,
                 onSelectionChanged = viewModel::updateCancelDurationHour
             )
-
-            MobileFacilityClassEditSelectUserGroupComponent(
-                selectedUserGroup = facilityClass.userGroup,
-                onUserGroupSelected = viewModel::updateUserGroup
-            )
             // endregion
 
-            // region: Appointment & Payment
-            FacilityClassMandatoryAppointmentInputGroup(
+            // region: Obligation
+            LessonEditAppointmentObligationRow(
                 isMandatory = facilityClass.isAppointmentMandatory,
-                onOptionSelected = viewModel::updateAppointmentMandatory
-            )
-
-            MobileFacilityClassEditPaymentInputGroup(
-                isPaymentMandatory = facilityClass.isPaymentMandatory,
-                onPaymentMandatoryChanged = viewModel::updatePaymentMandatory,
-                price = facilityClass.price,
-                onPriceChanged = viewModel::updatePrice
+                onSelectionChanged = viewModel::updateAppointmentMandatory
             )
             // endregion
 
-            Spacer(Modifier.height(112.dp))
+            // region: Cost
+            LessonEditCostRow(
+                cost = facilityClass.cost,
+                onChanged = viewModel::updateCost
+            )
+            // endregion
+
+            LessonEditActionRow(
+                isNewLesson = true, //TODO: new-edit?
+                isEnabled = facilityClass.isSaveButtonEnabled,
+                isLoading = false, //TODO: loading
+                onClick = {
+                    navigator.jumpAndTakeover(
+                        NavigationRoute.FacilityLessons,
+                        NavigationRoute.FacilityLessonCreated
+                    )
+                })
+
+            Spacer(Modifier.height(24.dp))
         }
 
-        MobileFacilityClassEditScreenCancelDialog(
-            showDialog = facilityClass.showCancelDialog,
-            onClickDismiss = { viewModel.updateShowCancelDialog(false) },
-            onClickExit = { navigator.popBackStack() }
-        )
+        if (facilityClass.showCancelDialog) {
+            LessonEditCancelDialog(
+                showDialog = facilityClass.showCancelDialog,
+                onClickDismiss = { viewModel.updateShowCancelDialog(false) },
+                onClickExit = { navigator.popBackStack() }
+            )
+        }
     }
 }
 
-
+//region Subject
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
 private fun EditLessonSubjectItem(
@@ -352,6 +351,7 @@ private fun EditLessonSubjectItem(
         }
     }
 }
+//endregion Subject
 
 //region Trainer
 @Composable
@@ -367,78 +367,10 @@ private fun LessonEditNoteRow(
     )
 }
 
-@Composable //TODO: Remove legacy
-fun FacilityClassSelectTrainerInputComponent(
-    trainers: List<FacilityTrainerViewData>,
-    initialTrainer: FacilityTrainerViewData?,
-    onTrainerSelected: (FacilityTrainerViewData) -> Unit
-) {
-    var isDialogOpen by remember { mutableStateOf(false) }
-    val selectedTrainer = initialTrainer ?: trainers.first()
-
-    Column(modifier = Modifier.fillMaxWidth()) {
-        // Title
-        Text(
-            text = "Eğitmen",
-            style = SkyFitTypography.bodyMediumSemibold,
-            modifier = Modifier.padding(start = 8.dp, bottom = 4.dp)
-        )
-
-        // Dropdown Selection Box
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .clip(RoundedCornerShape(50))
-                .background(SkyFitColor.background.surfaceSecondary)
-                .clickable { isDialogOpen = true }
-                .padding(horizontal = 16.dp, vertical = 12.dp),
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.SpaceBetween
-        ) {
-            Row(verticalAlignment = Alignment.CenterVertically) {
-                AsyncImage(
-                    model = selectedTrainer.imageUrl,
-                    contentDescription = null,
-                    contentScale = ContentScale.Crop,
-                    modifier = Modifier
-                        .size(24.dp)
-                        .clip(CircleShape)
-                )
-
-                Spacer(modifier = Modifier.width(8.dp))
-
-                Text(
-                    text = selectedTrainer.name,
-                    style = SkyFitTypography.bodyMediumRegular,
-                    modifier = Modifier.weight(1f)
-                )
-
-                Icon(
-                    painter = painterResource(Res.drawable.ic_chevron_down),
-                    contentDescription = "Dropdown Arrow",
-                    tint = SkyFitColor.icon.default,
-                    modifier = Modifier.size(16.dp)
-                )
-            }
-        }
-
-        if (isDialogOpen) {
-            TrainerPickerDialog(
-                trainers = trainers,
-                initialTrainer = selectedTrainer,
-                onDismiss = { isDialogOpen = false },
-                onTrainerSelected = { trainer ->
-                    onTrainerSelected(trainer)
-                }
-            )
-        }
-    }
-}
-
 @Composable
 private fun EditLessonTrainerRow(
     trainers: List<SelectableTrainerMenuItemModel>,
-    onSelected: (SelectableTrainerMenuItemModel) -> Unit
+    onSelectionChanged: (SelectableTrainerMenuItemModel) -> Unit
 ) {
     var isDialogOpen by remember { mutableStateOf(false) }
     val selectedTrainer = trainers.firstOrNull { it.selected }
@@ -480,7 +412,7 @@ private fun EditLessonTrainerRow(
                 isOpen = isDialogOpen,
                 onDismiss = { isDialogOpen = false },
                 trainers = trainers,
-                onSelectionChanged = onSelected
+                onSelectionChanged = onSelectionChanged
             )
         }
     }
@@ -629,39 +561,11 @@ private fun generateHourSlots(startHour: Int, endHour: Int, intervalMinutes: Int
     return times
 }
 
-@Composable //TODO: REMOVE
-fun FacilityClassCalendarRepeaterInputGroup(
-    selectedOption: String,
-    onOptionSelected: (String) -> Unit,
-    selectedDaysOfWeek: List<String>,
-    onDaySelected: (String) -> Unit,
-    selectedMonthlyOption: String,
-    onMonthlyOptionSelected: (String) -> Unit
-) {
-    Column {
-        SkyFitDropdownComponent(
-            title = "Ders Tekrarı",
-            options = classRepeatPeriodOptions,
-            selectedOption = selectedOption,
-            onOptionSelected = { onOptionSelected(it) }
-        )
-
-        Spacer(Modifier.height(8.dp))
-
-        when (selectedOption) {
-            "Haftada belirli günler" -> WeeklySelectionGroup(
-                selectedDays = selectedDaysOfWeek,
-                onDaySelected = onDaySelected
-            )
-        }
-    }
-}
-
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
 fun LessonEditRecurrenceRow(
     selectedRecurrence: CalendarRecurrence,
-    onChanged: (CalendarRecurrence) -> Unit
+    onSelectionChanged: (CalendarRecurrence) -> Unit
 ) {
     val dayOfWeekLabels = mapOf(
         DayOfWeek.MONDAY to stringResource(Res.string.day_monday_label),
@@ -702,7 +606,7 @@ fun LessonEditRecurrenceRow(
         // Rule: Must have at least one selected
         if (newList.isNotEmpty()) {
             selectedDays = newList
-            onChanged(CalendarRecurrence.SomeDays(newList))
+            onSelectionChanged(CalendarRecurrence.SomeDays(newList))
         }
     }
 
@@ -752,14 +656,14 @@ fun LessonEditRecurrenceRow(
                     isWeekDaysOpened = newType == CalendarRecurrenceType.SOMEDAYS
 
                     when (newType) {
-                        CalendarRecurrenceType.NEVER -> onChanged(CalendarRecurrence.Never)
-                        CalendarRecurrenceType.DAILY -> onChanged(CalendarRecurrence.Daily)
+                        CalendarRecurrenceType.NEVER -> onSelectionChanged(CalendarRecurrence.Never)
+                        CalendarRecurrenceType.DAILY -> onSelectionChanged(CalendarRecurrence.Daily)
                         CalendarRecurrenceType.SOMEDAYS -> {
                             if (selectedDays.isEmpty()) {
                                 // Start with default day to avoid empty invalid state
                                 selectedDays = mutableListOf(DayOfWeek.MONDAY)
                             }
-                            onChanged(CalendarRecurrence.SomeDays(selectedDays))
+                            onSelectionChanged(CalendarRecurrence.SomeDays(selectedDays))
                         }
                     }
                 }
@@ -770,7 +674,7 @@ fun LessonEditRecurrenceRow(
 
 
 @OptIn(ExperimentalLayoutApi::class)
-@Composable
+@Composable //TODO remove
 private fun WeeklySelectionGroup(
     selectedDays: List<String>,
     onDaySelected: (String) -> Unit
@@ -800,33 +704,9 @@ private fun WeeklySelectionGroup(
     }
 }
 
-@Composable //TODO: REMOVE
-private fun MonthlySelectionGroup(
-    selectedOption: String,
-    onOptionSelected: (String) -> Unit
-) {
-    Column {
-        Text("Format Seçimi", style = SkyFitTypography.bodyMediumSemibold)
-        Text("Lütfen dersin her ay tekrarını hangi formatta yapmak istediğinizi seçin.", color = SkyFitColor.text.secondary)
-        Spacer(Modifier.height(8.dp))
-
-//        classRepeatMonthlyOptions.forEach { option ->
-//            Row(
-//                verticalAlignment = Alignment.CenterVertically,
-//                modifier = Modifier.clickable { onOptionSelected(option) }
-//            ) {
-//                SkyFitRadioButtonComponent(
-//                    text = option,
-//                    selected = selectedOption == option,
-//                    onOptionSelected = { onOptionSelected(option) }
-//                )
-//            }
-//        }
-    }
-}
-
 //endregion Date Time Components
 
+//region Capacity
 @Composable
 private fun LessonEditCapacityRow(
     selectedCapacity: Int,
@@ -855,8 +735,9 @@ private fun LessonEditCapacityRow(
         }
     }
 }
+//endregion Capacity
 
-
+//region Cancel Duration
 @Composable
 private fun LessonEditCancelDurationRow(
     selectedHour: Int,
@@ -885,47 +766,53 @@ private fun LessonEditCancelDurationRow(
         }
     }
 }
+//endregion Cancel Duration
 
-
+//region Appointment Obligation
 @Composable
-private fun FacilityClassMandatoryAppointmentInputGroup(
+private fun LessonEditAppointmentObligationRow(
     isMandatory: Boolean = false,
-    onOptionSelected: (Boolean) -> Unit = {}
+    onSelectionChanged: (Boolean) -> Unit = {}
 ) {
     Column {
-        Text(
-            "Zorunlu Randevu Alimi",
-            style = SkyFitTypography.bodyMediumSemibold,
+        BodyMediumSemiboldText(
+            text = stringResource(Res.string.lesson_mandatory_appointment_booking_label),
             modifier = Modifier.padding(start = 8.dp)
         )
 
-        Row {
-            SkyFitRadioButtonComponent(
-                text = "Evet",
+        Row(
+            modifier = Modifier.fillMaxWidth().padding(8.dp),
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.spacedBy(24.dp)
+        ) {
+            RadioButton(text = stringResource(Res.string.yes_action),
                 selected = isMandatory,
-                onOptionSelected = { onOptionSelected(true) }
-            )
-            SkyFitRadioButtonComponent(
-                text = "Hayır",
+                onClick = { onSelectionChanged(true) })
+
+            RadioButton(text = stringResource(Res.string.no_action),
                 selected = !isMandatory,
-                onOptionSelected = { onOptionSelected(false) }
-            )
+                onClick = { onSelectionChanged(false) })
         }
     }
 }
+//endregion Appointment Obligation
 
+//region Cost
 @Composable
-private fun MobileFacilityClassEditPaymentInputGroup(
-    isPaymentMandatory: Boolean,
-    onPaymentMandatoryChanged: (Boolean) -> Unit,
-    price: String,
-    onPriceChanged: (String) -> Unit
+private fun LessonEditCostRow(
+    cost: Double?,
+    onChanged: (Double) -> Unit
 ) {
+    var isPaymentMandatory by remember { mutableStateOf(false) }
+    var inputValue by remember { mutableStateOf(cost?.toString() ?: "") }
+
     Column(
-        modifier = Modifier.fillMaxWidth().padding(start = 8.dp)
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(start = 8.dp)
     ) {
         Text(
-            text = "Ücret",
+            text = stringResource(Res.string.lesson_cost_label),
             style = SkyFitTypography.bodyMediumSemibold
         )
         Spacer(Modifier.height(8.dp))
@@ -935,92 +822,94 @@ private fun MobileFacilityClassEditPaymentInputGroup(
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.spacedBy(16.dp)
         ) {
-            // Checkbox to enable/disable payment input
             SkyFitCheckBoxComponent(
-                label = "Uygula",
+                label = stringResource(Res.string.apply_action),
                 checked = isPaymentMandatory,
-                onCheckedChange = { onPaymentMandatoryChanged(it) }
+                onCheckedChange = {
+                    isPaymentMandatory = it
+                    if (!it) inputValue = ""
+                }
             )
 
-            // Price input field
             BasicTextField(
-                value = price,
-                onValueChange = { onPriceChanged(it) },
+                value = inputValue,
+                onValueChange = { newValue ->
+                    val cleaned = newValue.replace(',', '.').filter { it.isDigit() || it == '.' }
+                    inputValue = cleaned
+                    cleaned.toDoubleOrNull()?.let { onChanged(it) }
+                },
                 enabled = isPaymentMandatory,
-                textStyle = SkyFitTypography.bodyMediumRegular
-                    .copy(color = if (isPaymentMandatory) SkyFitColor.text.default else SkyFitColor.text.secondary),
-                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Decimal, imeAction = ImeAction.Done),
+                textStyle = SkyFitTypography.bodyMediumRegular.copy(
+                    color = if (isPaymentMandatory) SkyFitColor.text.default else SkyFitColor.text.secondary,
+                    textAlign = TextAlign.Left
+                ),
+                keyboardOptions = KeyboardOptions(
+                    keyboardType = KeyboardType.Decimal,
+                    imeAction = ImeAction.Done
+                ),
                 modifier = Modifier
                     .weight(1f)
                     .clip(RoundedCornerShape(50))
                     .background(SkyFitColor.background.surfaceSecondary)
                     .padding(horizontal = 16.dp, vertical = 12.dp),
+                cursorBrush = SolidColor(SkyFitColor.icon.default),
                 decorationBox = { innerTextField ->
-                    Row(
-                        Modifier.fillMaxWidth(),
-                        horizontalArrangement = Arrangement.SpaceBetween,
-                        verticalAlignment = Alignment.CenterVertically
+                    Box(
+                        modifier = Modifier.fillMaxWidth(),
+                        contentAlignment = Alignment.CenterStart
                     ) {
-                        innerTextField()
-                        Text("₺", color = SkyFitColor.text.secondary)
+                        if (inputValue.isEmpty()) {
+                            Text(
+                                "0.00",
+                                color = SkyFitColor.text.secondary,
+                                style = SkyFitTypography.bodyMediumRegular
+                            )
+                        }
+                        Row(
+                            modifier = Modifier.fillMaxWidth(),
+                            horizontalArrangement = Arrangement.SpaceBetween,
+                            verticalAlignment = Alignment.CenterVertically
+                        ) {
+                            innerTextField()
+                            Text("₺", color = SkyFitColor.text.secondary)
+                        }
                     }
                 }
             )
         }
     }
 }
+//endregion Cost
 
+//region Actions
 @Composable
-private fun MobileFacilityClassEditSelectUserGroupComponent(
-    selectedUserGroup: String,
-    onUserGroupSelected: (String) -> Unit
+private fun LessonEditActionRow(
+    isNewLesson: Boolean,
+    isEnabled: Boolean,
+    isLoading: Boolean,
+    onClick: () -> Unit
 ) {
-    val userGroups = listOf("Herkes", "Üyeler", "Takipçiler")
-
-    Column {
-        Text(
-            "Kimler Katılabilir?",
-            style = SkyFitTypography.bodyMediumSemibold,
-            modifier = Modifier.padding(start = 8.dp)
+    if (isNewLesson) {
+        PrimaryLargeButton(
+            modifier = Modifier.fillMaxWidth().padding(16.dp),
+            text = stringResource(Res.string.lesson_create_private_action),
+            onClick = { if (isEnabled) onClick.invoke() },
+            isLoading = isLoading,
+            isEnabled = isEnabled && !isLoading
         )
-
-        Row {
-            userGroups.forEach { group ->
-                Row(
-                    modifier = Modifier
-                        .clickable { onUserGroupSelected(group) }
-                        .padding(end = 16.dp), // Spacing between options
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-                    SkyFitRadioButtonComponent(
-                        text = group,
-                        selected = selectedUserGroup == group,
-                        onOptionSelected = { onUserGroupSelected(group) }
-                    )
-                }
-            }
-        }
-    }
-}
-
-@Composable
-private fun MobileFacilityClassEditScreenActionComponent(enabled: Boolean, onClick: () -> Unit) {
-    Box(Modifier.padding(32.dp).background(SkyFitColor.background.default)) {
-        SkyFitButtonComponent(
+    } else {
+        PrimaryLargeButton(
             modifier = Modifier.fillMaxWidth(),
-            text = "Özel Ders Oluştur",
-            onClick = onClick,
-            variant = if (enabled) ButtonVariant.Primary else ButtonVariant.Secondary,
-            size = ButtonSize.Large,
-            state = ButtonState.Rest,
-            leftIconPainter = painterResource(Res.drawable.ic_check),
-            isEnabled = enabled
+            text = stringResource(Res.string.save_action),
+            onClick = { if (isEnabled) onClick.invoke() },
+            isLoading = isLoading,
+            isEnabled = isEnabled && !isLoading
         )
     }
 }
 
 @Composable
-private fun MobileFacilityClassEditScreenCancelDialog(
+private fun LessonEditCancelDialog(
     showDialog: Boolean,
     onClickExit: () -> Unit,
     onClickDismiss: () -> Unit
@@ -1090,112 +979,13 @@ private fun MobileFacilityClassEditScreenCancelDialog(
         }
     }
 }
-
-
-@Composable
-fun TrainerPickerDialog(
-    trainers: List<FacilityTrainerViewData>,
-    initialTrainer: FacilityTrainerViewData? = null,
-    onDismiss: () -> Unit,
-    onTrainerSelected: (FacilityTrainerViewData) -> Unit
-) {
-    var selectedTrainer by remember { mutableStateOf(initialTrainer) }
-
-    Dialog(onDismissRequest = onDismiss) {
-        Box(
-            modifier = Modifier
-                .padding(16.dp)
-                .background(SkyFitColor.background.surfaceSecondary, RoundedCornerShape(12.dp))
-        ) {
-            Column(
-                modifier = Modifier.padding(16.dp),
-                horizontalAlignment = Alignment.CenterHorizontally
-            ) {
-                Text(
-                    text = "Eğitmen Seçin",
-                    style = SkyFitTypography.bodyMediumRegular
-                )
-                Spacer(Modifier.height(12.dp))
-
-                Column(
-                    modifier = Modifier.fillMaxWidth(),
-                    verticalArrangement = Arrangement.spacedBy(8.dp)
-                ) {
-                    trainers.forEach { trainer ->
-                        val isSelected = selectedTrainer == trainer
-                        Row(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .clickable { selectedTrainer = trainer }
-                                .padding(12.dp),
-                            verticalAlignment = Alignment.CenterVertically,
-                            horizontalArrangement = Arrangement.SpaceBetween
-                        ) {
-                            Row(verticalAlignment = Alignment.CenterVertically) {
-                                AsyncImage(
-                                    model = trainer.imageUrl,
-                                    contentDescription = null,
-                                    contentScale = ContentScale.Crop,
-                                    modifier = Modifier
-                                        .size(32.dp)
-                                        .clip(CircleShape)
-                                )
-                                Spacer(Modifier.width(12.dp))
-                                Text(
-                                    text = trainer.name,
-                                    style = SkyFitTypography.bodyMediumSemibold
-                                )
-                            }
-
-                            if (isSelected) {
-                                Icon(
-                                    painter = painterResource(Res.drawable.ic_check),
-                                    contentDescription = "Selected",
-                                    tint = SkyFitColor.icon.success
-                                )
-                            }
-                        }
-                    }
-                }
-
-                Spacer(Modifier.height(24.dp))
-
-                Row(
-                    modifier = Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.End
-                ) {
-                    TextButton(onClick = onDismiss) {
-                        Text("İptal", style = SkyFitTypography.bodyMediumSemibold)
-                    }
-                    Spacer(Modifier.width(16.dp))
-                    Button(
-                        onClick = {
-                            selectedTrainer?.let { onTrainerSelected(it) }
-                            onDismiss()
-                        },
-                        shape = CircleShape,
-                        colors = ButtonDefaults.buttonColors(
-                            backgroundColor = SkyFitColor.specialty.buttonBgRest
-                        )
-                    ) {
-                        Text(
-                            text = "Onayla",
-                            style = SkyFitTypography.bodyMediumSemibold,
-                            color = SkyFitColor.text.inverse
-                        )
-                    }
-                }
-            }
-        }
-    }
-}
-
+//endregion Actions
 
 @Composable
-fun TimePickerDialog(
+private fun TimePickerDialog(
     isOpen: Boolean,
     initialTime: String,
-    startTime: String?,  // ✅ Pass the selected start time
+    startTime: String?,
     onDismiss: () -> Unit,
     onTimeSelected: (String) -> Unit
 ) {

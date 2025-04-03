@@ -33,8 +33,7 @@ data class FacilityClassViewData(
     val repeatOption: String = "Hergün",
     val selectedDaysOfWeek: List<String> = emptyList(),
     val isAppointmentMandatory: Boolean = false,
-    val isPaymentMandatory: Boolean = false,
-    val price: String = "0.00",
+    val cost: Double? = null,
     val capacity: Int = 5,
     val cancelDurationHour: Int = 24,
     val userGroup: String = "Herkes",
@@ -201,13 +200,8 @@ class MobileFacilityClassEditScreenViewModel : ViewModel() {
         checkIfModified()
     }
 
-    fun updatePaymentMandatory(mandatory: Boolean) {
-        _facilityClassState.update { it.copy(isPaymentMandatory = mandatory) }
-        checkIfModified()
-    }
-
-    fun updatePrice(amount: String) {
-        _facilityClassState.update { it.copy(price = amount) }
+    fun updateCost(amount: Double) {
+        _facilityClassState.update { it.copy(cost = amount) }
         checkIfModified()
     }
 
@@ -231,8 +225,7 @@ class MobileFacilityClassEditScreenViewModel : ViewModel() {
             capacity = 10,
             userGroup = "Herkes",
             isAppointmentMandatory = false,
-            isPaymentMandatory = false,
-            price = "50.00",
+            cost = 50.0,
             isSaveButtonEnabled = false, // Initial state should not be modified yet
             showCancelDialog = false
         )
