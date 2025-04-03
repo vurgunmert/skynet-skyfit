@@ -54,6 +54,8 @@
     <string name="no_action">Hayır</string>
     <string name="apply_action">Uygula</string>
     <string name="save_action">Kaydet</string>
+    <string name="ok_action">Tamam</string>
+    <string name="no_not_yet_action">Hayır, şimdi değil</string>
 
     <!-- 🔷 Gender Options -->
     <string name="gender_female">Kadın</string>

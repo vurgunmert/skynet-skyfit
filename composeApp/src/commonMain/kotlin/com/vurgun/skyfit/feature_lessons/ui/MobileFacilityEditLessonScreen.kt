@@ -18,7 +18,6 @@ import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.rememberScrollState
@@ -49,16 +48,16 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
+import androidx.compose.ui.window.DialogProperties
 import com.vurgun.skyfit.core.domain.models.CalendarRecurrence
 import com.vurgun.skyfit.core.domain.models.CalendarRecurrenceType
-import com.vurgun.skyfit.core.ui.components.ButtonSize
-import com.vurgun.skyfit.core.ui.components.ButtonVariant
 import com.vurgun.skyfit.core.ui.components.DatePickerDialog
-import com.vurgun.skyfit.core.ui.components.SkyFitButtonComponent
 import com.vurgun.skyfit.core.ui.components.SkyFitCheckBoxComponent
 import com.vurgun.skyfit.core.ui.components.SkyFitMobileScaffold
 import com.vurgun.skyfit.core.ui.components.SkyFitScreenHeader
+import com.vurgun.skyfit.core.ui.components.button.PrimaryDialogButton
 import com.vurgun.skyfit.core.ui.components.button.PrimaryLargeButton
+import com.vurgun.skyfit.core.ui.components.button.SecondaryDialogButton
 import com.vurgun.skyfit.core.ui.components.text.BodyMediumRegularText
 import com.vurgun.skyfit.core.ui.components.text.BodyMediumSemiboldText
 import com.vurgun.skyfit.core.ui.resources.SkyFitColor
@@ -85,6 +84,7 @@ import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
 import skyfit.composeapp.generated.resources.Res
 import skyfit.composeapp.generated.resources.apply_action
+import skyfit.composeapp.generated.resources.close_action
 import skyfit.composeapp.generated.resources.day_friday_label
 import skyfit.composeapp.generated.resources.day_monday_label
 import skyfit.composeapp.generated.resources.day_saturday_label
@@ -95,6 +95,7 @@ import skyfit.composeapp.generated.resources.day_wednesday_label
 import skyfit.composeapp.generated.resources.ic_calendar_dots
 import skyfit.composeapp.generated.resources.ic_check
 import skyfit.composeapp.generated.resources.ic_chevron_down
+import skyfit.composeapp.generated.resources.ic_close_circle
 import skyfit.composeapp.generated.resources.ic_exercises
 import skyfit.composeapp.generated.resources.icon_label
 import skyfit.composeapp.generated.resources.lesson_capacity_label
@@ -113,8 +114,9 @@ import skyfit.composeapp.generated.resources.lesson_start_date_label
 import skyfit.composeapp.generated.resources.lesson_start_hour_hint
 import skyfit.composeapp.generated.resources.lesson_start_hour_label
 import skyfit.composeapp.generated.resources.lesson_trainer_label
-import skyfit.composeapp.generated.resources.logo_skyfit
 import skyfit.composeapp.generated.resources.no_action
+import skyfit.composeapp.generated.resources.no_not_yet_action
+import skyfit.composeapp.generated.resources.ok_action
 import skyfit.composeapp.generated.resources.open_action
 import skyfit.composeapp.generated.resources.recurrence_daily_label
 import skyfit.composeapp.generated.resources.recurrence_last_cancel_duration_label
@@ -128,8 +130,8 @@ import skyfit.composeapp.generated.resources.yes_action
 @Composable
 fun MobileFacilityEditLessonScreen(navigator: Navigator) {
 
-    val viewModel = remember { MobileFacilityClassEditScreenViewModel() }
-    val facilityClass = viewModel.facilityClassState.collectAsState().value
+    val viewModel = remember { FacilityEditLessonViewModel() }
+    val facilityClass = viewModel.uiState.collectAsState().value
 
     LaunchedEffect(Unit) {
         viewModel.loadClass("facilityId", "null")
@@ -159,7 +161,7 @@ fun MobileFacilityEditLessonScreen(navigator: Navigator) {
         ) {
             // region: Head Info (Icon + Title)
             EditLessonSubjectItem(
-                selectedIcon = facilityClass.icon,
+                selectedIcon = facilityClass.iconId,
                 title = facilityClass.title,
                 onIconSelected = viewModel::updateIcon,
                 onTitleChanged = viewModel::updateTitle
@@ -168,7 +170,7 @@ fun MobileFacilityEditLessonScreen(navigator: Navigator) {
 
             // region: Trainer Selection + Trainer Note
             EditLessonTrainerRow(
-                trainers = facilityClass.trainerItems,
+                trainers = facilityClass.trainers,
                 onSelectionChanged = viewModel::updateSelectedTrainer
             )
 
@@ -671,39 +673,6 @@ fun LessonEditRecurrenceRow(
         }
     }
 }
-
-
-@OptIn(ExperimentalLayoutApi::class)
-@Composable //TODO remove
-private fun WeeklySelectionGroup(
-    selectedDays: List<String>,
-    onDaySelected: (String) -> Unit
-) {
-
-    Column {
-        Text("Gün Seçimi", style = SkyFitTypography.bodyMediumSemibold)
-        Spacer(Modifier.height(8.dp))
-
-        FlowRow(
-            horizontalArrangement = Arrangement.spacedBy(12.dp),
-            verticalArrangement = Arrangement.spacedBy(12.dp)
-        ) {
-            classRepeatDaysOfWeek.forEach { day ->
-                Row(
-                    verticalAlignment = Alignment.CenterVertically,
-                    modifier = Modifier.clickable { onDaySelected(day) }
-                ) {
-                    SkyFitCheckBoxComponent(
-                        label = day,
-                        checked = selectedDays.contains(day),
-                        onCheckedChange = { onDaySelected(day) }
-                    )
-                }
-            }
-        }
-    }
-}
-
 //endregion Date Time Components
 
 //region Capacity
@@ -915,32 +884,31 @@ private fun LessonEditCancelDialog(
     onClickDismiss: () -> Unit
 ) {
     if (showDialog) {
-        Dialog(onDismissRequest = onClickDismiss) {
+        Dialog(
+            onDismissRequest = onClickDismiss,
+            properties = DialogProperties(usePlatformDefaultWidth = false)
+        ) {
             Box(
                 modifier = Modifier
-                    .fillMaxWidth()
+                    .fillMaxWidth(0.9f)
                     .clip(RoundedCornerShape(16.dp))
                     .background(SkyFitColor.background.surfaceSecondary)
-                    .padding(16.dp)
+                    .padding(24.dp)
             ) {
                 Column(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(8.dp),
+                    modifier = Modifier.fillMaxWidth(),
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
                     // Close Icon
                     Box(
-                        modifier = Modifier
-                            .size(24.dp)
-                            .padding(bottom = 8.dp),
+                        modifier = Modifier.fillMaxWidth().padding(bottom = 8.dp),
                         contentAlignment = Alignment.TopEnd
                     ) {
                         Icon(
-                            painter = painterResource(Res.drawable.logo_skyfit),
-                            contentDescription = "Close",
+                            painter = painterResource(Res.drawable.ic_close_circle),
+                            contentDescription = stringResource(Res.string.close_action),
                             tint = SkyFitColor.icon.default,
-                            modifier = Modifier.clickable(onClick = onClickDismiss)
+                            modifier = Modifier.size(24.dp).clickable(onClick = onClickDismiss)
                         )
                     }
 
@@ -955,23 +923,18 @@ private fun LessonEditCancelDialog(
 
                     // Buttons Row
                     Row(
-                        modifier = Modifier.fillMaxWidth(),
-                        horizontalArrangement = Arrangement.SpaceEvenly
+                        modifier = Modifier.fillMaxWidth()
                     ) {
-                        SkyFitButtonComponent(
-                            text = "Tamam",
-                            modifier = Modifier.wrapContentWidth(),
-                            onClick = onClickExit,
-                            variant = ButtonVariant.Secondary,
-                            size = ButtonSize.Medium,
+                        SecondaryDialogButton(
+                            text = stringResource(Res.string.ok_action),
+                            modifier = Modifier,
+                            onClick = onClickExit
                         )
-
-                        SkyFitButtonComponent(
-                            text = "Hayır, şimdi değil",
+                        Spacer(Modifier.width(24.dp))
+                        PrimaryDialogButton(
+                            text = stringResource(Res.string.no_not_yet_action),
                             modifier = Modifier.weight(1f),
-                            onClick = onClickDismiss,
-                            variant = ButtonVariant.Primary,
-                            size = ButtonSize.Medium,
+                            onClick = onClickDismiss
                         )
                     }
                 }
