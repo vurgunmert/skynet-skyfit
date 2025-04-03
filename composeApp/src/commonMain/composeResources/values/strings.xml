@@ -142,6 +142,7 @@
     <string name="lesson_mandatory_appointment_booking_label">Zorunlu randevu alımı</string>
     <string name="lesson_cost_label">Ücret</string>
     <string name="lesson_create_private_action">Özel Ders Oluştur</string>
+    <string name="lesson_edit_cancel_message">Geri dönerseniz değişikler kaydedilmeyecek</string>
 
     <string name="recurrence_none_label">Tekrar yok</string>
     <string name="recurrence_daily_label">Her gün</string>
@@ -155,6 +156,7 @@
     <string name="day_friday_label">Cuma</string>
     <string name="day_saturday_label">Cumartesi</string>
     <string name="day_sunday_label">Pazar</string>
+
 
 </resources>
 

@@ -65,6 +65,7 @@ import com.vurgun.skyfit.core.ui.resources.SkyFitIcon
 import com.vurgun.skyfit.core.ui.resources.SkyFitStyleGuide
 import com.vurgun.skyfit.core.ui.resources.SkyFitTypography
 import com.vurgun.skyfit.designsystem.components.button.RadioButton
+import com.vurgun.skyfit.designsystem.components.dialog.DestructiveDialog
 import com.vurgun.skyfit.designsystem.components.icon.ActionIcon
 import com.vurgun.skyfit.designsystem.components.image.CircleNetworkImage
 import com.vurgun.skyfit.designsystem.components.popup.LessonSelectCancelDurationPopupMenu
@@ -103,6 +104,7 @@ import skyfit.composeapp.generated.resources.lesson_cost_label
 import skyfit.composeapp.generated.resources.lesson_create_private_action
 import skyfit.composeapp.generated.resources.lesson_date_hint
 import skyfit.composeapp.generated.resources.lesson_edit_action
+import skyfit.composeapp.generated.resources.lesson_edit_cancel_message
 import skyfit.composeapp.generated.resources.lesson_end_date_label
 import skyfit.composeapp.generated.resources.lesson_end_hour_hint
 import skyfit.composeapp.generated.resources.lesson_end_hour_label
@@ -246,10 +248,11 @@ fun MobileFacilityEditLessonScreen(navigator: Navigator) {
         }
 
         if (facilityClass.showCancelDialog) {
-            LessonEditCancelDialog(
+            DestructiveDialog(
                 showDialog = facilityClass.showCancelDialog,
-                onClickDismiss = { viewModel.updateShowCancelDialog(false) },
-                onClickExit = { navigator.popBackStack() }
+                message = stringResource(Res.string.lesson_edit_cancel_message),
+                onClickConfirm = { navigator.popBackStack() },
+                onClickDismiss = { viewModel.updateShowCancelDialog(false) }
             )
         }
     }
@@ -874,72 +877,6 @@ private fun LessonEditActionRow(
             isLoading = isLoading,
             isEnabled = isEnabled && !isLoading
         )
-    }
-}
-
-@Composable
-private fun LessonEditCancelDialog(
-    showDialog: Boolean,
-    onClickExit: () -> Unit,
-    onClickDismiss: () -> Unit
-) {
-    if (showDialog) {
-        Dialog(
-            onDismissRequest = onClickDismiss,
-            properties = DialogProperties(usePlatformDefaultWidth = false)
-        ) {
-            Box(
-                modifier = Modifier
-                    .fillMaxWidth(0.9f)
-                    .clip(RoundedCornerShape(16.dp))
-                    .background(SkyFitColor.background.surfaceSecondary)
-                    .padding(24.dp)
-            ) {
-                Column(
-                    modifier = Modifier.fillMaxWidth(),
-                    horizontalAlignment = Alignment.CenterHorizontally
-                ) {
-                    // Close Icon
-                    Box(
-                        modifier = Modifier.fillMaxWidth().padding(bottom = 8.dp),
-                        contentAlignment = Alignment.TopEnd
-                    ) {
-                        Icon(
-                            painter = painterResource(Res.drawable.ic_close_circle),
-                            contentDescription = stringResource(Res.string.close_action),
-                            tint = SkyFitColor.icon.default,
-                            modifier = Modifier.size(24.dp).clickable(onClick = onClickDismiss)
-                        )
-                    }
-
-                    // Alert Message
-                    Text(
-                        text = "Geri dönerseniz değişikler kaydedilmeyecek",
-                        style = SkyFitTypography.bodyLargeMedium,
-                        textAlign = TextAlign.Center,
-                    )
-
-                    Spacer(modifier = Modifier.height(16.dp))
-
-                    // Buttons Row
-                    Row(
-                        modifier = Modifier.fillMaxWidth()
-                    ) {
-                        SecondaryDialogButton(
-                            text = stringResource(Res.string.ok_action),
-                            modifier = Modifier,
-                            onClick = onClickExit
-                        )
-                        Spacer(Modifier.width(24.dp))
-                        PrimaryDialogButton(
-                            text = stringResource(Res.string.no_not_yet_action),
-                            modifier = Modifier.weight(1f),
-                            onClick = onClickDismiss
-                        )
-                    }
-                }
-            }
-        }
     }
 }
 //endregion Actions

@@ -23,7 +23,6 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.vurgun.skyfit.core.ui.resources.SkyFitColor
 import com.vurgun.skyfit.core.ui.resources.SkyFitTypography
-import com.vurgun.skyfit.designsystem.components.text.AutoResizeText
 
 @Composable
 fun SkyFitButtonComponent(
@@ -35,6 +34,7 @@ fun SkyFitButtonComponent(
     rightIconPainter: Painter? = null,
     isEnabled: Boolean = true,
     modifier: Modifier = Modifier.fillMaxWidth(),
+    maxLines: Int = 1,
     onClick: () -> Unit
 ) {
 
@@ -96,10 +96,11 @@ fun SkyFitButtonComponent(
                     Spacer(Modifier.width(size.iconPadding))
                 }
 
-                AutoResizeText(
+                Text(
                     text = text,
+                    style = buttonTextStyle,
                     color = buttonStyle.foregroundColor,
-                    style = buttonTextStyle
+                    maxLines = 1
                 )
 
                 rightIconPainter?.let {

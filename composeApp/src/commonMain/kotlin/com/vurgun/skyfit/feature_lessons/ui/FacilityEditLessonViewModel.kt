@@ -24,7 +24,7 @@ data class FacilityEditLessonViewState(
     val capacity: Int = 5,
     val cancelDurationHour: Int = 24,
     val isSaveButtonEnabled: Boolean = false,
-    val showCancelDialog: Boolean = false
+    val showCancelDialog: Boolean = true
 )
 
 // Simulated
