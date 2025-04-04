@@ -34,7 +34,7 @@ import com.vurgun.skyfit.core.ui.components.divider.VerticalDivider
 import com.vurgun.skyfit.core.ui.components.special.RatingStarComponent
 import com.vurgun.skyfit.core.ui.resources.SkyFitColor
 import com.vurgun.skyfit.core.ui.resources.SkyFitTypography
-import com.vurgun.skyfit.feature_navigation.NavigationRoute
+import com.vurgun.skyfit.feature_navigation.MobileNavRoute
 import com.vurgun.skyfit.feature_navigation.jumpAndStay
 import moe.tlaster.precompose.navigation.Navigator
 import org.jetbrains.compose.resources.painterResource
@@ -51,7 +51,7 @@ fun MobileUserExerciseDetailScreen(navigator: Navigator) {
             SkyFitButtonComponent(
                 modifier = Modifier.padding(24.dp).fillMaxWidth(),
                 text = "Başla",
-                onClick = { navigator.jumpAndStay(NavigationRoute.ExerciseInProgress) },
+                onClick = { navigator.jumpAndStay(MobileNavRoute.ExerciseInProgress) },
                 variant = ButtonVariant.Primary,
                 size = ButtonSize.Large,
                 state = ButtonState.Rest

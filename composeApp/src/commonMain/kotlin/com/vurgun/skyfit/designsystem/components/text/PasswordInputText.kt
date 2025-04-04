@@ -1,12 +1,12 @@
-package com.vurgun.skyfit.core.ui.components
+package com.vurgun.skyfit.designsystem.components.text
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
@@ -22,7 +22,10 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.SolidColor
+import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
@@ -35,21 +38,27 @@ import skyfit.composeapp.generated.resources.ic_lock
 import skyfit.composeapp.generated.resources.ic_visibility_hide
 import skyfit.composeapp.generated.resources.ic_visibility_show
 
-//TODO: use from designsystem
 @Composable
-fun SkyFitPasswordInputComponent(
+fun PasswordInputText(
+    title: String? = null,
     hint: String,
     value: String? = null,
     error: String? = null,
+    modifier: Modifier = Modifier,
+    focusRequester: FocusRequester = FocusRequester(),
+    nextFocusRequester: FocusRequester? = null,
     keyboardOptions: KeyboardOptions = KeyboardOptions.Default.copy(imeAction = ImeAction.Next),
     onKeyboardGoAction: () -> Unit = {},
     onValueChange: ((String) -> Unit)? = null
 ) {
     var isPasswordVisible by remember { mutableStateOf(false) }
-
     val backgroundColor = error?.let { SkyFitColor.background.surfaceCriticalActive } ?: SkyFitColor.background.surfaceSecondary
+    val keyboardController = LocalSoftwareKeyboardController.current
 
-    Column(Modifier.fillMaxWidth()) {
+    Column(modifier, verticalArrangement = Arrangement.spacedBy(4.dp)) {
+        title.takeUnless { it.isNullOrEmpty() }?.let {
+            Text(it, Modifier.padding(start = 8.dp), style = SkyFitTypography.bodySmallSemibold)
+        }
 
         Row(
             modifier = Modifier
@@ -72,11 +81,17 @@ fun SkyFitPasswordInputComponent(
                 textStyle = SkyFitTypography.bodyMediumRegular,
                 modifier = Modifier
                     .weight(1f)
+                    .focusRequester(focusRequester)
                     .padding(horizontal = 4.dp),
                 singleLine = true,
                 visualTransformation = if (isPasswordVisible) VisualTransformation.None else PasswordVisualTransformation(),
-                keyboardOptions = keyboardOptions,
-                keyboardActions = KeyboardActions(onGo = { onKeyboardGoAction() }),
+                keyboardOptions = KeyboardOptions.Default.copy(
+                    imeAction = if (nextFocusRequester != null) ImeAction.Next else ImeAction.Done
+                ),
+                keyboardActions = KeyboardActions(
+                    onNext = { nextFocusRequester?.requestFocus() },
+                    onDone = { keyboardController?.hide() }
+                ),
                 decorationBox = { innerTextField ->
                     if (value.isNullOrEmpty()) {
                         Text(text = hint, style = SkyFitTypography.bodyMediumRegular.copy(color = SkyFitColor.text.secondary))
@@ -97,13 +112,8 @@ fun SkyFitPasswordInputComponent(
             )
         }
 
-        error?.let {
-            Spacer(Modifier.height(4.dp))
-            Text(
-                modifier = Modifier.padding(start = 8.dp),
-                text = error,
-                style = SkyFitTypography.bodySmallSemibold
-            )
+        error.takeUnless { it.isNullOrEmpty() }?.let {
+            Text(modifier = Modifier.padding(start = 8.dp), text = it, style = SkyFitTypography.bodySmallSemibold)
         }
     }
 }

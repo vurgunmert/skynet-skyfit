@@ -19,7 +19,7 @@ import com.vurgun.skyfit.core.ui.components.SkyFitWheelPickerComponent
 import com.vurgun.skyfit.core.ui.resources.SkyFitColor
 import com.vurgun.skyfit.core.utils.getDaysInMonth
 import com.vurgun.skyfit.core.utils.now
-import com.vurgun.skyfit.feature_navigation.NavigationRoute
+import com.vurgun.skyfit.feature_navigation.MobileNavRoute
 import com.vurgun.skyfit.feature_navigation.jumpAndStay
 import com.vurgun.skyfit.feature_onboarding.domain.viewmodel.OnboardingViewModel
 import kotlinx.datetime.LocalDate
@@ -80,7 +80,7 @@ fun MobileOnboardingBirthdaySelectionScreen(
             Spacer(Modifier.weight(1f))
             OnboardingActionGroupComponent(
                 onClickContinue = {
-                    navigator.jumpAndStay(NavigationRoute.OnboardingGenderSelection)
+                    navigator.jumpAndStay(MobileNavRoute.OnboardingGenderSelection)
                 }
             )
 

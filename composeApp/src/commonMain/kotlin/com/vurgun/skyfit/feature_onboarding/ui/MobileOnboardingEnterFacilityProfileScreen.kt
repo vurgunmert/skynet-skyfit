@@ -27,7 +27,7 @@ import com.vurgun.skyfit.core.ui.components.SkyFitScaffold
 import com.vurgun.skyfit.core.ui.resources.SkyFitStyleGuide
 import com.vurgun.skyfit.core.utils.KeyboardState
 import com.vurgun.skyfit.core.utils.keyboardAsState
-import com.vurgun.skyfit.feature_navigation.NavigationRoute
+import com.vurgun.skyfit.feature_navigation.MobileNavRoute
 import com.vurgun.skyfit.feature_navigation.jumpAndStay
 import com.vurgun.skyfit.feature_onboarding.domain.viewmodel.OnboardingViewModel
 import com.vurgun.skyfit.feature_settings.ui.MobileUserSettingsScreenPhotoEditComponent
@@ -142,7 +142,7 @@ fun MobileOnboardingFacilityDetailsScreen(
                 text = stringResource(Res.string.continue_action),
                 onClick = {
                     if (isContinueEnabled) {
-                        navigator.jumpAndStay(NavigationRoute.OnboardingFacilityProfileTags)
+                        navigator.jumpAndStay(MobileNavRoute.OnboardingFacilityProfileTags)
                     }
                 },
                 variant = ButtonVariant.Primary,

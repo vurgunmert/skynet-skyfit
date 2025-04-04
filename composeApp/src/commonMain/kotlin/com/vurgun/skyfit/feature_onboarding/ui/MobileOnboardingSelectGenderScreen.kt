@@ -20,7 +20,7 @@ import com.vurgun.skyfit.core.domain.models.GenderType
 import com.vurgun.skyfit.core.ui.components.SkyFitScaffold
 import com.vurgun.skyfit.core.ui.components.SkyFitSelectableCardComponent
 import com.vurgun.skyfit.core.ui.resources.SkyFitTypography
-import com.vurgun.skyfit.feature_navigation.NavigationRoute
+import com.vurgun.skyfit.feature_navigation.MobileNavRoute
 import com.vurgun.skyfit.feature_navigation.jumpAndStay
 import com.vurgun.skyfit.feature_onboarding.domain.viewmodel.OnboardingViewModel
 import moe.tlaster.precompose.navigation.Navigator
@@ -58,7 +58,7 @@ fun MobileOnboardingGenderSelectionScreen(
                 onSelected = viewModel::updateGender
             )
             Spacer(Modifier.weight(1f))
-            OnboardingActionGroupComponent { navigator.jumpAndStay(NavigationRoute.OnboardingWeightSelection) }
+            OnboardingActionGroupComponent { navigator.jumpAndStay(MobileNavRoute.OnboardingWeightSelection) }
 
             Spacer(Modifier.height(20.dp))
         }

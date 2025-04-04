@@ -27,7 +27,7 @@ import com.vurgun.skyfit.core.ui.resources.SkyFitColor
 import com.vurgun.skyfit.core.utils.now
 import com.vurgun.skyfit.designsystem.components.calendar.monthly.CalendarRangeDateSelectorCard
 import com.vurgun.skyfit.feature_lessons.ui.components.LessonSessionColumn
-import com.vurgun.skyfit.feature_navigation.NavigationRoute
+import com.vurgun.skyfit.feature_navigation.MobileNavRoute
 import com.vurgun.skyfit.feature_navigation.jumpAndStay
 import kotlinx.datetime.LocalDate
 import moe.tlaster.precompose.navigation.Navigator
@@ -68,7 +68,7 @@ fun MobileFacilityCalendarVisitedScreen(navigator: Navigator) {
         bottomBar = {
             if (isAppointmentAllowed) {
                 MobileFacilityCalendarVisitedScreenCreateActionComponent(onClick = {
-                    navigator.jumpAndStay(NavigationRoute.UserAppointmentDetail)
+                    navigator.jumpAndStay(MobileNavRoute.UserAppointmentDetail)
                 })
             }
         }

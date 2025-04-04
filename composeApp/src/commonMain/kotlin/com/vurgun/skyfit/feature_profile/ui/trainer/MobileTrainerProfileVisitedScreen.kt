@@ -47,7 +47,7 @@ import com.vurgun.skyfit.feature_profile.ui.components.UserProfileCardPreference
 import com.vurgun.skyfit.feature_profile.ui.components.viewdata.LifestyleActionRowViewData
 import com.vurgun.skyfit.feature_profile.ui.user.viewmodel.TopBarGroupViewData
 import com.vurgun.skyfit.feature_social.ui.components.LazySocialPostsColumn
-import com.vurgun.skyfit.feature_navigation.NavigationRoute
+import com.vurgun.skyfit.feature_navigation.MobileNavRoute
 import com.vurgun.skyfit.feature_navigation.jumpAndStay
 import com.vurgun.skyfit.feature_profile.ui.components.MobileVisitedProfileActionsComponent
 import com.vurgun.skyfit.feature_profile.ui.trainer.viewmodel.SkyFitTrainerProfileViewModel
@@ -96,7 +96,7 @@ fun MobileTrainerProfileVisitedScreen(navigator: Navigator) {
                 isFollowing = isFollowing,
                 onClickFollow = { isFollowing = true },
                 onClickUnFollow = { isFollowing = false },
-                onClickCalendar = { navigator.jumpAndStay(NavigationRoute.FacilityCalendarVisited) }
+                onClickCalendar = { navigator.jumpAndStay(MobileNavRoute.FacilityCalendarVisited) }
             )
 
             MobileTrainerProfileVisitedScreenActionsComponent(
@@ -104,7 +104,7 @@ fun MobileTrainerProfileVisitedScreen(navigator: Navigator) {
                 showMessage = isFollowing,
                 onClickAbout = { showPosts = false },
                 onClickPosts = { showPosts = true },
-                onClickMessage = { navigator.jumpAndStay(NavigationRoute.UserToTrainerChat) }
+                onClickMessage = { navigator.jumpAndStay(MobileNavRoute.UserToTrainerChat) }
             )
 
             if (showPosts) {
@@ -136,7 +136,7 @@ private fun ColumnScope.MobileTrainerProfileVisitedAboutGroup(
         if (lessonsColumViewData != null) {
             LessonSessionColumn(
                 viewData = lessonsColumViewData,
-                onClickItem = { navigator.jumpAndStay(NavigationRoute.FacilityCalendarVisited) })
+                onClickItem = { navigator.jumpAndStay(MobileNavRoute.FacilityCalendarVisited) })
         }
     }
 }

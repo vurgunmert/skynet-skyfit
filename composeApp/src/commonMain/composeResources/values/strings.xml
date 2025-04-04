@@ -56,6 +56,7 @@
     <string name="save_action">Kaydet</string>
     <string name="ok_action">Tamam</string>
     <string name="no_not_yet_action">Hayır, şimdi değil</string>
+    <string name="send_action">Gönder</string>
 
     <!-- 🔷 Gender Options -->
     <string name="gender_female">Kadın</string>
@@ -69,11 +70,6 @@
     <!-- 🔷 Navigation & Settings -->
     <string name="go_to_home_action">Ana Sayfa</string>
     <string name="back_to_lessons_action">Dersler'e Dön</string>
-    <string name="settings_title">Ayarlar</string>
-    <string name="settings_account_label">Hesap Ayarları</string>
-    <string name="settings_payment_history_label">Ödeme Geçmişi</string>
-    <string name="settings_notifications_label">Bildirimler</string>
-    <string name="settings_support_label">Destek ve Yardım</string>
 
     <!-- 🔷 Sections / Labels -->
     <string name="members_label">Üyeler</string>
@@ -157,6 +153,34 @@
     <string name="day_saturday_label">Cumartesi</string>
     <string name="day_sunday_label">Pazar</string>
 
+
+    <string name="settings_title">Ayarlar</string>
+    <string name="settings_account_label">Hesap Ayarları</string>
+    <string name="settings_payment_history_label">Ödeme Geçmişi</string>
+    <string name="settings_notifications_label">Bildirimler</string>
+    <string name="settings_support_label">Destek ve Yardım</string>
+
+    <string name="settings_change_my_password_label">Şifremi Değiştir</string>
+    <string name="settings_current_password_label">Güncel Şifre</string>
+    <string name="settings_current_password_hint">Güncel şifrenizi girin</string>
+    <string name="settings_new_password_label">Yeni Şifre</string>
+    <string name="settings_new_password_hint">Yeni şifrenizi girin</string>
+    <string name="settings_new_password_again_label">Yeni Şifre (Tekrar)</string>
+    <string name="settings_new_password_again_hint">Yeni şifrenizi tekrarlayın</string>
+    <string name="settings_change_password_action">Şifreyi Değiştir</string>
+
+    <string name="settings_support_issue_account_label">Hesap Problemi</string>
+    <string name="settings_support_issue_payment_label">Ödeme Sorunu</string>
+    <string name="settings_support_issue_technical_label">Teknik Destek</string>
+    <string name="settings_support_issue_other_label">Diğer</string>
+    <string name="settings_support_subject_label">Konu*</string>
+    <string name="settings_support_email_label">E-Posta*</string>
+    <string name="settings_support_email_hint">sample@email.com</string>
+    <string name="settings_support_description_label">Açıklama*</string>
+    <string name="settings_support_description_hint">Problemi kısaca açıklayınız\n\n\n</string>
+    <string name="settings_support_upload_file_label">Dosya Yükle</string>
+    <string name="settings_support_upload_file_hint">Ekran fotoğrafı, dekont veya belgenizi ekleyin.</string>
+    <string name="settings_support_questions_label">Sıkça Sorulan Sorular</string>
 
 </resources>
 

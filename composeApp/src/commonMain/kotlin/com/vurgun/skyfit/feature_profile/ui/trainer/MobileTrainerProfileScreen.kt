@@ -59,7 +59,7 @@ import com.vurgun.skyfit.feature_profile.ui.components.UserProfileCardPreference
 import com.vurgun.skyfit.feature_profile.ui.components.viewdata.LifestyleActionRowViewData
 import com.vurgun.skyfit.feature_profile.ui.user.viewmodel.TopBarGroupViewData
 import com.vurgun.skyfit.feature_social.ui.components.LazySocialPostsColumn
-import com.vurgun.skyfit.feature_navigation.NavigationRoute
+import com.vurgun.skyfit.feature_navigation.MobileNavRoute
 import com.vurgun.skyfit.feature_navigation.jumpAndStay
 import com.vurgun.skyfit.feature_profile.ui.trainer.viewmodel.SkyFitTrainerProfileViewModel
 import moe.tlaster.precompose.navigation.Navigator
@@ -106,8 +106,8 @@ fun MobileTrainerProfileScreen(navigator: Navigator) {
                         postsSelected = showPosts,
                         onClickAbout = { showPosts = false },
                         onClickPosts = { showPosts = true },
-                        onClickSettings = { navigator.jumpAndStay(NavigationRoute.TrainerSettings) },
-                        onClickNewPost = { navigator.jumpAndStay(NavigationRoute.UserSocialMediaPostAdd) }
+                        onClickSettings = { navigator.jumpAndStay(MobileNavRoute.Settings.Trainer.Home) },
+                        onClickNewPost = { navigator.jumpAndStay(MobileNavRoute.UserSocialMediaPostAdd) }
                     )
                 }
             }

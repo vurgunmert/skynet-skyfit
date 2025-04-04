@@ -39,7 +39,7 @@ import com.vurgun.skyfit.core.ui.components.SkyFitScreenHeader
 import com.vurgun.skyfit.designsystem.components.event.ActiveAppointmentEventItem
 import com.vurgun.skyfit.designsystem.components.event.AttendanceAppointmentEventItem
 import com.vurgun.skyfit.designsystem.components.event.BasicAppointmentEventItem
-import com.vurgun.skyfit.feature_navigation.NavigationRoute
+import com.vurgun.skyfit.feature_navigation.MobileNavRoute
 import com.vurgun.skyfit.feature_navigation.jumpAndStay
 import com.vurgun.skyfit.core.ui.resources.SkyFitColor
 import com.vurgun.skyfit.core.ui.resources.SkyFitTypography
@@ -103,7 +103,7 @@ fun MobileUserAppointmentsScreen(navigator: Navigator) {
                                 appointmentToDelete = appointment
                                 showDeleteDialog = true
                             },
-                            onClick = { navigator.jumpAndStay(NavigationRoute.UserAppointmentDetail) }
+                            onClick = { navigator.jumpAndStay(MobileNavRoute.UserAppointmentDetail) }
                         )
                     }
                     1 -> {
@@ -115,7 +115,7 @@ fun MobileUserAppointmentsScreen(navigator: Navigator) {
                             location = appointment.location,
                             trainer = appointment.trainer,
                             note = appointment.note,
-                            onClick = { navigator.jumpAndStay(NavigationRoute.UserAppointmentDetail) }
+                            onClick = { navigator.jumpAndStay(MobileNavRoute.UserAppointmentDetail) }
                         )
                     }
                     2 -> {
@@ -128,7 +128,7 @@ fun MobileUserAppointmentsScreen(navigator: Navigator) {
                             trainer = appointment.trainer,
                             note = appointment.note,
                             isCompleted = appointment.attended,
-                            onClick = { navigator.jumpAndStay(NavigationRoute.UserAppointmentDetail) }
+                            onClick = { navigator.jumpAndStay(MobileNavRoute.UserAppointmentDetail) }
                         )
                     }
                 }

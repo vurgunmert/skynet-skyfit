@@ -36,7 +36,7 @@ import com.vurgun.skyfit.designsystem.components.event.EditableLessonEventItem
 import com.vurgun.skyfit.designsystem.components.loader.FullScreenLoader
 import com.vurgun.skyfit.designsystem.components.popup.LessonEventItemPopupMenu
 import com.vurgun.skyfit.feature_lessons.ui.components.viewdata.LessonSessionItemViewData
-import com.vurgun.skyfit.feature_navigation.NavigationRoute
+import com.vurgun.skyfit.feature_navigation.MobileNavRoute
 import com.vurgun.skyfit.feature_navigation.jumpAndStay
 import moe.tlaster.precompose.navigation.Navigator
 import org.jetbrains.compose.resources.painterResource
@@ -82,12 +82,12 @@ fun MobileFacilityLessonListScreen(navigator: Navigator) {
             if (uiState.isLoading) {
                 FullScreenLoader()
             } else if (uiState.isEmpty) {
-                EmptyLessonListItem(onClickNew = { navigator.jumpAndStay(NavigationRoute.FacilityLessonEdit) })
+                EmptyLessonListItem(onClickNew = { navigator.jumpAndStay(MobileNavRoute.FacilityLessonEdit) })
             } else {
                 FacilityLessonListContentGroup(
                     uiState = uiState,
-                    onClickNew = { navigator.jumpAndStay(NavigationRoute.FacilityLessonEdit) },
-                    onEdit = { navigator.jumpAndStay(NavigationRoute.FacilityLessonEdit) },
+                    onClickNew = { navigator.jumpAndStay(MobileNavRoute.FacilityLessonEdit) },
+                    onEdit = { navigator.jumpAndStay(MobileNavRoute.FacilityLessonEdit) },
                     onDeactivate = { viewModel.toggleClassStatus(it.sessionId) },
                     onActivate = { viewModel.toggleClassStatus(it.sessionId) },
                     onDelete = { viewModel.deleteClass(it.sessionId) }

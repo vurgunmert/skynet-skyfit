@@ -19,7 +19,7 @@ import com.vurgun.skyfit.core.domain.models.HeightUnitType
 import com.vurgun.skyfit.core.ui.components.SkyFitScaffold
 import com.vurgun.skyfit.core.ui.components.SkyFitWheelPickerComponent
 import com.vurgun.skyfit.core.ui.resources.SkyFitColor
-import com.vurgun.skyfit.feature_navigation.NavigationRoute
+import com.vurgun.skyfit.feature_navigation.MobileNavRoute
 import com.vurgun.skyfit.feature_navigation.jumpAndStay
 import com.vurgun.skyfit.feature_onboarding.domain.viewmodel.OnboardingViewModel
 import moe.tlaster.precompose.navigation.Navigator
@@ -76,7 +76,7 @@ fun MobileOnboardingHeightSelectionScreen(
             }
 
             Spacer(Modifier.weight(1f))
-            OnboardingActionGroupComponent { navigator.jumpAndStay(NavigationRoute.OnboardingBodyTypeSelection) }
+            OnboardingActionGroupComponent { navigator.jumpAndStay(MobileNavRoute.OnboardingBodyTypeSelection) }
 
             Spacer(Modifier.height(20.dp))
         }

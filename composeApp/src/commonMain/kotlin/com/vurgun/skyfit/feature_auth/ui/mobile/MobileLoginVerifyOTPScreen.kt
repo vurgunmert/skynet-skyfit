@@ -35,7 +35,7 @@ import com.vurgun.skyfit.core.utils.formatPhoneNumber
 import com.vurgun.skyfit.feature_auth.ui.component.OTPInputTextField
 import com.vurgun.skyfit.feature_auth.ui.viewmodel.LoginOTPVerificationViewEvent
 import com.vurgun.skyfit.feature_auth.ui.viewmodel.LoginOTPVerificationViewModel
-import com.vurgun.skyfit.feature_navigation.NavigationRoute
+import com.vurgun.skyfit.feature_navigation.MobileNavRoute
 import com.vurgun.skyfit.feature_navigation.jumpAndTakeover
 import kotlinx.coroutines.flow.collectLatest
 import moe.tlaster.precompose.navigation.Navigator
@@ -64,15 +64,15 @@ fun MobileLoginVerifyOTPScreen(navigator: Navigator) {
         viewModel.events.collectLatest { event ->
             when (event) {
                 is LoginOTPVerificationViewEvent.GoToRegister -> {
-                    navigator.jumpAndTakeover(NavigationRoute.CreatePassword)
+                    navigator.jumpAndTakeover(MobileNavRoute.CreatePassword)
                 }
 
                 is LoginOTPVerificationViewEvent.GoToDashboard -> {
-                    navigator.jumpAndTakeover(NavigationRoute.Dashboard)
+                    navigator.jumpAndTakeover(MobileNavRoute.Dashboard)
                 }
 
                 is LoginOTPVerificationViewEvent.GoToOnboarding -> {
-                    navigator.jumpAndTakeover(NavigationRoute.Onboarding)
+                    navigator.jumpAndTakeover(MobileNavRoute.Onboarding)
                 }
 
                 is LoginOTPVerificationViewEvent.ShowError -> {

@@ -41,7 +41,7 @@ import com.vurgun.skyfit.core.ui.components.ButtonVariant
 import com.vurgun.skyfit.core.ui.components.SkyFitButtonComponent
 import com.vurgun.skyfit.core.ui.components.SkyFitSearchFilterBarComponent
 import com.vurgun.skyfit.core.ui.components.SkyFitSearchTextInputComponent
-import com.vurgun.skyfit.feature_navigation.NavigationRoute
+import com.vurgun.skyfit.feature_navigation.MobileNavRoute
 import com.vurgun.skyfit.feature_navigation.jumpAndStay
 import com.vurgun.skyfit.core.ui.resources.SkyFitColor
 import com.vurgun.skyfit.core.ui.resources.SkyFitTypography
@@ -76,21 +76,21 @@ fun MobileDashboardExploreScreen(rootNavigator: Navigator) {
             verticalArrangement = Arrangement.spacedBy(24.dp)
         ) {
             MobileDashboardExploreScreenFeaturedExercisesComponent(
-                onClick = { rootNavigator.jumpAndStay(NavigationRoute.ExerciseDetail) })
+                onClick = { rootNavigator.jumpAndStay(MobileNavRoute.ExerciseDetail) })
 
             MobileDashboardExploreScreenFeaturedTrainersComponent(
                 trainers,
-                onClick = { rootNavigator.jumpAndStay(NavigationRoute.TrainerProfileVisited) })
+                onClick = { rootNavigator.jumpAndStay(MobileNavRoute.TrainerProfileVisited) })
 
             MobileDashboardExploreScreenFeaturedFacilitiesComponent(
                 facilities,
-                onClick = { rootNavigator.jumpAndStay(NavigationRoute.FacilityProfileVisited) })
+                onClick = { rootNavigator.jumpAndStay(MobileNavRoute.FacilityProfileVisited) })
 
             MobileDashboardExploreScreenFeaturedCommunitiesComponent(
-                onClick = { rootNavigator.jumpAndStay(NavigationRoute.ExploreCommunities) })
+                onClick = { rootNavigator.jumpAndStay(MobileNavRoute.ExploreCommunities) })
 
             MobileDashboardExploreScreenFeaturedChallengesComponent(
-                onClick = { rootNavigator.jumpAndStay(NavigationRoute.ExploreChallenges) })
+                onClick = { rootNavigator.jumpAndStay(MobileNavRoute.ExploreChallenges) })
 
             Spacer(Modifier.height(124.dp))
         }

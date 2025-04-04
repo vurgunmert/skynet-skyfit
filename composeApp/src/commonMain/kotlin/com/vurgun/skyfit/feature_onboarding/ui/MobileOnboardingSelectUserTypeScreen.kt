@@ -16,8 +16,8 @@ import com.vurgun.skyfit.core.ui.components.SkyFitLogoComponent
 import com.vurgun.skyfit.core.ui.components.SkyFitScaffold
 import com.vurgun.skyfit.core.ui.components.SkyFitTextButton
 import com.vurgun.skyfit.core.ui.resources.SkyFitStyleGuide
-import com.vurgun.skyfit.feature_navigation.NavigationRoute.OnboardingCharacterSelection
-import com.vurgun.skyfit.feature_navigation.NavigationRoute.OnboardingFacilityDetails
+import com.vurgun.skyfit.feature_navigation.MobileNavRoute.OnboardingCharacterSelection
+import com.vurgun.skyfit.feature_navigation.MobileNavRoute.OnboardingFacilityDetails
 import com.vurgun.skyfit.feature_navigation.jumpAndStay
 import com.vurgun.skyfit.feature_onboarding.domain.viewmodel.OnboardingViewModel
 import moe.tlaster.precompose.navigation.Navigator

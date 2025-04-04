@@ -8,6 +8,8 @@ interface LocalSettingsStore {
     fun clearToken()
     fun clearPhoneNumber()
     fun clearAll()
+    fun isChatbotOnboardingCompleted(): Boolean
+    fun setChatbotOnboardingCompleted(value: Boolean)
 }
 
 expect fun provideLocalSettings(context: Any?): LocalSettingsStore

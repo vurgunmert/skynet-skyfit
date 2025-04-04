@@ -77,6 +77,30 @@ fun SecondaryMediumButton(
     )
 }
 
+
+@Composable
+fun SecondaryMicroButton(
+    text: String,
+    modifier: Modifier = Modifier.wrapContentWidth(),
+    leftIconPainter: Painter? = null,
+    rightIconPainter: Painter? = null,
+    isEnabled: Boolean = true,
+    isLoading: Boolean = false,
+    onClick: () -> Unit
+) {
+    SkyFitButtonComponent(
+        text = text,
+        onClick = onClick,
+        variant = ButtonVariant.Secondary,
+        size = ButtonSize.Micro,
+        state = if (isLoading) ButtonState.Loading else ButtonState.Rest,
+        modifier = modifier,
+        isEnabled = isEnabled,
+        leftIconPainter = leftIconPainter,
+        rightIconPainter = rightIconPainter
+    )
+}
+
 @Composable
 fun PrimaryDialogButton(
     text: String,

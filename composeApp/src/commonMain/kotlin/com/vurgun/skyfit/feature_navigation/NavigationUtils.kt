@@ -5,14 +5,14 @@ import moe.tlaster.precompose.navigation.NavOptions
 import moe.tlaster.precompose.navigation.Navigator
 import moe.tlaster.precompose.navigation.PopUpTo
 
-fun Navigator.jumpAndTakeover(from: NavigationRoute, to: NavigationRoute) {
+fun Navigator.jumpAndTakeover(from: MobileNavRoute, to: MobileNavRoute) {
     navigate(
         route = to.route,
         options = NavOptions(popUpTo = PopUpTo(from.route, inclusive = true), launchSingleTop = true)
     )
 }
 
-fun Navigator.jumpAndTakeover(to: NavigationRoute) {
+fun Navigator.jumpAndTakeover(to: MobileNavRoute) {
     navigate(
         route = to.route,
         options = NavOptions(
@@ -29,7 +29,7 @@ fun Navigator.jumpAndTakeover(from: String, to: String) {
     )
 }
 
-fun Navigator.jumpAndStay(into: NavigationRoute) {
+fun Navigator.jumpAndStay(into: MobileNavRoute) {
     navigate(
         route = into.route,
         options = NavOptions(launchSingleTop = false) // Ensures a new instance is added to the stack
@@ -41,17 +41,4 @@ fun Navigator.jumpAndStay(route: String) {
         route = route,
         options = NavOptions(launchSingleTop = false) // Ensures a new instance is added to the stack
     )
-}
-
-// Extensions for Navigator to handle role-based navigation
-fun Navigator.navigateToScreen(
-    screen: NavigationRoute,
-    userType: UserType,
-    vararg args: Pair<NavigationRoute.Param, String?>
-) {
-    if (userType in screen.roles) {
-        navigate(screen.createRoute(*args))
-    } else {
-        println("Access Denied: User role $userType cannot access ${screen.route}")
-    }
 }

@@ -19,7 +19,7 @@ import androidx.compose.ui.unit.dp
 import com.vurgun.skyfit.core.ui.components.SkyFitScaffold
 import com.vurgun.skyfit.feature_exercises.ui.components.FindExercisesCard
 import com.vurgun.skyfit.feature_lessons.ui.components.LessonSessionColumn
-import com.vurgun.skyfit.feature_navigation.NavigationRoute
+import com.vurgun.skyfit.feature_navigation.MobileNavRoute
 import com.vurgun.skyfit.feature_navigation.jumpAndStay
 import com.vurgun.skyfit.feature_profile.ui.components.LifestyleActionRow
 import com.vurgun.skyfit.feature_profile.ui.components.MobileMeasurementsActionCard
@@ -69,8 +69,8 @@ fun MobileUserProfileScreen(navigator: Navigator) {
                     postsSelected = showPosts,
                     onClickAbout = { viewModel.toggleShowPosts(false) },
                     onClickPosts = { viewModel.toggleShowPosts(true) },
-                    onClickSettings = { navigator.jumpAndStay(NavigationRoute.UserSettings) },
-                    onClickNewPost = { navigator.jumpAndStay(NavigationRoute.UserSocialMediaPostAdd) }
+                    onClickSettings = { navigator.jumpAndStay(MobileNavRoute.Settings.User.Home) },
+                    onClickNewPost = { navigator.jumpAndStay(MobileNavRoute.UserSocialMediaPostAdd) }
                 )
             }
 
@@ -95,7 +95,7 @@ fun MobileUserProfileScreen(navigator: Navigator) {
                         LessonSessionColumn(
                             viewData = it,
                             modifier = Modifier.padding(horizontal = 16.dp),
-                            onClickItem = { navigator.jumpAndStay(NavigationRoute.UserAppointments) }
+                            onClickItem = { navigator.jumpAndStay(MobileNavRoute.UserAppointments) }
                         )
                     }
                 }
@@ -103,7 +103,7 @@ fun MobileUserProfileScreen(navigator: Navigator) {
                 if (showMeasurements) {
                     item(key = "Measurements") {
                         MobileMeasurementsActionCard(modifier = Modifier.padding(horizontal = 16.dp)) {
-                            navigator.jumpAndStay(NavigationRoute.UserMeasurements)
+                            navigator.jumpAndStay(MobileNavRoute.UserMeasurements)
                         }
                     }
                 }
@@ -112,7 +112,7 @@ fun MobileUserProfileScreen(navigator: Navigator) {
                     uiState.exercises?.let {
                         LifestyleActionRow(modifier = Modifier.padding(horizontal = 16.dp), viewData = it)
                     } ?: FindExercisesCard(modifier = Modifier.padding(horizontal = 16.dp)) {
-                        navigator.jumpAndStay(NavigationRoute.ExploreExercises)
+                        navigator.jumpAndStay(MobileNavRoute.ExploreExercises)
                     }
                 }
 
@@ -120,7 +120,7 @@ fun MobileUserProfileScreen(navigator: Navigator) {
                     uiState.photoDiary?.let {
                         PhotoGalleryStackCard(modifier = Modifier.padding(horizontal = 16.dp), viewData = it)
                     } ?: PhotoGalleryEmptyStackCard(modifier = Modifier.padding(horizontal = 16.dp)) {
-                        navigator.jumpAndStay(NavigationRoute.UserPhotoDiary)
+                        navigator.jumpAndStay(MobileNavRoute.UserPhotoDiary)
                     }
                 }
 

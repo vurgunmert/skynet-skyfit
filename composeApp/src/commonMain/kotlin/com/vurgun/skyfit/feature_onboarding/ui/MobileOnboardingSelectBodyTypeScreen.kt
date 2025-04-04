@@ -24,7 +24,7 @@ import com.vurgun.skyfit.core.ui.components.SkyFitScaffold
 import com.vurgun.skyfit.core.ui.components.SkyFitSelectableCardComponent
 import com.vurgun.skyfit.core.ui.resources.SkyFitTypography
 import com.vurgun.skyfit.core.ui.viewdata.BodyTypeViewData
-import com.vurgun.skyfit.feature_navigation.NavigationRoute
+import com.vurgun.skyfit.feature_navigation.MobileNavRoute
 import com.vurgun.skyfit.feature_navigation.jumpAndStay
 import com.vurgun.skyfit.feature_onboarding.domain.viewmodel.OnboardingViewModel
 import moe.tlaster.precompose.navigation.Navigator
@@ -70,9 +70,9 @@ fun MobileOnboardingBodyTypeSelectionScreen(
             OnboardingActionGroupComponent(
                 onClickContinue = {
                     when (viewModel.uiState.value.userType) {
-                        UserType.User -> navigator.jumpAndStay(NavigationRoute.OnboardingUserGoalSelection)
-                        UserType.Trainer -> navigator.jumpAndStay(NavigationRoute.OnboardingEnterProfile)
-                        else -> navigator.jumpAndStay(NavigationRoute.FacilityClassDetail)
+                        UserType.User -> navigator.jumpAndStay(MobileNavRoute.OnboardingUserGoalSelection)
+                        UserType.Trainer -> navigator.jumpAndStay(MobileNavRoute.OnboardingEnterProfile)
+                        else -> navigator.jumpAndStay(MobileNavRoute.FacilityClassDetail)
                     }
                 }
             )

@@ -36,4 +36,12 @@ class LocalSettingsImpl(context: Context) : LocalSettingsStore {
         clearPhoneNumber()
         clearToken()
     }
+
+    override fun isChatbotOnboardingCompleted(): Boolean {
+        return sharedPreferences.getBoolean("chatbot_onboarding_completed", false)
+    }
+
+    override fun setChatbotOnboardingCompleted(value: Boolean) {
+        sharedPreferences.edit().putBoolean("chatbot_onboarding_completed", value).apply()
+    }
 }

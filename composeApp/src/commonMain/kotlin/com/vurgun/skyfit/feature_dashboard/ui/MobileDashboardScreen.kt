@@ -23,9 +23,8 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import com.vurgun.skyfit.core.ui.components.SkyFitMobileScaffold
 import com.vurgun.skyfit.feature_chatbot.ui.ChatBotButtonComponent
-import com.vurgun.skyfit.core.ui.components.SkyFitScaffold
-import com.vurgun.skyfit.feature_navigation.NavigationRoute
-import com.vurgun.skyfit.feature_navigation.NavigationRoute.DashboardHome
+import com.vurgun.skyfit.feature_navigation.MobileNavRoute
+import com.vurgun.skyfit.feature_navigation.MobileNavRoute.DashboardHome
 import com.vurgun.skyfit.feature_navigation.jumpAndStay
 import com.vurgun.skyfit.core.ui.resources.SkyFitColor
 import moe.tlaster.precompose.navigation.NavHost
@@ -50,17 +49,17 @@ import skyfit.composeapp.generated.resources.ic_search
 fun MobileDashboardWithNavigation(
     rootNavigator: Navigator,
     dashboardNavigator: Navigator,
-    initialRoute: NavigationRoute = DashboardHome
+    initialRoute: MobileNavRoute = DashboardHome
 ) {
     NavHost(
         navigator = dashboardNavigator,
         initialRoute = initialRoute.route
     ) {
         scene(DashboardHome.route) { MobileDashboardHomeScreen(rootNavigator) }
-        scene(NavigationRoute.DashboardExplore.route) { MobileDashboardExploreScreen(rootNavigator) }
-        scene(NavigationRoute.DashboardSocial.route) { MobileDashboardSocialScreen(rootNavigator) }
-        scene(NavigationRoute.DashboardNutrition.route) { MobileDashboardNutritionScreen(rootNavigator) }
-        scene(NavigationRoute.DashboardProfile.route) { MobileDashboardProfileScreen(rootNavigator) }
+        scene(MobileNavRoute.DashboardExplore.route) { MobileDashboardExploreScreen(rootNavigator) }
+        scene(MobileNavRoute.DashboardSocial.route) { MobileDashboardSocialScreen(rootNavigator) }
+        scene(MobileNavRoute.DashboardNutrition.route) { MobileDashboardNutritionScreen(rootNavigator) }
+        scene(MobileNavRoute.DashboardProfile.route) { MobileDashboardProfileScreen(rootNavigator) }
     }
 }
 
@@ -68,7 +67,7 @@ fun MobileDashboardWithNavigation(
 @Composable
 fun MobileDashboardScreen(
     rootNavigator: Navigator,
-    initialRoute: NavigationRoute = DashboardHome
+    initialRoute: MobileNavRoute = DashboardHome
 ) {
     val dashboardNavigator = rememberNavigator()
     // Collect the current navigation entry as state
@@ -84,12 +83,12 @@ fun MobileDashboardScreen(
                     .padding(bottom = 24.dp),
                 currentRoute = currentRoute,
                 onClickHome = { dashboardNavigator.takeover(DashboardHome) },
-                onClickExplore = { dashboardNavigator.takeover(NavigationRoute.DashboardExplore) },
-                onClickSocial = { dashboardNavigator.takeover(NavigationRoute.DashboardSocial) },
-                onClickAddPost = { rootNavigator.jumpAndStay(NavigationRoute.UserSocialMediaPostAdd) },
-                onClickNutrition = { dashboardNavigator.takeover(NavigationRoute.DashboardNutrition) },
-                onClickProfile = { dashboardNavigator.takeover(NavigationRoute.DashboardProfile) },
-                onClickChatBot = { rootNavigator.jumpAndStay(NavigationRoute.UserChatBot) },
+                onClickExplore = { dashboardNavigator.takeover(MobileNavRoute.DashboardExplore) },
+                onClickSocial = { dashboardNavigator.takeover(MobileNavRoute.DashboardSocial) },
+                onClickAddPost = { rootNavigator.jumpAndStay(MobileNavRoute.UserSocialMediaPostAdd) },
+                onClickNutrition = { dashboardNavigator.takeover(MobileNavRoute.DashboardNutrition) },
+                onClickProfile = { dashboardNavigator.takeover(MobileNavRoute.DashboardProfile) },
+                onClickChatBot = { rootNavigator.jumpAndStay(MobileNavRoute.UserChatBot) },
             )
         }
     ) {
@@ -149,7 +148,7 @@ private fun MobileDashboardBottomBar(
                 }
 
                 val exploreIconRes =
-                    if (currentRoute == NavigationRoute.DashboardExplore.route) Res.drawable.ic_barbell_fill else Res.drawable.ic_barbell
+                    if (currentRoute == MobileNavRoute.DashboardExplore.route) Res.drawable.ic_barbell_fill else Res.drawable.ic_barbell
                 Box(Modifier.width(32.dp).height(68.dp).clickable(onClick = onClickHome), contentAlignment = Alignment.Center) {
                     Icon(
                         painter = painterResource(exploreIconRes),
@@ -160,20 +159,20 @@ private fun MobileDashboardBottomBar(
                 }
 
                 val socialIconRes =
-                    if (currentRoute == NavigationRoute.DashboardSocial.route) Res.drawable.ic_plus else Res.drawable.ic_search
+                    if (currentRoute == MobileNavRoute.DashboardSocial.route) Res.drawable.ic_plus else Res.drawable.ic_search
                 Box(Modifier.width(32.dp).height(68.dp).clickable(onClick = onClickHome), contentAlignment = Alignment.Center) {
                     Icon(
                         painter = painterResource(socialIconRes),
-                        contentDescription = if (currentRoute == NavigationRoute.DashboardSocial.route) "Add Post" else "Social",
+                        contentDescription = if (currentRoute == MobileNavRoute.DashboardSocial.route) "Add Post" else "Social",
                         tint = SkyFitColor.text.inverse,
                         modifier = Modifier.size(24.dp).clickable(
-                            onClick = if (currentRoute == NavigationRoute.DashboardSocial.route) onClickAddPost else onClickSocial
+                            onClick = if (currentRoute == MobileNavRoute.DashboardSocial.route) onClickAddPost else onClickSocial
                         )
                     )
                 }
 
                 val nutritionIconRes =
-                    if (currentRoute == NavigationRoute.DashboardNutrition.route) Res.drawable.ic_coffee_fill else Res.drawable.ic_coffee
+                    if (currentRoute == MobileNavRoute.DashboardNutrition.route) Res.drawable.ic_coffee_fill else Res.drawable.ic_coffee
                 Box(Modifier.width(32.dp).height(68.dp).clickable(onClick = onClickHome), contentAlignment = Alignment.Center) {
                     Icon(
                         painter = painterResource(nutritionIconRes),
@@ -184,7 +183,7 @@ private fun MobileDashboardBottomBar(
                 }
 
                 val profileIconRes =
-                    if (currentRoute == NavigationRoute.DashboardProfile.route) Res.drawable.ic_profile_fill else Res.drawable.ic_profile
+                    if (currentRoute == MobileNavRoute.DashboardProfile.route) Res.drawable.ic_profile_fill else Res.drawable.ic_profile
                 Box(Modifier.width(32.dp).height(68.dp).clickable(onClick = onClickHome), contentAlignment = Alignment.Center) {
                     Icon(
                         painter = painterResource(profileIconRes),
@@ -206,7 +205,7 @@ private fun MobileDashboardBottomBar(
 }
 
 
-private fun Navigator.takeover(to: NavigationRoute) {
+private fun Navigator.takeover(to: MobileNavRoute) {
     navigate(
         route = to.route,
         options = NavOptions(

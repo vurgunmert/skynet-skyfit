@@ -23,7 +23,7 @@ import com.vurgun.skyfit.core.ui.components.button.SecondaryLargeButton
 import com.vurgun.skyfit.designsystem.components.event.DetailedLessonEventItem
 import com.vurgun.skyfit.core.ui.resources.SkyFitTypography
 import com.vurgun.skyfit.feature_appointments.ui.AppointmentCardViewData
-import com.vurgun.skyfit.feature_navigation.NavigationRoute
+import com.vurgun.skyfit.feature_navigation.MobileNavRoute
 import com.vurgun.skyfit.feature_navigation.jumpAndTakeover
 import moe.tlaster.precompose.navigation.Navigator
 import org.jetbrains.compose.resources.painterResource
@@ -70,7 +70,7 @@ fun MobileFacilityEditLessonFeedbackScreen(navigator: Navigator) {
             MobileFacilityClassEditCompletedActionGroup(
                 onBackToLessons = { navigator.popBackStack() },
                 onCreateLesson = { navigator.popBackStack() },
-                onGoToHome = { navigator.jumpAndTakeover(NavigationRoute.DashboardHome) }
+                onGoToHome = { navigator.jumpAndTakeover(MobileNavRoute.DashboardHome) }
             )
         }
     }

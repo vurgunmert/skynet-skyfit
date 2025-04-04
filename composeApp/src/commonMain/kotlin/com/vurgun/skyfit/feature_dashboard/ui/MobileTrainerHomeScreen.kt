@@ -60,7 +60,7 @@ import com.vurgun.skyfit.core.ui.components.ButtonVariant
 import com.vurgun.skyfit.core.ui.components.SkyFitButtonComponent
 import com.vurgun.skyfit.core.ui.resources.SkyFitColor
 import com.vurgun.skyfit.core.ui.resources.SkyFitTypography
-import com.vurgun.skyfit.feature_navigation.NavigationRoute
+import com.vurgun.skyfit.feature_navigation.MobileNavRoute
 import com.vurgun.skyfit.feature_navigation.jumpAndStay
 import moe.tlaster.precompose.navigation.Navigator
 import kotlin.math.sign
@@ -82,18 +82,18 @@ fun MobileTrainerHomeScreen(userDetail: UserDetail, rootNavigator: Navigator) {
             userDetail.characterType?.let {
                 MobileDashboardHomeCharacterProgressComponent(
                     characterType = it,
-                    onClick = { rootNavigator.jumpAndStay(NavigationRoute.DashboardProfile) }
+                    onClick = { rootNavigator.jumpAndStay(MobileNavRoute.DashboardProfile) }
                 )
             }
 
             Spacer(Modifier.height(24.dp))
 
             MobileDashboardHomeTrophiesBarComponent(
-                onClick = { rootNavigator.jumpAndStay(NavigationRoute.UserTrophies) }
+                onClick = { rootNavigator.jumpAndStay(MobileNavRoute.UserTrophies) }
             )
 
             MobileDashboardHomeWeekProgressComponent(
-                onClick = { rootNavigator.jumpAndStay(NavigationRoute.UserActivityCalendar) }
+                onClick = { rootNavigator.jumpAndStay(MobileNavRoute.UserActivityCalendar) }
             )
 
             MobileDashboardHomeTrainerStatisticsComponent()

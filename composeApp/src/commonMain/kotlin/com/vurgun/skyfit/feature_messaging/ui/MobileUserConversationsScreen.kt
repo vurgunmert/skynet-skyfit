@@ -36,7 +36,7 @@ import com.vurgun.skyfit.core.ui.components.SkyFitNumberBadge
 import com.vurgun.skyfit.core.ui.components.SkyFitScreenHeader
 import com.vurgun.skyfit.core.ui.components.SkyFitSearchTextInputComponent
 import com.vurgun.skyfit.core.ui.components.UserCircleAvatarItem
-import com.vurgun.skyfit.feature_navigation.NavigationRoute
+import com.vurgun.skyfit.feature_navigation.MobileNavRoute
 import com.vurgun.skyfit.feature_navigation.jumpAndStay
 import com.vurgun.skyfit.core.ui.resources.SkyFitColor
 import com.vurgun.skyfit.core.ui.resources.SkyFitTypography
@@ -74,7 +74,7 @@ fun MobileUserConversationsScreen(navigator: Navigator) {
             } else {
                 MobileUserConversationsComponent(conversations,
                     onClickConversation = {
-                        navigator.jumpAndStay(NavigationRoute.UserToUserChat)
+                        navigator.jumpAndStay(MobileNavRoute.UserToUserChat)
                     })
                 Spacer(Modifier.height(48.dp))
             }

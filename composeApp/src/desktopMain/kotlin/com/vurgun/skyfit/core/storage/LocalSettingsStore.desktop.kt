@@ -36,4 +36,12 @@ class DesktopLocalSettingsStore : LocalSettingsStore {
     override fun clearAll() {
         prefs.clear()
     }
+
+    override fun isChatbotOnboardingCompleted(): Boolean {
+        return prefs.getBoolean("chatbot_onboarding_completed", false)
+    }
+
+    override fun setChatbotOnboardingCompleted(value: Boolean) {
+        prefs.putBoolean("chatbot_onboarding_completed", value)
+    }
 }

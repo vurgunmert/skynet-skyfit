@@ -11,7 +11,6 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -24,6 +23,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.vurgun.skyfit.core.ui.components.BodyTypePickerDialog
 import com.vurgun.skyfit.core.ui.components.HeightPickerDialog
+import com.vurgun.skyfit.core.ui.components.SkyFitMobileScaffold
 import com.vurgun.skyfit.core.ui.components.SkyFitScreenHeader
 import com.vurgun.skyfit.core.ui.components.WeightPickerDialog
 import com.vurgun.skyfit.feature_settings.ui.SkyFitSelectToEnterInputComponent
@@ -33,15 +33,19 @@ import com.vurgun.skyfit.feature_settings.ui.FitnessTagPickerComponent
 import com.vurgun.skyfit.feature_settings.ui.MobileUserSettingsScreenDeleteActionsComponent
 import com.vurgun.skyfit.feature_settings.ui.MobileUserSettingsScreenPhotoEditComponent
 import com.vurgun.skyfit.feature_settings.ui.MobileUserSettingsScreenSaveActionComponent
-import com.vurgun.skyfit.feature_navigation.NavigationRoute
+import com.vurgun.skyfit.feature_navigation.MobileNavRoute
 import com.vurgun.skyfit.feature_navigation.jumpAndStay
-import com.vurgun.skyfit.core.ui.resources.SkyFitColor
+import com.vurgun.skyfit.feature_settings.ui.component.FacilityAccountSettingsProfileCard
+import com.vurgun.skyfit.feature_settings.ui.component.TrainerAccountSettingsProfileCard
+import com.vurgun.skyfit.feature_settings.ui.component.UserAccountSettingsProfileCard
 import moe.tlaster.precompose.navigation.Navigator
+import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.koinInject
 import skyfit.composeapp.generated.resources.Res
 import skyfit.composeapp.generated.resources.ic_delete
 import skyfit.composeapp.generated.resources.ic_lock
 import skyfit.composeapp.generated.resources.ic_pencil
+import skyfit.composeapp.generated.resources.settings_account_label
 
 @Composable
 fun MobileUserSettingsAccountScreen(navigator: Navigator) {
@@ -59,10 +63,9 @@ fun MobileUserSettingsAccountScreen(navigator: Navigator) {
         viewModel.loadData()
     }
 
-    Scaffold(
-        backgroundColor = SkyFitColor.background.default,
+    SkyFitMobileScaffold(
         topBar = {
-            SkyFitScreenHeader("Hesap Ayarlari", onClickBack = { navigator.popBackStack() })
+            SkyFitScreenHeader(stringResource(Res.string.settings_account_label), onClickBack = { navigator.popBackStack() })
         },
         bottomBar = {
             if (showDeleteConfirm) {
@@ -84,6 +87,11 @@ fun MobileUserSettingsAccountScreen(navigator: Navigator) {
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.spacedBy(24.dp)
         ) {
+
+            UserAccountSettingsProfileCard()
+            TrainerAccountSettingsProfileCard()
+            FacilityAccountSettingsProfileCard()
+
             MobileUserSettingsScreenPhotoEditComponent(
                 urlString = null,
                 label = "Fotoğrafı Düzenle",
@@ -156,7 +164,7 @@ fun MobileUserSettingsAccountScreen(navigator: Navigator) {
             MobileSettingsMenuItemComponent(
                 text = "Şifremi Değiştir",
                 iconRes = Res.drawable.ic_lock,
-                onClick = { navigator.jumpAndStay(NavigationRoute.UserSettingsChangePassword) }
+                onClick = { navigator.jumpAndStay(MobileNavRoute.Settings.User.ChangePassword) }
             )
 
             MobileSettingsMenuItemComponent(

@@ -48,16 +48,13 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
-import androidx.compose.ui.window.DialogProperties
 import com.vurgun.skyfit.core.domain.models.CalendarRecurrence
 import com.vurgun.skyfit.core.domain.models.CalendarRecurrenceType
 import com.vurgun.skyfit.core.ui.components.DatePickerDialog
 import com.vurgun.skyfit.core.ui.components.SkyFitCheckBoxComponent
 import com.vurgun.skyfit.core.ui.components.SkyFitMobileScaffold
 import com.vurgun.skyfit.core.ui.components.SkyFitScreenHeader
-import com.vurgun.skyfit.core.ui.components.button.PrimaryDialogButton
 import com.vurgun.skyfit.core.ui.components.button.PrimaryLargeButton
-import com.vurgun.skyfit.core.ui.components.button.SecondaryDialogButton
 import com.vurgun.skyfit.core.ui.components.text.BodyMediumRegularText
 import com.vurgun.skyfit.core.ui.components.text.BodyMediumSemiboldText
 import com.vurgun.skyfit.core.ui.resources.SkyFitColor
@@ -75,7 +72,7 @@ import com.vurgun.skyfit.designsystem.components.popup.LessonSelectTrainerPopupM
 import com.vurgun.skyfit.designsystem.components.popup.SelectableTrainerMenuItemModel
 import com.vurgun.skyfit.designsystem.components.text.MultiLineInputText
 import com.vurgun.skyfit.designsystem.components.text.TitledMediumRegularText
-import com.vurgun.skyfit.feature_navigation.NavigationRoute
+import com.vurgun.skyfit.feature_navigation.MobileNavRoute
 import com.vurgun.skyfit.feature_navigation.jumpAndTakeover
 import com.vurgun.skyfit.feature_settings.ui.SkyFitSelectToEnterInputComponent
 import kotlinx.datetime.DayOfWeek
@@ -85,7 +82,6 @@ import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
 import skyfit.composeapp.generated.resources.Res
 import skyfit.composeapp.generated.resources.apply_action
-import skyfit.composeapp.generated.resources.close_action
 import skyfit.composeapp.generated.resources.day_friday_label
 import skyfit.composeapp.generated.resources.day_monday_label
 import skyfit.composeapp.generated.resources.day_saturday_label
@@ -96,7 +92,6 @@ import skyfit.composeapp.generated.resources.day_wednesday_label
 import skyfit.composeapp.generated.resources.ic_calendar_dots
 import skyfit.composeapp.generated.resources.ic_check
 import skyfit.composeapp.generated.resources.ic_chevron_down
-import skyfit.composeapp.generated.resources.ic_close_circle
 import skyfit.composeapp.generated.resources.ic_exercises
 import skyfit.composeapp.generated.resources.icon_label
 import skyfit.composeapp.generated.resources.lesson_capacity_label
@@ -117,8 +112,6 @@ import skyfit.composeapp.generated.resources.lesson_start_hour_hint
 import skyfit.composeapp.generated.resources.lesson_start_hour_label
 import skyfit.composeapp.generated.resources.lesson_trainer_label
 import skyfit.composeapp.generated.resources.no_action
-import skyfit.composeapp.generated.resources.no_not_yet_action
-import skyfit.composeapp.generated.resources.ok_action
 import skyfit.composeapp.generated.resources.open_action
 import skyfit.composeapp.generated.resources.recurrence_daily_label
 import skyfit.composeapp.generated.resources.recurrence_last_cancel_duration_label
@@ -239,8 +232,8 @@ fun MobileFacilityEditLessonScreen(navigator: Navigator) {
                 isLoading = false, //TODO: loading
                 onClick = {
                     navigator.jumpAndTakeover(
-                        NavigationRoute.FacilityLessons,
-                        NavigationRoute.FacilityLessonCreated
+                        MobileNavRoute.FacilityLessons,
+                        MobileNavRoute.FacilityLessonCreated
                     )
                 })
 

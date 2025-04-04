@@ -11,7 +11,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import com.vurgun.skyfit.core.ui.resources.SkyFitColor
-import com.vurgun.skyfit.feature_navigation.NavigationRoute
+import com.vurgun.skyfit.feature_navigation.MobileNavRoute
 import com.vurgun.skyfit.feature_navigation.jumpAndTakeover
 import com.vurgun.skyfit.feature_splash.presentation.viewmodel.SplashUiState
 import com.vurgun.skyfit.feature_splash.presentation.viewmodel.SplashViewModel
@@ -31,15 +31,15 @@ fun SplashScreen(navigator: Navigator) {
         when (uiState) {
             SplashUiState.Loading -> Unit
             SplashUiState.Maintenance -> {
-                navigator.jumpAndTakeover(NavigationRoute.Maintenance)
+                navigator.jumpAndTakeover(MobileNavRoute.Maintenance)
             }
 
             SplashUiState.NavigateToDashboard -> {
-                navigator.jumpAndTakeover(NavigationRoute.Dashboard)
+                navigator.jumpAndTakeover(MobileNavRoute.Dashboard)
             }
 
             SplashUiState.NavigateToLogin -> {
-                navigator.jumpAndTakeover(NavigationRoute.Login)
+                navigator.jumpAndTakeover(MobileNavRoute.Login)
             }
         }
     }

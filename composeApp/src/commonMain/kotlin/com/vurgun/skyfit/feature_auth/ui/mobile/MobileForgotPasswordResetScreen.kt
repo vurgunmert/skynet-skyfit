@@ -32,7 +32,7 @@ import com.vurgun.skyfit.core.utils.KeyboardState
 import com.vurgun.skyfit.core.utils.keyboardAsState
 import com.vurgun.skyfit.feature_auth.ui.viewmodel.PasswordResetViewEvent
 import com.vurgun.skyfit.feature_auth.ui.viewmodel.PasswordResetViewModel
-import com.vurgun.skyfit.feature_navigation.NavigationRoute
+import com.vurgun.skyfit.feature_navigation.MobileNavRoute
 import com.vurgun.skyfit.feature_navigation.jumpAndTakeover
 import kotlinx.coroutines.flow.collectLatest
 import moe.tlaster.precompose.navigation.Navigator
@@ -63,7 +63,7 @@ fun MobileForgotPasswordResetScreen(navigator: Navigator) {
                     errorMessage = event.message
                 }
                 PasswordResetViewEvent.GoToDashboard -> {
-                    navigator.jumpAndTakeover(NavigationRoute.Dashboard)
+                    navigator.jumpAndTakeover(MobileNavRoute.Dashboard)
                 }
             }
         }
@@ -133,7 +133,7 @@ fun MobileForgotPasswordResetScreen(navigator: Navigator) {
                 isLoading = isLoading,
                 isEnabled = isSubmitEnabled,
                 onClickContinue = viewModel::submitPasswordReset,
-                onClickCancel = { navigator.jumpAndTakeover(NavigationRoute.Login) }
+                onClickCancel = { navigator.jumpAndTakeover(MobileNavRoute.Login) }
             )
             Spacer(Modifier.height(30.dp))
         }

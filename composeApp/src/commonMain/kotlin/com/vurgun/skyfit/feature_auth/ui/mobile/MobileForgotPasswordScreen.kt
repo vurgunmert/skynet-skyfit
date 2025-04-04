@@ -29,7 +29,7 @@ import com.vurgun.skyfit.core.ui.resources.SkyFitStyleGuide
 import com.vurgun.skyfit.core.ui.resources.SkyFitTypography
 import com.vurgun.skyfit.feature_auth.ui.viewmodel.ForgotPasswordViewEvent
 import com.vurgun.skyfit.feature_auth.ui.viewmodel.ForgotPasswordViewModel
-import com.vurgun.skyfit.feature_navigation.NavigationRoute
+import com.vurgun.skyfit.feature_navigation.MobileNavRoute
 import com.vurgun.skyfit.feature_navigation.jumpAndTakeover
 import kotlinx.coroutines.flow.collectLatest
 import moe.tlaster.precompose.navigation.Navigator
@@ -55,7 +55,7 @@ fun MobileForgotPasswordScreen(navigator: Navigator) {
         viewModel.uiEvents.collectLatest { event ->
             when (event) {
                 ForgotPasswordViewEvent.GoToOTPVerification -> {
-                    navigator.jumpAndTakeover(NavigationRoute.ForgotPasswordVerifyOTP)
+                    navigator.jumpAndTakeover(MobileNavRoute.ForgotPasswordVerifyOTP)
                 }
 
                 is ForgotPasswordViewEvent.ShowError -> {

@@ -15,7 +15,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.vurgun.skyfit.core.ui.components.SkyFitMobileScaffold
 import com.vurgun.skyfit.core.ui.components.button.PrimaryLargeButton
-import com.vurgun.skyfit.feature_navigation.NavigationRoute
+import com.vurgun.skyfit.feature_navigation.MobileNavRoute
 import com.vurgun.skyfit.feature_navigation.jumpAndTakeover
 import com.vurgun.skyfit.feature_onboarding.domain.viewmodel.OnboardingViewModel
 import moe.tlaster.precompose.navigation.Navigator
@@ -56,7 +56,7 @@ fun MobileOnboardingCompletedScreen(
                     .padding(16.dp)
                     .fillMaxWidth(),
                 text = stringResource(Res.string.onboarding_get_started_action),
-                onClick = { navigator.jumpAndTakeover(NavigationRoute.Dashboard) },
+                onClick = { navigator.jumpAndTakeover(MobileNavRoute.Dashboard) },
             )
 
             Spacer(Modifier.height(20.dp))

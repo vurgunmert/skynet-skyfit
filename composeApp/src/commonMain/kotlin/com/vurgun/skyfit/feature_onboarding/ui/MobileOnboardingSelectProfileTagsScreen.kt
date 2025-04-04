@@ -16,7 +16,7 @@ import com.vurgun.skyfit.core.domain.models.FitnessTagType
 import com.vurgun.skyfit.core.ui.components.SkyFitMobileScaffold
 import com.vurgun.skyfit.core.ui.components.error.ErrorDialog
 import com.vurgun.skyfit.designsystem.components.loader.CircularLoader
-import com.vurgun.skyfit.feature_navigation.NavigationRoute
+import com.vurgun.skyfit.feature_navigation.MobileNavRoute
 import com.vurgun.skyfit.feature_navigation.jumpAndTakeover
 import com.vurgun.skyfit.feature_onboarding.domain.viewmodel.OnboardingViewEvent
 import com.vurgun.skyfit.feature_onboarding.domain.viewmodel.OnboardingViewModel
@@ -46,7 +46,7 @@ fun MobileOnboardingFacilityProfileTagsScreen(
                 )
             }
             OnboardingViewEvent.Completed -> {
-                onboardingNavigator.jumpAndTakeover(NavigationRoute.OnboardingCompleted)
+                onboardingNavigator.jumpAndTakeover(MobileNavRoute.OnboardingCompleted)
             }
             is OnboardingViewEvent.Error -> {
                 ErrorDialog(event.message, onDismiss = viewModel::clearError)
@@ -56,7 +56,7 @@ fun MobileOnboardingFacilityProfileTagsScreen(
             }
 
             OnboardingViewEvent.NavigateToLogin -> {
-                rootNavigator.jumpAndTakeover(NavigationRoute.Login)
+                rootNavigator.jumpAndTakeover(MobileNavRoute.Login)
             }
         }
     }

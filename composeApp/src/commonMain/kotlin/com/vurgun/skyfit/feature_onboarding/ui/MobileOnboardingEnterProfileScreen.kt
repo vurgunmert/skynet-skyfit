@@ -31,7 +31,7 @@ import com.vurgun.skyfit.core.ui.components.error.ErrorDialog
 import com.vurgun.skyfit.designsystem.components.loader.CircularLoader
 import com.vurgun.skyfit.core.utils.KeyboardState
 import com.vurgun.skyfit.core.utils.keyboardAsState
-import com.vurgun.skyfit.feature_navigation.NavigationRoute
+import com.vurgun.skyfit.feature_navigation.MobileNavRoute
 import com.vurgun.skyfit.feature_navigation.jumpAndTakeover
 import com.vurgun.skyfit.feature_onboarding.domain.viewmodel.OnboardingViewEvent
 import com.vurgun.skyfit.feature_onboarding.domain.viewmodel.OnboardingViewModel
@@ -166,7 +166,7 @@ fun MobileOnboardingEnterProfileScreen(
             }
 
             OnboardingViewEvent.Completed -> {
-                onboardingNavigator.jumpAndTakeover(NavigationRoute.OnboardingCompleted)
+                onboardingNavigator.jumpAndTakeover(MobileNavRoute.OnboardingCompleted)
             }
 
             is OnboardingViewEvent.Error -> {
@@ -178,7 +178,7 @@ fun MobileOnboardingEnterProfileScreen(
             }
 
             OnboardingViewEvent.NavigateToLogin -> {
-                rootNavigator.jumpAndTakeover(NavigationRoute.Login)
+                rootNavigator.jumpAndTakeover(MobileNavRoute.Login)
             }
         }
     }

@@ -15,7 +15,7 @@ import androidx.compose.ui.unit.dp
 import com.vurgun.skyfit.core.domain.models.GoalType
 import com.vurgun.skyfit.core.ui.components.SkyFitMobileScaffold
 import com.vurgun.skyfit.core.ui.components.SkyFitSelectableTextButton
-import com.vurgun.skyfit.feature_navigation.NavigationRoute
+import com.vurgun.skyfit.feature_navigation.MobileNavRoute
 import com.vurgun.skyfit.feature_navigation.jumpAndStay
 import com.vurgun.skyfit.feature_onboarding.domain.viewmodel.OnboardingViewModel
 import moe.tlaster.precompose.navigation.Navigator
@@ -50,7 +50,7 @@ fun MobileOnboardingGoalSelectionScreen(
             )
 
             Spacer(Modifier.weight(1f))
-            OnboardingActionGroupComponent { navigator.jumpAndStay(NavigationRoute.OnboardingEnterProfile) }
+            OnboardingActionGroupComponent { navigator.jumpAndStay(MobileNavRoute.OnboardingEnterProfile) }
 
             Spacer(Modifier.height(20.dp))
         }

@@ -44,7 +44,7 @@ import com.vurgun.skyfit.core.ui.components.SkyFitSearchTextInputComponent
 import com.vurgun.skyfit.core.ui.components.image.CircularImage
 import com.vurgun.skyfit.core.ui.resources.SkyFitColor
 import com.vurgun.skyfit.core.ui.resources.SkyFitTypography
-import com.vurgun.skyfit.feature_navigation.NavigationRoute
+import com.vurgun.skyfit.feature_navigation.MobileNavRoute
 import com.vurgun.skyfit.feature_navigation.jumpAndStay
 import moe.tlaster.precompose.navigation.Navigator
 import org.jetbrains.compose.resources.painterResource
@@ -74,9 +74,9 @@ fun MobileExploreChallengesScreen(rootNavigator: Navigator) {
             modifier = Modifier.fillMaxSize(),
             verticalArrangement = Arrangement.spacedBy(12.dp)
         ) {
-            MobileExploreUserChallengesComponent(onClick = { rootNavigator.jumpAndStay(NavigationRoute.ExploreChallengeDetail) })
+            MobileExploreUserChallengesComponent(onClick = { rootNavigator.jumpAndStay(MobileNavRoute.ExploreChallengeDetail) })
             Spacer(Modifier.height(12.dp))
-            MobileExploreActiveChallengesComponent(onClick = { rootNavigator.jumpAndStay(NavigationRoute.ExploreChallengeDetail) })
+            MobileExploreActiveChallengesComponent(onClick = { rootNavigator.jumpAndStay(MobileNavRoute.ExploreChallengeDetail) })
             Spacer(Modifier.height(24.dp))
         }
     }

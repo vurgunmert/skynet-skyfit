@@ -38,7 +38,7 @@ import com.vurgun.skyfit.core.utils.KeyboardState
 import com.vurgun.skyfit.core.utils.keyboardAsState
 import com.vurgun.skyfit.feature_auth.ui.viewmodel.CreatePasswordViewEvent
 import com.vurgun.skyfit.feature_auth.ui.viewmodel.PasswordCreateViewModel
-import com.vurgun.skyfit.feature_navigation.NavigationRoute
+import com.vurgun.skyfit.feature_navigation.MobileNavRoute
 import com.vurgun.skyfit.feature_navigation.jumpAndStay
 import com.vurgun.skyfit.feature_navigation.jumpAndTakeover
 import kotlinx.coroutines.flow.collectLatest
@@ -79,7 +79,7 @@ fun MobileCreatePasswordScreen(navigator: Navigator) {
         viewModel.uiEvents.collectLatest { event ->
             when (event) {
                 is CreatePasswordViewEvent.GoToOnboarding -> {
-                    navigator.jumpAndTakeover(NavigationRoute.CreatePassword, NavigationRoute.Onboarding)
+                    navigator.jumpAndTakeover(MobileNavRoute.CreatePassword, MobileNavRoute.Onboarding)
                 }
 
                 is CreatePasswordViewEvent.Error -> {
@@ -126,8 +126,8 @@ fun MobileCreatePasswordScreen(navigator: Navigator) {
             )
             Spacer(Modifier.height(16.dp))
             MobileRegisterScreenLegalActionsComponent(
-                onPrivacyPolicyClick = { navigator.jumpAndStay(NavigationRoute.PrivacyPolicy) },
-                onTermsOfServiceClick = { navigator.jumpAndStay(NavigationRoute.TermsAndConditions) }
+                onPrivacyPolicyClick = { navigator.jumpAndStay(MobileNavRoute.PrivacyPolicy) },
+                onTermsOfServiceClick = { navigator.jumpAndStay(MobileNavRoute.TermsAndConditions) }
             )
         }
     }

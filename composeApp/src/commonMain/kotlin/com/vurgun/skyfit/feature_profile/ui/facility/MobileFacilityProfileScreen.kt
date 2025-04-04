@@ -54,7 +54,7 @@ import com.vurgun.skyfit.feature_profile.ui.components.VerticalTrainerProfileCar
 import com.vurgun.skyfit.feature_profile.ui.components.viewdata.PhotoGalleryStackViewData
 import com.vurgun.skyfit.feature_social.ui.components.SocialPostCard
 import com.vurgun.skyfit.feature_social.ui.components.SocialQuickPostInputCard
-import com.vurgun.skyfit.feature_navigation.NavigationRoute
+import com.vurgun.skyfit.feature_navigation.MobileNavRoute
 import com.vurgun.skyfit.feature_navigation.jumpAndStay
 import com.vurgun.skyfit.feature_profile.ui.facility.viewmodel.FacilityProfileInfoViewData
 import com.vurgun.skyfit.feature_profile.ui.facility.viewmodel.FacilityProfileViewModel
@@ -133,8 +133,8 @@ fun MobileFacilityProfileScreen(
                     viewMode = viewMode,
                     onClickFollow = viewModel::followFacility,
                     onClickUnFollow = viewModel::unfollowFacility,
-                    onClickBookingCalendar = { navigator.jumpAndStay(NavigationRoute.FacilityCalendarVisited) },
-                    onClickMessage = { navigator.jumpAndStay(NavigationRoute.UserToFacilityChat) }
+                    onClickBookingCalendar = { navigator.jumpAndStay(MobileNavRoute.FacilityCalendarVisited) },
+                    onClickMessage = { navigator.jumpAndStay(MobileNavRoute.UserToFacilityChat) }
                 )
 
                 if (postsVisible) {
@@ -156,8 +156,8 @@ fun MobileFacilityProfileScreen(
                             postsSelected = postsVisible,
                             onClickAbout = { viewModel.togglePostTab(false) },
                             onClickPosts = { viewModel.togglePostTab(true) },
-                            onClickSettings = { navigator.jumpAndStay(NavigationRoute.FacilitySettings) },
-                            onClickNewPost = { navigator.jumpAndStay(NavigationRoute.UserSocialMediaPostAdd) }
+                            onClickSettings = { navigator.jumpAndStay(MobileNavRoute.FacilitySettings) },
+                            onClickNewPost = { navigator.jumpAndStay(MobileNavRoute.UserSocialMediaPostAdd) }
                         )
                     }
 
@@ -306,7 +306,7 @@ private fun MobileFacilityProfilePhotoGallerySection(
     if (galleryStackViewData == null) {
         PhotoGalleryEmptyStackCard(
             modifier = Modifier.padding(horizontal = 16.dp),
-            onClickAdd = { navigator.jumpAndStay(NavigationRoute.FacilityPhotoGallery) }
+            onClickAdd = { navigator.jumpAndStay(MobileNavRoute.FacilityPhotoGallery) }
         )
     } else {
         PhotoGalleryStackCard(
@@ -341,12 +341,12 @@ private fun MobileFacilityProfileTrainerSection(
 ) {
     if (trainers.isEmpty()) {
         MobileFacilityTrainersCard(
-            onClickAdd = { navigator.jumpAndStay(NavigationRoute.TrainerProfileVisited) }
+            onClickAdd = { navigator.jumpAndStay(MobileNavRoute.TrainerProfileVisited) }
         )
     } else {
         MobileFacilityProfileTrainersRow(
             trainers = trainers,
-            onClick = { navigator.jumpAndStay(NavigationRoute.TrainerProfileVisited) }
+            onClick = { navigator.jumpAndStay(MobileNavRoute.TrainerProfileVisited) }
         )
     }
 }
@@ -361,11 +361,11 @@ private fun MobileFacilityProfileLessonSection(
 ) {
     if (lessonSessionColumnViewData == null) {
         MobileFacilityLessonsEmptyCard(
-            onClickAdd = { navigator.jumpAndStay(NavigationRoute.FacilityLessons) }
+            onClickAdd = { navigator.jumpAndStay(MobileNavRoute.FacilityLessons) }
         )
     } else {
-        val actionVisitCalendar: () -> Unit = { navigator.jumpAndStay(NavigationRoute.FacilityCalendarVisited) }
-        val actionManageLessons: () -> Unit = { navigator.jumpAndStay(NavigationRoute.FacilityLessons) }
+        val actionVisitCalendar: () -> Unit = { navigator.jumpAndStay(MobileNavRoute.FacilityCalendarVisited) }
+        val actionManageLessons: () -> Unit = { navigator.jumpAndStay(MobileNavRoute.FacilityLessons) }
         LessonSessionColumn(
             viewData = lessonSessionColumnViewData,
             onClickShowAll = if (viewMode == ProfileViewMode.VISITOR) null else actionManageLessons,

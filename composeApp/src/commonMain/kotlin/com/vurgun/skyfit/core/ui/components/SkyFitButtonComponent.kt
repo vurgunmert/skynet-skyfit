@@ -128,7 +128,7 @@ sealed class ButtonSize(
     data object Large : ButtonSize(24.dp, 32.dp, 8.dp, 8.dp, 20.dp)
     data object Medium : ButtonSize(20.dp, 24.dp, 6.dp, 8.dp, 16.dp)
     data object MediumDialog : ButtonSize(8.dp, 8.dp, 6.dp, 8.dp, 16.dp)
-    data object Micro : ButtonSize(12.dp, 16.dp, 4.dp, 4.dp, 16.dp)
+    data object Micro : ButtonSize(16.dp, 12.dp, 4.dp, 4.dp, 16.dp)
 }
 
 enum class ButtonVariant {

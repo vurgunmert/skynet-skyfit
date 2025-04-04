@@ -25,7 +25,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.vurgun.skyfit.feature_navigation.NavigationRoute
+import com.vurgun.skyfit.feature_navigation.MobileNavRoute
 import com.vurgun.skyfit.feature_navigation.jumpAndStay
 import com.vurgun.skyfit.core.ui.resources.SkyFitColor
 import moe.tlaster.precompose.navigation.Navigator
@@ -47,7 +47,7 @@ fun MobileFacilityHomeScreen(rootNavigator: Navigator) {
             MobileDashboardHomeFacilityStatisticsComponent()
 
             MobileDashboardHomeFacilityNoClassComponent(
-                onClick = { rootNavigator.jumpAndStay(NavigationRoute.FacilityLessons) }
+                onClick = { rootNavigator.jumpAndStay(MobileNavRoute.FacilityLessons) }
             )
 
             MobileDashboardHomeUpcomingAppointmentsComponent()

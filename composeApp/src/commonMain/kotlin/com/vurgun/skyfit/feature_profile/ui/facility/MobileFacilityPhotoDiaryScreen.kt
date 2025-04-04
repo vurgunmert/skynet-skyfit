@@ -3,7 +3,7 @@ package com.vurgun.skyfit.feature_profile.ui.facility
 import androidx.compose.material.Button
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
-import com.vurgun.skyfit.feature_navigation.NavigationRoute
+import com.vurgun.skyfit.feature_navigation.MobileNavRoute
 import com.vurgun.skyfit.feature_navigation.jumpAndTakeover
 import moe.tlaster.precompose.navigation.Navigator
 
@@ -11,6 +11,6 @@ import moe.tlaster.precompose.navigation.Navigator
 fun MobileFacilityPhotoDiaryScreen(navigator: Navigator) {
 
     Button({
-        navigator.jumpAndTakeover(NavigationRoute.FacilityPhotoGallery, NavigationRoute.Dashboard)
+        navigator.jumpAndTakeover(MobileNavRoute.FacilityPhotoGallery, MobileNavRoute.Dashboard)
     }, content = { Text("Dashboard") })
 }

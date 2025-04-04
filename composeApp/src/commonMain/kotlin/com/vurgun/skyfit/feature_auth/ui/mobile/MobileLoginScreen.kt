@@ -40,7 +40,7 @@ import com.vurgun.skyfit.core.utils.KeyboardState
 import com.vurgun.skyfit.core.utils.keyboardAsState
 import com.vurgun.skyfit.feature_auth.ui.viewmodel.LoginViewEvent
 import com.vurgun.skyfit.feature_auth.ui.viewmodel.LoginViewModel
-import com.vurgun.skyfit.feature_navigation.NavigationRoute
+import com.vurgun.skyfit.feature_navigation.MobileNavRoute
 import com.vurgun.skyfit.feature_navigation.jumpAndStay
 import com.vurgun.skyfit.feature_navigation.jumpAndTakeover
 import kotlinx.coroutines.flow.collectLatest
@@ -79,15 +79,15 @@ fun MobileLoginScreen(navigator: Navigator) {
         viewModel.uiEvents.collectLatest { event ->
             when (event) {
                 is LoginViewEvent.GoToDashboard -> {
-                    navigator.jumpAndTakeover(NavigationRoute.Dashboard)
+                    navigator.jumpAndTakeover(MobileNavRoute.Dashboard)
                 }
 
                 is LoginViewEvent.GoToOnboarding -> {
-                    navigator.jumpAndTakeover(NavigationRoute.Onboarding)
+                    navigator.jumpAndTakeover(MobileNavRoute.Onboarding)
                 }
 
                 is LoginViewEvent.GoToOTPVerification -> {
-                    navigator.jumpAndStay(NavigationRoute.LoginVerifyOTP)
+                    navigator.jumpAndStay(MobileNavRoute.LoginVerifyOTP)
                 }
 
                 is LoginViewEvent.ShowError -> {
@@ -121,9 +121,9 @@ fun MobileLoginScreen(navigator: Navigator) {
                     viewModel.submitLogin()
                 },
                 onTogglePassword = viewModel::togglePasswordVisibility,
-                onClickPrivacyPolicy = { navigator.jumpAndStay(NavigationRoute.PrivacyPolicy) },
-                onClickTermsAndConditions = { navigator.jumpAndStay(NavigationRoute.TermsAndConditions) },
-                onClickForgotPassword = { navigator.jumpAndStay(NavigationRoute.ForgotPassword) }
+                onClickPrivacyPolicy = { navigator.jumpAndStay(MobileNavRoute.PrivacyPolicy) },
+                onClickTermsAndConditions = { navigator.jumpAndStay(MobileNavRoute.TermsAndConditions) },
+                onClickForgotPassword = { navigator.jumpAndStay(MobileNavRoute.ForgotPassword) }
             )
             MobileLoginActionGroup(
                 isLoginEnabled = isLoginEnabled,

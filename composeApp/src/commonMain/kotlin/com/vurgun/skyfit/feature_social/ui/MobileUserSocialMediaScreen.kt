@@ -23,7 +23,7 @@ import androidx.compose.ui.unit.dp
 import com.vurgun.skyfit.core.ui.components.SkyFitCircularImageComponent
 import com.vurgun.skyfit.core.ui.components.button.SkyFitIconButton
 import com.vurgun.skyfit.core.ui.components.UserCircleAvatarItem
-import com.vurgun.skyfit.feature_navigation.NavigationRoute
+import com.vurgun.skyfit.feature_navigation.MobileNavRoute
 import com.vurgun.skyfit.feature_navigation.jumpAndStay
 import com.vurgun.skyfit.core.ui.resources.SkyFitColor
 import com.vurgun.skyfit.core.ui.resources.SkyFitTypography
@@ -43,7 +43,7 @@ fun MobileUserSocialMediaScreen(navigator: Navigator) {
         backgroundColor = SkyFitColor.background.default,
         topBar = {
             MobileUserSocialMediaScreenUserProfilesComponent(onNewPost = {
-                navigator.jumpAndStay(NavigationRoute.UserSocialMediaPostAdd)
+                navigator.jumpAndStay(MobileNavRoute.UserSocialMediaPostAdd)
             })
         }
     ) {

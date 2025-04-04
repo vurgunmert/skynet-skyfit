@@ -14,7 +14,7 @@ import androidx.compose.ui.unit.dp
 import com.vurgun.skyfit.core.ui.components.SkyFitMobileScaffold
 import com.vurgun.skyfit.core.ui.components.SkyFitScreenHeader
 import com.vurgun.skyfit.core.ui.components.button.PrimaryLargeButton
-import com.vurgun.skyfit.feature_navigation.NavigationRoute
+import com.vurgun.skyfit.feature_navigation.MobileNavRoute
 import com.vurgun.skyfit.feature_navigation.jumpAndStay
 import com.vurgun.skyfit.feature_navigation.jumpAndTakeover
 import com.vurgun.skyfit.feature_settings.ui.MobileSettingsMenuItemComponent
@@ -46,7 +46,7 @@ fun MobileTrainerSettingsScreen(navigator: Navigator) {
         viewModel.uiEvents.collectLatest {
             when (it) {
                 UserSettingsViewEvent.GoToLogin -> {
-                    navigator.jumpAndTakeover(NavigationRoute.Login)
+                    navigator.jumpAndTakeover(MobileNavRoute.Login)
                 }
             }
         }
@@ -76,13 +76,13 @@ fun MobileTrainerSettingsScreen(navigator: Navigator) {
             MobileSettingsMenuItemComponent(
                 text = stringResource(Res.string.settings_account_label),
                 iconRes = Res.drawable.ic_profile,
-                onClick = { navigator.jumpAndStay(NavigationRoute.TrainerSettingsAccount) }
+                onClick = { navigator.jumpAndStay(MobileNavRoute.Settings.Trainer.Account) }
             )
 
             MobileSettingsMenuItemComponent(
                 text = stringResource(Res.string.settings_payment_history_label),
                 iconRes = Res.drawable.ic_credit_card,
-                onClick = { navigator.jumpAndStay(NavigationRoute.TrainerSettingsPaymentHistory) }
+                onClick = { navigator.jumpAndStay(MobileNavRoute.Settings.Trainer.PaymentHistory) }
             )
 
             MobileSettingsMenuItemDividerComponent()
@@ -90,7 +90,7 @@ fun MobileTrainerSettingsScreen(navigator: Navigator) {
             MobileSettingsMenuItemComponent(
                 text = stringResource(Res.string.settings_notifications_label),
                 iconRes = Res.drawable.ic_bell,
-                onClick = { navigator.jumpAndStay(NavigationRoute.TrainerSettingsNotifications) }
+                onClick = { navigator.jumpAndStay(MobileNavRoute.Settings.Trainer.Notifications) }
             )
 
             MobileSettingsMenuItemDividerComponent()
@@ -98,7 +98,7 @@ fun MobileTrainerSettingsScreen(navigator: Navigator) {
             MobileSettingsMenuItemComponent(
                 text = stringResource(Res.string.settings_support_label),
                 iconRes = Res.drawable.ic_question_circle,
-                onClick = { navigator.jumpAndStay(NavigationRoute.TrainerSettingsHelp) }
+                onClick = { navigator.jumpAndStay(MobileNavRoute.Settings.Trainer.Help) }
             )
         }
     }

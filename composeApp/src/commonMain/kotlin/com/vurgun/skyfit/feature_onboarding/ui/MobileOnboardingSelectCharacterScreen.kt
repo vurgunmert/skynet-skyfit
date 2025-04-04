@@ -26,7 +26,7 @@ import com.vurgun.skyfit.core.ui.components.SkyFitScaffold
 import com.vurgun.skyfit.core.ui.components.SkyFitSelectableCardComponent
 import com.vurgun.skyfit.core.ui.resources.SkyFitStyleGuide
 import com.vurgun.skyfit.core.ui.viewdata.CharacterTypeViewData
-import com.vurgun.skyfit.feature_navigation.NavigationRoute
+import com.vurgun.skyfit.feature_navigation.MobileNavRoute
 import com.vurgun.skyfit.feature_navigation.jumpAndStay
 import com.vurgun.skyfit.feature_onboarding.domain.viewmodel.OnboardingViewModel
 import moe.tlaster.precompose.navigation.Navigator
@@ -74,7 +74,7 @@ fun MobileOnboardingCharacterSelectionScreen(
             OnboardingActionGroupComponent(
                 onClickContinue = {
                     viewModel.updateCharacter(selectedCharacter)
-                    navigator.jumpAndStay(NavigationRoute.OnboardingBirthYearSelection)
+                    navigator.jumpAndStay(MobileNavRoute.OnboardingBirthYearSelection)
                 }
             )
 

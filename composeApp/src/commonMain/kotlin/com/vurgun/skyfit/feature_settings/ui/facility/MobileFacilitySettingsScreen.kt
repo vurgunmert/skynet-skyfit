@@ -14,7 +14,7 @@ import androidx.compose.ui.unit.dp
 import com.vurgun.skyfit.core.ui.components.SkyFitMobileScaffold
 import com.vurgun.skyfit.core.ui.components.SkyFitScreenHeader
 import com.vurgun.skyfit.core.ui.components.button.PrimaryLargeButton
-import com.vurgun.skyfit.feature_navigation.NavigationRoute
+import com.vurgun.skyfit.feature_navigation.MobileNavRoute
 import com.vurgun.skyfit.feature_navigation.jumpAndStay
 import com.vurgun.skyfit.feature_navigation.jumpAndTakeover
 import com.vurgun.skyfit.feature_settings.ui.MobileSettingsMenuItemComponent
@@ -52,7 +52,7 @@ fun MobileFacilitySettingsScreen(navigator: Navigator) {
         viewModel.uiEvents.collectLatest {
             when (it) {
                 UserSettingsViewEvent.GoToLogin -> {
-                    navigator.jumpAndTakeover(NavigationRoute.Login)
+                    navigator.jumpAndTakeover(MobileNavRoute.Login)
                 }
             }
         }
@@ -82,13 +82,13 @@ fun MobileFacilitySettingsScreen(navigator: Navigator) {
             MobileSettingsMenuItemComponent(
                 text = stringResource(Res.string.settings_account_label),
                 iconRes = Res.drawable.ic_profile,
-                onClick = { navigator.jumpAndStay(NavigationRoute.FacilitySettingsAccount) }
+                onClick = { navigator.jumpAndStay(MobileNavRoute.FacilitySettingsAccount) }
             )
 
             MobileSettingsMenuItemComponent(
                 text = stringResource(Res.string.settings_payment_history_label),
                 iconRes = Res.drawable.ic_credit_card,
-                onClick = { navigator.jumpAndStay(NavigationRoute.FacilitySettingsPaymentHistory) }
+                onClick = { navigator.jumpAndStay(MobileNavRoute.FacilitySettingsPaymentHistory) }
             )
 
             MobileSettingsMenuItemDividerComponent()
@@ -96,7 +96,7 @@ fun MobileFacilitySettingsScreen(navigator: Navigator) {
             MobileSettingsMenuItemComponent(
                 text = stringResource(Res.string.settings_notifications_label),
                 iconRes = Res.drawable.ic_bell,
-                onClick = { navigator.jumpAndStay(NavigationRoute.FacilitySettingsNotifications) }
+                onClick = { navigator.jumpAndStay(MobileNavRoute.FacilitySettingsNotifications) }
             )
 
             MobileSettingsMenuItemDividerComponent()
@@ -104,19 +104,19 @@ fun MobileFacilitySettingsScreen(navigator: Navigator) {
             MobileSettingsMenuItemComponent(
                 text = stringResource(Res.string.members_label),
                 iconRes = Res.drawable.ic_posture_fill,
-                onClick = { navigator.jumpAndStay(NavigationRoute.FacilitySettingsSearchMembers) }
+                onClick = { navigator.jumpAndStay(MobileNavRoute.FacilitySettingsSearchMembers) }
             )
 
             MobileSettingsMenuItemComponent(
                 text = stringResource(Res.string.trainers_label),
                 iconRes = Res.drawable.ic_athletic_performance,
-                onClick = { navigator.jumpAndStay(NavigationRoute.FacilitySettingsTrainers) }
+                onClick = { navigator.jumpAndStay(MobileNavRoute.FacilitySettingsTrainers) }
             )
 
             MobileSettingsMenuItemComponent(
                 text = stringResource(Res.string.branches_label),
                 iconRes = Res.drawable.ic_building,
-                onClick = { navigator.jumpAndStay(NavigationRoute.FacilitySettingsTrainers) }
+                onClick = { navigator.jumpAndStay(MobileNavRoute.FacilitySettingsTrainers) }
             )
 
             MobileSettingsMenuItemDividerComponent()
@@ -124,7 +124,7 @@ fun MobileFacilitySettingsScreen(navigator: Navigator) {
             MobileSettingsMenuItemComponent(
                 text = stringResource(Res.string.settings_support_label),
                 iconRes = Res.drawable.ic_question_circle,
-                onClick = { navigator.jumpAndStay(NavigationRoute.FacilitySettingsHelp) }
+                onClick = { navigator.jumpAndStay(MobileNavRoute.FacilitySettingsHelp) }
             )
         }
     }

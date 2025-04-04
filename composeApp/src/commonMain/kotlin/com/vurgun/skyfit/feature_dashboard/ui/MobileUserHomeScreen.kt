@@ -13,7 +13,7 @@ import androidx.compose.ui.unit.dp
 import com.vurgun.skyfit.core.domain.models.UserDetail
 import com.vurgun.skyfit.core.ui.components.SkyFitScaffold
 import com.vurgun.skyfit.core.ui.resources.SkyFitStyleGuide
-import com.vurgun.skyfit.feature_navigation.NavigationRoute
+import com.vurgun.skyfit.feature_navigation.MobileNavRoute
 import com.vurgun.skyfit.feature_navigation.jumpAndStay
 import moe.tlaster.precompose.navigation.Navigator
 
@@ -27,10 +27,10 @@ fun MobileUserHomeScreen(
         topBar = {
             MobileDashboardHomeToolbarComponent(
                 onClickNotifications = {
-                    rootNavigator.jumpAndStay(NavigationRoute.UserNotifications)
+                    rootNavigator.jumpAndStay(MobileNavRoute.UserNotifications)
                 },
                 onClickMessages = {
-                    rootNavigator.jumpAndStay(NavigationRoute.UserConversations)
+                    rootNavigator.jumpAndStay(MobileNavRoute.UserConversations)
                 }
             )
         }
@@ -45,29 +45,29 @@ fun MobileUserHomeScreen(
             userDetail.characterType?.let { characterType ->
                 MobileDashboardHomeCharacterProgressComponent(
                     characterType = characterType,
-                    onClick = { rootNavigator.jumpAndStay(NavigationRoute.DashboardProfile) }
+                    onClick = { rootNavigator.jumpAndStay(MobileNavRoute.DashboardProfile) }
                 )
             }
             Spacer(Modifier.height(24.dp))
 
             MobileDashboardHomeTrophiesBarComponent(
-                onClick = { rootNavigator.jumpAndStay(NavigationRoute.UserTrophies) }
+                onClick = { rootNavigator.jumpAndStay(MobileNavRoute.UserTrophies) }
             )
 
             MobileDashboardHomeWeekProgressComponent(
-                onClick = { rootNavigator.jumpAndStay(NavigationRoute.UserActivityCalendar) }
+                onClick = { rootNavigator.jumpAndStay(MobileNavRoute.UserActivityCalendar) }
             )
 
             MobileDashboardHomeActivityCalendarComponent(
-                onClickShowAll = { rootNavigator.jumpAndStay(NavigationRoute.UserActivityCalendar) }
+                onClickShowAll = { rootNavigator.jumpAndStay(MobileNavRoute.UserActivityCalendar) }
             )
 
             MobileDashboardHomeActivityHourlyCalendarComponent(
-                onClickAdd = { rootNavigator.jumpAndStay(NavigationRoute.UserActivityCalendar) }
+                onClickAdd = { rootNavigator.jumpAndStay(MobileNavRoute.UserActivityCalendar) }
             )
 
             MobileDashboardHomeUpcomingAppointmentsComponent(
-                onClickShowAll = { rootNavigator.jumpAndStay(NavigationRoute.UserAppointments) }
+                onClickShowAll = { rootNavigator.jumpAndStay(MobileNavRoute.UserAppointments) }
             )
 
             MobileDashboardHomeGeneralStatisticsComponent()
@@ -77,19 +77,19 @@ fun MobileUserHomeScreen(
             MobileDashboardHomeProgressGridComponent()
 
             MobileDashboardHomeDailyExerciseGoalsComponent(
-                onClick = { rootNavigator.jumpAndStay(NavigationRoute.ExerciseDetail) }
+                onClick = { rootNavigator.jumpAndStay(MobileNavRoute.ExerciseDetail) }
             )
 
             MobileDashboardHomeMealGoalsComponent(
-                onClick = { rootNavigator.jumpAndStay(NavigationRoute.DashboardNutrition) }
+                onClick = { rootNavigator.jumpAndStay(MobileNavRoute.DashboardNutrition) }
             )
 
             MobileDashboardHomeFeaturedExercisesComponent(
-                onClick = { rootNavigator.jumpAndStay(NavigationRoute.ExerciseDetail) }
+                onClick = { rootNavigator.jumpAndStay(MobileNavRoute.ExerciseDetail) }
             )
 
             MobileDashboardHomeFeaturedTrainersComponent(
-                onClick = { rootNavigator.jumpAndStay(NavigationRoute.TrainerProfileVisited) }
+                onClick = { rootNavigator.jumpAndStay(MobileNavRoute.TrainerProfileVisited) }
             )
 
             Spacer(Modifier.height(128.dp))

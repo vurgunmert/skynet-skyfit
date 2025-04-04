@@ -29,7 +29,7 @@ import com.vurgun.skyfit.feature_settings.ui.FitnessTagPickerComponent
 import com.vurgun.skyfit.feature_settings.ui.MobileUserSettingsScreenDeleteActionsComponent
 import com.vurgun.skyfit.feature_settings.ui.MobileUserSettingsScreenPhotoEditComponent
 import com.vurgun.skyfit.feature_settings.ui.MobileUserSettingsScreenSaveActionComponent
-import com.vurgun.skyfit.feature_navigation.NavigationRoute
+import com.vurgun.skyfit.feature_navigation.MobileNavRoute
 import com.vurgun.skyfit.feature_navigation.jumpAndStay
 import com.vurgun.skyfit.core.ui.resources.SkyFitColor
 import moe.tlaster.precompose.navigation.Navigator
@@ -134,7 +134,7 @@ fun MobileTrainerSettingsAccountScreen(navigator: Navigator) {
             MobileSettingsMenuItemComponent(
                 text = "Şifremi Değiştir",
                 iconRes = Res.drawable.ic_lock,
-                onClick = { navigator.jumpAndStay(NavigationRoute.UserSettingsChangePassword) }
+                onClick = { navigator.jumpAndStay(MobileNavRoute.Settings.Trainer.ChangePassword) }
             )
 
             MobileSettingsMenuItemComponent(

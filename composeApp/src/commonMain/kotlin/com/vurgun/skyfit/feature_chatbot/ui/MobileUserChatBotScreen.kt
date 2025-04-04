@@ -36,9 +36,9 @@ import androidx.compose.ui.unit.min
 import com.vurgun.skyfit.core.ui.components.ButtonSize
 import com.vurgun.skyfit.core.ui.components.ButtonVariant
 import com.vurgun.skyfit.core.ui.components.SkyFitButtonComponent
-import com.vurgun.skyfit.core.ui.components.SkyFitScaffold
+import com.vurgun.skyfit.core.ui.components.SkyFitMobileScaffold
 import com.vurgun.skyfit.core.ui.components.SkyFitScreenHeader
-import com.vurgun.skyfit.feature_navigation.NavigationRoute
+import com.vurgun.skyfit.feature_navigation.MobileNavRoute
 import com.vurgun.skyfit.feature_navigation.jumpAndStay
 import com.vurgun.skyfit.core.ui.resources.SkyFitColor
 import com.vurgun.skyfit.core.ui.resources.SkyFitTypography
@@ -61,14 +61,12 @@ fun MobileUserChatBotScreen(navigator: Navigator) {
     val viewModel: ChatbotViewModel = koinInject()
     val showIntro = viewModel.isIntroEnabled.collectAsState().value
 
-
-    SkyFitScaffold(
+    SkyFitMobileScaffold(
         topBar = {
             SkyFitScreenHeader("Chatbot", onClickBack = { navigator.popBackStack() })
         }
     ) {
         Box(Modifier.fillMaxSize()) {
-
             MobileUserChatBotScreenBackgroundComponent()
 
             Column(
@@ -87,13 +85,13 @@ fun MobileUserChatBotScreen(navigator: Navigator) {
                 } else {
                     MobileUserChatBotScreenActionGroupComponent(
                         onClickShortcut = {
-                            navigator.jumpAndStay(NavigationRoute.UserBodyAnalysis)
+                            navigator.jumpAndStay(MobileNavRoute.UserBodyAnalysis)
                         },
                         onClickChatHistory = {
-                            navigator.jumpAndStay(NavigationRoute.UserToBotChat)
+                            navigator.jumpAndStay(MobileNavRoute.UserToBotChat)
                         },
                         onClickChat = {
-                            navigator.jumpAndStay(NavigationRoute.UserToBotChat)
+                            navigator.jumpAndStay(MobileNavRoute.UserToBotChat)
                         }
                     )
                 }

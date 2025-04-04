@@ -35,4 +35,13 @@ class WebLocalSettingsStore : LocalSettingsStore {
     override fun clearAll() {
         localStorage.clear()
     }
+
+    override fun isChatbotOnboardingCompleted(): Boolean {
+        return localStorage.getItem("chatbot_onboarding_completed") == "true"
+    }
+
+    override fun setChatbotOnboardingCompleted(value: Boolean) {
+        localStorage.setItem("chatbot_onboarding_completed", value.toString())
+    }
+
 }

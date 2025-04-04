@@ -28,7 +28,7 @@ import com.vurgun.skyfit.core.ui.components.ButtonState
 import com.vurgun.skyfit.core.ui.components.ButtonVariant
 import com.vurgun.skyfit.core.ui.components.SkyFitButtonComponent
 import com.vurgun.skyfit.core.ui.components.SkyFitScaffold
-import com.vurgun.skyfit.feature_navigation.NavigationRoute
+import com.vurgun.skyfit.feature_navigation.MobileNavRoute
 import com.vurgun.skyfit.feature_navigation.jumpAndTakeover
 import com.vurgun.skyfit.core.ui.resources.SkyFitColor
 import com.vurgun.skyfit.core.ui.resources.SkyFitTypography
@@ -64,7 +64,7 @@ fun MobileUserExerciseInActionCompletedScreen(navigator: Navigator) {
                 }
                 Spacer(Modifier.weight(1f))
                 MobileUserExerciseInActionCompletedScreenActionComponent(onClick = {
-                    navigator.jumpAndTakeover(NavigationRoute.ExerciseDetail, NavigationRoute.Dashboard)
+                    navigator.jumpAndTakeover(MobileNavRoute.ExerciseDetail, MobileNavRoute.Dashboard)
                 })
             }
         }
