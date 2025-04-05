@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material.Icon
 import androidx.compose.material.Text
@@ -23,9 +24,11 @@ import skyfit.composeapp.generated.resources.ic_chevron_right
 
 
 @Composable
-fun MobileSettingsMenuItemComponent(text: String,
-                                    iconRes: DrawableResource? = null,
-                                    onClick: () -> Unit = {}) {
+fun MobileSettingsMenuItemComponent(
+    text: String,
+    iconRes: DrawableResource? = null,
+    onClick: () -> Unit = {}
+) {
     Row(
         modifier = Modifier.fillMaxWidth().clickable(onClick = onClick),
         verticalAlignment = Alignment.CenterVertically,
@@ -56,9 +59,48 @@ fun MobileSettingsMenuItemComponent(text: String,
 }
 
 @Composable
+fun SettingsMenuItem(
+    iconRes: DrawableResource,
+    text: String,
+    modifier: Modifier = Modifier,
+    onClick: () -> Unit
+) {
+    Row(
+        modifier = modifier
+            .fillMaxWidth()
+            .clickable(onClick = onClick)
+            .padding(vertical = 16.dp),
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.spacedBy(16.dp)
+    ) {
+        Icon(
+            painter = painterResource(iconRes),
+            contentDescription = text,
+            modifier = Modifier.size(24.dp),
+            tint = SkyFitColor.icon.default
+        )
+
+        Text(
+            text = text,
+            modifier = Modifier.weight(1f),
+            style = SkyFitTypography.bodyMediumMediumBold
+        )
+
+        Icon(
+            painter = painterResource(Res.drawable.ic_chevron_right),
+            contentDescription = text,
+            modifier = Modifier.size(24.dp),
+            tint = SkyFitColor.icon.default
+        )
+    }
+}
+
+@Composable
 fun MobileSettingsMenuItemDividerComponent() {
     Box(
-        modifier = Modifier.fillMaxWidth()
+        modifier = Modifier
+            .padding(vertical = 16.dp)
+            .fillMaxWidth()
             .height(1.dp)
             .background(SkyFitColor.border.default)
     )

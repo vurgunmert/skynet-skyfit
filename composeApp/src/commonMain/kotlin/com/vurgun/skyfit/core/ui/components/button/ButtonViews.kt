@@ -55,6 +55,30 @@ fun SecondaryLargeButton(
 }
 
 @Composable
+fun PrimaryMediumButton(
+    text: String,
+    modifier: Modifier = Modifier.wrapContentWidth(),
+    leftIconPainter: Painter? = null,
+    rightIconPainter: Painter? = null,
+    isEnabled: Boolean = true,
+    isLoading: Boolean = false,
+    onClick: (() -> Unit)? = null
+) {
+    SkyFitButtonComponent(
+        text = text,
+        onClick = onClick,
+        variant = ButtonVariant.Primary,
+        size = ButtonSize.Medium,
+        state = if (isLoading) ButtonState.Loading else ButtonState.Rest,
+        modifier = modifier,
+        isEnabled = isEnabled,
+        leftIconPainter = leftIconPainter,
+        rightIconPainter = rightIconPainter
+    )
+}
+
+
+@Composable
 fun SecondaryMediumButton(
     text: String,
     modifier: Modifier = Modifier.wrapContentWidth(),

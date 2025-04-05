@@ -76,10 +76,11 @@ import com.vurgun.skyfit.feature_settings.ui.trainer.MobileTrainerSettingsNotifi
 import com.vurgun.skyfit.feature_settings.ui.trainer.MobileTrainerSettingsPaymentHistoryScreen
 import com.vurgun.skyfit.feature_settings.ui.trainer.MobileTrainerSettingsScreen
 import com.vurgun.skyfit.feature_settings.ui.user.MobileUserSettingsAccountScreen
+import com.vurgun.skyfit.feature_settings.ui.user.MobileUserSettingsEditProfileScreen
 import com.vurgun.skyfit.feature_settings.ui.user.MobileUserSettingsHelpScreen
 import com.vurgun.skyfit.feature_settings.ui.user.MobileUserSettingsNotificationsScreen
 import com.vurgun.skyfit.feature_settings.ui.user.MobileUserSettingsPaymentHistoryScreen
-import com.vurgun.skyfit.feature_settings.ui.user.MobileUserSettingsScreen
+import com.vurgun.skyfit.feature_settings.ui.user.MobileUserSettingsHomeScreen
 import com.vurgun.skyfit.feature_social.ui.MobileUserSocialMediaNewPostScreen
 import com.vurgun.skyfit.feature_splash.presentation.view.SplashScreen
 import moe.tlaster.precompose.navigation.NavHost
@@ -102,7 +103,7 @@ fun MobileNavigationGraph() {
 
     NavHost(
         navigator = navigator,
-        initialRoute = MobileNavRoute.Settings.User.ChangePassword.route
+        initialRoute = MobileNavRoute.Settings.User.EditProfile.route
     ) {
         mobileAuthNavGraph(navigator)
         mobileOnboardingNavGraph(navigator)
@@ -206,9 +207,9 @@ private fun RouteBuilder.userNavGraph(navigator: Navigator) {
 
 private fun RouteBuilder.settingsNavGraph(navigator: Navigator) {
     //User - Settings
-    scene(MobileNavRoute.Settings.User.Home.route) { MobileUserSettingsScreen(navigator) }
+    scene(MobileNavRoute.Settings.User.Home.route) { MobileUserSettingsHomeScreen(navigator) }
     scene(MobileNavRoute.Settings.User.Account.route) { MobileUserSettingsAccountScreen(navigator) }
-    scene(MobileNavRoute.Settings.User.EditProfile.route) { MobileUserSettingsAccountScreen(navigator) }
+    scene(MobileNavRoute.Settings.User.EditProfile.route) { MobileUserSettingsEditProfileScreen(navigator) }
     scene(MobileNavRoute.Settings.User.Notifications.route) { MobileUserSettingsNotificationsScreen(navigator) }
     scene(MobileNavRoute.Settings.User.PaymentHistory.route) { MobileUserSettingsPaymentHistoryScreen(navigator) }
     scene(MobileNavRoute.Settings.User.ChangePassword.route) { SettingsChangePasswordScreen(navigator) }

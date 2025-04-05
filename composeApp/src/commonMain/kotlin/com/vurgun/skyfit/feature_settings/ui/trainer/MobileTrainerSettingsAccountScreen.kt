@@ -26,7 +26,7 @@ import com.vurgun.skyfit.feature_settings.ui.SkyFitSelectToEnterInputComponent
 import com.vurgun.skyfit.feature_settings.ui.SkyFitSelectToEnterMultilineInputComponent
 import com.vurgun.skyfit.feature_settings.ui.MobileSettingsMenuItemComponent
 import com.vurgun.skyfit.feature_settings.ui.FitnessTagPickerComponent
-import com.vurgun.skyfit.feature_settings.ui.MobileUserSettingsScreenDeleteActionsComponent
+import com.vurgun.skyfit.feature_settings.ui.MobileSettingsDeleteAccountBottomSheet
 import com.vurgun.skyfit.feature_settings.ui.MobileUserSettingsScreenPhotoEditComponent
 import com.vurgun.skyfit.feature_settings.ui.MobileUserSettingsScreenSaveActionComponent
 import com.vurgun.skyfit.feature_navigation.MobileNavRoute
@@ -59,7 +59,7 @@ fun MobileTrainerSettingsAccountScreen(navigator: Navigator) {
         },
         bottomBar = {
             if (showDeleteConfirm) {
-                MobileUserSettingsScreenDeleteActionsComponent(
+                MobileSettingsDeleteAccountBottomSheet(
                     onCancelClicked = { showDeleteConfirm = false },
                     onDeleteClicked = {}
                 )

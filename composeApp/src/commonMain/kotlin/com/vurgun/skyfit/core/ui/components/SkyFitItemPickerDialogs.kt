@@ -36,9 +36,9 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import com.vurgun.skyfit.core.domain.models.BodyType
 import com.vurgun.skyfit.core.domain.models.FitnessTagType
-import com.vurgun.skyfit.feature_onboarding.ui.WeightPicker
 import com.vurgun.skyfit.core.ui.resources.SkyFitColor
 import com.vurgun.skyfit.core.ui.resources.SkyFitTypography
+import com.vurgun.skyfit.designsystem.components.picker.WeightPicker
 import org.jetbrains.compose.resources.painterResource
 import skyfit.composeapp.generated.resources.Res
 import skyfit.composeapp.generated.resources.ic_check
@@ -130,6 +130,7 @@ fun StringUnitPicker(
     )
 }
 
+//TODO: Remove
 @Composable
 fun HeightPickerDialog(
     initialHeight: Int? = 170,

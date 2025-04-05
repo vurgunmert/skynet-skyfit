@@ -1,6 +1,5 @@
 package com.vurgun.skyfit.feature_settings.ui.user
 
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -17,8 +16,8 @@ import com.vurgun.skyfit.core.ui.components.button.PrimaryLargeButton
 import com.vurgun.skyfit.feature_navigation.MobileNavRoute
 import com.vurgun.skyfit.feature_navigation.jumpAndStay
 import com.vurgun.skyfit.feature_navigation.jumpAndTakeover
-import com.vurgun.skyfit.feature_settings.ui.MobileSettingsMenuItemComponent
 import com.vurgun.skyfit.feature_settings.ui.MobileSettingsMenuItemDividerComponent
+import com.vurgun.skyfit.feature_settings.ui.SettingsMenuItem
 import kotlinx.coroutines.flow.collectLatest
 import moe.tlaster.precompose.navigation.Navigator
 import org.jetbrains.compose.resources.stringResource
@@ -36,7 +35,7 @@ import skyfit.composeapp.generated.resources.settings_support_label
 import skyfit.composeapp.generated.resources.settings_title
 
 @Composable
-fun MobileUserSettingsScreen(navigator: Navigator) {
+fun MobileUserSettingsHomeScreen(navigator: Navigator) {
 
     val viewModel: UserSettingsViewModel = koinInject()
 
@@ -67,35 +66,34 @@ fun MobileUserSettingsScreen(navigator: Navigator) {
                 .padding(start = 21.dp, end = 11.dp, top = 24.dp, bottom = 96.dp)
                 .fillMaxSize()
                 .padding(12.dp)
-                .verticalScroll(rememberScrollState()),
-            verticalArrangement = Arrangement.spacedBy(32.dp)
+                .verticalScroll(rememberScrollState())
         ) {
 
-            MobileSettingsMenuItemComponent(
-                text = stringResource(Res.string.settings_account_label),
+            SettingsMenuItem(
                 iconRes = Res.drawable.ic_profile,
+                text = stringResource(Res.string.settings_account_label),
                 onClick = { navigator.jumpAndStay(MobileNavRoute.Settings.User.Account) }
             )
 
-            MobileSettingsMenuItemComponent(
-                text = stringResource(Res.string.settings_payment_history_label),
+            SettingsMenuItem(
                 iconRes = Res.drawable.ic_credit_card,
+                text = stringResource(Res.string.settings_payment_history_label),
                 onClick = { navigator.jumpAndStay(MobileNavRoute.Settings.User.PaymentHistory) }
             )
 
             MobileSettingsMenuItemDividerComponent()
 
-            MobileSettingsMenuItemComponent(
-                text = stringResource(Res.string.settings_notifications_label),
+            SettingsMenuItem(
                 iconRes = Res.drawable.ic_bell,
+                text = stringResource(Res.string.settings_notifications_label),
                 onClick = { navigator.jumpAndStay(MobileNavRoute.Settings.User.Notifications) }
             )
 
             MobileSettingsMenuItemDividerComponent()
 
-            MobileSettingsMenuItemComponent(
-                text = stringResource(Res.string.settings_support_label),
+            SettingsMenuItem(
                 iconRes = Res.drawable.ic_question_circle,
+                text = stringResource(Res.string.settings_support_label),
                 onClick = { navigator.jumpAndStay(MobileNavRoute.Settings.User.Help) }
             )
         }

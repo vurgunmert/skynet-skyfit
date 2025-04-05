@@ -140,7 +140,8 @@ fun UserAccountSettingsProfileCard(
     social: String = "vurgunmert",
     height: String = "174 cm",
     weight: String = "78 kg",
-    bodyType: String = "Ecto"
+    bodyType: String = "Ecto",
+    onClick: () -> Unit
 ) {
     AccountSettingsProfileCard(
         imageContent = {
@@ -148,7 +149,8 @@ fun UserAccountSettingsProfileCard(
             AccountSettingsProfileCardForegroundImage(foregroundImageUrl)
             LargePrimaryIconButton(
                 iconRes = Res.drawable.ic_pencil,
-                modifier = Modifier.align(Alignment.TopEnd).padding(8.dp)
+                modifier = Modifier.align(Alignment.TopEnd).padding(8.dp),
+                onClick = onClick
             )
         },
         editorialContent = {
@@ -182,7 +184,8 @@ fun TrainerAccountSettingsProfileCard(
     name: String = "Mert",
     social: String = "vurgunmert",
     note: String = "Whether you're a beginner or looking to advance, My balanced approach will guide you every step of the way. \uD83C\uDFC3\uD83C\uDFFD\u200D♂\uFE0F\n@ironstudio",
-    tags: List<FitnessTagType> = FitnessTagType.getAllTags().take(5).shuffled()
+    tags: List<FitnessTagType> = FitnessTagType.getAllTags().take(5).shuffled(),
+    onClick: () -> Unit
 ) {
 
     AccountSettingsProfileCard(
@@ -191,7 +194,8 @@ fun TrainerAccountSettingsProfileCard(
             AccountSettingsProfileCardForegroundImage(foregroundImageUrl)
             LargePrimaryIconButton(
                 iconRes = Res.drawable.ic_pencil,
-                modifier = Modifier.align(Alignment.TopEnd).padding(8.dp)
+                modifier = Modifier.align(Alignment.TopEnd).padding(8.dp),
+                onClick = onClick
             )
         },
         editorialContent = {
@@ -230,7 +234,8 @@ fun FacilityAccountSettingsProfileCard(
     name: String = "Ironstudio",
     address: String = "1425 Maplewood Avenue, Apt 3B, Brookfield, IL 60513, USA",
     note: String = "Whether you're a beginner or looking to advance, My balanced approach will guide you every step of the way. \uD83C\uDFC3\uD83C\uDFFD\u200D♂\uFE0F\n@ironstudio",
-    tags: List<FitnessTagType> = FitnessTagType.getAllTags().take(5).shuffled()
+    tags: List<FitnessTagType> = FitnessTagType.getAllTags().take(5).shuffled(),
+    onClick: () -> Unit
 ) {
 
     AccountSettingsProfileCard(
@@ -238,7 +243,8 @@ fun FacilityAccountSettingsProfileCard(
             AccountSettingsProfileCardBackgroundImage(backgroundImageUrl)
             LargePrimaryIconButton(
                 iconRes = Res.drawable.ic_pencil,
-                modifier = Modifier.align(Alignment.TopEnd).padding(8.dp)
+                modifier = Modifier.align(Alignment.TopEnd).padding(8.dp),
+                onClick = onClick
             )
         },
         editorialContent = {

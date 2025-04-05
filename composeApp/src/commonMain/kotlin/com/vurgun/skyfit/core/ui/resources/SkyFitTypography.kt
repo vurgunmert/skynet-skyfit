@@ -256,6 +256,16 @@ object SkyFitTypography {
             color = SkyFitColor.text.default
         )
 
+    val bodyMediumMediumBold: TextStyle
+        @Composable
+        get() = TextStyle(
+            fontFamily = InterFontFamily(),
+            fontWeight = FontWeight.Bold,
+            fontSize = 14.sp,
+            lineHeight = 20.sp,
+            color = SkyFitColor.text.default
+        )
+
     val bodyMediumRegular: TextStyle
         @Composable
         get() = TextStyle(

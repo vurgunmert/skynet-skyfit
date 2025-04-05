@@ -27,12 +27,22 @@ fun SecondaryMediumUnderlinedText(text: String, modifier: Modifier = Modifier) {
     )
 }
 
-
 @Composable
 fun BodySmallRegularText(text: String, modifier: Modifier = Modifier, color: Color? = null) {
     Text(
         text = text,
         style = SkyFitTypography.bodySmall,
+        color = color ?: SkyFitColor.text.default,
+        modifier = modifier
+    )
+}
+
+
+@Composable
+fun BodySmallSemiboldText(text: String, modifier: Modifier = Modifier, color: Color? = null) {
+    Text(
+        text = text,
+        style = SkyFitTypography.bodySmallSemibold,
         color = color ?: SkyFitColor.text.default,
         modifier = modifier
     )

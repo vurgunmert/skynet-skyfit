@@ -1,25 +1,26 @@
 package com.vurgun.skyfit.feature_settings.ui.user
 
 import androidx.lifecycle.ViewModel
+import com.vurgun.skyfit.core.domain.models.BodyType
+import com.vurgun.skyfit.core.domain.models.HeightUnitType
+import com.vurgun.skyfit.core.domain.models.WeightUnitType
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.update
-import com.vurgun.skyfit.core.domain.models.BodyType
-import com.vurgun.skyfit.core.domain.models.FitnessTagType
 
 // Data class to hold all user account state in one place
 data class UserAccountState(
     val userName: String? = null,
-    val fullName: String? = null,
+    val firstName: String? = null,
+    val lastName: String? = null,
     val email: String? = null,
-    val height: Int? = null,
-    val heightUnit: String? = null,
-    val weight: Int? = null,
-    val weightUnit: String? = null,
-    val bodyType: BodyType = BodyType.NOT_DEFINED,
+    val height: Int = 170,
+    val heightUnit: HeightUnitType = HeightUnitType.CM,
+    val weight: Int = 70,
+    val weightUnit: WeightUnitType = WeightUnitType.KG,
+    val bodyType: BodyType = BodyType.ECTOMORPH,
     val profileImageUrl: String? = null,
     val backgroundImageUrl: String? = null,
-    val profileTags: List<FitnessTagType> = emptyList(),
     val isUpdated: Boolean = false
 )
 
@@ -33,14 +34,12 @@ class SkyFitUserAccountSettingsViewModel : ViewModel() {
     fun loadData() {
         val initial = UserAccountState(
             userName = "maxjacobson",
-            fullName = "Maxine",
+            firstName = "Maxine",
+            lastName = "Jacobson",
             email = "maxine@gmail.com",
             height = 175,
-            heightUnit = "cm",
             weight = 75,
-            weightUnit = "kg",
-            bodyType = BodyType.NOT_DEFINED,
-            profileTags = listOf(FitnessTagType.MUSCLE_GROWTH, FitnessTagType.ENDURANCE),
+            bodyType = BodyType.ECTOMORPH,
             profileImageUrl = null,
             backgroundImageUrl = null
         )
@@ -59,8 +58,12 @@ class SkyFitUserAccountSettingsViewModel : ViewModel() {
         updateState { copy(userName = value) }
     }
 
-    fun updateFullName(value: String) {
-        updateState { copy(fullName = value) }
+    fun updateFirstName(value: String) {
+        updateState { copy(firstName = value) }
+    }
+
+    fun updateLastName(value: String) {
+        updateState { copy(lastName = value) }
     }
 
     fun updateEmail(value: String) {
@@ -71,11 +74,11 @@ class SkyFitUserAccountSettingsViewModel : ViewModel() {
         updateState { copy(height = value) }
     }
 
-    fun updateHeightUnit(value: String) {
+    fun updateHeightUnit(value: HeightUnitType) {
         updateState { copy(heightUnit = value) }
     }
 
-    fun updateWeightUnit(value: String) {
+    fun updateWeightUnit(value: WeightUnitType) {
         updateState { copy(weightUnit = value) }
     }
 
@@ -87,16 +90,8 @@ class SkyFitUserAccountSettingsViewModel : ViewModel() {
         updateState { copy(bodyType = value) }
     }
 
-    fun updateTags(tags: List<FitnessTagType>) {
-        updateState { copy(profileTags = tags) }
-    }
-
     fun saveChanges() {
         updateState { copy(isUpdated = false) }
         initialState = _accountState.value
-    }
-
-    fun deleteAccount() {
-        // TODO: Implement account deletion logic
     }
 }

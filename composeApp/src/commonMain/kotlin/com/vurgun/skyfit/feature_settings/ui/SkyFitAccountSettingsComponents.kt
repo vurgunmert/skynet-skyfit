@@ -28,7 +28,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -56,18 +55,25 @@ import com.vurgun.skyfit.core.ui.components.ButtonVariant
 import com.vurgun.skyfit.core.ui.components.FitnessTagPickerDialog
 import com.vurgun.skyfit.core.ui.components.SkyFitAccountSettingsProfileTagItemComponent
 import com.vurgun.skyfit.core.ui.components.SkyFitButtonComponent
+import com.vurgun.skyfit.core.ui.components.button.PrimaryLargeButton
+import com.vurgun.skyfit.core.ui.components.button.SecondaryLargeButton
 import com.vurgun.skyfit.core.ui.components.image.SkyFitPickImageWrapper
 import com.vurgun.skyfit.core.ui.resources.SkyFitColor
 import com.vurgun.skyfit.core.ui.resources.SkyFitTypography
 import org.jetbrains.compose.resources.DrawableResource
 import org.jetbrains.compose.resources.painterResource
+import org.jetbrains.compose.resources.stringResource
 import skyfit.composeapp.generated.resources.Res
+import skyfit.composeapp.generated.resources.cancel_action
+import skyfit.composeapp.generated.resources.delete_account_action
 import skyfit.composeapp.generated.resources.ic_delete
 import skyfit.composeapp.generated.resources.ic_pencil
 import skyfit.composeapp.generated.resources.ic_warning
 import skyfit.composeapp.generated.resources.logo_skyfit
+import skyfit.composeapp.generated.resources.settings_delete_account_dialog_message
+import skyfit.composeapp.generated.resources.settings_delete_account_dialog_title
 
-
+//TODO: REMOVE
 @Composable
 fun MobileUserSettingsScreenPhotoEditComponent(
     urlString: String?,
@@ -150,7 +156,7 @@ fun MobileUserSettingsScreenSaveActionComponent(onClick: () -> Unit) {
 }
 
 @Composable
-fun MobileUserSettingsScreenDeleteActionsComponent(
+fun MobileSettingsDeleteAccountBottomSheet(
     onDeleteClicked: () -> Unit,
     onCancelClicked: () -> Unit
 ) {
@@ -161,7 +167,7 @@ fun MobileUserSettingsScreenDeleteActionsComponent(
             .padding(24.dp)
     ) {
         Text(
-            text = "Emin misiniz?",
+            text = stringResource(Res.string.settings_delete_account_dialog_title),
             style = SkyFitTypography.heading4,
             color = SkyFitColor.text.default,
             modifier = Modifier.fillMaxWidth(),
@@ -170,30 +176,24 @@ fun MobileUserSettingsScreenDeleteActionsComponent(
 
         Spacer(Modifier.height(16.dp))
         Text(
-            text = "Hesabınızı sildiğinizde bu işlemi geri alamayacaksınız. Profiliniz, fotoğraflarınız, notlarınız, tepkileriniz ve takipçileriniz dahil tüm verileriniz kaybolacak.",
+            text = stringResource(Res.string.settings_delete_account_dialog_message),
             style = SkyFitTypography.bodyLargeMedium,
             color = SkyFitColor.text.secondary,
             textAlign = TextAlign.Start
         )
 
         Spacer(Modifier.height(24.dp))
-        SkyFitButtonComponent(
+        PrimaryLargeButton(
             modifier = Modifier.fillMaxWidth().padding(horizontal = 24.dp),
-            text = "Hesabı Sil",
+            text = stringResource(Res.string.delete_account_action),
             onClick = onDeleteClicked,
-            variant = ButtonVariant.Primary,
-            size = ButtonSize.Large,
-            state = ButtonState.Rest,
             leftIconPainter = painterResource(Res.drawable.ic_delete)
         )
         Spacer(Modifier.height(24.dp))
-        SkyFitButtonComponent(
+        SecondaryLargeButton(
             modifier = Modifier.fillMaxWidth().padding(horizontal = 24.dp),
-            text = "İptal",
-            onClick = onCancelClicked,
-            variant = ButtonVariant.Secondary,
-            size = ButtonSize.Large,
-            state = ButtonState.Rest
+            text = stringResource(Res.string.cancel_action),
+            onClick = onCancelClicked
         )
     }
 }

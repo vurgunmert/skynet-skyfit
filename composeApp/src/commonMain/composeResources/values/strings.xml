@@ -57,6 +57,8 @@
     <string name="ok_action">Tamam</string>
     <string name="no_not_yet_action">Hayır, şimdi değil</string>
     <string name="send_action">Gönder</string>
+    <string name="change_action">Değiştir</string>
+    <string name="add_action">Ekle</string>
 
     <!-- 🔷 Gender Options -->
     <string name="gender_female">Kadın</string>
@@ -160,6 +162,8 @@
     <string name="settings_notifications_label">Bildirimler</string>
     <string name="settings_support_label">Destek ve Yardım</string>
 
+    <string name="add_account_action">Hesap Ekle</string>
+    <string name="delete_account_action">Hesabı Sil</string>
     <string name="settings_change_my_password_label">Şifremi Değiştir</string>
     <string name="settings_current_password_label">Güncel Şifre</string>
     <string name="settings_current_password_hint">Güncel şifrenizi girin</string>
@@ -181,7 +185,14 @@
     <string name="settings_support_upload_file_label">Dosya Yükle</string>
     <string name="settings_support_upload_file_hint">Ekran fotoğrafı, dekont veya belgenizi ekleyin.</string>
     <string name="settings_support_questions_label">Sıkça Sorulan Sorular</string>
-
+    <string name="settings_delete_account_dialog_title">Emin misiniz?</string>
+    <string name="settings_delete_account_dialog_message">Hesabınızı sildiğinizde bu işlemi geri alamayacaksınız. Profiliniz, fotoğraflarınız, notlarınız, tepkileriniz ve takipçileriniz dahil tüm verileriniz kaybolacak.</string>
+    <string name="settings_edit_profile_username_label">Kullanıcı Adı *</string>
+    <string name="settings_edit_profile_username_hint">Kullanıcı adını girin</string>
+    <string name="settings_edit_profile_firstname_label">Kullanıcı adını girin</string>
+    <string name="settings_edit_profile_height_label">Boy (%1$s)</string>
+    <string name="settings_edit_profile_weight_label">Kilo (%1$s)</string>
+    <string name="settings_edit_profile_body_type_label">Vücut Tipi</string>
 </resources>
 
 <!--    Use snake_case + purpose-based suffixes:-->

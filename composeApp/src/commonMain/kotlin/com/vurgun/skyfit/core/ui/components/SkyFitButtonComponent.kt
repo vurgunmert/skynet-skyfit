@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Button
 import androidx.compose.material.ButtonDefaults
@@ -35,7 +36,7 @@ fun SkyFitButtonComponent(
     isEnabled: Boolean = true,
     modifier: Modifier = Modifier.fillMaxWidth(),
     maxLines: Int = 1,
-    onClick: () -> Unit
+    onClick: (() -> Unit)? = null
 ) {
 
     val buttonStyle = getButtonStyle(variant, if (isEnabled) state else ButtonState.Disabled)
@@ -47,24 +48,26 @@ fun SkyFitButtonComponent(
     }
 
     Button(
-        onClick = { if (state != ButtonState.Disabled && state != ButtonState.Loading) onClick() },
-        modifier = modifier,
+        onClick = { if (state != ButtonState.Disabled && state != ButtonState.Loading) onClick?.invoke() },
+        modifier = modifier
+            .wrapContentSize()
+            .padding(
+            start = size.paddingStart,
+            end = size.paddingEnd,
+            top = size.paddingVertical,
+            bottom = size.paddingVertical
+        ),
         colors = ButtonDefaults.buttonColors(
             backgroundColor = buttonStyle.backgroundColor,
             contentColor = buttonStyle.foregroundColor
         ),
         shape = RoundedCornerShape(percent = 50),
         border = BorderStroke(1.dp, buttonStyle.borderColor),
-        enabled = isEnabled || state != ButtonState.Disabled
+        enabled = onClick!= null && (isEnabled || state != ButtonState.Disabled)
     ) {
         if (state == ButtonState.Loading) {
             Row(
-                modifier = Modifier.padding(
-                    start = size.paddingStart,
-                    end = size.paddingEnd,
-                    top = size.paddingVertical,
-                    bottom = size.paddingVertical
-                ),
+                modifier = Modifier,
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.Center
             ) {
@@ -75,14 +78,8 @@ fun SkyFitButtonComponent(
                 )
             }
         } else {
-
             Row(
-                modifier = Modifier.padding(
-                    start = size.paddingStart,
-                    end = size.paddingEnd,
-                    top = size.paddingVertical,
-                    bottom = size.paddingVertical
-                ),
+                modifier = Modifier,
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.Center
             ) {
