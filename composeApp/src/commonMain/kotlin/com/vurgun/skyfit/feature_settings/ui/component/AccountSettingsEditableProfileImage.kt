@@ -82,6 +82,7 @@ private fun PillText(
 }
 
 
+//TODO: Remove
 @Composable
 fun AccountSettingsEditableProfileImage2(
     title: String,

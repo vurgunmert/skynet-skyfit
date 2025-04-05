@@ -45,7 +45,7 @@ import skyfit.composeapp.generated.resources.ic_pencil
 import skyfit.composeapp.generated.resources.onboarding_trainer_profile_message
 import skyfit.composeapp.generated.resources.onboarding_trainer_profile_title
 import skyfit.composeapp.generated.resources.user_biography_hint
-import skyfit.composeapp.generated.resources.user_biography_mandatory_label
+import skyfit.composeapp.generated.resources.mandatory_biography_label
 import skyfit.composeapp.generated.resources.user_first_name_hint
 import skyfit.composeapp.generated.resources.user_first_name_mandatory_label
 import skyfit.composeapp.generated.resources.user_last_name_hint
@@ -137,7 +137,7 @@ fun MobileOnboardingEnterProfileScreen(
                     if (userType == UserType.Trainer) {
                         SkyFitSelectToEnterMultilineInputComponent(
                             modifier = Modifier.padding(horizontal = 22.dp),
-                            title = stringResource(Res.string.user_biography_mandatory_label),
+                            title = stringResource(Res.string.mandatory_biography_label),
                             hint = stringResource(Res.string.user_biography_hint),
                             value = biography,
                             onValueChange = { viewModel.updateBiography(it) },

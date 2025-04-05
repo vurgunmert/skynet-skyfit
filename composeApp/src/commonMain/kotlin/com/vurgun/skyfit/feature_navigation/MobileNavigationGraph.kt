@@ -64,9 +64,10 @@ import com.vurgun.skyfit.feature_profile.ui.user.MobileUserTrophiesScreen
 import com.vurgun.skyfit.feature_settings.ui.changepassword.SettingsChangePasswordScreen
 import com.vurgun.skyfit.feature_settings.ui.facility.MobileFacilitySettingsAccountScreen
 import com.vurgun.skyfit.feature_settings.ui.facility.MobileFacilitySettingsAddMembersScreen
+import com.vurgun.skyfit.feature_settings.ui.facility.MobileFacilitySettingsEditProfileScreen
 import com.vurgun.skyfit.feature_settings.ui.facility.MobileFacilitySettingsNotificationsScreen
 import com.vurgun.skyfit.feature_settings.ui.facility.MobileFacilitySettingsPaymentHistoryScreen
-import com.vurgun.skyfit.feature_settings.ui.facility.MobileFacilitySettingsScreen
+import com.vurgun.skyfit.feature_settings.ui.facility.MobileFacilitySettingsHomeScreen
 import com.vurgun.skyfit.feature_settings.ui.facility.MobileFacilitySettingsSearchMembersScreen
 import com.vurgun.skyfit.feature_settings.ui.facility.MobileFacilitySettingsTrainersScreen
 import com.vurgun.skyfit.feature_settings.ui.helpsupport.MobileSettingsSupportHelpScreen
@@ -102,7 +103,7 @@ fun MobileNavigationGraph() {
 
     NavHost(
         navigator = navigator,
-        initialRoute = MobileNavRoute.Settings.Trainer.Help.route
+        initialRoute = MobileNavRoute.Settings.Facility.Account.route
     ) {
         mobileAuthNavGraph(navigator)
         mobileOnboardingNavGraph(navigator)
@@ -224,9 +225,9 @@ private fun RouteBuilder.settingsNavGraph(navigator: Navigator) {
     scene(MobileNavRoute.Settings.Trainer.ManageAccounts.route) { MobileSettingsSupportHelpScreen(navigator) }
     scene(MobileNavRoute.Settings.Trainer.ManageMembers.route) { MobileSettingsSupportHelpScreen(navigator) }
     //Facility - Settings
-    scene(MobileNavRoute.Settings.Facility.Home.route) { MobileFacilitySettingsScreen(navigator) }
+    scene(MobileNavRoute.Settings.Facility.Home.route) { MobileFacilitySettingsHomeScreen(navigator) }
     scene(MobileNavRoute.Settings.Facility.Account.route) { MobileFacilitySettingsAccountScreen(navigator) }
-    scene(MobileNavRoute.Settings.Facility.EditProfile.route) { MobileFacilitySettingsAccountScreen(navigator) }
+    scene(MobileNavRoute.Settings.Facility.EditProfile.route) { MobileFacilitySettingsEditProfileScreen(navigator) }
     scene(MobileNavRoute.Settings.Facility.PaymentHistory.route) { MobileFacilitySettingsPaymentHistoryScreen(navigator) }
     scene(MobileNavRoute.Settings.Facility.ChangePassword.route) { SettingsChangePasswordScreen(navigator) }
     scene(MobileNavRoute.Settings.Facility.Notifications.route) { MobileFacilitySettingsNotificationsScreen(navigator) }

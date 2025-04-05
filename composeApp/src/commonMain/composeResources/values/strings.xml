@@ -16,9 +16,11 @@
     <string name="user_first_name_mandatory_label">Ad *</string>
     <string name="user_last_name_mandatory_label">Soyad *</string>
     <string name="user_workplace_mandatory_label">İş Yeri *</string>
-    <string name="user_workplace_name_mandatory_label">İş Yeri Adı *</string>
-    <string name="user_biography_mandatory_label">Biyografi *</string>
-    <string name="user_address_mandatory_label">Adres *</string>
+    <string name="mandatory_workplace_name_label">İşyeri Adı *</string>
+    <string name="workplace_name_hint">Profilinizde görünecek işyeri adını giriniz</string>
+
+    <string name="mandatory_biography_label">Biyografi *</string>
+    <string name="mandatory_address_label">Adres *</string>
 
     <!-- 🔹 Hints -->
     <string name="user_first_name_hint">Adınızı girin</string>
@@ -195,7 +197,9 @@
     <string name="settings_edit_profile_weight_label">Kilo (%1$s)</string>
     <string name="settings_edit_profile_body_type_label">Vücut Tipi</string>
     <string name="settings_edit_profile_biography_label">Biyografi *</string>
-    <string name="settings_edit_profile_biography_hint">Kendinizi ve uzmanlık alanınızı kısaca tanıtın</string>
+    <string name="settings_edit_profile_biography_hint">Kendinizi veya kuruluşunuzu kısaca tanıtın</string>
+    <string name="settings_edit_profile_address_label">Adres *</string>
+    <string name="settings_edit_profile_address_hint">Açık adresinizi giriniz</string>
 
     <string name="background_image_label">Arkaplan Resmi</string>
     <string name="profile_image_label">Profil Resmi</string>

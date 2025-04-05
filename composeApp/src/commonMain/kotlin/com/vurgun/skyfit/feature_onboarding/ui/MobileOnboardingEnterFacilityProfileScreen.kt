@@ -40,11 +40,11 @@ import skyfit.composeapp.generated.resources.continue_action
 import skyfit.composeapp.generated.resources.ic_pencil
 import skyfit.composeapp.generated.resources.onboarding_facility_profile_message
 import skyfit.composeapp.generated.resources.onboarding_facility_profile_title
-import skyfit.composeapp.generated.resources.user_address_mandatory_label
+import skyfit.composeapp.generated.resources.mandatory_address_label
 import skyfit.composeapp.generated.resources.user_biography_hint
-import skyfit.composeapp.generated.resources.user_biography_mandatory_label
+import skyfit.composeapp.generated.resources.mandatory_biography_label
 import skyfit.composeapp.generated.resources.user_workplace_mandatory_label
-import skyfit.composeapp.generated.resources.user_workplace_name_mandatory_label
+import skyfit.composeapp.generated.resources.mandatory_workplace_name_label
 
 @Composable
 fun MobileOnboardingFacilityDetailsScreen(
@@ -104,7 +104,7 @@ fun MobileOnboardingFacilityDetailsScreen(
 
                 SkyFitSelectToEnterInputComponent(
                     title = stringResource(Res.string.user_workplace_mandatory_label),
-                    hint = stringResource(Res.string.user_workplace_name_mandatory_label),
+                    hint = stringResource(Res.string.mandatory_workplace_name_label),
                     value = name,
                     onValueChange = { viewModel.updateFacilityName(it) },
                     rightIconRes = Res.drawable.ic_pencil,
@@ -114,8 +114,8 @@ fun MobileOnboardingFacilityDetailsScreen(
 
                 Spacer(Modifier.height(16.dp))
                 SkyFitSelectToEnterMultilineInputComponent(
-                    title = stringResource(Res.string.user_address_mandatory_label),
-                    hint = stringResource(Res.string.user_address_mandatory_label),
+                    title = stringResource(Res.string.mandatory_address_label),
+                    hint = stringResource(Res.string.mandatory_address_label),
                     value = address,
                     onValueChange = { viewModel.updateFacilityAddress(it) },
                     rightIconRes = Res.drawable.ic_pencil,
@@ -125,7 +125,7 @@ fun MobileOnboardingFacilityDetailsScreen(
 
                 Spacer(Modifier.height(16.dp))
                 SkyFitSelectToEnterMultilineInputComponent(
-                    title = stringResource(Res.string.user_biography_mandatory_label),
+                    title = stringResource(Res.string.mandatory_biography_label),
                     hint = stringResource(Res.string.user_biography_hint),
                     value = biography,
                     onValueChange = { viewModel.updateFacilityBiography(it) },

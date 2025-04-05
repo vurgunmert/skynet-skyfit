@@ -44,7 +44,7 @@ import skyfit.composeapp.generated.resources.settings_title
 import skyfit.composeapp.generated.resources.trainers_label
 
 @Composable
-fun MobileFacilitySettingsScreen(navigator: Navigator) {
+fun MobileFacilitySettingsHomeScreen(navigator: Navigator) {
 
     val viewModel: UserSettingsViewModel = koinInject()
 

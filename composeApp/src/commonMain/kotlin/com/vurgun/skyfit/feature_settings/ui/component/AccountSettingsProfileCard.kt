@@ -231,10 +231,10 @@ fun TrainerAccountSettingsProfileCard(
 @Composable
 fun FacilityAccountSettingsProfileCard(
     backgroundImageUrl: String? = null,
-    name: String = "Ironstudio",
-    address: String = "1425 Maplewood Avenue, Apt 3B, Brookfield, IL 60513, USA",
-    note: String = "Whether you're a beginner or looking to advance, My balanced approach will guide you every step of the way. \uD83C\uDFC3\uD83C\uDFFD\u200D♂\uFE0F\n@ironstudio",
-    tags: List<FitnessTagType> = FitnessTagType.getAllTags().take(5).shuffled(),
+    name: String,
+    address: String,
+    note: String,
+    tags: List<FitnessTagType>,
     onClick: () -> Unit
 ) {
 
