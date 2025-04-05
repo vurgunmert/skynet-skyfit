@@ -161,6 +161,7 @@
     <string name="settings_payment_history_label">Ödeme Geçmişi</string>
     <string name="settings_notifications_label">Bildirimler</string>
     <string name="settings_support_label">Destek ve Yardım</string>
+    <string name="settings_support_help_subtitle">Sık sorulan soruların yanıtlarını bulun veya doğrudan bizimle iletişime geçin</string>
 
     <string name="add_account_action">Hesap Ekle</string>
     <string name="delete_account_action">Hesabı Sil</string>

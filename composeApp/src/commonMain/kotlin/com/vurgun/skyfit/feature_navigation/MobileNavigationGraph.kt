@@ -64,24 +64,22 @@ import com.vurgun.skyfit.feature_profile.ui.user.MobileUserTrophiesScreen
 import com.vurgun.skyfit.feature_settings.ui.changepassword.SettingsChangePasswordScreen
 import com.vurgun.skyfit.feature_settings.ui.facility.MobileFacilitySettingsAccountScreen
 import com.vurgun.skyfit.feature_settings.ui.facility.MobileFacilitySettingsAddMembersScreen
-import com.vurgun.skyfit.feature_settings.ui.facility.MobileFacilitySettingsHelpScreen
 import com.vurgun.skyfit.feature_settings.ui.facility.MobileFacilitySettingsNotificationsScreen
 import com.vurgun.skyfit.feature_settings.ui.facility.MobileFacilitySettingsPaymentHistoryScreen
 import com.vurgun.skyfit.feature_settings.ui.facility.MobileFacilitySettingsScreen
 import com.vurgun.skyfit.feature_settings.ui.facility.MobileFacilitySettingsSearchMembersScreen
 import com.vurgun.skyfit.feature_settings.ui.facility.MobileFacilitySettingsTrainersScreen
+import com.vurgun.skyfit.feature_settings.ui.helpsupport.MobileSettingsSupportHelpScreen
 import com.vurgun.skyfit.feature_settings.ui.trainer.MobileTrainerSettingsAccountScreen
 import com.vurgun.skyfit.feature_settings.ui.trainer.MobileTrainerSettingsEditProfileScreen
-import com.vurgun.skyfit.feature_settings.ui.trainer.MobileTrainerSettingsHelpScreen
 import com.vurgun.skyfit.feature_settings.ui.trainer.MobileTrainerSettingsNotificationsScreen
 import com.vurgun.skyfit.feature_settings.ui.trainer.MobileTrainerSettingsPaymentHistoryScreen
 import com.vurgun.skyfit.feature_settings.ui.trainer.MobileTrainerSettingsScreen
 import com.vurgun.skyfit.feature_settings.ui.user.MobileUserSettingsAccountScreen
 import com.vurgun.skyfit.feature_settings.ui.user.MobileUserSettingsEditProfileScreen
-import com.vurgun.skyfit.feature_settings.ui.user.MobileUserSettingsHelpScreen
+import com.vurgun.skyfit.feature_settings.ui.user.MobileUserSettingsHomeScreen
 import com.vurgun.skyfit.feature_settings.ui.user.MobileUserSettingsNotificationsScreen
 import com.vurgun.skyfit.feature_settings.ui.user.MobileUserSettingsPaymentHistoryScreen
-import com.vurgun.skyfit.feature_settings.ui.user.MobileUserSettingsHomeScreen
 import com.vurgun.skyfit.feature_social.ui.MobileUserSocialMediaNewPostScreen
 import com.vurgun.skyfit.feature_splash.presentation.view.SplashScreen
 import moe.tlaster.precompose.navigation.NavHost
@@ -104,7 +102,7 @@ fun MobileNavigationGraph() {
 
     NavHost(
         navigator = navigator,
-        initialRoute = MobileNavRoute.Settings.Trainer.Account.route
+        initialRoute = MobileNavRoute.Settings.Trainer.Help.route
     ) {
         mobileAuthNavGraph(navigator)
         mobileOnboardingNavGraph(navigator)
@@ -214,7 +212,7 @@ private fun RouteBuilder.settingsNavGraph(navigator: Navigator) {
     scene(MobileNavRoute.Settings.User.Notifications.route) { MobileUserSettingsNotificationsScreen(navigator) }
     scene(MobileNavRoute.Settings.User.PaymentHistory.route) { MobileUserSettingsPaymentHistoryScreen(navigator) }
     scene(MobileNavRoute.Settings.User.ChangePassword.route) { SettingsChangePasswordScreen(navigator) }
-    scene(MobileNavRoute.Settings.User.Help.route) { MobileUserSettingsHelpScreen(navigator) }
+    scene(MobileNavRoute.Settings.User.Help.route) { MobileSettingsSupportHelpScreen(navigator) }
     //Trainer - Settings
     scene(MobileNavRoute.Settings.Trainer.Home.route) { MobileTrainerSettingsScreen(navigator) }
     scene(MobileNavRoute.Settings.Trainer.Account.route) { MobileTrainerSettingsAccountScreen(navigator) }
@@ -222,9 +220,9 @@ private fun RouteBuilder.settingsNavGraph(navigator: Navigator) {
     scene(MobileNavRoute.Settings.Trainer.Notifications.route) { MobileTrainerSettingsNotificationsScreen(navigator) }
     scene(MobileNavRoute.Settings.Trainer.PaymentHistory.route) { MobileTrainerSettingsPaymentHistoryScreen(navigator) }
     scene(MobileNavRoute.Settings.Trainer.ChangePassword.route) { SettingsChangePasswordScreen(navigator) }
-    scene(MobileNavRoute.Settings.Trainer.Help.route) { MobileTrainerSettingsHelpScreen(navigator) }
-    scene(MobileNavRoute.Settings.Trainer.ManageAccounts.route) { MobileTrainerSettingsHelpScreen(navigator) }
-    scene(MobileNavRoute.Settings.Trainer.ManageMembers.route) { MobileTrainerSettingsHelpScreen(navigator) }
+    scene(MobileNavRoute.Settings.Trainer.Help.route) { MobileSettingsSupportHelpScreen(navigator) }
+    scene(MobileNavRoute.Settings.Trainer.ManageAccounts.route) { MobileSettingsSupportHelpScreen(navigator) }
+    scene(MobileNavRoute.Settings.Trainer.ManageMembers.route) { MobileSettingsSupportHelpScreen(navigator) }
     //Facility - Settings
     scene(MobileNavRoute.Settings.Facility.Home.route) { MobileFacilitySettingsScreen(navigator) }
     scene(MobileNavRoute.Settings.Facility.Account.route) { MobileFacilitySettingsAccountScreen(navigator) }
@@ -232,7 +230,7 @@ private fun RouteBuilder.settingsNavGraph(navigator: Navigator) {
     scene(MobileNavRoute.Settings.Facility.PaymentHistory.route) { MobileFacilitySettingsPaymentHistoryScreen(navigator) }
     scene(MobileNavRoute.Settings.Facility.ChangePassword.route) { SettingsChangePasswordScreen(navigator) }
     scene(MobileNavRoute.Settings.Facility.Notifications.route) { MobileFacilitySettingsNotificationsScreen(navigator) }
-    scene(MobileNavRoute.Settings.Facility.Help.route) { MobileFacilitySettingsHelpScreen(navigator) }
+    scene(MobileNavRoute.Settings.Facility.Help.route) { MobileSettingsSupportHelpScreen(navigator) }
     scene(MobileNavRoute.Settings.Facility.ManageAccounts.route) { MobileFacilitySettingsTrainersScreen(navigator) }
     scene(MobileNavRoute.Settings.Facility.ManageTrainers.route) { MobileFacilitySettingsTrainersScreen(navigator) }
     scene(MobileNavRoute.Settings.Facility.ManageBranches.route) { MobileFacilitySettingsTrainersScreen(navigator) }
