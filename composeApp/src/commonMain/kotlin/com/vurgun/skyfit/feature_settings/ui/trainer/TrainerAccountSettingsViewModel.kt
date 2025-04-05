@@ -8,7 +8,8 @@ import kotlinx.coroutines.flow.update
 
 data class TrainerAccountState(
     val userName: String? = null,
-    val fullName: String? = null,
+    val firstName: String? = null,
+    val lastName: String? = null,
     val email: String? = null,
     val biography: String? = null,
     val profileImageUrl: String? = null,
@@ -27,8 +28,9 @@ class TrainerAccountSettingsViewModel : ViewModel() {
     fun loadData() {
         val initial = TrainerAccountState(
             userName = "maxjacobson",
-            fullName = "Maxine",
-            email = "maxine@gmail.com",
+            firstName = "Maxine",
+            lastName = "Jacombzi",
+            email = "maxinetrainer@gmail.com",
             biography = "Whether you're a beginner or looking to advance, My balanced approach will guide you every step of the way. \uD83C\uDFC3\uD83C\uDFFD\u200D♂\uFE0F\n" +
                     "@ironstudio",
             profileTags = listOf(FitnessTagType.CARDIO, FitnessTagType.FLEXIBILITY),
@@ -50,8 +52,12 @@ class TrainerAccountSettingsViewModel : ViewModel() {
         updateState { copy(userName = value) }
     }
 
-    fun updateFullName(value: String) {
-        updateState { copy(fullName = value) }
+    fun updateFirstName(value: String) {
+        updateState { copy(firstName = value) }
+    }
+
+    fun updateLastName(value: String) {
+        updateState { copy(lastName = value) }
     }
 
     fun updateEmail(value: String) {

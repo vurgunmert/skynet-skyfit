@@ -1,7 +1,6 @@
 package com.vurgun.skyfit.feature_settings.ui.trainer
 
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -22,29 +21,32 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.vurgun.skyfit.core.ui.components.SkyFitScreenHeader
-import com.vurgun.skyfit.feature_settings.ui.SkyFitSelectToEnterInputComponent
-import com.vurgun.skyfit.feature_settings.ui.SkyFitSelectToEnterMultilineInputComponent
-import com.vurgun.skyfit.feature_settings.ui.MobileSettingsMenuItemComponent
-import com.vurgun.skyfit.feature_settings.ui.FitnessTagPickerComponent
-import com.vurgun.skyfit.feature_settings.ui.MobileSettingsDeleteAccountBottomSheet
-import com.vurgun.skyfit.feature_settings.ui.MobileUserSettingsScreenPhotoEditComponent
-import com.vurgun.skyfit.feature_settings.ui.MobileUserSettingsScreenSaveActionComponent
+import com.vurgun.skyfit.core.ui.components.button.PrimaryLargeButton
+import com.vurgun.skyfit.core.ui.resources.SkyFitColor
 import com.vurgun.skyfit.feature_navigation.MobileNavRoute
 import com.vurgun.skyfit.feature_navigation.jumpAndStay
-import com.vurgun.skyfit.core.ui.resources.SkyFitColor
+import com.vurgun.skyfit.feature_settings.ui.MobileSettingsDeleteAccountBottomSheet
+import com.vurgun.skyfit.feature_settings.ui.SettingsMenuItem
+import com.vurgun.skyfit.feature_settings.ui.component.TrainerAccountSettingsProfileCard
 import moe.tlaster.precompose.navigation.Navigator
+import org.jetbrains.compose.resources.painterResource
+import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.koinInject
 import skyfit.composeapp.generated.resources.Res
+import skyfit.composeapp.generated.resources.add_account_action
+import skyfit.composeapp.generated.resources.delete_account_action
 import skyfit.composeapp.generated.resources.ic_delete
 import skyfit.composeapp.generated.resources.ic_lock
-import skyfit.composeapp.generated.resources.ic_pencil
+import skyfit.composeapp.generated.resources.ic_plus
+import skyfit.composeapp.generated.resources.settings_account_label
+import skyfit.composeapp.generated.resources.settings_change_my_password_label
 
 @Composable
 fun MobileTrainerSettingsAccountScreen(navigator: Navigator) {
 
     val viewModel: TrainerAccountSettingsViewModel = koinInject()
 
-    val trainerAccountState by viewModel.accountState.collectAsState()
+    val account by viewModel.accountState.collectAsState()
 
     var showDeleteConfirm by remember { mutableStateOf(false) }
 
@@ -55,18 +57,14 @@ fun MobileTrainerSettingsAccountScreen(navigator: Navigator) {
     Scaffold(
         backgroundColor = SkyFitColor.background.default,
         topBar = {
-            SkyFitScreenHeader("Hesap Ayarlari", onClickBack = { navigator.popBackStack() })
+            SkyFitScreenHeader(stringResource(Res.string.settings_account_label), onClickBack = { navigator.popBackStack() })
         },
         bottomBar = {
             if (showDeleteConfirm) {
                 MobileSettingsDeleteAccountBottomSheet(
                     onCancelClicked = { showDeleteConfirm = false },
-                    onDeleteClicked = {}
+                    onDeleteClicked = viewModel::deleteAccount
                 )
-            } else if (trainerAccountState.isUpdated) {
-                Box(Modifier.fillMaxWidth().padding(24.dp)) {
-                    MobileUserSettingsScreenSaveActionComponent(onClick = viewModel::saveChanges)
-                }
             }
         }
     ) {
@@ -77,69 +75,31 @@ fun MobileTrainerSettingsAccountScreen(navigator: Navigator) {
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.spacedBy(24.dp)
         ) {
-            MobileUserSettingsScreenPhotoEditComponent(
-                urlString = null,
-                label = "Fotoğrafı Düzenle",
-                onImagePicked = {
-                    //TODO: Picked image should be stored
-                }
+
+            TrainerAccountSettingsProfileCard(
+                onClick = { navigator.jumpAndStay(MobileNavRoute.Settings.Trainer.EditProfile) },
+                backgroundImageUrl = account.backgroundImageUrl,
+                foregroundImageUrl = account.profileImageUrl,
+                name = account.firstName.toString(),
+                social = account.email?.substringBefore("@").toString(),
+                note = account.biography.toString(),
+                tags = account.profileTags
             )
 
-            MobileUserSettingsScreenPhotoEditComponent(
-                urlString = null,
-                label = "Arkaplanı Düzenle",
-                onImagePicked = {
-                    //TODO: Picked image should be stored
-                }
-            )
-
-            SkyFitSelectToEnterInputComponent(
-                title = "Kullanıcı Adı *",
-                hint = "Kullanıcı Adı",
-                value = trainerAccountState.userName,
-                onValueChange = { viewModel.updateUserName(it) },
-                rightIconRes = Res.drawable.ic_pencil
-            )
-
-            SkyFitSelectToEnterInputComponent(
-                title = "Ad Soyad *",
-                hint = "Ad Soyad",
-                value = trainerAccountState.fullName,
-                onValueChange = { viewModel.updateFullName(it) },
-                rightIconRes = Res.drawable.ic_pencil
-            )
-
-            SkyFitSelectToEnterInputComponent(
-                title = "Email *",
-                hint = "Email",
-                value = trainerAccountState.email,
-                onValueChange = { viewModel.updateEmail(it) },
-                rightIconRes = Res.drawable.ic_pencil
-            )
-
-            SkyFitSelectToEnterMultilineInputComponent(
-                title = "Biyografi *",
-                hint = "Biyografi bilgilerinizi girin",
-                value = trainerAccountState.biography,
-                onValueChange = { viewModel.updateBiography(it) },
-                rightIconRes = Res.drawable.ic_pencil
-            )
-
-
-            FitnessTagPickerComponent(
-                selectedTags = trainerAccountState.profileTags,
-                onTagsSelected = viewModel::updateTags
-            )
-
-            MobileSettingsMenuItemComponent(
-                text = "Şifremi Değiştir",
+            SettingsMenuItem(
                 iconRes = Res.drawable.ic_lock,
-                onClick = { navigator.jumpAndStay(MobileNavRoute.Settings.Trainer.ChangePassword) }
-            )
+                text = stringResource(Res.string.settings_change_my_password_label),
+                onClick = { navigator.jumpAndStay(MobileNavRoute.Settings.Trainer.ChangePassword) })
 
-            MobileSettingsMenuItemComponent(
-                text = "Hesabı Sil",
-                iconRes = Res.drawable.ic_delete,
+            SettingsMenuItem(
+                iconRes = Res.drawable.ic_plus,
+                text = stringResource(Res.string.add_account_action),
+                onClick = { navigator.jumpAndStay(MobileNavRoute.Settings.Trainer.ManageAccounts) })
+
+            PrimaryLargeButton(
+                text = stringResource(Res.string.delete_account_action),
+                leftIconPainter = painterResource(Res.drawable.ic_delete),
+                modifier = Modifier.fillMaxWidth(),
                 onClick = { showDeleteConfirm = true }
             )
 

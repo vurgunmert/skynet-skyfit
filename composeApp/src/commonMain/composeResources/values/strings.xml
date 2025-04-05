@@ -193,6 +193,11 @@
     <string name="settings_edit_profile_height_label">Boy (%1$s)</string>
     <string name="settings_edit_profile_weight_label">Kilo (%1$s)</string>
     <string name="settings_edit_profile_body_type_label">Vücut Tipi</string>
+    <string name="settings_edit_profile_biography_label">Biyografi *</string>
+    <string name="settings_edit_profile_biography_hint">Kendinizi ve uzmanlık alanınızı kısaca tanıtın</string>
+
+    <string name="background_image_label">Arkaplan Resmi</string>
+    <string name="profile_image_label">Profil Resmi</string>
 </resources>
 
 <!--    Use snake_case + purpose-based suffixes:-->

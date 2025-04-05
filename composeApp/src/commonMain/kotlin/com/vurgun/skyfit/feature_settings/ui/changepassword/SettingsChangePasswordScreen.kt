@@ -1,4 +1,4 @@
-package com.vurgun.skyfit.feature_settings.ui
+package com.vurgun.skyfit.feature_settings.ui.changepassword
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -18,7 +18,6 @@ import com.vurgun.skyfit.core.ui.components.SkyFitScreenHeader
 import com.vurgun.skyfit.core.ui.components.button.PrimaryLargeButton
 import com.vurgun.skyfit.designsystem.components.text.PasswordInputText
 import com.vurgun.skyfit.designsystem.components.text.SingleLineInputText
-import com.vurgun.skyfit.feature_settings.ui.user.ChangePasswordViewModel
 import moe.tlaster.precompose.navigation.Navigator
 import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.koinInject

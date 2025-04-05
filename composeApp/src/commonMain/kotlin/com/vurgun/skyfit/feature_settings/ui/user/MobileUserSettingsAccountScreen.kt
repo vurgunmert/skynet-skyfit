@@ -1,7 +1,6 @@
 package com.vurgun.skyfit.feature_settings.ui.user
 
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -26,7 +25,6 @@ import com.vurgun.skyfit.core.ui.components.button.PrimaryLargeButton
 import com.vurgun.skyfit.feature_navigation.MobileNavRoute
 import com.vurgun.skyfit.feature_navigation.jumpAndStay
 import com.vurgun.skyfit.feature_settings.ui.MobileSettingsDeleteAccountBottomSheet
-import com.vurgun.skyfit.feature_settings.ui.MobileUserSettingsScreenSaveActionComponent
 import com.vurgun.skyfit.feature_settings.ui.SettingsMenuItem
 import com.vurgun.skyfit.feature_settings.ui.component.UserAccountSettingsProfileCard
 import moe.tlaster.precompose.navigation.Navigator
@@ -45,7 +43,7 @@ fun MobileUserSettingsAccountScreen(navigator: Navigator) {
 
     val viewModel: SkyFitUserAccountSettingsViewModel = koinInject()
 
-    val userAccountState by viewModel.accountState.collectAsState()
+    val account by viewModel.accountState.collectAsState()
 
     var showDeleteConfirm by remember { mutableStateOf(false) }
 
@@ -61,12 +59,8 @@ fun MobileUserSettingsAccountScreen(navigator: Navigator) {
             if (showDeleteConfirm) {
                 MobileSettingsDeleteAccountBottomSheet(
                     onCancelClicked = { showDeleteConfirm = false },
-                    onDeleteClicked = {}
+                    onDeleteClicked = viewModel::deleteAccount
                 )
-            } else if (userAccountState.isUpdated) {
-                Box(Modifier.fillMaxWidth().padding(24.dp)) {
-                    MobileUserSettingsScreenSaveActionComponent(onClick = viewModel::saveChanges)
-                }
             }
         }
     ) {
@@ -79,7 +73,14 @@ fun MobileUserSettingsAccountScreen(navigator: Navigator) {
         ) {
 
             UserAccountSettingsProfileCard(
-                onClick = { navigator.jumpAndStay(MobileNavRoute.Settings.User.EditProfile) }
+                backgroundImageUrl = account.backgroundImageUrl,
+                foregroundImageUrl = account.profileImageUrl,
+                name = account.firstName.toString(),
+                social = account.email?.substringBefore("@").toString(),
+                height = account.height.toString(),
+                weight = account.weight.toString(),
+                bodyType = account.bodyType.turkishShort,
+                onClick = { navigator.jumpAndStay(MobileNavRoute.Settings.User.EditProfile) },
             )
 
             SettingsMenuItem(

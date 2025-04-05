@@ -1,7 +1,7 @@
 package com.vurgun.skyfit.feature_settings.di
 
 import com.vurgun.skyfit.feature_settings.ui.trainer.TrainerAccountSettingsViewModel
-import com.vurgun.skyfit.feature_settings.ui.user.ChangePasswordViewModel
+import com.vurgun.skyfit.feature_settings.ui.changepassword.ChangePasswordViewModel
 import com.vurgun.skyfit.feature_settings.ui.user.SkyFitUserAccountSettingsViewModel
 import com.vurgun.skyfit.feature_settings.ui.user.UserSettingsViewModel
 import org.koin.core.module.dsl.viewModel

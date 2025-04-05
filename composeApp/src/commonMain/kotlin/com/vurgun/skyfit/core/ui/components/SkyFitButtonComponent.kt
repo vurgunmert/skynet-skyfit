@@ -8,7 +8,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Button
 import androidx.compose.material.ButtonDefaults
@@ -49,14 +48,7 @@ fun SkyFitButtonComponent(
 
     Button(
         onClick = { if (state != ButtonState.Disabled && state != ButtonState.Loading) onClick?.invoke() },
-        modifier = modifier
-            .wrapContentSize()
-            .padding(
-            start = size.paddingStart,
-            end = size.paddingEnd,
-            top = size.paddingVertical,
-            bottom = size.paddingVertical
-        ),
+        modifier = modifier,
         colors = ButtonDefaults.buttonColors(
             backgroundColor = buttonStyle.backgroundColor,
             contentColor = buttonStyle.foregroundColor
@@ -67,7 +59,12 @@ fun SkyFitButtonComponent(
     ) {
         if (state == ButtonState.Loading) {
             Row(
-                modifier = Modifier,
+                modifier = Modifier.padding(
+                    start = size.paddingStart,
+                    end = size.paddingEnd,
+                    top = size.paddingVertical,
+                    bottom = size.paddingVertical
+                ),
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.Center
             ) {
@@ -78,8 +75,14 @@ fun SkyFitButtonComponent(
                 )
             }
         } else {
+
             Row(
-                modifier = Modifier,
+                modifier = Modifier.padding(
+                    start = size.paddingStart,
+                    end = size.paddingEnd,
+                    top = size.paddingVertical,
+                    bottom = size.paddingVertical
+                ),
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.Center
             ) {

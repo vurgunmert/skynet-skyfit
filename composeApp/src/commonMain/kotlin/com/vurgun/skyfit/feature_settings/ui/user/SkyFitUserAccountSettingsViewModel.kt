@@ -1,12 +1,13 @@
 package com.vurgun.skyfit.feature_settings.ui.user
 
 import androidx.lifecycle.ViewModel
-import com.vurgun.skyfit.core.domain.models.BodyType
-import com.vurgun.skyfit.core.domain.models.HeightUnitType
-import com.vurgun.skyfit.core.domain.models.WeightUnitType
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.update
+import com.vurgun.skyfit.core.domain.models.BodyType
+import com.vurgun.skyfit.core.domain.models.FitnessTagType
+import com.vurgun.skyfit.core.domain.models.HeightUnitType
+import com.vurgun.skyfit.core.domain.models.WeightUnitType
 
 // Data class to hold all user account state in one place
 data class UserAccountState(
@@ -93,5 +94,9 @@ class SkyFitUserAccountSettingsViewModel : ViewModel() {
     fun saveChanges() {
         updateState { copy(isUpdated = false) }
         initialState = _accountState.value
+    }
+
+    fun deleteAccount() {
+        // TODO: Implement account deletion logic
     }
 }

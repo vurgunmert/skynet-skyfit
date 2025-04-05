@@ -134,13 +134,13 @@ private fun AccountSettingsProfileCard(
 
 @Composable
 fun UserAccountSettingsProfileCard(
-    backgroundImageUrl: String? = "https://t3.ftcdn.net/jpg/04/29/35/62/360_F_429356296_CVQ5LkC6Pl55kUNLqLisVKgTw9vjyif1.jpg",
-    foregroundImageUrl: String? = "https://res.cloudinary.com/jerrick/image/upload/d_642250b563292b35f27461a7.png,f_jpg,q_auto,w_720/673757e3f2132a001df5062e.png",
-    name: String = "Mert",
-    social: String = "vurgunmert",
-    height: String = "174 cm",
-    weight: String = "78 kg",
-    bodyType: String = "Ecto",
+    backgroundImageUrl: String?,
+    foregroundImageUrl: String?,
+    name: String,
+    social: String,
+    height: String,
+    weight: String,
+    bodyType: String,
     onClick: () -> Unit
 ) {
     AccountSettingsProfileCard(
@@ -179,12 +179,12 @@ fun UserAccountSettingsProfileCard(
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
 fun TrainerAccountSettingsProfileCard(
-    backgroundImageUrl: String? = "https://t3.ftcdn.net/jpg/04/29/35/62/360_F_429356296_CVQ5LkC6Pl55kUNLqLisVKgTw9vjyif1.jpg",
-    foregroundImageUrl: String? = "https://res.cloudinary.com/jerrick/image/upload/d_642250b563292b35f27461a7.png,f_jpg,q_auto,w_720/673757e3f2132a001df5062e.png",
-    name: String = "Mert",
-    social: String = "vurgunmert",
-    note: String = "Whether you're a beginner or looking to advance, My balanced approach will guide you every step of the way. \uD83C\uDFC3\uD83C\uDFFD\u200D♂\uFE0F\n@ironstudio",
-    tags: List<FitnessTagType> = FitnessTagType.getAllTags().take(5).shuffled(),
+    backgroundImageUrl: String?,
+    foregroundImageUrl: String?,
+    name: String,
+    social: String,
+    note: String,
+    tags: List<FitnessTagType>,
     onClick: () -> Unit
 ) {
 

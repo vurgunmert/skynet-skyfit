@@ -61,7 +61,7 @@ import com.vurgun.skyfit.feature_profile.ui.user.MobileUserMeasurementsScreen
 import com.vurgun.skyfit.feature_profile.ui.user.MobileUserPhotoDiaryScreen
 import com.vurgun.skyfit.feature_profile.ui.user.MobileUserProfileScreen
 import com.vurgun.skyfit.feature_profile.ui.user.MobileUserTrophiesScreen
-import com.vurgun.skyfit.feature_settings.ui.SettingsChangePasswordScreen
+import com.vurgun.skyfit.feature_settings.ui.changepassword.SettingsChangePasswordScreen
 import com.vurgun.skyfit.feature_settings.ui.facility.MobileFacilitySettingsAccountScreen
 import com.vurgun.skyfit.feature_settings.ui.facility.MobileFacilitySettingsAddMembersScreen
 import com.vurgun.skyfit.feature_settings.ui.facility.MobileFacilitySettingsHelpScreen
@@ -71,6 +71,7 @@ import com.vurgun.skyfit.feature_settings.ui.facility.MobileFacilitySettingsScre
 import com.vurgun.skyfit.feature_settings.ui.facility.MobileFacilitySettingsSearchMembersScreen
 import com.vurgun.skyfit.feature_settings.ui.facility.MobileFacilitySettingsTrainersScreen
 import com.vurgun.skyfit.feature_settings.ui.trainer.MobileTrainerSettingsAccountScreen
+import com.vurgun.skyfit.feature_settings.ui.trainer.MobileTrainerSettingsEditProfileScreen
 import com.vurgun.skyfit.feature_settings.ui.trainer.MobileTrainerSettingsHelpScreen
 import com.vurgun.skyfit.feature_settings.ui.trainer.MobileTrainerSettingsNotificationsScreen
 import com.vurgun.skyfit.feature_settings.ui.trainer.MobileTrainerSettingsPaymentHistoryScreen
@@ -103,7 +104,7 @@ fun MobileNavigationGraph() {
 
     NavHost(
         navigator = navigator,
-        initialRoute = MobileNavRoute.Settings.User.EditProfile.route
+        initialRoute = MobileNavRoute.Settings.Trainer.Account.route
     ) {
         mobileAuthNavGraph(navigator)
         mobileOnboardingNavGraph(navigator)
@@ -217,7 +218,7 @@ private fun RouteBuilder.settingsNavGraph(navigator: Navigator) {
     //Trainer - Settings
     scene(MobileNavRoute.Settings.Trainer.Home.route) { MobileTrainerSettingsScreen(navigator) }
     scene(MobileNavRoute.Settings.Trainer.Account.route) { MobileTrainerSettingsAccountScreen(navigator) }
-    scene(MobileNavRoute.Settings.Trainer.EditProfile.route) { MobileTrainerSettingsAccountScreen(navigator) }
+    scene(MobileNavRoute.Settings.Trainer.EditProfile.route) { MobileTrainerSettingsEditProfileScreen(navigator) }
     scene(MobileNavRoute.Settings.Trainer.Notifications.route) { MobileTrainerSettingsNotificationsScreen(navigator) }
     scene(MobileNavRoute.Settings.Trainer.PaymentHistory.route) { MobileTrainerSettingsPaymentHistoryScreen(navigator) }
     scene(MobileNavRoute.Settings.Trainer.ChangePassword.route) { SettingsChangePasswordScreen(navigator) }

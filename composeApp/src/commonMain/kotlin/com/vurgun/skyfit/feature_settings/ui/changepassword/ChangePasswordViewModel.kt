@@ -1,4 +1,4 @@
-package com.vurgun.skyfit.feature_settings.ui.user
+package com.vurgun.skyfit.feature_settings.ui.changepassword
 
 import androidx.lifecycle.ViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
