@@ -14,7 +14,7 @@
         android:required="false" />
 
     <application
-        android:name=".core.AndroidApplication"
+        android:name=".AndroidApplication"
         android:allowBackup="false"
         android:icon="@mipmap/ic_launcher"
         android:roundIcon="@mipmap/ic_launcher_circle"
@@ -24,7 +24,7 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.SkyFitMobile">
         <activity
-            android:name=".core.ui.AndroidHostActivity"
+            android:name=".AndroidHostActivity"
             android:configChanges="orientation|screenSize|screenLayout|keyboardHidden|mnc|colorMode|density|fontScale|fontWeightAdjustment|keyboard|layoutDirection|locale|mcc|navigation|smallestScreenSize|touchscreen|uiMode"
             android:exported="true"
             android:screenOrientation="sensorPortrait"

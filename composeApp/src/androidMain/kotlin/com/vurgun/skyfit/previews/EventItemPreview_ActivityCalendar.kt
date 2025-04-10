@@ -2,11 +2,10 @@ package com.vurgun.skyfit.previews
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.tooling.preview.Preview
-import com.vurgun.skyfit.designsystem.utils.PreviewBox
-import com.vurgun.skyfit.designsystem.components.event.AvailableActivityCalendarEventItem
-import com.vurgun.skyfit.designsystem.components.event.BasicActivityCalendarEventItem
-import com.vurgun.skyfit.designsystem.components.event.BookedActivityCalendarEventItem
-import com.vurgun.skyfit.designsystem.components.event.PaidActivityCalendarEventItem
+import com.vurgun.skyfit.ui.core.components.event.AvailableActivityCalendarEventItem
+import com.vurgun.skyfit.ui.core.components.event.BasicActivityCalendarEventItem
+import com.vurgun.skyfit.ui.core.components.event.BookedActivityCalendarEventItem
+import com.vurgun.skyfit.ui.core.components.event.PaidActivityCalendarEventItem
 
 @Preview(name = "Basic - Disabled")
 @Composable

@@ -1,23 +1,30 @@
-# ============================================
-# Versions
-# ============================================
 [versions]
-# Android Versions
-agp = "8.8.0"
-android-compileSdk = "35"
-android-minSdk = "24"
-android-targetSdk = "34"
 
-# Kotlin Versions
+# Kotlin
 kotlin = "2.1.10"
-kotlinx-coroutines = "1.10.1"
+ksp = "2.0.21-1.0.25"
 kotlinx-serialization = "1.8.0"
 kotlinx-datetime = "0.6.1"
-# Compose
-androidx-activityCompose = "1.9.3"
-compose-multiplatform = "1.7.3"
-# Dependency Versions
+kotlinx-coroutines = "1.10.1"
+
+# Android
+agp = "8.9.1"
+android-compileSdk = "35"
+android-minSdk = "24"
+android-targetSdk = "35"
+androidx-activityCompose = "1.10.1"
+androidx-lifecycle = "2.8.4"
+
+# UI
+compose-plugin = "1.7.3"
+compose-navigation="2.8.0-alpha10"
+
+# Dependency Injection
 koin = "4.1.0-Beta4"
+
+# Settings
+datastore = "1.1.4"
+
 precompose = "1.7.0-alpha01"
 ktor = "3.1.1"
 coil = "3.0.4"
@@ -27,9 +34,6 @@ skiko = "0.9.2"
 uiToolingPreviewAndroid = "1.7.8"
 uiTooling = "1.7.8"
 
-# ============================================
-# Libraries
-# ============================================
 [libraries]
 # Kotlin & Serialization
 kotlinx-coroutines-core = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-core", version.ref = "kotlinx-coroutines" }
@@ -37,18 +41,24 @@ kotlinx-serialization = { group = "org.jetbrains.kotlinx", name = "kotlinx-seria
 kotlinx-datetime = { group = "org.jetbrains.kotlinx", name = "kotlinx-datetime", version.ref = "kotlinx-datetime" }
 kotlinx-coroutines-swing = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-swing", version.ref = "kotlinx-coroutines" }
 
-# AndroidX & Compose
-androidx-activity-compose = { module = "androidx.activity:activity-compose", version.ref = "androidx-activityCompose" }
+# Dependency Injection
+koin-android = { module = "io.insert-koin:koin-android", version.ref = "koin" }
+koin-core = { module = "io.insert-koin:koin-core", version.ref = "koin" }
+koin-compose = { module = "io.insert-koin:koin-compose", version.ref = "koin" }
+koin-compose-viewmodel = { module = "io.insert-koin:koin-compose-viewmodel", version.ref = "koin" }
+koin-compose-viewmodel-navigation = { module = "io.insert-koin:koin-compose-viewmodel-navigation", version.ref = "koin" }
 
-# Koin (Dependency Injection)
-koin-core = { group = "io.insert-koin", name = "koin-core", version.ref = "koin" }
-koin-compose = { group = "io.insert-koin", name = "koin-compose", version.ref = "koin" }
-koin-compose-viewmodel = { group = "io.insert-koin", name = "koin-compose-viewmodel", version.ref = "koin" }
+# Android
+androidx-activity-compose = { module = "androidx.activity:activity-compose", version.ref = "androidx-activityCompose" }
+androidx-lifecycle-viewmodel = { group = "org.jetbrains.androidx.lifecycle", name = "lifecycle-viewmodel", version.ref = "androidx-lifecycle" }
+androidx-lifecycle-viewmodel-compose = { group = "org.jetbrains.androidx.lifecycle", name = "lifecycle-viewmodel-compose", version.ref = "androidx-lifecycle" }
+androidx-lifecycle-runtime-compose = { group = "org.jetbrains.androidx.lifecycle", name = "lifecycle-runtime-compose", version.ref = "androidx-lifecycle" }
 
 # PreCompose (Multiplatform Navigation)
 precompose = { group = "moe.tlaster", name = "precompose", version.ref = "precompose" }
 precompose-viewmodel = { group = "moe.tlaster", name = "precompose-viewmodel", version.ref = "precompose" }
 precompose-koin = { group = "moe.tlaster", name = "precompose-koin", version.ref = "precompose" }
+navigation-compose = { group = "androidx.navigation", name = "navigation-compose",  version.ref = "compose-navigation" }
 
 # Coil (Image Loading)
 coil-compose = { module = "io.coil-kt.coil3:coil-compose", version.ref = "coil" }
@@ -75,13 +85,18 @@ skiko-js = { module = "org.jetbrains.skiko:skiko-js-wasm-runtime", version.ref =
 androidx-ui-tooling-preview-android = { group = "androidx.compose.ui", name = "ui-tooling-preview-android", version.ref = "uiToolingPreviewAndroid" }
 androidx-ui-tooling = { group = "androidx.compose.ui", name = "ui-tooling", version.ref = "uiTooling" }
 
-# ============================================
-# Plugins
-# ============================================
+# Settings
+datastore-preferences-core = { group = "androidx.datastore", name = "datastore-preferences-core", version.ref = "datastore" }
+
+[bundles]
+kotlin = ["kotlinx-datetime", "kotlinx-coroutines-core", "kotlinx-serialization"]
+koin-compose = ["koin-compose", "koin-compose-viewmodel", "koin-compose-viewmodel-navigation"]
+
 [plugins]
 androidApplication = { id = "com.android.application", version.ref = "agp" }
 androidLibrary = { id = "com.android.library", version.ref = "agp" }
-composeMultiplatform = { id = "org.jetbrains.compose", version.ref = "compose-multiplatform" }
+composeMultiplatform = { id = "org.jetbrains.compose", version.ref = "compose-plugin" }
 composeCompiler = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
 kotlinMultiplatform = { id = "org.jetbrains.kotlin.multiplatform", version.ref = "kotlin" }
 kotlinSerialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
+ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }

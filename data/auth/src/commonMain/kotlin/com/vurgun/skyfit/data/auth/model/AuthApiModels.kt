@@ -1,0 +1,32 @@
+package com.vurgun.skyfit.data.auth.model
+
+import kotlinx.serialization.Serializable
+
+@Serializable
+data class AuthorizationRequest(
+    val phone: String,
+    val password: String? = null
+)
+
+@Serializable
+data class VerifyOTPRequest(val otpCode: String)
+
+@Serializable
+data class AuthorizationResponse(
+    val token: String,
+    val isNewUser: Boolean? = null,
+    val onboardingComplete: Boolean? = null
+)
+
+@Serializable
+data class CreatePasswordRequest(
+    val username: String,
+    val password: String,
+    val againPassword: String
+)
+
+@Serializable
+data class ResetPasswordRequest(
+    val password: String,
+    val againPassword: String
+)

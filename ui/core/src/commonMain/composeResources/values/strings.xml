@@ -1,0 +1,222 @@
+<resources>
+    <!-- 🔷 App -->
+    <string name="app_name">SkyFit</string>
+
+    <!-- 🔹 User Fields -->
+    <string name="user_username_label">Kullanıcı Adı</string>
+    <string name="user_phone_number_label">Telefon Numarası</string>
+
+    <!-- 🔹 Name Fields -->
+    <string name="user_first_name_label">Ad</string>
+    <string name="user_last_name_label">Soyad</string>
+    <string name="user_full_name_label">Ad Soyad</string>
+
+    <!-- 🔹 Mandatory Labels -->
+    <string name="user_full_name_mandatory_label">Ad Soyad *</string>
+    <string name="user_first_name_mandatory_label">Ad *</string>
+    <string name="user_last_name_mandatory_label">Soyad *</string>
+    <string name="user_workplace_mandatory_label">İş Yeri *</string>
+    <string name="mandatory_workplace_name_label">İşyeri Adı *</string>
+    <string name="workplace_name_hint">Profilinizde görünecek işyeri adını giriniz</string>
+
+    <string name="mandatory_biography_label">Biyografi *</string>
+    <string name="mandatory_address_label">Adres *</string>
+
+    <!-- 🔹 Hints -->
+    <string name="user_first_name_hint">Adınızı girin</string>
+    <string name="user_last_name_hint">Soyadınızı girin</string>
+    <string name="user_biography_hint">
+    Whether you're a beginner or looking to advance, my balanced approach will guide you every step of the way. 🏃🏽‍♂️
+</string>
+
+    <!-- 🔹 Goals -->
+    <string name="goal_lose_weight_label">Kilo Vermek</string>
+    <string name="goal_be_fit_label">Fit Olmak</string>
+    <string name="goal_gain_muscle_label">Kas Yapmak</string>
+
+
+    <!-- 🔷 User Types -->
+    <string name="user_type_user">Kullanıcı</string>
+    <string name="user_type_trainer">Antrenör</string>
+    <string name="user_type_facility">İşletme</string>
+
+    <!-- 🔷 Common Actions -->
+    <string name="skip_action">Atla</string>
+    <string name="continue_action">Devam Et</string>
+    <string name="cancel_action">İptal</string>
+    <string name="edit_action">Düzenle</string>
+    <string name="delete_action">Sil</string>
+    <string name="open_action">Aç</string>
+    <string name="close_action">Kapat</string>
+    <string name="activate_action">Aktifleştir</string>
+    <string name="disable_action">Devre Dışı Bırak</string>
+    <string name="logout_action">Oturumu Kapat</string>
+    <string name="confirm_action">Onayla</string>
+    <string name="yes_action">Evet</string>
+    <string name="no_action">Hayır</string>
+    <string name="apply_action">Uygula</string>
+    <string name="save_action">Kaydet</string>
+    <string name="ok_action">Tamam</string>
+    <string name="no_not_yet_action">Hayır, şimdi değil</string>
+    <string name="send_action">Gönder</string>
+    <string name="change_action">Değiştir</string>
+    <string name="add_action">Ekle</string>
+    <string name="search_action">Ara</string>
+
+    <!-- 🔷 Gender Options -->
+    <string name="gender_female">Kadın</string>
+    <string name="gender_male">Erkek</string>
+
+    <!-- 🔷 Body Type Options -->
+    <string name="body_type_ecto">Ectomorph</string>
+    <string name="body_type_meso">Mesomorph</string>
+    <string name="body_type_endo">Endomorph</string>
+
+    <!-- 🔷 Navigation & Settings -->
+    <string name="go_to_home_action">Ana Sayfa</string>
+    <string name="back_to_lessons_action">Dersler'e Dön</string>
+
+    <!-- 🔷 Sections / Labels -->
+    <string name="members_label">Üyeler</string>
+    <string name="trainers_label">Eğitmenler</string>
+    <string name="branches_label">Şubeler</string>
+    <string name="lessons_label">Dersler</string>
+
+    <!-- 🔷 Lesson Related -->
+    <string name="lesson_status_completed">Tamamlandı</string>
+    <string name="lesson_status_missing">Eksik</string>
+    <string name="lesson_create_action">Yeni Ders Oluştur</string>
+    <string name="lesson_created_message">Ders Oluşturuldu</string>
+    <string name="lesson_edit_action">Dersi Düzenle</string>
+
+    <!-- 🔷 Descriptions / Notes -->
+    <string name="description_label">Açıklama</string>
+    <string name="description_hint_add">Açıklama ekle</string>
+    <string name="trainer_note_label">Eğitmenin Notu</string>
+    <string name="trainer_note_hint_add">Try to arrive 5-10 minutes early to warm up and settle in before the class starts.</string>
+
+    <!-- 🔷 Misc -->
+    <string name="icon_label">İkon</string>
+    <string name="status_out_of_use">Kullanım dışı</string>
+
+    <!-- Appointments -->
+    <!-- Titles & Actions -->
+    <string name="appointments_title">Randevularım</string>
+    <string name="appointment_book_action">Randevu Al</string>
+    <string name="appointment_create_action">Randevu Oluştur</string>
+
+    <!-- Cancel Appointment Dialog -->
+    <string name="appointment_cancel_title">Randevuyu İptal Et</string>
+    <string name="appointment_cancel_message">Randevunuzu iptal etmek istiyor musunuz?</string>
+    <string name="appointment_cancel_confirm">Evet, İptal Et</string>
+    <string name="appointment_cancel_dismiss">Hayır, Geri Dön</string>
+
+    <!-- Delete All Appointments Dialog -->
+    <string name="appointment_delete_all_title">Tüm Randevuları Sil</string>
+    <string name="appointment_delete_all_message">Tüm randevuları silmek istediğinize emin misiniz?</string>
+
+    <!-- When offering notification about open spot -->
+    <string name="lesson_notify_me_action">Kontenjan açıldığında bildirim almak istiyorum.</string>
+
+
+    <string name="new_label">Yeni</string>
+    <string name="lesson_add_action">Ders Ekle</string>
+    <string name="lesson_active_label">Aktif</string>
+    <string name="lesson_deactivated_label">Kullanım dışı</string>
+
+    <string name="calendar_select_date">Tarih Belirle</string>
+    <string name="calendar_select_date_range">Tarih Aralığı Belirle</string>
+
+
+    <string name="lesson_exercise_title">Antrenman Başlığı</string>
+    <string name="lesson_exercise_title_hint">Shoulders and Abs</string>
+    <string name="lesson_trainer_label">Eğitmen</string>
+    <string name="lesson_start_date_label">Başlangıç Tarihi</string>
+    <string name="lesson_date_hint">GG / AA / YYYY</string>
+    <string name="lesson_end_date_label">Bitiş Tarihi</string>
+    <string name="lesson_start_hour_label">Başlangıç Saati</string>
+    <string name="lesson_start_hour_hint">08:00</string>
+    <string name="lesson_end_hour_label">Bitiş Saati</string>
+    <string name="lesson_end_hour_hint">08:30</string>
+    <string name="lesson_repeat_label">Ders Tekrarı</string>
+    <string name="lesson_capacity_label">Kontenjan</string>
+    <string name="lesson_mandatory_appointment_booking_label">Zorunlu randevu alımı</string>
+    <string name="lesson_cost_label">Ücret</string>
+    <string name="lesson_create_private_action">Özel Ders Oluştur</string>
+    <string name="lesson_edit_cancel_message">Geri dönerseniz değişikler kaydedilmeyecek</string>
+
+    <string name="recurrence_none_label">Tekrar yok</string>
+    <string name="recurrence_daily_label">Her gün</string>
+    <string name="recurrence_weekly_label">Haftada belirli günler</string>
+    <string name="recurrence_last_cancel_duration_label">Son İptal Süresi</string>
+
+    <string name="day_monday_label">Pazartesi</string>
+    <string name="day_tuesday_label">Salı</string>
+    <string name="day_wednesday_label">Çarşamba</string>
+    <string name="day_thursday_label">Perşembe</string>
+    <string name="day_friday_label">Cuma</string>
+    <string name="day_saturday_label">Cumartesi</string>
+    <string name="day_sunday_label">Pazar</string>
+
+
+    <string name="settings_title">Ayarlar</string>
+    <string name="settings_account_label">Hesap Ayarları</string>
+    <string name="settings_payment_history_label">Ödeme Geçmişi</string>
+    <string name="settings_notifications_label">Bildirimler</string>
+    <string name="settings_support_label">Destek ve Yardım</string>
+    <string name="settings_support_help_subtitle">Sık sorulan soruların yanıtlarını bulun veya doğrudan bizimle iletişime geçin</string>
+
+    <string name="add_account_action">Hesap Ekle</string>
+    <string name="delete_account_action">Hesabı Sil</string>
+    <string name="settings_change_my_password_label">Şifremi Değiştir</string>
+    <string name="settings_current_password_label">Güncel Şifre</string>
+    <string name="settings_current_password_hint">Güncel şifrenizi girin</string>
+    <string name="settings_new_password_label">Yeni Şifre</string>
+    <string name="settings_new_password_hint">Yeni şifrenizi girin</string>
+    <string name="settings_new_password_again_label">Yeni Şifre (Tekrar)</string>
+    <string name="settings_new_password_again_hint">Yeni şifrenizi tekrarlayın</string>
+    <string name="settings_change_password_action">Şifreyi Değiştir</string>
+
+    <string name="settings_support_issue_account_label">Hesap Problemi</string>
+    <string name="settings_support_issue_payment_label">Ödeme Sorunu</string>
+    <string name="settings_support_issue_technical_label">Teknik Destek</string>
+    <string name="settings_support_issue_other_label">Diğer</string>
+    <string name="settings_support_subject_label">Konu*</string>
+    <string name="settings_support_email_label">E-Posta*</string>
+    <string name="settings_support_email_hint">sample@email.com</string>
+    <string name="settings_support_description_label">Açıklama*</string>
+    <string name="settings_support_description_hint">Problemi kısaca açıklayınız\n\n\n</string>
+    <string name="settings_support_upload_file_label">Dosya Yükle</string>
+    <string name="settings_support_upload_file_hint">Ekran fotoğrafı, dekont veya belgenizi ekleyin.</string>
+    <string name="settings_support_questions_label">Sıkça Sorulan Sorular</string>
+    <string name="settings_delete_account_dialog_title">Emin misiniz?</string>
+    <string name="settings_delete_account_dialog_message">Hesabınızı sildiğinizde bu işlemi geri alamayacaksınız. Profiliniz, fotoğraflarınız, notlarınız, tepkileriniz ve takipçileriniz dahil tüm verileriniz kaybolacak.</string>
+    <string name="settings_edit_profile_username_label">Kullanıcı Adı *</string>
+    <string name="settings_edit_profile_username_hint">Kullanıcı adını girin</string>
+    <string name="settings_edit_profile_firstname_label">Kullanıcı adını girin</string>
+    <string name="settings_edit_profile_height_label">Boy (%1$s)</string>
+    <string name="settings_edit_profile_weight_label">Kilo (%1$s)</string>
+    <string name="settings_edit_profile_body_type_label">Vücut Tipi</string>
+    <string name="settings_edit_profile_biography_label">Biyografi *</string>
+    <string name="settings_edit_profile_biography_hint">Kendinizi veya kuruluşunuzu kısaca tanıtın</string>
+    <string name="settings_edit_profile_address_label">Adres *</string>
+    <string name="settings_edit_profile_address_hint">Açık adresinizi giriniz</string>
+
+    <string name="background_image_label">Arkaplan Resmi</string>
+    <string name="profile_image_label">Profil Resmi</string>
+</resources>
+
+<!--    Use snake_case + purpose-based suffixes:-->
+
+<!--    *_action → for actions/buttons (e.g. logout_action)-->
+
+<!--    *_label → for static labels/tabs (e.g. notifications_label)-->
+
+<!--    *_title → for screen titles (e.g. settings_title)-->
+
+<!--    *_desc → for helper text/tooltips-->
+
+<!--    *_message → for messages or alerts-->
+
+<!--    *_error → for error texts-->
+

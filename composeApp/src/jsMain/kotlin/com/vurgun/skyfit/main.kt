@@ -17,15 +17,19 @@ fun main() {
     initKoin()
 
     onWasmReady {
-        CanvasBasedWindow(canvasElementId = "ComposeTarget") {
-
-            Box(Modifier.fillMaxSize().background(Color.Black)) {
-                Text(
-                    text = "TODO: precompose for web",
-                    fontSize = 124.sp,
-                    color = Color.White
-                )
+        CanvasBasedWindow(
+            canvasElementId = "ComposeTarget",
+            title = "SkyFit Web",
+            content = {
+//                MobileApp()
+                Box(Modifier.fillMaxSize().background(Color.Black)) {
+                    Text(
+                        text = "TODO: precompose for web",
+                        fontSize = 124.sp,
+                        color = Color.White
+                    )
+                }
             }
-        }
+        )
     }
 }

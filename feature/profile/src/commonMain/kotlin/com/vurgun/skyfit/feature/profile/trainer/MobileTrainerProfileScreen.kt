@@ -1,0 +1,343 @@
+package com.vurgun.skyfit.feature.profile.trainer
+
+import androidx.compose.foundation.ScrollState
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.BoxWithConstraints
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.heightIn
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.wrapContentWidth
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.Divider
+import androidx.compose.material.DropdownMenu
+import androidx.compose.material.DropdownMenuItem
+import androidx.compose.material.Icon
+import androidx.compose.material.MaterialTheme
+import androidx.compose.material.Scaffold
+import androidx.compose.material.Surface
+import androidx.compose.material.Text
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.Edit
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.blur
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.unit.Dp
+import androidx.compose.ui.unit.dp
+import com.vurgun.skyfit.data.courses.model.LessonSessionColumnViewData
+import com.vurgun.skyfit.feature.profile.components.LifestyleActionRow
+import com.vurgun.skyfit.feature.profile.components.MobileProfileActionsRow
+import com.vurgun.skyfit.feature.profile.components.UserProfileCardPreferenceRow
+import com.vurgun.skyfit.feature.profile.components.viewdata.LifestyleActionRowViewData
+import com.vurgun.skyfit.feature.profile.trainer.viewmodel.SkyFitTrainerProfileViewModel
+import com.vurgun.skyfit.feature.profile.user.viewmodel.TopBarGroupViewData
+import com.vurgun.skyfit.feature.social.components.LazySocialPostsColumn
+import com.vurgun.skyfit.ui.core.components.event.LessonSessionColumn
+import com.vurgun.skyfit.ui.core.components.image.NetworkImage
+import com.vurgun.skyfit.ui.core.components.special.ButtonSize
+import com.vurgun.skyfit.ui.core.components.special.ButtonVariant
+import com.vurgun.skyfit.ui.core.components.special.SkyFitButtonComponent
+import com.vurgun.skyfit.ui.core.styling.SkyFitColor
+import com.vurgun.skyfit.ui.core.styling.SkyFitTypography
+import org.jetbrains.compose.resources.painterResource
+import skyfit.ui.core.generated.resources.Res
+import skyfit.ui.core.generated.resources.logo_skyfit
+
+@Composable
+fun MobileTrainerProfileScreen(
+    goToSettings: () -> Unit,
+    goToCreatePost: () -> Unit,
+) {
+
+    val viewModel = remember { SkyFitTrainerProfileViewModel() }
+    val scrollState = rememberScrollState()
+    var showPosts by remember { mutableStateOf(false) }
+
+    val profileData by viewModel.profileData.collectAsState()
+    val specialtiesRowViewData by viewModel.specialtiesRowViewData.collectAsState()
+    val posts = viewModel.posts.collectAsState().value
+
+    val lessonsColumViewData by viewModel.lessonsColumViewData.collectAsState()
+
+    LaunchedEffect(Unit) {
+        viewModel.loadData()
+    }
+
+    Scaffold(
+        backgroundColor = SkyFitColor.background.default,
+        topBar = {
+            BoxWithConstraints {
+                val width = maxWidth
+                val imageHeight = width * 9 / 16
+                val contentTopPadding = imageHeight * 3 / 10
+
+                MobileTrainerProfileBackgroundImageComponent(imageHeight)
+
+                Column(
+                    Modifier
+                        .padding(top = contentTopPadding)
+                        .fillMaxWidth()
+                ) {
+                    MobileTrainerProfileInfoCardComponent(profileData)
+
+                    Spacer(Modifier.height(16.dp))
+                    MobileProfileActionsRow(
+                        postsSelected = showPosts,
+                        onClickAbout = { showPosts = false },
+                        onClickPosts = { showPosts = true },
+                        onClickSettings = goToSettings,
+                        onClickNewPost = goToCreatePost
+                    )
+                }
+            }
+        }
+    ) {
+        if (showPosts) {
+            LazySocialPostsColumn(posts)
+        } else {
+            MobileTrainerProfileAboutGroupComponent(specialtiesRowViewData, lessonsColumViewData, scrollState)
+        }
+    }
+}
+
+@Composable
+fun MobileTrainerProfileAboutGroupComponent(
+    specialtiesRowViewData: LifestyleActionRowViewData?,
+    lessonSessionColumnViewData: LessonSessionColumnViewData? = null,
+    scrollState: ScrollState
+) {
+    Column(
+        modifier = Modifier.fillMaxSize().verticalScroll(scrollState),
+        horizontalAlignment = Alignment.CenterHorizontally,
+    ) {
+        if (specialtiesRowViewData == null) {
+            MobileTrainerProfileSpecialitiesEmptyComponent(onClickAdd = {})
+        } else {
+            LifestyleActionRow(viewData = specialtiesRowViewData)
+        }
+
+        if (lessonSessionColumnViewData != null) {
+            LessonSessionColumn(
+                viewData = lessonSessionColumnViewData,
+                onClickShowAll = {}
+            )
+        } else {
+            MobileTrainerProfilePrivateClassesEmptyComponent(onClickAdd = {})
+        }
+
+        Spacer(Modifier.height(124.dp))
+    }
+}
+
+@Composable
+fun MobileTrainerProfileBackgroundImageComponent(height: Dp) {
+    NetworkImage(
+        imageUrl = "https://cdn.shopify.com/s/files/1/0599/3624/3866/t/57/assets/e69266f5f9de--field-street-fitness-6-4a2977.jpg?v=1682607953",
+        modifier = Modifier
+            .fillMaxWidth()
+            .height(height)
+    )
+}
+
+@Composable
+fun MobileTrainerProfileInfoCardComponent(viewData: TopBarGroupViewData?) {
+    viewData ?: return
+
+    Box(modifier = Modifier.fillMaxWidth()) {
+        Box(
+            modifier = Modifier
+                .padding(top = 70.dp)
+                .padding(horizontal = 16.dp)
+                .width(398.dp)
+                .heightIn(max = 140.dp)
+                .background(SkyFitColor.background.fillTransparent, RoundedCornerShape(16.dp))
+        ) {
+            Box(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .background(Color(0xFF012E36).copy(alpha = 0.88f), RoundedCornerShape(16.dp))
+                    .blur(40.dp)
+            )
+
+            Column(
+                modifier = Modifier
+                    .padding(start = 16.dp, top = 36.dp, end = 16.dp, bottom = 16.dp)
+                    .fillMaxWidth(),
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+                Row(
+                    horizontalArrangement = Arrangement.Center,
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Text(
+                        text = viewData.name,
+                        style = SkyFitTypography.bodyLargeSemibold
+                    )
+                    Spacer(modifier = Modifier.width(8.dp)) // Space between name and social link
+                    Text(
+                        text = viewData.social,
+                        style = SkyFitTypography.bodySmallMedium,
+                        color = SkyFitColor.text.secondary
+                    )
+                }
+
+                Spacer(modifier = Modifier.height(16.dp))
+
+                if (viewData.preferences.isNotEmpty()) {
+                    UserProfileCardPreferenceRow(Modifier.fillMaxWidth())
+                }
+            }
+        }
+
+        NetworkImage(
+            imageUrl = viewData.imageUrl,
+            modifier = Modifier
+                .size(100.dp)
+                .clip(RoundedCornerShape(20.dp))
+                .align(Alignment.TopCenter)
+        )
+    }
+}
+
+@Composable
+private fun TrainerClassMenuPopup(
+    isOpen: Boolean,
+    onDismiss: () -> Unit,
+    onAddEvent: () -> Unit,
+    onEdit: () -> Unit
+) {
+    if (isOpen) {
+        MaterialTheme(
+            colors = MaterialTheme.colors.copy(surface = SkyFitColor.background.surfaceSecondary),
+            shapes = MaterialTheme.shapes.copy(medium = RoundedCornerShape(16.dp))
+        ) {
+            DropdownMenu(
+                expanded = isOpen,
+                onDismissRequest = { onDismiss() },
+                modifier = Modifier
+                    .width(160.dp)
+                    .background(Color.Transparent) // Prevents overriding the rounded shape
+            ) {
+                Surface(elevation = 8.dp) {
+                    Column {
+                        // "Etkinlik Ekle" Option
+                        DropdownMenuItem(
+                            onClick = {
+                                onAddEvent()
+                                onDismiss()
+                            }
+                        ) {
+                            Row(
+                                modifier = Modifier.fillMaxWidth(),
+                                verticalAlignment = Alignment.CenterVertically,
+                                horizontalArrangement = Arrangement.SpaceBetween
+                            ) {
+                                Text(
+                                    text = "Etkinlik Ekle",
+                                    style = SkyFitTypography.bodyMediumRegular
+                                )
+                                Icon(
+                                    imageVector = Icons.Default.Add,
+                                    contentDescription = "Add Event",
+                                    tint = SkyFitColor.icon.default,
+                                    modifier = Modifier.size(16.dp)
+                                )
+                            }
+                        }
+
+                        Divider(
+                            color = SkyFitColor.border.default,
+                            thickness = 1.dp
+                        )
+
+                        // "Düzenle" Option
+                        DropdownMenuItem(
+                            onClick = {
+                                onEdit()
+                                onDismiss()
+                            }
+                        ) {
+                            Row(
+                                modifier = Modifier.fillMaxWidth(),
+                                verticalAlignment = Alignment.CenterVertically,
+                                horizontalArrangement = Arrangement.SpaceBetween
+                            ) {
+                                Text(
+                                    text = "Düzenle",
+                                    style = SkyFitTypography.bodyMediumRegular
+                                )
+                                Icon(
+                                    imageVector = Icons.Default.Edit,
+                                    contentDescription = "Edit",
+                                    tint = SkyFitColor.icon.default,
+                                    modifier = Modifier.size(16.dp)
+                                )
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
+@Composable
+private fun MobileTrainerProfileSpecialitiesEmptyComponent(onClickAdd: () -> Unit) {
+    Box(
+        Modifier
+            .padding(16.dp)
+            .fillMaxWidth()
+            .background(SkyFitColor.background.surfaceSecondary, RoundedCornerShape(24.dp))
+            .padding(vertical = 56.dp),
+        contentAlignment = Alignment.Center
+    ) {
+        SkyFitButtonComponent(
+            modifier = Modifier.wrapContentWidth(), text = "Profili Düzenle",
+            onClick = onClickAdd,
+            variant = ButtonVariant.Secondary,
+            size = ButtonSize.Micro,
+            rightIconPainter = painterResource(Res.drawable.logo_skyfit)
+        )
+    }
+}
+
+@Composable
+private fun MobileTrainerProfilePrivateClassesEmptyComponent(onClickAdd: () -> Unit) {
+    Box(
+        Modifier
+            .padding(16.dp)
+            .fillMaxWidth()
+            .background(SkyFitColor.background.surfaceSecondary, RoundedCornerShape(24.dp))
+            .padding(vertical = 56.dp),
+        contentAlignment = Alignment.Center
+    ) {
+        SkyFitButtonComponent(
+            modifier = Modifier.wrapContentWidth(), text = "Ozel Ders Ekle",
+            onClick = onClickAdd,
+            variant = ButtonVariant.Secondary,
+            size = ButtonSize.Micro,
+            rightIconPainter = painterResource(Res.drawable.logo_skyfit)
+        )
+    }
+}
+

@@ -12,15 +12,12 @@ plugins {
 
 kotlin {
 
-    //region Target: Android
     androidTarget {
         compilerOptions {
             jvmTarget.set(JvmTarget.JVM_11)
         }
     }
-    //endregion Target: Android
 
-    //region Target: iOS
     listOf(
         iosX64(),
         iosArm64(),
@@ -32,37 +29,43 @@ kotlin {
             isStatic = true
         }
     }
-    //endregion Target: iOS
 
-    //region Target: Desktop
     jvm("desktop")
-    //endregion Target: Desktop
 
-    //region Target: Web-IR
-    js(IR) {
-        browser {
-            commonWebpackConfig {
-                outputFileName = "composeApp.js"
-            }
-        }
-        binaries.executable()
-    }
-    //endregion Target:  Web-IR
+//    js(IR) {
+//        browser {
+//            commonWebpackConfig {
+//                outputFileName = "composeApp.js"
+//            }
+//        }
+//        binaries.executable()
+//    }
 
     sourceSets {
         val desktopMain by getting
 
         commonMain.dependencies {
-            // Compose Multiplatform libraries
-            implementation(compose.runtime)
-            implementation(compose.foundation)
-            implementation(compose.material)
-            implementation(compose.ui)
-            implementation(compose.animation)
-            implementation(compose.components.resources)
+            implementation(projects.ui.core)
 
-            // Compose Components
-//            implementation("com.google.accompanist:accompanist-permissions:0.37.2")
+            implementation(projects.data.core)
+            implementation(projects.data.network)
+            implementation(projects.data.user)
+
+            implementation(projects.feature.auth)
+            implementation(projects.feature.onboarding)
+            implementation(projects.feature.dashboard)
+            implementation(projects.feature.settings)
+            implementation(projects.feature.calendar)
+            implementation(projects.feature.courses)
+            implementation(projects.feature.notification)
+            implementation(projects.feature.profile)
+            implementation(projects.feature.social)
+            implementation(projects.feature.messaging)
+            implementation(projects.feature.home)
+            implementation(projects.feature.explore)
+            implementation(projects.feature.exercise)
+            implementation(projects.feature.appointments)
+            implementation(projects.feature.home)
 
             // Kotlinx
             implementation(libs.kotlinx.coroutines.core)
@@ -71,15 +74,7 @@ kotlin {
 
             // Koin for dependency injection
             implementation(libs.koin.core)
-            implementation(libs.koin.compose)
-            implementation(libs.koin.compose.viewmodel)
-
-            // Ktor client core and content negotiation
-            implementation(libs.ktor.client.core)
-            implementation(libs.ktor.client.logging)
-            implementation(libs.ktor.client.content.negotiation)
-            implementation(libs.ktor.serialization.json)
-
+            implementation(libs.bundles.koin.compose)
 
             // peekaboo for Camera work
 //            implementation(libs.peekaboo.ui)
@@ -93,42 +88,27 @@ kotlin {
             // PreCompose for multiplatform navigation
             implementation(libs.precompose)
             implementation(libs.precompose.koin)
-
-//            // FilePicker
-            implementation(libs.calf.filepicker)
         }
 
         androidMain.dependencies {
-            implementation(libs.androidx.activity.compose)
-            implementation(libs.ktor.client.okhttp)
-            implementation(libs.calf.permissions)
-            implementation(libs.androidx.ui.tooling.preview.android)
-
-            implementation("app.rive:rive-android:9.6.5")
-            implementation("androidx.startup:startup-runtime:1.2.0")
         }
 
         iosMain.dependencies {
-            implementation(libs.ktor.client.darwin)
-            implementation(libs.calf.permissions)
         }
 
         desktopMain.dependencies {
-            implementation(compose.desktop.currentOs)
-            implementation(libs.kotlinx.coroutines.swing)
-            implementation(libs.ktor.client.cio)
         }
 
-        val jsMain by getting {
-            dependencies {
-                implementation(compose.foundation)
-                implementation(compose.animation)
-                implementation(compose.material)
-                implementation(compose.html.core)
-                implementation(libs.skiko.js)
-                implementation(libs.ktor.client.js)
-            }
-        }
+//        val jsMain by getting {
+//            dependencies {
+//                implementation(compose.foundation)
+//                implementation(compose.animation)
+//                implementation(compose.material)
+//                implementation(compose.html.core)
+//                implementation(libs.skiko.js)
+//                implementation(libs.ktor.client.js)
+//            }
+//        }
     }
 }
 

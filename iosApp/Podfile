@@ -5,4 +5,6 @@ target 'iosApp' do
 
   # Shared Kotlin Multiplatform framework
   pod 'composeApp', :path => '../composeApp.podspec'
+  pod("RiveRuntime", "6.7.4")
+
 end

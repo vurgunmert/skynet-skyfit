@@ -1,0 +1,50 @@
+<resources>
+
+    <!-- 🔹 Onboarding – General -->
+    <string name="onboarding_welcome_title">SkyFit’e Hoş Geldin!</string>
+    <string name="onboarding_welcome_message">Uygulamaya nasıl devam etmek istersin</string>
+    <string name="onboarding_get_started_action">Haydi Başla</string>
+
+    <!-- 🔹 Onboarding – Character Selection -->
+    <string name="onboarding_character_title">Karakter Seçiniz</string>
+    <string name="onboarding_character_message">Seçtiğiniz karakter ana ekranda görüntülenecek</string>
+
+    <!-- 🔹 Onboarding – Date of Birth -->
+    <string name="onboarding_birth_date_title">Doğum Tarihiniz</string>
+    <string name="onboarding_birth_date_message">Seçiminiz profilinizde görüntülenecek</string>
+
+    <!-- 🔹 Onboarding – Gender -->
+    <string name="onboarding_gender_title">Cinsiyet Seçiniz</string>
+    <string name="onboarding_gender_message">Seçiminiz profilinizde görüntülenecek</string>
+
+    <!-- 🔹 Onboarding – Weight -->
+    <string name="onboarding_weight_title">Kilonuz</string>
+    <string name="onboarding_weight_message">Seçiminiz profilinizde görüntülenecek</string>
+
+    <!-- 🔹 Onboarding – Height -->
+    <string name="onboarding_height_title">Boyunuz</string>
+    <string name="onboarding_height_message">Seçiminiz profilinizde görüntülenecek</string>
+
+    <!-- 🔹 Onboarding – Body Type -->
+    <string name="onboarding_body_type_title">Vücut Tipiniz</string>
+    <string name="onboarding_body_type_message">Seçiminiz profilinizde görüntülenecek</string>
+
+    <!-- 🔹 Onboarding – Goal -->
+    <string name="onboarding_goal_title">Ne için buradasınız</string>
+    <string name="onboarding_goal_message">Seçiminize göre özel antrenmanlara ulaş</string>
+
+    <!-- 🔹 Onboarding – Trainer -->
+    <string name="onboarding_trainer_profile_title">Profilini Tamamla</string>
+    <string name="onboarding_trainer_profile_message">Seçiminize göre özel antrenmanlara ulaş</string>
+
+    <!-- 🔹 Onboarding – Facility -->
+    <string name="onboarding_edit_background_action">Arkaplanı Düzenle</string>
+    <string name="onboarding_facility_profile_title">Profilini Tamamla</string>
+    <string name="onboarding_facility_profile_message">Seçiminize göre özel antrenmanlara ulaş</string>
+
+    <!-- 🔹 Onboarding – Final Step -->
+    <string name="onboarding_ready_title">Hazırsınız 🚀</string>
+    <string name="onboarding_ready_message">Vakit ayırdığınız için teşekkür ederiz. Uygulamayı sizin için hazırlıyoruz.</string>
+
+
+</resources>

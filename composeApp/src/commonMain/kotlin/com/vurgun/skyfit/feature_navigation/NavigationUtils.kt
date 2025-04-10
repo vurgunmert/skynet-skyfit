@@ -1,6 +1,5 @@
 package com.vurgun.skyfit.feature_navigation
 
-import com.vurgun.skyfit.core.domain.models.UserType
 import moe.tlaster.precompose.navigation.NavOptions
 import moe.tlaster.precompose.navigation.Navigator
 import moe.tlaster.precompose.navigation.PopUpTo

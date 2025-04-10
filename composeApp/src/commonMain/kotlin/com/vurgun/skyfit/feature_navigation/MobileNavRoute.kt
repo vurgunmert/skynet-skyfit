@@ -26,7 +26,7 @@ sealed class MobileNavRoute(
     }
 
     // Auth
-    data object Maintenance : MobileNavRoute("maintenance" )
+    data object Maintenance : MobileNavRoute("maintenance")
     data object Splash : MobileNavRoute("splash" )
     data object Login : MobileNavRoute("login" )
     data object LoginVerifyOTP : MobileNavRoute("login_otp_verification" )
@@ -39,18 +39,6 @@ sealed class MobileNavRoute(
 
     //Onboarding
     data object Onboarding : MobileNavRoute("onboarding")
-    data object OnboardingUserTypeSelection : MobileNavRoute("onboarding/user_type_selection")
-    data object OnboardingCharacterSelection : MobileNavRoute("onboarding/character_selection")
-    data object OnboardingBirthYearSelection : MobileNavRoute("onboarding/birth_year_selection")
-    data object OnboardingGenderSelection : MobileNavRoute("onboarding/gender_selection")
-    data object OnboardingWeightSelection : MobileNavRoute("onboarding/weight_selection")
-    data object OnboardingHeightSelection : MobileNavRoute("onboarding/height_selection")
-    data object OnboardingUserGoalSelection : MobileNavRoute("onboarding/goal_selection")
-    data object OnboardingBodyTypeSelection : MobileNavRoute("onboarding/body_type_selection")
-    data object OnboardingEnterProfile : MobileNavRoute("onboarding/enter_profile")
-    data object OnboardingFacilityDetails : MobileNavRoute("onboarding/facility_details")
-    data object OnboardingFacilityProfileTags : MobileNavRoute("onboarding/facility_profile_tags")
-    data object OnboardingCompleted : MobileNavRoute("onboarding/completed")
 
     //Dashboard
     data object Dashboard : MobileNavRoute("dashboard")
