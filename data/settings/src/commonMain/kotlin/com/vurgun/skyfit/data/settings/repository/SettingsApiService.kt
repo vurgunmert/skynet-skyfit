@@ -74,7 +74,7 @@ class SettingsApiService(private val apiClient: ApiClient) {
         return apiClient.safeApiCall<List<MemberDto>> {
             method = HttpMethod.Post
             bearerAuth(token)
-            url("/get/gym/trainers")
+            url("get/gym/trainers")
             setBody(request)
         }
     }
@@ -89,8 +89,8 @@ class SettingsApiService(private val apiClient: ApiClient) {
         }
     }
 
-    suspend fun getPlatformTrainers(token: String): ApiResult<List<MemberDto>> {
-        val request = GetPlatformTrainersRequest(0)
+    suspend fun getPlatformTrainers(gymId: Int, token: String): ApiResult<List<MemberDto>> {
+        val request = GetPlatformTrainersRequest(gymId)
         return apiClient.safeApiCall<List<MemberDto>> {
             method = HttpMethod.Post
             bearerAuth(token)

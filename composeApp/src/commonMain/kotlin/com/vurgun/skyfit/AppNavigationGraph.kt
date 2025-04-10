@@ -25,7 +25,7 @@ fun AppNavigationGraph() {
 
     NavHost(
         navController = navigationController,
-        startDestination = SettingsRoute.ManageMembers,
+        startDestination = SettingsRoute.ManageTrainers,
         modifier = Modifier.windowInsetsPadding(WindowInsets.systemBars) //TOOD: CATCHES ALL SIDES
     ) {
 

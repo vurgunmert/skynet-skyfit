@@ -34,11 +34,8 @@ import com.vurgun.skyfit.feature.explore.screen.MobileExploreTrainersScreen
 import com.vurgun.skyfit.feature.notification.screen.MobileUserNotificationsScreen
 import com.vurgun.skyfit.feature.settings.changepassword.SettingsChangePasswordScreen
 import com.vurgun.skyfit.feature.settings.facility.MobileFacilitySettingsAccountScreen
-import com.vurgun.skyfit.feature.settings.facility.MobileFacilitySettingsAddMemberScreen
 import com.vurgun.skyfit.feature.settings.facility.MobileFacilitySettingsEditProfileScreen
 import com.vurgun.skyfit.feature.settings.facility.MobileFacilitySettingsHomeScreen
-import com.vurgun.skyfit.feature.settings.facility.MobileFacilitySettingsManageMembersScreen
-import com.vurgun.skyfit.feature.settings.facility.MobileFacilitySettingsManageTrainersScreen
 import com.vurgun.skyfit.feature.settings.facility.MobileFacilitySettingsNotificationsScreen
 import com.vurgun.skyfit.feature.settings.facility.MobileFacilitySettingsPaymentHistoryScreen
 import com.vurgun.skyfit.feature.settings.helpsupport.MobileSettingsSupportHelpScreen
@@ -438,24 +435,14 @@ private fun RouteBuilder.settingsNavGraph(navigator: Navigator) {
         MobileSettingsSupportHelpScreen(goToBack = navigator::popBackStack)
     }
     scene(MobileNavRoute.Settings.Facility.ManageAccounts.route) { }
-    scene(MobileNavRoute.Settings.Facility.ManageTrainers.route) {
-        MobileFacilitySettingsManageTrainersScreen(
-            goToBack = navigator::popBackStack,
-            goToAddTrainer = { }
-        )
-    }
+
     scene(MobileNavRoute.Settings.Facility.ManageBranches.route) { }
-    scene(MobileNavRoute.Settings.Facility.ManageMembers.route) {
-        MobileFacilitySettingsManageMembersScreen(
-            goToBack = navigator::popBackStack,
-            goToAddMember = { navigator.jumpAndStay(MobileNavRoute.Settings.Facility.AddMembers) }
-        )
-    }
-    scene(MobileNavRoute.Settings.Facility.AddMembers.route) {
-        MobileFacilitySettingsAddMemberScreen(
-            goToBack = navigator::popBackStack
-        )
-    }
+//    scene(MobileNavRoute.Settings.Facility.ManageMembers.route) {
+//        MobileFacilitySettingsManageMembersScreen(
+//            goToBack = navigator::popBackStack,
+//            goToAddMember = { navigator.jumpAndStay(MobileNavRoute.Settings.Facility.AddMembers) }
+//        )
+//    }
 }
 
 private fun RouteBuilder.trainerNavGraph(navigator: Navigator) {

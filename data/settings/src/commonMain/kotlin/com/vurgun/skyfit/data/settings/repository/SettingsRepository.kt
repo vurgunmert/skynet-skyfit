@@ -11,6 +11,6 @@ interface SettingsRepository {
     suspend fun addGymTrainer(gymId: Int, userId: Int): Result<Boolean>
     suspend fun getGymTrainers(gymId: Int): Result<List<Member>>
     suspend fun deleteGymTrainer(gymId: Int, userId: Int): Result<Boolean>
-    suspend fun getPlatformTrainers(): Result<List<Member>>
+    suspend fun getPlatformTrainers(gymId: Int): Result<List<Member>>
 }
 

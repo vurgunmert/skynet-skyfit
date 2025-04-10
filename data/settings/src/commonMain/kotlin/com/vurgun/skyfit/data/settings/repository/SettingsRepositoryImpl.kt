@@ -168,11 +168,11 @@ class SettingsRepositoryImpl(
         }
     }
 
-    override suspend fun getPlatformTrainers(): Result<List<Member>> = withContext(dispatchers.io) {
+    override suspend fun getPlatformTrainers(gymId: Int): Result<List<Member>> = withContext(dispatchers.io) {
         try {
             val token = requireToken()
 
-            when (val response = apiService.getPlatformTrainers(token)) {
+            when (val response = apiService.getPlatformTrainers(gymId, token)) {
                 is ApiResult.Error -> Result.failure(IllegalStateException(response.message))
                 is ApiResult.Exception -> Result.failure(response.exception)
                 is ApiResult.Success -> {

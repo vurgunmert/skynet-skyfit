@@ -3,20 +3,19 @@ package com.vurgun.skyfit.feature.settings.navigation
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.composable
-import androidx.navigation.toRoute
 import com.vurgun.skyfit.data.core.domain.model.UserRole
 import com.vurgun.skyfit.feature.settings.account.MobileSettingsAddAccountScreen
 import com.vurgun.skyfit.feature.settings.account.MobileSettingsManageAccountsScreen
 import com.vurgun.skyfit.feature.settings.changepassword.SettingsChangePasswordScreen
 import com.vurgun.skyfit.feature.settings.component.rbac.RequireRole
 import com.vurgun.skyfit.feature.settings.facility.MobileFacilitySettingsAccountScreen
-import com.vurgun.skyfit.feature.settings.facility.MobileFacilitySettingsAddMemberScreen
-import com.vurgun.skyfit.feature.settings.facility.MobileFacilitySettingsAddTrainerScreen
+import com.vurgun.skyfit.feature.settings.facility.member.MobileFacilityAddMemberScreen
+import com.vurgun.skyfit.feature.settings.facility.trainer.MobileFacilityAddTrainerScreen
 import com.vurgun.skyfit.feature.settings.facility.MobileFacilitySettingsEditProfileScreen
 import com.vurgun.skyfit.feature.settings.facility.MobileFacilitySettingsHomeScreen
 import com.vurgun.skyfit.feature.settings.facility.MobileFacilitySettingsManageBranchesScreen
-import com.vurgun.skyfit.feature.settings.facility.MobileFacilitySettingsManageMembersScreen
-import com.vurgun.skyfit.feature.settings.facility.MobileFacilitySettingsManageTrainersScreen
+import com.vurgun.skyfit.feature.settings.facility.member.MobileFacilityManageMembersScreen
+import com.vurgun.skyfit.feature.settings.facility.trainer.MobileFacilityManageTrainersScreen
 import com.vurgun.skyfit.feature.settings.facility.MobileFacilitySettingsNotificationsScreen
 import com.vurgun.skyfit.feature.settings.facility.MobileFacilitySettingsPaymentHistoryScreen
 import com.vurgun.skyfit.feature.settings.helpsupport.MobileSettingsSupportHelpScreen
@@ -314,7 +313,7 @@ fun NavGraphBuilder.settingsRoutes(
     composable<SettingsRoute.ManageMembers> {
         RequireRole(role, listOf(UserRole.Trainer, UserRole.Facility)) {
             when (role) {
-                UserRole.Facility -> MobileFacilitySettingsManageMembersScreen(
+                UserRole.Facility -> MobileFacilityManageMembersScreen(
                     goToBack = { navController.popBackStack() },
                     goToAddMember = {
                         navController.navigate(SettingsRoute.AddMembers)
@@ -329,7 +328,7 @@ fun NavGraphBuilder.settingsRoutes(
     composable<SettingsRoute.AddMembers> {
         RequireRole(role, listOf(UserRole.Facility)) {
             when (role) {
-                UserRole.Facility -> MobileFacilitySettingsAddMemberScreen(
+                UserRole.Facility -> MobileFacilityAddMemberScreen(
                     goToBack = { navController.popBackStack() },
                 )
 
@@ -341,7 +340,7 @@ fun NavGraphBuilder.settingsRoutes(
     composable<SettingsRoute.ManageTrainers> {
         RequireRole(role, listOf(UserRole.Facility)) {
             when (role) {
-                UserRole.Facility -> MobileFacilitySettingsManageTrainersScreen(
+                UserRole.Facility -> MobileFacilityManageTrainersScreen(
                     goToBack = { navController.popBackStack() },
                     goToAddTrainer = {
                         navController.navigate(SettingsRoute.AddTrainers)
@@ -356,7 +355,7 @@ fun NavGraphBuilder.settingsRoutes(
     composable<SettingsRoute.AddTrainers> {
         RequireRole(role, listOf(UserRole.Facility)) {
             when (role) {
-                UserRole.Facility -> MobileFacilitySettingsAddTrainerScreen(
+                UserRole.Facility -> MobileFacilityAddTrainerScreen(
                     goToBack = { navController.popBackStack() },
                 )
 

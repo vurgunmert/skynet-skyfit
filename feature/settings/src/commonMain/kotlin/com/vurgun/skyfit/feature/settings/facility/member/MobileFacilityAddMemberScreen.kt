@@ -1,4 +1,4 @@
-package com.vurgun.skyfit.feature.settings.facility
+package com.vurgun.skyfit.feature.settings.facility.member
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -27,7 +27,7 @@ import skyfit.ui.core.generated.resources.ic_plus
 import skyfit.ui.core.generated.resources.search_action
 
 @Composable
-fun MobileFacilitySettingsAddMemberScreen(
+internal fun MobileFacilityAddMemberScreen(
     goToBack: () -> Unit,
     viewModel: FacilityAddMembersViewModel = koinViewModel()
 ) {

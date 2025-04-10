@@ -1,4 +1,4 @@
-package com.vurgun.skyfit.feature.settings.facility
+package com.vurgun.skyfit.feature.settings.facility.trainer
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -31,7 +31,7 @@ import com.vurgun.skyfit.ui.core.components.special.ButtonSize
 import com.vurgun.skyfit.ui.core.components.special.ButtonState
 import com.vurgun.skyfit.ui.core.components.special.ButtonVariant
 import com.vurgun.skyfit.ui.core.components.special.SkyFitButtonComponent
-import com.vurgun.skyfit.ui.core.components.special.SkyFitScaffold
+import com.vurgun.skyfit.ui.core.components.special.SkyFitMobileScaffold
 import com.vurgun.skyfit.ui.core.components.special.SkyFitScreenHeader
 import com.vurgun.skyfit.ui.core.components.special.SkyFitSearchTextInputComponent
 import com.vurgun.skyfit.ui.core.styling.SkyFitColor
@@ -41,36 +41,28 @@ import org.koin.compose.viewmodel.koinViewModel
 import skyfit.ui.core.generated.resources.Res
 import skyfit.ui.core.generated.resources.add_action
 import skyfit.ui.core.generated.resources.delete_action
-import skyfit.ui.core.generated.resources.members_label
 import skyfit.ui.core.generated.resources.search_action
-
-data class ManageMembersUiState(
-    val filtered: List<Member> = emptyList(),
-    val query: String = "",
-    val isLoading: Boolean = false,
-    val error: String? = null,
-    val unauthorized: Boolean = false
-)
+import skyfit.ui.core.generated.resources.trainers_label
 
 @Composable
-fun MobileFacilitySettingsManageMembersScreen(
+internal fun MobileFacilityManageTrainersScreen(
     goToBack: () -> Unit,
-    goToAddMember: () -> Unit,
-    viewModel: FacilityManageMembersViewModel = koinViewModel()
+    goToAddTrainer: () -> Unit,
+    viewModel: FacilityManageTrainersViewModel = koinViewModel()
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 
     LaunchedEffect(Unit) {
-        viewModel.refreshGymMembers() // or refreshPlatformMembers() in add screen
+        viewModel.refreshGymTrainers()
     }
 
-    SkyFitScaffold(
+    SkyFitMobileScaffold(
         topBar = {
             Column(Modifier.fillMaxWidth()) {
-                MobileFacilitySettingsSearchUserToolbarComponent(
-                    title = stringResource(Res.string.members_label),
+                MobileFacilitySettingsSearchTrainerToolbarComponent(
+                    title = stringResource(Res.string.trainers_label),
                     onClickBack = goToBack,
-                    onClickAdd = goToAddMember
+                    onClickAdd = goToAddTrainer
                 )
 
                 SkyFitSearchTextInputComponent(
@@ -91,14 +83,14 @@ fun MobileFacilitySettingsManageMembersScreen(
             verticalArrangement = Arrangement.spacedBy(16.dp)
         ) {
             items(uiState.filtered) {
-                MobileFacilityMemberItemComponent(
+                MobileFacilityTrainerItemComponent(
                     item = it,
                     onClick = {},
                     actionContent = {
                         SkyFitButtonComponent(
                             text = stringResource(Res.string.delete_action),
                             modifier = Modifier.wrapContentWidth(),
-                            onClick = { viewModel.deleteMember(it.userId) },
+                            onClick = { viewModel.deleteTrainer(it.userId) },
                             variant = ButtonVariant.Primary,
                             size = ButtonSize.Micro,
                             state = ButtonState.Rest
@@ -111,7 +103,7 @@ fun MobileFacilitySettingsManageMembersScreen(
 }
 
 @Composable
-fun MobileFacilitySettingsSearchUserToolbarComponent(
+fun MobileFacilitySettingsSearchTrainerToolbarComponent(
     title: String,
     onClickBack: () -> Unit,
     onClickAdd: () -> Unit
@@ -122,7 +114,8 @@ fun MobileFacilitySettingsSearchUserToolbarComponent(
         SkyFitButtonComponent(
             modifier = Modifier
                 .padding(end = 24.dp)
-                .wrapContentWidth(), text = stringResource(Res.string.add_action),
+                .wrapContentWidth(),
+            text = stringResource(Res.string.add_action),
             onClick = onClickAdd,
             variant = ButtonVariant.Primary,
             size = ButtonSize.Micro,
@@ -132,7 +125,7 @@ fun MobileFacilitySettingsSearchUserToolbarComponent(
 }
 
 @Composable
-fun MobileFacilityMemberItemComponent(
+fun MobileFacilityTrainerItemComponent(
     item: Member,
     onClick: () -> Unit,
     actionContent: @Composable () -> Unit

@@ -1,4 +1,4 @@
-package com.vurgun.skyfit.feature.settings.facility
+package com.vurgun.skyfit.feature.settings.facility.member
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -11,12 +11,20 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
-class FacilityManageMembersViewModel(
+internal data class FacilityAddMembersUiState(
+    val filtered: List<Member> = emptyList(),
+    val query: String = "",
+    val isLoading: Boolean = false,
+    val error: String? = null,
+    val unauthorized: Boolean = false
+)
+
+internal class FacilityAddMembersViewModel(
     private val settingsRepository: SettingsRepository
 ) : ViewModel() {
 
-    private val _uiState = MutableStateFlow(ManageMembersUiState())
-    val uiState: StateFlow<ManageMembersUiState> = _uiState.asStateFlow()
+    private val _uiState = MutableStateFlow(FacilityAddMembersUiState())
+    val uiState: StateFlow<FacilityAddMembersUiState> = _uiState.asStateFlow()
 
     private var cached: List<Member> = emptyList()
 
@@ -29,11 +37,11 @@ class FacilityManageMembersViewModel(
         }
     }
 
-    fun refreshGymMembers() {
+    fun refreshPlatformMembers() {
         viewModelScope.launch {
             _uiState.update { it.copy(isLoading = true, error = null, unauthorized = false) }
 
-            settingsRepository.getGymMembers(gymId = 10).fold(
+            settingsRepository.getPlatformMembers(gymId = 10).fold(
                 onSuccess = { members ->
                     cached = members
                     _uiState.update {
@@ -57,20 +65,20 @@ class FacilityManageMembersViewModel(
         }
     }
 
-    fun deleteMember(memberId: Int) {
+    fun addMember(memberId: Int) {
         viewModelScope.launch {
             _uiState.update { it.copy(isLoading = true, error = null) }
 
-            settingsRepository.deleteGymMember(gymId = 10, userId = memberId).fold(
+            settingsRepository.addGymUser(gymId = 10, userId = memberId).fold(
                 onSuccess = {
-                    refreshGymMembers()
+                    refreshPlatformMembers()
                 },
                 onFailure = { error ->
                     _uiState.update {
                         it.copy(
                             isLoading = false,
                             unauthorized = error is MissingTokenException,
-                            error = error.message ?: "Failed to remove member"
+                            error = error.message ?: "Failed to add member"
                         )
                     }
                 }

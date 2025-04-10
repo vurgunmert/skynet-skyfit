@@ -1,4 +1,4 @@
-package com.vurgun.skyfit.feature.settings.facility
+package com.vurgun.skyfit.feature.settings.facility.trainer
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -11,7 +11,7 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
-data class FacilityAddMembersUiState(
+internal data class FacilityAddTrainersUiState(
     val filtered: List<Member> = emptyList(),
     val query: String = "",
     val isLoading: Boolean = false,
@@ -19,12 +19,12 @@ data class FacilityAddMembersUiState(
     val unauthorized: Boolean = false
 )
 
-class FacilityAddMembersViewModel(
+internal class FacilityAddTrainerViewModel(
     private val settingsRepository: SettingsRepository
 ) : ViewModel() {
 
-    private val _uiState = MutableStateFlow(FacilityAddMembersUiState())
-    val uiState: StateFlow<FacilityAddMembersUiState> = _uiState.asStateFlow()
+    private val _uiState = MutableStateFlow(FacilityAddTrainersUiState())
+    val uiState: StateFlow<FacilityAddTrainersUiState> = _uiState.asStateFlow()
 
     private var cached: List<Member> = emptyList()
 
@@ -37,16 +37,16 @@ class FacilityAddMembersViewModel(
         }
     }
 
-    fun refreshPlatformMembers() {
+    fun refreshPlatformTrainers() {
         viewModelScope.launch {
             _uiState.update { it.copy(isLoading = true, error = null, unauthorized = false) }
 
-            settingsRepository.getPlatformMembers(gymId = 10).fold(
-                onSuccess = { members ->
-                    cached = members
+            settingsRepository.getPlatformTrainers(gymId = 10).fold(
+                onSuccess = { trainers ->
+                    cached = trainers
                     _uiState.update {
                         it.copy(
-                            filtered = applyQuery(members, it.query),
+                            filtered = applyQuery(trainers, it.query),
                             isLoading = false
                         )
                     }
@@ -65,20 +65,20 @@ class FacilityAddMembersViewModel(
         }
     }
 
-    fun addMember(memberId: Int) {
+    fun addTrainer(trainerId: Int) {
         viewModelScope.launch {
             _uiState.update { it.copy(isLoading = true, error = null) }
 
-            settingsRepository.addGymUser(gymId = 10, userId = memberId).fold(
+            settingsRepository.addGymTrainer(gymId = 10, userId = trainerId).fold(
                 onSuccess = {
-                    refreshPlatformMembers()
+                    refreshPlatformTrainers()
                 },
                 onFailure = { error ->
                     _uiState.update {
                         it.copy(
                             isLoading = false,
                             unauthorized = error is MissingTokenException,
-                            error = error.message ?: "Failed to add member"
+                            error = error.message ?: "Failed to add trainer"
                         )
                     }
                 }

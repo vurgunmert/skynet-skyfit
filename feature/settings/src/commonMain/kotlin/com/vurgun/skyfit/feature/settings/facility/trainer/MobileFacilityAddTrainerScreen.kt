@@ -1,4 +1,4 @@
-package com.vurgun.skyfit.feature.settings.facility
+package com.vurgun.skyfit.feature.settings.facility.trainer
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -9,10 +9,12 @@ import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.vurgun.skyfit.feature.settings.facility.member.MobileFacilityMemberItemComponent
 import com.vurgun.skyfit.ui.core.components.button.SecondaryMicroButton
 import com.vurgun.skyfit.ui.core.components.special.SkyFitScaffold
 import com.vurgun.skyfit.ui.core.components.special.SkyFitScreenHeader
@@ -26,12 +28,15 @@ import skyfit.ui.core.generated.resources.ic_plus
 import skyfit.ui.core.generated.resources.search_action
 
 @Composable
-fun MobileFacilitySettingsAddTrainerScreen(
-    goToBack: () -> Unit
+internal fun MobileFacilityAddTrainerScreen(
+    goToBack: () -> Unit,
+    viewModel: FacilityAddTrainerViewModel = koinViewModel()
 ) {
-
-    val viewModel: FacilityAddMembersViewModel = koinViewModel()
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+
+    LaunchedEffect(Unit) {
+        viewModel.refreshPlatformTrainers()
+    }
 
     SkyFitScaffold(
         topBar = {
@@ -63,7 +68,7 @@ fun MobileFacilitySettingsAddTrainerScreen(
                         SecondaryMicroButton(
                             text = stringResource(Res.string.add_action),
                             modifier = Modifier.wrapContentWidth(),
-                            onClick = { viewModel.addMember(it.userId) },
+                            onClick = { viewModel.addTrainer(it.userId) },
                             leftIconPainter = painterResource(Res.drawable.ic_plus)
                         )
                     }
