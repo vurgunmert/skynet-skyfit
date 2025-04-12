@@ -2,37 +2,34 @@ package com.vurgun.skyfit.feature.dashboard.navigation
 
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
-import com.vurgun.skyfit.data.core.domain.model.UserRole
-import com.vurgun.skyfit.feature.dashboard.MobileDashboardScreen
+import com.vurgun.skyfit.feature.dashboard.screen.DashboardRootGraph
 import kotlinx.serialization.Serializable
 
 sealed interface DashboardRoute {
 
     @Serializable
-    data object Main: DashboardRoute
+    data object Home : DashboardRoute
 
     @Serializable
-    data object Home: DashboardRoute
-
-    @Serializable
-    data object Explore: DashboardRoute
-
-    @Serializable
-    data object Social: DashboardRoute
-
-    @Serializable
-    data object Profile: DashboardRoute
+    data object Profile : DashboardRoute
 }
 
 fun NavGraphBuilder.dashboardRoutes(
-    userRole: UserRole,
     goToChatBot: () -> Unit,
+    goToSettings: () -> Unit,
 ) {
-    composable<DashboardRoute.Main> {
-        MobileDashboardScreen(
-            userRole = userRole,
+    composable<DashboardRoute.Home> {
+        DashboardRootGraph(
             startRoute = DashboardRoute.Home,
-            goToChatBot = goToChatBot
+            goToChatBot = goToChatBot,
+            goToSettings = goToSettings
+        )
+    }
+    composable<DashboardRoute.Profile> {
+        DashboardRootGraph(
+            startRoute = DashboardRoute.Profile,
+            goToChatBot = goToChatBot,
+            goToSettings = goToSettings
         )
     }
 }

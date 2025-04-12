@@ -1,4 +1,4 @@
-package com.vurgun.skyfit.feature.settings.facility
+package com.vurgun.skyfit.feature.settings.facility.profile
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -44,7 +44,7 @@ fun MobileFacilitySettingsEditProfileScreen(
     goToBack: () -> Unit
 ) {
 
-    val viewModel = remember { FacilityAccountSettingsViewModel() }
+    val viewModel = remember { FacilityManageProfileViewModel() }
 
     val accountState by viewModel.accountState.collectAsState()
     val scrollState = rememberScrollState()

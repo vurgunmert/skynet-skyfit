@@ -1,4 +1,4 @@
-package com.vurgun.skyfit.feature.settings.facility
+package com.vurgun.skyfit.feature.settings.facility.notification
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope

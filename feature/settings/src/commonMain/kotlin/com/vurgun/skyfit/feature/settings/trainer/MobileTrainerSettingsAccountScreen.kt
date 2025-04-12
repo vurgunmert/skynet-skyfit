@@ -24,6 +24,7 @@ import com.vurgun.skyfit.ui.core.components.special.MobileSettingsDeleteAccountB
 import com.vurgun.skyfit.ui.core.components.menu.SettingsMenuItem
 import com.vurgun.skyfit.feature.settings.component.TrainerAccountSettingsProfileCard
 import com.vurgun.skyfit.ui.core.components.button.PrimaryLargeButton
+import com.vurgun.skyfit.ui.core.components.special.SkyFitMobileScaffold
 import com.vurgun.skyfit.ui.core.components.special.SkyFitScreenHeader
 import com.vurgun.skyfit.ui.core.styling.SkyFitColor
 import org.jetbrains.compose.resources.painterResource
@@ -56,8 +57,7 @@ fun MobileTrainerSettingsAccountScreen(
         viewModel.loadData()
     }
 
-    Scaffold(
-        backgroundColor = SkyFitColor.background.default,
+    SkyFitMobileScaffold(
         topBar = {
             SkyFitScreenHeader(stringResource(Res.string.settings_account_label), onClickBack = goToBack)
         },

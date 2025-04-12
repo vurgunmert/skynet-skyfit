@@ -5,10 +5,10 @@ import androidx.navigation.compose.composable
 import com.vurgun.skyfit.feature.onboarding.screen.MobileOnboardingScreen
 import kotlinx.serialization.Serializable
 
-sealed interface OnboardingRoute {
+@Serializable
+data object Onboarding : OnboardingRoute
 
-    @Serializable
-    data object Main : OnboardingRoute
+internal sealed interface OnboardingRoute {
 
     @Serializable
     data object UserTypeSelection : OnboardingRoute
@@ -51,7 +51,7 @@ fun NavGraphBuilder.onboardingRoutes(
     goToLogin: () -> Unit,
     goToDashboard: () -> Unit,
 ) {
-    composable<OnboardingRoute.Main> {
+    composable<Onboarding> {
         MobileOnboardingScreen(
             goToLogin = goToLogin,
             goToDashboard = goToDashboard

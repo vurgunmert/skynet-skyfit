@@ -11,13 +11,16 @@ import com.vurgun.skyfit.data.core.domain.model.GoalType
 import com.vurgun.skyfit.data.core.domain.model.HeightUnitType
 import com.vurgun.skyfit.data.core.domain.model.UserRole
 import com.vurgun.skyfit.data.core.domain.model.WeightUnitType
+import com.vurgun.skyfit.data.core.domain.repository.UserRepository
 import com.vurgun.skyfit.ui.core.viewdata.BodyTypeViewData
 import com.vurgun.skyfit.ui.core.viewdata.CharacterTypeViewData
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 
-sealed class OnboardingViewEvent {
+internal sealed class OnboardingViewEvent {
     data object Idle: OnboardingViewEvent()
     data object InProgress: OnboardingViewEvent()
     data object Completed: OnboardingViewEvent()
@@ -25,9 +28,40 @@ sealed class OnboardingViewEvent {
     data object NavigateToLogin: OnboardingViewEvent()
 }
 
-class OnboardingViewModel(
-    private val onboardingRepository: OnboardingRepository
+internal data class SelectableUserRole(
+    val userRole: UserRole,
+    val enabled: Boolean
+)
+
+internal class OnboardingViewModel(
+    private val onboardingRepository: OnboardingRepository,
+    private val userRepository: UserRepository
 ) : ViewModel() {
+
+    private val _availableUserRoles = MutableStateFlow(
+        listOf(
+            SelectableUserRole(UserRole.User, true),
+            SelectableUserRole(UserRole.Trainer, true),
+            SelectableUserRole(UserRole.Facility, true)
+        )
+    )
+    val availableUserRoles: StateFlow<List<SelectableUserRole>> = _availableUserRoles
+
+    init {
+        viewModelScope.launch {
+            val result = userRepository.getUserTypes()
+            val registeredRoles = result
+                .getOrNull()
+                ?.map { UserRole.fromId(it.typeId) }
+                ?: emptyList()
+
+            _availableUserRoles.value = _availableUserRoles.value.map { selectable ->
+                if (registeredRoles.contains(selectable.userRole)) {
+                    selectable.copy(enabled = false)
+                } else selectable
+            }
+        }
+    }
 
     val characterTypes = listOf(CharacterTypeViewData.Carrot, CharacterTypeViewData.Koala, CharacterTypeViewData.Panda)
 

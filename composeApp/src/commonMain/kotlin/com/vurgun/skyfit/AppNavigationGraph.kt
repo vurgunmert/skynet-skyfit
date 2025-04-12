@@ -1,19 +1,16 @@
 package com.vurgun.skyfit
 
-import androidx.compose.foundation.layout.WindowInsets
-import androidx.compose.foundation.layout.systemBars
-import androidx.compose.foundation.layout.windowInsetsPadding
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.rememberNavController
-import com.vurgun.skyfit.data.core.domain.model.UserRole
 import com.vurgun.skyfit.feature.auth.AuthRoute
 import com.vurgun.skyfit.feature.auth.authRoutes
 import com.vurgun.skyfit.feature.dashboard.navigation.DashboardRoute
 import com.vurgun.skyfit.feature.dashboard.navigation.dashboardRoutes
-import com.vurgun.skyfit.feature.onboarding.navigation.OnboardingRoute
+import com.vurgun.skyfit.feature.onboarding.navigation.Onboarding
 import com.vurgun.skyfit.feature.onboarding.navigation.onboardingRoutes
 import com.vurgun.skyfit.feature.settings.navigation.SettingsRoute
 import com.vurgun.skyfit.feature.settings.navigation.settingsRoutes
@@ -21,21 +18,20 @@ import com.vurgun.skyfit.feature.settings.navigation.settingsRoutes
 @Composable
 fun AppNavigationGraph() {
     val navigationController = rememberNavController()
-    val selectedRole = UserRole.Facility
 
     NavHost(
         navController = navigationController,
-        startDestination = SettingsRoute.ManageTrainers,
-        modifier = Modifier.windowInsetsPadding(WindowInsets.systemBars) //TOOD: CATCHES ALL SIDES
+        startDestination = Onboarding,
+        modifier = Modifier.fillMaxSize()
     ) {
 
         authRoutes(
             navController = navigationController,
             goToDashboard = {
-                navigationController.navigateAndClear(DashboardRoute.Main)
+                navigationController.navigateAndClear(DashboardRoute.Home)
             },
             goToOnboarding = {
-                navigationController.navigateAndClear(OnboardingRoute.Main)
+                navigationController.navigateAndClear(Onboarding)
             }
         )
 
@@ -44,20 +40,21 @@ fun AppNavigationGraph() {
                 navigationController.navigateAndClear(AuthRoute.Login)
             },
             goToDashboard = {
-                navigationController.navigateAndClear(DashboardRoute.Main)
+                navigationController.navigateAndClear(DashboardRoute.Home)
             }
         )
 
         dashboardRoutes(
-            userRole = selectedRole,
             goToChatBot = {
 
+            },
+            goToSettings = {
+                navigationController.navigate(SettingsRoute.Main)
             }
         )
 
         settingsRoutes(
             navController = navigationController,
-            role = selectedRole,
             goToLogin = {
                 navigationController.navigateAndClear(AuthRoute.Login)
             }

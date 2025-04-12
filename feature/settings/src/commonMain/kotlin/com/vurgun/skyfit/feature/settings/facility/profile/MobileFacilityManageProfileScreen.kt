@@ -1,4 +1,4 @@
-package com.vurgun.skyfit.feature.settings.facility
+package com.vurgun.skyfit.feature.settings.facility.profile
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -36,14 +36,14 @@ import skyfit.ui.core.generated.resources.settings_account_label
 import skyfit.ui.core.generated.resources.settings_change_my_password_label
 
 @Composable
-fun MobileFacilitySettingsAccountScreen(
+fun MobileFacilityManageProfileScreen(
     goToBack: () -> Unit,
     goToEditProfile: () -> Unit,
     goToChangePassword: () -> Unit,
     goToManageAccounts: () -> Unit,
 ) {
 
-    val viewModel = remember { FacilityAccountSettingsViewModel() }
+    val viewModel = remember { FacilityManageProfileViewModel() }
 
     val accountState by viewModel.accountState.collectAsState()
     val scrollState = rememberScrollState()

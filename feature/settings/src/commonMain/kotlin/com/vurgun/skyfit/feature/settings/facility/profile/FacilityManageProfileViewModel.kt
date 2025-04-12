@@ -1,4 +1,4 @@
-package com.vurgun.skyfit.feature.settings.facility
+package com.vurgun.skyfit.feature.settings.facility.profile
 
 import androidx.lifecycle.ViewModel
 import com.vurgun.skyfit.data.core.domain.model.FitnessTagType
@@ -15,7 +15,7 @@ data class FacilityAccountState(
     val isUpdated: Boolean = false
 )
 
-class FacilityAccountSettingsViewModel : ViewModel() {
+class FacilityManageProfileViewModel : ViewModel() {
 
     private val _accountState = MutableStateFlow(FacilityAccountState())
     val accountState: StateFlow<FacilityAccountState> = _accountState

@@ -40,7 +40,7 @@ fun MobileUserSettingsHomeScreen(
     goToHelp: () -> Unit,
 ) {
 
-    val viewModel: UserSettingsViewModel = koinInject()
+    val viewModel: SettingsHomeViewModel = koinInject()
 
     LaunchedEffect(viewModel) {
         viewModel.uiEvents.collectLatest {

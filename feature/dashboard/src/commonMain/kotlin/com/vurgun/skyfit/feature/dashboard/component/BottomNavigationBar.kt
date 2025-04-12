@@ -7,7 +7,6 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
@@ -19,32 +18,22 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
-import com.vurgun.skyfit.feature.explore.navigation.ExploreRoute
-import com.vurgun.skyfit.feature.home.navigation.HomeRoute
-import com.vurgun.skyfit.feature.profile.navigation.ProfileRoute
-import com.vurgun.skyfit.feature.social.navigation.SocialMediaRoute
+import com.vurgun.skyfit.feature.dashboard.navigation.DashboardRoute
 import com.vurgun.skyfit.ui.core.components.special.ChatBotButtonComponent
 import com.vurgun.skyfit.ui.core.styling.SkyFitColor
 import org.jetbrains.compose.resources.DrawableResource
 import org.jetbrains.compose.resources.painterResource
 import skyfit.ui.core.generated.resources.Res
-import skyfit.ui.core.generated.resources.ic_barbell
-import skyfit.ui.core.generated.resources.ic_barbell_fill
 import skyfit.ui.core.generated.resources.ic_home
 import skyfit.ui.core.generated.resources.ic_home_fill
-import skyfit.ui.core.generated.resources.ic_plus
 import skyfit.ui.core.generated.resources.ic_profile
 import skyfit.ui.core.generated.resources.ic_profile_fill
-import skyfit.ui.core.generated.resources.ic_search
 
 @Composable
 internal fun BottomNavigationBar(
     modifier: Modifier = Modifier,
     currentRoute: Any,
     onClickHome: () -> Unit,
-    onClickExplore: () -> Unit,
-    onClickSocial: () -> Unit,
-    onClickAddPost: () -> Unit,
     onClickProfile: () -> Unit,
     onClickChatBot: () -> Unit
 ) {
@@ -52,12 +41,12 @@ internal fun BottomNavigationBar(
         Modifier.fillMaxWidth(),
         contentAlignment = Alignment.Center
     ) {
-        Box(
-            modifier = Modifier
-                .size(332.dp, 68.dp)
-                .offset(y = (-10).dp)
-                .shadow(4.dp, shape = RoundedCornerShape(50), ambientColor = Color.Black, spotColor = Color.Black)
-        )
+//        Box(
+//            modifier = Modifier
+//                .size(332.dp, 68.dp)
+//                .offset(y = (-10).dp)
+//                .shadow(4.dp, shape = RoundedCornerShape(50), ambientColor = Color.Black, spotColor = Color.Black)
+//        )
 
         Box(
             modifier = Modifier
@@ -71,25 +60,14 @@ internal fun BottomNavigationBar(
                 horizontalArrangement = Arrangement.spacedBy(24.dp)
             ) {
                 BottomBarItem(
-                    selected = currentRoute == HomeRoute.Main,
+                    selected = currentRoute == DashboardRoute.Home,
                     selectedIcon = Res.drawable.ic_home_fill,
                     unselectedIcon = Res.drawable.ic_home,
                     onClick = onClickHome
                 )
+
                 BottomBarItem(
-                    selected = currentRoute == ExploreRoute.Main,
-                    selectedIcon = Res.drawable.ic_barbell_fill,
-                    unselectedIcon = Res.drawable.ic_barbell,
-                    onClick = onClickExplore
-                )
-                BottomBarItem(
-                    selected = currentRoute == SocialMediaRoute.Main,
-                    selectedIcon = Res.drawable.ic_plus,
-                    unselectedIcon = Res.drawable.ic_search,
-                    onClick = { if (currentRoute == SocialMediaRoute.Main) onClickAddPost() else onClickSocial() }
-                )
-                BottomBarItem(
-                    selected = currentRoute == ProfileRoute.Main,
+                    selected = currentRoute == DashboardRoute.Profile,
                     selectedIcon = Res.drawable.ic_profile_fill,
                     unselectedIcon = Res.drawable.ic_profile,
                     onClick = onClickProfile

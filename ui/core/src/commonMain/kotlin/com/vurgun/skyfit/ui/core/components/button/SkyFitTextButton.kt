@@ -16,18 +16,23 @@ import com.vurgun.skyfit.ui.core.styling.SkyFitColor
 import com.vurgun.skyfit.ui.core.styling.SkyFitTypography
 
 @Composable
-fun SkyFitTextButton(text: String, onClick: () -> Unit) {
+fun SkyFitTextButton(
+    text: String,
+    enabled: Boolean,
+    onClick: () -> Unit
+) {
     Box(
         Modifier
             .fillMaxWidth()
             .clip(CircleShape)
             .background(SkyFitColor.background.surfaceSecondary)
-            .clickable(onClick = onClick)
+            .clickable(enabled = enabled, onClick = onClick)
             .padding(16.dp),
     ) {
         Text(
             text = text,
-            style = SkyFitTypography.bodyMediumRegular
+            style = SkyFitTypography.bodyMediumRegular,
+            color = if (enabled) SkyFitColor.text.default else SkyFitColor.text.disabled
         )
     }
 }

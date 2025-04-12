@@ -33,11 +33,11 @@ import com.vurgun.skyfit.feature.explore.screen.MobileExploreFacilitiesScreen
 import com.vurgun.skyfit.feature.explore.screen.MobileExploreTrainersScreen
 import com.vurgun.skyfit.feature.notification.screen.MobileUserNotificationsScreen
 import com.vurgun.skyfit.feature.settings.changepassword.SettingsChangePasswordScreen
-import com.vurgun.skyfit.feature.settings.facility.MobileFacilitySettingsAccountScreen
-import com.vurgun.skyfit.feature.settings.facility.MobileFacilitySettingsEditProfileScreen
+import com.vurgun.skyfit.feature.settings.facility.profile.MobileFacilityManageProfileScreen
+import com.vurgun.skyfit.feature.settings.facility.profile.MobileFacilitySettingsEditProfileScreen
 import com.vurgun.skyfit.feature.settings.facility.MobileFacilitySettingsHomeScreen
-import com.vurgun.skyfit.feature.settings.facility.MobileFacilitySettingsNotificationsScreen
-import com.vurgun.skyfit.feature.settings.facility.MobileFacilitySettingsPaymentHistoryScreen
+import com.vurgun.skyfit.feature.settings.facility.notification.MobileFacilitySettingsNotificationsScreen
+import com.vurgun.skyfit.feature.settings.facility.payment.MobileFacilitySettingsPaymentHistoryScreen
 import com.vurgun.skyfit.feature.settings.helpsupport.MobileSettingsSupportHelpScreen
 import com.vurgun.skyfit.feature.settings.payment.MobileUserPaymentProcessScreen
 import com.vurgun.skyfit.feature.settings.trainer.MobileTrainerSettingsAccountScreen
@@ -402,7 +402,7 @@ private fun RouteBuilder.settingsNavGraph(navigator: Navigator) {
     }
 
     scene(MobileNavRoute.Settings.Facility.Account.route) {
-        MobileFacilitySettingsAccountScreen(
+        MobileFacilityManageProfileScreen(
             goToBack = navigator::popBackStack,
             goToEditProfile = { navigator.jumpAndStay(MobileNavRoute.Settings.Facility.EditProfile) },
             goToChangePassword = { navigator.jumpAndStay(MobileNavRoute.Settings.Trainer.ChangePassword) },

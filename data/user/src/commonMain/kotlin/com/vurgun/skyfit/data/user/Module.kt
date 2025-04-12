@@ -19,5 +19,4 @@ val dataUserModule = module {
     }
 
     single<UserManager> { UserManagerImpl(get()) }
-
 }
