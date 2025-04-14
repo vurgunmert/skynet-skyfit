@@ -2,6 +2,17 @@ import UIKit
 import SwiftUI
 import composeApp
 
+struct ContentView: View {
+    var body: some View {
+        ZStack {
+//            Color.black.ignoresSafeArea(.all)
+            ComposeView()
+                .ignoresSafeArea(.keyboard)
+        }
+        .preferredColorScheme(.dark)
+    }
+}
+
 struct ComposeView: UIViewControllerRepresentable {
     func makeUIViewController(context: Context) -> UIViewController {
         let vc = MainViewControllerKt.MainViewController()
@@ -16,15 +27,4 @@ struct ComposeView: UIViewControllerRepresentable {
     }
 
     func updateUIViewController(_ uiViewController: UIViewController, context: Context) {}
-}
-
-struct ContentView: View {
-    var body: some View {
-        ZStack {
-//            Color.black.ignoresSafeArea(.all)
-            ComposeView()
-                .ignoresSafeArea(.keyboard)
-        }
-        .preferredColorScheme(.dark)
-    }
 }

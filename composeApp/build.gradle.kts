@@ -57,15 +57,11 @@ kotlin {
             implementation(projects.feature.settings)
             implementation(projects.feature.calendar)
             implementation(projects.feature.courses)
-            implementation(projects.feature.notification)
             implementation(projects.feature.profile)
-            implementation(projects.feature.social)
-            implementation(projects.feature.messaging)
             implementation(projects.feature.home)
-            implementation(projects.feature.explore)
-            implementation(projects.feature.exercise)
             implementation(projects.feature.appointments)
             implementation(projects.feature.home)
+            implementation(projects.feature.bodyanalysis)
 
             // Kotlinx
             implementation(libs.kotlinx.coroutines.core)

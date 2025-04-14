@@ -8,5 +8,5 @@ import org.koin.dsl.module
 val featureOnboardingModule = module {
     includes(dataOnboardingModule)
 
-    viewModel { OnboardingViewModel(get()) }
+    viewModel { OnboardingViewModel(get(), get()) }
 }

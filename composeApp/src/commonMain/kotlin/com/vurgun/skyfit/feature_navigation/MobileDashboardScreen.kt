@@ -21,9 +21,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
-import com.vurgun.skyfit.feature.explore.screen.MobileExploreScreen
 import com.vurgun.skyfit.ui.core.components.special.ChatBotButtonComponent
-import com.vurgun.skyfit.feature.social.screen.MobileSocialMediaScreen
 import com.vurgun.skyfit.feature_navigation.MobileNavRoute.DashboardHome
 import com.vurgun.skyfit.ui.core.components.special.SkyFitMobileScaffold
 import com.vurgun.skyfit.ui.core.styling.SkyFitColor
@@ -55,17 +53,17 @@ fun MobileDashboardWithNavigation(
     ) {
 //        scene(DashboardHome.route) { MobileHomeRootScreen(rootNavigator) }
         scene(MobileNavRoute.DashboardExplore.route) {
-            MobileExploreScreen(
-                goToExercise = { },
-                goToVisitTrainer = { },
-                goToVisitFacility = { },
-                goToExploreCommunities = { },
-                goToExploreChallenges = { }
-            )
+//            MobileExploreScreen(
+//                goToExercise = { },
+//                goToVisitTrainer = { },
+//                goToVisitFacility = { },
+//                goToExploreCommunities = { },
+//                goToExploreChallenges = { }
+//            )
         }
-        scene(MobileNavRoute.DashboardSocial.route) { MobileSocialMediaScreen(
-            goToCreatePost = {  }
-        ) }
+//        scene(MobileNavRoute.DashboardSocial.route) { MobileSocialMediaScreen(
+//            goToCreatePost = {  }
+//        ) }
 //        scene(MobileNavRoute.DashboardProfile.route) { MobileDashboardProfileScreen(rootNavigator) }
     }
 }

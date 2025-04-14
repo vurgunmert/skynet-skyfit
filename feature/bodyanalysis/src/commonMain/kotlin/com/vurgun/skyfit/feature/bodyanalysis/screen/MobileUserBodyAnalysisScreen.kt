@@ -58,6 +58,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
+import com.vurgun.skyfit.data.bodyanalysis.model.PostureType
 import com.vurgun.skyfit.ui.core.components.button.SkyFitIconButton
 import com.vurgun.skyfit.ui.core.components.special.ButtonSize
 import com.vurgun.skyfit.ui.core.components.special.ButtonState
@@ -68,17 +69,10 @@ import com.vurgun.skyfit.ui.core.styling.SkyFitColor
 import com.vurgun.skyfit.ui.core.styling.SkyFitTypography
 import com.vurgun.skyfit.ui.core.utils.AppPermission
 import com.vurgun.skyfit.ui.core.utils.PlatformPermissionManager
-import moe.tlaster.precompose.navigation.Navigator
 import org.jetbrains.compose.resources.DrawableResource
 import org.jetbrains.compose.resources.painterResource
 import skyfit.ui.core.generated.resources.Res
-import skyfit.ui.core.generated.resources.body_analysis_back_figure
-import skyfit.ui.core.generated.resources.body_analysis_figure_back
-import skyfit.ui.core.generated.resources.body_analysis_figure_front
-import skyfit.ui.core.generated.resources.body_analysis_figure_right
-import skyfit.ui.core.generated.resources.body_analysis_front_figure
 import skyfit.ui.core.generated.resources.body_analysis_grid
-import skyfit.ui.core.generated.resources.body_analysis_right_figure
 import skyfit.ui.core.generated.resources.body_analysis_scan_result_fake
 import skyfit.ui.core.generated.resources.ic_chevron_left
 import skyfit.ui.core.generated.resources.ic_close_circle
@@ -91,7 +85,9 @@ import skyfit.ui.core.generated.resources.logo_skyfit
 
 
 @Composable
-fun MobileUserBodyAnalysisScreen(navigator: Navigator) {
+fun MobileUserBodyAnalysisScreen(
+    goToBack: () -> Unit
+) {
 
     val viewModel = remember { MobileUserBodyAnalysisViewModel() }
     val uiState by viewModel.uiState.collectAsState()
@@ -129,14 +125,14 @@ fun MobileUserBodyAnalysisScreen(navigator: Navigator) {
 
             /** 🔹 POSTURE OPTIONS */
             if (uiState is MobileUserBodyAnalysisState.PostureOptions) {
-                MobileUserBodyAnalysisScreenPostureOptionsComponent(
-                    onClickFront = { viewModel.selectPosture(PostureType.FRONT) },
-                    onClickBack = { viewModel.selectPosture(PostureType.BACK) },
-                    onClickRight = { viewModel.selectPosture(PostureType.RIGHT) },
-                    onClickExit = { viewModel.showCaptureExitScreen() },
-                    onToggleGuide = {},
-                    onToggleInfo = { viewModel.showInfoScreen() },
-                )
+//                MobileUserBodyAnalysisScreenPostureOptionsComponent(
+//                    onClickFront = { viewModel.selectPosture(PostureType.FRONT) },
+//                    onClickBack = { viewModel.selectPosture(PostureType.BACK) },
+//                    onClickRight = { viewModel.selectPosture(PostureType.RIGHT) },
+//                    onClickExit = { viewModel.showCaptureExitScreen() },
+//                    onToggleGuide = {},
+//                    onToggleInfo = { viewModel.showInfoScreen() },
+//                )
             }
 
             /** 🔹 CAMERA PREVIEW */
@@ -208,7 +204,7 @@ fun MobileUserBodyAnalysisScreen(navigator: Navigator) {
             if (uiState is MobileUserBodyAnalysisState.CaptureResultExit) {
                 MobileUserBodyAnalysisScreenExitActionComponent(
                     showDialog = true,
-                    onClickExit = { navigator.popBackStack() },
+                    onClickExit = goToBack,
                     onClickDismiss = {
                         if (capturedImage != null) {
                             viewModel.showCaptureResults()
@@ -879,26 +875,26 @@ private fun MobileUserBodyAnalysisScreenPostureOptionsComponent(
 ) {
     Box(modifier = Modifier.fillMaxSize()) {
 
-        Column(
-            modifier = Modifier.align(Alignment.Center)
-                .padding(horizontal = 36.dp)
-                .fillMaxWidth()
-                .padding(16.dp),
-            verticalArrangement = Arrangement.spacedBy(12.dp)
-        ) {
-            PostureOptionItem(
-                res = Res.drawable.body_analysis_figure_front,
-                text = "Ön Görünüm", onClick = onClickFront
-            )
-            PostureOptionItem(
-                res = Res.drawable.body_analysis_figure_back,
-                text = "Arka Görünüm", onClick = onClickBack
-            )
-            PostureOptionItem(
-                res = Res.drawable.body_analysis_figure_right,
-                text = "Sağ Görünüm", onClick = onClickRight
-            )
-        }
+//        Column(
+//            modifier = Modifier.align(Alignment.Center)
+//                .padding(horizontal = 36.dp)
+//                .fillMaxWidth()
+//                .padding(16.dp),
+//            verticalArrangement = Arrangement.spacedBy(12.dp)
+//        ) {
+//            PostureOptionItem(
+//                res = Res.drawable.body_analysis_figure_front,
+//                text = "Ön Görünüm", onClick = onClickFront
+//            )
+//            PostureOptionItem(
+//                res = Res.drawable.body_analysis_figure_back,
+//                text = "Arka Görünüm", onClick = onClickBack
+//            )
+//            PostureOptionItem(
+//                res = Res.drawable.body_analysis_figure_right,
+//                text = "Sağ Görünüm", onClick = onClickRight
+//            )
+//        }
 
         MobileUserBodyAnalysisScreenToolbarComponent(
             Modifier.align(Alignment.TopStart),
@@ -924,17 +920,17 @@ fun MobileUserBodyAnalysisScreenPostureGuideComponent(
         )
 
         // Posture Figure based on type
-        val posturePainter = when (postureType) {
-            PostureType.FRONT -> painterResource(Res.drawable.body_analysis_front_figure)
-            PostureType.BACK -> painterResource(Res.drawable.body_analysis_back_figure)
-            PostureType.RIGHT -> painterResource(Res.drawable.body_analysis_right_figure)
-        }
+//        val posturePainter = when (postureType) {
+//            PostureType.FRONT -> painterResource(Res.drawable.body_analysis_front_figure)
+//            PostureType.BACK -> painterResource(Res.drawable.body_analysis_back_figure)
+//            PostureType.RIGHT -> painterResource(Res.drawable.body_analysis_right_figure)
+//        }
 
-        Icon(
-            painter = posturePainter,
-            contentDescription = "${postureType.name} Figure",
-            modifier = Modifier.align(Alignment.Center)
-        )
+//        Icon(
+//            painter = posturePainter,
+//            contentDescription = "${postureType.name} Figure",
+//            modifier = Modifier.align(Alignment.Center)
+//        )
     }
 }
 

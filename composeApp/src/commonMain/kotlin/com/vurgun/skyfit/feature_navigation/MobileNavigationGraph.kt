@@ -3,7 +3,6 @@ package com.vurgun.skyfit.feature_navigation
 import androidx.compose.runtime.Composable
 import com.vurgun.skyfit.AppNavigationGraph
 import com.vurgun.skyfit.appModule
-import com.vurgun.skyfit.feature.auth.register.MobileCreatePasswordScreen
 import com.vurgun.skyfit.feature.auth.forgotpassword.MobileForgotPasswordResetScreen
 import com.vurgun.skyfit.feature.auth.forgotpassword.MobileForgotPasswordScreen
 import com.vurgun.skyfit.feature.auth.forgotpassword.MobileForgotPasswordVerifyOTPScreen
@@ -11,6 +10,7 @@ import com.vurgun.skyfit.feature.auth.legal.MobilePrivacyPolicyScreen
 import com.vurgun.skyfit.feature.auth.legal.MobileTermsAndConditionsScreen
 import com.vurgun.skyfit.feature.auth.login.MobileLoginScreen
 import com.vurgun.skyfit.feature.auth.login.MobileLoginVerifyOTPScreen
+import com.vurgun.skyfit.feature.auth.register.MobileCreatePasswordScreen
 import com.vurgun.skyfit.feature.auth.splash.SplashScreen
 import com.vurgun.skyfit.feature.calendar.components.screen.MobileUserActivityCalendarAddActivityScreen
 import com.vurgun.skyfit.feature.calendar.components.screen.MobileUserActivityCalendarAddedScreen
@@ -19,25 +19,12 @@ import com.vurgun.skyfit.feature.calendar.components.screen.MobileUserActivityCa
 import com.vurgun.skyfit.feature.calendar.components.screen.MobileUserActivityCalendarSearchScreen
 import com.vurgun.skyfit.feature.calendar.components.screen.MobileUserAppointmentDetailScreen
 import com.vurgun.skyfit.feature.calendar.components.screen.MobileUserAppointmentsScreen
-import com.vurgun.skyfit.feature.exercise.MobileUserExerciseDetailScreen
-import com.vurgun.skyfit.feature.exercise.MobileUserExerciseInActionCompletedScreen
-import com.vurgun.skyfit.feature.exercise.MobileUserExerciseInActionScreen
-import com.vurgun.skyfit.feature.explore.screen.MobileExploreBlogArticleDetailScreen
-import com.vurgun.skyfit.feature.explore.screen.MobileExploreBlogScreen
-import com.vurgun.skyfit.feature.explore.screen.MobileExploreChallengeDetailScreen
-import com.vurgun.skyfit.feature.explore.screen.MobileExploreChallengesScreen
-import com.vurgun.skyfit.feature.explore.screen.MobileExploreCommunitiesScreen
-import com.vurgun.skyfit.feature.explore.screen.MobileExploreCommunityDetailScreen
-import com.vurgun.skyfit.feature.explore.screen.MobileExploreExercisesScreen
-import com.vurgun.skyfit.feature.explore.screen.MobileExploreFacilitiesScreen
-import com.vurgun.skyfit.feature.explore.screen.MobileExploreTrainersScreen
-import com.vurgun.skyfit.feature.notification.screen.MobileUserNotificationsScreen
 import com.vurgun.skyfit.feature.settings.changepassword.SettingsChangePasswordScreen
-import com.vurgun.skyfit.feature.settings.facility.profile.MobileFacilityManageProfileScreen
-import com.vurgun.skyfit.feature.settings.facility.profile.MobileFacilitySettingsEditProfileScreen
 import com.vurgun.skyfit.feature.settings.facility.MobileFacilitySettingsHomeScreen
 import com.vurgun.skyfit.feature.settings.facility.notification.MobileFacilitySettingsNotificationsScreen
 import com.vurgun.skyfit.feature.settings.facility.payment.MobileFacilitySettingsPaymentHistoryScreen
+import com.vurgun.skyfit.feature.settings.facility.profile.MobileFacilityManageProfileScreen
+import com.vurgun.skyfit.feature.settings.facility.profile.MobileFacilitySettingsEditProfileScreen
 import com.vurgun.skyfit.feature.settings.helpsupport.MobileSettingsSupportHelpScreen
 import com.vurgun.skyfit.feature.settings.payment.MobileUserPaymentProcessScreen
 import com.vurgun.skyfit.feature.settings.trainer.MobileTrainerSettingsAccountScreen
@@ -175,49 +162,49 @@ private fun RouteBuilder.dashboardNavGraph(navigator: Navigator) {
 }
 
 private fun RouteBuilder.exploreNavGraph(navigator: Navigator) {
-    scene(MobileNavRoute.ExploreTrainers.route) { MobileExploreTrainersScreen(
-        goToBack = navigator::popBackStack
-    ) }
-    scene(MobileNavRoute.ExploreExercises.route) { MobileExploreExercisesScreen(
-        goToBack = navigator::popBackStack
-    ) }
-    scene(MobileNavRoute.ExploreFacilities.route) { MobileExploreFacilitiesScreen(
-        goToBack = navigator::popBackStack
-    ) }
-    scene(MobileNavRoute.ExploreBlogs.route) { MobileExploreBlogScreen(
-        goToBack = navigator::popBackStack
-    ) }
-    scene(MobileNavRoute.ExploreBlogArticleDetail.route) { MobileExploreBlogArticleDetailScreen(
-        goToBack = navigator::popBackStack
-    ) }
-    scene(MobileNavRoute.ExploreChallenges.route) { MobileExploreChallengesScreen(
-        goToBack = navigator::popBackStack,
-        goToChallengeDetail = { navigator.jumpAndStay(MobileNavRoute.ExploreChallengeDetail) }
-    ) }
-    scene(MobileNavRoute.ExploreChallengeDetail.route) { MobileExploreChallengeDetailScreen(
-        goToBack = navigator::popBackStack
-    ) }
-    scene(MobileNavRoute.ExploreCommunities.route) { MobileExploreCommunitiesScreen(
-        goToBack = navigator::popBackStack
-    ) }
-    scene(MobileNavRoute.ExploreCommunityDetail.route) { MobileExploreCommunityDetailScreen(
-        goToBack = navigator::popBackStack
-    ) }
+//    scene(MobileNavRoute.ExploreTrainers.route) { MobileExploreTrainersScreen(
+//        goToBack = navigator::popBackStack
+//    ) }
+//    scene(MobileNavRoute.ExploreExercises.route) { MobileExploreExercisesScreen(
+//        goToBack = navigator::popBackStack
+//    ) }
+//    scene(MobileNavRoute.ExploreFacilities.route) { MobileExploreFacilitiesScreen(
+//        goToBack = navigator::popBackStack
+//    ) }
+//    scene(MobileNavRoute.ExploreBlogs.route) { MobileExploreBlogScreen(
+//        goToBack = navigator::popBackStack
+//    ) }
+//    scene(MobileNavRoute.ExploreBlogArticleDetail.route) { MobileExploreBlogArticleDetailScreen(
+//        goToBack = navigator::popBackStack
+//    ) }
+//    scene(MobileNavRoute.ExploreChallenges.route) { MobileExploreChallengesScreen(
+//        goToBack = navigator::popBackStack,
+//        goToChallengeDetail = { navigator.jumpAndStay(MobileNavRoute.ExploreChallengeDetail) }
+//    ) }
+//    scene(MobileNavRoute.ExploreChallengeDetail.route) { MobileExploreChallengeDetailScreen(
+//        goToBack = navigator::popBackStack
+//    ) }
+//    scene(MobileNavRoute.ExploreCommunities.route) { MobileExploreCommunitiesScreen(
+//        goToBack = navigator::popBackStack
+//    ) }
+//    scene(MobileNavRoute.ExploreCommunityDetail.route) { MobileExploreCommunityDetailScreen(
+//        goToBack = navigator::popBackStack
+//    ) }
 }
 
 private fun RouteBuilder.exerciseNavGraph(navigator: Navigator) {
-    scene(MobileNavRoute.ExerciseDetail.route) { MobileUserExerciseDetailScreen(
-        goToBack = TODO(),
-        goToExerciseAction = TODO()
-    ) }
-    scene(MobileNavRoute.ExerciseInProgress.route) { MobileUserExerciseInActionScreen(
-        goToBack = TODO(),
-        goToComplete = TODO(),
-        goToTrophies = TODO()
-    ) }
-    scene(MobileNavRoute.ExerciseCompleted.route) { MobileUserExerciseInActionCompletedScreen(
-        goToDashboard = TODO()
-    ) }
+//    scene(MobileNavRoute.ExerciseDetail.route) { MobileUserExerciseDetailScreen(
+//        goToBack = TODO(),
+//        goToExerciseAction = TODO()
+//    ) }
+//    scene(MobileNavRoute.ExerciseInProgress.route) { MobileUserExerciseInActionScreen(
+//        goToBack = TODO(),
+//        goToComplete = TODO(),
+//        goToTrophies = TODO()
+//    ) }
+//    scene(MobileNavRoute.ExerciseCompleted.route) { MobileUserExerciseInActionCompletedScreen(
+//        goToDashboard = TODO()
+//    ) }
 }
 
 private fun RouteBuilder.nutritionNavGraph(navigator: Navigator) {
@@ -276,10 +263,10 @@ private fun RouteBuilder.userNavGraph(navigator: Navigator) {
 //    scene(MobileNavRoute.UserSocialMediaPostAdd.route) { MobileUserSocialMediaNewPostScreen(navigator) }
     //User - Notifications
     scene(MobileNavRoute.UserNotifications.route) {
-        MobileUserNotificationsScreen(
-            goBack = navigator::popBackStack,
-            goToSettings = { navigator.jumpAndStay(MobileNavRoute.Settings.User.Notifications) }
-        )
+//        MobileUserNotificationsScreen(
+//            goBack = navigator::popBackStack,
+//            goToSettings = { navigator.jumpAndStay(MobileNavRoute.Settings.User.Notifications) }
+//        )
     }
     //User - Messages
 //    scene(MobileNavRoute.UserChatBot.route) { MobileUserChatBotScreen(navigator) }

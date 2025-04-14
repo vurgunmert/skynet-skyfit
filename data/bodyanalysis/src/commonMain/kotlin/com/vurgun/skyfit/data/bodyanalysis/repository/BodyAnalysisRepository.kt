@@ -10,7 +10,7 @@ import io.ktor.http.ContentType
 import io.ktor.http.contentType
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
-import kotlinx.serialization.json.Json
+//import kotlinx.serialization.json.Json
 
 class BodyAnalysisRepository {
 
@@ -93,17 +93,17 @@ class BodyTypeAnalysisRepository() {
         val confidence: Double
     )
 
-    suspend fun sendImageUrl(imageUrl: String): BodyTypeAnalysisResponse {
-        val requestBody = RequestPayload(
-            api_key = apiKey,
-            inputs = mapOf("image" to ImageInput(type = "url", value = imageUrl))
-        )
-
-        val response: HttpResponse = commonHttpClient.post(apiUrl) {
-            contentType(ContentType.Application.Json)
-            setBody(Json.encodeToString(requestBody))
-        }
-
-        return Json.decodeFromString(response.body())
-    }
+//    suspend fun sendImageUrl(imageUrl: String): BodyTypeAnalysisResponse {
+//        val requestBody = RequestPayload(
+//            api_key = apiKey,
+//            inputs = mapOf("image" to ImageInput(type = "url", value = imageUrl))
+//        )
+//
+//        val response: HttpResponse = commonHttpClient.post(apiUrl) {
+//            contentType(ContentType.Application.Json)
+//            setBody(Json.encodeToString(requestBody))
+//        }
+//
+//        return Json.decodeFromString(response.body())
+//    }
 }

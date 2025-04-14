@@ -8,6 +8,8 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.rememberNavController
 import com.vurgun.skyfit.feature.auth.AuthRoute
 import com.vurgun.skyfit.feature.auth.authRoutes
+import com.vurgun.skyfit.feature.bodyanalysis.navigation.PostureAnalysisRoute
+import com.vurgun.skyfit.feature.bodyanalysis.navigation.postureAnalysisRoutes
 import com.vurgun.skyfit.feature.dashboard.navigation.DashboardRoute
 import com.vurgun.skyfit.feature.dashboard.navigation.dashboardRoutes
 import com.vurgun.skyfit.feature.onboarding.navigation.Onboarding
@@ -21,9 +23,15 @@ fun AppNavigationGraph() {
 
     NavHost(
         navController = navigationController,
-        startDestination = Onboarding,
+        startDestination = PostureAnalysisRoute.Root,
         modifier = Modifier.fillMaxSize()
     ) {
+
+        postureAnalysisRoutes(
+            onExit = {
+
+            }
+        )
 
         authRoutes(
             navController = navigationController,

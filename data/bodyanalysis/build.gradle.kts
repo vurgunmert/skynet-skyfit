@@ -32,6 +32,9 @@ kotlin {
             implementation(projects.data.network)
 
             implementation(libs.koin.core)
+
+            implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.8.1")
+
         }
 
 

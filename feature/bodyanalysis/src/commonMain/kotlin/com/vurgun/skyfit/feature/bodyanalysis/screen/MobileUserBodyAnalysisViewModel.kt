@@ -2,10 +2,13 @@ package com.vurgun.skyfit.feature.bodyanalysis.screen
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.vurgun.skyfit.feature_body_analysis.domain.BodyAnalysisRepository
-import com.vurgun.skyfit.feature_body_analysis.domain.BodyTypeAnalysisRepository
+import com.vurgun.skyfit.data.bodyanalysis.model.PostureType
+import com.vurgun.skyfit.data.bodyanalysis.repository.BodyAnalysisRepository
+import com.vurgun.skyfit.data.bodyanalysis.repository.BodyTypeAnalysisRepository
 import kotlinx.coroutines.delay
-import kotlinx.coroutines.flow.*
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 
 sealed class MobileUserBodyAnalysisState {
@@ -18,9 +21,6 @@ sealed class MobileUserBodyAnalysisState {
     object CaptureResultExit : MobileUserBodyAnalysisState()
 }
 
-enum class PostureType {
-    FRONT, BACK, RIGHT
-}
 
 class MobileUserBodyAnalysisViewModel : ViewModel() {
 
@@ -69,8 +69,8 @@ class MobileUserBodyAnalysisViewModel : ViewModel() {
 
             viewModelScope.launch {
                 //TODO: Can we send base64 instead of a image url -> Ahmet?
-                val predictionResponse = bodyTypeAnalysisRepository.sendImageUrl("https://source.roboflow.com/CECMTkNg4zdmZ0o2pq6HcI85gRj1/xN6r5Nl2vq6t24LQBsKH/thumb.jpg")
-                println(predictionResponse)
+//                val predictionResponse = bodyTypeAnalysisRepository.sendImageUrl("https://source.roboflow.com/CECMTkNg4zdmZ0o2pq6HcI85gRj1/xN6r5Nl2vq6t24LQBsKH/thumb.jpg")
+//                println(predictionResponse)
                 delay(2000)
                 _uiState.value = MobileUserBodyAnalysisState.CaptureResult
             }
@@ -94,7 +94,7 @@ class MobileUserBodyAnalysisViewModel : ViewModel() {
 
     /** Finds the next posture that hasn't been captured */
     private fun findNextUncapturedPosture(): PostureType {
-        return PostureType.entries.firstOrNull { it !in _capturedPostures.value } ?: PostureType.FRONT
+        return PostureType.entries.firstOrNull { it !in _capturedPostures.value } ?: PostureType.Front
     }
 }
 

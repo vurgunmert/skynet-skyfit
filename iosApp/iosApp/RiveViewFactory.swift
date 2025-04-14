@@ -6,24 +6,21 @@
 //  Copyright © 2025 orgName. All rights reserved.
 //
 
-import Foundation
-import UIKit
+import SwiftUI
 import RiveRuntime
+import UIKit
 
 @objc public class RiveViewFactory: NSObject {
-
-    @objc public static func createRiveView(_ fileName: String) -> UIView {
-        let riveView = RiveView()
-
-        do {
-            // You can switch based on character type
-            let file = try RiveFile(name: fileName)
-            try riveView.configure(with: file)
-        } catch {
-            print("Failed to load Rive file: \(error)")
-        }
-
-        return riveView
+    
+    @objc public static func createCharacterViewController() -> UIViewController {
+        let characterView = CharacterAnimationView()
+        let hostingController = UIHostingController(rootView: characterView)
+        return hostingController
     }
 }
 
+struct CharacterAnimationView: View {
+    var body: some View {
+        RiveViewModel(fileName: "character_carrot").view()
+    }
+}

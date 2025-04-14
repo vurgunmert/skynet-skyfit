@@ -65,6 +65,70 @@ fun SkyFitPrimaryCircularBackButton(
 }
 
 @Composable
+fun PrimaryIconButton(
+    painter: Painter = painterResource(Res.drawable.logo_skyfit),
+    modifier: Modifier = Modifier.size(44.dp),
+    onClick: () -> Unit = {}
+) {
+    Box(
+        modifier
+            .background(SkyFitColor.specialty.buttonBgRest, shape = CircleShape)
+            .clickable(onClick = onClick),
+        contentAlignment = Alignment.Center
+    ) {
+        Icon(
+            painter = painter,
+            contentDescription = "Button",
+            tint = SkyFitColor.icon.inverseSecondary,
+            modifier = Modifier.size(16.dp)
+        )
+    }
+}
+
+@Composable
+fun SecondaryIconButton(
+    painter: Painter = painterResource(Res.drawable.logo_skyfit),
+    modifier: Modifier = Modifier.size(44.dp),
+    onClick: (() -> Unit)? = null
+) {
+    Box(
+        modifier
+            .background(SkyFitColor.specialty.secondaryButtonRest, shape = CircleShape)
+            .border(1.dp, SkyFitColor.specialty.buttonBgRest, CircleShape)
+            .clickable(enabled = onClick != null, onClick = { onClick?.invoke() }),
+        contentAlignment = Alignment.Center
+    ) {
+        Icon(
+            painter = painter,
+            contentDescription = "Button",
+            tint = SkyFitColor.icon.default,
+            modifier = Modifier.size(16.dp)
+        )
+    }
+}
+
+
+@Composable
+fun SecondaryFlatIconButton(
+    painter: Painter = painterResource(Res.drawable.logo_skyfit),
+    modifier: Modifier = Modifier.size(44.dp)
+) {
+    Box(
+        modifier
+            .background(SkyFitColor.specialty.secondaryButtonRest, shape = CircleShape)
+            .border(1.dp, SkyFitColor.specialty.buttonBgRest, CircleShape),
+        contentAlignment = Alignment.Center
+    ) {
+        Icon(
+            painter = painter,
+            contentDescription = "Button",
+            tint = SkyFitColor.icon.default,
+            modifier = Modifier.size(16.dp)
+        )
+    }
+}
+
+@Composable
 fun SkyFitSecondaryIconButton(
     painter: Painter = painterResource(Res.drawable.logo_skyfit),
     modifier: Modifier = Modifier.size(44.dp),
