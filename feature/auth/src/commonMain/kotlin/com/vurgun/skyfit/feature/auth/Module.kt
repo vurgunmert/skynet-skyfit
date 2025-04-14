@@ -15,10 +15,10 @@ val featureAuthModule = module {
     includes(dataAuthModule)
 
     viewModel { SplashViewModel(get()) }
-    viewModel { LoginViewModel(get()) }
+    viewModel { LoginViewModel(get(), get()) }
     viewModel { ForgotPasswordViewModel(get()) }
     viewModel { PasswordCreateViewModel(get()) }
     viewModel { PasswordResetViewModel(get()) }
-    viewModel { LoginOTPVerificationViewModel(get(), get()) }
+    viewModel { LoginOTPVerificationViewModel(get(), get(), get()) }
     viewModel { ForgotPasswordVerifyOTPViewModel(get(), get()) }
 }

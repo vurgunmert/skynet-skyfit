@@ -6,12 +6,12 @@ sealed class CharacterType(val id: Int) {
     data object Panda : CharacterType(3)
 
     companion object {
-        fun fromId(id: Int?): CharacterType {
+        fun fromId(id: Int?): CharacterType? {
             return when (id) {
                 Carrot.id -> Carrot
                 Koala.id -> Koala
                 Panda.id -> Panda
-                else -> throw IllegalArgumentException("Unknown CharacterType id: $id")
+                else -> null
             }
         }
     }

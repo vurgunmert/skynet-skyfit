@@ -53,6 +53,7 @@ fun MobileLoginVerifyOTPScreen(
 
     val enteredOtp by viewModel.enteredOtp.collectAsState()
     val isLoading by viewModel.isLoading.collectAsState()
+    val phoneNumber by viewModel.phoneNumber.collectAsState("")
     val isResendEnabled by viewModel.isResendEnabled.collectAsState()
     val countdownTime by viewModel.countdownTime.collectAsState()
     val otpLength = viewModel.otpLength
@@ -92,7 +93,7 @@ fun MobileLoginVerifyOTPScreen(
             verticalArrangement = Arrangement.spacedBy(48.dp)
         ) {
 
-            MobileOTPVerificationTextGroup(viewModel.phoneNumber)
+            MobileOTPVerificationTextGroup(phoneNumber)
 
             OTPInputTextField(onCodeReady = viewModel::onOtpChanged)
 

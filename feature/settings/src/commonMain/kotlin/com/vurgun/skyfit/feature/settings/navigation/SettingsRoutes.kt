@@ -1,8 +1,11 @@
 package com.vurgun.skyfit.feature.settings.navigation
 
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
@@ -132,10 +135,18 @@ private fun SettingsRootGraph(
     onExitSettings: () -> Unit,
     goToLogin: () -> Unit
 ) {
+    val settingsNavController = rememberNavController()
+
     val userManager: UserManager = koinInject()
     val role by userManager.userRole.collectAsState(UserRole.Guest)
+    val previousRole = remember { mutableStateOf(role) }
 
-    val settingsNavController = rememberNavController()
+    LaunchedEffect(role) {
+        if (previousRole.value != role) {
+            settingsNavController.popBackStack(SettingsRoute.Main, inclusive = false)
+            previousRole.value = role
+        }
+    }
 
     NavHost(
         navController = settingsNavController,

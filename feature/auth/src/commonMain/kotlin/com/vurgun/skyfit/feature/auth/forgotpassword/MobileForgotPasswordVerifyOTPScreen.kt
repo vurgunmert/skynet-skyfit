@@ -48,6 +48,7 @@ fun MobileForgotPasswordVerifyOTPScreen(
     val isLoading by viewModel.isLoading.collectAsState()
     val isResendEnabled by viewModel.isResendEnabled.collectAsState()
     val countdownTime by viewModel.countdownTime.collectAsState()
+    val phoneNumber by viewModel.phoneNumber.collectAsState("")
 
     var errorMessage by remember { mutableStateOf<String?>(null) }
 
@@ -83,7 +84,7 @@ fun MobileForgotPasswordVerifyOTPScreen(
             verticalArrangement = Arrangement.spacedBy(48.dp)
         ) {
 
-            MobileForgotPasswordCodeTextGroup(viewModel.phoneNumber)
+            MobileForgotPasswordCodeTextGroup(phoneNumber)
 
             OTPInputTextField(onCodeReady = viewModel::onOtpChanged)
 

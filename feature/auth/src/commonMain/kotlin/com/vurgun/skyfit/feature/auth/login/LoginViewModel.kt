@@ -4,6 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.vurgun.skyfit.data.auth.domain.model.AuthLoginResult
 import com.vurgun.skyfit.data.auth.domain.repository.AuthRepository
+import com.vurgun.skyfit.data.core.domain.manager.UserManager
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
@@ -21,7 +22,8 @@ sealed class LoginViewEvent {
 }
 
 class LoginViewModel(
-    private val authRepository: AuthRepository
+    private val authRepository: AuthRepository,
+    private val userManager: UserManager,
 ) : ViewModel() {
 
     // State
@@ -64,7 +66,11 @@ class LoginViewModel(
             _isLoading.value = true
             try {
                 val event = when (val result = authRepository.login(_phoneNumber.value, _password.value)) {
-                    is AuthLoginResult.Success -> LoginViewEvent.GoToDashboard
+                    is AuthLoginResult.Success -> {
+                        userManager.getActiveUser(true)
+                        LoginViewEvent.GoToDashboard
+                    }
+
                     is AuthLoginResult.OTPVerificationRequired -> LoginViewEvent.GoToOTPVerification
                     is AuthLoginResult.OnboardingRequired -> LoginViewEvent.GoToOnboarding
                     is AuthLoginResult.Error -> LoginViewEvent.ShowError(result.message)

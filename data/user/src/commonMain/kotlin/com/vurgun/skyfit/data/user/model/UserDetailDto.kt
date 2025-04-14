@@ -26,9 +26,10 @@ data class UserDetailDto(
     @SerialName("isNotification") val isNotification: Boolean? = null,
     @SerialName("isMail") val isMail: Boolean? = null,
     @SerialName("isSms") val isSms: Boolean? = null,
-    @SerialName("profilePhoto") val profilePhotoUrl: String? = null,
+    @SerialName("profilePhoto") val profilePhotoPath: String? = null,
     @SerialName("createdDate") val createdDate: String? = null,
     @SerialName("bio") val bio: String? = null,
+    @SerialName("gymId") val gymId: Int? = null,
     @SerialName("gymName") val gymName: String? = null,
     @SerialName("gymAdress") val gymAddress: String? = null,
     @SerialName("backgroundImage") val backgroundImagePath: String? = null

@@ -11,11 +11,6 @@ class HomeViewModel(
     private val userManager: UserManager
 ) : ViewModel() {
 
-    val user = userManager.observeUser().stateIn(
-        scope = viewModelScope,
-        started = SharingStarted.WhileSubscribed(),
-        initialValue = null
-    )
-
+    val user = userManager.user
     val characterType = user.map { it?.characterType }
 }

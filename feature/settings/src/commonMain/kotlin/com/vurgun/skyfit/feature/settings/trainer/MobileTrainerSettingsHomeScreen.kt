@@ -15,16 +15,15 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.vurgun.skyfit.data.core.domain.model.UserRole
 import com.vurgun.skyfit.feature.settings.facility.SettingsHomeAccountTypesColumn
+import com.vurgun.skyfit.feature.settings.user.SettingsHomeViewModel
+import com.vurgun.skyfit.feature.settings.user.UserSettingsViewEvent
+import com.vurgun.skyfit.ui.core.components.button.PrimaryLargeButton
 import com.vurgun.skyfit.ui.core.components.menu.MobileSettingsMenuItemComponent
 import com.vurgun.skyfit.ui.core.components.menu.MobileSettingsMenuItemDividerComponent
-import com.vurgun.skyfit.feature.settings.user.UserSettingsViewEvent
-import com.vurgun.skyfit.feature.settings.user.SettingsHomeViewModel
-import com.vurgun.skyfit.ui.core.components.button.PrimaryLargeButton
 import com.vurgun.skyfit.ui.core.components.special.SkyFitMobileScaffold
 import com.vurgun.skyfit.ui.core.components.special.SkyFitScreenHeader
 import kotlinx.coroutines.flow.collectLatest
 import org.jetbrains.compose.resources.stringResource
-import org.koin.compose.koinInject
 import org.koin.compose.viewmodel.koinViewModel
 import skyfit.ui.core.generated.resources.Res
 import skyfit.ui.core.generated.resources.ic_bell
@@ -123,7 +122,7 @@ fun MobileTrainerSettingsHomeScreen(
 
             SettingsHomeAccountTypesColumn(
                 accounts = accountTypes,
-                selectedTypeId = UserRole.Facility.typeId,
+                selectedTypeId = UserRole.Trainer.typeId,
                 onSelectType = viewModel::selectUserType
             )
         }

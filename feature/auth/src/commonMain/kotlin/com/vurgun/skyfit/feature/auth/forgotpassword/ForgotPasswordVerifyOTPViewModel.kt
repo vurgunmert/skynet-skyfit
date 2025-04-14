@@ -6,11 +6,15 @@ import com.vurgun.skyfit.data.core.storage.LocalSettingsStore
 import com.vurgun.skyfit.data.auth.domain.model.ForgotPasswordOTPResult
 import com.vurgun.skyfit.data.auth.domain.model.SendOTPResult
 import com.vurgun.skyfit.data.auth.domain.repository.AuthRepository
+import com.vurgun.skyfit.data.core.domain.repository.UserRepository
+import com.vurgun.skyfit.data.core.storage.Storage
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asSharedFlow
+import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
@@ -21,11 +25,11 @@ sealed class ForgotPasswordVerifyOTPViewEvent {
 
 class ForgotPasswordVerifyOTPViewModel(
     private val authRepository: AuthRepository,
-    localSettingsStore: LocalSettingsStore
+    storage: Storage
 ) : ViewModel() {
 
     val otpLength = 6
-    val phoneNumber = localSettingsStore.getPhoneNumber().orEmpty()
+    val phoneNumber = storage.getAsFlow(UserRepository.UserPhoneNumber).map { it.orEmpty() }
 
     private val _enteredOtp = MutableStateFlow("")
     val enteredOtp: StateFlow<String> = _enteredOtp

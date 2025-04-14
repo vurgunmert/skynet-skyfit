@@ -1,7 +1,8 @@
 package com.vurgun.skyfit.data.settings.repository
 
+import com.vurgun.skyfit.data.core.domain.repository.UserRepository
 import com.vurgun.skyfit.data.core.model.MissingTokenException
-import com.vurgun.skyfit.data.core.storage.LocalSettingsStore
+import com.vurgun.skyfit.data.core.storage.Storage
 import com.vurgun.skyfit.data.network.ApiResult
 import com.vurgun.skyfit.data.network.DispatcherProvider
 import com.vurgun.skyfit.data.settings.model.Member
@@ -9,9 +10,9 @@ import com.vurgun.skyfit.data.settings.model.toDomain
 import kotlinx.coroutines.withContext
 
 class SettingsRepositoryImpl(
-    private val settingsStore: LocalSettingsStore,
     private val apiService: SettingsApiService,
-    private val dispatchers: DispatcherProvider
+    private val dispatchers: DispatcherProvider,
+    private val storage: Storage,
 ) : SettingsRepository {
 
     private suspend fun <T, R> apiCallWithToken(
@@ -29,13 +30,8 @@ class SettingsRepositoryImpl(
     }
 
     //TODO: load onto generic function above
-    private fun requireToken(): String {
-        val token = settingsStore.getToken()
-        if (token == null) {
-            settingsStore.clearAll()
-            throw MissingTokenException
-        }
-        return token
+    private suspend fun requireToken(): String {
+        return storage.get(UserRepository.UserAuthToken) ?: throw MissingTokenException
     }
 
     override suspend fun addGymUser(gymId: Int, userId: Int): Result<Boolean> =
@@ -44,44 +40,10 @@ class SettingsRepositoryImpl(
         }
 
 
-//    override suspend fun addGymUser(gymId: Int, userId: Int): Result<Boolean> = withContext(dispatchers.io) {
-//        try {
-//            val token = requireToken()
-//
-//            when (val response = apiService.addGymMember(gymId, userId, token)) {
-//                is ApiResult.Error -> Result.failure(IllegalStateException(response.message))
-//                is ApiResult.Exception -> Result.failure(response.exception)
-//                is ApiResult.Success -> {
-//                    return@withContext Result.success(true)
-//                }
-//            }
-//
-//        } catch (e: MissingTokenException) {
-//            Result.failure(e)
-//        }
-//    }
-
     override suspend fun getGymMembers(gymId: Int): Result<List<Member>> =
         apiCallWithToken({ it.toDomain() }) { token ->
             apiService.getGymMembers(gymId, token)
         }
-
-//    override suspend fun getGymMembers(gymId: Int): Result<List<Member>> = withContext(dispatchers.io) {
-//        try {
-//            val token = requireToken()
-//
-//            when (val response = apiService.getGymMembers(gymId, token)) {
-//                is ApiResult.Error -> Result.failure(IllegalStateException(response.message))
-//                is ApiResult.Exception -> Result.failure(response.exception)
-//                is ApiResult.Success -> {
-//                    return@withContext Result.success(response.data.map { it.toDomain() })
-//                }
-//            }
-//
-//        } catch (e: MissingTokenException) {
-//            Result.failure(e)
-//        }
-//    }
 
     override suspend fun deleteGymMember(gymId: Int, userId: Int): Result<Boolean> = withContext(dispatchers.io) {
         try {

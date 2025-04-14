@@ -7,6 +7,8 @@ import com.vurgun.skyfit.data.core.domain.model.UserRole
 import com.vurgun.skyfit.data.user.model.UserAccountTypeDto
 import com.vurgun.skyfit.data.user.model.UserDetailDto
 
+val baseImageUrl = "https://skyfit.mertbeta.xyz/"
+
 object UserDetailMapper {
     fun UserDetailDto.toDomain(): UserDetail {
         return UserDetail(
@@ -18,9 +20,11 @@ object UserDetailMapper {
             gymName = this.gymName,
             gymAddress = this.gymAddress,
             bio = this.bio,
-            backgroundImagePath = this.backgroundImagePath,
+            backgroundImageUrl = baseImageUrl+this.backgroundImagePath,
+            profileImageUrl = baseImageUrl+this.profilePhotoPath,
             email = this.email,
-            birthday = this.birthday
+            birthday = this.birthday,
+            gymId = this.gymId
         )
     }
 

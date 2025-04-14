@@ -7,8 +7,8 @@ import com.vurgun.skyfit.feature.settings.facility.member.FacilityManageMembersV
 import com.vurgun.skyfit.feature.settings.facility.trainer.FacilityAddTrainerViewModel
 import com.vurgun.skyfit.feature.settings.facility.trainer.FacilityManageTrainersViewModel
 import com.vurgun.skyfit.feature.settings.trainer.TrainerAccountSettingsViewModel
-import com.vurgun.skyfit.feature.settings.user.SkyFitUserAccountSettingsViewModel
 import com.vurgun.skyfit.feature.settings.user.SettingsHomeViewModel
+import com.vurgun.skyfit.feature.settings.user.SkyFitUserAccountSettingsViewModel
 import org.koin.core.module.dsl.viewModel
 import org.koin.dsl.module
 
@@ -17,7 +17,7 @@ val featureSettingsModule = module {
 
     viewModel { SkyFitUserAccountSettingsViewModel() }
     viewModel { TrainerAccountSettingsViewModel() }
-    viewModel { SettingsHomeViewModel(get(), get(), get()) }
+    viewModel { SettingsHomeViewModel(get(), get()) }
     viewModel { ChangePasswordViewModel() }
 
     viewModel { FacilityManageMembersViewModel(get()) }

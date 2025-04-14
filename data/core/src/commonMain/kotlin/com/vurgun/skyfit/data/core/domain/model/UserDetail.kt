@@ -8,9 +8,11 @@ data class UserDetail(
     val username: String,
     val phone: String,
     val birthday: String?,
+    val gymId: Int?,
     val gymName: String?,
     val gymAddress: String?,
     val bio: String?,
-    val backgroundImagePath: String?,
+    val backgroundImageUrl: String?,
+    val profileImageUrl: String?,
     val email: String? // Renamed `mail` to `email` for consistency
 )

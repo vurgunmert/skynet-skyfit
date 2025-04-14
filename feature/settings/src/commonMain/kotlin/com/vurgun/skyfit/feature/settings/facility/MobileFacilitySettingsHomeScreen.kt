@@ -1,6 +1,7 @@
 package com.vurgun.skyfit.feature.settings.facility
 
 import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -163,7 +164,10 @@ fun AccountTypeItem(
     onClick: () -> Unit
 ) {
     Row(
-        Modifier.fillMaxWidth().padding(16.dp),
+        Modifier
+            .clickable(onClick = onClick)
+            .fillMaxWidth()
+            .padding(16.dp),
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.spacedBy(16.dp)
     ) {

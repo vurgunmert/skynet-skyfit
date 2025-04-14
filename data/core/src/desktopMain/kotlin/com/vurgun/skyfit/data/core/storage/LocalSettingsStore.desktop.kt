@@ -21,8 +21,7 @@ class DesktopLocalSettingsStore : LocalSettingsStore {
         prefs.put("token", value)
     }
 
-    override fun getToken(): String? { //TODO: REMOVE DEBUG
-        return "eyJpdiI6IjVLOHNQemppZi9GcjdjTmYxdnB2d0E9PSIsImRhdGEiOiIyL24rRVBsZHlCVXNvRkh4R2c4OVZNOGtKaHdRazRVREdKUncxMVhrTDRxbzdxTjBMRXpEdEEvME13VitNaVpkV0JRYURRbmFJQmc4VU5JVU8yYnRFaW1sYmJ1aGpjUXo5ckFDVmR6NVg0eVBPellsSjN5QUkzMmtPdnR2MTJPcWU2dHF5SXlHS3I3TjV5d3FPMExOWnN5OFlnb0FSeWV1TzZQdzhlUnVoN1FNMzIzZkJQYjkxK3F6dTlISDR2d01KSHo3RVQwM0E4cTJSbG9xeWM2UjdBaGdSNlMwdXhVTFVXRGpXVGpZR0ZVb1BsWlIzV3lGa1FIayttdUZoYXRUYmhsSEgxNnBlUnFYZzlGWkJIQjBhY01MOEdaVGFEdWZxSFdscExVdE9qUDh6SmdMQlNMUWFrTW5PWGdnditUVm94djlZZEtTUjUyL01XUEJMbjg4UW94T1c5STJUWnFiVi93M2trYkxtc009In0="
+    override fun getToken(): String? {
         return prefs.get("token", null)
     }
 

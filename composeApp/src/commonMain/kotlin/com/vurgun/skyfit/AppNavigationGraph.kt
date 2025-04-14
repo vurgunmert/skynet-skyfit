@@ -23,7 +23,7 @@ fun AppNavigationGraph() {
 
     NavHost(
         navController = navigationController,
-        startDestination = PostureAnalysisRoute.Root,
+        startDestination = AuthRoute.Splash,
         modifier = Modifier.fillMaxSize()
     ) {
 

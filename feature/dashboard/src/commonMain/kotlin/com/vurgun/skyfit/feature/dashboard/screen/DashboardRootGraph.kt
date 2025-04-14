@@ -3,6 +3,7 @@ package com.vurgun.skyfit.feature.dashboard.screen
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -23,9 +24,8 @@ internal fun DashboardRootGraph(
     goToChatBot: () -> Unit,
     goToSettings: () -> Unit,
 ) {
-
     val userManager: UserManager = koinInject()
-    val userRole by userManager.userRole.collectAsState(UserRole.Guest)
+    val userRole by userManager.userRole.collectAsStateWithLifecycle()
 
     val internalNavController = rememberNavController()
     val currentBackStackEntry by internalNavController.currentBackStackEntryAsState()
