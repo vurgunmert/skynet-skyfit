@@ -27,7 +27,7 @@ datastore = "1.1.4"
 
 precompose = "1.7.0-alpha01"
 ktor = "3.1.1"
-coil = "3.0.4"
+coil = "3.1.0"
 peekaboo = "0.5.2"
 calf = "0.7.1"
 skiko = "0.9.2"

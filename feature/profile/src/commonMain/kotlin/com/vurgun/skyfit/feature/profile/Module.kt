@@ -5,6 +5,6 @@ import org.koin.core.module.dsl.viewModel
 import org.koin.dsl.module
 
 val featureProfileModule = module {
-
-    viewModel { FacilityProfileViewModel() }
+    //TODO: ACTUALLY NEED USER DATA MODULE
+    viewModel { FacilityProfileViewModel(get(), get()) }
 }
