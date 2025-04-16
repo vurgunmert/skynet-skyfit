@@ -4,15 +4,13 @@ import com.vurgun.skyfit.data.core.domain.repository.UserRepository
 import com.vurgun.skyfit.data.core.model.MissingTokenException
 import com.vurgun.skyfit.data.core.storage.Storage
 import com.vurgun.skyfit.data.courses.CourseApiService
-import com.vurgun.skyfit.data.courses.model.LessonDTO
+import com.vurgun.skyfit.data.courses.domain.model.Lesson
+import com.vurgun.skyfit.data.courses.domain.repository.CourseRepository
+import com.vurgun.skyfit.data.courses.mapper.toDomain
 import com.vurgun.skyfit.data.network.ApiResult
 import com.vurgun.skyfit.data.network.DispatcherProvider
 import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.withContext
-
-interface CourseRepository {
-    suspend fun getLessons(gymId: Int, startDate: String, endDate: String?): Result<List<LessonDTO>>
-}
 
 class CourseRepositoryImpl(
     private val storage: Storage,
@@ -24,20 +22,15 @@ class CourseRepositoryImpl(
 
     private suspend fun requireToken(): String = userToken.firstOrNull() ?: throw MissingTokenException
 
-    override suspend fun getLessons(gymId: Int, startDate: String, endDate: String?) = withContext(dispatchers.io) {
-        try {
-            val token = requireToken()
-            when (val response = apiService.getLessons(gymId, startDate, endDate, token)) {
-                is ApiResult.Error -> Result.failure(IllegalStateException(response.message))
-
-                is ApiResult.Exception -> Result.failure(response.exception)
-                is ApiResult.Success -> {
-                    val user = response.data
-                    return@withContext Result.success(user)
+    override suspend fun getLessons(gymId: Int, startDate: String, endDate: String?): Result<List<Lesson>> =
+        withContext(dispatchers.io) {
+            runCatching {
+                val token = requireToken()
+                when (val result = apiService.getLessons(gymId, startDate, endDate, token)) {
+                    is ApiResult.Success -> result.data.toDomain()
+                    is ApiResult.Error -> throw IllegalStateException(result.message)
+                    is ApiResult.Exception -> throw result.exception
                 }
             }
-        } catch (e: Exception) {
-            return@withContext Result.failure(e)
         }
-    }
 }

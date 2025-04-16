@@ -2,159 +2,97 @@ package com.vurgun.skyfit.feature.courses.screen
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.vurgun.skyfit.data.core.domain.manager.UserManager
+import com.vurgun.skyfit.data.courses.domain.model.Lesson
+import com.vurgun.skyfit.data.courses.domain.repository.CourseRepository
+import com.vurgun.skyfit.data.courses.mapper.LessonSessionItemViewDataMapper
 import com.vurgun.skyfit.data.courses.model.LessonSessionItemViewData
 import com.vurgun.skyfit.ui.core.styling.SkyFitAsset
+import kotlinx.coroutines.channels.Channel
+import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import kotlinx.datetime.LocalDate
 
 data class FacilityLessonListUiState(
-    val isLoading: Boolean = true,
+    val isLoading: Boolean = false,
     val lessons: List<LessonSessionItemViewData> = emptyList(),
-    val activeLessons: List<LessonSessionItemViewData> = emptyList(),
-    val inactiveLessons: List<LessonSessionItemViewData> = emptyList()
+    val errorMessage: String? = null
 ) {
     val isEmpty: Boolean get() = lessons.isEmpty()
+    val activeLessons: List<LessonSessionItemViewData> get() = lessons.filter { it.isActive }
+    val inactiveLessons: List<LessonSessionItemViewData> get() = lessons.filterNot { it.isActive }
 }
 
-
-class FacilityLessonListViewModel : ViewModel() {
+class FacilityLessonListViewModel(
+    private val courseRepository: CourseRepository,
+    private val userManager: UserManager,
+    private val lessonMapper: LessonSessionItemViewDataMapper
+) : ViewModel() {
 
     private val _uiState = MutableStateFlow(FacilityLessonListUiState())
     val uiState: StateFlow<FacilityLessonListUiState> = _uiState
 
-    fun loadDataAt(date: LocalDate) {
+    private val _editLessonChannel = Channel<Lesson>(Channel.BUFFERED)
+    val editLessonFlow = _editLessonChannel.receiveAsFlow()
+
+    private var lessons: List<Lesson> = emptyList()
+
+    fun loadLessonsFor(date: LocalDate) {
         viewModelScope.launch {
-            _uiState.update { it.copy(isLoading = true) }
+            val gymId = userManager.user.value?.gymId
+            val gymAddress = userManager.user.value?.gymAddress
+            if (gymId == null || gymAddress == null) {
+                _uiState.update { it.copy(isLoading = false, errorMessage = "Missing gym information.") }
+                return@launch
+            }
 
-            val fetchedClasses = fakeLessons //TODO: Load from data source
+            _uiState.update { it.copy(isLoading = true, errorMessage = null) }
 
-            _uiState.update {
-                it.copy(
-                    isLoading = false,
-                    lessons = fetchedClasses,
-                    activeLessons = fetchedClasses.filter { it.enabled },
-                    inactiveLessons = fetchedClasses.filterNot { it.enabled }
-                )
+            val result = courseRepository.getLessons(gymId, date.toString(), date.toString())
+            result.fold(
+                onSuccess = { lessons ->
+                    this@FacilityLessonListViewModel.lessons = lessons
+                    val mappedLessons = lessons.map { lesson ->
+                        lessonMapper.map(lesson, gymAddress)
+                    }
+                    _uiState.update {
+                        it.copy(
+                            isLoading = false,
+                            lessons = mappedLessons
+                        )
+                    }
+                },
+                onFailure = { throwable ->
+                    _uiState.update {
+                        it.copy(
+                            isLoading = false,
+                            errorMessage = throwable.message ?: "An unexpected error occurred."
+                        )
+                    }
+                }
+            )
+        }
+    }
+
+    fun navigateToEdit(lessonId: Int) {
+        val lesson = lessons.firstOrNull { it.lessonId == lessonId }
+        lesson?.let {
+            viewModelScope.launch {
+                _editLessonChannel.send(it)
             }
         }
     }
 
-    fun toggleClassStatus(sessionId: String) {
-        _uiState.update { state ->
-            val updated = state.lessons.map {
-                if (it.sessionId == sessionId) it.copy(enabled = !it.enabled) else it
-            }
-            state.copy(
-                lessons = updated,
-                activeLessons = updated.filter { it.enabled },
-                inactiveLessons = updated.filterNot { it.enabled }
-            )
-        }
+    fun toggleLessonStatus(lessonId: Int) {
+        // TODO: Call repository to update status
     }
 
-    fun addNewClass(newSession: LessonSessionItemViewData) {
-        _uiState.update { state ->
-            val updated = state.lessons + newSession
-            state.copy(
-                lessons = updated,
-                activeLessons = updated.filter { it.enabled },
-                inactiveLessons = updated.filterNot { it.enabled }
-            )
-        }
-    }
-
-    fun deleteClass(sessionId: String) {
-        _uiState.update { state ->
-            val updated = state.lessons.filterNot { it.sessionId == sessionId }
-            state.copy(
-                lessons = updated,
-                activeLessons = updated.filter { it.enabled },
-                inactiveLessons = updated.filterNot { it.enabled }
-            )
-        }
+    fun deleteLesson(lessonId: Int) {
+        // TODO: Call repository to delete
     }
 }
-
-
-val fakeLessons = listOf(
-    LessonSessionItemViewData(
-        iconId = SkyFitAsset.SkyFitIcon.PUSH_UP.id,
-        title = "Shoulders and Abs",
-        date = "18/11/2024",
-        hours = "08:00 - 09:00",
-        trainer = "Micheal Blake",
-        location = "@ironstudio (İzmir - Bornova)",
-        note = "Try to arrive 5-10 minutes early to warm up and settle in before the class starts.",
-        enabled = true,
-        sessionId = "1111"
-    ),
-    LessonSessionItemViewData(
-        iconId = SkyFitAsset.SkyFitIcon.HIGH_INTENSITY_TRAINING.id,
-        title = "Reformer Pilates",
-        trainer = "Micheal Blake",
-        date = "18/11/2024",
-        hours = "08:00 - 09:00",
-        category = "Pilates",
-        location = "@ironstudio (İzmir - Bornova)",
-        enabled = false,
-        sessionId = "2222"
-    ),
-    LessonSessionItemViewData(
-        iconId = SkyFitAsset.SkyFitIcon.BICEPS_FORCE.id,
-        title = "Fitness",
-        date = "18/11/2024",
-        hours = "08:00 - 09:00",
-        trainer = "Micheal Blake",
-        location = "@ironstudio (İzmir - Bornova)",
-        category = "PT",
-        enabled = true,
-        sessionId = "3333"
-    ),
-    LessonSessionItemViewData(
-        iconId = SkyFitAsset.SkyFitIcon.BICEPS_FORCE.id,
-        title = "Fitness",
-        date = "18/11/2024",
-        hours = "08:00 - 09:00",
-        trainer = "Micheal Blake",
-        location = "@ironstudio (İzmir - Bornova)",
-        category = "PT",
-        enabled = true,
-        sessionId = "3333"
-    ),
-    LessonSessionItemViewData(
-        iconId = SkyFitAsset.SkyFitIcon.BICEPS_FORCE.id,
-        title = "Fitness",
-        date = "18/11/2024",
-        hours = "08:00 - 09:00",
-        trainer = "Micheal Blake",
-        location = "@ironstudio (İzmir - Bornova)",
-        category = "PT",
-        enabled = true,
-        sessionId = "3333"
-    ),
-    LessonSessionItemViewData(
-        iconId = SkyFitAsset.SkyFitIcon.BICEPS_FORCE.id,
-        title = "Fitness",
-        date = "18/11/2024",
-        hours = "08:00 - 09:00",
-        trainer = "Micheal Blake",
-        location = "@ironstudio (İzmir - Bornova)",
-        category = "PT",
-        enabled = true,
-        sessionId = "3333"
-    ),
-    LessonSessionItemViewData(
-        iconId = SkyFitAsset.SkyFitIcon.BICEPS_FORCE.id,
-        title = "Fitness",
-        date = "18/11/2024",
-        hours = "08:00 - 09:00",
-        trainer = "Micheal Blake",
-        location = "@ironstudio (İzmir - Bornova)",
-        category = "PT",
-        enabled = true,
-        sessionId = "3333"
-    )
-)

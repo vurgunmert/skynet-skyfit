@@ -3,7 +3,7 @@ package com.vurgun.skyfit.data.courses.model
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class LessonDTO(
+internal data class LessonDTO(
     val lessonId: Int,
     val lessonIcon: Int,
     val typeName: String,
@@ -12,13 +12,13 @@ data class LessonDTO(
     val startTime: String,
     val endDate: String,
     val endTime: String,
-    val trainerId: Long,
+    val trainerId: Int,
     val name: String,
     val surname: String,
     val gymName: String,
-    val trainerNote: String,
+    val trainerNote: String? = null,
     val lastCancelTime: String,
-    val price: Long? = null,
+    val price: Int,
     val status: Int,
     val statusName: String,
 )

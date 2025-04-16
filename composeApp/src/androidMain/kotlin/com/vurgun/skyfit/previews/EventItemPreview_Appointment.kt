@@ -12,7 +12,7 @@ private fun Preview_BasicAppointmentEventItem() {
     PreviewBox {
         BasicAppointmentEventItem(
             title = "Shoulders and Abs",
-            iconId = "ic_push_up",
+            iconId = 2,
             date = "30/11/2024",
             timePeriod = "08:00 - 09:00",
             location = "@ironstudio",
@@ -28,7 +28,7 @@ private fun Preview_ActiveAppointmentEventItem() {
     PreviewBox {
         ActiveAppointmentEventItem(
             title = "Shoulders and Abs",
-            iconId = "ic_push_up",
+            iconId = 2,
             date = "30/11/2024",
             timePeriod = "08:00 - 09:00",
             location = "@ironstudio",
@@ -46,7 +46,7 @@ private fun Preview_AttendanceAppointmentEventItem_Missing() {
     PreviewBox {
         AttendanceAppointmentEventItem(
             title = "Shoulders and Abs",
-            iconId = "ic_push_up",
+            iconId = 2,
             date = "30/11/2024",
             timePeriod = "08:00 - 09:00",
             location = "@ironstudio",
@@ -64,7 +64,7 @@ private fun Preview_AttendanceAppointmentEventItem_Completed() {
     PreviewBox {
         AttendanceAppointmentEventItem(
             title = "Shoulders and Abs",
-            iconId = "ic_push_up",
+            iconId = 2,
             date = "30/11/2024",
             timePeriod = "08:00 - 09:00",
             location = "@ironstudio",

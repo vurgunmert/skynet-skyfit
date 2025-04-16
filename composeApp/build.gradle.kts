@@ -80,10 +80,6 @@ kotlin {
             implementation(libs.coil.compose)
             implementation(libs.coil.network.ktor)
 //            implementation("network.chaintech:compose-multiplatform-media-player:1.0.30")
-
-            // PreCompose for multiplatform navigation
-            implementation(libs.precompose)
-            implementation(libs.precompose.koin)
         }
 
         androidMain.dependencies {

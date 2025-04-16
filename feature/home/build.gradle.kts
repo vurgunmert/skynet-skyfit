@@ -32,15 +32,13 @@ kotlin {
         commonMain.dependencies {
             implementation(projects.ui.core)
             implementation(projects.data.core)
+            implementation(projects.data.courses)
 
             implementation(projects.feature.profile) //TODO: decouple
             implementation(projects.feature.calendar)
 
             implementation(libs.koin.core)
             implementation(libs.bundles.koin.compose)
-
-            implementation(libs.precompose)
-            implementation(libs.precompose.koin)
 
             implementation(libs.kotlinx.serialization)
         }

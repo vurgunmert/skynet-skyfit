@@ -1,7 +1,6 @@
 package com.vurgun.skyfit.feature.dashboard.screen
 
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavGraph.Companion.findStartDestination
@@ -10,7 +9,6 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.vurgun.skyfit.data.core.domain.manager.UserManager
-import com.vurgun.skyfit.data.core.domain.model.UserRole
 import com.vurgun.skyfit.feature.dashboard.component.BottomNavigationBar
 import com.vurgun.skyfit.feature.dashboard.navigation.DashboardRoute
 import com.vurgun.skyfit.feature.home.navigation.HomeRoot
@@ -23,6 +21,7 @@ internal fun DashboardRootGraph(
     startRoute: DashboardRoute = DashboardRoute.Home,
     goToChatBot: () -> Unit,
     goToSettings: () -> Unit,
+    goToFacilityCourses: () -> Unit,
 ) {
     val userManager: UserManager = koinInject()
     val userRole by userManager.userRole.collectAsStateWithLifecycle()
@@ -71,13 +70,15 @@ internal fun DashboardRootGraph(
                     goToSocial = { },
                     goToProfile = { },
                     goToActivityCalendar = { },
-                    goToAppointments = { }
+                    goToAppointments = { },
+                    goToFacilityCourses = goToFacilityCourses
                 )
             }
 
             composable<DashboardRoute.Profile> {
                 ProfileRoot(
                     userRole = userRole,
+                    goToFacilityCourses = goToFacilityCourses,
                     goToSettings = goToSettings
                 )
             }

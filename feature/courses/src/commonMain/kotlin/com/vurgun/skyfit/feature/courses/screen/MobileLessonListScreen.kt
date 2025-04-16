@@ -23,7 +23,10 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.compose.LocalLifecycleOwner
+import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.vurgun.skyfit.data.courses.domain.model.Lesson
 import com.vurgun.skyfit.data.courses.model.LessonSessionItemViewData
 import com.vurgun.skyfit.feature.calendar.components.component.calendar.weekly.CalendarWeekDaySelector
 import com.vurgun.skyfit.feature.calendar.components.component.calendar.weekly.CalendarWeekDaySelectorViewModel
@@ -36,8 +39,11 @@ import com.vurgun.skyfit.ui.core.components.special.SkyFitMobileScaffold
 import com.vurgun.skyfit.ui.core.components.special.SkyFitScreenHeader
 import com.vurgun.skyfit.ui.core.styling.SkyFitColor
 import com.vurgun.skyfit.ui.core.styling.SkyFitTypography
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
+import org.koin.compose.viewmodel.koinViewModel
 import skyfit.ui.core.generated.resources.Res
 import skyfit.ui.core.generated.resources.ic_plus
 import skyfit.ui.core.generated.resources.lesson_add_action
@@ -47,18 +53,23 @@ import skyfit.ui.core.generated.resources.status_out_of_use
 @Composable
 fun MobileFacilityLessonListScreen(
     goToBack: () -> Unit,
-    goToCreateNew: () -> Unit,
-    goToEdit: () -> Unit
+    onNewLesson: () -> Unit,
+    onEditLesson: (Lesson) -> Unit,
+    viewModel: FacilityLessonListViewModel = koinViewModel()
 ) {
-
-    val viewModel = remember { FacilityLessonListViewModel() }
     val uiState by viewModel.uiState.collectAsState()
 
     val calendarViewModel: CalendarWeekDaySelectorViewModel = viewModel()
     val calendarUiState = rememberWeekDaySelectorState(calendarViewModel)
 
     LaunchedEffect(calendarUiState.selectedDate) {
-        viewModel.loadDataAt(date = calendarUiState.selectedDate)
+        viewModel.loadLessonsFor(date = calendarUiState.selectedDate)
+    }
+
+    LaunchedEffect(Unit) {
+        viewModel.editLessonFlow.collect { lesson ->
+            onEditLesson(lesson)
+        }
     }
 
     SkyFitMobileScaffold(
@@ -83,15 +94,15 @@ fun MobileFacilityLessonListScreen(
             if (uiState.isLoading) {
                 FullScreenLoader()
             } else if (uiState.isEmpty) {
-                EmptyLessonListItem(onClickNew = goToEdit)
+                EmptyLessonListItem(onClickNew = onNewLesson)
             } else {
                 FacilityLessonListContentGroup(
                     uiState = uiState,
-                    onClickNew = goToCreateNew,
-                    onEdit = { goToEdit() },
-                    onDeactivate = { viewModel.toggleClassStatus(it.sessionId) },
-                    onActivate = { viewModel.toggleClassStatus(it.sessionId) },
-                    onDelete = { viewModel.deleteClass(it.sessionId) }
+                    onClickNew = onNewLesson,
+                    onEdit = viewModel::navigateToEdit,
+                    onDeactivate = viewModel::toggleLessonStatus,
+                    onActivate = viewModel::toggleLessonStatus,
+                    onDelete = viewModel::deleteLesson,
                 )
             }
 
@@ -104,10 +115,10 @@ fun MobileFacilityLessonListScreen(
 private fun FacilityLessonListContentGroup(
     uiState: FacilityLessonListUiState,
     onClickNew: () -> Unit,
-    onActivate: (LessonSessionItemViewData) -> Unit,
-    onDeactivate: (LessonSessionItemViewData) -> Unit,
-    onEdit: (LessonSessionItemViewData) -> Unit,
-    onDelete: (LessonSessionItemViewData) -> Unit
+    onActivate: (lessonId: Int) -> Unit,
+    onDeactivate: (lessonId: Int) -> Unit,
+    onEdit: (lessonId: Int) -> Unit,
+    onDelete: (lessonId: Int) -> Unit
 ) {
     Column(
         modifier = Modifier
@@ -127,11 +138,11 @@ private fun FacilityLessonListContentGroup(
 private fun ActiveSessionItemsColumn(
     items: List<LessonSessionItemViewData>,
     onClickNew: () -> Unit,
-    onDeactivate: (LessonSessionItemViewData) -> Unit,
-    onEdit: (LessonSessionItemViewData) -> Unit,
-    onDelete: (LessonSessionItemViewData) -> Unit
+    onDeactivate: (lessonId: Int) -> Unit,
+    onEdit: (lessonId: Int) -> Unit,
+    onDelete: (lessonId: Int) -> Unit
 ) {
-    var openMenuItemId by remember { mutableStateOf<String?>(null) }
+    var openMenuItemId by remember { mutableStateOf<Int?>(null) }
 
     Column(
         modifier = Modifier.fillMaxWidth(),
@@ -160,15 +171,15 @@ private fun ActiveSessionItemsColumn(
                 location = item.location.toString(),
                 trainer = item.trainer.toString(),
                 note = item.note,
-                isMenuOpen = openMenuItemId == item.sessionId,
-                onMenuToggle = { isOpen -> openMenuItemId = if (isOpen) item.sessionId else null },
+                isMenuOpen = openMenuItemId == item.lessonId,
+                onMenuToggle = { isOpen -> openMenuItemId = if (isOpen) item.lessonId else null },
                 menuContent = {
                     LessonEventItemPopupMenu(
-                        isOpen = openMenuItemId == item.sessionId,
+                        isOpen = openMenuItemId == item.lessonId,
                         onDismiss = { openMenuItemId = null },
-                        onDeactivate = { onDeactivate(item) },
-                        onEdit = { onEdit(item) },
-                        onDelete = { onDelete(item) }
+                        onDeactivate = { onDeactivate(item.lessonId) },
+                        onEdit = { onEdit(item.lessonId) },
+                        onDelete = { onDelete(item.lessonId) }
                     )
                 }
             )
@@ -180,11 +191,11 @@ private fun ActiveSessionItemsColumn(
 private fun InactiveSessionItemsColumn(
     items: List<LessonSessionItemViewData>,
     onClickNew: () -> Unit,
-    onActivate: (LessonSessionItemViewData) -> Unit,
-    onEdit: (LessonSessionItemViewData) -> Unit,
-    onDelete: (LessonSessionItemViewData) -> Unit
+    onActivate: (lessonId: Int) -> Unit,
+    onEdit: (lessonId: Int) -> Unit,
+    onDelete: (lessonId: Int) -> Unit
 ) {
-    var openMenuItemId by remember { mutableStateOf<String?>(null) }
+    var openMenuItemId by remember { mutableStateOf<Int?>(null) }
 
     Column(
         modifier = Modifier.fillMaxWidth(),
@@ -208,15 +219,15 @@ private fun InactiveSessionItemsColumn(
                 location = item.location.toString(),
                 trainer = item.trainer.toString(),
                 note = item.note,
-                isMenuOpen = openMenuItemId == item.sessionId,
-                onMenuToggle = { isOpen -> openMenuItemId = if (isOpen) item.sessionId else null },
+                isMenuOpen = openMenuItemId == item.lessonId,
+                onMenuToggle = { isOpen -> openMenuItemId = if (isOpen) item.lessonId else null },
                 menuContent = {
                     LessonEventItemPopupMenu(
-                        isOpen = openMenuItemId == item.sessionId,
+                        isOpen = openMenuItemId == item.lessonId,
                         onDismiss = { openMenuItemId = null },
-                        onActivate = { onActivate(item) },
-                        onEdit = { onEdit(item) },
-                        onDelete = { onDelete(item) }
+                        onActivate = { onActivate(item.lessonId) },
+                        onEdit = { onEdit(item.lessonId) },
+                        onDelete = { onDelete(item.lessonId) }
                     )
                 }
             )

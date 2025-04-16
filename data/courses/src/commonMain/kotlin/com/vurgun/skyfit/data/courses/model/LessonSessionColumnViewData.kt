@@ -11,20 +11,21 @@ data class LessonSessionColumnViewData(
 )
 
 data class LessonSessionItemViewData(
-    val iconId: String,
+    val lessonId: Int,
+    val iconId: Int,
     val title: String,
     val date: String? = null,
     val hours: String? = null,
     val duration: String? = null,
     val trainer: String? = null,
     val category: String? = null,
+    val facility: String? = null,
     val location: String? = null,
     val note: String? = null,
-    val enrolledCount: Int? = null,
-    val maxCapacity: Int? = null,
-    val enabled: Boolean = true,
+    val enrolledCount: String? = null,
+    val capacityRatio: String? = null,
+    val isActive: Boolean = true,
     val selected: Boolean = false,
-    val sessionId: String = Uuid.random().toString(),
 ) {
-    fun isBooked(userBookedSessionIds: List<String>) = sessionId in userBookedSessionIds
+    fun isBooked(userBookedSessionIds: List<String>) = false //TODO: Remove
 }

@@ -12,7 +12,10 @@ import com.vurgun.skyfit.data.network.DispatcherProvider
 import com.vurgun.skyfit.data.user.mappers.UserDetailMapper.toDomain
 import com.vurgun.skyfit.data.user.service.UserApiService
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.filter
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.firstOrNull
+import kotlinx.coroutines.flow.lastOrNull
 import kotlinx.coroutines.withContext
 
 class UserRepositoryImpl(
@@ -26,6 +29,14 @@ class UserRepositoryImpl(
     override val userTypeId: Flow<Int?> = storage.getAsFlow(UserRepository.UserTypeIdKey)
 
     private suspend fun requireToken(): String = userToken.firstOrNull() ?: throw MissingTokenException
+
+    private suspend fun requireUpdatedToken(after: suspend () -> Unit): String {
+        after() // run update
+        return userToken
+            .filter { !it.isNullOrBlank() }
+            .first() ?: throw MissingTokenException
+    }
+
 
     private suspend fun <T, R> apiCallWithToken(
         map: (T) -> R,
@@ -84,7 +95,10 @@ class UserRepositoryImpl(
                 is ApiResult.Exception -> Result.failure(response.exception)
                 is ApiResult.Success -> {
                     updateUserTypeId(typeId)
-                    updateUserToken(response.data.token)
+                    val newToken = requireUpdatedToken {
+                        updateUserToken(response.data.token)
+                    }
+                    println("✅ Token confirmed updated before any next API call: $newToken")
                     return@withContext Result.success(true)
                 }
             }

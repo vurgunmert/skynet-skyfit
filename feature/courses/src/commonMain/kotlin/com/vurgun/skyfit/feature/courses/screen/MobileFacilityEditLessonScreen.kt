@@ -70,8 +70,8 @@ import com.vurgun.skyfit.ui.core.components.special.SkyFitScreenHeader
 import com.vurgun.skyfit.ui.core.components.text.BodyMediumRegularText
 import com.vurgun.skyfit.ui.core.components.text.BodyMediumSemiboldText
 import com.vurgun.skyfit.ui.core.styling.LocalPadding
+import com.vurgun.skyfit.ui.core.styling.SkyFitAsset
 import com.vurgun.skyfit.ui.core.styling.SkyFitColor
-import com.vurgun.skyfit.ui.core.styling.SkyFitIcon
 import com.vurgun.skyfit.ui.core.styling.SkyFitTypography
 import kotlinx.datetime.DayOfWeek
 import kotlinx.datetime.LocalDate
@@ -89,7 +89,6 @@ import skyfit.ui.core.generated.resources.day_wednesday_label
 import skyfit.ui.core.generated.resources.ic_calendar_dots
 import skyfit.ui.core.generated.resources.ic_check
 import skyfit.ui.core.generated.resources.ic_chevron_down
-import skyfit.ui.core.generated.resources.ic_exercises
 import skyfit.ui.core.generated.resources.icon_label
 import skyfit.ui.core.generated.resources.lesson_capacity_label
 import skyfit.ui.core.generated.resources.lesson_cost_label
@@ -122,10 +121,9 @@ import skyfit.ui.core.generated.resources.yes_action
 @Composable
 fun MobileFacilityEditLessonScreen(
     goToBack: () -> Unit,
-    goToLessonCreated: () -> Unit
+    goToLessonCreated: () -> Unit,
+    viewModel: FacilityEditLessonViewModel
 ) {
-
-    val viewModel = remember { FacilityEditLessonViewModel() }
     val facilityClass = viewModel.uiState.collectAsState().value
 
     LaunchedEffect(Unit) {
@@ -251,13 +249,13 @@ fun MobileFacilityEditLessonScreen(
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
 private fun EditLessonSubjectItem(
-    selectedIcon: String?,
+    selectedIcon: Int?,
     title: String?,
-    onIconSelected: (String) -> Unit,
+    onIconSelected: (Int) -> Unit,
     onTitleChanged: (String) -> Unit
 ) {
     var isIconPickerOpen by remember { mutableStateOf(false) }
-    val icons = SkyFitIcon.idResMap.keys.toList()
+    val icons = SkyFitAsset.SkyFitIcon.intIdMap.keys.toList()
 
     Column {
         Row(
@@ -279,8 +277,8 @@ private fun EditLessonSubjectItem(
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     Icon(
-                        painter = SkyFitIcon.getIconResourcePainter(selectedIcon, defaultRes = Res.drawable.ic_exercises),
-                        contentDescription = selectedIcon,
+                        painter = SkyFitAsset.getPainter(selectedIcon),
+                        contentDescription = "Icon",
                         tint = SkyFitColor.icon.default,
                         modifier = Modifier.size(24.dp)
                     )
@@ -310,14 +308,14 @@ private fun EditLessonSubjectItem(
                 horizontalArrangement = Arrangement.spacedBy(8.dp),
                 verticalArrangement = Arrangement.spacedBy(8.dp)
             ) {
-                icons.forEach { iconName ->
+                icons.forEach { iconId ->
                     Box(
                         modifier = Modifier
                             .size(40.dp)
                             .clip(RoundedCornerShape(8.dp))
                             .background(SkyFitColor.background.surfaceSecondary, RoundedCornerShape(16.dp))
                             .then(
-                                if (iconName == selectedIcon) {
+                                if (iconId == selectedIcon) {
                                     Modifier.border(
                                         width = 1.dp,
                                         color = SkyFitColor.border.secondaryButton,
@@ -326,19 +324,17 @@ private fun EditLessonSubjectItem(
                                 } else Modifier
                             )
                             .clickable {
-                                onIconSelected(iconName)
+                                onIconSelected(iconId)
                                 isIconPickerOpen = false
                             }
                             .padding(8.dp),
                         contentAlignment = Alignment.Center
                     ) {
-                        SkyFitIcon.getIconResourcePainter(iconName)?.let {
-                            Icon(
-                                painter = it,
-                                contentDescription = iconName.replace("_", " "),
-                                tint = if (iconName == selectedIcon) Color.White else SkyFitColor.icon.default
-                            )
-                        }
+                        Icon(
+                            painter = SkyFitAsset.getPainter(iconId),
+                            contentDescription = "Icon",
+                            tint = if (iconId == selectedIcon) Color.White else SkyFitColor.icon.default
+                        )
                     }
                 }
             }
@@ -763,10 +759,10 @@ private fun LessonEditAppointmentObligationRow(
 //region Cost
 @Composable
 private fun LessonEditCostRow(
-    cost: Double?,
-    onChanged: (Double) -> Unit
+    cost: Int?,
+    onChanged: (Int) -> Unit
 ) {
-    var isPaymentMandatory by remember { mutableStateOf(false) }
+    var isPaymentMandatory by remember { mutableStateOf((cost ?: 0) > 0) }
     var inputValue by remember { mutableStateOf(cost?.toString() ?: "") }
 
     Column(
@@ -799,7 +795,7 @@ private fun LessonEditCostRow(
                 onValueChange = { newValue ->
                     val cleaned = newValue.replace(',', '.').filter { it.isDigit() || it == '.' }
                     inputValue = cleaned
-                    cleaned.toDoubleOrNull()?.let { onChanged(it) }
+                    cleaned.toIntOrNull()?.let { onChanged(it) }
                 },
                 enabled = isPaymentMandatory,
                 textStyle = SkyFitTypography.bodyMediumRegular.copy(

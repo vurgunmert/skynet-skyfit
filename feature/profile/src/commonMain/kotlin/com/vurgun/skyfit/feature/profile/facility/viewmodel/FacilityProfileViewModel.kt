@@ -2,12 +2,11 @@ package com.vurgun.skyfit.feature.profile.facility.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import androidx.lifecycle.viewmodel.compose.viewModel
 import com.vurgun.skyfit.data.core.domain.manager.UserManager
 import com.vurgun.skyfit.data.core.utility.now
+import com.vurgun.skyfit.data.courses.domain.repository.CourseRepository
+import com.vurgun.skyfit.data.courses.mapper.LessonSessionItemViewDataMapper
 import com.vurgun.skyfit.data.courses.model.LessonSessionColumnViewData
-import com.vurgun.skyfit.data.courses.model.LessonSessionItemViewData
-import com.vurgun.skyfit.data.courses.repository.CourseRepository
 import com.vurgun.skyfit.feature.profile.components.viewdata.PhotoGalleryStackViewData
 import com.vurgun.skyfit.feature.profile.components.viewdata.TrainerProfileCardItemViewData
 import com.vurgun.skyfit.feature.social.components.viewdata.SocialPostItemViewData
@@ -40,7 +39,8 @@ data class FacilityProfileState(
 
 class FacilityProfileViewModel(
     private val userManager: UserManager,
-    private val courseRepository: CourseRepository
+    private val courseRepository: CourseRepository,
+    private val lessonSessionItemViewDataMapper: LessonSessionItemViewDataMapper
 ) : ViewModel() {
 
     private val _profileState = MutableStateFlow<FacilityProfileState>(FacilityProfileState())
@@ -80,24 +80,21 @@ class FacilityProfileViewModel(
 
         viewModelScope.launch {
 
-            val items = courseRepository.getLessons(user?.gymId!!, LocalDate.now().toString(), null)
-                .map {lessons ->
-                    lessons.map {
-                        LessonSessionItemViewData(
-                            iconId = SkyFitAsset.SkyFitIcon.PUSH_UP.id,
-                            title = it.typeName,
-                            trainer = "${it.name} ${it.surname}",
-                            date = it.startDate,
-                            hours = "${it.startTime} ${it.endTime}",
-                            note = it.trainerNote,
-                            location = it.gymName,
-                            category = "Group Fitness",
-                        )
+            val gymId = userManager.user.value?.gymId
+            //TODO: Fail if not available gymId
+
+            val items = courseRepository.getLessons(gymId!!, LocalDate.now().toString(), null)
+                .map { lessons ->
+                    lessons
+                        .sortedBy { it.startDateTime }
+                        .take(5)
+                        .map {
+                        lessonSessionItemViewDataMapper.map(it, user?.gymAddress)
                     }
                 }.getOrElse { emptyList() }
 
             val lessonsColumViewData = LessonSessionColumnViewData(
-                iconId = SkyFitAsset.SkyFitIcon.EXERCISES.id,
+                iconId = SkyFitAsset.SkyFitIcon.EXERCISES.resId,
                 title = "Özel Dersler",
                 items = items
             )

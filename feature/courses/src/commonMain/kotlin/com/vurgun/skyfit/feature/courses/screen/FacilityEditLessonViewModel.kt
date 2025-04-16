@@ -3,14 +3,20 @@ package com.vurgun.skyfit.feature.courses.screen
 import androidx.lifecycle.ViewModel
 import com.vurgun.skyfit.data.core.domain.model.CalendarRecurrence
 import com.vurgun.skyfit.data.core.utility.now
+import com.vurgun.skyfit.data.courses.domain.model.Lesson
+import com.vurgun.skyfit.data.courses.domain.repository.CourseRepository
 import com.vurgun.skyfit.feature.courses.component.SelectableTrainerMenuItemModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.update
+import kotlinx.datetime.Instant
 import kotlinx.datetime.LocalDate
+import kotlinx.datetime.LocalDateTime
+import kotlinx.datetime.TimeZone
+import kotlinx.datetime.toInstant
 
 data class FacilityEditLessonViewState(
-    val iconId: String = "ic_push_up",
+    val iconId: Int = 1,
     val title: String? = null,
     val trainers: List<SelectableTrainerMenuItemModel> = fakeTrainerMenuItems,
     val trainerNote: String? = null,
@@ -20,11 +26,11 @@ data class FacilityEditLessonViewState(
     val endTime: String = "08:30",
     val recurrence: CalendarRecurrence = CalendarRecurrence.Never,
     val isAppointmentMandatory: Boolean = false,
-    val cost: Double? = null,
+    val cost: Int? = null,
     val capacity: Int = 5,
     val cancelDurationHour: Int = 24,
     val isSaveButtonEnabled: Boolean = false,
-    val showCancelDialog: Boolean = true
+    val showCancelDialog: Boolean = false
 )
 
 // Simulated
@@ -61,12 +67,39 @@ private val fakeTrainerMenuItems = listOf<SelectableTrainerMenuItemModel>(
     )
 )
 
-class FacilityEditLessonViewModel : ViewModel() {
+class FacilityEditLessonViewModel(
+    private val courseRepository: CourseRepository
+) : ViewModel() {
 
     private var initialState: FacilityEditLessonViewState = FacilityEditLessonViewState()
 
     private val _uiState = MutableStateFlow(initialState)
     val uiState: StateFlow<FacilityEditLessonViewState> = _uiState
+
+
+    fun loadLesson(lesson: Lesson? = null) {
+        if (lesson != null) {
+            _uiState.update {
+
+                val cancelPeriod = getLastCancelDurationHours(lesson.startDateTime, lesson.lastCancelableAt)
+                it.copy(
+                    iconId = lesson.iconId,
+                    title = lesson.title,
+                    trainerNote = lesson.trainerNote,
+                    startDate = lesson.startDate,
+                    endDate = lesson.endDate,
+                    startTime = lesson.startTime.toString(),
+                    endTime = lesson.endTime.toString(),
+                    cost = lesson.price,
+                    isAppointmentMandatory = lesson.price > 0,
+                    cancelDurationHour = cancelPeriod.toInt(),
+                    capacity = lesson.capacityRatio.substringAfter("/").toIntOrNull() ?: 1,
+                )
+            }
+        } else {
+            //TODO: CLEAR STATE
+        }
+    }
 
     fun loadClass(facilityId: String, classId: String?) {
 //        val fetchedData = classId?.let { fakeFetchClassData(facilityId, it) }
@@ -84,7 +117,7 @@ class FacilityEditLessonViewModel : ViewModel() {
         }
     }
 
-    fun updateIcon(icon: String) {
+    fun updateIcon(icon: Int) {
         _uiState.update { it.copy(iconId = icon) }
         checkIfModified()
     }
@@ -147,7 +180,7 @@ class FacilityEditLessonViewModel : ViewModel() {
         checkIfModified()
     }
 
-    fun updateCost(amount: Double) {
+    fun updateCost(amount: Int) {
         _uiState.update { it.copy(cost = amount) }
         checkIfModified()
     }
@@ -156,19 +189,14 @@ class FacilityEditLessonViewModel : ViewModel() {
         _uiState.update { it.copy(showCancelDialog = show) }
     }
 
-    private fun fakeFetchClassData(facilityId: String, classId: String): FacilityEditLessonViewState {
-        return FacilityEditLessonViewState(
-            title = "Example Class",
-            trainerNote = "Be sure to stretch before class!",
-            startDate = LocalDate(2024, 12, 24),
-            endDate = LocalDate(2024, 12, 24),
-            startTime = "09:00",
-            endTime = "10:30",
-            capacity = 10,
-            isAppointmentMandatory = false,
-            cost = 50.0,
-            isSaveButtonEnabled = false,
-            showCancelDialog = false
-        )
+    private fun getLastCancelDurationHours(
+        startDateTime: LocalDateTime,
+        lastCancelableAt: Instant,
+    ): Long {
+        val utc = TimeZone.UTC
+        val startInstant = startDateTime.toInstant(utc)
+        val duration = startInstant - lastCancelableAt
+        val hours = duration.inWholeHours
+        return hours
     }
 }

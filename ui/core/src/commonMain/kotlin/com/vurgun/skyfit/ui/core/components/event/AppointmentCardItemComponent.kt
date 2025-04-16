@@ -22,8 +22,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.vurgun.skyfit.ui.core.components.special.SkyFitCheckBoxComponent
+import com.vurgun.skyfit.ui.core.styling.SkyFitAsset
 import com.vurgun.skyfit.ui.core.styling.SkyFitColor
-import com.vurgun.skyfit.ui.core.styling.SkyFitIcon
 import com.vurgun.skyfit.ui.core.styling.SkyFitTypography
 import org.jetbrains.compose.resources.DrawableResource
 import org.jetbrains.compose.resources.painterResource
@@ -39,7 +39,7 @@ import skyfit.ui.core.generated.resources.ic_profile
 import skyfit.ui.core.generated.resources.logo_skyfit
 
 data class AppointmentCardViewData(
-    val iconId: String,
+    val iconId: Int,
     val title: String,
     val date: String,
     val hours: String,
@@ -69,7 +69,7 @@ fun AppointmentCardItemComponent(item: AppointmentCardViewData, modifier: Modifi
 
         Row(Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
             Icon(
-                painter = SkyFitIcon.getIconResourcePainter(item.iconId, Res.drawable.ic_exercises),
+                painter = SkyFitAsset.getPainter(iconId = item.iconId),
                 contentDescription = "Exercise",
                 tint = SkyFitColor.icon.default,
                 modifier = Modifier.size(24.dp)

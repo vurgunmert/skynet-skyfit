@@ -23,7 +23,7 @@ fun MobileUserHomeScreen(
     goToProfile: () -> Unit,
     goToActivityCalendar: () -> Unit,
     goToAppointments: () -> Unit,
-    viewModel: HomeViewModel = koinViewModel()
+    viewModel: UserHomeViewModel = koinViewModel()
 ) {
     val characterType = viewModel.characterType.collectAsState(null).value
 
@@ -50,6 +50,7 @@ fun MobileUserHomeScreen(
             }
 
             MobileDashboardHomeUpcomingAppointmentsComponent(
+                appointments = viewModel.appointments,
                 onClickShowAll = goToAppointments
             )
         }

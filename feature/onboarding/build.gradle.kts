@@ -38,9 +38,6 @@ kotlin {
             implementation(libs.koin.core)
             implementation(libs.bundles.koin.compose)
 
-            implementation(libs.precompose)
-            implementation(libs.precompose.koin)
-
             implementation(libs.kotlinx.serialization)
         }
     }

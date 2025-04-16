@@ -44,7 +44,7 @@ private fun EventItemColumn(
 @Composable
 fun BasicActivityCalendarEventItem(
     title: String,
-    iconId: String?,
+    iconId: Int?,
     timePeriod: String,
     enabled: Boolean = true
 ) {
@@ -58,7 +58,7 @@ fun BasicActivityCalendarEventItem(
 @Composable
 fun BookedActivityCalendarEventItem(
     title: String,
-    iconId: String,
+    iconId: Int,
     date: String,
     timePeriod: String,
     location: String,
@@ -85,7 +85,7 @@ fun BookedActivityCalendarEventItem(
 @Composable
 fun PaidActivityCalendarEventItem(
     title: String,
-    iconId: String,
+    iconId: Int,
     date: String,
     timePeriod: String,
     location: String,
@@ -117,7 +117,7 @@ fun PaidActivityCalendarEventItem(
 @Composable
 fun AvailableActivityCalendarEventItem(
     title: String,
-    iconId: String,
+    iconId: Int,
     date: String,
     timePeriod: String,
     location: String,
@@ -158,7 +158,7 @@ fun AvailableActivityCalendarEventItem(
 @Composable
 fun BasicAppointmentEventItem(
     title: String,
-    iconId: String,
+    iconId: Int,
     date: String,
     timePeriod: String,
     location: String,
@@ -172,7 +172,7 @@ fun BasicAppointmentEventItem(
 @Composable
 fun ActiveAppointmentEventItem(
     title: String,
-    iconId: String,
+    iconId: Int,
     date: String,
     timePeriod: String,
     location: String,
@@ -198,7 +198,7 @@ fun ActiveAppointmentEventItem(
 @Composable
 fun AttendanceAppointmentEventItem(
     title: String,
-    iconId: String,
+    iconId: Int,
     date: String,
     timePeriod: String,
     location: String,
@@ -226,7 +226,7 @@ fun AttendanceAppointmentEventItem(
 @Composable
 fun BasicLessonEventItem(
     title: String,
-    iconId: String,
+    iconId: Int,
     date: String,
     timePeriod: String,
     location: String,
@@ -250,7 +250,7 @@ fun BasicLessonEventItem(
 @Composable
 fun DetailedLessonEventItem(
     title: String,
-    iconId: String,
+    iconId: Int,
     date: String,
     timePeriod: String,
     category: String,
@@ -279,7 +279,7 @@ fun DetailedLessonEventItem(
 @Composable
 fun EditableLessonEventItem(
     title: String,
-    iconId: String,
+    iconId: Int,
     date: String,
     timePeriod: String,
     location: String,

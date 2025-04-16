@@ -13,7 +13,7 @@ private fun Preview_BasicActivityCalendar_Disabled() {
     PreviewBox {
         BasicActivityCalendarEventItem(
             title = "Shoulders and Abs",
-            iconId = "ic_push_up",
+            iconId = 1,
             timePeriod = "08:00 - 09:00",
             enabled = false
         )
@@ -26,7 +26,7 @@ private fun Preview_BasicActivityCalendar_Enabled() {
     PreviewBox {
         BasicActivityCalendarEventItem(
             title = "Shoulders and Abs",
-            iconId = "ic_push_up",
+            iconId = 2,
             timePeriod = "08:00 - 09:00",
             enabled = true
         )
@@ -39,7 +39,7 @@ private fun Preview_BookedActivityCalendar_Disabled() {
     PreviewBox {
         BookedActivityCalendarEventItem(
             title = "Shoulders and Abs",
-            iconId = "ic_push_up",
+            iconId =3,
             date = "30/11/2024",
             timePeriod = "08:00 - 09:00",
             location = "@ironstudio",
@@ -56,7 +56,7 @@ private fun Preview_BookedActivityCalendar_Enabled() {
     PreviewBox {
         BookedActivityCalendarEventItem(
             title = "Shoulders and Abs",
-            iconId = "ic_push_up",
+            iconId = 4,
             date = "30/11/2024",
             timePeriod = "08:00 - 09:00",
             location = "@ironstudio",
@@ -73,7 +73,7 @@ private fun Preview_AvailableActivityCalendar() {
     PreviewBox {
         AvailableActivityCalendarEventItem(
             title = "Shoulders and Abs",
-            iconId = "ic_push_up",
+            iconId = 3,
             date = "30/11/2024",
             timePeriod = "08:00 - 09:00",
             location = "@ironstudio",
@@ -90,7 +90,7 @@ private fun Preview_AvailableActivityCalendar_Full() {
     PreviewBox {
         AvailableActivityCalendarEventItem(
             title = "Shoulders and Abs",
-            iconId = "ic_push_up",
+            iconId = 3,
             date = "30/11/2024",
             timePeriod = "08:00 - 09:00",
             location = "@ironstudio",
@@ -108,7 +108,7 @@ private fun Preview_AvailableActivityCalendar_FullNotify() {
     PreviewBox {
         AvailableActivityCalendarEventItem(
             title = "Shoulders and Abs",
-            iconId = "ic_push_up",
+            iconId = 3,
             date = "30/11/2024",
             timePeriod = "08:00 - 09:00",
             location = "@ironstudio",
@@ -128,7 +128,7 @@ private fun Preview_PaidActivityCalendar() {
     PreviewBox {
         PaidActivityCalendarEventItem(
             title = "Shoulders and Abs",
-            iconId = "ic_push_up",
+            iconId = 3,
             date = "30/11/2024",
             timePeriod = "08:00 - 09:00",
             location = "@ironstudio",

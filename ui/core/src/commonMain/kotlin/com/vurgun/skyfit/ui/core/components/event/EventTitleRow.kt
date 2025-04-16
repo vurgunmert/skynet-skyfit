@@ -24,7 +24,7 @@ import skyfit.ui.core.generated.resources.lesson_status_missing
 fun EventTitleRow(
     title: String,
     modifier: Modifier = Modifier,
-    iconId: String? = null,
+    iconId: Int? = null,
     endContent: (@Composable RowScope.() -> Unit)? = null
 ) {
     Row(
@@ -33,7 +33,7 @@ fun EventTitleRow(
         horizontalArrangement = Arrangement.spacedBy(8.dp)
     ) {
 
-        iconId.takeUnless { it.isNullOrEmpty() }?.let { iconId ->
+        iconId?.let { iconId ->
             Icon(
                 painter = SkyFitAsset.getPainter(iconId),
                 contentDescription = title,
@@ -52,21 +52,21 @@ fun EventTitleRow(
 }
 
 @Composable
-fun BasicActivityEventTitleRow(title: String, iconId: String? = null, timePeriod: String) {
+fun BasicActivityEventTitleRow(title: String, iconId: Int? = null, timePeriod: String) {
     EventTitleRow(title = title, iconId = iconId, endContent = {
         EventBadge(value = timePeriod)
     })
 }
 
 @Composable
-fun BookedActivityEventTitleRow(title: String, iconId: String? = null, timePeriod: String) {
+fun BookedActivityEventTitleRow(title: String, iconId: Int? = null, timePeriod: String) {
     EventTitleRow(title = title, iconId = iconId, endContent = {
         EventBadge(value = timePeriod)
     })
 }
 
 @Composable
-fun AvailableActivityEventTitleRow(title: String, iconId: String? = null, date: String, capacity: String, isFull: Boolean) {
+fun AvailableActivityEventTitleRow(title: String, iconId: Int? = null, date: String, capacity: String, isFull: Boolean) {
     EventTitleRow(title = title, iconId = iconId, endContent = {
         BodySmallRegularText(text = date)
         EventBadge(value = capacity, state = if (isFull) BadgeState.Warning else BadgeState.Default)
@@ -74,14 +74,14 @@ fun AvailableActivityEventTitleRow(title: String, iconId: String? = null, date: 
 }
 
 @Composable
-fun BasicAppointmentEventTitleRow(title: String, iconId: String? = null, date: String) {
+fun BasicAppointmentEventTitleRow(title: String, iconId: Int? = null, date: String) {
     EventTitleRow(title = title, iconId = iconId, endContent = {
         BodyMediumSemiboldText(text = date)
     })
 }
 
 @Composable
-fun ActiveAppointmentEventTitleRow(title: String, iconId: String? = null, date: String, onDelete: () -> Unit) {
+fun ActiveAppointmentEventTitleRow(title: String, iconId: Int? = null, date: String, onDelete: () -> Unit) {
     EventTitleRow(title = title, iconId = iconId, endContent = {
         BodyMediumSemiboldText(text = date, color = SkyFitColor.text.secondary)
         CircularDeleteIcon(onClick = onDelete)
@@ -89,7 +89,7 @@ fun ActiveAppointmentEventTitleRow(title: String, iconId: String? = null, date: 
 }
 
 @Composable
-fun AttendanceAppointmentEventTitleRow(title: String, iconId: String? = null, date: String, isCompleted: Boolean = false) {
+fun AttendanceAppointmentEventTitleRow(title: String, iconId: Int? = null, date: String, isCompleted: Boolean = false) {
     EventTitleRow(title = title, iconId = iconId, endContent = {
         BodyMediumSemiboldText(text = date, color = SkyFitColor.text.secondary)
         if (isCompleted) {

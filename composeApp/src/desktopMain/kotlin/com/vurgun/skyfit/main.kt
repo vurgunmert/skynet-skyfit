@@ -6,7 +6,6 @@ import com.vurgun.skyfit.data.core.storage.LocalSettingsStore
 import com.vurgun.skyfit.data.core.storage.provideLocalSettings
 import com.vurgun.skyfit.feature_navigation.SkyFitApp
 import com.vurgun.skyfit.ui.core.styling.LocalDimensions
-import moe.tlaster.precompose.ProvidePreComposeLocals
 import org.koin.dsl.module
 import java.awt.Dimension
 
@@ -19,12 +18,10 @@ fun main() = application {
         val localDimens = LocalDimensions.current
         window.minimumSize = Dimension(localDimens.desktopMinWidthPx, localDimens.desktopMinHeightPx)
 
-        ProvidePreComposeLocals {
-            SkyFitApp(
-                platformModule = module {
-                    single<LocalSettingsStore> { provideLocalSettings(null) }
-                }
-            )
-        }
+        SkyFitApp(
+            platformModule = module {
+                single<LocalSettingsStore> { provideLocalSettings(null) }
+            }
+        )
     }
 }

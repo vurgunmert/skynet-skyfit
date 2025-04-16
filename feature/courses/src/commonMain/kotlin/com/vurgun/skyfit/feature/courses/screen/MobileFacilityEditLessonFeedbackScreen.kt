@@ -33,14 +33,15 @@ import skyfit.ui.core.generated.resources.lesson_create_action
 import skyfit.ui.core.generated.resources.lesson_created_message
 
 @Composable
-fun MobileFacilityEditLessonFeedbackScreen(
-    goToBack: () -> Unit,
+fun MobileFacilityCreatedLessonScreen(
+    goToListing: () -> Unit,
     goToNewLesson: () -> Unit,
     goToDashboard: () -> Unit,
+    viewModel: FacilityEditLessonViewModel
 ) {
 
     val item = AppointmentCardViewData(
-        iconId = "ic_push_up",
+        iconId = 1,
         title = "Shoulders and Abs",
         date = "30/11/2024",
         hours = "08:00 - 09:00",
@@ -69,7 +70,7 @@ fun MobileFacilityEditLessonFeedbackScreen(
             Spacer(Modifier.height(24.dp))
 
             MobileFacilityClassEditCompletedActionGroup(
-                onBackToLessons = goToBack,
+                onBackToLessons = goToListing,
                 onCreateLesson = goToNewLesson,
                 onGoToHome = goToDashboard
             )

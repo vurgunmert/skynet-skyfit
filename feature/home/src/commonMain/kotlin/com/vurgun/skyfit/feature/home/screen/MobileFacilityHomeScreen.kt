@@ -18,6 +18,7 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -25,16 +26,21 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.vurgun.skyfit.feature.home.component.MobileDashboardHomeToolbarComponent
 import com.vurgun.skyfit.feature.home.component.MobileDashboardHomeUpcomingAppointmentsComponent
 import com.vurgun.skyfit.ui.core.styling.SkyFitColor
+import org.koin.compose.viewmodel.koinViewModel
 
 @Composable
 fun MobileFacilityHomeScreen(
     goToCourses: () -> Unit,
     goToNotifications: () -> Unit,
     goToMessages: () -> Unit,
+    viewModel: FacilityHomeViewModel = koinViewModel(key = "FacilityHome")
 ) {
+
+    val appointments by viewModel.appointments.collectAsStateWithLifecycle()
 
     Scaffold(
         backgroundColor = SkyFitColor.background.default,
@@ -50,13 +56,16 @@ fun MobileFacilityHomeScreen(
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {
 
-            MobileDashboardHomeFacilityStatisticsComponent()
-
-            MobileDashboardHomeFacilityNoClassComponent(
-                onClick = goToCourses
-            )
-
-            MobileDashboardHomeUpcomingAppointmentsComponent()
+            if (appointments.isEmpty()) {
+                MobileDashboardHomeFacilityNoClassComponent(
+                    onClick = goToCourses
+                )
+            } else {
+                MobileDashboardHomeUpcomingAppointmentsComponent(
+                    appointments = appointments,
+                    onClickShowAll = goToCourses
+                )
+            }
 
             Spacer(Modifier.height(128.dp))
         }

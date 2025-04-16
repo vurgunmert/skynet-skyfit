@@ -62,29 +62,29 @@ class SkyFitUserProfileViewModel : ViewModel() {
             showInfoMini = false
         )
 
-        val appointmentsViewData = listOf(
-            LessonSessionItemViewData(
-                iconId = SkyFitAsset.SkyFitIcon.PUSH_UP.id,
-                title = "Fonksiyonel hareket ve esneklik geliştirme",
-                duration = "60 dakika",
-                date = "18/11/2024",
-                hours = "08:00 - 09:00",
-                location = "@ironstudio",
-                trainer = "Micheal Blake"
-            ),
-            LessonSessionItemViewData(
-                iconId = SkyFitAsset.SkyFitIcon.BICEPS_FORCE.id,
-                title = "Kişisel kuvvet antrenmanı",
-                date = "18/11/2024",
-                hours = "08:00 - 09:00",
-                duration = "60 dakika",
-                location = "@ironstudio",
-                trainer = "Micheal Blake"
-            )
+        val appointmentsViewData = listOf<LessonSessionItemViewData>(
+//            LessonSessionItemViewData(
+//                iconId = SkyFitAsset.SkyFitIcon.PUSH_UP.resId,
+//                title = "Fonksiyonel hareket ve esneklik geliştirme",
+//                duration = "60 dakika",
+//                date = "18/11/2024",
+//                hours = "08:00 - 09:00",
+//                location = "@ironstudio",
+//                trainer = "Micheal Blake"
+//            ),
+//            LessonSessionItemViewData(
+//                iconId = SkyFitAsset.SkyFitIcon.BICEPS_FORCE.resId,
+//                title = "Kişisel kuvvet antrenmanı",
+//                date = "18/11/2024",
+//                hours = "08:00 - 09:00",
+//                duration = "60 dakika",
+//                location = "@ironstudio",
+//                trainer = "Micheal Blake"
+//            )
         )
 
         val appointmentsColumnViewData = LessonSessionColumnViewData(
-            iconId = SkyFitAsset.SkyFitIcon.EXERCISES.id,
+            iconId = SkyFitAsset.SkyFitIcon.EXERCISES.resId,
             title = "Randevularım",
             items = appointmentsViewData
         )
@@ -92,25 +92,25 @@ class SkyFitUserProfileViewModel : ViewModel() {
         val photoDiaryViewData = PhotoGalleryStackViewData()
 
         val exercisesViewData = listOf(
-            LifestyleActionItemViewData(SkyFitAsset.SkyFitIcon.PUSH_UP.id, "Şınav"),
-            LifestyleActionItemViewData(SkyFitAsset.SkyFitIcon.YOGA.id, "Yoga"),
-            LifestyleActionItemViewData(SkyFitAsset.SkyFitIcon.PULL_UP_BAR.id, "Pull up"),
-            LifestyleActionItemViewData(SkyFitAsset.SkyFitIcon.SIT_UP.id, "Mekik"),
-            LifestyleActionItemViewData(SkyFitAsset.SkyFitIcon.JUMPING_ROPE.id, "İp atlama")
+            LifestyleActionItemViewData(SkyFitAsset.SkyFitIcon.PUSH_UP.resId, "Şınav"),
+            LifestyleActionItemViewData(SkyFitAsset.SkyFitIcon.YOGA.resId, "Yoga"),
+            LifestyleActionItemViewData(SkyFitAsset.SkyFitIcon.PULL_UP_BAR.resId, "Pull up"),
+            LifestyleActionItemViewData(SkyFitAsset.SkyFitIcon.SIT_UP.resId, "Mekik"),
+            LifestyleActionItemViewData(SkyFitAsset.SkyFitIcon.JUMPING_ROPE.resId, "İp atlama")
         )
         val exercisesRowViewData = LifestyleActionRowViewData(
-            iconId = SkyFitAsset.SkyFitIcon.CLOCK.id,
+            iconId = SkyFitAsset.SkyFitIcon.CLOCK.resId,
             title = "Egzersiz Geçmişi",
             items = exercisesViewData
         )
 
         val habitsViewData = listOf(
-            LifestyleActionItemViewData(SkyFitAsset.SkyFitIcon.SLEEP.id, "Düzensiz Uyku"),
-            LifestyleActionItemViewData(SkyFitAsset.SkyFitIcon.FAST_FOOD.id, "Fast Food"),
-            LifestyleActionItemViewData(SkyFitAsset.SkyFitIcon.SMOKING.id, "Smoking")
+            LifestyleActionItemViewData(SkyFitAsset.SkyFitIcon.SLEEP.resId, "Düzensiz Uyku"),
+            LifestyleActionItemViewData(SkyFitAsset.SkyFitIcon.FAST_FOOD.resId, "Fast Food"),
+            LifestyleActionItemViewData(SkyFitAsset.SkyFitIcon.SMOKING.resId, "Smoking")
         )
         val habitsRowViewData = LifestyleActionRowViewData(
-            iconId = SkyFitAsset.SkyFitIcon.YOGA.id,
+            iconId = SkyFitAsset.SkyFitIcon.YOGA.resId,
             title = "Alışkanlıklar",
             items = habitsViewData
         )

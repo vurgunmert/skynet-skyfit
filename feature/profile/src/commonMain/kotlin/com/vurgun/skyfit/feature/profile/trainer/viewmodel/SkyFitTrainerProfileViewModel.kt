@@ -32,49 +32,49 @@ class SkyFitTrainerProfileViewModel : ViewModel() {
         loadProfileData()
         _posts.value = fakePosts
 
-        val specialtiesViewData = listOf(
-            LifestyleActionItemViewData(SkyFitAsset.SkyFitIcon.PUSH_UP.id, "Fonksiyonel Antrenman"),
-            LifestyleActionItemViewData(SkyFitAsset.SkyFitIcon.BICEPS_FORCE.id, "Kuvvet ve Kondisyon"),
-            LifestyleActionItemViewData(SkyFitAsset.SkyFitIcon.FAST_FOOD.id, "Beslenme Danışmanlığı"),
-            LifestyleActionItemViewData(SkyFitAsset.SkyFitIcon.PULL_UP_BAR.id, "Atletik Performans Geliştirme")
-        )
-
-        _specialtiesRowViewData.value = LifestyleActionRowViewData(
-            iconId = SkyFitAsset.SkyFitIcon.TROPHY.id, // Medal Icon for Specialties
-            title = "Uzmanlık Alanları",
-            items = specialtiesViewData,
-            iconSizePx = 48
-        )
-
-        val privateLessonsViewData = listOf(
-            LessonSessionItemViewData(
-                iconId = SkyFitAsset.SkyFitIcon.PUSH_UP.id,
-                title = "Shoulders and Abs",
-                hours = "08:00 - 09:00",
-                trainer = "Micheal Blake",
-                category = "Group Fitness"
-            ),
-            LessonSessionItemViewData(
-                iconId = SkyFitAsset.SkyFitIcon.HIGH_INTENSITY_TRAINING.id,
-                title = "Reformer Pilates",
-                hours = "09:00 - 10:00",
-                category = "Pilates"
-            ),
-            LessonSessionItemViewData(
-                iconId = SkyFitAsset.SkyFitIcon.BICEPS_FORCE.id,
-                title = "Fitness",
-                hours = "10:00 - 11:00",
-                trainer = "Sarah L.",
-                category = "PT",
-                note = "Try to arrive 5-10 minutes early to warm up and settle in before the class starts."
-            )
-        )
-
-        _lessonsColumViewData.value = LessonSessionColumnViewData(
-            iconId = SkyFitAsset.SkyFitIcon.EXERCISES.id,
-            title = "Özel Dersler",
-            items = privateLessonsViewData
-        )
+//        val specialtiesViewData = listOf(
+//            LifestyleActionItemViewData(SkyFitAsset.SkyFitIcon.PUSH_UP.id, "Fonksiyonel Antrenman"),
+//            LifestyleActionItemViewData(SkyFitAsset.SkyFitIcon.BICEPS_FORCE.id, "Kuvvet ve Kondisyon"),
+//            LifestyleActionItemViewData(SkyFitAsset.SkyFitIcon.FAST_FOOD.id, "Beslenme Danışmanlığı"),
+//            LifestyleActionItemViewData(SkyFitAsset.SkyFitIcon.PULL_UP_BAR.id, "Atletik Performans Geliştirme")
+//        )
+//
+//        _specialtiesRowViewData.value = LifestyleActionRowViewData(
+//            iconId = SkyFitAsset.SkyFitIcon.TROPHY.id, // Medal Icon for Specialties
+//            title = "Uzmanlık Alanları",
+//            items = specialtiesViewData,
+//            iconSizePx = 48
+//        )
+//
+//        val privateLessonsViewData = listOf(
+//            LessonSessionItemViewData(
+//                iconId = SkyFitAsset.SkyFitIcon.PUSH_UP.id,
+//                title = "Shoulders and Abs",
+//                hours = "08:00 - 09:00",
+//                trainer = "Micheal Blake",
+//                category = "Group Fitness"
+//            ),
+//            LessonSessionItemViewData(
+//                iconId = SkyFitAsset.SkyFitIcon.HIGH_INTENSITY_TRAINING.id,
+//                title = "Reformer Pilates",
+//                hours = "09:00 - 10:00",
+//                category = "Pilates"
+//            ),
+//            LessonSessionItemViewData(
+//                iconId = SkyFitAsset.SkyFitIcon.BICEPS_FORCE.id,
+//                title = "Fitness",
+//                hours = "10:00 - 11:00",
+//                trainer = "Sarah L.",
+//                category = "PT",
+//                note = "Try to arrive 5-10 minutes early to warm up and settle in before the class starts."
+//            )
+//        )
+//
+//        _lessonsColumViewData.value = LessonSessionColumnViewData(
+//            iconId = SkyFitAsset.SkyFitIcon.EXERCISES.id,
+//            title = "Özel Dersler",
+//            items = privateLessonsViewData
+//        )
     }
 
 

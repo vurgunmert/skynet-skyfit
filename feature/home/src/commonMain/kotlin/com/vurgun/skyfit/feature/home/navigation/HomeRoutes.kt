@@ -17,6 +17,7 @@ fun HomeRoot(
     goToProfile: () -> Unit,
     goToActivityCalendar: () -> Unit,
     goToAppointments: () -> Unit,
+    goToFacilityCourses: () -> Unit,
 ) {
     when (userRole) {
         is UserRole.User -> MobileUserHomeScreen(
@@ -36,7 +37,7 @@ fun HomeRoot(
         )
 
         is UserRole.Facility -> MobileFacilityHomeScreen(
-            goToCourses = { },
+            goToCourses = goToFacilityCourses,
             goToNotifications = { },
             goToMessages = { }
         )

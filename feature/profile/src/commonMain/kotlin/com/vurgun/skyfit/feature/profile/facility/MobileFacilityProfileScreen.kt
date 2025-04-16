@@ -13,7 +13,6 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
@@ -66,7 +65,7 @@ import skyfit.ui.core.generated.resources.ic_send
 @Composable
 fun MobileFacilityProfileScreen(
     goToBack: () -> Unit,
-    goToManageLessons: () -> Unit,
+    goToCourses: () -> Unit,
     goToSettings: () -> Unit,
     goToCreatePost: () -> Unit,
     goToVisitCalendar: () -> Unit,
@@ -166,20 +165,22 @@ fun MobileFacilityProfileScreen(
                             )
                         }
 
-                        MobileFacilityProfilePhotoGallerySection(
-                            galleryStackViewData, viewMode,
-                            goToPhotoGallery = goToPhotoGallery,
+                        MobileFacilityProfileLessonSection(
+                            lessonSessionColumnViewData = lessonSessionColumnViewData,
+                            viewMode = viewMode,
+                            goToLessons = goToCourses,
+                            goToVisitCalendar = goToVisitCalendar,
+                            modifier = Modifier.padding(horizontal = 16.dp)
                         )
+
+//                        MobileFacilityProfilePhotoGallerySection(
+//                            galleryStackViewData, viewMode,
+//                            goToPhotoGallery = goToPhotoGallery,
+//                        )
 
                         MobileFacilityProfileTrainerSection(
                             trainers, viewMode,
                             goToVisitTrainerProfile = goToVisitTrainerProfile,
-                        )
-
-                        MobileFacilityProfileLessonSection(
-                            lessonSessionColumnViewData, viewMode,
-                            goToLessons = goToManageLessons,
-                            goToVisitCalendar = goToVisitCalendar,
                         )
                     }
 
@@ -376,6 +377,7 @@ private fun MobileFacilityProfileLessonSection(
     viewMode: ProfileViewMode,
     goToLessons: () -> Unit,
     goToVisitCalendar: () -> Unit,
+    modifier: Modifier = Modifier,
 ) {
     if (lessonSessionColumnViewData == null) {
         MobileFacilityLessonsEmptyCard(
@@ -392,7 +394,8 @@ private fun MobileFacilityProfileLessonSection(
                     ProfileViewMode.OWNER -> actionManageLessons.invoke()
                     ProfileViewMode.VISITOR -> actionVisitCalendar.invoke()
                 }
-            }
+            },
+            modifier = modifier
         )
     }
 }

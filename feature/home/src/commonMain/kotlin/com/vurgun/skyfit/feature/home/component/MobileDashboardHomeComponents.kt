@@ -56,8 +56,8 @@ import com.vurgun.skyfit.ui.core.components.special.SkyFitListItemCardComponent
 import com.vurgun.skyfit.ui.core.components.special.SkyFitMonthPickerDropdownComponent
 import com.vurgun.skyfit.ui.core.components.special.UserCharacterComponent
 import com.vurgun.skyfit.ui.core.styling.LocalPadding
+import com.vurgun.skyfit.ui.core.styling.SkyFitAsset
 import com.vurgun.skyfit.ui.core.styling.SkyFitColor
-import com.vurgun.skyfit.ui.core.styling.SkyFitIcon
 import com.vurgun.skyfit.ui.core.styling.SkyFitTypography
 import org.jetbrains.compose.resources.DrawableResource
 import org.jetbrains.compose.resources.painterResource
@@ -364,11 +364,7 @@ fun MobileDashboardHomeActivityHourlyCalendarComponent(
 
 @Composable
 fun MobileDashboardHomeUpcomingAppointmentsComponent(
-    appointments: List<HomeAppointmentComponentItem> = listOf(
-        HomeAppointmentComponentItem("ic_biceps_force", "Kişisel kuvvet antrenmanı", "08:00", "@ironstudio"),
-        HomeAppointmentComponentItem("ic_biceps_force", "Kişisel kuvvet antrenmanı", "08:00", "@ironstudio"),
-        HomeAppointmentComponentItem("ic_biceps_force", "Kişisel kuvvet antrenmanı", "08:00", "@ironstudio")
-    ),
+    appointments: List<HomeAppointmentItemViewData>,
     onClickShowAll: () -> Unit = {}
 ) {
 
@@ -404,8 +400,10 @@ fun MobileDashboardHomeUpcomingAppointmentsComponent(
 }
 
 @Composable
-private fun MobileDashboardHomeAppointmentCard(appointment: HomeAppointmentComponentItem,
-                                               onClick: () -> Unit = {}) {
+private fun MobileDashboardHomeAppointmentCard(
+    appointment: HomeAppointmentItemViewData,
+    onClick: () -> Unit = {}
+) {
     SkyFitListItemCardComponent(
         modifier = Modifier
             .fillMaxWidth()
@@ -419,8 +417,9 @@ private fun MobileDashboardHomeAppointmentCard(appointment: HomeAppointmentCompo
                 .padding(16.dp),
             contentAlignment = Alignment.Center
         ) {
+
             Icon(
-                painter = SkyFitIcon.getIconResourcePainter(appointment.iconId, Res.drawable.ic_exercises),
+                painter = SkyFitAsset.getPainter(appointment.iconId),
                 contentDescription = "Activity",
                 tint = SkyFitColor.icon.default,
                 modifier = Modifier.size(24.dp)
@@ -471,14 +470,6 @@ private fun MobileDashboardHomeAppointmentCard(appointment: HomeAppointmentCompo
         )
     }
 }
-
-data class HomeAppointmentComponentItem(
-    val iconId: String,
-    val title: String,
-    val time: String,
-    val location: String
-)
-
 
 @Composable
 fun MobileDashboardHomeGeneralStatisticsComponent() {
@@ -829,7 +820,6 @@ private fun MobileDashboardHomeProgressGridItemCard(item: HomeGridProgressItem) 
 }
 
 
-
 private data class HomeGridProgressItem(
     val iconRes: DrawableResource,
     val title: String,
@@ -866,7 +856,7 @@ private fun MobileDashboardHomeExerciseCard(goal: HomeExerciseComponentItem) {
     val backgroundColor = if (goal.isCompleted) SkyFitColor.background.surfaceSecondary else SkyFitColor.specialty.buttonBgRest
     val textColor = if (goal.isCompleted) SkyFitColor.text.default else SkyFitColor.text.inverse
     Box(
-        Modifier .background(backgroundColor, RoundedCornerShape(16.dp))
+        Modifier.background(backgroundColor, RoundedCornerShape(16.dp))
     ) {
         Icon(
             painter = painterResource(Res.drawable.ic_tool_illustration),

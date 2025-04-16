@@ -28,42 +28,37 @@ import com.vurgun.skyfit.ui.core.components.special.ButtonVariant
 import com.vurgun.skyfit.ui.core.components.special.SkyFitButtonComponent
 import com.vurgun.skyfit.ui.core.components.special.SkyFitScreenHeader
 import com.vurgun.skyfit.ui.core.components.special.SkyFitTextInputComponent
-import com.vurgun.skyfit.feature_navigation.MobileNavRoute
-import com.vurgun.skyfit.feature_navigation.jumpAndStay
 import com.vurgun.skyfit.ui.core.styling.SkyFitColor
 import com.vurgun.skyfit.ui.core.styling.SkyFitTypography
-import moe.tlaster.precompose.navigation.NavHost
-import moe.tlaster.precompose.navigation.Navigator
-import moe.tlaster.precompose.navigation.rememberNavigator
 import org.jetbrains.compose.resources.painterResource
 import skyfit.ui.core.generated.resources.Res
 import skyfit.ui.core.generated.resources.logo_skyfit
 
 @Composable
-fun MobileUserMealDetailAddScreen(rootNavigator: Navigator) {
+fun MobileUserMealDetailAddScreen() {
 
-    val userMealDetailAddViewModel: Any = 1
-    val detailNavigator = rememberNavigator()
-
-    val onComplete: () -> Unit = {
-        rootNavigator.popBackStack()
-    }
-
-    NavHost(
-        navigator = detailNavigator,
-        initialRoute = MobileNavRoute.UserMealDetailAdd.route
-    ) {
-        scene(MobileNavRoute.UserMealDetailAdd.route) {
-            MobileUserMealDetailAddInputScreen(
-                onClickBack = { rootNavigator.popBackStack() },
-                onClickCapturePhoto = { detailNavigator.jumpAndStay(MobileNavRoute.UserMealDetailAddPhoto) },
-                onClickSave = { rootNavigator.navigate(MobileNavRoute.DashboardNutrition.route) }
-            )
-        }
-        scene(MobileNavRoute.UserMealDetailAddPhoto.route) {
-            MobileUserMealDetailAddPhotoScreen(detailNavigator)
-        }
-    }
+//    val userMealDetailAddViewModel: Any = 1
+//    val detailNavigator = rememberNavigator()
+//
+//    val onComplete: () -> Unit = {
+//        rootNavigator.popBackStack()
+//    }
+//
+//    NavHost(
+//        navigator = detailNavigator,
+//        initialRoute = MobileNavRoute.UserMealDetailAdd.route
+//    ) {
+//        scene(MobileNavRoute.UserMealDetailAdd.route) {
+//            MobileUserMealDetailAddInputScreen(
+//                onClickBack = { rootNavigator.popBackStack() },
+//                onClickCapturePhoto = { detailNavigator.jumpAndStay(MobileNavRoute.UserMealDetailAddPhoto) },
+//                onClickSave = { rootNavigator.navigate(MobileNavRoute.DashboardNutrition.route) }
+//            )
+//        }
+//        scene(MobileNavRoute.UserMealDetailAddPhoto.route) {
+//            MobileUserMealDetailAddPhotoScreen(detailNavigator)
+//        }
+//    }
 }
 
 @Composable

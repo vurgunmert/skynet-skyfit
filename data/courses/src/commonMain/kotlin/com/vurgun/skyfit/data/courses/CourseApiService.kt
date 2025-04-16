@@ -11,7 +11,7 @@ import io.ktor.http.HttpMethod
 
 class CourseApiService(private val apiClient: ApiClient) {
 
-    suspend fun getLessons(gymId: Int, startDate: String, endDate: String?, token: String): ApiResult<List<LessonDTO>> {
+    internal suspend fun getLessons(gymId: Int, startDate: String, endDate: String?, token: String): ApiResult<List<LessonDTO>> {
         val request = GetLessonsRequest(gymId, startDate, endDate)
         return apiClient.safeApiCall<List<LessonDTO>> {
             method = HttpMethod.Post

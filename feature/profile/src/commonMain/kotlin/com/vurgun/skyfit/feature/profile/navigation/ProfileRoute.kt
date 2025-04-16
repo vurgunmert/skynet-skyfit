@@ -12,12 +12,13 @@ import com.vurgun.skyfit.ui.core.screen.UnauthorizedAccessScreen
 @Composable
 fun ProfileRoot(
     userRole: UserRole,
+    goToFacilityCourses: () -> Unit,
     goToSettings: () -> Unit
 ) {
     RequireRole(userRole, listOf(UserRole.User, UserRole.Trainer, UserRole.Facility)) {
         when (userRole) {
             UserRole.Facility -> MobileFacilityProfileScreen(
-                goToManageLessons = { },
+                goToCourses = goToFacilityCourses,
                 goToSettings = goToSettings,
                 goToCreatePost = { },
                 goToVisitCalendar = { },

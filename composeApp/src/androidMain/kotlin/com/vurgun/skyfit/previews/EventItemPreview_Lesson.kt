@@ -13,7 +13,7 @@ private fun Preview_BasicLessonEventItem() {
     PreviewBox {
         BasicLessonEventItem(
             title = "Shoulders and Abs",
-            iconId = "ic_push_up",
+            iconId = 2,
             date = "30/11/2024",
             timePeriod = "08:00 - 09:00",
             location = "@ironstudio",
@@ -29,7 +29,7 @@ private fun Preview_DetailedLessonEventItem() {
     PreviewBox {
         DetailedLessonEventItem(
             title = "Shoulders and Abs",
-            iconId = "ic_push_up",
+            iconId = 2,
             date = "30/11/2024",
             timePeriod = "08:00 - 09:00",
             category = "Group Fitness",
@@ -47,7 +47,7 @@ private fun Preview_EditableLessonEventItem() {
     PreviewBox {
         EditableLessonEventItem(
             title = "Shoulders and Abs",
-            iconId = "ic_push_up",
+            iconId = 2,
             date = "30/11/2024",
             timePeriod = "08:00 - 09:00",
             location = "@ironstudio",

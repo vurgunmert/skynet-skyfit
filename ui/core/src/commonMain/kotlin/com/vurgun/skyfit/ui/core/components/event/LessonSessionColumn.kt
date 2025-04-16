@@ -39,9 +39,9 @@ import skyfit.ui.core.generated.resources.ic_profile_fill
 @Composable
 fun LessonSessionColumn(
     viewData: LessonSessionColumnViewData,
-    modifier: Modifier = Modifier,
     onClickItem: ((LessonSessionItemViewData) -> Unit)? = null,
-    onClickShowAll: (() -> Unit)? = null
+    onClickShowAll: (() -> Unit)? = null,
+    modifier: Modifier = Modifier,
 ) {
     Column(
         modifier.fillMaxWidth()
@@ -81,13 +81,14 @@ fun LessonSessionColumn(
             verticalArrangement = Arrangement.spacedBy(16.dp)
         ) {
             viewData.items.forEach { item ->
-                BasicLessonEventItem(
+                AvailableActivityCalendarEventItem(
                     title = item.title,
                     iconId = item.iconId,
                     date = item.date.toString(),
                     timePeriod = item.hours.toString(),
                     location = item.location.toString(),
                     trainer = item.trainer.toString(),
+                    capacity = item.capacityRatio.toString(),
                     note = item.note
                 )
             }
@@ -104,9 +105,9 @@ fun LessonSessionColumnItem(
     onMenuToggle: ((Boolean) -> Unit)? = null,
     menuContent: (@Composable (() -> Unit))? = null
 ) {
-    val textColor = if (item.enabled) SkyFitColor.text.default else SkyFitColor.text.disabled
-    val subTextColor = if (item.enabled) SkyFitColor.text.secondary else SkyFitColor.text.disabled
-    val iconColor = if (item.enabled) SkyFitColor.icon.default else SkyFitColor.icon.disabled
+    val textColor = if (item.isActive) SkyFitColor.text.default else SkyFitColor.text.disabled
+    val subTextColor = if (item.isActive) SkyFitColor.text.secondary else SkyFitColor.text.disabled
+    val iconColor = if (item.isActive) SkyFitColor.icon.default else SkyFitColor.icon.disabled
 
     Column(
         Modifier.fillMaxWidth()
@@ -153,9 +154,9 @@ fun LessonSessionColumnItem(
                 }
             }
 
-            if (item.enrolledCount != null && item.maxCapacity != null) {
+            item.capacityRatio?.let {
                 Text(
-                    text = "(${item.enrolledCount}/${item.maxCapacity})",
+                    text = it,
                     style = SkyFitTypography.bodyLargeSemibold,
                     modifier = Modifier.padding(start = 8.dp),
                     color = textColor

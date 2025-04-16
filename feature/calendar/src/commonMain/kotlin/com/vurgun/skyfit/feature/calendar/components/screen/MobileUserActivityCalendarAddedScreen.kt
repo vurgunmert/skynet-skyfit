@@ -53,7 +53,7 @@ private fun MobileUserActivityCalendarAddedComponent(
     onClickDashboard: () -> Unit
 ) {
     val appointmentCardItem = AppointmentCardViewData(
-        iconId = "TODO()",
+        iconId = 2,
         title = "Shoulders and Abs",
         date = "30/11/2024",
         hours = "08:00 - 09:00",

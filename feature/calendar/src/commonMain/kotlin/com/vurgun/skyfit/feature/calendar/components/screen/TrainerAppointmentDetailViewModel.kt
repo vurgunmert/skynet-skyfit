@@ -19,7 +19,7 @@ class TrainerAppointmentDetailViewModel : ViewModel() {
         viewModelScope.launch {
             // **Simulate fetching appointment details**
             _appointment.value = AppointmentCardViewData(
-                iconId = "https://example.com/icons/strength.png",
+                iconId = 1,
                 title = "Fitness",
                 date = "30/11/2024",
                 hours = "07:00 - 08:00",
