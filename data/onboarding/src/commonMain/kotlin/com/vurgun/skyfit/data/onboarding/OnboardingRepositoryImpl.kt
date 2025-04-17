@@ -12,10 +12,14 @@ internal class OnboardingRepositoryImpl(
     private val storage: Storage
 ) : OnboardingRepository {
 
-    override suspend fun submitOnboarding(request: OnboardingRequest) = withContext(dispatchers.io) {
+    override suspend fun submitOnboarding(request: OnboardingRequest, isAccountAddition: Boolean) = withContext(dispatchers.io) {
         val token = storage.get(UserRepository.UserAuthToken) ?: return@withContext OnboardingResult.Unauthorized
 
-        when (val response = apiService.onboardUser(request, token)) {
+        val response = when {
+            isAccountAddition -> apiService.onboardingAdditionalAccount(request, token)
+            else -> apiService.onboardNewAccount(request, token)
+        }
+        when (response) {
             is ApiResult.Error -> OnboardingResult.Error(response.message)
             is ApiResult.Exception -> OnboardingResult.Error(response.exception.message)
             is ApiResult.Success -> OnboardingResult.Success

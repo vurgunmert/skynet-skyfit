@@ -1,6 +1,7 @@
 package com.vurgun.skyfit.feature.settings.user
 
 import androidx.lifecycle.ViewModel
+import com.vurgun.skyfit.data.core.domain.manager.UserManager
 import com.vurgun.skyfit.data.core.domain.model.BodyType
 import com.vurgun.skyfit.data.core.domain.model.HeightUnitType
 import com.vurgun.skyfit.data.core.domain.model.WeightUnitType
@@ -24,7 +25,11 @@ data class UserAccountState(
     val isUpdated: Boolean = false
 )
 
-class SkyFitUserAccountSettingsViewModel : ViewModel() {
+class UserAccountSettingsViewModel(
+    private val userManager: UserManager
+) : ViewModel() {
+
+    val hasMultipleAccounts = userManager.accountTypes.value.size > 1
 
     private val _accountState = MutableStateFlow(UserAccountState())
     val accountState: StateFlow<UserAccountState> = _accountState

@@ -32,7 +32,7 @@ object UserDetailMapper {
         return this.map {
             UserAccountType(
                 typeId = it.usertypeId,
-                profilePhoto = it.profilePhoto,
+                profilePhoto = it.profilePhoto, //TODO: probably this one is also path
                 typeName = it.typeName,
                 fullName = it.name
             )

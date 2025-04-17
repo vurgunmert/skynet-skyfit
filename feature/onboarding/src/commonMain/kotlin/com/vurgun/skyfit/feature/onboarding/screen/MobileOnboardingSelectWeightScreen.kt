@@ -13,7 +13,7 @@ import com.vurgun.skyfit.feature.onboarding.component.OnboardingActionGroupCompo
 import com.vurgun.skyfit.feature.onboarding.component.OnboardingStepProgressComponent
 import com.vurgun.skyfit.feature.onboarding.component.OnboardingTitleGroupComponent
 import com.vurgun.skyfit.ui.core.components.picker.WeightAndUnitPicker
-import com.vurgun.skyfit.ui.core.components.special.SkyFitScaffold
+import com.vurgun.skyfit.ui.core.components.special.SkyFitMobileScaffold
 import org.jetbrains.compose.resources.stringResource
 import skyfit.ui.core.generated.resources.Res
 import skyfit.ui.core.generated.resources.onboarding_weight_message
@@ -27,7 +27,7 @@ internal fun MobileOnboardingWeightSelectionScreen(
     val selectedWeight = viewModel.uiState.collectAsState().value.weight ?: 70
     val selectedWeightUnit = viewModel.uiState.collectAsState().value.weightUnit
 
-    SkyFitScaffold {
+    SkyFitMobileScaffold {
         Column(
             modifier = Modifier.fillMaxSize(),
             horizontalAlignment = Alignment.CenterHorizontally,

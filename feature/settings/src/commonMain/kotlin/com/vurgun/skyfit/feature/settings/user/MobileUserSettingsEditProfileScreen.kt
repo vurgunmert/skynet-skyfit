@@ -49,7 +49,7 @@ import skyfit.ui.core.generated.resources.user_last_name_mandatory_label
 @Composable
 fun MobileUserSettingsEditProfileScreen(goToBack: () -> Unit) {
 
-    val viewModel: SkyFitUserAccountSettingsViewModel = koinInject()
+    val viewModel: UserAccountSettingsViewModel = koinInject()
 
     val userAccountState by viewModel.accountState.collectAsState()
 

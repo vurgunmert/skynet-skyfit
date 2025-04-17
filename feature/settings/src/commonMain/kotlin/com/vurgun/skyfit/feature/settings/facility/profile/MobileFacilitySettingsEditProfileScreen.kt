@@ -21,14 +21,15 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import com.vurgun.skyfit.feature.settings.component.AccountSettingsEditableProfileImage
+import com.vurgun.skyfit.feature.settings.component.SettingsEditProfileHeader
 import com.vurgun.skyfit.ui.core.components.special.FitnessTagPickerComponent
 import com.vurgun.skyfit.ui.core.components.special.MobileSettingsDeleteAccountBottomSheet
 import com.vurgun.skyfit.ui.core.components.special.MobileUserSettingsScreenSaveActionComponent
 import com.vurgun.skyfit.ui.core.components.special.SkyFitSelectToEnterMultilineInputComponent
-import com.vurgun.skyfit.feature.settings.component.AccountSettingsEditableProfileImage
-import com.vurgun.skyfit.feature.settings.component.SettingsEditProfileHeader
 import com.vurgun.skyfit.ui.core.styling.SkyFitColor
 import org.jetbrains.compose.resources.stringResource
+import org.koin.compose.viewmodel.koinViewModel
 import skyfit.ui.core.generated.resources.Res
 import skyfit.ui.core.generated.resources.background_image_label
 import skyfit.ui.core.generated.resources.ic_pencil
@@ -41,11 +42,9 @@ import skyfit.ui.core.generated.resources.workplace_name_hint
 
 @Composable
 fun MobileFacilitySettingsEditProfileScreen(
-    goToBack: () -> Unit
+    goToBack: () -> Unit,
+    viewModel: FacilityManageProfileViewModel = koinViewModel()
 ) {
-
-    val viewModel = remember { FacilityManageProfileViewModel() }
-
     val accountState by viewModel.accountState.collectAsState()
     val scrollState = rememberScrollState()
 

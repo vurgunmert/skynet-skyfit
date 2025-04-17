@@ -21,6 +21,8 @@ sealed class UserRole(val typeId: Int) {
             else -> Guest
         }
 
-        fun getAllUserTypes(): List<UserRole> = listOf(Guest, User, Trainer, Facility)
+        fun listOfAllowedRoles() = listOf(User, Trainer, Facility)
+
+        fun setOfAllowedRoles() = setOf(UserRole.User, UserRole.Trainer, UserRole.Facility)
     }
 }

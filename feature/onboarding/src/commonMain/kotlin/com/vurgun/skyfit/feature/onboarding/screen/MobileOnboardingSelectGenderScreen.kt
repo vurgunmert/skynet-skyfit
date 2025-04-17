@@ -20,6 +20,7 @@ import com.vurgun.skyfit.data.core.domain.model.GenderType
 import com.vurgun.skyfit.feature.onboarding.component.OnboardingActionGroupComponent
 import com.vurgun.skyfit.feature.onboarding.component.OnboardingStepProgressComponent
 import com.vurgun.skyfit.feature.onboarding.component.OnboardingTitleGroupComponent
+import com.vurgun.skyfit.ui.core.components.special.SkyFitMobileScaffold
 import com.vurgun.skyfit.ui.core.components.special.SkyFitScaffold
 import com.vurgun.skyfit.ui.core.components.special.SkyFitSelectableCardComponent
 import com.vurgun.skyfit.ui.core.styling.SkyFitTypography
@@ -40,7 +41,7 @@ internal fun MobileOnboardingGenderSelectionScreen(
 ) {
     val selectedGender = viewModel.uiState.collectAsState().value.gender
 
-    SkyFitScaffold {
+    SkyFitMobileScaffold {
         Column(
             modifier = Modifier.fillMaxSize(),
             horizontalAlignment = Alignment.CenterHorizontally,

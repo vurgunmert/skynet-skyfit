@@ -14,7 +14,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.vurgun.skyfit.data.core.domain.model.UserRole
-import com.vurgun.skyfit.feature.settings.facility.SettingsHomeAccountTypesColumn
+import com.vurgun.skyfit.feature.settings.component.SettingsHomeAccountTypesColumn
 import com.vurgun.skyfit.feature.settings.user.SettingsHomeViewModel
 import com.vurgun.skyfit.feature.settings.user.UserSettingsViewEvent
 import com.vurgun.skyfit.ui.core.components.button.PrimaryLargeButton

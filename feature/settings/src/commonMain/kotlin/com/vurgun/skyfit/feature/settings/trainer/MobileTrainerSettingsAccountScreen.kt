@@ -30,12 +30,15 @@ import com.vurgun.skyfit.ui.core.styling.SkyFitColor
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.koinInject
+import org.koin.compose.viewmodel.koinViewModel
 import skyfit.ui.core.generated.resources.Res
+import skyfit.ui.core.generated.resources.accounts_title
 import skyfit.ui.core.generated.resources.add_account_action
 import skyfit.ui.core.generated.resources.delete_account_action
 import skyfit.ui.core.generated.resources.ic_delete
 import skyfit.ui.core.generated.resources.ic_lock
 import skyfit.ui.core.generated.resources.ic_plus
+import skyfit.ui.core.generated.resources.ic_profile
 import skyfit.ui.core.generated.resources.settings_account_label
 import skyfit.ui.core.generated.resources.settings_change_my_password_label
 
@@ -44,10 +47,10 @@ fun MobileTrainerSettingsAccountScreen(
     goToBack: () -> Unit,
     goToEditProfile: () -> Unit,
     goToChangePassword: () -> Unit,
+    goToAddAccount: () -> Unit,
     goToManageAccounts: () -> Unit,
+    viewModel: TrainerAccountSettingsViewModel = koinViewModel()
 ) {
-
-    val viewModel: TrainerAccountSettingsViewModel = koinInject()
 
     val account by viewModel.accountState.collectAsState()
 
@@ -94,11 +97,19 @@ fun MobileTrainerSettingsAccountScreen(
                 onClick = goToChangePassword
             )
 
-            SettingsMenuItem(
-                iconRes = Res.drawable.ic_plus,
-                text = stringResource(Res.string.add_account_action),
-                onClick = goToManageAccounts
-            )
+            if (viewModel.hasMultipleAccounts) {
+                SettingsMenuItem(
+                    iconRes = Res.drawable.ic_profile,
+                    text = stringResource(Res.string.accounts_title),
+                    onClick = goToManageAccounts
+                )
+            } else {
+                SettingsMenuItem(
+                    iconRes = Res.drawable.ic_plus,
+                    text = stringResource(Res.string.add_account_action),
+                    onClick = goToManageAccounts
+                )
+            }
 
             PrimaryLargeButton(
                 text = stringResource(Res.string.delete_account_action),

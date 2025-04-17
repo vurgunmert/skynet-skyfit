@@ -2,11 +2,12 @@ package com.vurgun.skyfit.feature.onboarding.navigation
 
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
+import androidx.navigation.toRoute
 import com.vurgun.skyfit.feature.onboarding.screen.MobileOnboardingScreen
 import kotlinx.serialization.Serializable
 
 @Serializable
-data object Onboarding : OnboardingRoute
+data class Onboarding(val isAddition: Boolean)
 
 internal sealed interface OnboardingRoute {
 
@@ -52,7 +53,9 @@ fun NavGraphBuilder.onboardingRoutes(
     goToDashboard: () -> Unit,
 ) {
     composable<Onboarding> {
+
         MobileOnboardingScreen(
+            isAddition = it.toRoute<Onboarding>().isAddition,
             goToLogin = goToLogin,
             goToDashboard = goToDashboard
         )

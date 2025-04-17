@@ -19,7 +19,7 @@ import com.vurgun.skyfit.data.core.utility.now
 import com.vurgun.skyfit.feature.onboarding.component.OnboardingActionGroupComponent
 import com.vurgun.skyfit.feature.onboarding.component.OnboardingStepProgressComponent
 import com.vurgun.skyfit.feature.onboarding.component.OnboardingTitleGroupComponent
-import com.vurgun.skyfit.ui.core.components.special.SkyFitScaffold
+import com.vurgun.skyfit.ui.core.components.special.SkyFitMobileScaffold
 import com.vurgun.skyfit.ui.core.components.special.SkyFitWheelPickerComponent
 import com.vurgun.skyfit.ui.core.styling.SkyFitColor
 import kotlinx.datetime.LocalDate
@@ -38,7 +38,7 @@ internal fun MobileOnboardingBirthdaySelectionScreen(
     val selectedMonth = viewModel.uiState.collectAsState().value.birthMonth ?: 1
     val selectedDay = viewModel.uiState.collectAsState().value.birthDay ?: 1
 
-    SkyFitScaffold {
+    SkyFitMobileScaffold {
         Column(
             modifier = Modifier.fillMaxSize(),
             horizontalAlignment = Alignment.CenterHorizontally,

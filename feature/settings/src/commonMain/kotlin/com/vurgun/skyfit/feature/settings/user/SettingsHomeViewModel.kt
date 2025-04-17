@@ -32,6 +32,7 @@ class SettingsHomeViewModel(
     }
 
     fun selectUserType(userTypeId: Int) {
+        if (selectedRole.value.typeId == userTypeId) return
         viewModelScope.launch {
             userManager.updateUserType(userTypeId)
         }

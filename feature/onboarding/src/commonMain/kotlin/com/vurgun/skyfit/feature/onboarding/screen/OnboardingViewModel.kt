@@ -38,6 +38,7 @@ internal class OnboardingViewModel(
     private val userRepository: UserRepository
 ) : ViewModel() {
 
+    private var isAccountAddition: Boolean = false
     private val _availableUserRoles = MutableStateFlow(
         listOf(
             SelectableUserRole(UserRole.User, true),
@@ -46,6 +47,7 @@ internal class OnboardingViewModel(
         )
     )
     val availableUserRoles: StateFlow<List<SelectableUserRole>> = _availableUserRoles
+
 
     init {
         viewModelScope.launch {
@@ -151,6 +153,10 @@ internal class OnboardingViewModel(
         _uiState.value = _uiState.value.copy(profileTags = profileTags)
     }
 
+    fun updateIsAccountAddition(value: Boolean) {
+        isAccountAddition = value
+    }
+
     fun submitRequest() {
         val currentState = _uiState.value
 
@@ -185,7 +191,7 @@ internal class OnboardingViewModel(
         viewModelScope.launch {
             _eventState.value = OnboardingViewEvent.InProgress
 
-            when(val result = onboardingRepository.submitOnboarding(request)) {
+            when(val result = onboardingRepository.submitOnboarding(request, isAccountAddition)) {
                 OnboardingResult.Unauthorized -> {
                     _eventState.value = OnboardingViewEvent.NavigateToLogin
                 }

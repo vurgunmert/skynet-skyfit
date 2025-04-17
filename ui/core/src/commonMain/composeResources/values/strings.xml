@@ -166,6 +166,7 @@
     <string name="settings_support_label">Destek ve Yardım</string>
     <string name="settings_support_help_subtitle">Sık sorulan soruların yanıtlarını bulun veya doğrudan bizimle iletişime geçin</string>
 
+    <string name="accounts_title">Hesaplar</string>
     <string name="add_account_action">Hesap Ekle</string>
     <string name="delete_account_action">Hesabı Sil</string>
     <string name="settings_change_my_password_label">Şifremi Değiştir</string>

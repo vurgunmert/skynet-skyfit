@@ -28,7 +28,7 @@ import com.vurgun.skyfit.ui.core.styling.SkyFitColor
 import com.vurgun.skyfit.ui.core.styling.SkyFitTypography
 
 @Composable
-fun OnboardingStepProgressComponent(
+internal fun OnboardingStepProgressComponent(
     modifier: Modifier = Modifier.fillMaxWidth().padding(24.dp),
     totalSteps: Int = 7,
     currentStep: Int = 1,
@@ -62,7 +62,7 @@ fun OnboardingStepProgressComponent(
 }
 
 @Composable
-fun OnboardingTitleGroupComponent(title: String,
+internal fun OnboardingTitleGroupComponent(title: String,
                                   subtitle: String,
                                   modifier: Modifier = Modifier) {
     Column(
@@ -83,7 +83,7 @@ fun OnboardingTitleGroupComponent(title: String,
 }
 
 @Composable
-fun OnboardingActionGroupComponent(
+internal fun OnboardingActionGroupComponent(
     onClickContinue: () -> Unit
 ) {
     SkyFitButtonComponent(

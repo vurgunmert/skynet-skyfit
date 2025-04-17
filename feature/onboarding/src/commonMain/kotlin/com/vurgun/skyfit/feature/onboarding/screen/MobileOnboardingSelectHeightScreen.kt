@@ -13,6 +13,7 @@ import com.vurgun.skyfit.feature.onboarding.component.OnboardingActionGroupCompo
 import com.vurgun.skyfit.feature.onboarding.component.OnboardingStepProgressComponent
 import com.vurgun.skyfit.feature.onboarding.component.OnboardingTitleGroupComponent
 import com.vurgun.skyfit.ui.core.components.picker.HeightAndUnitPicker
+import com.vurgun.skyfit.ui.core.components.special.SkyFitMobileScaffold
 import com.vurgun.skyfit.ui.core.components.special.SkyFitScaffold
 import org.jetbrains.compose.resources.stringResource
 import skyfit.ui.core.generated.resources.Res
@@ -27,7 +28,7 @@ internal fun MobileOnboardingHeightSelectionScreen(
     val selectedHeight = viewModel.uiState.collectAsState().value.height ?: 170
     val selectedHeightUnit = viewModel.uiState.collectAsState().value.heightUnit
 
-    SkyFitScaffold {
+    SkyFitMobileScaffold {
         Column(
             modifier = Modifier.fillMaxSize(),
             horizontalAlignment = Alignment.CenterHorizontally,

@@ -13,7 +13,6 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.vurgun.skyfit.data.core.domain.manager.UserManager
 import com.vurgun.skyfit.data.core.domain.model.UserRole
-import com.vurgun.skyfit.feature.settings.account.MobileSettingsAddAccountScreen
 import com.vurgun.skyfit.feature.settings.account.MobileSettingsManageAccountsScreen
 import com.vurgun.skyfit.feature.settings.changepassword.SettingsChangePasswordScreen
 import com.vurgun.skyfit.feature.settings.component.rbac.RequireRole
@@ -23,7 +22,7 @@ import com.vurgun.skyfit.feature.settings.facility.member.MobileFacilityAddMembe
 import com.vurgun.skyfit.feature.settings.facility.member.MobileFacilityManageMembersScreen
 import com.vurgun.skyfit.feature.settings.facility.notification.MobileFacilitySettingsNotificationsScreen
 import com.vurgun.skyfit.feature.settings.facility.payment.MobileFacilitySettingsPaymentHistoryScreen
-import com.vurgun.skyfit.feature.settings.facility.profile.MobileFacilityManageProfileScreen
+import com.vurgun.skyfit.feature.settings.facility.account.MobileFacilitySettingsAccountScreen
 import com.vurgun.skyfit.feature.settings.facility.profile.MobileFacilitySettingsEditProfileScreen
 import com.vurgun.skyfit.feature.settings.facility.trainer.MobileFacilityAddTrainerScreen
 import com.vurgun.skyfit.feature.settings.facility.trainer.MobileFacilityManageTrainersScreen
@@ -118,14 +117,16 @@ sealed interface SettingsRoute {
 
 fun NavGraphBuilder.settingsRoutes(
     navController: NavHostController,
-    goToLogin: () -> Unit
+    goToLogin: () -> Unit,
+    goToAddAccount: () -> Unit
 ) {
     composable<SettingsRoute.Main> {
         SettingsRootGraph(
             onExitSettings = {
                 navController.popBackStack()
             },
-            goToLogin = goToLogin
+            goToLogin = goToLogin,
+            goToAddAccount = goToAddAccount
         )
     }
 }
@@ -133,7 +134,8 @@ fun NavGraphBuilder.settingsRoutes(
 @Composable
 private fun SettingsRootGraph(
     onExitSettings: () -> Unit,
-    goToLogin: () -> Unit
+    goToLogin: () -> Unit,
+    goToAddAccount: () -> Unit
 ) {
     val settingsNavController = rememberNavController()
 
@@ -226,7 +228,7 @@ private fun SettingsRootGraph(
         composable<SettingsRoute.Account> {
             RequireRole(role, listOf(UserRole.User, UserRole.Trainer, UserRole.Facility)) {
                 when (role) {
-                    UserRole.Facility -> MobileFacilityManageProfileScreen(
+                    UserRole.Facility -> MobileFacilitySettingsAccountScreen(
                         goToBack = { settingsNavController.popBackStack() },
                         goToEditProfile = {
                             settingsNavController.navigate(SettingsRoute.EditProfile)
@@ -234,6 +236,7 @@ private fun SettingsRootGraph(
                         goToChangePassword = {
                             settingsNavController.navigate(SettingsRoute.ChangePassword)
                         },
+                        goToAddAccount = goToAddAccount,
                         goToManageAccounts = {
                             settingsNavController.navigate(SettingsRoute.ManageAccounts)
                         }
@@ -247,6 +250,7 @@ private fun SettingsRootGraph(
                         goToChangePassword = {
                             settingsNavController.navigate(SettingsRoute.ChangePassword)
                         },
+                        goToAddAccount = goToAddAccount,
                         goToManageAccounts = {
                             settingsNavController.navigate(SettingsRoute.ManageAccounts)
                         }
@@ -260,6 +264,10 @@ private fun SettingsRootGraph(
                         goToChangePassword = {
                             settingsNavController.navigate(SettingsRoute.ChangePassword)
                         },
+                        goToAddAccount = goToAddAccount,
+                        goToManageAccounts = {
+                            settingsNavController.navigate(SettingsRoute.ManageAccounts)
+                        }
                     )
 
                     else -> UnauthorizedAccessScreen()
@@ -350,28 +358,13 @@ private fun SettingsRootGraph(
         }
 
         composable<SettingsRoute.ManageAccounts> {
-            RequireRole(role, listOf(UserRole.Trainer, UserRole.Facility)) {
-                when (role) {
-                    UserRole.Facility,
-                    UserRole.Trainer -> MobileSettingsManageAccountsScreen(
-                        goToBack = { settingsNavController.popBackStack() },
-                        goToAddAccount = {
-                            settingsNavController.navigate(SettingsRoute.AddAccount)
-                        }
-                    )
-
-                    else -> UnauthorizedAccessScreen()
-                }
-            }
-        }
-
-        composable<SettingsRoute.AddAccount> {
             RequireRole(role, listOf(UserRole.User, UserRole.Trainer, UserRole.Facility)) {
                 when (role) {
                     UserRole.User,
-                    UserRole.Trainer,
-                    UserRole.Facility -> MobileSettingsAddAccountScreen(
+                    UserRole.Facility,
+                    UserRole.Trainer -> MobileSettingsManageAccountsScreen(
                         goToBack = { settingsNavController.popBackStack() },
+                        goToAddAccount = goToAddAccount,
                     )
 
                     else -> UnauthorizedAccessScreen()

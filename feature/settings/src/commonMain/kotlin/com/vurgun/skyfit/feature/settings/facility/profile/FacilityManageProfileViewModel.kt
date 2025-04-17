@@ -1,6 +1,7 @@
 package com.vurgun.skyfit.feature.settings.facility.profile
 
 import androidx.lifecycle.ViewModel
+import com.vurgun.skyfit.data.core.domain.manager.UserManager
 import com.vurgun.skyfit.data.core.domain.model.FitnessTagType
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -15,7 +16,11 @@ data class FacilityAccountState(
     val isUpdated: Boolean = false
 )
 
-class FacilityManageProfileViewModel : ViewModel() {
+class FacilityManageProfileViewModel(
+    private val userManager: UserManager
+) : ViewModel() {
+
+    val hasMultipleAccounts = userManager.accountTypes.value.size > 1
 
     private val _accountState = MutableStateFlow(FacilityAccountState())
     val accountState: StateFlow<FacilityAccountState> = _accountState
@@ -23,12 +28,14 @@ class FacilityManageProfileViewModel : ViewModel() {
     private var initialState: FacilityAccountState? = null
 
     fun loadData() {
+        val facilityDetail = userManager.user.value ?: return
+
         val initial = FacilityAccountState(
-            name = "IronStudio Fitness",
-            biography = "At IronStudio Fitness, we’re all about building strength, confidence, and a community of like-minded individuals. Our expert trainers offer personalized programs in strength training, functional fitness, and overall wellness. Let's forge your fitness together!",
-            profileTags = listOf(FitnessTagType.CARDIO, FitnessTagType.HIIT, FitnessTagType.PHYSICAL_FITNESS),
-            location = "1425 Maplewood Avenue, Apt 3B, Brookfield, IL 60513, USA",
-            backgroundImageUrl = null
+            name = facilityDetail.gymName,
+            biography = facilityDetail.bio,
+            profileTags = listOf(), //TODO: GET TAGS API
+            location = facilityDetail.gymAddress,
+            backgroundImageUrl = facilityDetail.backgroundImageUrl
         )
         _accountState.value = initial
         initialState = initial

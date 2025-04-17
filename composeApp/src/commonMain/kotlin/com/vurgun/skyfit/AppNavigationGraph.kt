@@ -40,7 +40,7 @@ fun AppNavigationGraph() {
                 navigationController.navigateAndClear(DashboardRoute.Home)
             },
             goToOnboarding = {
-                navigationController.navigateAndClear(Onboarding)
+                navigationController.navigateAndClear(Onboarding(isAddition = false))
             }
         )
 
@@ -69,6 +69,9 @@ fun AppNavigationGraph() {
             navController = navigationController,
             goToLogin = {
                 navigationController.navigateAndClear(AuthRoute.Login)
+            },
+            goToAddAccount = {
+                navigationController.navigate(Onboarding(isAddition = true))
             }
         )
 

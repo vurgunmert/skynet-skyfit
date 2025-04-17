@@ -125,7 +125,7 @@ internal fun MobileOnboardingEnterProfileScreen(
                             onValueChange = { viewModel.updateLastName(it) },
                             rightIconRes = Res.drawable.ic_pencil,
                             focusRequester = lastNameFocusRequester,
-                            nextFocusRequester = bioFocusRequester
+                            nextFocusRequester = if(userType == UserRole.Trainer) bioFocusRequester else null
                         )
                     }
 
