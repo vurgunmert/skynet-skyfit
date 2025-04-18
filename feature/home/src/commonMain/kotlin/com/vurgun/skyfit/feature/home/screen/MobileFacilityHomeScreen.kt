@@ -74,7 +74,7 @@ fun MobileFacilityHomeScreen(
 
 @Composable
 fun MobileDashboardHomeFacilityNoClassComponent(onClick: () -> Unit) {
-    MobileDashboardHomeTrainerNoClassComponent(onClickAdd = onClick)
+    EmptyUpcomingAppointments(onClickAdd = onClick)
 }
 
 

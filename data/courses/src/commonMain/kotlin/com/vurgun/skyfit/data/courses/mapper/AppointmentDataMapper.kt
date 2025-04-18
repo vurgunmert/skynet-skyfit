@@ -8,12 +8,19 @@ import kotlinx.datetime.LocalDateTime
 import kotlinx.datetime.LocalTime
 
 internal fun AppointmentDTO.toLessonDomain(): Appointment {
-    val parsedStartDate = LocalDate.parse(startDate)
-    val parsedEndDate = LocalDate.parse(endDate)
-    val parsedStartTime = LocalTime.parse(startTime)
-    val parsedEndTime = LocalTime.parse(endTime)
-    val startDateTime = LocalDateTime(parsedStartDate, parsedStartTime)
-    val endDateTime = LocalDateTime(parsedEndDate, parsedEndTime)
+
+    // Extract LocalDate
+    val parsedStartDate = LocalDate.parse(startDate.substringBefore("T"))
+    val parsedEndDate = LocalDate.parse(endDate.substringBefore("T"))
+
+    // Extract LocalTime (from "07:30:00")
+    val parsedStartTime = LocalTime.parse(startTime.substring(0, 5))
+    val parsedEndTime = LocalTime.parse(endTime.substring(0, 5))
+
+    // Combine to LocalDateTime
+    val parsedStartDateTime = LocalDateTime(parsedStartDate, parsedStartTime)
+    val parsedEndDateTime = LocalDateTime(parsedEndDate, parsedEndTime)
+
     val cancelInstant = Instant.parse(lastCancelTime)
     val joinedInstant = Instant.parse(joinedAt)
 
@@ -22,8 +29,8 @@ internal fun AppointmentDTO.toLessonDomain(): Appointment {
         iconId = lessonIcon,
         title = typeName,
 
-        startDateTime = startDateTime,
-        endDateTime = endDateTime,
+        startDateTime = parsedStartDateTime,
+        endDateTime = parsedEndDateTime,
         lastCancelableAt = cancelInstant,
 
         startDate = parsedStartDate,
@@ -39,8 +46,7 @@ internal fun AppointmentDTO.toLessonDomain(): Appointment {
         joinedAt = joinedInstant,
         price = price,
         lessonStatus = lessonStatus,
-        participantStatus = participantStatus,
-        statusName = statusName
+        participantStatus = participantStatus
     )
 }
 

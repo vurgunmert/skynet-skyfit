@@ -205,6 +205,9 @@
 
     <string name="background_image_label">Arkaplan Resmi</string>
     <string name="profile_image_label">Profil Resmi</string>
+    <string name="upcoming_appointments_label">Yaklaşan Randevular</string>
+    <string name="show_all_action">Hepsini Görüntüle</string>
+
 </resources>
 
 <!--    Use snake_case + purpose-based suffixes:-->

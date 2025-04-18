@@ -11,7 +11,7 @@ import org.koin.dsl.module
 val featureHomeModule = module {
     includes(dataCoreModule, dataCoursesModule)
 
-    viewModel { UserHomeViewModel(get()) }
+    viewModel { UserHomeViewModel(get(), get()) }
     viewModel { FacilityHomeViewModel(get(), get()) }
     viewModel { TrainerHomeViewModel(get(), get()) }
 }

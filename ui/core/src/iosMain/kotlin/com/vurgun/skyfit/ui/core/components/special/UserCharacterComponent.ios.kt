@@ -7,7 +7,7 @@ import com.vurgun.skyfit.data.core.domain.model.CharacterType
 import platform.UIKit.UIView
 
 @Composable
-actual fun UserCharacterComponent(modifier: Modifier, characterType: CharacterType) {
+actual fun AnimatedCharacterComponent(modifier: Modifier, characterType: CharacterType) {
 
 //    UIKitView(
 //        modifier = modifier,

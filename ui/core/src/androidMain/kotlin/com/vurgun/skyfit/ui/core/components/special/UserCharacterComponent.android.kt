@@ -5,6 +5,6 @@ import androidx.compose.ui.Modifier
 import com.vurgun.skyfit.data.core.domain.model.CharacterType
 
 @Composable
-actual fun UserCharacterComponent(modifier: Modifier, characterType: CharacterType) {
-    AndroidRiveUserCharacterComponent(modifier, characterType)
+actual fun AnimatedCharacterComponent(modifier: Modifier, characterType: CharacterType) {
+    AndroidRiveAnimatedCharacterComponent(modifier, characterType)
 }

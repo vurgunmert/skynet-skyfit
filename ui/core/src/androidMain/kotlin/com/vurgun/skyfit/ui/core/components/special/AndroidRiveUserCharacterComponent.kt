@@ -15,7 +15,7 @@ import com.vurgun.skyfit.ui.core.R
 import com.vurgun.skyfit.data.core.domain.model.CharacterType
 
 @Composable
-fun AndroidRiveUserCharacterComponent(modifier: Modifier = Modifier, characterType: CharacterType) {
+fun AndroidRiveAnimatedCharacterComponent(modifier: Modifier = Modifier, characterType: CharacterType) {
     val context = LocalContext.current
     var riveView by remember { mutableStateOf<RiveAnimationView?>(null) }
     val animations = listOf("Resting (Default)", "Weight Lift", "Patted") // List of animations to cycle through

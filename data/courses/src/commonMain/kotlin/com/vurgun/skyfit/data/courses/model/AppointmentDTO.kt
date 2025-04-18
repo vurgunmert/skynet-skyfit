@@ -20,6 +20,5 @@ internal data class AppointmentDTO(
     val price: Int,
     val lessonStatus: Int,
     val participantStatus: Int,
-    val statusName: String,
     val joinedAt: String,
 )

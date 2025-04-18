@@ -15,14 +15,12 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Checkbox
 import androidx.compose.material.CheckboxDefaults
 import androidx.compose.material.Icon
-import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
 import androidx.compose.material.TextField
 import androidx.compose.material.TextFieldDefaults
@@ -49,21 +47,22 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.drawText
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.rememberTextMeasurer
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.vurgun.skyfit.feature.home.component.MobileDashboardHomeCharacterProgressComponent
 import com.vurgun.skyfit.feature.home.component.MobileDashboardHomeToolbarComponent
 import com.vurgun.skyfit.feature.home.component.MobileDashboardHomeUpcomingAppointmentsComponent
-import com.vurgun.skyfit.ui.core.components.special.ButtonSize
-import com.vurgun.skyfit.ui.core.components.special.ButtonState
-import com.vurgun.skyfit.ui.core.components.special.ButtonVariant
-import com.vurgun.skyfit.ui.core.components.special.SkyFitButtonComponent
+import com.vurgun.skyfit.ui.core.components.button.PrimaryMediumButton
+import com.vurgun.skyfit.ui.core.components.special.CharacterImage
+import com.vurgun.skyfit.ui.core.components.special.SkyFitMobileScaffold
 import com.vurgun.skyfit.ui.core.styling.SkyFitColor
 import com.vurgun.skyfit.ui.core.styling.SkyFitTypography
+import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.viewmodel.koinViewModel
+import skyfit.ui.core.generated.resources.Res
+import skyfit.ui.core.generated.resources.lesson_add_action
+import skyfit.ui.core.generated.resources.upcoming_appointments_label
 import kotlin.math.sign
 
 @Composable
@@ -76,8 +75,7 @@ fun MobileTrainerHomeScreen(
 ) {
     val appointments by viewModel.appointments.collectAsStateWithLifecycle()
 
-    Scaffold(
-        backgroundColor = SkyFitColor.background.default,
+    SkyFitMobileScaffold(
         topBar = {
             MobileDashboardHomeToolbarComponent(
                 onClickNotifications = goToNotifications,
@@ -86,14 +84,16 @@ fun MobileTrainerHomeScreen(
         }
     ) {
         Column(
-            modifier = Modifier.fillMaxSize().verticalScroll(rememberScrollState()),
+            modifier = Modifier
+                .fillMaxSize()
+                .verticalScroll(rememberScrollState()),
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {
 
-            viewModel.characterType?.let {
-                MobileDashboardHomeCharacterProgressComponent(
-                    characterType = it,
-                    onClick = goToProfile
+            viewModel.characterType?.let { characterType ->
+                CharacterImage(
+                    characterType = characterType,
+                    modifier = Modifier
                 )
             }
 
@@ -102,7 +102,7 @@ fun MobileTrainerHomeScreen(
 //            MobileDashboardHomeTrainerStatisticsComponent()
 
             if (appointments.isEmpty()) {
-                MobileDashboardHomeTrainerNoClassComponent(onClickAdd = {})
+                EmptyUpcomingAppointments(onClickAdd = {})
             } else {
                 MobileDashboardHomeUpcomingAppointmentsComponent(
                     appointments = appointments,
@@ -354,43 +354,34 @@ fun MemberChangeLineChart(dataPoints: List<Int>, labels: List<String>) {
 
 
 @Composable
-fun MobileDashboardHomeTrainerNoClassComponent(onClickAdd: () -> Unit) {
+fun EmptyUpcomingAppointments(onClickAdd: () -> Unit) {
 
     Column(
         modifier = Modifier
-            .padding(16.dp)
             .fillMaxWidth()
-            .background(SkyFitColor.background.surfaceSecondary, RoundedCornerShape(16.dp))
-            .padding(32.dp),
+            .padding(horizontal = 20.dp, vertical = 16.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center
     ) {
         Text(
-            text = "Oluşturulmuş dersiniz bulunmamakta",
-            fontSize = 16.sp,
-            color = Color.White,
-            fontWeight = FontWeight.Bold,
-            textAlign = TextAlign.Center
+            text = stringResource(Res.string.upcoming_appointments_label),
+            style = SkyFitTypography.bodyLargeSemibold
         )
 
-        Spacer(modifier = Modifier.height(4.dp))
+        Spacer(modifier = Modifier.height(8.dp))
 
-        Text(
-            text = "Ders oluşturduğunuzda buradan görüntüleyebilirsiniz.",
-            fontSize = 14.sp,
-            color = Color.Gray,
-            textAlign = TextAlign.Center
-        )
-
-        Spacer(modifier = Modifier.height(16.dp))
-
-        SkyFitButtonComponent(
-            modifier = Modifier.wrapContentWidth(), text = "Etkinlik Oluştur",
-            onClick = onClickAdd,
-            variant = ButtonVariant.Primary,
-            size = ButtonSize.Medium,
-            state = ButtonState.Rest
-        )
+        Box(
+            Modifier
+                .fillMaxWidth()
+                .height(105.dp)
+                .background(SkyFitColor.background.surfaceSecondary, RoundedCornerShape(16.dp)),
+            contentAlignment = Alignment.Center
+        ) {
+            PrimaryMediumButton(
+                text = stringResource(Res.string.lesson_add_action),
+                onClick = onClickAdd,
+            )
+        }
     }
 }
 

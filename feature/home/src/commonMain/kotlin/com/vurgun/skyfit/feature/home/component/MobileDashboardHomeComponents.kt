@@ -54,24 +54,29 @@ import com.vurgun.skyfit.ui.core.components.special.ButtonVariant
 import com.vurgun.skyfit.ui.core.components.special.SkyFitButtonComponent
 import com.vurgun.skyfit.ui.core.components.special.SkyFitListItemCardComponent
 import com.vurgun.skyfit.ui.core.components.special.SkyFitMonthPickerDropdownComponent
-import com.vurgun.skyfit.ui.core.components.special.UserCharacterComponent
+import com.vurgun.skyfit.ui.core.components.special.AnimatedCharacterComponent
 import com.vurgun.skyfit.ui.core.styling.LocalPadding
 import com.vurgun.skyfit.ui.core.styling.SkyFitAsset
 import com.vurgun.skyfit.ui.core.styling.SkyFitColor
 import com.vurgun.skyfit.ui.core.styling.SkyFitTypography
 import org.jetbrains.compose.resources.DrawableResource
 import org.jetbrains.compose.resources.painterResource
+import org.jetbrains.compose.resources.stringResource
 import skyfit.ui.core.generated.resources.Res
 import skyfit.ui.core.generated.resources.ic_bell
 import skyfit.ui.core.generated.resources.ic_calories
 import skyfit.ui.core.generated.resources.ic_chat
 import skyfit.ui.core.generated.resources.ic_check
+import skyfit.ui.core.generated.resources.ic_chevron_right
 import skyfit.ui.core.generated.resources.ic_clock
 import skyfit.ui.core.generated.resources.ic_exercises
+import skyfit.ui.core.generated.resources.ic_location_pin
 import skyfit.ui.core.generated.resources.ic_path_distance
 import skyfit.ui.core.generated.resources.ic_steps
 import skyfit.ui.core.generated.resources.ic_tool_illustration
 import skyfit.ui.core.generated.resources.ic_water
+import skyfit.ui.core.generated.resources.show_all_action
+import skyfit.ui.core.generated.resources.upcoming_appointments_label
 
 @Composable
 fun MobileDashboardHomeToolbarComponent(
@@ -118,7 +123,7 @@ fun MobileDashboardHomeCharacterProgressComponent(
             .clickable(onClick = onClick)
             .padding(horizontal = 16.dp, vertical = 24.dp)
     ) {
-        UserCharacterComponent(
+        AnimatedCharacterComponent(
             modifier = Modifier.align(Alignment.TopCenter).size(240.dp),
             characterType = characterType
         )
@@ -381,11 +386,12 @@ fun MobileDashboardHomeUpcomingAppointmentsComponent(
             verticalAlignment = Alignment.CenterVertically
         ) {
             Text(
-                text = "Yaklaşan Randevular",
-                style = SkyFitTypography.bodyMediumSemibold
+                text = stringResource(Res.string.upcoming_appointments_label),
+                style = SkyFitTypography.bodyLargeSemibold
             )
+
             Text(
-                text = "Hepsini Görüntüle",
+                text = stringResource(Res.string.show_all_action),
                 style = SkyFitTypography.bodyXSmall,
                 color = SkyFitColor.border.secondaryButton,
                 modifier = Modifier.clickable(onClick = onClickShowAll)
@@ -407,8 +413,9 @@ private fun MobileDashboardHomeAppointmentCard(
     SkyFitListItemCardComponent(
         modifier = Modifier
             .fillMaxWidth()
-            .background(SkyFitColor.background.surfaceSecondary, RoundedCornerShape(16.dp))
+            .clip(RoundedCornerShape(16.dp))
             .clickable(onClick = onClick)
+            .background(SkyFitColor.background.surfaceSecondary)
             .padding(12.dp)
     ) {
         Box(
@@ -439,7 +446,7 @@ private fun MobileDashboardHomeAppointmentCard(
 
             Row(verticalAlignment = Alignment.CenterVertically) {
                 Icon(
-                    imageVector = Icons.Default.DateRange,
+                    painter = painterResource(Res.drawable.ic_clock),
                     contentDescription = "Time",
                     tint = Color.Gray,
                     modifier = Modifier.size(14.dp)
@@ -450,7 +457,7 @@ private fun MobileDashboardHomeAppointmentCard(
                 Spacer(modifier = Modifier.width(8.dp))
 
                 Icon(
-                    imageVector = Icons.Default.Place,
+                    painter = painterResource(Res.drawable.ic_location_pin),
                     contentDescription = "Location",
                     tint = Color.Gray,
                     modifier = Modifier.size(14.dp)
@@ -463,7 +470,7 @@ private fun MobileDashboardHomeAppointmentCard(
         Spacer(modifier = Modifier.width(12.dp))
 
         Icon(
-            imageVector = Icons.Default.PlayArrow,
+            painter = painterResource(Res.drawable.ic_chevron_right),
             contentDescription = "Enter",
             tint = SkyFitColor.icon.default,
             modifier = Modifier.size(16.dp)

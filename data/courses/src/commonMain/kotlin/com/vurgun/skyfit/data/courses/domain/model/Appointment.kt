@@ -31,6 +31,5 @@ data class Appointment(
     val joinedAt: Instant,
     val price: Int,
     val lessonStatus: Int,
-    val participantStatus: Int,
-    val statusName: String
+    val participantStatus: Int
 )

@@ -5,12 +5,14 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.vurgun.skyfit.feature.home.component.MobileDashboardHomeCharacterProgressComponent
 import com.vurgun.skyfit.feature.home.component.MobileDashboardHomeToolbarComponent
 import com.vurgun.skyfit.feature.home.component.MobileDashboardHomeUpcomingAppointmentsComponent
+import com.vurgun.skyfit.ui.core.components.special.CharacterImage
 import com.vurgun.skyfit.ui.core.components.special.SkyFitMobileScaffold
 import org.koin.compose.viewmodel.koinViewModel
 
@@ -25,6 +27,8 @@ fun MobileUserHomeScreen(
     goToAppointments: () -> Unit,
     viewModel: UserHomeViewModel = koinViewModel()
 ) {
+
+    val appointments by viewModel.appointments.collectAsStateWithLifecycle()
 
     SkyFitMobileScaffold(
         topBar = {
@@ -42,16 +46,18 @@ fun MobileUserHomeScreen(
         ) {
 
             viewModel.characterType?.let { characterType ->
-                MobileDashboardHomeCharacterProgressComponent(
+                CharacterImage(
                     characterType = characterType,
-                    onClick = goToProfile
+                    modifier = Modifier
                 )
             }
 
-            MobileDashboardHomeUpcomingAppointmentsComponent(
-                appointments = viewModel.appointments,
-                onClickShowAll = goToAppointments
-            )
+            if (appointments.isNotEmpty()) {
+                MobileDashboardHomeUpcomingAppointmentsComponent(
+                    appointments = appointments,
+                    onClickShowAll = goToAppointments
+                )
+            }
         }
     }
 }

@@ -11,7 +11,7 @@ import com.vurgun.skyfit.core.ui.resources.SkyFitColor
 import org.jetbrains.compose.web.dom.Text
 
 //@Composable
-//actual fun UserCharacterComponent(modifier: Modifier) {
+//actual fun AnimatedCharacterComponent(modifier: Modifier) {
 //    SkyFitImageComponent(
 //        url =  "https://ik.imagekit.io/skynet2skyfit/character_carrot.png?updatedAt=1738866664880",
 //        modifier = modifier.size(240.dp)
@@ -19,7 +19,7 @@ import org.jetbrains.compose.web.dom.Text
 //}
 
 @Composable
-actual fun UserCharacterComponent(
+actual fun AnimatedCharacterComponent(
     modifier: Modifier,
     characterType: CharacterType
 ) {
