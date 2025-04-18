@@ -1,74 +1,54 @@
 package com.vurgun.skyfit.feature.courses.screen
 
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import com.vurgun.skyfit.data.core.domain.manager.UserManager
 import com.vurgun.skyfit.data.core.domain.model.CalendarRecurrence
 import com.vurgun.skyfit.data.core.utility.now
 import com.vurgun.skyfit.data.courses.domain.model.Lesson
+import com.vurgun.skyfit.data.courses.domain.model.LessonCreationInfo
+import com.vurgun.skyfit.data.courses.domain.model.LessonUpdateInfo
 import com.vurgun.skyfit.data.courses.domain.repository.CourseRepository
+import com.vurgun.skyfit.data.settings.domain.repository.MemberRepository
+import com.vurgun.skyfit.data.settings.domain.repository.TrainerRepository
 import com.vurgun.skyfit.feature.courses.component.SelectableTrainerMenuItemModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.launch
+import kotlinx.datetime.DayOfWeek
 import kotlinx.datetime.Instant
 import kotlinx.datetime.LocalDate
 import kotlinx.datetime.LocalDateTime
+import kotlinx.datetime.LocalTime
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.toInstant
 
 data class FacilityEditLessonViewState(
+    val lessonId: Int? = null,
     val iconId: Int = 1,
     val title: String? = null,
-    val trainers: List<SelectableTrainerMenuItemModel> = fakeTrainerMenuItems,
     val trainerNote: String? = null,
     val startDate: LocalDate = LocalDate.now(),
     val endDate: LocalDate = LocalDate.now(),
     val startTime: String = "08:00",
     val endTime: String = "08:30",
     val recurrence: CalendarRecurrence = CalendarRecurrence.Never,
-    val isAppointmentMandatory: Boolean = false,
-    val cost: Int? = null,
+    val isAppointmentMandatory: Boolean = true,
+    val cost: Int = 0,
     val capacity: Int = 5,
     val cancelDurationHour: Int = 24,
+    val showCancelDialog: Boolean = false,
     val isSaveButtonEnabled: Boolean = false,
-    val showCancelDialog: Boolean = false
-)
-
-// Simulated
-private val fakeTrainerMenuItems = listOf<SelectableTrainerMenuItemModel>(
-    SelectableTrainerMenuItemModel(
-        1,
-        "Sude Kale",
-        "https://cdn4.iconfinder.com/data/icons/diversity-v2-0-volume-05/64/fitness-trainer-black-male-512.png"
-    ),
-    SelectableTrainerMenuItemModel(
-        2,
-        "Alex Lang",
-        "https://cdn4.iconfinder.com/data/icons/diversity-v2-0-volume-05/64/fitness-trainer-black-male-512.png"
-    ),
-    SelectableTrainerMenuItemModel(
-        3,
-        "Sophia Hawl",
-        "https://cdn4.iconfinder.com/data/icons/diversity-v2-0-volume-05/64/fitness-trainer-black-male-512.png"
-    ),
-    SelectableTrainerMenuItemModel(
-        4,
-        "Cenk Kar",
-        "https://cdn4.iconfinder.com/data/icons/diversity-v2-0-volume-05/64/fitness-trainer-black-male-512.png"
-    ),
-    SelectableTrainerMenuItemModel(
-        5,
-        "Racheal Lee",
-        "https://cdn4.iconfinder.com/data/icons/diversity-v2-0-volume-05/64/fitness-trainer-black-male-512.png"
-    ),
-    SelectableTrainerMenuItemModel(
-        6,
-        "Karen Maroon",
-        "https://cdn4.iconfinder.com/data/icons/diversity-v2-0-volume-05/64/fitness-trainer-black-male-512.png"
-    )
-)
+) {
+    val isEditing: Boolean = lessonId != null
+}
 
 class FacilityEditLessonViewModel(
-    private val courseRepository: CourseRepository
+    private val userManager: UserManager,
+    private val courseRepository: CourseRepository,
+    private val trainerRepository: TrainerRepository,
+    private val memberRepository: MemberRepository
 ) : ViewModel() {
 
     private var initialState: FacilityEditLessonViewState = FacilityEditLessonViewState()
@@ -76,38 +56,45 @@ class FacilityEditLessonViewModel(
     private val _uiState = MutableStateFlow(initialState)
     val uiState: StateFlow<FacilityEditLessonViewState> = _uiState
 
+    private val _trainers = MutableStateFlow<List<SelectableTrainerMenuItemModel>>(emptyList())
+    val trainers: StateFlow<List<SelectableTrainerMenuItemModel>> = _trainers
 
-    fun loadLesson(lesson: Lesson? = null) {
-        if (lesson != null) {
-            _uiState.update {
+    var gymId: Int = userManager.user.value?.gymId ?: error("NO GYM ID")
 
-                val cancelPeriod = getLastCancelDurationHours(lesson.startDateTime, lesson.lastCancelableAt)
-                it.copy(
-                    iconId = lesson.iconId,
-                    title = lesson.title,
-                    trainerNote = lesson.trainerNote,
-                    startDate = lesson.startDate,
-                    endDate = lesson.endDate,
-                    startTime = lesson.startTime.toString(),
-                    endTime = lesson.endTime.toString(),
-                    cost = lesson.price,
-                    isAppointmentMandatory = lesson.price > 0,
-                    cancelDurationHour = cancelPeriod.toInt(),
-                    capacity = lesson.capacityRatio.substringAfter("/").toIntOrNull() ?: 1,
-                )
-            }
-        } else {
-            //TODO: CLEAR STATE
+    var createdLessonInfo: LessonCreationInfo? = null
+    var updatedLessonInfo: LessonUpdateInfo? = null
+
+    init {
+        viewModelScope.launch {
+            _trainers.value = trainerRepository.getFacilityTrainers(gymId)
+                .getOrThrow()
+                .map {
+                    SelectableTrainerMenuItemModel(it.trainerId, it.fullName, it.profileImageUrl)
+                }
         }
     }
 
-    fun loadClass(facilityId: String, classId: String?) {
-//        val fetchedData = classId?.let { fakeFetchClassData(facilityId, it) }
-//            ?: FacilityClassViewData(trainers = facilityTrainers)
-//
-//        initialState = fetchedData.copy()
+    fun loadLesson(lesson: Lesson? = null) {
+        if (lesson != null) {
+            val cancelPeriod = getLastCancelDurationHours(lesson.startDateTime, lesson.lastCancelableAt)
 
-//        _facilityClassState.update { fetchedData } // 🔥 This will ensure recomposition
+            initialState = FacilityEditLessonViewState(
+                lessonId = lesson.lessonId,
+                iconId = lesson.iconId,
+                title = lesson.title,
+                trainerNote = lesson.trainerNote,
+                startDate = lesson.startDate,
+                endDate = lesson.endDate,
+                startTime = lesson.startTime.toString(),
+                endTime = lesson.endTime.toString(),
+                cost = lesson.price,
+                capacity = lesson.capacityRatio.substringAfter("/").toIntOrNull() ?: 1,
+                cancelDurationHour = cancelPeriod.toInt(),
+            )
+        } else {
+            initialState = FacilityEditLessonViewState()
+        }
+        _uiState.value = initialState
     }
 
     // Compare current state with the initial state, enable Save if changed
@@ -128,11 +115,9 @@ class FacilityEditLessonViewModel(
     }
 
     fun updateSelectedTrainer(trainer: SelectableTrainerMenuItemModel) {
-        val updatedTrainers = _uiState.value.trainers.map {
+        _trainers.value = _trainers.value.map {
             it.copy(selected = it.id == trainer.id)
         }
-        _uiState.update { it.copy(trainers = updatedTrainers) }
-        checkIfModified()
     }
 
     fun updateTrainerNote(note: String) {
@@ -146,7 +131,7 @@ class FacilityEditLessonViewModel(
     }
 
     fun updateEndDate(date: LocalDate) {
-        _uiState.update { it.copy(startDate = date) }
+        _uiState.update { it.copy(endDate = date) }
         checkIfModified()
     }
 
@@ -187,6 +172,92 @@ class FacilityEditLessonViewModel(
 
     fun updateShowCancelDialog(show: Boolean) {
         _uiState.update { it.copy(showCancelDialog = show) }
+    }
+
+    fun submitLesson() {
+        viewModelScope.launch {
+            uiState.value.let {
+                if (it.isEditing) {
+                    updateLesson(it)
+                } else {
+                    createLesson(it)
+                }
+            }
+        }
+    }
+
+    private suspend fun createLesson(state: FacilityEditLessonViewState) {
+        val trainerId = trainers.value.firstOrNull { it.selected }?.id ?: error("NO TRAINER ID")
+
+        val creationInfo = state.let {
+            val repetition = (it.recurrence as? CalendarRecurrence.SomeDays)?.days?.mapNotNull { dayOfWeek ->
+                when (dayOfWeek) {
+                    DayOfWeek.MONDAY -> 2
+                    DayOfWeek.TUESDAY -> 3
+                    DayOfWeek.WEDNESDAY -> 4
+                    DayOfWeek.THURSDAY -> 5
+                    DayOfWeek.FRIDAY -> 6
+                    DayOfWeek.SATURDAY -> 7
+                    DayOfWeek.SUNDAY -> 1
+                    else -> null
+                }
+            }.orEmpty()
+
+            LessonCreationInfo(
+                gymId = gymId,
+                iconId = it.iconId,
+                title = it.title.toString(),
+                trainerNote = it.trainerNote,
+                trainerId = trainerId,
+                startDateTime = LocalDateTime(it.startDate, LocalTime.parse(it.startTime)),
+                endDateTime = LocalDateTime(it.endDate, LocalTime.parse(it.endTime)),
+                repetitionType = it.recurrence.id,
+                repetition = repetition,
+                quota = it.capacity,
+                lastCancelableHoursBefore = it.cancelDurationHour,
+                isRequiredAppointment = it.isAppointmentMandatory,
+                price = it.cost,
+            )
+        }
+
+        courseRepository.createLesson(info = creationInfo).fold(
+            onSuccess = {
+                createdLessonInfo = creationInfo
+                //TODO: NAVIGATE TO CREATED BY DISMISSING THIS ONE
+            },
+            onFailure = { error ->
+                println("❌ CANNOT CREATE LESSON: $error")
+            }
+        )
+    }
+
+    private suspend fun updateLesson(state: FacilityEditLessonViewState) {
+        val trainerId = trainers.value.first { it.selected }.id
+
+        val updateInfo = state.let {
+            LessonUpdateInfo(
+                lessonId = it.lessonId!!,
+                iconId = it.iconId,
+                trainerNote = it.trainerNote,
+                trainerId = trainerId,
+                startDateTime = LocalDateTime(it.startDate, LocalTime.parse(it.startTime)),
+                endDateTime = LocalDateTime(it.endDate, LocalTime.parse(it.endTime)),
+                quota = it.capacity,
+                lastCancelableHoursBefore = it.cancelDurationHour,
+                isRequiredAppointment = it.isAppointmentMandatory,
+                price = it.cost,
+            )
+        }
+
+        courseRepository.updateLesson(info = updateInfo).fold(
+            onSuccess = {
+                updatedLessonInfo = updateInfo
+                //TODO: NAVIGATE TO CREATED BY DISMISSING THIS ONE
+            },
+            onFailure = { error ->
+                println("❌ CANNOT UPDATE LESSON: $error")
+            }
+        )
     }
 
     private fun getLastCancelDurationHours(

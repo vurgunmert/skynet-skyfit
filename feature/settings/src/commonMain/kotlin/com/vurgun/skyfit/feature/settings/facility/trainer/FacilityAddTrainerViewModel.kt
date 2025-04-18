@@ -3,8 +3,8 @@ package com.vurgun.skyfit.feature.settings.facility.trainer
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.vurgun.skyfit.data.core.model.MissingTokenException
-import com.vurgun.skyfit.data.settings.model.Member
-import com.vurgun.skyfit.data.settings.repository.SettingsRepository
+import com.vurgun.skyfit.data.settings.domain.model.Trainer
+import com.vurgun.skyfit.data.settings.domain.repository.TrainerRepository
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -12,7 +12,7 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
 internal data class FacilityAddTrainersUiState(
-    val filtered: List<Member> = emptyList(),
+    val filtered: List<Trainer> = emptyList(),
     val query: String = "",
     val isLoading: Boolean = false,
     val error: String? = null,
@@ -20,13 +20,13 @@ internal data class FacilityAddTrainersUiState(
 )
 
 internal class FacilityAddTrainerViewModel(
-    private val settingsRepository: SettingsRepository
+    private val trainerRepository: TrainerRepository
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow(FacilityAddTrainersUiState())
     val uiState: StateFlow<FacilityAddTrainersUiState> = _uiState.asStateFlow()
 
-    private var cached: List<Member> = emptyList()
+    private var cached: List<Trainer> = emptyList()
 
     fun updateSearchQuery(query: String) {
         _uiState.update {
@@ -41,7 +41,7 @@ internal class FacilityAddTrainerViewModel(
         viewModelScope.launch {
             _uiState.update { it.copy(isLoading = true, error = null, unauthorized = false) }
 
-            settingsRepository.getPlatformTrainers(gymId = 10).fold(
+            trainerRepository.getPlatformTrainers(gymId = 10).fold(
                 onSuccess = { trainers ->
                     cached = trainers
                     _uiState.update {
@@ -69,7 +69,7 @@ internal class FacilityAddTrainerViewModel(
         viewModelScope.launch {
             _uiState.update { it.copy(isLoading = true, error = null) }
 
-            settingsRepository.addGymTrainer(gymId = 10, userId = trainerId).fold(
+            trainerRepository.addFacilityTrainer(gymId = 10, userId = trainerId).fold(
                 onSuccess = {
                     refreshPlatformTrainers()
                 },
@@ -86,12 +86,9 @@ internal class FacilityAddTrainerViewModel(
         }
     }
 
-    private fun applyQuery(members: List<Member>, query: String): List<Member> {
-        return if (query.isBlank()) members else {
-            members.filter {
-                it.name.contains(query, ignoreCase = true) ||
-                        it.surname.contains(query, ignoreCase = true)
-            }
+    private fun applyQuery(trainers: List<Trainer>, query: String): List<Trainer> {
+        return if (query.isBlank()) trainers else {
+            trainers.filter { it.fullName.contains(query, ignoreCase = true) }
         }
     }
 }

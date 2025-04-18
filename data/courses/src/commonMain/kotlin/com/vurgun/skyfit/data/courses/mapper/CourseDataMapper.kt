@@ -1,9 +1,11 @@
 package com.vurgun.skyfit.data.courses.mapper
 
 
+import com.vurgun.skyfit.data.core.utility.formatToServerDate
+import com.vurgun.skyfit.data.core.utility.formatToServerTime
 import com.vurgun.skyfit.data.courses.domain.model.Lesson
-import com.vurgun.skyfit.data.courses.domain.model.NewLesson
-import com.vurgun.skyfit.data.courses.domain.model.UpdatedLesson
+import com.vurgun.skyfit.data.courses.domain.model.LessonCreationInfo
+import com.vurgun.skyfit.data.courses.domain.model.LessonUpdateInfo
 import com.vurgun.skyfit.data.courses.model.CreateLessonRequest
 import com.vurgun.skyfit.data.courses.model.LessonDTO
 import com.vurgun.skyfit.data.courses.model.UpdateLessonRequest
@@ -12,37 +14,17 @@ import kotlinx.datetime.LocalDate
 import kotlinx.datetime.LocalDateTime
 import kotlinx.datetime.LocalTime
 
-internal fun UpdatedLesson.toUpdateRequest(): UpdateLessonRequest {
-    return UpdateLessonRequest(
-        lessonId = lessonId,
-        iconId = iconId,
-        trainerNote = trainerNote,
-        trainerId = trainerId,
-        startDate = startDateTime.date.toString(), // ISO format
-        endDate = endDateTime.date.toString(),
-        startTime = startDateTime.time.toString().substring(0, 5), // hh:mm
-        endTime = endDateTime.time.toString().substring(0, 5),
-        quota = quota,
-        lastCancelTime = lastCancelableAt.toString(), // backend expects datetime string
-        isRequiredAppointment = isRequiredAppointment,
-        price = price,
-        participantType = participantType,
-        participants = participants
-    )
-}
-
-
-internal fun NewLesson.toCreateRequest(): CreateLessonRequest {
+internal fun LessonCreationInfo.toCreateLessonRequest(): CreateLessonRequest {
     return CreateLessonRequest(
         gymId = gymId,
         iconId = iconId,
         title = title,
         trainerNote = trainerNote,
         trainerId = trainerId,
-        startDate = startDateTime.date.toString(), // "2025-04-30"
-        endDate = endDateTime.date.toString(),
-        startTime = startDateTime.time.toString().substring(0, 5), // "07:30"
-        endTime = endDateTime.time.toString().substring(0, 5),
+        startDate = startDateTime.formatToServerDate(), // " YYYY-MM-DD HH:mm:ss"
+        endDate = endDateTime.formatToServerDate(),
+        startTime = startDateTime.formatToServerTime(), // "HH:mm:ss"
+        endTime = endDateTime.formatToServerTime(),
         repetitionType = repetitionType,
         repetition = repetition,
         quota = quota,
@@ -53,8 +35,26 @@ internal fun NewLesson.toCreateRequest(): CreateLessonRequest {
     )
 }
 
+internal fun LessonUpdateInfo.toUpdateLessonRequest(): UpdateLessonRequest {
+    return UpdateLessonRequest(
+        lessonId = lessonId,
+        iconId = iconId,
+        trainerNote = trainerNote,
+        trainerId = trainerId,
+        startDate = startDateTime.formatToServerDate(),
+        endDate = endDateTime.formatToServerDate(),
+        startTime = startDateTime.formatToServerTime(),
+        endTime = endDateTime.formatToServerTime(),
+        quota = quota,
+        lastCancelTime = lastCancelableHoursBefore,
+        isRequiredAppointment = isRequiredAppointment,
+        price = price,
+        participantType = participantType,
+        participants = participantsIds
+    )
+}
 
-internal fun LessonDTO.toDomain(): Lesson {
+internal fun LessonDTO.toLessonDomain(): Lesson {
     // Extract LocalDate
     val parsedStartDate = LocalDate.parse(startDate.substringBefore("T"))
     val parsedEndDate = LocalDate.parse(endDate.substringBefore("T"))
@@ -72,7 +72,7 @@ internal fun LessonDTO.toDomain(): Lesson {
 
     return Lesson(
         lessonId = lessonId,
-        iconId = lessonId, // You can update this if you link to SkyFitIcon later
+        iconId = lessonIcon,
         title = typeName,
         startDateTime = parsedStartDateTime,
         endDateTime = parsedEndDateTime,
@@ -94,4 +94,4 @@ internal fun LessonDTO.toDomain(): Lesson {
     )
 }
 
-internal fun List<LessonDTO>.toDomain(): List<Lesson> = map { it.toDomain() }
+internal fun List<LessonDTO>.toLessonDomainList(): List<Lesson> = map { it.toLessonDomain() }

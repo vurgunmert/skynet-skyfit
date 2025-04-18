@@ -34,7 +34,7 @@ class FacilityHomeViewModel(
             }
 
             val today = LocalDate.now()
-            val result = courseRepository.getLessons(gymId, today.toString())
+            val result = courseRepository.getLessonsByFacility(gymId, today.toString())
 
             _appointments.value = result
                 .mapCatching { lessons ->

@@ -2,14 +2,12 @@ package com.vurgun.skyfit.data.core.utility
 
 import kotlinx.datetime.Clock
 import kotlinx.datetime.DateTimeUnit
-import kotlinx.datetime.Instant
 import kotlinx.datetime.LocalDate
 import kotlinx.datetime.LocalDateTime
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.isoDayNumber
 import kotlinx.datetime.minus
 import kotlinx.datetime.plus
-import kotlinx.datetime.toInstant
 import kotlinx.datetime.toLocalDateTime
 
 // Helpers for LocalDate
@@ -128,3 +126,27 @@ fun getStartOfWeek(date: LocalDate): LocalDate {
 
 fun LocalDate.previousWeek(): LocalDate = this.minus(7, DateTimeUnit.DAY)
 fun LocalDate.nextWeek(): LocalDate = this.plus(7, DateTimeUnit.DAY)
+
+fun LocalDateTime.formatToServerDate(): String {
+    val year = this.date.year.toString().padStart(4, '0')
+    val month = this.date.monthNumber.toString().padStart(2, '0')
+    val day = this.date.dayOfMonth.toString().padStart(2, '0')
+    val hour = this.hour.toString().padStart(2, '0')
+    val minute = this.minute.toString().padStart(2, '0')
+    val second = this.second.toString().padStart(2, '0')
+    return "$year-$month-$day $hour:$minute:$second"
+}
+
+fun LocalDate.formatToServerDate(): String {
+    val year = this.year.toString().padStart(4, '0')
+    val month = this.monthNumber.toString().padStart(2, '0')
+    val day = this.dayOfMonth.toString().padStart(2, '0')
+    return "$year-$month-$day 00:00:00"
+}
+
+fun LocalDateTime.formatToServerTime(): String {
+    val hour = this.hour.toString().padStart(2, '0')
+    val minute = this.minute.toString().padStart(2, '0')
+    val second = this.second.toString().padStart(2, '0')
+    return "$hour:$minute:$second"
+}

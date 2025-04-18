@@ -15,12 +15,14 @@ import io.ktor.serialization.kotlinx.json.json
 import kotlinx.serialization.json.Json
 import kotlin.native.concurrent.ThreadLocal
 
+const val BASE_HOST_URL = "http://skyfit.mertbeta.xyz" //TODO: SECURE URL
+private const val FULL_BASE_URL = "${BASE_HOST_URL}:8084/api/v1/" //TODO: SECURE URL
+
 expect fun httpClientEngine(): HttpClientEngine
 
 @ThreadLocal
 val commonHttpClient = HttpClient(httpClientEngine()) {
 
-    val baseUrl = "http://skyfit.mertbeta.xyz:8084/api/v1/" // Trailing without / is not working yet
     val constants = getNetworkConstants()
 
     // Default Headers
@@ -28,7 +30,7 @@ val commonHttpClient = HttpClient(httpClientEngine()) {
         contentType(ContentType.Application.Json)
         header("client-id", constants.clientId)
         header("os-id", constants.osId)
-        url(baseUrl)
+        url(FULL_BASE_URL)
     }
 
     // JSON Serialization

@@ -12,6 +12,7 @@ import com.vurgun.skyfit.data.settings.model.GetGymTrainersRequest
 import com.vurgun.skyfit.data.settings.model.GetPlatformMembersRequest
 import com.vurgun.skyfit.data.settings.model.GetPlatformTrainersRequest
 import com.vurgun.skyfit.data.settings.model.MemberDto
+import com.vurgun.skyfit.data.settings.model.TrainerDto
 import io.ktor.client.request.bearerAuth
 import io.ktor.client.request.setBody
 import io.ktor.client.request.url
@@ -19,82 +20,86 @@ import io.ktor.http.HttpMethod
 
 class SettingsApiService(private val apiClient: ApiClient) {
 
-    suspend fun addGymMember(gymId: Int, userId: Int, token: String): ApiResult<EmptyDataResponse> {
-        val request = AddGymMemberRequest(gymId, userId)
+    private object Endpoints {
+        const val ADD_GYM_USER = "add/gym/user"
+        const val GET_GYM_MEMBERS = "get/gym/members"
+        const val GET_ALL_PLATFORM_MEMBERS = "get/all/platform/members"
+        const val DELETE_GYM_MEMBER = "delete/gym/member"
+
+        const val ADD_GYM_TRAINER = "add/gym/trainer"
+        const val GET_GYM_TRAINERS = "get/gym/trainers"
+        const val GET_ALL_PLATFORM_TRAINERS = "get/all/platform/trainers"
+        const val DELETE_GYM_TRAINER = "delete/gym/trainer"
+    }
+
+    suspend fun addGymMember(request: AddGymMemberRequest, token: String): ApiResult<EmptyDataResponse> {
         return apiClient.safeApiCall<EmptyDataResponse> {
             method = HttpMethod.Post
             bearerAuth(token)
-            url("add/gym/user")
+            url(Endpoints.ADD_GYM_USER)
             setBody(request)
         }
     }
 
-    suspend fun getGymMembers(gymId: Int, token: String): ApiResult<List<MemberDto>> {
-        val request = GetGymMembersRequest(gymId)
+    suspend fun getGymMembers(request: GetGymMembersRequest, token: String): ApiResult<List<MemberDto>> {
         return apiClient.safeApiCall<List<MemberDto>> {
             method = HttpMethod.Post
             bearerAuth(token)
-            url("get/gym/members")
+            url(Endpoints.GET_GYM_MEMBERS)
             setBody(request)
         }
     }
 
-    suspend fun getPlatformMembers(gymId: Int, token: String): ApiResult<List<MemberDto>> {
-        val request = GetPlatformMembersRequest(gymId)
+    suspend fun getPlatformMembers(request: GetPlatformMembersRequest, token: String): ApiResult<List<MemberDto>> {
         return apiClient.safeApiCall<List<MemberDto>> {
             method = HttpMethod.Post
             bearerAuth(token)
-            url("get/all/platform/members")
+            url(Endpoints.GET_ALL_PLATFORM_MEMBERS)
             setBody(request)
         }
     }
 
-    suspend fun deleteGymMember(gymId: Int, userId: Int, token: String): ApiResult<EmptyDataResponse> {
-        val request = DeleteGymMemberRequest(gymId, userId)
-        return apiClient.safeApiCall<EmptyDataResponse> {
-            method = HttpMethod.Delete
-            bearerAuth(token)
-            url("delete/gym/member")
-            setBody(request)
-        }
-    }
-
-    suspend fun addGymTrainer(gymId: Int, userId: Int, token: String): ApiResult<EmptyDataResponse> {
-        val request = AddGymTrainerRequest(gymId, userId)
-        return apiClient.safeApiCall<EmptyDataResponse> {
-            method = HttpMethod.Post
-            bearerAuth(token)
-            url("add/gym/trainer")
-            setBody(request)
-        }
-    }
-
-    suspend fun getGymTrainers(gymId: Int, token: String): ApiResult<List<MemberDto>> {
-        val request = GetGymTrainersRequest(gymId)
-        return apiClient.safeApiCall<List<MemberDto>> {
-            method = HttpMethod.Post
-            bearerAuth(token)
-            url("get/gym/trainers")
-            setBody(request)
-        }
-    }
-
-    suspend fun deleteGymTrainer(gymId: Int, userId: Int, token: String): ApiResult<EmptyDataResponse> {
-        val request = DeleteGymTrainerRequest(gymId, userId)
+    suspend fun deleteGymMember(request: DeleteGymMemberRequest, token: String): ApiResult<EmptyDataResponse> {
         return apiClient.safeApiCall<EmptyDataResponse> {
             method = HttpMethod.Delete
             bearerAuth(token)
-            url("delete/gym/trainer")
+            url(Endpoints.DELETE_GYM_MEMBER)
             setBody(request)
         }
     }
 
-    suspend fun getPlatformTrainers(gymId: Int, token: String): ApiResult<List<MemberDto>> {
-        val request = GetPlatformTrainersRequest(gymId)
-        return apiClient.safeApiCall<List<MemberDto>> {
+    suspend fun addGymTrainer(request: AddGymTrainerRequest, token: String): ApiResult<EmptyDataResponse> {
+        return apiClient.safeApiCall<EmptyDataResponse> {
             method = HttpMethod.Post
             bearerAuth(token)
-            url("get/all/platform/trainers")
+            url(Endpoints.ADD_GYM_TRAINER)
+            setBody(request)
+        }
+    }
+
+    suspend fun getGymTrainers(request: GetGymTrainersRequest, token: String): ApiResult<List<TrainerDto>> {
+        return apiClient.safeApiCall<List<TrainerDto>> {
+            method = HttpMethod.Post
+            bearerAuth(token)
+            url(Endpoints.GET_GYM_TRAINERS)
+            setBody(request)
+        }
+    }
+
+    suspend fun getPlatformTrainers(request: GetPlatformTrainersRequest, token: String): ApiResult<List<TrainerDto>> {
+        return apiClient.safeApiCall<List<TrainerDto>> {
+            method = HttpMethod.Post
+            bearerAuth(token)
+            url(Endpoints.GET_ALL_PLATFORM_TRAINERS)
+            setBody(request)
+        }
+    }
+
+    suspend fun deleteGymTrainer(request: DeleteGymTrainerRequest, token: String): ApiResult<EmptyDataResponse> {
+        return apiClient.safeApiCall<EmptyDataResponse> {
+            method = HttpMethod.Delete
+            bearerAuth(token)
+            url(Endpoints.DELETE_GYM_TRAINER)
             setBody(request)
         }
     }

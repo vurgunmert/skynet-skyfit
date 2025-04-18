@@ -3,8 +3,8 @@ package com.vurgun.skyfit.feature.settings.facility.member
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.vurgun.skyfit.data.core.model.MissingTokenException
-import com.vurgun.skyfit.data.settings.model.Member
-import com.vurgun.skyfit.data.settings.repository.SettingsRepository
+import com.vurgun.skyfit.data.settings.domain.model.Member
+import com.vurgun.skyfit.data.settings.domain.repository.MemberRepository
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -20,7 +20,7 @@ internal data class ManageMembersUiState(
 )
 
 internal class FacilityManageMembersViewModel(
-    private val settingsRepository: SettingsRepository
+    private val memberRepository: MemberRepository
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow(ManageMembersUiState())
@@ -41,7 +41,7 @@ internal class FacilityManageMembersViewModel(
         viewModelScope.launch {
             _uiState.update { it.copy(isLoading = true, error = null, unauthorized = false) }
 
-            settingsRepository.getGymMembers(gymId = 10).fold(
+            memberRepository.getFacilityMembers(gymId = 10).fold(
                 onSuccess = { members ->
                     cached = members
                     _uiState.update {
@@ -69,7 +69,7 @@ internal class FacilityManageMembersViewModel(
         viewModelScope.launch {
             _uiState.update { it.copy(isLoading = true, error = null) }
 
-            settingsRepository.deleteGymMember(gymId = 10, userId = memberId).fold(
+            memberRepository.deleteFacilityMember(gymId = 10, userId = memberId).fold(
                 onSuccess = {
                     refreshGymMembers()
                 },

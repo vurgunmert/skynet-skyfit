@@ -83,7 +83,7 @@ class FacilityProfileViewModel(
             val gymId = userManager.user.value?.gymId
             //TODO: Fail if not available gymId
 
-            val items = courseRepository.getLessons(gymId!!, LocalDate.now().toString(), null)
+            val items = courseRepository.getLessonsByFacility(gymId!!, LocalDate.now().toString(), null)
                 .map { lessons ->
                     lessons
                         .sortedBy { it.startDateTime }

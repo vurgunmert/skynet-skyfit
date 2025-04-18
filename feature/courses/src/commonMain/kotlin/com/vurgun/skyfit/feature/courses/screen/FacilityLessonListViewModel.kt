@@ -7,11 +7,8 @@ import com.vurgun.skyfit.data.courses.domain.model.Lesson
 import com.vurgun.skyfit.data.courses.domain.repository.CourseRepository
 import com.vurgun.skyfit.data.courses.mapper.LessonSessionItemViewDataMapper
 import com.vurgun.skyfit.data.courses.model.LessonSessionItemViewData
-import com.vurgun.skyfit.ui.core.styling.SkyFitAsset
 import kotlinx.coroutines.channels.Channel
-import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.update
@@ -53,7 +50,7 @@ class FacilityLessonListViewModel(
 
             _uiState.update { it.copy(isLoading = true, errorMessage = null) }
 
-            val result = courseRepository.getLessons(gymId, date.toString(), date.toString())
+            val result = courseRepository.getLessonsByFacility(gymId, date.toString(), date.toString())
             result.fold(
                 onSuccess = { lessons ->
                     this@FacilityLessonListViewModel.lessons = lessons

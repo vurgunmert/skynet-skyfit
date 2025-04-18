@@ -33,7 +33,7 @@ import skyfit.ui.core.generated.resources.lesson_create_action
 import skyfit.ui.core.generated.resources.lesson_created_message
 
 @Composable
-fun MobileFacilityCreatedLessonScreen(
+fun MobileFacilityLessonCreatedScreen(
     goToListing: () -> Unit,
     goToNewLesson: () -> Unit,
     goToDashboard: () -> Unit,

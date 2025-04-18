@@ -14,7 +14,6 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.vurgun.skyfit.feature.settings.facility.member.MobileFacilityMemberItemComponent
 import com.vurgun.skyfit.ui.core.components.button.SecondaryMicroButton
 import com.vurgun.skyfit.ui.core.components.special.SkyFitScaffold
 import com.vurgun.skyfit.ui.core.components.special.SkyFitScreenHeader
@@ -61,7 +60,7 @@ internal fun MobileFacilityAddTrainerScreen(
             verticalArrangement = Arrangement.spacedBy(16.dp)
         ) {
             items(uiState.filtered) {
-                MobileFacilityMemberItemComponent(
+                MobileFacilityTrainerItemComponent(
                     item = it,
                     onClick = {},
                     actionContent = {

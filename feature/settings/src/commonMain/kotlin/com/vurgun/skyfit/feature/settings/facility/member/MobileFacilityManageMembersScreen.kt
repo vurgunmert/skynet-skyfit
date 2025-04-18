@@ -25,7 +25,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.vurgun.skyfit.data.settings.model.Member
+import com.vurgun.skyfit.data.settings.domain.model.Member
+import com.vurgun.skyfit.data.settings.domain.model.Trainer
 import com.vurgun.skyfit.ui.core.components.image.NetworkImage
 import com.vurgun.skyfit.ui.core.components.special.ButtonSize
 import com.vurgun.skyfit.ui.core.components.special.ButtonState
@@ -134,7 +135,7 @@ fun MobileFacilityMemberItemComponent(
         verticalAlignment = Alignment.CenterVertically
     ) {
         NetworkImage(
-            imageUrl = item.profilePhoto,
+            imageUrl = item.profileImageUrl,
             modifier = Modifier
                 .size(60.dp)
                 .clip(CircleShape)
@@ -149,6 +150,41 @@ fun MobileFacilityMemberItemComponent(
             Spacer(Modifier.height(4.dp))
             Text(
                 text = "${item.name} ${item.surname}",
+                style = SkyFitTypography.bodyMediumRegular,
+                color = SkyFitColor.text.secondary
+            )
+        }
+        Spacer(Modifier.width(24.dp))
+        actionContent()
+    }
+}
+
+@Composable
+fun MobileFacilityTrainerItemComponent(
+    item: Trainer,
+    onClick: () -> Unit,
+    actionContent: @Composable () -> Unit
+) {
+    Row(
+        Modifier.fillMaxWidth().clickable(onClick = onClick),
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        NetworkImage(
+            imageUrl = item.profileImageUrl,
+            modifier = Modifier
+                .size(60.dp)
+                .clip(CircleShape)
+        )
+        Spacer(Modifier.width(16.dp))
+
+        Column(Modifier.weight(1f)) {
+            Text(
+                text = item.username,
+                style = SkyFitTypography.bodyLargeSemibold
+            )
+            Spacer(Modifier.height(4.dp))
+            Text(
+                text = item.fullName,
                 style = SkyFitTypography.bodyMediumRegular,
                 color = SkyFitColor.text.secondary
             )

@@ -48,6 +48,7 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.vurgun.skyfit.data.core.domain.model.CalendarRecurrence
 import com.vurgun.skyfit.data.core.domain.model.CalendarRecurrenceType
 import com.vurgun.skyfit.designsystem.components.text.MultiLineInputText
@@ -124,18 +125,15 @@ fun MobileFacilityEditLessonScreen(
     goToLessonCreated: () -> Unit,
     viewModel: FacilityEditLessonViewModel
 ) {
-    val facilityClass = viewModel.uiState.collectAsState().value
-
-    LaunchedEffect(Unit) {
-        viewModel.loadClass("facilityId", "null")
-    }
+    val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+    val trainers by viewModel.trainers.collectAsStateWithLifecycle()
 
     val scrollState = rememberScrollState()
 
     SkyFitMobileScaffold(
         topBar = {
             SkyFitScreenHeader(stringResource(Res.string.lesson_edit_action), onClickBack = {
-                if (facilityClass.isSaveButtonEnabled) {
+                if (uiState.isSaveButtonEnabled) {
                     viewModel.updateShowCancelDialog(true)
                 } else {
                     goToBack()
@@ -154,8 +152,8 @@ fun MobileFacilityEditLessonScreen(
         ) {
             // region: Head Info (Icon + Title)
             EditLessonSubjectItem(
-                selectedIcon = facilityClass.iconId,
-                title = facilityClass.title,
+                selectedIcon = uiState.iconId,
+                title = uiState.title,
                 onIconSelected = viewModel::updateIcon,
                 onTitleChanged = viewModel::updateTitle
             )
@@ -163,27 +161,27 @@ fun MobileFacilityEditLessonScreen(
 
             // region: Trainer Selection + Trainer Note
             EditLessonTrainerRow(
-                trainers = facilityClass.trainers,
+                trainers = trainers,
                 onSelectionChanged = viewModel::updateSelectedTrainer
             )
 
             LessonEditNoteRow(
-                note = facilityClass.trainerNote,
+                note = uiState.trainerNote,
                 onChanged = viewModel::updateTrainerNote
             )
             // endregion
 
             // region: Date & Time Selection
             EditLessonDatesRow(
-                startDate = facilityClass.startDate,
-                endDate = facilityClass.endDate,
+                startDate = uiState.startDate,
+                endDate = uiState.endDate,
                 onStartDateSelected = viewModel::updateStartDate,
                 onEndDateSelected = viewModel::updateEndDate
             )
 
             LessonEditHoursRow(
-                selectedStartTime = facilityClass.startTime,
-                selectedEndTime = facilityClass.endTime,
+                selectedStartTime = uiState.startTime,
+                selectedEndTime = uiState.endTime,
                 onStartTimeSelected = viewModel::updateStartTime,
                 onEndTimeSelected = viewModel::updateEndTime
             )
@@ -191,52 +189,52 @@ fun MobileFacilityEditLessonScreen(
 
             // region: Recurrence
             LessonEditRecurrenceRow(
-                selectedRecurrence = facilityClass.recurrence,
+                selectedRecurrence = uiState.recurrence,
                 onSelectionChanged = viewModel::updateRecurrence
             )
             // endregion
 
             // region: Capacity
             LessonEditCapacityRow(
-                selectedCapacity = facilityClass.capacity,
+                selectedCapacity = uiState.capacity,
                 onSelectionChanged = viewModel::updateCapacity
             )
             // endregion
 
             // region: Cancel Duration
             LessonEditCancelDurationRow(
-                selectedHour = facilityClass.cancelDurationHour,
+                selectedHour = uiState.cancelDurationHour,
                 onSelectionChanged = viewModel::updateCancelDurationHour
             )
             // endregion
 
             // region: Obligation
             LessonEditAppointmentObligationRow(
-                isMandatory = facilityClass.isAppointmentMandatory,
+                isMandatory = uiState.isAppointmentMandatory,
                 onSelectionChanged = viewModel::updateAppointmentMandatory
             )
             // endregion
 
             // region: Cost
             LessonEditCostRow(
-                cost = facilityClass.cost,
+                cost = uiState.cost,
                 onChanged = viewModel::updateCost
             )
             // endregion
 
             LessonEditActionRow(
                 isNewLesson = true, //TODO: new-edit?
-                isEnabled = facilityClass.isSaveButtonEnabled,
+                isEnabled = uiState.isSaveButtonEnabled,
                 isLoading = false, //TODO: loading
-                onClick = goToLessonCreated
+                onClick = viewModel::submitLesson
             )
 
             Spacer(Modifier.height(24.dp))
         }
 
-        if (facilityClass.showCancelDialog) {
+        if (uiState.showCancelDialog) {
             DestructiveDialog(
-                showDialog = facilityClass.showCancelDialog,
+                showDialog = uiState.showCancelDialog,
                 message = stringResource(Res.string.lesson_edit_cancel_message),
                 onClickConfirm = goToBack,
                 onClickDismiss = { viewModel.updateShowCancelDialog(false) }

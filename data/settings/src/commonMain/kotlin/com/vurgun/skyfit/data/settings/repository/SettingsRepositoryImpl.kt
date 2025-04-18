@@ -3,148 +3,80 @@ package com.vurgun.skyfit.data.settings.repository
 import com.vurgun.skyfit.data.core.domain.repository.UserRepository
 import com.vurgun.skyfit.data.core.model.MissingTokenException
 import com.vurgun.skyfit.data.core.storage.Storage
-import com.vurgun.skyfit.data.network.ApiResult
 import com.vurgun.skyfit.data.network.DispatcherProvider
-import com.vurgun.skyfit.data.settings.model.Member
-import com.vurgun.skyfit.data.settings.model.toDomain
-import kotlinx.coroutines.withContext
+import com.vurgun.skyfit.data.network.utils.ioResult
+import com.vurgun.skyfit.data.network.utils.mapOrThrow
+import com.vurgun.skyfit.data.settings.domain.model.Member
+import com.vurgun.skyfit.data.settings.domain.model.Trainer
+import com.vurgun.skyfit.data.settings.domain.repository.MemberRepository
+import com.vurgun.skyfit.data.settings.domain.repository.TrainerRepository
+import com.vurgun.skyfit.data.settings.mapper.toMemberDomainList
+import com.vurgun.skyfit.data.settings.mapper.toTrainerDomainList
+import com.vurgun.skyfit.data.settings.model.AddGymMemberRequest
+import com.vurgun.skyfit.data.settings.model.AddGymTrainerRequest
+import com.vurgun.skyfit.data.settings.model.DeleteGymMemberRequest
+import com.vurgun.skyfit.data.settings.model.DeleteGymTrainerRequest
+import com.vurgun.skyfit.data.settings.model.GetGymMembersRequest
+import com.vurgun.skyfit.data.settings.model.GetGymTrainersRequest
+import com.vurgun.skyfit.data.settings.model.GetPlatformMembersRequest
+import com.vurgun.skyfit.data.settings.model.GetPlatformTrainersRequest
 
 class SettingsRepositoryImpl(
     private val apiService: SettingsApiService,
     private val dispatchers: DispatcherProvider,
     private val storage: Storage,
-) : SettingsRepository {
+) : MemberRepository, TrainerRepository {
 
-    private suspend fun <T, R> apiCallWithToken(
-        map: (T) -> R,
-        block: suspend (String) -> ApiResult<T>
-    ): Result<R> = withContext(dispatchers.io) {
-        runCatching {
-            val token = requireToken()
-            when (val response = block(token)) {
-                is ApiResult.Success -> map(response.data).let { Result.success(it) }
-                is ApiResult.Error -> Result.failure(IllegalStateException(response.message))
-                is ApiResult.Exception -> Result.failure(response.exception)
-            }
-        }.getOrElse { Result.failure(it) }
-    }
-
-    //TODO: load onto generic function above
     private suspend fun requireToken(): String {
         return storage.get(UserRepository.UserAuthToken) ?: throw MissingTokenException
     }
 
-    override suspend fun addGymUser(gymId: Int, userId: Int): Result<Boolean> =
-        apiCallWithToken({ true }) { token ->
-            apiService.addGymMember(gymId, userId, token)
-        }
-
-
-    override suspend fun getGymMembers(gymId: Int): Result<List<Member>> =
-        apiCallWithToken({ it.toDomain() }) { token ->
-            apiService.getGymMembers(gymId, token)
-        }
-
-    override suspend fun deleteGymMember(gymId: Int, userId: Int): Result<Boolean> = withContext(dispatchers.io) {
-        try {
-            val token = requireToken()
-
-            when (val response = apiService.deleteGymMember(gymId, userId, token)) {
-                is ApiResult.Error -> Result.failure(IllegalStateException(response.message))
-                is ApiResult.Exception -> Result.failure(response.exception)
-                is ApiResult.Success -> {
-                    return@withContext Result.success(true)
-                }
-            }
-
-        } catch (e: MissingTokenException) {
-            Result.failure(e)
-        }
+    override suspend fun addMemberToFacility(gymId: Int, userId: Int): Result<Unit> = ioResult(dispatchers) {
+        val token = requireToken()
+        val request = AddGymMemberRequest(gymId, userId)
+        apiService.addGymMember(request, token).mapOrThrow { }
     }
 
-    override suspend fun getPlatformMembers(gymId: Int): Result<List<Member>> = withContext(dispatchers.io) {
-        try {
-            val token = requireToken()
-
-            when (val response = apiService.getPlatformMembers(gymId, token)) {
-                is ApiResult.Error -> Result.failure(IllegalStateException(response.message))
-                is ApiResult.Exception -> Result.failure(response.exception)
-                is ApiResult.Success -> {
-                    return@withContext Result.success(response.data.toDomain())
-                }
-            }
-
-        } catch (e: MissingTokenException) {
-            Result.failure(e)
-        }
+    override suspend fun getFacilityMembers(gymId: Int): Result<List<Member>> = ioResult(dispatchers) {
+        val token = requireToken()
+        val request = GetGymMembersRequest(gymId)
+        apiService.getGymMembers(request, token).mapOrThrow { it.toMemberDomainList() }
     }
 
-    override suspend fun addGymTrainer(gymId: Int, userId: Int): Result<Boolean> = withContext(dispatchers.io) {
-        try {
-            val token = requireToken()
-
-            when (val response = apiService.addGymTrainer(gymId, userId, token)) {
-                is ApiResult.Error -> Result.failure(IllegalStateException(response.message))
-                is ApiResult.Exception -> Result.failure(response.exception)
-                is ApiResult.Success -> {
-                    return@withContext Result.success(true)
-                }
-            }
-
-        } catch (e: MissingTokenException) {
-            Result.failure(e)
-        }
+    override suspend fun deleteFacilityMember(gymId: Int, userId: Int): Result<Unit> = ioResult(dispatchers) {
+        val token = requireToken()
+        val request = DeleteGymMemberRequest(gymId, userId)
+        apiService.deleteGymMember(request, token).mapOrThrow { }
     }
 
-    override suspend fun getGymTrainers(gymId: Int): Result<List<Member>> = withContext(dispatchers.io) {
-        try {
-            val token = requireToken()
-
-            when (val response = apiService.getGymTrainers(gymId, token)) {
-                is ApiResult.Error -> Result.failure(IllegalStateException(response.message))
-                is ApiResult.Exception -> Result.failure(response.exception)
-                is ApiResult.Success -> {
-                    return@withContext Result.success(response.data.toDomain())
-                }
-            }
-
-        } catch (e: MissingTokenException) {
-            Result.failure(e)
-        }
+    override suspend fun getPlatformMembers(gymId: Int): Result<List<Member>> = ioResult(dispatchers) {
+        val token = requireToken()
+        val request = GetPlatformMembersRequest(gymId)
+        apiService.getPlatformMembers(request, token).mapOrThrow { it.toMemberDomainList() }
     }
 
-    override suspend fun deleteGymTrainer(gymId: Int, userId: Int): Result<Boolean> = withContext(dispatchers.io) {
-        try {
-            val token = requireToken()
-
-            when (val response = apiService.deleteGymTrainer(gymId, userId, token)) {
-                is ApiResult.Error -> Result.failure(IllegalStateException(response.message))
-                is ApiResult.Exception -> Result.failure(response.exception)
-                is ApiResult.Success -> {
-                    return@withContext Result.success(true)
-                }
-            }
-
-        } catch (e: MissingTokenException) {
-            Result.failure(e)
-        }
+    override suspend fun addFacilityTrainer(gymId: Int, userId: Int): Result<Unit> = ioResult(dispatchers) {
+        val token = requireToken()
+        val request = AddGymTrainerRequest(gymId, userId)
+        apiService.addGymTrainer(request, token).mapOrThrow { }
     }
 
-    override suspend fun getPlatformTrainers(gymId: Int): Result<List<Member>> = withContext(dispatchers.io) {
-        try {
-            val token = requireToken()
+    override suspend fun getFacilityTrainers(gymId: Int): Result<List<Trainer>> = ioResult(dispatchers) {
+        val token = requireToken()
+        val request = GetGymTrainersRequest(gymId)
+        apiService.getGymTrainers(request, token).mapOrThrow { it.toTrainerDomainList() }
+    }
 
-            when (val response = apiService.getPlatformTrainers(gymId, token)) {
-                is ApiResult.Error -> Result.failure(IllegalStateException(response.message))
-                is ApiResult.Exception -> Result.failure(response.exception)
-                is ApiResult.Success -> {
-                    return@withContext Result.success(response.data.toDomain())
-                }
-            }
+    override suspend fun deleteFacilityTrainer(gymId: Int, userId: Int): Result<Unit> = ioResult(dispatchers) {
+        val token = requireToken()
+        val request = DeleteGymTrainerRequest(gymId, userId)
+        apiService.deleteGymTrainer(request, token).mapOrThrow { }
+    }
 
-        } catch (e: MissingTokenException) {
-            Result.failure(e)
-        }
+    override suspend fun getPlatformTrainers(gymId: Int): Result<List<Trainer>> = ioResult(dispatchers) {
+        val token = requireToken()
+        val request = GetPlatformTrainersRequest(gymId)
+        apiService.getPlatformTrainers(request, token).mapOrThrow { it.toTrainerDomainList() }
     }
 
 }

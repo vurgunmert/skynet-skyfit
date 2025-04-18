@@ -39,6 +39,7 @@ kotlin {
             implementation(projects.ui.core)
             implementation(projects.data.core)
             implementation(projects.data.courses)
+            implementation(projects.data.settings)
 
             implementation(projects.feature.calendar)
 

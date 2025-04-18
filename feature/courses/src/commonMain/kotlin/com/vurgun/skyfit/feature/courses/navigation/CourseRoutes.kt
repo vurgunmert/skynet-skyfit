@@ -6,7 +6,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.vurgun.skyfit.feature.courses.screen.FacilityEditLessonViewModel
-import com.vurgun.skyfit.feature.courses.screen.MobileFacilityCreatedLessonScreen
+import com.vurgun.skyfit.feature.courses.screen.MobileFacilityLessonCreatedScreen
 import com.vurgun.skyfit.feature.courses.screen.MobileFacilityEditLessonScreen
 import com.vurgun.skyfit.feature.courses.screen.MobileFacilityLessonListScreen
 import kotlinx.serialization.Serializable
@@ -91,7 +91,7 @@ private fun FacilityManageCourseLessonGraph(
         }
 
         composable<CourseLessonRoute.Created> {
-            MobileFacilityCreatedLessonScreen(
+            MobileFacilityLessonCreatedScreen(
                 goToListing = {
                     courseNavController.navigate(CourseLessonRoute.Listing.route) {
                         popUpTo(CourseLessonRoute.Listing.route) { inclusive = false }
