@@ -13,7 +13,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.vurgun.skyfit.feature.profile.components.FindExercisesCard
@@ -23,11 +22,11 @@ import com.vurgun.skyfit.feature.profile.components.MobileProfileActionsRow
 import com.vurgun.skyfit.feature.profile.components.MobileProfileHeader
 import com.vurgun.skyfit.feature.profile.components.PhotoGalleryEmptyStackCard
 import com.vurgun.skyfit.feature.profile.components.PhotoGalleryStackCard
-import com.vurgun.skyfit.feature.profile.user.viewmodel.SkyFitUserProfileViewModel
 import com.vurgun.skyfit.feature.social.components.SocialPostCard
 import com.vurgun.skyfit.feature.social.components.SocialQuickPostInputCard
 import com.vurgun.skyfit.ui.core.components.event.LessonSessionColumn
 import com.vurgun.skyfit.ui.core.components.special.SkyFitScaffold
+import org.koin.compose.viewmodel.koinViewModel
 
 @Composable
 fun MobileUserProfileScreen(
@@ -37,9 +36,9 @@ fun MobileUserProfileScreen(
     goToMeasurements: () -> Unit,
     goToExercises: () -> Unit,
     goToPhotoDiary: () -> Unit,
-    goToCreatePost: () -> Unit
+    goToCreatePost: () -> Unit,
+    viewModel: UserProfileOwnerViewModel = koinViewModel()
 ) {
-    val viewModel = remember { SkyFitUserProfileViewModel() }
 
     // Observing state from ViewModel
     val uiState by viewModel.uiState.collectAsState()

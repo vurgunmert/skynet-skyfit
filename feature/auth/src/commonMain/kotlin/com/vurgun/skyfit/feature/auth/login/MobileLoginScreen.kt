@@ -24,6 +24,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
 import com.vurgun.skyfit.feature.auth.component.MobileLoginWelcomeGroup
@@ -151,6 +152,8 @@ private fun MobileLoginWithPhoneContentGroup(
     onClickTermsAndConditions: () -> Unit,
     onClickForgotPassword: () -> Unit
 ) {
+    val passwordFocusRequester = remember { FocusRequester() }
+
     Column(modifier = Modifier.fillMaxWidth()) {
 
         Text(
@@ -184,6 +187,7 @@ private fun MobileLoginWithPhoneContentGroup(
                 )
             }
         } else {
+            //TODO: USE DESIGN SYSTEM
             SkyFitPasswordInputComponent(
                 hint = stringResource(Res.string.auth_password_input_hint),
                 value = password,

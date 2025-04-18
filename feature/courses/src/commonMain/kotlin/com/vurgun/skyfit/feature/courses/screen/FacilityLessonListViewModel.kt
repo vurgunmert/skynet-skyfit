@@ -3,6 +3,7 @@ package com.vurgun.skyfit.feature.courses.screen
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.vurgun.skyfit.data.core.domain.manager.UserManager
+import com.vurgun.skyfit.data.core.domain.model.FacilityDetail
 import com.vurgun.skyfit.data.courses.domain.model.Lesson
 import com.vurgun.skyfit.data.courses.domain.repository.CourseRepository
 import com.vurgun.skyfit.data.courses.mapper.LessonSessionItemViewDataMapper
@@ -31,6 +32,16 @@ class FacilityLessonListViewModel(
     private val lessonMapper: LessonSessionItemViewDataMapper
 ) : ViewModel() {
 
+    private val facilityUser: FacilityDetail
+        get() = userManager.user.value as? FacilityDetail
+            ?: error("User is not a Facility")
+
+    private val gymId: Int
+        get() = facilityUser.gymId
+
+    private val gymAddress: String
+        get() = facilityUser.gymAddress
+
     private val _uiState = MutableStateFlow(FacilityLessonListUiState())
     val uiState: StateFlow<FacilityLessonListUiState> = _uiState
 
@@ -41,13 +52,6 @@ class FacilityLessonListViewModel(
 
     fun loadLessonsFor(date: LocalDate) {
         viewModelScope.launch {
-            val gymId = userManager.user.value?.gymId
-            val gymAddress = userManager.user.value?.gymAddress
-            if (gymId == null || gymAddress == null) {
-                _uiState.update { it.copy(isLoading = false, errorMessage = "Missing gym information.") }
-                return@launch
-            }
-
             _uiState.update { it.copy(isLoading = true, errorMessage = null) }
 
             val result = courseRepository.getLessonsByFacility(gymId, date.toString(), date.toString())

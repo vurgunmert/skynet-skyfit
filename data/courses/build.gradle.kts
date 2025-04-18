@@ -30,6 +30,7 @@ kotlin {
         commonMain.dependencies {
             implementation(projects.data.network)
             implementation(projects.data.core)
+            implementation(projects.data.user)
 
             implementation(libs.koin.core)
             implementation(libs.kotlinx.serialization)

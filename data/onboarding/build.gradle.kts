@@ -31,6 +31,7 @@ kotlin {
             implementation(projects.data.core)
             implementation(projects.data.settings)
             implementation(projects.data.network)
+            implementation(projects.data.user)
 
             implementation(libs.kotlinx.coroutines.core)
 

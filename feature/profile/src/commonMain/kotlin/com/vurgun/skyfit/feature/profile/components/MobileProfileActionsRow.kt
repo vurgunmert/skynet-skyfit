@@ -35,7 +35,7 @@ fun MobileProfileActionsRow(
     onClickNewPost: () -> Unit
 ) {
     Row(
-        Modifier.padding(horizontal = 16.dp).fillMaxWidth(),
+        Modifier.fillMaxWidth(),
         horizontalArrangement = Arrangement.spacedBy(16.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {

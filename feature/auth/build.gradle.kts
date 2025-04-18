@@ -35,6 +35,7 @@ kotlin {
             implementation(projects.ui.core)
             implementation(projects.data.core)
             implementation(projects.data.auth)
+            implementation(projects.data.user)
 
             implementation(libs.koin.core)
             implementation(libs.bundles.koin.compose)

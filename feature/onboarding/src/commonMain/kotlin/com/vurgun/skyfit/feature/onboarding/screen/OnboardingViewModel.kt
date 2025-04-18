@@ -2,22 +2,21 @@ package com.vurgun.skyfit.feature.onboarding.screen
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.vurgun.skyfit.data.onboarding.OnboardingRepository
-import com.vurgun.skyfit.data.onboarding.OnboardingRequest
-import com.vurgun.skyfit.data.onboarding.OnboardingResult
 import com.vurgun.skyfit.data.core.domain.model.FitnessTagType
 import com.vurgun.skyfit.data.core.domain.model.GenderType
 import com.vurgun.skyfit.data.core.domain.model.GoalType
 import com.vurgun.skyfit.data.core.domain.model.HeightUnitType
 import com.vurgun.skyfit.data.core.domain.model.UserRole
 import com.vurgun.skyfit.data.core.domain.model.WeightUnitType
-import com.vurgun.skyfit.data.core.domain.repository.UserRepository
+import com.vurgun.skyfit.data.onboarding.OnboardingRepository
+import com.vurgun.skyfit.data.onboarding.OnboardingRequest
+import com.vurgun.skyfit.data.onboarding.OnboardingResult
+import com.vurgun.skyfit.data.user.repository.UserRepository
 import com.vurgun.skyfit.ui.core.viewdata.BodyTypeViewData
 import com.vurgun.skyfit.ui.core.viewdata.CharacterTypeViewData
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 
 internal sealed class OnboardingViewEvent {

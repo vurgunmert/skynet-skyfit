@@ -1,4 +1,4 @@
-package com.vurgun.skyfit.feature.social.components.viewdata
+package com.vurgun.skyfit.feature.social.viewdata
 
 data class SocialPostItemViewData(
     val postId: String,

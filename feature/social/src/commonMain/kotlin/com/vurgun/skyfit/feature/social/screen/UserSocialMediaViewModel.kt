@@ -1,8 +1,8 @@
 package com.vurgun.skyfit.feature.social.screen
 
 import androidx.lifecycle.ViewModel
-import com.vurgun.skyfit.feature.social.components.viewdata.SocialPostItemViewData
-import com.vurgun.skyfit.feature.social.components.viewdata.fakePosts
+import com.vurgun.skyfit.feature.social.viewdata.SocialPostItemViewData
+import com.vurgun.skyfit.feature.social.viewdata.fakePosts
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 

@@ -33,7 +33,8 @@ fun HomeRoot(
         is UserRole.Trainer -> MobileTrainerHomeScreen(
             goToNotifications = { },
             goToMessages = { },
-            goToProfile = { }
+            goToProfile = { },
+            goToAppointments = goToAppointments,
         )
 
         is UserRole.Facility -> MobileFacilityHomeScreen(

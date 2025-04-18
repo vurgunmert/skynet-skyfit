@@ -25,7 +25,6 @@ fun MobileUserHomeScreen(
     goToAppointments: () -> Unit,
     viewModel: UserHomeViewModel = koinViewModel()
 ) {
-    val characterType = viewModel.characterType.collectAsState(null).value
 
     SkyFitMobileScaffold(
         topBar = {
@@ -42,7 +41,7 @@ fun MobileUserHomeScreen(
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {
 
-            characterType?.let { characterType ->
+            viewModel.characterType?.let { characterType ->
                 MobileDashboardHomeCharacterProgressComponent(
                     characterType = characterType,
                     onClick = goToProfile

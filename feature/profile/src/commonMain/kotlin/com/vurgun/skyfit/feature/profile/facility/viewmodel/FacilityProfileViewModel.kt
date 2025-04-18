@@ -3,19 +3,17 @@ package com.vurgun.skyfit.feature.profile.facility.viewmodel
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.vurgun.skyfit.data.core.domain.manager.UserManager
-import com.vurgun.skyfit.data.core.utility.now
+import com.vurgun.skyfit.data.core.domain.model.FacilityDetail
 import com.vurgun.skyfit.data.courses.domain.repository.CourseRepository
 import com.vurgun.skyfit.data.courses.mapper.LessonSessionItemViewDataMapper
 import com.vurgun.skyfit.data.courses.model.LessonSessionColumnViewData
 import com.vurgun.skyfit.feature.profile.components.viewdata.PhotoGalleryStackViewData
 import com.vurgun.skyfit.feature.profile.components.viewdata.TrainerProfileCardItemViewData
-import com.vurgun.skyfit.feature.social.components.viewdata.SocialPostItemViewData
-import com.vurgun.skyfit.feature.social.components.viewdata.fakePosts
+import com.vurgun.skyfit.feature.social.viewdata.SocialPostItemViewData
 import com.vurgun.skyfit.ui.core.styling.SkyFitAsset
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
-import kotlinx.datetime.LocalDate
 
 data class FacilityProfileInfoViewData(
     val backgroundUrl: String,
@@ -43,6 +41,10 @@ class FacilityProfileViewModel(
     private val lessonSessionItemViewDataMapper: LessonSessionItemViewDataMapper
 ) : ViewModel() {
 
+    private val facilityUser: FacilityDetail
+        get() = userManager.user.value as? FacilityDetail
+            ?: error("User is not a Facility")
+
     private val _profileState = MutableStateFlow<FacilityProfileState>(FacilityProfileState())
     val profileState: StateFlow<FacilityProfileState> get() = _profileState
 
@@ -52,18 +54,18 @@ class FacilityProfileViewModel(
     private val _posts = MutableStateFlow<List<SocialPostItemViewData>>(emptyList())
     val posts: StateFlow<List<SocialPostItemViewData>> get() = _posts
 
-    fun loadData() {
+    init {
+        loadData()
+    }
 
-        _posts.value = fakePosts
-
-        val user = userManager.user.value
+    private fun loadData() {
 
         val infoViewData = FacilityProfileInfoViewData(
-            backgroundUrl = user?.backgroundImageUrl.orEmpty(),
-            name = user?.gymName.orEmpty(),
-            bio = user?.bio.orEmpty(),
-            address = user?.gymAddress.orEmpty(),
-            socialLink = "@ironstudio",
+            backgroundUrl = facilityUser.backgroundImageUrl,
+            name = facilityUser.gymName,
+            bio = facilityUser.bio.orEmpty(),
+            address = facilityUser.gymAddress,
+            socialLink = "",
             memberCount = 0,
             trainerCount = 0,
             rating = 5.0
@@ -80,21 +82,15 @@ class FacilityProfileViewModel(
 
         viewModelScope.launch {
 
-            val gymId = userManager.user.value?.gymId
-            //TODO: Fail if not available gymId
-
-            val items = courseRepository.getLessonsByFacility(gymId!!, LocalDate.now().toString(), null)
+            val items = courseRepository.getUpcomingLessonsByFacility(facilityUser.gymId)
                 .map { lessons ->
-                    lessons
-                        .sortedBy { it.startDateTime }
-                        .take(5)
-                        .map {
-                        lessonSessionItemViewDataMapper.map(it, user?.gymAddress)
+                    lessons.map {
+                        lessonSessionItemViewDataMapper.map(it, facilityUser.gymAddress)
                     }
                 }.getOrElse { emptyList() }
 
             val lessonsColumViewData = LessonSessionColumnViewData(
-                iconId = SkyFitAsset.SkyFitIcon.EXERCISES.resId,
+                iconId = SkyFitAsset.SkyFitIcon.EXERCISES.id,
                 title = "Özel Dersler",
                 items = items
             )

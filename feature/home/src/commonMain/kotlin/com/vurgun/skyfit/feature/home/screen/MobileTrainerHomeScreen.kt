@@ -53,15 +53,17 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.vurgun.skyfit.data.core.domain.model.CharacterType
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.vurgun.skyfit.feature.home.component.MobileDashboardHomeCharacterProgressComponent
 import com.vurgun.skyfit.feature.home.component.MobileDashboardHomeToolbarComponent
+import com.vurgun.skyfit.feature.home.component.MobileDashboardHomeUpcomingAppointmentsComponent
 import com.vurgun.skyfit.ui.core.components.special.ButtonSize
 import com.vurgun.skyfit.ui.core.components.special.ButtonState
 import com.vurgun.skyfit.ui.core.components.special.ButtonVariant
 import com.vurgun.skyfit.ui.core.components.special.SkyFitButtonComponent
 import com.vurgun.skyfit.ui.core.styling.SkyFitColor
 import com.vurgun.skyfit.ui.core.styling.SkyFitTypography
+import org.koin.compose.viewmodel.koinViewModel
 import kotlin.math.sign
 
 @Composable
@@ -69,9 +71,10 @@ fun MobileTrainerHomeScreen(
     goToNotifications: () -> Unit,
     goToMessages: () -> Unit,
     goToProfile: () -> Unit,
+    goToAppointments: () -> Unit,
+    viewModel: TrainerHomeViewModel = koinViewModel()
 ) {
-
-    val characterType = CharacterType.Koala
+    val appointments by viewModel.appointments.collectAsStateWithLifecycle()
 
     Scaffold(
         backgroundColor = SkyFitColor.background.default,
@@ -87,7 +90,7 @@ fun MobileTrainerHomeScreen(
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {
 
-            characterType?.let {
+            viewModel.characterType?.let {
                 MobileDashboardHomeCharacterProgressComponent(
                     characterType = it,
                     onClick = goToProfile
@@ -96,11 +99,16 @@ fun MobileTrainerHomeScreen(
 
             Spacer(Modifier.height(24.dp))
 
-            MobileDashboardHomeTrainerStatisticsComponent()
+//            MobileDashboardHomeTrainerStatisticsComponent()
 
-            MobileDashboardHomeTrainerNoClassComponent(onClickAdd = {})
-
-            MobileDashboardHomeTrainerClassScheduleComponent()
+            if (appointments.isEmpty()) {
+                MobileDashboardHomeTrainerNoClassComponent(onClickAdd = {})
+            } else {
+                MobileDashboardHomeUpcomingAppointmentsComponent(
+                    appointments = appointments,
+                    onClickShowAll = goToAppointments
+                )
+            }
 
             Spacer(Modifier.height(128.dp))
         }
@@ -387,6 +395,7 @@ fun MobileDashboardHomeTrainerNoClassComponent(onClickAdd: () -> Unit) {
 }
 
 
+//TODO: REMOVE
 @Composable
 fun MobileDashboardHomeTrainerClassScheduleComponent() {
     val classList = listOf(

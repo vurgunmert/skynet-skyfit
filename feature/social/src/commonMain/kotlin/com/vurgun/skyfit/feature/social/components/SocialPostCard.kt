@@ -19,14 +19,13 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.dp
 import com.vurgun.skyfit.ui.core.styling.SkyFitColor
 import com.vurgun.skyfit.ui.core.styling.SkyFitTypography
 import com.vurgun.skyfit.feature.social.components.SkyFitPostCardItemComponent.InteractionRow
 import com.vurgun.skyfit.feature.social.components.SkyFitPostCardItemComponent.ProfileImage
 import com.vurgun.skyfit.feature.social.components.SkyFitPostCardItemComponent.SkyFitPostItemUserInfoRow
-import com.vurgun.skyfit.feature.social.components.viewdata.SocialPostItemViewData
+import com.vurgun.skyfit.feature.social.viewdata.SocialPostItemViewData
 import com.vurgun.skyfit.ui.core.components.image.NetworkImage
 import org.jetbrains.compose.resources.DrawableResource
 import org.jetbrains.compose.resources.painterResource

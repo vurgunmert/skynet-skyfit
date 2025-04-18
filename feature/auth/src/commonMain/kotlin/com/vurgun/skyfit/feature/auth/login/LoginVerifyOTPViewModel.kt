@@ -2,22 +2,18 @@ package com.vurgun.skyfit.feature.auth.login
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.vurgun.skyfit.data.core.storage.LocalSettingsStore
 import com.vurgun.skyfit.data.auth.domain.model.AuthorizationOTPResult
 import com.vurgun.skyfit.data.auth.domain.model.SendOTPResult
 import com.vurgun.skyfit.data.auth.domain.repository.AuthRepository
 import com.vurgun.skyfit.data.core.domain.manager.UserManager
-import com.vurgun.skyfit.data.core.domain.repository.UserRepository
 import com.vurgun.skyfit.data.core.storage.Storage
+import com.vurgun.skyfit.data.user.repository.UserRepository
 import kotlinx.coroutines.delay
-import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asSharedFlow
-import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
@@ -70,8 +66,12 @@ class LoginOTPVerificationViewModel(
                         AuthorizationOTPResult.RegistrationRequired -> LoginOTPVerificationViewEvent.GoToRegister
                         AuthorizationOTPResult.OnboardingRequired -> LoginOTPVerificationViewEvent.GoToOnboarding
                         AuthorizationOTPResult.LoginSuccess -> {
-                            userManager.getActiveUser(true)
-                            LoginOTPVerificationViewEvent.GoToDashboard
+                            try {
+                                userManager.getActiveUser(true).getOrThrow()
+                                LoginOTPVerificationViewEvent.GoToDashboard
+                            } catch (e: Exception) {
+                                LoginOTPVerificationViewEvent.ShowError(e.message)
+                            }
                         }
                     }
                 )

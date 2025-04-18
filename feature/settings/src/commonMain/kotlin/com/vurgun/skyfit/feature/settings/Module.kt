@@ -17,7 +17,7 @@ import org.koin.dsl.module
 val featureSettingsModule = module {
     includes(dataSettingsModule)
 
-    viewModel { SettingsHomeViewModel(get(), get()) }
+    viewModel { SettingsHomeViewModel(get()) }
     viewModel { ChangePasswordViewModel() }
     viewModel { SettingsManageAccountsViewModel(get()) }
 

@@ -5,7 +5,7 @@ import kotlin.uuid.ExperimentalUuidApi
 import kotlin.uuid.Uuid
 
 data class LessonSessionColumnViewData(
-    val iconId: String,
+    val iconId: Int,
     val title: String,
     val items: List<LessonSessionItemViewData>
 )

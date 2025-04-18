@@ -2,6 +2,7 @@ package com.vurgun.skyfit.feature.settings.facility.profile
 
 import androidx.lifecycle.ViewModel
 import com.vurgun.skyfit.data.core.domain.manager.UserManager
+import com.vurgun.skyfit.data.core.domain.model.FacilityDetail
 import com.vurgun.skyfit.data.core.domain.model.FitnessTagType
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -20,6 +21,10 @@ class FacilityManageProfileViewModel(
     private val userManager: UserManager
 ) : ViewModel() {
 
+    private val facilityUser: FacilityDetail
+        get() = userManager.user.value as? FacilityDetail
+            ?: error("User is not a Facility")
+
     val hasMultipleAccounts = userManager.accountTypes.value.size > 1
 
     private val _accountState = MutableStateFlow(FacilityAccountState())
@@ -28,14 +33,12 @@ class FacilityManageProfileViewModel(
     private var initialState: FacilityAccountState? = null
 
     fun loadData() {
-        val facilityDetail = userManager.user.value ?: return
-
         val initial = FacilityAccountState(
-            name = facilityDetail.gymName,
-            biography = facilityDetail.bio,
+            name = facilityUser.gymName,
+            biography = facilityUser.bio,
             profileTags = listOf(), //TODO: GET TAGS API
-            location = facilityDetail.gymAddress,
-            backgroundImageUrl = facilityDetail.backgroundImageUrl
+            location = facilityUser.gymAddress,
+            backgroundImageUrl = facilityUser.backgroundImageUrl
         )
         _accountState.value = initial
         initialState = initial

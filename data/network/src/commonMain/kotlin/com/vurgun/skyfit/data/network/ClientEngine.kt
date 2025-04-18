@@ -16,6 +16,7 @@ import kotlinx.serialization.json.Json
 import kotlin.native.concurrent.ThreadLocal
 
 const val BASE_HOST_URL = "http://skyfit.mertbeta.xyz" //TODO: SECURE URL
+const val BASE_IMAGE_URL = "http://skyfit.mertbeta.xyz/" //TODO: SECURE URL
 private const val FULL_BASE_URL = "${BASE_HOST_URL}:8084/api/v1/" //TODO: SECURE URL
 
 expect fun httpClientEngine(): HttpClientEngine

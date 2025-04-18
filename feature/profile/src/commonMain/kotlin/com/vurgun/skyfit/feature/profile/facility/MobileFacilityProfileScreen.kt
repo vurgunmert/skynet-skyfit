@@ -29,6 +29,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.vurgun.skyfit.data.courses.model.LessonSessionColumnViewData
 import com.vurgun.skyfit.feature.profile.components.MobileProfileActionsRow
 import com.vurgun.skyfit.feature.profile.components.MobileProfileBackgroundImage
@@ -72,22 +73,18 @@ fun MobileFacilityProfileScreen(
     goToVisitTrainerProfile: () -> Unit,
     goToPhotoGallery: () -> Unit,
     goToChat: () -> Unit,
-    viewMode: ProfileViewMode = ProfileViewMode.VISITOR,
+    viewMode: ProfileViewMode = ProfileViewMode.OWNER,
     viewModel: FacilityProfileViewModel = koinInject()
 ) {
     val scrollState = rememberScrollState()
-    val profileState by viewModel.profileState.collectAsState()
-    val postsVisible by viewModel.postsVisible.collectAsState()
+    val profileState by viewModel.profileState.collectAsStateWithLifecycle()
+    val postsVisible by viewModel.postsVisible.collectAsStateWithLifecycle()
     val posts by viewModel.posts.collectAsState()
 
     val infoViewData = profileState.infoViewData
     val galleryStackViewData = profileState.galleryStackViewData
     val lessonSessionColumnViewData = profileState.lessonSessionColumnViewData
     val trainers = profileState.trainers
-
-    LaunchedEffect(viewModel) {
-        viewModel.loadData()
-    }
 
     var backgroundAlpha by remember { mutableStateOf(1f) }
     val transitionThreshold = 300f
@@ -127,6 +124,7 @@ fun MobileFacilityProfileScreen(
                     modifier = Modifier
                         .align(Alignment.TopCenter)
                         .fillMaxWidth()
+                        .padding(horizontal = 16.dp)
                         .verticalScroll(scrollState),
                     verticalArrangement = Arrangement.spacedBy(16.dp)
                 ) {
@@ -140,6 +138,16 @@ fun MobileFacilityProfileScreen(
                         onClickBookingCalendar = goToVisitCalendar,
                         onClickMessage = goToChat
                     )
+
+                    if (viewMode == ProfileViewMode.OWNER) {
+                        MobileProfileActionsRow(
+                            postsSelected = postsVisible,
+                            onClickAbout = { viewModel.togglePostTab(false) },
+                            onClickPosts = { viewModel.togglePostTab(true) },
+                            onClickSettings = goToSettings,
+                            onClickNewPost = goToCreatePost
+                        )
+                    }
 
                     if (postsVisible) {
                         SocialQuickPostInputCard(modifier = Modifier.padding(horizontal = 16.dp), onClickSend = {})
@@ -155,22 +163,12 @@ fun MobileFacilityProfileScreen(
                             )
                         }
                     } else {
-                        if (viewMode == ProfileViewMode.OWNER) {
-                            MobileProfileActionsRow(
-                                postsSelected = postsVisible,
-                                onClickAbout = { viewModel.togglePostTab(false) },
-                                onClickPosts = { viewModel.togglePostTab(true) },
-                                onClickSettings = goToSettings,
-                                onClickNewPost = goToCreatePost
-                            )
-                        }
-
                         MobileFacilityProfileLessonSection(
                             lessonSessionColumnViewData = lessonSessionColumnViewData,
                             viewMode = viewMode,
                             goToLessons = goToCourses,
                             goToVisitCalendar = goToVisitCalendar,
-                            modifier = Modifier.padding(horizontal = 16.dp)
+                            modifier = Modifier
                         )
 
 //                        MobileFacilityProfilePhotoGallerySection(
@@ -193,7 +191,6 @@ fun MobileFacilityProfileScreen(
             }
         }
     }
-
 }
 
 @Composable
@@ -214,7 +211,6 @@ fun MobileFacilityProfileScreenInfoCardComponent(
 ) {
     BoxWithConstraints(
         modifier = Modifier
-            .padding(horizontal = 16.dp)
             .fillMaxWidth()
             .background(color = SkyFitColor.background.surfaceSecondary, RoundedCornerShape(16.dp))
             .padding(24.dp)

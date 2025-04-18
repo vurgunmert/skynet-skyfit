@@ -37,8 +37,7 @@ import com.vurgun.skyfit.feature.profile.components.MobileProfileActionTabsRow
 import com.vurgun.skyfit.feature.profile.components.MobileVisitedProfileActionsComponent
 import com.vurgun.skyfit.feature.profile.components.UserProfileCardPreferenceRow
 import com.vurgun.skyfit.feature.profile.components.viewdata.LifestyleActionRowViewData
-import com.vurgun.skyfit.feature.profile.trainer.viewmodel.SkyFitTrainerProfileViewModel
-import com.vurgun.skyfit.feature.profile.user.viewmodel.TopBarGroupViewData
+import com.vurgun.skyfit.feature.profile.user.TopBarGroupViewData
 import com.vurgun.skyfit.feature.social.components.LazySocialPostsColumn
 import com.vurgun.skyfit.ui.core.components.button.SkyFitPrimaryCircularBackButton
 import com.vurgun.skyfit.ui.core.components.event.LessonSessionColumn
@@ -49,6 +48,7 @@ import com.vurgun.skyfit.ui.core.components.special.SkyFitButtonComponent
 import com.vurgun.skyfit.ui.core.styling.SkyFitColor
 import com.vurgun.skyfit.ui.core.styling.SkyFitTypography
 import org.jetbrains.compose.resources.painterResource
+import org.koin.compose.viewmodel.koinViewModel
 import skyfit.ui.core.generated.resources.Res
 import skyfit.ui.core.generated.resources.ic_calendar_dots
 import skyfit.ui.core.generated.resources.ic_send
@@ -57,10 +57,10 @@ import skyfit.ui.core.generated.resources.ic_send
 fun MobileTrainerProfileVisitedScreen(
     goToBack: () -> Unit,
     goToChat: () -> Unit,
-    goToVisitCalendar: () -> Unit
+    goToVisitCalendar: () -> Unit,
+    viewModel: TrainerProfileOwnerViewModel = koinViewModel()
 ) {
 
-    val viewModel = remember { SkyFitTrainerProfileViewModel() }
     val scrollState = rememberScrollState()
     var showPosts by remember { mutableStateOf(false) }
 
@@ -82,7 +82,7 @@ fun MobileTrainerProfileVisitedScreen(
         val imageHeight = width * 9 / 16
         val contentTopPadding = imageHeight * 3 / 10
 
-        MobileTrainerProfileBackgroundImageComponent(imageHeight)
+//        MobileTrainerProfileBackgroundImageComponent(imageHeight)
 
         Column(
             modifier = Modifier.fillMaxSize(),
@@ -226,7 +226,7 @@ private fun MobileTrainerProfileVisitedScreenInfoCardComponent(
         }
 
         NetworkImage(
-            imageUrl = viewData.imageUrl,
+            imageUrl = viewData.profileImageUrl,
             modifier = Modifier
                 .size(100.dp)
                 .clip(RoundedCornerShape(20.dp))

@@ -1,14 +1,17 @@
-package com.vurgun.skyfit.feature.profile.user.viewmodel
+package com.vurgun.skyfit.feature.profile.user
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.vurgun.skyfit.data.core.domain.manager.UserManager
+import com.vurgun.skyfit.data.core.domain.model.UserDetail
+import com.vurgun.skyfit.data.courses.domain.repository.CourseRepository
 import com.vurgun.skyfit.data.courses.model.LessonSessionColumnViewData
 import com.vurgun.skyfit.data.courses.model.LessonSessionItemViewData
 import com.vurgun.skyfit.feature.profile.components.viewdata.LifestyleActionItemViewData
 import com.vurgun.skyfit.feature.profile.components.viewdata.LifestyleActionRowViewData
 import com.vurgun.skyfit.feature.profile.components.viewdata.PhotoGalleryStackViewData
-import com.vurgun.skyfit.feature.social.components.viewdata.SocialPostItemViewData
-import com.vurgun.skyfit.feature.social.components.viewdata.fakePosts
+import com.vurgun.skyfit.feature.social.viewdata.SocialPostItemViewData
+import com.vurgun.skyfit.feature.social.viewdata.fakePosts
 import com.vurgun.skyfit.ui.core.styling.SkyFitAsset
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
@@ -29,7 +32,14 @@ data class UserProfileUiState(
 )
 
 
-class SkyFitUserProfileViewModel : ViewModel() {
+class UserProfileOwnerViewModel(
+    private val userManager: UserManager,
+    private val courseRepository: CourseRepository,
+) : ViewModel() {
+
+    private val user: UserDetail
+        get() = userManager.user.value as? UserDetail
+            ?: error("❌ current account is not user")
 
     private val _posts = MutableStateFlow<List<SocialPostItemViewData>>(emptyList())
     val posts: StateFlow<List<SocialPostItemViewData>> get() = _posts
@@ -51,13 +61,14 @@ class SkyFitUserProfileViewModel : ViewModel() {
 
     init {
         val profileViewData = TopBarGroupViewData(
-            name = "Dexter Moore",
-            social = "@dexteretymo",
-            imageUrl = "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSJq8Cfy_pOdcJOYIQew3rWrnwwxfc8bZIarg&s",
+            name = user.firstName,
+            social = user.username,
+            profileImageUrl = user.profileImageUrl,
+            backgroundImageUrl = user.backgroundImageUrl,
             preferences = listOf(
-                UserProfilePreferenceItem(iconId = "ic_height_outline", "Boy", "175"),
-                UserProfilePreferenceItem(iconId = "ic_dna_outline", "Kilo", "75"),
-                UserProfilePreferenceItem(iconId = "ic_overweight", "Vücut Tipi", "Ecto")
+                UserProfilePreferenceItem(iconId = "ic_height_outline", "Boy", user.height.toString()),
+                UserProfilePreferenceItem(iconId = "ic_dna_outline", "Kilo", user.weight.toString()),
+                UserProfilePreferenceItem(iconId = "ic_overweight", "Vücut Tipi", user.bodyTypeId.toString())
             ),
             showInfoMini = false
         )
@@ -84,7 +95,7 @@ class SkyFitUserProfileViewModel : ViewModel() {
         )
 
         val appointmentsColumnViewData = LessonSessionColumnViewData(
-            iconId = SkyFitAsset.SkyFitIcon.EXERCISES.resId,
+            iconId = SkyFitAsset.SkyFitIcon.EXERCISES.id,
             title = "Randevularım",
             items = appointmentsViewData
         )
@@ -151,7 +162,8 @@ data class UserProfilePreferenceItem(
 data class TopBarGroupViewData(
     val name: String = "",
     val social: String = "",
-    val imageUrl: String = "https://cdn.shopify.com/s/files/1/0599/3624/3866/t/57/assets/e69266f5f9de--field-street-fitness-6-4a2977.jpg?v=1682607953",
+    val profileImageUrl: String? = null,
+    val backgroundImageUrl: String? = null,
     val preferences: List<UserProfilePreferenceItem> = emptyList(),
     val showInfoMini: Boolean = false // Whether to show the mini info card
 )

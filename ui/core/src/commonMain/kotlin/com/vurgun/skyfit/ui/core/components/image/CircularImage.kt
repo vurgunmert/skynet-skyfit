@@ -28,6 +28,7 @@ import androidx.compose.ui.unit.dp
 import coil3.compose.AsyncImage
 import coil3.compose.AsyncImagePainter
 import coil3.compose.rememberAsyncImagePainter
+import com.vurgun.skyfit.ui.core.styling.SkyFitColor
 import org.jetbrains.compose.resources.painterResource
 import skyfit.ui.core.generated.resources.Res
 import skyfit.ui.core.generated.resources.ic_image
@@ -63,7 +64,7 @@ private fun CircularImageContent(
         contentDescription = "Image",
         modifier = modifier
             .clip(CircleShape)
-            .background(Color.Gray),
+            .background(SkyFitColor.background.fillTransparent),
         contentScale = ContentScale.Crop,
         onState = { state ->
             if (state is AsyncImagePainter.State.Success) {
@@ -88,7 +89,7 @@ fun NetworkImage(
         modifier = modifier
             .size(size)
             .clip(RoundedCornerShape(cornerRadius))
-            .background(Color.LightGray),
+            .background(SkyFitColor.background.fillTransparent),
         contentAlignment = Alignment.Center
     ) {
         when (state) {

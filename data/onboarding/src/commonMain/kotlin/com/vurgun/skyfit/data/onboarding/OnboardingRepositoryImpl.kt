@@ -1,9 +1,9 @@
 package com.vurgun.skyfit.data.onboarding
 
-import com.vurgun.skyfit.data.core.domain.repository.UserRepository
 import com.vurgun.skyfit.data.core.storage.Storage
 import com.vurgun.skyfit.data.network.ApiResult
 import com.vurgun.skyfit.data.network.DispatcherProvider
+import com.vurgun.skyfit.data.user.repository.UserRepository
 import kotlinx.coroutines.withContext
 
 internal class OnboardingRepositoryImpl(

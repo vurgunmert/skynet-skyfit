@@ -17,7 +17,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
-import com.vurgun.skyfit.feature.profile.user.viewmodel.TopBarGroupViewData
+import com.vurgun.skyfit.feature.profile.user.TopBarGroupViewData
 import com.vurgun.skyfit.ui.core.components.divider.VerticalDivider
 import com.vurgun.skyfit.ui.core.components.image.NetworkImage
 import com.vurgun.skyfit.ui.core.styling.SkyFitColor
@@ -39,7 +39,7 @@ fun MobileProfileHeader(
         val contentTopPadding = imageHeight * 3 / 10
 
         if (!viewData.showInfoMini) {
-            MobileProfileBackgroundImage(viewData.imageUrl, imageHeight)
+            MobileProfileBackgroundImage(viewData.profileImageUrl, imageHeight)
         }
 
         Column(
@@ -57,7 +57,7 @@ fun MobileProfileHeader(
 }
 
 @Composable
-fun MobileProfileBackgroundImage(imageUrl: String, height: Dp) {
+fun MobileProfileBackgroundImage(imageUrl: String?, height: Dp) {
     NetworkImage(
         imageUrl = imageUrl,
         modifier = Modifier
@@ -67,7 +67,8 @@ fun MobileProfileBackgroundImage(imageUrl: String, height: Dp) {
 }
 
 @Composable
-fun MobileProfileBackgroundImage(imageUrl: String, modifier: Modifier = Modifier.fillMaxWidth()) {
+fun MobileProfileBackgroundImage(imageUrl: String?,
+                                 modifier: Modifier = Modifier.fillMaxWidth()) {
     NetworkImage(
         imageUrl = imageUrl,
         modifier = modifier

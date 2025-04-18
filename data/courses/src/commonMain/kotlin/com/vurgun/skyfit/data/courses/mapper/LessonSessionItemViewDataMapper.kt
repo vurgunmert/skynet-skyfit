@@ -6,7 +6,7 @@ import com.vurgun.skyfit.data.courses.model.LessonSessionItemViewData
 class LessonSessionItemViewDataMapper {
     fun map(
         lesson: Lesson,
-        location: String?
+        location: String? = null
     ): LessonSessionItemViewData {
         return LessonSessionItemViewData(
             iconId = lesson.iconId,

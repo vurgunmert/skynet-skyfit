@@ -67,8 +67,12 @@ class LoginViewModel(
             try {
                 val event = when (val result = authRepository.login(_phoneNumber.value, _password.value)) {
                     is AuthLoginResult.Success -> {
-                        userManager.getActiveUser(true)
-                        LoginViewEvent.GoToDashboard
+                        try {
+                            userManager.getActiveUser(true).getOrThrow()
+                            LoginViewEvent.GoToDashboard
+                        } catch (e: Exception) {
+                            LoginViewEvent.ShowError(e.message)
+                        }
                     }
 
                     is AuthLoginResult.OTPVerificationRequired -> LoginViewEvent.GoToOTPVerification

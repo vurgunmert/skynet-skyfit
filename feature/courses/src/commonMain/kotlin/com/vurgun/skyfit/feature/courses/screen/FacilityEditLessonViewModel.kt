@@ -4,6 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.vurgun.skyfit.data.core.domain.manager.UserManager
 import com.vurgun.skyfit.data.core.domain.model.CalendarRecurrence
+import com.vurgun.skyfit.data.core.domain.model.FacilityDetail
 import com.vurgun.skyfit.data.core.utility.now
 import com.vurgun.skyfit.data.courses.domain.model.Lesson
 import com.vurgun.skyfit.data.courses.domain.model.LessonCreationInfo
@@ -51,6 +52,13 @@ class FacilityEditLessonViewModel(
     private val memberRepository: MemberRepository
 ) : ViewModel() {
 
+    private val facilityUser: FacilityDetail
+        get() = userManager.user.value as? FacilityDetail
+            ?: error("User is not a Facility!")
+
+    val gymId: Int
+        get() = facilityUser.gymId
+
     private var initialState: FacilityEditLessonViewState = FacilityEditLessonViewState()
 
     private val _uiState = MutableStateFlow(initialState)
@@ -58,8 +66,6 @@ class FacilityEditLessonViewModel(
 
     private val _trainers = MutableStateFlow<List<SelectableTrainerMenuItemModel>>(emptyList())
     val trainers: StateFlow<List<SelectableTrainerMenuItemModel>> = _trainers
-
-    var gymId: Int = userManager.user.value?.gymId ?: error("NO GYM ID")
 
     var createdLessonInfo: LessonCreationInfo? = null
     var updatedLessonInfo: LessonUpdateInfo? = null

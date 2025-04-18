@@ -14,6 +14,8 @@ interface Storage {
         writeValue(key, null)
     }
 
+    suspend fun clearAll()
+
     sealed class Key<T>(
         val name: String,
         val defaultValue: T?,
@@ -27,5 +29,4 @@ interface Storage {
         open class BooleanKey(name: String, defaultValue: Boolean?): Key<Boolean>(name, defaultValue)
 
     }
-
 }

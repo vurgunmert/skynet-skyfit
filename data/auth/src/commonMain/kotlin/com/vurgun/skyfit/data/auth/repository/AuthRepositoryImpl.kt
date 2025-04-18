@@ -13,11 +13,11 @@ import com.vurgun.skyfit.data.auth.model.CreatePasswordRequest
 import com.vurgun.skyfit.data.auth.model.ResetPasswordRequest
 import com.vurgun.skyfit.data.auth.model.VerifyOTPRequest
 import com.vurgun.skyfit.data.auth.service.AuthApiService
-import com.vurgun.skyfit.data.core.domain.repository.UserRepository
 import com.vurgun.skyfit.data.core.model.MissingTokenException
 import com.vurgun.skyfit.data.core.storage.Storage
 import com.vurgun.skyfit.data.network.ApiResult
 import com.vurgun.skyfit.data.network.DispatcherProvider
+import com.vurgun.skyfit.data.user.repository.UserRepository
 import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.withContext
 

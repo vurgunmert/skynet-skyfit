@@ -36,6 +36,12 @@ class DataStoreStorage(
         }
     }
 
+    override suspend fun clearAll() {
+        dataStore.edit { preferences ->
+            preferences.clear()
+        }
+    }
+
     @Suppress("UNCHECKED_CAST")
     private fun <T> getDataStoreKey(key: Storage.Key<T>): Preferences.Key<T> = when (key) {
         is Storage.Key.BooleanKey -> booleanPreferencesKey(key.name)

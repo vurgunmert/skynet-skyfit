@@ -23,7 +23,7 @@ import com.vurgun.skyfit.ui.core.styling.SkyFitTypography
 
 @Composable
 fun MobileFacilityTrainersCard(onClickAdd: () -> Unit) {
-    Column(Modifier.padding(16.dp).fillMaxWidth()) {
+    Column(Modifier.fillMaxWidth()) {
         Text("Antrenorlerimiz", style = SkyFitTypography.bodyLargeSemibold)
         Spacer(Modifier.height(16.dp))
         Box(

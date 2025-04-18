@@ -1,6 +1,5 @@
 package com.vurgun.skyfit.data.courses.repository
 
-import com.vurgun.skyfit.data.core.domain.repository.UserRepository
 import com.vurgun.skyfit.data.core.model.MissingTokenException
 import com.vurgun.skyfit.data.core.storage.Storage
 import com.vurgun.skyfit.data.courses.CourseApiService
@@ -26,6 +25,7 @@ import com.vurgun.skyfit.data.network.ApiResult
 import com.vurgun.skyfit.data.network.DispatcherProvider
 import com.vurgun.skyfit.data.network.utils.ioResult
 import com.vurgun.skyfit.data.network.utils.mapOrThrow
+import com.vurgun.skyfit.data.user.repository.UserRepository
 import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.withContext
 

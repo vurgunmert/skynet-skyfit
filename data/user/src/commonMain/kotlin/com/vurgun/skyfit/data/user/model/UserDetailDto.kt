@@ -30,6 +30,8 @@ data class UserDetailDto(
     @SerialName("createdDate") val createdDate: String? = null,
     @SerialName("bio") val bio: String? = null,
     @SerialName("gymId") val gymId: Int? = null,
+    @SerialName("trainerId") val trainerId: Int? = null,
+    @SerialName("nmId") val normalUserId: Int? = null,
     @SerialName("gymName") val gymName: String? = null,
     @SerialName("gymAdress") val gymAddress: String? = null,
     @SerialName("backgroundImage") val backgroundImagePath: String? = null

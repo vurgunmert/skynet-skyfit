@@ -1,6 +1,5 @@
 package com.vurgun.skyfit.feature.profile.trainer
 
-import androidx.compose.foundation.ScrollState
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -24,7 +23,6 @@ import androidx.compose.material.DropdownMenu
 import androidx.compose.material.DropdownMenuItem
 import androidx.compose.material.Icon
 import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Scaffold
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
@@ -39,27 +37,30 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.blur
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.vurgun.skyfit.data.courses.model.LessonSessionColumnViewData
 import com.vurgun.skyfit.feature.profile.components.LifestyleActionRow
 import com.vurgun.skyfit.feature.profile.components.MobileProfileActionsRow
+import com.vurgun.skyfit.feature.profile.components.MobileProfileBackgroundImage
 import com.vurgun.skyfit.feature.profile.components.UserProfileCardPreferenceRow
 import com.vurgun.skyfit.feature.profile.components.viewdata.LifestyleActionRowViewData
-import com.vurgun.skyfit.feature.profile.trainer.viewmodel.SkyFitTrainerProfileViewModel
-import com.vurgun.skyfit.feature.profile.user.viewmodel.TopBarGroupViewData
-import com.vurgun.skyfit.feature.social.components.LazySocialPostsColumn
+import com.vurgun.skyfit.feature.profile.components.viewdata.ProfileViewMode
+import com.vurgun.skyfit.feature.profile.user.TopBarGroupViewData
 import com.vurgun.skyfit.ui.core.components.event.LessonSessionColumn
 import com.vurgun.skyfit.ui.core.components.image.NetworkImage
 import com.vurgun.skyfit.ui.core.components.special.ButtonSize
 import com.vurgun.skyfit.ui.core.components.special.ButtonVariant
 import com.vurgun.skyfit.ui.core.components.special.SkyFitButtonComponent
+import com.vurgun.skyfit.ui.core.components.special.SkyFitMobileScaffold
 import com.vurgun.skyfit.ui.core.styling.SkyFitColor
 import com.vurgun.skyfit.ui.core.styling.SkyFitTypography
 import org.jetbrains.compose.resources.painterResource
+import org.koin.compose.viewmodel.koinViewModel
 import skyfit.ui.core.generated.resources.Res
 import skyfit.ui.core.generated.resources.logo_skyfit
 
@@ -67,55 +68,82 @@ import skyfit.ui.core.generated.resources.logo_skyfit
 fun MobileTrainerProfileScreen(
     goToSettings: () -> Unit,
     goToCreatePost: () -> Unit,
+    viewMode: ProfileViewMode = ProfileViewMode.OWNER,
+    viewModel: TrainerProfileOwnerViewModel = koinViewModel()
 ) {
 
-    val viewModel = remember { SkyFitTrainerProfileViewModel() }
     val scrollState = rememberScrollState()
-    var showPosts by remember { mutableStateOf(false) }
+    val postsVisible by viewModel.postsVisible.collectAsStateWithLifecycle()
+    val posts by viewModel.posts.collectAsStateWithLifecycle()
 
     val profileData by viewModel.profileData.collectAsState()
     val specialtiesRowViewData by viewModel.specialtiesRowViewData.collectAsState()
-    val posts = viewModel.posts.collectAsState().value
 
     val lessonsColumViewData by viewModel.lessonsColumViewData.collectAsState()
 
-    LaunchedEffect(Unit) {
-        viewModel.loadData()
+    var backgroundAlpha by remember { mutableStateOf(1f) }
+    val transitionThreshold = 300f
+
+    LaunchedEffect(scrollState.value) {
+        val scrollY = scrollState.value.toFloat()
+        backgroundAlpha = when {
+            scrollY >= transitionThreshold -> 0f
+            else -> (1f - (scrollY / transitionThreshold))
+        }
     }
 
-    Scaffold(
-        backgroundColor = SkyFitColor.background.default,
-        topBar = {
-            BoxWithConstraints {
-                val width = maxWidth
-                val imageHeight = width * 9 / 16
-                val contentTopPadding = imageHeight * 3 / 10
+    SkyFitMobileScaffold { defaultPadding ->
 
-                MobileTrainerProfileBackgroundImageComponent(imageHeight)
+        BoxWithConstraints(
+            modifier = Modifier
+                .padding(defaultPadding)
+                .fillMaxSize()
+                .background(SkyFitColor.background.default)
+        ) {
+            val width = maxWidth
+            val imageHeight = width * 9 / 16
+            val contentTopPadding = imageHeight * 6 / 10
 
-                Column(
-                    Modifier
-                        .padding(top = contentTopPadding)
-                        .fillMaxWidth()
-                ) {
-                    MobileTrainerProfileInfoCardComponent(profileData)
+            MobileProfileBackgroundImage(
+                imageUrl = profileData?.backgroundImageUrl,
+                Modifier
+                    .align(Alignment.TopStart)
+                    .fillMaxWidth()
+                    .height(imageHeight)
+                    .alpha(backgroundAlpha)
+            )
 
-                    Spacer(Modifier.height(16.dp))
+            Column(
+                modifier = Modifier
+                    .align(Alignment.TopCenter)
+                    .fillMaxWidth()
+                    .padding(horizontal = 16.dp)
+                    .verticalScroll(scrollState),
+                verticalArrangement = Arrangement.spacedBy(16.dp)
+            ) {
+                Spacer(Modifier.height(contentTopPadding))
+
+                MobileTrainerProfileInfoCardComponent(profileData)
+
+                if (viewMode == ProfileViewMode.OWNER) {
                     MobileProfileActionsRow(
-                        postsSelected = showPosts,
-                        onClickAbout = { showPosts = false },
-                        onClickPosts = { showPosts = true },
+                        postsSelected = postsVisible,
+                        onClickAbout = { viewModel.togglePostTab(false) },
+                        onClickPosts = { viewModel.togglePostTab(true) },
                         onClickSettings = goToSettings,
                         onClickNewPost = goToCreatePost
                     )
                 }
+
+                if (postsVisible) {
+
+                } else {
+                    MobileTrainerProfileAboutGroupComponent(
+                        specialtiesRowViewData = specialtiesRowViewData,
+                        lessonSessionColumnViewData = lessonsColumViewData
+                    )
+                }
             }
-        }
-    ) {
-        if (showPosts) {
-            LazySocialPostsColumn(posts)
-        } else {
-            MobileTrainerProfileAboutGroupComponent(specialtiesRowViewData, lessonsColumViewData, scrollState)
         }
     }
 }
@@ -123,40 +151,24 @@ fun MobileTrainerProfileScreen(
 @Composable
 fun MobileTrainerProfileAboutGroupComponent(
     specialtiesRowViewData: LifestyleActionRowViewData?,
-    lessonSessionColumnViewData: LessonSessionColumnViewData? = null,
-    scrollState: ScrollState
+    lessonSessionColumnViewData: LessonSessionColumnViewData? = null
 ) {
-    Column(
-        modifier = Modifier.fillMaxSize().verticalScroll(scrollState),
-        horizontalAlignment = Alignment.CenterHorizontally,
-    ) {
-        if (specialtiesRowViewData == null) {
-            MobileTrainerProfileSpecialitiesEmptyComponent(onClickAdd = {})
-        } else {
-            LifestyleActionRow(viewData = specialtiesRowViewData)
-        }
-
-        if (lessonSessionColumnViewData != null) {
-            LessonSessionColumn(
-                viewData = lessonSessionColumnViewData,
-                onClickShowAll = {}
-            )
-        } else {
-            MobileTrainerProfilePrivateClassesEmptyComponent(onClickAdd = {})
-        }
-
-        Spacer(Modifier.height(124.dp))
+    if (specialtiesRowViewData == null) {
+        MobileTrainerProfileSpecialitiesEmptyComponent(onClickAdd = {})
+    } else {
+        LifestyleActionRow(viewData = specialtiesRowViewData)
     }
-}
 
-@Composable
-fun MobileTrainerProfileBackgroundImageComponent(height: Dp) {
-    NetworkImage(
-        imageUrl = "https://cdn.shopify.com/s/files/1/0599/3624/3866/t/57/assets/e69266f5f9de--field-street-fitness-6-4a2977.jpg?v=1682607953",
-        modifier = Modifier
-            .fillMaxWidth()
-            .height(height)
-    )
+    if (lessonSessionColumnViewData != null) {
+        LessonSessionColumn(
+            viewData = lessonSessionColumnViewData,
+            onClickShowAll = {}
+        )
+    } else {
+        MobileTrainerProfilePrivateClassesEmptyComponent(onClickAdd = {})
+    }
+
+    Spacer(Modifier.height(124.dp))
 }
 
 @Composable
@@ -167,7 +179,6 @@ fun MobileTrainerProfileInfoCardComponent(viewData: TopBarGroupViewData?) {
         Box(
             modifier = Modifier
                 .padding(top = 70.dp)
-                .padding(horizontal = 16.dp)
                 .width(398.dp)
                 .heightIn(max = 140.dp)
                 .background(SkyFitColor.background.fillTransparent, RoundedCornerShape(16.dp))
@@ -210,7 +221,7 @@ fun MobileTrainerProfileInfoCardComponent(viewData: TopBarGroupViewData?) {
         }
 
         NetworkImage(
-            imageUrl = viewData.imageUrl,
+            imageUrl = viewData.profileImageUrl,
             modifier = Modifier
                 .size(100.dp)
                 .clip(RoundedCornerShape(20.dp))
@@ -305,7 +316,6 @@ private fun TrainerClassMenuPopup(
 private fun MobileTrainerProfileSpecialitiesEmptyComponent(onClickAdd: () -> Unit) {
     Box(
         Modifier
-            .padding(16.dp)
             .fillMaxWidth()
             .background(SkyFitColor.background.surfaceSecondary, RoundedCornerShape(24.dp))
             .padding(vertical = 56.dp),

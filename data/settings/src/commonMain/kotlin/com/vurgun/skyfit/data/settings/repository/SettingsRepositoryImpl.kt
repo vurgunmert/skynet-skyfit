@@ -1,6 +1,5 @@
 package com.vurgun.skyfit.data.settings.repository
 
-import com.vurgun.skyfit.data.core.domain.repository.UserRepository
 import com.vurgun.skyfit.data.core.model.MissingTokenException
 import com.vurgun.skyfit.data.core.storage.Storage
 import com.vurgun.skyfit.data.network.DispatcherProvider
@@ -20,6 +19,7 @@ import com.vurgun.skyfit.data.settings.model.GetGymMembersRequest
 import com.vurgun.skyfit.data.settings.model.GetGymTrainersRequest
 import com.vurgun.skyfit.data.settings.model.GetPlatformMembersRequest
 import com.vurgun.skyfit.data.settings.model.GetPlatformTrainersRequest
+import com.vurgun.skyfit.data.user.repository.UserRepository
 
 class SettingsRepositoryImpl(
     private val apiService: SettingsApiService,

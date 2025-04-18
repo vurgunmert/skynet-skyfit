@@ -22,7 +22,7 @@ import androidx.compose.ui.draw.blur
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
-import com.vurgun.skyfit.feature.profile.user.viewmodel.TopBarGroupViewData
+import com.vurgun.skyfit.feature.profile.user.TopBarGroupViewData
 import com.vurgun.skyfit.ui.core.components.image.NetworkImage
 import com.vurgun.skyfit.ui.core.styling.SkyFitColor
 import com.vurgun.skyfit.ui.core.styling.SkyFitTypography
@@ -76,7 +76,7 @@ fun MobileProfileHeaderMini(viewData: TopBarGroupViewData) {
         }
 
         NetworkImage(
-            imageUrl = viewData.imageUrl,
+            imageUrl = viewData.profileImageUrl,
             modifier = Modifier
                 .size(100.dp)
                 .clip(RoundedCornerShape(20.dp))
