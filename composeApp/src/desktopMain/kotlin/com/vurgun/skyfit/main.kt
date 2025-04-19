@@ -4,7 +4,6 @@ import androidx.compose.ui.window.Window
 import androidx.compose.ui.window.application
 import com.vurgun.skyfit.data.core.storage.LocalSettingsStore
 import com.vurgun.skyfit.data.core.storage.provideLocalSettings
-import com.vurgun.skyfit.feature_navigation.SkyFitApp
 import com.vurgun.skyfit.ui.core.styling.LocalDimensions
 import org.koin.dsl.module
 import java.awt.Dimension

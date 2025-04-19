@@ -15,21 +15,17 @@ import com.vurgun.skyfit.data.auth.model.VerifyOTPRequest
 import com.vurgun.skyfit.data.auth.service.AuthApiService
 import com.vurgun.skyfit.data.core.model.MissingTokenException
 import com.vurgun.skyfit.data.core.storage.Storage
+import com.vurgun.skyfit.data.core.storage.TokenManager
 import com.vurgun.skyfit.data.network.ApiResult
 import com.vurgun.skyfit.data.network.DispatcherProvider
-import com.vurgun.skyfit.data.user.repository.UserRepository
-import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.withContext
 
 class AuthRepositoryImpl(
     private val apiService: AuthApiService,
     private val dispatchers: DispatcherProvider,
-    private val storage: Storage
+    private val storage: Storage,
+    private val tokenManager: TokenManager
 ) : AuthRepository {
-
-    private val userToken = storage.getAsFlow(UserRepository.UserAuthToken)
-
-    private suspend fun requireToken(): String = userToken.firstOrNull() ?: throw MissingTokenException
 
     override suspend fun login(phoneNumber: String, password: String?): AuthLoginResult =
         withContext(dispatchers.io) {
@@ -39,8 +35,9 @@ class AuthRepositoryImpl(
                 is ApiResult.Error -> AuthLoginResult.Error(response.message)
                 is ApiResult.Exception -> AuthLoginResult.Error(response.exception.message)
                 is ApiResult.Success -> {
-                    storage.writeValue(UserRepository.UserPhoneNumber, phoneNumber)
-                    storage.writeValue(UserRepository.UserAuthToken, response.data.token)
+                    storage.writeValue(AuthRepository.UserPhoneNumber, phoneNumber)
+                    tokenManager.setToken(response.data.token)
+                    tokenManager.waitUntilTokenReady()
 
                     when {
                         password.isNullOrEmpty() || response.data.isNewUser == true -> AuthLoginResult.OTPVerificationRequired
@@ -53,14 +50,15 @@ class AuthRepositoryImpl(
 
     override suspend fun verifyLoginOTP(code: String): AuthorizationOTPResult = withContext(dispatchers.io) {
         try {
-            val token = requireToken()
+            val token = tokenManager.getTokenOrThrow()
             val request = VerifyOTPRequest(code)
 
             when (val response = apiService.verifyOTP(request, token)) {
                 is ApiResult.Error -> AuthorizationOTPResult.Error(response.message)
                 is ApiResult.Exception -> AuthorizationOTPResult.Error(response.exception.message)
                 is ApiResult.Success -> {
-                    storage.writeValue(UserRepository.UserAuthToken, response.data.token)
+                    tokenManager.setToken(response.data.token)
+                    tokenManager.waitUntilTokenReady()
 
                     return@withContext when {
                         response.data.isNewUser == true -> AuthorizationOTPResult.RegistrationRequired
@@ -81,8 +79,9 @@ class AuthRepositoryImpl(
             is ApiResult.Error -> ForgotPasswordResult.Error(response.message)
             is ApiResult.Exception -> ForgotPasswordResult.Error(response.exception.message)
             is ApiResult.Success -> {
-                storage.writeValue(UserRepository.UserPhoneNumber, phoneNumber)
-                storage.writeValue(UserRepository.UserAuthToken, response.data.token)
+                storage.writeValue(AuthRepository.UserPhoneNumber, phoneNumber)
+                tokenManager.setToken(response.data.token)
+                tokenManager.waitUntilTokenReady()
                 ForgotPasswordResult.Success
             }
         }
@@ -90,14 +89,15 @@ class AuthRepositoryImpl(
 
     override suspend fun verifyForgotPasswordOTP(code: String): ForgotPasswordOTPResult = withContext(dispatchers.io) {
         try {
-            val token = requireToken()
+            val token = tokenManager.getTokenOrThrow()
             val request = VerifyOTPRequest(code)
 
             when (val response = apiService.forgotPasswordVerifyOTP(request, token)) {
                 is ApiResult.Error -> ForgotPasswordOTPResult.Error(response.message)
                 is ApiResult.Exception -> ForgotPasswordOTPResult.Error(response.exception.message)
                 is ApiResult.Success -> {
-                    storage.writeValue(UserRepository.UserAuthToken, response.data.token)
+                    tokenManager.setToken(response.data.token)
+                    tokenManager.waitUntilTokenReady()
                     ForgotPasswordOTPResult.Success
                 }
             }
@@ -109,9 +109,9 @@ class AuthRepositoryImpl(
 
     override suspend fun sendOTP(): SendOTPResult = withContext(dispatchers.io) {
         try {
+            val token =  tokenManager.getTokenOrThrow()
             val phoneNumber =
-                storage.get(UserRepository.UserPhoneNumber) ?: return@withContext SendOTPResult.Error("Phone Number not found")
-            val token = requireToken()
+                storage.get(AuthRepository.UserPhoneNumber) ?: return@withContext SendOTPResult.Error("Phone Number not found")
             val request = AuthorizationRequest(phoneNumber)
 
             when (val response = apiService.sendOTP(request, token)) {
@@ -130,7 +130,7 @@ class AuthRepositoryImpl(
         againPassword: String
     ): CreatePasswordResult = withContext(dispatchers.io) {
         try {
-            val token = requireToken()
+            val token = tokenManager.getTokenOrThrow()
             val request = CreatePasswordRequest(username, password, againPassword)
 
             when (val response = apiService.createPassword(request, token)) {
@@ -146,7 +146,7 @@ class AuthRepositoryImpl(
 
     override suspend fun resetPassword(password: String, againPassword: String): ResetPasswordResult = withContext(dispatchers.io) {
         try {
-            val token = requireToken()
+            val token = tokenManager.getTokenOrThrow()
             val request = ResetPasswordRequest(password, againPassword)
 
             when (val response = apiService.resetPassword(request, token)) {

@@ -5,9 +5,8 @@ import androidx.lifecycle.viewModelScope
 import com.vurgun.skyfit.data.auth.domain.model.AuthorizationOTPResult
 import com.vurgun.skyfit.data.auth.domain.model.SendOTPResult
 import com.vurgun.skyfit.data.auth.domain.repository.AuthRepository
-import com.vurgun.skyfit.data.core.domain.manager.UserManager
+import com.vurgun.skyfit.data.user.repository.UserManager
 import com.vurgun.skyfit.data.core.storage.Storage
-import com.vurgun.skyfit.data.user.repository.UserRepository
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -32,7 +31,7 @@ class LoginOTPVerificationViewModel(
 
     val otpLength = 6
 
-    val phoneNumber = storage.getAsFlow(UserRepository.UserPhoneNumber).map { it.orEmpty() }
+    val phoneNumber = storage.getAsFlow(AuthRepository.UserPhoneNumber).map { it.orEmpty() }
 
     private val _enteredOtp = MutableStateFlow("")
     val enteredOtp: StateFlow<String> = _enteredOtp

@@ -32,6 +32,7 @@ kotlin {
         commonMain.dependencies {
             implementation(projects.ui.core)
             implementation(projects.data.core)
+            implementation(projects.data.user)
 
             implementation(projects.feature.home)
             implementation(projects.feature.explore)

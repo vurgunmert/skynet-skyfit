@@ -13,7 +13,7 @@ val dataAuthModule = module {
     includes(dataCoreModule)
 
     single { AuthApiService(get()) }
-    single<AuthRepository> { AuthRepositoryImpl(get(), get(), get()) }
+    single<AuthRepository> { AuthRepositoryImpl(get(), get(), get(), get()) }
 
     single<AppConfigRepository> { AppConfigRepositoryImpl() }
     factory { SplashUseCase(get(), get()) }

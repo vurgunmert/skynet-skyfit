@@ -1,7 +1,7 @@
 package com.vurgun.skyfit.feature.settings.user
 
 import androidx.lifecycle.ViewModel
-import com.vurgun.skyfit.data.core.domain.manager.UserManager
+import com.vurgun.skyfit.data.user.repository.UserManager
 import com.vurgun.skyfit.data.core.domain.model.BodyType
 import com.vurgun.skyfit.data.core.domain.model.HeightUnitType
 import com.vurgun.skyfit.data.core.domain.model.UserDetail

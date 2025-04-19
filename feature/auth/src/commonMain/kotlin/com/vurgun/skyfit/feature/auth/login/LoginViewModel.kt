@@ -4,7 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.vurgun.skyfit.data.auth.domain.model.AuthLoginResult
 import com.vurgun.skyfit.data.auth.domain.repository.AuthRepository
-import com.vurgun.skyfit.data.core.domain.manager.UserManager
+import com.vurgun.skyfit.data.user.repository.UserManager
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted

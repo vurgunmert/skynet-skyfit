@@ -1,6 +1,7 @@
 package com.vurgun.skyfit.feature.settings
 
 import com.vurgun.skyfit.data.settings.dataSettingsModule
+import com.vurgun.skyfit.data.user.dataUserModule
 import com.vurgun.skyfit.feature.settings.account.SettingsManageAccountsViewModel
 import com.vurgun.skyfit.feature.settings.changepassword.ChangePasswordViewModel
 import com.vurgun.skyfit.feature.settings.facility.member.FacilityAddMembersViewModel
@@ -15,7 +16,7 @@ import org.koin.core.module.dsl.viewModel
 import org.koin.dsl.module
 
 val featureSettingsModule = module {
-    includes(dataSettingsModule)
+    includes(dataSettingsModule, dataUserModule)
 
     viewModel { SettingsHomeViewModel(get()) }
     viewModel { ChangePasswordViewModel() }

@@ -8,13 +8,12 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
-import com.vurgun.skyfit.data.core.domain.manager.UserManager
 import com.vurgun.skyfit.feature.dashboard.component.BottomNavigationBar
 import com.vurgun.skyfit.feature.dashboard.navigation.DashboardRoute
 import com.vurgun.skyfit.feature.home.navigation.HomeRoot
 import com.vurgun.skyfit.feature.profile.navigation.ProfileRoot
 import com.vurgun.skyfit.ui.core.components.special.SkyFitMobileScaffold
-import org.koin.compose.koinInject
+import org.koin.compose.viewmodel.koinViewModel
 
 @Composable
 internal fun DashboardRootGraph(
@@ -22,9 +21,9 @@ internal fun DashboardRootGraph(
     goToChatBot: () -> Unit,
     goToSettings: () -> Unit,
     goToFacilityCourses: () -> Unit,
+    viewModel: DashboardViewModel = koinViewModel()
 ) {
-    val userManager: UserManager = koinInject()
-    val userRole by userManager.userRole.collectAsStateWithLifecycle()
+    val userRole by viewModel.userRole.collectAsStateWithLifecycle()
 
     val internalNavController = rememberNavController()
     val currentBackStackEntry by internalNavController.currentBackStackEntryAsState()

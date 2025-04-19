@@ -26,7 +26,7 @@
     <!-- Verification -->
     <string name="auth_code_sent_message">Lütfen %1$s numarasına gelen kodu girin</string>
     <string name="auth_resend_timer_message">Yeni kod göndermek için %1$d saniye bekleyin</string>
-    <string name="auth_code_not_received_message">Herhangi bir kod iletilmedi mi?</string>
+    <string name="auth_code_not_received_message">Herhangi bir kod iletilmedi mi? </string>
     <string name="auth_resend_code_action">Tekrar Gönder</string>
 
 </resources>

@@ -1,19 +1,18 @@
 package com.vurgun.skyfit.data.onboarding
 
-import com.vurgun.skyfit.data.core.storage.Storage
+import com.vurgun.skyfit.data.core.storage.TokenManager
 import com.vurgun.skyfit.data.network.ApiResult
 import com.vurgun.skyfit.data.network.DispatcherProvider
-import com.vurgun.skyfit.data.user.repository.UserRepository
 import kotlinx.coroutines.withContext
 
 internal class OnboardingRepositoryImpl(
     private val apiService: OnboardingApiService,
     private val dispatchers: DispatcherProvider,
-    private val storage: Storage
+    private val tokenManager: TokenManager
 ) : OnboardingRepository {
 
     override suspend fun submitOnboarding(request: OnboardingRequest, isAccountAddition: Boolean) = withContext(dispatchers.io) {
-        val token = storage.get(UserRepository.UserAuthToken) ?: return@withContext OnboardingResult.Unauthorized
+        val token = tokenManager.getTokenOrNull() ?: return@withContext OnboardingResult.Unauthorized
 
         val response = when {
             isAccountAddition -> apiService.onboardingAdditionalAccount(request, token)

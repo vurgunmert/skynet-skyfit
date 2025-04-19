@@ -2,7 +2,7 @@ package com.vurgun.skyfit.feature.home.screen
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.vurgun.skyfit.data.core.domain.manager.UserManager
+import com.vurgun.skyfit.data.user.repository.UserManager
 import com.vurgun.skyfit.data.core.domain.model.FacilityDetail
 import com.vurgun.skyfit.data.courses.domain.model.Lesson
 import com.vurgun.skyfit.data.courses.domain.repository.CourseRepository

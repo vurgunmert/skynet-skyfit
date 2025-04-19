@@ -2,7 +2,7 @@ package com.vurgun.skyfit.feature.courses.screen
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.vurgun.skyfit.data.core.domain.manager.UserManager
+import com.vurgun.skyfit.data.user.repository.UserManager
 import com.vurgun.skyfit.data.core.domain.model.CalendarRecurrence
 import com.vurgun.skyfit.data.core.domain.model.FacilityDetail
 import com.vurgun.skyfit.data.core.utility.now
@@ -198,13 +198,13 @@ class FacilityEditLessonViewModel(
         val creationInfo = state.let {
             val repetition = (it.recurrence as? CalendarRecurrence.SomeDays)?.days?.mapNotNull { dayOfWeek ->
                 when (dayOfWeek) {
-                    DayOfWeek.MONDAY -> 2
-                    DayOfWeek.TUESDAY -> 3
-                    DayOfWeek.WEDNESDAY -> 4
-                    DayOfWeek.THURSDAY -> 5
-                    DayOfWeek.FRIDAY -> 6
-                    DayOfWeek.SATURDAY -> 7
-                    DayOfWeek.SUNDAY -> 1
+                    DayOfWeek.SUNDAY -> 0
+                    DayOfWeek.MONDAY -> 1
+                    DayOfWeek.TUESDAY -> 2
+                    DayOfWeek.WEDNESDAY -> 3
+                    DayOfWeek.THURSDAY -> 4
+                    DayOfWeek.FRIDAY -> 5
+                    DayOfWeek.SATURDAY -> 6
                     else -> null
                 }
             }.orEmpty()

@@ -11,7 +11,7 @@ data class LessonCreationInfo(
     val startDateTime: LocalDateTime,
     val endDateTime: LocalDateTime,
     val repetitionType: Int,      // 1-4
-    val repetition: List<Int>,    // 1=pazar .. 7=cumartesi
+    val repetition: List<Int>,    // 0=pazar .. 6=cumartesi
     val quota: Int,
     val lastCancelableHoursBefore: Int,
     val isRequiredAppointment: Boolean,

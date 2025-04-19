@@ -7,6 +7,7 @@ import com.vurgun.skyfit.data.auth.domain.model.ForgotPasswordOTPResult
 import com.vurgun.skyfit.data.auth.domain.model.ForgotPasswordResult
 import com.vurgun.skyfit.data.auth.domain.model.ResetPasswordResult
 import com.vurgun.skyfit.data.auth.domain.model.SendOTPResult
+import com.vurgun.skyfit.data.core.storage.Storage
 
 interface AuthRepository {
     suspend fun login(phoneNumber: String, password: String?): AuthLoginResult
@@ -16,4 +17,7 @@ interface AuthRepository {
     suspend fun sendOTP(): SendOTPResult
     suspend fun createPassword(username: String, password: String, againPassword: String): CreatePasswordResult
     suspend fun resetPassword(password: String, againPassword: String): ResetPasswordResult
+
+
+    data object UserPhoneNumber : Storage.Key.StringKey("user_phone_number", null)
 }

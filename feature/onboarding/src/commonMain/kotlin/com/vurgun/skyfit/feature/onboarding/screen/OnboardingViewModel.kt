@@ -2,6 +2,7 @@ package com.vurgun.skyfit.feature.onboarding.screen
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.vurgun.skyfit.data.user.repository.UserManager
 import com.vurgun.skyfit.data.core.domain.model.FitnessTagType
 import com.vurgun.skyfit.data.core.domain.model.GenderType
 import com.vurgun.skyfit.data.core.domain.model.GoalType
@@ -11,7 +12,6 @@ import com.vurgun.skyfit.data.core.domain.model.WeightUnitType
 import com.vurgun.skyfit.data.onboarding.OnboardingRepository
 import com.vurgun.skyfit.data.onboarding.OnboardingRequest
 import com.vurgun.skyfit.data.onboarding.OnboardingResult
-import com.vurgun.skyfit.data.user.repository.UserRepository
 import com.vurgun.skyfit.ui.core.viewdata.BodyTypeViewData
 import com.vurgun.skyfit.ui.core.viewdata.CharacterTypeViewData
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -34,7 +34,7 @@ internal data class SelectableUserRole(
 
 internal class OnboardingViewModel(
     private val onboardingRepository: OnboardingRepository,
-    private val userRepository: UserRepository
+    private val userManager: UserManager
 ) : ViewModel() {
 
     private var isAccountAddition: Boolean = false
@@ -47,14 +47,9 @@ internal class OnboardingViewModel(
     )
     val availableUserRoles: StateFlow<List<SelectableUserRole>> = _availableUserRoles
 
-
     init {
         viewModelScope.launch {
-            val result = userRepository.getUserTypes()
-            val registeredRoles = result
-                .getOrNull()
-                ?.map { UserRole.fromId(it.typeId) }
-                ?: emptyList()
+            val registeredRoles = userManager.getAccountTypes().map { UserRole.fromId(it.typeId) }
 
             _availableUserRoles.value = _availableUserRoles.value.map { selectable ->
                 if (registeredRoles.contains(selectable.userRole)) {

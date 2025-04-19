@@ -12,7 +12,6 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
@@ -25,12 +24,11 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
-import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
 import com.vurgun.skyfit.feature.auth.component.MobileLoginWelcomeGroup
 import com.vurgun.skyfit.ui.core.components.button.PrimaryLargeButton
 import com.vurgun.skyfit.ui.core.components.special.SkyFitMobileScaffold
-import com.vurgun.skyfit.ui.core.components.special.SkyFitPasswordInputComponent
+import com.vurgun.skyfit.ui.core.components.text.PasswordTextInput
 import com.vurgun.skyfit.ui.core.components.text.PhoneNumberTextInput
 import com.vurgun.skyfit.ui.core.components.text.SecondaryMediumText
 import com.vurgun.skyfit.ui.core.components.text.SecondaryMediumUnderlinedText
@@ -117,7 +115,7 @@ fun MobileLoginScreen(
                 isPasswordEnabled = isPasswordVisible,
                 password = password,
                 onPasswordChanged = viewModel::onPasswordChanged,
-                onPasswordSubmit = {
+                onSubmitInput = {
                     errorMessage = null
                     viewModel.submitLogin()
                 },
@@ -146,7 +144,7 @@ private fun MobileLoginWithPhoneContentGroup(
     isPasswordEnabled: Boolean,
     password: String,
     onPasswordChanged: (String) -> Unit,
-    onPasswordSubmit: () -> Unit,
+    onSubmitInput: () -> Unit,
     onTogglePassword: () -> Unit,
     onClickPrivacyPolicy: () -> Unit,
     onClickTermsAndConditions: () -> Unit,
@@ -162,8 +160,17 @@ private fun MobileLoginWithPhoneContentGroup(
             style = SkyFitTypography.bodySmallSemibold
         )
         Spacer(Modifier.height(4.dp))
-        PhoneNumberTextInput(value = phoneNumber, onValueChange = onPhoneNumberChanged)
-
+        PhoneNumberTextInput(
+            value = phoneNumber,
+            onValueChange = onPhoneNumberChanged,
+            onKeyboardGoAction = {
+                if (isPasswordEnabled) {
+                    passwordFocusRequester.requestFocus()
+                } else {
+                    onSubmitInput()
+                }
+            }
+        )
 
         errorMessage?.let {
             Spacer(Modifier.height(4.dp))
@@ -187,12 +194,17 @@ private fun MobileLoginWithPhoneContentGroup(
                 )
             }
         } else {
-            //TODO: USE DESIGN SYSTEM
-            SkyFitPasswordInputComponent(
+            LaunchedEffect(isPasswordEnabled) {
+                if (isPasswordEnabled && phoneNumber.isNotEmpty()) {
+                    passwordFocusRequester.requestFocus()
+                }
+            }
+
+            PasswordTextInput(
                 hint = stringResource(Res.string.auth_password_input_hint),
                 value = password,
-                keyboardOptions = KeyboardOptions.Default.copy(imeAction = ImeAction.Go),
-                onKeyboardGoAction = onPasswordSubmit,
+                focusRequester = passwordFocusRequester,
+                onKeyboardDoneAction = onSubmitInput,
                 onValueChange = onPasswordChanged
             )
             Spacer(Modifier.height(16.dp))

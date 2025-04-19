@@ -1,7 +1,7 @@
 package com.vurgun.skyfit.feature.settings.trainer
 
 import androidx.lifecycle.ViewModel
-import com.vurgun.skyfit.data.core.domain.manager.UserManager
+import com.vurgun.skyfit.data.user.repository.UserManager
 import com.vurgun.skyfit.data.core.domain.model.FitnessTagType
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow

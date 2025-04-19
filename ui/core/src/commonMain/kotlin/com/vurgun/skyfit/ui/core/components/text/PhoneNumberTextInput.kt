@@ -16,7 +16,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
-import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.input.ImeAction
@@ -70,8 +69,7 @@ fun PhoneNumberTextInput(
         BasicTextField(
             modifier = Modifier
                 .weight(1f)
-                .focusRequester(focusRequester)
-                .onFocusChanged { if (it.isFocused && value.isNotEmpty()) focusRequester.freeFocus() },
+                .focusRequester(focusRequester),
             value = value,
             onValueChange = { input ->
                 val digitsOnly = input.filter { it.isDigit() }.take(10)

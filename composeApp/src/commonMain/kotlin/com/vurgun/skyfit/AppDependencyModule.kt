@@ -7,6 +7,7 @@ import com.vurgun.skyfit.feature.auth.featureAuthModule
 import com.vurgun.skyfit.feature.bodyanalysis.featurePostureAnalysis
 import com.vurgun.skyfit.feature.calendar.components.featureCalendarModule
 import com.vurgun.skyfit.feature.courses.featureCoursesModule
+import com.vurgun.skyfit.feature.dashboard.featureDashboardModule
 import com.vurgun.skyfit.feature.home.featureHomeModule
 import com.vurgun.skyfit.feature.onboarding.featureOnboardingModule
 import com.vurgun.skyfit.feature.profile.featureProfileModule
@@ -20,8 +21,9 @@ val appModule = module {
         dataUserModule,
 
         featureAuthModule,
-        featureHomeModule,
         featureOnboardingModule,
+        featureDashboardModule,
+        featureHomeModule, //TODO: Probably move to dashboard
         featureSettingsModule,
         featureCoursesModule,
         featureCalendarModule,
