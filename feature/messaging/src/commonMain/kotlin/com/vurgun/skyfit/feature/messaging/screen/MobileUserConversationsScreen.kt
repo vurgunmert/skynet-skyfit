@@ -32,6 +32,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.dp
 import com.vurgun.skyfit.ui.core.components.special.SkyFitCircleAvatarRowComponent
+import com.vurgun.skyfit.ui.core.components.special.SkyFitMobileScaffold
 import com.vurgun.skyfit.ui.core.components.special.SkyFitNumberBadge
 import com.vurgun.skyfit.ui.core.components.special.SkyFitScreenHeader
 import com.vurgun.skyfit.ui.core.components.special.SkyFitSearchTextInputComponent
@@ -51,14 +52,10 @@ fun MobileUserConversationsScreen(
     val viewModel = UserConversationsViewModel()
     val conversations = viewModel.converstations
 
-    Scaffold(
-        backgroundColor = SkyFitColor.background.default,
+    SkyFitMobileScaffold(
         topBar = {
             Column {
-                SkyFitScreenHeader(
-                    title = "Mesajlar",
-                    onClickBack = goToBack
-                )
+                SkyFitScreenHeader(title = "Mesajlar", onClickBack = goToBack)
                 MobileUserConversationsScreenToolbarComponent()
             }
         }

@@ -39,6 +39,7 @@ import com.vurgun.skyfit.ui.core.components.event.AppointmentCardViewData
 import com.vurgun.skyfit.ui.core.components.event.AttendanceAppointmentEventItem
 import com.vurgun.skyfit.ui.core.components.event.BasicAppointmentEventItem
 import com.vurgun.skyfit.ui.core.components.special.SkyFitBadgeTabBarComponent
+import com.vurgun.skyfit.ui.core.components.special.SkyFitMobileScaffold
 import com.vurgun.skyfit.ui.core.components.special.SkyFitScreenHeader
 import com.vurgun.skyfit.ui.core.styling.SkyFitColor
 import com.vurgun.skyfit.ui.core.styling.SkyFitTypography
@@ -66,8 +67,7 @@ fun MobileUserAppointmentsScreen(
         viewModel.loadData()
     }
 
-    Scaffold(
-        backgroundColor = SkyFitColor.background.default,
+    SkyFitMobileScaffold(
         topBar = {
             Column {
                 SkyFitScreenHeader(stringResource(Res.string.appointments_title), onClickBack = goToBack)

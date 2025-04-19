@@ -27,6 +27,7 @@ import com.vurgun.skyfit.ui.core.components.special.SkyFitButtonComponent
 import com.vurgun.skyfit.ui.core.components.special.SkyFitScreenHeader
 import com.vurgun.skyfit.ui.core.styling.SkyFitColor
 import com.vurgun.skyfit.ui.core.components.event.LessonSessionColumn
+import com.vurgun.skyfit.ui.core.components.special.SkyFitMobileScaffold
 import kotlinx.datetime.LocalDate
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
@@ -60,8 +61,7 @@ fun MobileFacilityCalendarVisitedScreen(
         }
     }
 
-    Scaffold(
-        backgroundColor = SkyFitColor.background.default,
+    SkyFitMobileScaffold(
         topBar = {
             SkyFitScreenHeader(stringResource(Res.string.appointment_book_action), onClickBack = goToBack)
         },

@@ -24,7 +24,7 @@ data class UserProfileUiState(
     val profileData: TopBarGroupViewData = TopBarGroupViewData(),
     val posts: List<SocialPostItemViewData> = emptyList(),
     val appointments: LessonSessionColumnViewData? = null,
-    val showPosts: Boolean = true,
+    val showPosts: Boolean = false,
     val showInfoMini: Boolean = false,
     val exercises: LifestyleActionRowViewData? = null,
     val habits: LifestyleActionRowViewData? = null,
@@ -68,7 +68,7 @@ class UserProfileOwnerViewModel(
             preferences = listOf(
                 UserProfilePreferenceItem(iconId = "ic_height_outline", "Boy", user.height.toString()),
                 UserProfilePreferenceItem(iconId = "ic_dna_outline", "Kilo", user.weight.toString()),
-                UserProfilePreferenceItem(iconId = "ic_overweight", "Vücut Tipi", user.bodyTypeId.toString())
+                UserProfilePreferenceItem(iconId = "ic_overweight", "Vücut Tipi", user.bodyType.turkishShort)
             ),
             showInfoMini = false
         )

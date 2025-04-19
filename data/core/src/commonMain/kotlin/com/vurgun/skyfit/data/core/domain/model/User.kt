@@ -20,12 +20,12 @@ data class UserDetail(
     val profileImageUrl: String?,
     val firstName: String,
     val lastName: String,
-    val height: Int?,
-    val weight: Int?,
-    val birthday: String?,
-    val characterType: CharacterType?,
-    val bodyTypeId: Int?,
-    val gender: Int?,
+    val height: Int,
+    val weight: Int,
+    val birthday: String,
+    val characterType: CharacterType,
+    val bodyType: BodyType,
+    val gender: GenderType,
 ) : BaseUserDetail
 
 data class TrainerDetail(

@@ -19,7 +19,6 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Icon
-import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowForward
@@ -38,10 +37,10 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.vurgun.skyfit.ui.core.components.special.SkyFitMobileScaffold
 import com.vurgun.skyfit.ui.core.components.special.SkyFitScreenHeader
 import com.vurgun.skyfit.ui.core.components.special.SkyFitSearchFilterBarComponent
 import com.vurgun.skyfit.ui.core.components.special.SkyFitSearchTextInputComponent
-import com.vurgun.skyfit.ui.core.styling.SkyFitColor
 import org.jetbrains.compose.resources.painterResource
 import skyfit.ui.core.generated.resources.Res
 import skyfit.ui.core.generated.resources.logo_skyfit
@@ -53,8 +52,7 @@ fun MobileExploreCommunitiesScreen(
 
     var isSearchVisible by remember { mutableStateOf(false) }
 
-    Scaffold(
-        backgroundColor = SkyFitColor.background.default,
+    SkyFitMobileScaffold(
         topBar = {
             Column {
                 Column(Modifier.fillMaxWidth().padding(horizontal = 16.dp)) {

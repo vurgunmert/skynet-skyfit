@@ -32,6 +32,7 @@ import androidx.compose.ui.unit.dp
 import com.vurgun.skyfit.feature.messaging.component.SkyFitChatMessageBubble
 import com.vurgun.skyfit.feature.messaging.component.SkyFitChatMessageInputComponent
 import com.vurgun.skyfit.ui.core.components.special.SkyFitCircularImageComponent
+import com.vurgun.skyfit.ui.core.components.special.SkyFitMobileScaffold
 import com.vurgun.skyfit.ui.core.components.special.UserCircleAvatarItem
 import com.vurgun.skyfit.ui.core.styling.SkyFitColor
 import com.vurgun.skyfit.ui.core.styling.SkyFitTypography
@@ -65,8 +66,7 @@ fun MobileUserToFacilityChatScreen() {
         }
     }
 
-    Scaffold(
-        backgroundColor = SkyFitColor.background.default,
+    SkyFitMobileScaffold(
         topBar = {
             MobileUserToFacilityChatScreenToolbarComponent(
                 facilityName = "SkyFit Studio",

@@ -31,6 +31,7 @@ import com.vurgun.skyfit.ui.core.components.special.ButtonSize
 import com.vurgun.skyfit.ui.core.components.special.ButtonState
 import com.vurgun.skyfit.ui.core.components.special.ButtonVariant
 import com.vurgun.skyfit.ui.core.components.special.SkyFitButtonComponent
+import com.vurgun.skyfit.ui.core.components.special.SkyFitMobileScaffold
 import com.vurgun.skyfit.ui.core.components.special.SkyFitScreenHeader
 import com.vurgun.skyfit.ui.core.components.special.SkyFitWheelPickerComponent
 import com.vurgun.skyfit.ui.core.styling.SkyFitColor
@@ -53,8 +54,7 @@ fun MobileUserActivityCalendarAddActivityScreen(
     val step = MobileUserActivityCalendarAddStep.CONFIRM
     var activityName by remember { mutableStateOf("Yuruyus") }
 
-    Scaffold(
-        backgroundColor = SkyFitColor.background.default,
+    SkyFitMobileScaffold(
         topBar = {
             SkyFitScreenHeader("Yeni Aktivite", onClickBack = goToBack)
         },

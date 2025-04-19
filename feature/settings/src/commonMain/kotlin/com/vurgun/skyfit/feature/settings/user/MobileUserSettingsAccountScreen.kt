@@ -28,6 +28,7 @@ import com.vurgun.skyfit.ui.core.components.special.SkyFitScreenHeader
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.koinInject
+import org.koin.compose.viewmodel.koinViewModel
 import skyfit.ui.core.generated.resources.Res
 import skyfit.ui.core.generated.resources.accounts_title
 import skyfit.ui.core.generated.resources.add_account_action
@@ -46,10 +47,8 @@ fun MobileUserSettingsAccountScreen(
     goToChangePassword: () -> Unit,
     goToAddAccount: () -> Unit,
     goToManageAccounts: () -> Unit,
+    viewModel: UserAccountSettingsViewModel = koinViewModel()
 ) {
-
-    val viewModel: UserAccountSettingsViewModel = koinInject()
-
     val account by viewModel.accountState.collectAsState()
 
     var showDeleteConfirm by remember { mutableStateOf(false) }
@@ -82,8 +81,8 @@ fun MobileUserSettingsAccountScreen(
             UserAccountSettingsProfileCard(
                 backgroundImageUrl = account.backgroundImageUrl,
                 foregroundImageUrl = account.profileImageUrl,
-                name = account.firstName.toString(),
-                social = account.email?.substringBefore("@").toString(),
+                name = account.firstName,
+                social = account.userName,
                 height = account.height.toString(),
                 weight = account.weight.toString(),
                 bodyType = account.bodyType.turkishShort,

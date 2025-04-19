@@ -15,31 +15,28 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.dp
-import coil3.compose.AsyncImage
 import com.vurgun.skyfit.ui.core.components.button.SkyFitIconButton
+import com.vurgun.skyfit.ui.core.components.image.NetworkImage
+import com.vurgun.skyfit.ui.core.components.special.SkyFitMobileScaffold
 import com.vurgun.skyfit.ui.core.components.special.SkyFitScreenHeader
 import com.vurgun.skyfit.ui.core.components.special.SkyFitSearchTextInputComponent
 import com.vurgun.skyfit.ui.core.styling.SkyFitColor
 import com.vurgun.skyfit.ui.core.styling.SkyFitTypography
-import moe.tlaster.precompose.navigation.Navigator
 import org.jetbrains.compose.resources.painterResource
-import skyfit.composeapp.generated.resources.Res
-import skyfit.composeapp.generated.resources.logo_skyfit
+import skyfit.ui.core.generated.resources.Res
+import skyfit.ui.core.generated.resources.logo_skyfit
 
 @Composable
-fun MobileUserMealDetailScreen(rootNavigator: Navigator) {
+fun MobileUserMealDetailScreen(goToBack: () -> Unit) {
 
-    Scaffold(
-        backgroundColor = SkyFitColor.background.default,
+    SkyFitMobileScaffold(
         topBar = {
-            SkyFitScreenHeader("Kahvalti", onClickBack = { rootNavigator.popBackStack() })
+            SkyFitScreenHeader("Kahvalti", onClickBack = goToBack)
         }
     ) {
         MobileUserMealDetailScreenFoodRecordsComponent()
@@ -105,10 +102,8 @@ private fun MobileMealRecordItemComponent() {
         Column(Modifier.weight(0.3f)) {
             SkyFitIconButton(painterResource(Res.drawable.logo_skyfit), onClick = {})
             Spacer(Modifier.height(8.dp))
-            AsyncImage(
-                model = "https://opstudiohk.com/wp-content/uploads/2021/10/muscle-action.jpg",
-                contentDescription = null,
-                contentScale = ContentScale.Crop,
+            NetworkImage(
+                imageUrl = "https://opstudiohk.com/wp-content/uploads/2021/10/muscle-action.jpg",
                 modifier = Modifier
                     .aspectRatio(1f)
                     .clip(CircleShape)

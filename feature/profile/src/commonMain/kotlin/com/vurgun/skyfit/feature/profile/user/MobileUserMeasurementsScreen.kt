@@ -17,6 +17,7 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import com.vurgun.skyfit.ui.core.components.special.SkyFitMobileScaffold
 import com.vurgun.skyfit.ui.core.components.special.SkyFitScreenHeader
 import com.vurgun.skyfit.ui.core.components.special.SkyFitSearchTextInputComponent
 import com.vurgun.skyfit.ui.core.styling.SkyFitColor
@@ -36,8 +37,7 @@ fun MobileUserMeasurementsScreen(
         "3YMCA Submaximal Step Testi"
     )
 
-    Scaffold(
-        backgroundColor = SkyFitColor.background.default,
+    SkyFitMobileScaffold(
         topBar = {
             Column {
                 SkyFitScreenHeader(

@@ -4,6 +4,7 @@ import androidx.lifecycle.ViewModel
 import com.vurgun.skyfit.data.core.domain.manager.UserManager
 import com.vurgun.skyfit.data.core.domain.model.BodyType
 import com.vurgun.skyfit.data.core.domain.model.HeightUnitType
+import com.vurgun.skyfit.data.core.domain.model.UserDetail
 import com.vurgun.skyfit.data.core.domain.model.WeightUnitType
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -11,10 +12,9 @@ import kotlinx.coroutines.flow.update
 
 // Data class to hold all user account state in one place
 data class UserAccountState(
-    val userName: String? = null,
-    val firstName: String? = null,
-    val lastName: String? = null,
-    val email: String? = null,
+    val userName: String = "",
+    val firstName: String = "",
+    val lastName: String = "",
     val height: Int = 170,
     val heightUnit: HeightUnitType = HeightUnitType.CM,
     val weight: Int = 70,
@@ -29,6 +29,10 @@ class UserAccountSettingsViewModel(
     private val userManager: UserManager
 ) : ViewModel() {
 
+    private val user: UserDetail
+        get() = userManager.user.value as? UserDetail
+            ?: error("❌ current account is not user")
+
     val hasMultipleAccounts = userManager.accountTypes.value.size > 1
 
     private val _accountState = MutableStateFlow(UserAccountState())
@@ -38,15 +42,14 @@ class UserAccountSettingsViewModel(
 
     fun loadData() {
         val initial = UserAccountState(
-            userName = "maxjacobson",
-            firstName = "Maxine",
-            lastName = "Jacobson",
-            email = "maxine@gmail.com",
-            height = 175,
-            weight = 75,
-            bodyType = BodyType.ECTOMORPH,
-            profileImageUrl = null,
-            backgroundImageUrl = null
+            userName = user.username,
+            firstName = user.firstName,
+            lastName = user.lastName,
+            height = user.height,
+            weight = user.weight,
+            bodyType = user.bodyType,
+            profileImageUrl = user.profileImageUrl,
+            backgroundImageUrl = user.backgroundImageUrl
         )
         _accountState.value = initial
         initialState = initial
@@ -69,10 +72,6 @@ class UserAccountSettingsViewModel(
 
     fun updateLastName(value: String) {
         updateState { copy(lastName = value) }
-    }
-
-    fun updateEmail(value: String) {
-        updateState { copy(email = value) }
     }
 
     fun updateHeight(value: Int) {

@@ -26,6 +26,7 @@ import com.vurgun.skyfit.feature.settings.component.SettingsEditProfileHeader
 import com.vurgun.skyfit.ui.core.components.special.FitnessTagPickerComponent
 import com.vurgun.skyfit.ui.core.components.special.MobileSettingsDeleteAccountBottomSheet
 import com.vurgun.skyfit.ui.core.components.special.MobileUserSettingsScreenSaveActionComponent
+import com.vurgun.skyfit.ui.core.components.special.SkyFitMobileScaffold
 import com.vurgun.skyfit.ui.core.components.special.SkyFitSelectToEnterMultilineInputComponent
 import com.vurgun.skyfit.ui.core.styling.SkyFitColor
 import org.jetbrains.compose.resources.stringResource
@@ -54,8 +55,7 @@ fun MobileFacilitySettingsEditProfileScreen(
         viewModel.loadData()
     }
 
-    Scaffold(
-        backgroundColor = SkyFitColor.background.default,
+    SkyFitMobileScaffold(
         topBar = {
             SettingsEditProfileHeader(
                 showSave = accountState.isUpdated,

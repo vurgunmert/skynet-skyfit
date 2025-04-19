@@ -14,7 +14,6 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
-import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -25,6 +24,7 @@ import androidx.compose.ui.unit.dp
 import com.vurgun.skyfit.feature.messaging.component.SkyFitChatMessageBubble
 import com.vurgun.skyfit.feature.messaging.component.SkyFitChatMessageInputComponent
 import com.vurgun.skyfit.ui.core.components.special.SkyFitCircularImageComponent
+import com.vurgun.skyfit.ui.core.components.special.SkyFitMobileScaffold
 import com.vurgun.skyfit.ui.core.components.special.UserCircleAvatarItem
 import com.vurgun.skyfit.ui.core.styling.SkyFitColor
 import com.vurgun.skyfit.ui.core.styling.SkyFitTypography
@@ -43,8 +43,7 @@ fun MobileUserToUserChatScreen(
     val messages by viewModel.messages.collectAsState()
     val keyboardState by keyboardAsState()
 
-    Scaffold(
-        backgroundColor = SkyFitColor.background.default,
+    SkyFitMobileScaffold(
         topBar = {
             MobileUserToUserChatScreenToolbarComponent(
                 onClickBack = goToBack,

@@ -27,6 +27,7 @@ import com.vurgun.skyfit.feature.calendar.components.component.calendar.monthly.
 import com.vurgun.skyfit.feature.profile.facility.FacilityCalendarVisitedViewModel
 import com.vurgun.skyfit.feature.profile.facility.MobileFacilityCalendarVisitedScreenCreateActionComponent
 import com.vurgun.skyfit.ui.core.components.special.SkyFitCircularImageComponent
+import com.vurgun.skyfit.ui.core.components.special.SkyFitMobileScaffold
 import com.vurgun.skyfit.ui.core.components.special.SkyFitScreenHeader
 import com.vurgun.skyfit.ui.core.components.special.UserCircleAvatarItem
 import com.vurgun.skyfit.ui.core.styling.SkyFitColor
@@ -45,8 +46,7 @@ fun MobileTrainerCalendarVisitedScreen(
     val viewModel = FacilityCalendarVisitedViewModel()
     val lessonsColumnViewData by viewModel.lessonsColumnViewData.collectAsState()
 
-    Scaffold(
-        backgroundColor = SkyFitColor.background.default,
+    SkyFitMobileScaffold(
         topBar = {
             SkyFitScreenHeader("Randevu Al", onClickBack = goToBack)
         },

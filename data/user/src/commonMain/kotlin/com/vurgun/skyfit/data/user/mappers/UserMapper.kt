@@ -1,8 +1,10 @@
 package com.vurgun.skyfit.data.user.mappers
 
 import com.vurgun.skyfit.data.core.domain.model.BaseUserDetail
+import com.vurgun.skyfit.data.core.domain.model.BodyType
 import com.vurgun.skyfit.data.core.domain.model.CharacterType
 import com.vurgun.skyfit.data.core.domain.model.FacilityDetail
+import com.vurgun.skyfit.data.core.domain.model.GenderType
 import com.vurgun.skyfit.data.core.domain.model.TrainerDetail
 import com.vurgun.skyfit.data.core.domain.model.UserAccountType
 import com.vurgun.skyfit.data.core.domain.model.UserDetail
@@ -26,12 +28,12 @@ object UserDetailMapper {
             email = email,
             backgroundImageUrl = fullPath(backgroundImagePath),
             profileImageUrl = fullPath(profilePhotoPath),
-            height = height,
-            weight = weight,
-            birthday = birthday,
-            characterType = characterId?.let { CharacterType.fromId(it) },
-            bodyTypeId = bodyTypeId,
-            gender = gender,
+            height = height ?: -1,
+            weight = weight ?: -1,
+            birthday = birthday.orEmpty(),
+            characterType = characterId?.let { CharacterType.fromId(it) } ?: CharacterType.Carrot,
+            bodyType = BodyType.fromId(bodyTypeId),
+            gender = GenderType.from(gender),
             firstName = firstName.orEmpty(),
             lastName = lastName.orEmpty()
         )

@@ -22,6 +22,10 @@ enum class BodyType(
                         it.turkishName.equals(name, ignoreCase = true)
             } ?: NOT_DEFINED
         }
+
+        fun fromId(id: Int?): BodyType {
+            return entries.find { it.id == id } ?: NOT_DEFINED
+        }
     }
 }
 

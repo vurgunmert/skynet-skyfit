@@ -5,11 +5,10 @@ sealed class GenderType(val id: Int, val label: String) {
     data object FEMALE : GenderType(2, "Kadın")
 
     companion object {
-        fun from(id: Int): GenderType? {
+        fun from(id: Int?): GenderType {
             return when (id) {
-                1 -> MALE
                 2 -> FEMALE
-                else -> null
+                else -> MALE
             }
         }
 

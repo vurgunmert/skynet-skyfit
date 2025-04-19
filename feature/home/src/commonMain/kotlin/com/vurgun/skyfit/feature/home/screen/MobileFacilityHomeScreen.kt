@@ -29,6 +29,7 @@ import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.vurgun.skyfit.feature.home.component.MobileDashboardHomeToolbarComponent
 import com.vurgun.skyfit.feature.home.component.MobileDashboardHomeUpcomingAppointmentsComponent
+import com.vurgun.skyfit.ui.core.components.special.SkyFitMobileScaffold
 import com.vurgun.skyfit.ui.core.styling.SkyFitColor
 import org.koin.compose.viewmodel.koinViewModel
 
@@ -42,8 +43,7 @@ fun MobileFacilityHomeScreen(
 
     val appointments by viewModel.appointments.collectAsStateWithLifecycle()
 
-    Scaffold(
-        backgroundColor = SkyFitColor.background.default,
+    SkyFitMobileScaffold(
         topBar = {
             MobileDashboardHomeToolbarComponent(
                 onClickNotifications = goToNotifications,

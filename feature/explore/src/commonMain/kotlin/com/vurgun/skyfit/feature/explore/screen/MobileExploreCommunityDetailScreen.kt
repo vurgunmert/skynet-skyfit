@@ -21,7 +21,6 @@ import androidx.compose.material.Button
 import androidx.compose.material.ButtonDefaults
 import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
-import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
@@ -43,7 +42,7 @@ import com.vurgun.skyfit.ui.core.components.special.ButtonSize
 import com.vurgun.skyfit.ui.core.components.special.ButtonState
 import com.vurgun.skyfit.ui.core.components.special.ButtonVariant
 import com.vurgun.skyfit.ui.core.components.special.SkyFitButtonComponent
-import com.vurgun.skyfit.ui.core.styling.SkyFitColor
+import com.vurgun.skyfit.ui.core.components.special.SkyFitMobileScaffold
 import org.jetbrains.compose.resources.painterResource
 import skyfit.ui.core.generated.resources.Res
 import skyfit.ui.core.generated.resources.logo_skyfit
@@ -63,8 +62,7 @@ fun MobileExploreCommunityDetailScreen(goToBack: () -> Unit) {
         Group("Duyurular", "Asıl: Hedeflerine ulaşman için buradayız.", "10:21")
     )
 
-    Scaffold(
-        backgroundColor = SkyFitColor.background.default,
+    SkyFitMobileScaffold(
         topBar = {
             MobileExploreCommunityDetailScreenToolbarComponent(onBackPress = goToBack)
         }

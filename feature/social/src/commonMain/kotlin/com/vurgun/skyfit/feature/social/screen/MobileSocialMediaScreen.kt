@@ -23,6 +23,7 @@ import androidx.compose.ui.unit.dp
 import com.vurgun.skyfit.feature.social.components.SocialPostCard
 import com.vurgun.skyfit.ui.core.components.special.SkyFitCircularImageComponent
 import com.vurgun.skyfit.ui.core.components.button.SkyFitIconButton
+import com.vurgun.skyfit.ui.core.components.special.SkyFitMobileScaffold
 import com.vurgun.skyfit.ui.core.components.special.UserCircleAvatarItem
 import com.vurgun.skyfit.ui.core.styling.SkyFitColor
 import com.vurgun.skyfit.ui.core.styling.SkyFitTypography
@@ -38,8 +39,7 @@ fun MobileSocialMediaScreen(
     val viewModel = UserSocialMediaViewModel()
     val posts = viewModel.posts.collectAsState().value
 
-    Scaffold(
-        backgroundColor = SkyFitColor.background.default,
+    SkyFitMobileScaffold(
         topBar = {
             MobileUserSocialMediaScreenUserProfilesComponent(onNewPost = goToCreatePost)
         }
