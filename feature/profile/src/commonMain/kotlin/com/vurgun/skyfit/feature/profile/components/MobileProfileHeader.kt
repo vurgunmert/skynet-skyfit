@@ -119,10 +119,17 @@ fun UserProfileCardPreferenceItem(
     title: String,
     subtitle: String
 ) {
-    Column(modifier = modifier.padding(8.dp)) {
+    Column(
+        modifier = modifier
+            .fillMaxWidth()
+            .padding(horizontal = 8.dp),
+        verticalArrangement = Arrangement.Center,
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
         Row(
             modifier = Modifier.fillMaxWidth(),
-            verticalAlignment = Alignment.CenterVertically
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.Center
         ) {
             Icon(
                 painter = painterResource(iconRes),
@@ -134,6 +141,10 @@ fun UserProfileCardPreferenceItem(
             Text(text = title, style = SkyFitTypography.bodyMediumSemibold, color = SkyFitColor.text.default)
         }
         Spacer(modifier = Modifier.height(4.dp))
-        Text(text = subtitle, style = SkyFitTypography.bodySmall, color = SkyFitColor.text.secondary)
+        Text(
+            text = subtitle,
+            style = SkyFitTypography.bodySmall,
+            color = SkyFitColor.text.secondary
+        )
     }
 }

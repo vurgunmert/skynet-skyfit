@@ -39,9 +39,6 @@ class FacilityLessonListViewModel(
     private val gymId: Int
         get() = facilityUser.gymId
 
-    private val gymAddress: String
-        get() = facilityUser.gymAddress
-
     private val _uiState = MutableStateFlow(FacilityLessonListUiState())
     val uiState: StateFlow<FacilityLessonListUiState> = _uiState
 
@@ -62,20 +59,16 @@ class FacilityLessonListViewModel(
                 onSuccess = { lessons ->
                     this@FacilityLessonListViewModel.lessons = lessons
                     val mappedLessons = lessons.map { lesson ->
-                        lessonMapper.map(lesson, gymAddress)
+                        lessonMapper.map(lesson)
                     }
-                    _uiState.update {
-                        it.copy(
-                            isLoading = false,
-                            lessons = mappedLessons
-                        )
-                    }
+                    _uiState.update { it.copy(isLoading = false, lessons = mappedLessons) }
                 },
                 onFailure = { throwable ->
                     _uiState.update {
                         it.copy(
                             isLoading = false,
-                            errorMessage = throwable.message ?: "An unexpected error occurred."
+                            errorMessage = throwable.message ?: "An unexpected error occurred.",
+                            lessons = emptyList()
                         )
                     }
                 }

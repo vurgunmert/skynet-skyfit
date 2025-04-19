@@ -52,7 +52,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.vurgun.skyfit.feature.home.component.MobileDashboardHomeToolbarComponent
-import com.vurgun.skyfit.feature.home.component.MobileDashboardHomeUpcomingAppointmentsComponent
+import com.vurgun.skyfit.feature.home.component.MobileTrainerHomeUpcomingAppointmentsComponent
 import com.vurgun.skyfit.ui.core.components.button.PrimaryMediumButton
 import com.vurgun.skyfit.ui.core.components.special.CharacterImage
 import com.vurgun.skyfit.ui.core.components.special.SkyFitMobileScaffold
@@ -104,7 +104,7 @@ fun MobileTrainerHomeScreen(
             if (appointments.isEmpty()) {
                 EmptyUpcomingAppointments(onClickAdd = {})
             } else {
-                MobileDashboardHomeUpcomingAppointmentsComponent(
+                MobileTrainerHomeUpcomingAppointmentsComponent(
                     appointments = appointments,
                     onClickShowAll = goToAppointments
                 )

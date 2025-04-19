@@ -12,6 +12,6 @@ val featureHomeModule = module {
     includes(dataCoreModule, dataCoursesModule)
 
     viewModel { UserHomeViewModel(get(), get()) }
-    viewModel { FacilityHomeViewModel(get(), get()) }
-    viewModel { TrainerHomeViewModel(get(), get()) }
+    viewModel { FacilityHomeViewModel(get(), get(), get()) }
+    viewModel { TrainerHomeViewModel(get(), get(), get()) }
 }

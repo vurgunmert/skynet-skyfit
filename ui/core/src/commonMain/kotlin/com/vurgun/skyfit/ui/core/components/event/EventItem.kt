@@ -7,21 +7,30 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Icon
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.unit.dp
 import com.vurgun.skyfit.ui.core.components.special.SkyFitCheckBoxComponent
+import com.vurgun.skyfit.ui.core.components.special.SkyFitListItemCardComponent
 import com.vurgun.skyfit.ui.core.components.text.BodyMediumSemiboldText
+import com.vurgun.skyfit.ui.core.components.text.BodySmallRegularText
+import com.vurgun.skyfit.ui.core.styling.SkyFitAsset
 import com.vurgun.skyfit.ui.core.styling.SkyFitColor
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
 import skyfit.ui.core.generated.resources.Res
+import skyfit.ui.core.generated.resources.ic_chevron_right
 import skyfit.ui.core.generated.resources.ic_dots_vertical
 import skyfit.ui.core.generated.resources.lesson_notify_me_action
 
@@ -319,4 +328,119 @@ fun EditableLessonEventItem(
         }
     }
 }
+
+@Composable
+fun FacilityHomeLessonEventItem(
+    title: String,
+    iconId: Int,
+    date: String,
+    timePeriod: String,
+    trainer: String,
+    onClick: () -> Unit = {}
+) {
+    SkyFitListItemCardComponent(
+        modifier = Modifier
+            .fillMaxWidth()
+            .clip(RoundedCornerShape(16.dp))
+            .clickable(onClick = onClick)
+            .background(SkyFitColor.background.surfaceSecondary)
+            .padding(12.dp)
+    ) {
+        Box(
+            modifier = Modifier
+                .background(SkyFitColor.background.default, RoundedCornerShape(16.dp))
+                .padding(16.dp),
+            contentAlignment = Alignment.Center
+        ) {
+
+            Icon(
+                painter = SkyFitAsset.getPainter(iconId),
+                contentDescription = "Activity",
+                tint = SkyFitColor.icon.default,
+                modifier = Modifier.size(24.dp)
+            )
+        }
+
+        Spacer(modifier = Modifier.width(12.dp))
+
+        Column(Modifier.weight(1f)) {
+            Row {
+                BodyMediumSemiboldText(text = title, modifier = Modifier.weight(1f))
+                BodySmallRegularText(text = date, color = SkyFitColor.text.secondary)
+            }
+            Spacer(modifier = Modifier.height(8.dp))
+            Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                EventTimeText(timePeriod, modifier = Modifier.weight(1f))
+                EventTrainerText(trainer, modifier = Modifier.weight(1f))
+            }
+        }
+
+        Spacer(modifier = Modifier.width(12.dp))
+
+        Icon(
+            painter = painterResource(Res.drawable.ic_chevron_right),
+            contentDescription = "Enter",
+            tint = SkyFitColor.icon.default,
+            modifier = Modifier.size(16.dp)
+        )
+    }
+}
+
+@Composable
+fun TrainerHomeLessonEventItem(
+    title: String,
+    iconId: Int,
+    date: String,
+    timePeriod: String,
+    facility: String,
+    onClick: () -> Unit = {}
+) {
+    SkyFitListItemCardComponent(
+        modifier = Modifier
+            .fillMaxWidth()
+            .clip(RoundedCornerShape(16.dp))
+            .clickable(onClick = onClick)
+            .background(SkyFitColor.background.surfaceSecondary)
+            .padding(12.dp)
+    ) {
+        Box(
+            modifier = Modifier
+                .background(SkyFitColor.background.default, RoundedCornerShape(16.dp))
+                .padding(16.dp),
+            contentAlignment = Alignment.Center
+        ) {
+
+            Icon(
+                painter = SkyFitAsset.getPainter(iconId),
+                contentDescription = "Activity",
+                tint = SkyFitColor.icon.default,
+                modifier = Modifier.size(24.dp)
+            )
+        }
+
+        Spacer(modifier = Modifier.width(12.dp))
+
+        Column(Modifier.weight(1f)) {
+            Row {
+                BodyMediumSemiboldText(text = title, modifier = Modifier.weight(1f))
+                BodySmallRegularText(text = date, color = SkyFitColor.text.secondary)
+            }
+            Spacer(modifier = Modifier.height(8.dp))
+            Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                EventTimeText(timePeriod, modifier = Modifier.weight(1f))
+                EventLocationText(facility, modifier = Modifier.weight(1f))
+            }
+        }
+
+        Spacer(modifier = Modifier.width(12.dp))
+
+        Icon(
+            painter = painterResource(Res.drawable.ic_chevron_right),
+            contentDescription = "Enter",
+            tint = SkyFitColor.icon.default,
+            modifier = Modifier.size(16.dp)
+        )
+    }
+}
+
 //endregion LessonEvents

@@ -22,10 +22,6 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Icon
 import androidx.compose.material.Text
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.DateRange
-import androidx.compose.material.icons.filled.Place
-import androidx.compose.material.icons.filled.PlayArrow
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -44,17 +40,20 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.vurgun.skyfit.data.core.domain.model.CharacterType
+import com.vurgun.skyfit.data.courses.model.LessonSessionItemViewData
 import com.vurgun.skyfit.feature.calendar.components.component.calendar.MobileUserActivityHourlyCalendarComponent
 import com.vurgun.skyfit.feature.calendar.components.component.calendar.SkyFitColoredCalendarComponent
 import com.vurgun.skyfit.ui.core.components.button.SkyFitCircularProgressIconButton
+import com.vurgun.skyfit.ui.core.components.event.FacilityHomeLessonEventItem
+import com.vurgun.skyfit.ui.core.components.event.TrainerHomeLessonEventItem
 import com.vurgun.skyfit.ui.core.components.image.NetworkImage
+import com.vurgun.skyfit.ui.core.components.special.AnimatedCharacterComponent
 import com.vurgun.skyfit.ui.core.components.special.ButtonSize
 import com.vurgun.skyfit.ui.core.components.special.ButtonState
 import com.vurgun.skyfit.ui.core.components.special.ButtonVariant
 import com.vurgun.skyfit.ui.core.components.special.SkyFitButtonComponent
 import com.vurgun.skyfit.ui.core.components.special.SkyFitListItemCardComponent
 import com.vurgun.skyfit.ui.core.components.special.SkyFitMonthPickerDropdownComponent
-import com.vurgun.skyfit.ui.core.components.special.AnimatedCharacterComponent
 import com.vurgun.skyfit.ui.core.styling.LocalPadding
 import com.vurgun.skyfit.ui.core.styling.SkyFitAsset
 import com.vurgun.skyfit.ui.core.styling.SkyFitColor
@@ -334,7 +333,7 @@ fun MobileDashboardHomeActivityCalendarComponent(
 
 @Composable
 fun MobileDashboardHomeActivityHourlyCalendarComponent(
-    date: String = "18 Haziran Cumartesi",
+    date: String = "", //18 Haziran Cumartesi
     onClickAdd: () -> Unit = {}
 ) {
     Column(
@@ -368,7 +367,7 @@ fun MobileDashboardHomeActivityHourlyCalendarComponent(
 }
 
 @Composable
-fun MobileDashboardHomeUpcomingAppointmentsComponent(
+fun MobileUserHomeUpcomingAppointmentsComponent(
     appointments: List<HomeAppointmentItemViewData>,
     onClickShowAll: () -> Unit = {}
 ) {
@@ -381,7 +380,7 @@ fun MobileDashboardHomeUpcomingAppointmentsComponent(
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(horizontal = LocalPadding.current.medium),
+                .padding(horizontal = LocalPadding.current.xSmall),
             horizontalArrangement = Arrangement.SpaceBetween,
             verticalAlignment = Alignment.CenterVertically
         ) {
@@ -401,6 +400,96 @@ fun MobileDashboardHomeUpcomingAppointmentsComponent(
         appointments.forEach { appointment ->
             Spacer(modifier = Modifier.height(8.dp))
             MobileDashboardHomeAppointmentCard(appointment, onClick = onClickShowAll)
+        }
+    }
+}
+
+@Composable
+fun MobileDashboardHomeUpcomingAppointmentsComponent(
+    appointments: List<LessonSessionItemViewData>,
+    onClickShowAll: () -> Unit = {}
+) {
+
+    Column(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(LocalPadding.current.medium)
+    ) {
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = LocalPadding.current.xSmall),
+            horizontalArrangement = Arrangement.SpaceBetween,
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Text(
+                text = stringResource(Res.string.upcoming_appointments_label),
+                style = SkyFitTypography.bodyLargeSemibold
+            )
+
+            Text(
+                text = stringResource(Res.string.show_all_action),
+                style = SkyFitTypography.bodyXSmall,
+                color = SkyFitColor.border.secondaryButton,
+                modifier = Modifier.clickable(onClick = onClickShowAll)
+            )
+        }
+
+        appointments.forEach { appointment ->
+            Spacer(modifier = Modifier.height(8.dp))
+            FacilityHomeLessonEventItem(
+                title = appointment.title,
+                iconId = appointment.iconId,
+                date = appointment.date.toString(),
+                timePeriod = appointment.hours.toString(),
+                trainer = appointment.trainer.toString(),
+                onClick = onClickShowAll
+            )
+        }
+    }
+}
+
+@Composable
+fun MobileTrainerHomeUpcomingAppointmentsComponent(
+    appointments: List<LessonSessionItemViewData>,
+    onClickShowAll: () -> Unit = {}
+) {
+
+    Column(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(LocalPadding.current.medium)
+    ) {
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = LocalPadding.current.xSmall),
+            horizontalArrangement = Arrangement.SpaceBetween,
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Text(
+                text = stringResource(Res.string.upcoming_appointments_label),
+                style = SkyFitTypography.bodyLargeSemibold
+            )
+
+            Text(
+                text = stringResource(Res.string.show_all_action),
+                style = SkyFitTypography.bodyXSmall,
+                color = SkyFitColor.border.secondaryButton,
+                modifier = Modifier.clickable(onClick = onClickShowAll)
+            )
+        }
+
+        appointments.forEach { appointment ->
+            Spacer(modifier = Modifier.height(8.dp))
+            TrainerHomeLessonEventItem(
+                title = appointment.title,
+                iconId = appointment.iconId,
+                date = appointment.date.toString(),
+                timePeriod = appointment.hours.toString(),
+                facility = appointment.facility.toString(),
+                onClick = onClickShowAll
+            )
         }
     }
 }

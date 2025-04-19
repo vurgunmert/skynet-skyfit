@@ -21,6 +21,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.unit.dp
 import com.vurgun.skyfit.ui.core.components.icon.IconAsset
 import com.vurgun.skyfit.ui.core.components.text.BodyMediumRegularText
@@ -92,10 +93,15 @@ fun CalendarWeekDaySelector(
 }
 
 @Composable
-private fun DaySelectorDayItem(dayOfMonth: Int, selected: Boolean, onClick: () -> Unit)     {
+private fun DaySelectorDayItem(
+    dayOfMonth: Int,
+    selected: Boolean,
+    onClick: () -> Unit
+) {
     Box(
         modifier = Modifier
             .size(40.dp)
+            .clip(CircleShape)
             .background(
                 color = SkyFitColor.background.surfaceActive,
                 shape = CircleShape
@@ -105,7 +111,7 @@ private fun DaySelectorDayItem(dayOfMonth: Int, selected: Boolean, onClick: () -
                     Modifier.border(
                         width = 1.dp,
                         color = SkyFitColor.border.secondaryButton,
-                        shape = RoundedCornerShape(40.dp)
+                        shape = CircleShape
                     )
                 } else Modifier
             )

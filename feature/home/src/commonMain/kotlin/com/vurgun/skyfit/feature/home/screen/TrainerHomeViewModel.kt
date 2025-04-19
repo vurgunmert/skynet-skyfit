@@ -2,17 +2,19 @@ package com.vurgun.skyfit.feature.home.screen
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.vurgun.skyfit.data.user.repository.UserManager
 import com.vurgun.skyfit.data.core.domain.model.TrainerDetail
 import com.vurgun.skyfit.data.courses.domain.repository.CourseRepository
-import com.vurgun.skyfit.feature.home.component.HomeAppointmentItemViewData
+import com.vurgun.skyfit.data.courses.mapper.LessonSessionItemViewDataMapper
+import com.vurgun.skyfit.data.courses.model.LessonSessionItemViewData
+import com.vurgun.skyfit.data.user.repository.UserManager
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 
 class TrainerHomeViewModel(
     private val userManager: UserManager,
-    private val courseRepository: CourseRepository
+    private val courseRepository: CourseRepository,
+    private val mapper: LessonSessionItemViewDataMapper
 ) : ViewModel() {
 
     private val trainerUser: TrainerDetail
@@ -21,7 +23,7 @@ class TrainerHomeViewModel(
 
     val characterType = trainerUser.characterType
 
-    private val _appointments = MutableStateFlow<List<HomeAppointmentItemViewData>>(emptyList())
+    private val _appointments = MutableStateFlow<List<LessonSessionItemViewData>>(emptyList())
     val appointments = _appointments.asStateFlow()
 
     init {
@@ -32,7 +34,7 @@ class TrainerHomeViewModel(
         viewModelScope.launch {
             _appointments.value = courseRepository.getUpcomingLessonsByTrainer(trainerUser.trainerId)
                 .getOrNull()?.let { list ->
-                    list.map { it.toHomeViewData() }
+                    list.map { mapper.map(it) }
                 }.orEmpty()
         }
     }
