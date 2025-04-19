@@ -2,14 +2,13 @@ package com.vurgun.skyfit.feature.profile.trainer
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.vurgun.skyfit.data.user.repository.UserManager
 import com.vurgun.skyfit.data.core.domain.model.TrainerDetail
 import com.vurgun.skyfit.data.courses.domain.repository.CourseRepository
 import com.vurgun.skyfit.data.courses.mapper.LessonSessionItemViewDataMapper
 import com.vurgun.skyfit.data.courses.model.LessonSessionColumnViewData
+import com.vurgun.skyfit.data.user.repository.UserManager
 import com.vurgun.skyfit.feature.profile.components.viewdata.LifestyleActionRowViewData
-import com.vurgun.skyfit.feature.profile.user.TopBarGroupViewData
-import com.vurgun.skyfit.feature.profile.user.UserProfilePreferenceItem
+import com.vurgun.skyfit.feature.profile.user.UserProfileHeaderViewData
 import com.vurgun.skyfit.feature.social.viewdata.SocialPostItemViewData
 import com.vurgun.skyfit.ui.core.styling.SkyFitAsset
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -27,8 +26,8 @@ class TrainerProfileOwnerViewModel(
         get() = userManager.user.value as? TrainerDetail
             ?: error("❌ User is not a Trainer")
 
-    private val _profileData = MutableStateFlow<TopBarGroupViewData?>(null)
-    val profileData: StateFlow<TopBarGroupViewData?> get() = _profileData
+    private val _profileData = MutableStateFlow<UserProfileHeaderViewData?>(null)
+    val profileData: StateFlow<UserProfileHeaderViewData?> get() = _profileData
 
     private val _specialtiesRowViewData = MutableStateFlow<LifestyleActionRowViewData?>(null)
     val specialtiesRowViewData: StateFlow<LifestyleActionRowViewData?> get() = _specialtiesRowViewData
@@ -47,17 +46,14 @@ class TrainerProfileOwnerViewModel(
     }
 
     fun loadData() {
-        _profileData.value = TopBarGroupViewData(
+        _profileData.value = UserProfileHeaderViewData(
             name = trainerUser.firstName,
-            social = "@${trainerUser.username}",
+            username = "@${trainerUser.username}",
             profileImageUrl = trainerUser.profileImageUrl,
             backgroundImageUrl = trainerUser.backgroundImageUrl,
-            preferences = listOf(
-                UserProfilePreferenceItem(iconId = "ic_height_outline", "Boy", trainerUser.height.toString()),
-                UserProfilePreferenceItem(iconId = "ic_dna_outline", "Kilo", trainerUser.weight.toString()),
-                UserProfilePreferenceItem(iconId = "ic_overweight", "Vücut Tipi", trainerUser.bodyTypeId.toString() )
-            ),
-            showInfoMini = false
+            height = trainerUser.height.toString(),
+            weight = trainerUser.weight.toString(),
+            bodyType = trainerUser.bodyType.turkishShort
         )
 
         viewModelScope.launch {

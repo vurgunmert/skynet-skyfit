@@ -21,6 +21,12 @@ class SettingsHomeViewModel(
     val selectedRole = userManager.userRole
     val accountTypes = userManager.accountTypes
 
+    init {
+        viewModelScope.launch {
+            userManager.getAccountTypes()
+        }
+    }
+
     fun onLogout() {
         viewModelScope.launch {
             userManager.logout()

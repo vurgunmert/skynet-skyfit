@@ -16,7 +16,7 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 
 data class FacilityProfileInfoViewData(
-    val backgroundUrl: String,
+    val backgroundUrl: String?,
     val name: String,
     val bio: String,
     val address: String,
@@ -85,7 +85,7 @@ class FacilityProfileViewModel(
             val items = courseRepository.getUpcomingLessonsByFacility(facilityUser.gymId)
                 .map { lessons ->
                     lessons.map {
-                        lessonSessionItemViewDataMapper.map(it, facilityUser.gymAddress)
+                        lessonSessionItemViewDataMapper.map(it)
                     }
                 }.getOrElse { emptyList() }
 

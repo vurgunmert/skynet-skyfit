@@ -2,11 +2,11 @@ package com.vurgun.skyfit.feature.profile.user
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.vurgun.skyfit.data.user.repository.UserManager
 import com.vurgun.skyfit.data.core.domain.model.UserDetail
 import com.vurgun.skyfit.data.courses.domain.repository.CourseRepository
 import com.vurgun.skyfit.data.courses.model.LessonSessionColumnViewData
 import com.vurgun.skyfit.data.courses.model.LessonSessionItemViewData
+import com.vurgun.skyfit.data.user.repository.UserManager
 import com.vurgun.skyfit.feature.profile.components.viewdata.LifestyleActionItemViewData
 import com.vurgun.skyfit.feature.profile.components.viewdata.LifestyleActionRowViewData
 import com.vurgun.skyfit.feature.profile.components.viewdata.PhotoGalleryStackViewData
@@ -19,9 +19,10 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.launch
 
 data class UserProfileUiState(
-    val profileData: TopBarGroupViewData = TopBarGroupViewData(),
+    val profileData: UserProfileHeaderViewData = UserProfileHeaderViewData(),
     val posts: List<SocialPostItemViewData> = emptyList(),
     val appointments: LessonSessionColumnViewData? = null,
     val showPosts: Boolean = false,
@@ -31,10 +32,9 @@ data class UserProfileUiState(
     val photoDiary: PhotoGalleryStackViewData? = null
 )
 
-
 class UserProfileOwnerViewModel(
     private val userManager: UserManager,
-    private val courseRepository: CourseRepository,
+    private val courseRepository: CourseRepository
 ) : ViewModel() {
 
     private val user: UserDetail
@@ -60,45 +60,17 @@ class UserProfileOwnerViewModel(
     }.stateIn(viewModelScope, SharingStarted.Lazily, false)
 
     init {
-        val profileViewData = TopBarGroupViewData(
+        val profileViewData = UserProfileHeaderViewData(
             name = user.firstName,
-            social = user.username,
+            username = user.username,
             profileImageUrl = user.profileImageUrl,
             backgroundImageUrl = user.backgroundImageUrl,
-            preferences = listOf(
-                UserProfilePreferenceItem(iconId = "ic_height_outline", "Boy", user.height.toString()),
-                UserProfilePreferenceItem(iconId = "ic_dna_outline", "Kilo", user.weight.toString()),
-                UserProfilePreferenceItem(iconId = "ic_overweight", "Vücut Tipi", user.bodyType.turkishShort)
-            ),
-            showInfoMini = false
+            height = user.height.toString(),
+            weight = user.weight.toString(),
+            bodyType = user.bodyType.turkishShort
         )
 
-        val appointmentsViewData = listOf<LessonSessionItemViewData>(
-//            LessonSessionItemViewData(
-//                iconId = SkyFitAsset.SkyFitIcon.PUSH_UP.resId,
-//                title = "Fonksiyonel hareket ve esneklik geliştirme",
-//                duration = "60 dakika",
-//                date = "18/11/2024",
-//                hours = "08:00 - 09:00",
-//                location = "@ironstudio",
-//                trainer = "Micheal Blake"
-//            ),
-//            LessonSessionItemViewData(
-//                iconId = SkyFitAsset.SkyFitIcon.BICEPS_FORCE.resId,
-//                title = "Kişisel kuvvet antrenmanı",
-//                date = "18/11/2024",
-//                hours = "08:00 - 09:00",
-//                duration = "60 dakika",
-//                location = "@ironstudio",
-//                trainer = "Micheal Blake"
-//            )
-        )
-
-        val appointmentsColumnViewData = LessonSessionColumnViewData(
-            iconId = SkyFitAsset.SkyFitIcon.EXERCISES.id,
-            title = "Randevularım",
-            items = appointmentsViewData
-        )
+        loadAppointments()
 
         val photoDiaryViewData = PhotoGalleryStackViewData()
 
@@ -131,11 +103,50 @@ class UserProfileOwnerViewModel(
         _uiState.update {
             it.copy(
                 profileData = profileViewData,
-                appointments = appointmentsColumnViewData,
                 exercises = exercisesRowViewData,
                 habits = habitsRowViewData,
                 photoDiary = photoDiaryViewData
             )
+        }
+    }
+
+    private fun loadAppointments() {
+        viewModelScope.launch {
+            courseRepository.getUpcomingAppointmentsByUser(user.normalUserId)
+                .map { appointments ->
+                    appointments.map {
+                        LessonSessionItemViewData(
+                            lessonId = it.lessonId,
+                            iconId = it.iconId,
+                            title = it.title,
+                            date = it.startDate.toString(),
+                            hours = "${it.startTime} - ${it.endTime}",
+                            trainer = it.trainerFullName,
+                            facility = it.facilityName,
+                            location = it.facilityName,
+                            note = it.trainerNote
+                        )
+                    }
+                }
+                .fold(
+                    onSuccess = { appointments ->
+                        if (appointments.isNotEmpty()) {
+                            val appointmentsColumnViewData = LessonSessionColumnViewData(
+                                iconId = SkyFitAsset.SkyFitIcon.EXERCISES.id,
+                                title = "Randevularım",
+                                items = appointments
+                            )
+                            _uiState.update {
+                                it.copy(
+                                    appointments = appointmentsColumnViewData
+                                )
+                            }
+                        }
+                    },
+                    onFailure = {
+                        print("Failed to get appointments ${it.message}")
+                    }
+                )
         }
     }
 
@@ -153,17 +164,13 @@ class UserProfileOwnerViewModel(
     }
 }
 
-data class UserProfilePreferenceItem(
-    val iconId: String,
-    val title: String,
-    val subtitle: String
-)
-
-data class TopBarGroupViewData(
+data class UserProfileHeaderViewData(
     val name: String = "",
-    val social: String = "",
+    val username: String = "",
     val profileImageUrl: String? = null,
     val backgroundImageUrl: String? = null,
-    val preferences: List<UserProfilePreferenceItem> = emptyList(),
+    val height: String = "",
+    val weight: String = "",
+    val bodyType: String = "",
     val showInfoMini: Boolean = false // Whether to show the mini info card
 )

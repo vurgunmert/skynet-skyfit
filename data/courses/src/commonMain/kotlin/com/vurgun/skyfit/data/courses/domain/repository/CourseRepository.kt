@@ -16,6 +16,7 @@ interface CourseRepository {
 
     suspend fun createLesson(info: LessonCreationInfo): Result<Unit>
     suspend fun updateLesson(info: LessonUpdateInfo): Result<Unit>
+    suspend fun activateLesson(lessonId: Int): Result<Unit>
     suspend fun deactivateLesson(lessonId: Int): Result<Unit>
     suspend fun deleteLesson(lessonId: Int): Result<Unit>
     // endregion

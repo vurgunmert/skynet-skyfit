@@ -17,7 +17,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
-import com.vurgun.skyfit.feature.profile.user.TopBarGroupViewData
+import com.vurgun.skyfit.feature.profile.user.UserProfileHeaderViewData
 import com.vurgun.skyfit.ui.core.components.divider.VerticalDivider
 import com.vurgun.skyfit.ui.core.components.image.NetworkImage
 import com.vurgun.skyfit.ui.core.styling.SkyFitColor
@@ -31,7 +31,7 @@ import skyfit.ui.core.generated.resources.ic_overweight
 
 @Composable
 fun MobileProfileHeader(
-    viewData: TopBarGroupViewData
+    viewData: UserProfileHeaderViewData
 ) {
     BoxWithConstraints {
         val width = maxWidth
@@ -67,8 +67,10 @@ fun MobileProfileBackgroundImage(imageUrl: String?, height: Dp) {
 }
 
 @Composable
-fun MobileProfileBackgroundImage(imageUrl: String?,
-                                 modifier: Modifier = Modifier.fillMaxWidth()) {
+fun MobileProfileBackgroundImage(
+    imageUrl: String?,
+    modifier: Modifier = Modifier.fillMaxWidth()
+) {
     NetworkImage(
         imageUrl = imageUrl,
         modifier = modifier
@@ -77,7 +79,12 @@ fun MobileProfileBackgroundImage(imageUrl: String?,
 
 
 @Composable
-fun UserProfileCardPreferenceRow(modifier: Modifier) {
+fun UserProfileCardPreferenceRow(
+    height: String,
+    weight: String,
+    bodyType: String,
+    modifier: Modifier
+) {
     Row(
         modifier.fillMaxWidth(),
         horizontalArrangement = Arrangement.Center
@@ -85,21 +92,21 @@ fun UserProfileCardPreferenceRow(modifier: Modifier) {
         UserProfileCardPreferenceItem(
             modifier = Modifier.weight(1f),
             iconRes = Res.drawable.ic_height,
-            title = "175",
+            title = height,
             subtitle = "Boy (cm)"
         )
         VerticalDivider(Modifier.padding(horizontal = 12.dp))
         UserProfileCardPreferenceItem(
             modifier = Modifier.weight(1f),
             iconRes = Res.drawable.ic_dna,
-            title = "63",
+            title = weight,
             subtitle = "Kilo (kg)"
         )
         VerticalDivider(Modifier.padding(horizontal = 12.dp))
         UserProfileCardPreferenceItem(
             modifier = Modifier.weight(1f),
             iconRes = Res.drawable.ic_overweight,
-            title = "Ecto",
+            title = bodyType,
             subtitle = "Vücut Tipi"
         )
     }

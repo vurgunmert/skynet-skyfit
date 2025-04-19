@@ -28,6 +28,7 @@ import com.vurgun.skyfit.ui.core.styling.SkyFitColor
 import com.vurgun.skyfit.ui.core.styling.SkyFitTypography
 import org.jetbrains.compose.resources.DrawableResource
 import org.jetbrains.compose.resources.painterResource
+import org.jetbrains.compose.resources.stringResource
 import skyfit.ui.core.generated.resources.Res
 import skyfit.ui.core.generated.resources.ic_clock
 import skyfit.ui.core.generated.resources.ic_dashboard
@@ -35,6 +36,7 @@ import skyfit.ui.core.generated.resources.ic_dots_vertical
 import skyfit.ui.core.generated.resources.ic_location_pin
 import skyfit.ui.core.generated.resources.ic_note
 import skyfit.ui.core.generated.resources.ic_profile_fill
+import skyfit.ui.core.generated.resources.show_all_action
 
 @Composable
 fun LessonSessionColumn(
@@ -68,7 +70,7 @@ fun LessonSessionColumn(
 
             if (onClickShowAll != null) {
                 Text(
-                    text = "Hepsini Görüntüle",
+                    text = stringResource(Res.string.show_all_action),
                     style = SkyFitTypography.bodyXSmall,
                     color = SkyFitColor.border.secondaryButton,
                     modifier = Modifier.clickable(onClick = onClickShowAll)

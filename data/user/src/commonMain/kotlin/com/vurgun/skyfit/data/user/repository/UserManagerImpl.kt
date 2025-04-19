@@ -28,7 +28,6 @@ class UserManagerImpl(
         .map { it?.userRole ?: UserRole.Guest }
         .stateIn(appScope, SharingStarted.Eagerly, UserRole.Guest)
 
-
     private val _accountTypes = MutableStateFlow<List<UserAccountType>>(emptyList())
     override val accountTypes: StateFlow<List<UserAccountType>> = _accountTypes
 

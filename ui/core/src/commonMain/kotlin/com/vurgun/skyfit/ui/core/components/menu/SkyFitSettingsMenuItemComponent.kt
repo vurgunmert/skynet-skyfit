@@ -99,7 +99,6 @@ fun SettingsMenuItem(
 fun MobileSettingsMenuItemDividerComponent() {
     Box(
         modifier = Modifier
-            .padding(vertical = 12.dp)
             .fillMaxWidth()
             .height(1.dp)
             .background(SkyFitColor.border.default)

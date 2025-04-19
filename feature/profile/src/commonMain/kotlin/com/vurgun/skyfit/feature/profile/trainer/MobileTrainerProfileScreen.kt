@@ -50,7 +50,7 @@ import com.vurgun.skyfit.feature.profile.components.MobileProfileBackgroundImage
 import com.vurgun.skyfit.feature.profile.components.UserProfileCardPreferenceRow
 import com.vurgun.skyfit.feature.profile.components.viewdata.LifestyleActionRowViewData
 import com.vurgun.skyfit.feature.profile.components.viewdata.ProfileViewMode
-import com.vurgun.skyfit.feature.profile.user.TopBarGroupViewData
+import com.vurgun.skyfit.feature.profile.user.UserProfileHeaderViewData
 import com.vurgun.skyfit.ui.core.components.event.LessonSessionColumn
 import com.vurgun.skyfit.ui.core.components.image.NetworkImage
 import com.vurgun.skyfit.ui.core.components.special.ButtonSize
@@ -102,7 +102,7 @@ fun MobileTrainerProfileScreen(
         ) {
             val width = maxWidth
             val imageHeight = width * 9 / 16
-            val contentTopPadding = imageHeight * 6 / 10
+            val contentTopPadding = imageHeight * 5 / 10
 
             MobileProfileBackgroundImage(
                 imageUrl = profileData?.backgroundImageUrl,
@@ -153,11 +153,11 @@ fun MobileTrainerProfileAboutGroupComponent(
     specialtiesRowViewData: LifestyleActionRowViewData?,
     lessonSessionColumnViewData: LessonSessionColumnViewData? = null
 ) {
-    if (specialtiesRowViewData == null) {
-        MobileTrainerProfileSpecialitiesEmptyComponent(onClickAdd = {})
-    } else {
-        LifestyleActionRow(viewData = specialtiesRowViewData)
-    }
+//    if (specialtiesRowViewData == null) {
+//        MobileTrainerProfileSpecialitiesEmptyComponent(onClickAdd = {})
+//    } else {
+//        LifestyleActionRow(viewData = specialtiesRowViewData)
+//    }
 
     if (lessonSessionColumnViewData != null) {
         LessonSessionColumn(
@@ -172,7 +172,7 @@ fun MobileTrainerProfileAboutGroupComponent(
 }
 
 @Composable
-fun MobileTrainerProfileInfoCardComponent(viewData: TopBarGroupViewData?) {
+fun MobileTrainerProfileInfoCardComponent(viewData: UserProfileHeaderViewData?) {
     viewData ?: return
 
     Box(modifier = Modifier.fillMaxWidth()) {
@@ -204,9 +204,9 @@ fun MobileTrainerProfileInfoCardComponent(viewData: TopBarGroupViewData?) {
                         text = viewData.name,
                         style = SkyFitTypography.bodyLargeSemibold
                     )
-                    Spacer(modifier = Modifier.width(8.dp)) // Space between name and social link
+                    Spacer(modifier = Modifier.width(8.dp))
                     Text(
-                        text = viewData.social,
+                        text = viewData.username,
                         style = SkyFitTypography.bodySmallMedium,
                         color = SkyFitColor.text.secondary
                     )
@@ -214,9 +214,12 @@ fun MobileTrainerProfileInfoCardComponent(viewData: TopBarGroupViewData?) {
 
                 Spacer(modifier = Modifier.height(16.dp))
 
-                if (viewData.preferences.isNotEmpty()) {
-                    UserProfileCardPreferenceRow(Modifier.fillMaxWidth())
-                }
+                UserProfileCardPreferenceRow(
+                    height = viewData.height,
+                    weight = viewData.weight,
+                    bodyType = viewData.bodyType,
+                    modifier = Modifier.fillMaxWidth(),
+                )
             }
         }
 

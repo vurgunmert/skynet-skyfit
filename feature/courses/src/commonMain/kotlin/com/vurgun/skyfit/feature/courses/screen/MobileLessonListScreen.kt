@@ -100,8 +100,8 @@ fun MobileFacilityLessonListScreen(
                     uiState = uiState,
                     onClickNew = onNewLesson,
                     onEdit = viewModel::navigateToEdit,
-                    onDeactivate = viewModel::toggleLessonStatus,
-                    onActivate = viewModel::toggleLessonStatus,
+                    onDeactivate = viewModel::deactivateLesson,
+                    onActivate = viewModel::activateLesson,
                     onDelete = viewModel::deleteLesson,
                 )
             }

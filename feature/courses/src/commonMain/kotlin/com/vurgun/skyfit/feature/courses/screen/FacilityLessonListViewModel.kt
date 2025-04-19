@@ -49,8 +49,11 @@ class FacilityLessonListViewModel(
     val editLessonFlow = _editLessonChannel.receiveAsFlow()
 
     private var lessons: List<Lesson> = emptyList()
+    private var currentDate: LocalDate? = null
 
     fun loadLessonsFor(date: LocalDate) {
+        currentDate = date
+
         viewModelScope.launch {
             _uiState.update { it.copy(isLoading = true, errorMessage = null) }
 
@@ -80,6 +83,11 @@ class FacilityLessonListViewModel(
         }
     }
 
+    private fun refreshLessons() {
+        val date = currentDate ?: return
+        loadLessonsFor(date)
+    }
+
     fun navigateToEdit(lessonId: Int) {
         val lesson = lessons.firstOrNull { it.lessonId == lessonId }
         lesson?.let {
@@ -89,11 +97,36 @@ class FacilityLessonListViewModel(
         }
     }
 
-    fun toggleLessonStatus(lessonId: Int) {
-        // TODO: Call repository to update status
+    fun deactivateLesson(lessonId: Int) {
+        viewModelScope.launch {
+            courseRepository.deactivateLesson(lessonId).fold(
+                onSuccess = { refreshLessons() },
+                onFailure = { showError(it) }
+            )
+        }
+    }
+
+    fun activateLesson(lessonId: Int) {
+        viewModelScope.launch {
+            courseRepository.activateLesson(lessonId).fold(
+                onSuccess = { refreshLessons() },
+                onFailure = { showError(it) }
+            )
+        }
     }
 
     fun deleteLesson(lessonId: Int) {
-        // TODO: Call repository to delete
+        viewModelScope.launch {
+            courseRepository.deleteLesson(lessonId).fold(
+                onSuccess = { refreshLessons() },
+                onFailure = { showError(it) }
+            )
+        }
+    }
+
+    private fun showError(throwable: Throwable) {
+        _uiState.update {
+            it.copy(errorMessage = throwable.message ?: "Bir hata oluştu")
+        }
     }
 }

@@ -22,13 +22,13 @@ import androidx.compose.ui.draw.blur
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
-import com.vurgun.skyfit.feature.profile.user.TopBarGroupViewData
+import com.vurgun.skyfit.feature.profile.user.UserProfileHeaderViewData
 import com.vurgun.skyfit.ui.core.components.image.NetworkImage
 import com.vurgun.skyfit.ui.core.styling.SkyFitColor
 import com.vurgun.skyfit.ui.core.styling.SkyFitTypography
 
 @Composable
-fun MobileProfileHeaderMini(viewData: TopBarGroupViewData) {
+fun MobileProfileHeaderMini(viewData: UserProfileHeaderViewData) {
     Box(modifier = Modifier.fillMaxWidth()) {
         Box(
             modifier = Modifier
@@ -59,9 +59,9 @@ fun MobileProfileHeaderMini(viewData: TopBarGroupViewData) {
                         text = viewData.name,
                         style = SkyFitTypography.bodyLargeSemibold
                     )
-                    Spacer(modifier = Modifier.width(8.dp)) // Space between name and social link
+                    Spacer(modifier = Modifier.width(8.dp))
                     Text(
-                        text = viewData.social,
+                        text = viewData.username,
                         style = SkyFitTypography.bodySmallMedium,
                         color = SkyFitColor.text.secondary
                     )
@@ -69,9 +69,12 @@ fun MobileProfileHeaderMini(viewData: TopBarGroupViewData) {
 
                 Spacer(modifier = Modifier.height(12.dp))
 
-                if (viewData.preferences.isNotEmpty()) {
-                    UserProfileCardPreferenceRow(Modifier.fillMaxWidth())
-                }
+                UserProfileCardPreferenceRow(
+                    height = viewData.height,
+                    weight = viewData.weight,
+                    bodyType = viewData.bodyType,
+                    modifier = Modifier.fillMaxWidth(),
+                )
             }
         }
 

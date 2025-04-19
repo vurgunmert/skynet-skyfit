@@ -1,6 +1,7 @@
 package com.vurgun.skyfit.data.courses
 
 import com.vurgun.skyfit.data.core.model.EmptyDataResponse
+import com.vurgun.skyfit.data.courses.model.ActivateLessonRequest
 import com.vurgun.skyfit.data.courses.model.AppointmentDTO
 import com.vurgun.skyfit.data.courses.model.CreateLessonRequest
 import com.vurgun.skyfit.data.courses.model.CreateUserAppointmentRequest
@@ -26,6 +27,7 @@ class CourseApiService(private val apiClient: ApiClient) {
     private object Endpoints {
         const val CREATE_LESSON = "create/lesson"
         const val UPDATE_LESSON = "update/lesson"
+        const val ACTIVATE_LESSON = "activate/lesson"
         const val DEACTIVATE_LESSON = "deactivate/lesson"
         const val DELETE_LESSON = "delete/lesson"
         const val GET_LESSONS_BY_GYM = "get/lessons/gym"
@@ -99,6 +101,15 @@ class CourseApiService(private val apiClient: ApiClient) {
             method = HttpMethod.Put
             bearerAuth(token)
             url(Endpoints.DEACTIVATE_LESSON)
+            setBody(request)
+        }
+    }
+
+    internal suspend fun activateLesson(request: ActivateLessonRequest, token: String): ApiResult<EmptyDataResponse> {
+        return apiClient.safeApiCall<EmptyDataResponse> {
+            method = HttpMethod.Put
+            bearerAuth(token)
+            url(Endpoints.ACTIVATE_LESSON)
             setBody(request)
         }
     }

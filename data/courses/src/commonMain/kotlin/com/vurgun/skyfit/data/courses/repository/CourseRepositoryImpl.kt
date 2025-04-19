@@ -11,6 +11,7 @@ import com.vurgun.skyfit.data.courses.mapper.toCreateLessonRequest
 import com.vurgun.skyfit.data.courses.mapper.toLessonDomain
 import com.vurgun.skyfit.data.courses.mapper.toLessonDomainList
 import com.vurgun.skyfit.data.courses.mapper.toUpdateLessonRequest
+import com.vurgun.skyfit.data.courses.model.ActivateLessonRequest
 import com.vurgun.skyfit.data.courses.model.CreateUserAppointmentRequest
 import com.vurgun.skyfit.data.courses.model.DeactivateLessonRequest
 import com.vurgun.skyfit.data.courses.model.DeleteLessonRequest
@@ -87,6 +88,12 @@ class CourseRepositoryImpl(
         val token = tokenManager.getTokenOrThrow()
         val request = info.toUpdateLessonRequest()
         apiService.updateLesson(request, token).mapOrThrow { }
+    }
+
+    override suspend fun activateLesson(lessonId: Int): Result<Unit> = ioResult(dispatchers) {
+        val token = tokenManager.getTokenOrThrow()
+        val request = ActivateLessonRequest(lessonId)
+        apiService.activateLesson(request, token).mapOrThrow { }
     }
 
     override suspend fun deactivateLesson(lessonId: Int): Result<Unit> = ioResult(dispatchers) {

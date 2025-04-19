@@ -49,12 +49,12 @@ object UserDetailMapper {
             email = email,
             backgroundImageUrl = fullPath(backgroundImagePath),
             profileImageUrl = fullPath(profilePhotoPath),
-            height = height,
-            weight = weight,
+            height = height ?: -1,
+            weight = weight ?: -1,
             birthday = birthday,
-            characterType = characterId?.let { CharacterType.fromId(it) },
-            bodyTypeId = bodyTypeId,
-            gender = gender,
+            characterType = characterId?.let { CharacterType.fromId(it) } ?: CharacterType.Carrot,
+            bodyType = BodyType.fromId(bodyTypeId),
+            gender = GenderType.from(gender),
             firstName = firstName.orEmpty(),
             lastName = lastName.orEmpty()
         )

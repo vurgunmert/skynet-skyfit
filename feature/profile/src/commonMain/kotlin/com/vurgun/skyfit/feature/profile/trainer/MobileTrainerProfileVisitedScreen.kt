@@ -37,7 +37,7 @@ import com.vurgun.skyfit.feature.profile.components.MobileProfileActionTabsRow
 import com.vurgun.skyfit.feature.profile.components.MobileVisitedProfileActionsComponent
 import com.vurgun.skyfit.feature.profile.components.UserProfileCardPreferenceRow
 import com.vurgun.skyfit.feature.profile.components.viewdata.LifestyleActionRowViewData
-import com.vurgun.skyfit.feature.profile.user.TopBarGroupViewData
+import com.vurgun.skyfit.feature.profile.user.UserProfileHeaderViewData
 import com.vurgun.skyfit.feature.social.components.LazySocialPostsColumn
 import com.vurgun.skyfit.ui.core.components.button.SkyFitPrimaryCircularBackButton
 import com.vurgun.skyfit.ui.core.components.event.LessonSessionColumn
@@ -155,7 +155,7 @@ private fun MobileTrainerProfileVisitedScreenToolbarComponent(onClickBack: () ->
 
 @Composable
 private fun MobileTrainerProfileVisitedScreenInfoCardComponent(
-    viewData: TopBarGroupViewData?,
+    viewData: UserProfileHeaderViewData?,
     isFollowing: Boolean,
     onClickFollow: () -> Unit,
     onClickUnFollow: () -> Unit,
@@ -188,7 +188,7 @@ private fun MobileTrainerProfileVisitedScreenInfoCardComponent(
                     )
                     Spacer(modifier = Modifier.width(8.dp)) // Space between name and social link
                     Text(
-                        text = viewData.social,
+                        text = viewData.username,
                         style = SkyFitTypography.bodySmallMedium,
                         color = SkyFitColor.text.secondary
                     )
@@ -196,9 +196,12 @@ private fun MobileTrainerProfileVisitedScreenInfoCardComponent(
 
                 Spacer(modifier = Modifier.height(16.dp))
 
-                if (viewData.preferences.isNotEmpty()) {
-                    UserProfileCardPreferenceRow(Modifier.fillMaxWidth())
-                }
+                UserProfileCardPreferenceRow(
+                    height = viewData.height,
+                    weight = viewData.weight,
+                    bodyType = viewData.bodyType,
+                    modifier = Modifier.fillMaxWidth(),
+                )
 
                 Spacer(modifier = Modifier.height(16.dp))
 

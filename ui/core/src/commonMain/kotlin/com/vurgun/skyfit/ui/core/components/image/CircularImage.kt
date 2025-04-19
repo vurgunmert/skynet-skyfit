@@ -80,7 +80,8 @@ fun NetworkImage(
     modifier: Modifier = Modifier,
     size: Dp = 64.dp,
     cornerRadius: Dp = 8.dp,
-    isAnimated: Boolean = true
+    isAnimated: Boolean = true,
+    showPlaceholder: Boolean = false
 ) {
     val painter = rememberAsyncImagePainter(imageUrl)
     val state by painter.state.collectAsState()
@@ -99,11 +100,13 @@ fun NetworkImage(
             }
 
             is AsyncImagePainter.State.Error -> {
-                Icon(
-                    painter = painterResource(Res.drawable.ic_image),
-                    contentDescription = "Image failed",
-                    tint = Color.Gray
-                )
+                if (showPlaceholder) {
+                    Icon(
+                        painter = painterResource(Res.drawable.ic_image),
+                        contentDescription = "Placeholder",
+                        tint = SkyFitColor.icon.disabled
+                    )
+                }
             }
 
             is AsyncImagePainter.State.Success -> {

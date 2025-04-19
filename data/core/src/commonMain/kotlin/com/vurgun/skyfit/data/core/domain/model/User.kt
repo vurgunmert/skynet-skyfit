@@ -35,14 +35,14 @@ data class TrainerDetail(
     override val username: String,
     override val phone: String,
     override val email: String?,
-    override val backgroundImageUrl: String,
+    override val backgroundImageUrl: String?,
     val profileImageUrl: String?,
-    val height: Int?,
-    val weight: Int?,
+    val height: Int,
+    val weight: Int,
     val birthday: String?,
-    val characterType: CharacterType?,
-    val bodyTypeId: Int?,
-    val gender: Int?,
+    val characterType: CharacterType,
+    val bodyType: BodyType,
+    val gender: GenderType,
     val firstName: String,
     val lastName: String,
 ) : BaseUserDetail
@@ -57,5 +57,5 @@ data class FacilityDetail(
     override val username: String,
     override val phone: String,
     override val email: String?,
-    override val backgroundImageUrl: String
+    override val backgroundImageUrl: String?
 ) : BaseUserDetail
