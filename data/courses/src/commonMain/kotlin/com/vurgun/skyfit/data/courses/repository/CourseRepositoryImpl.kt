@@ -12,6 +12,7 @@ import com.vurgun.skyfit.data.courses.mapper.toLessonDomain
 import com.vurgun.skyfit.data.courses.mapper.toLessonDomainList
 import com.vurgun.skyfit.data.courses.mapper.toUpdateLessonRequest
 import com.vurgun.skyfit.data.courses.model.ActivateLessonRequest
+import com.vurgun.skyfit.data.courses.model.CancelUserAppointmentRequest
 import com.vurgun.skyfit.data.courses.model.CreateUserAppointmentRequest
 import com.vurgun.skyfit.data.courses.model.DeactivateLessonRequest
 import com.vurgun.skyfit.data.courses.model.DeleteLessonRequest
@@ -108,21 +109,27 @@ class CourseRepositoryImpl(
         apiService.deleteLesson(request, token).mapOrThrow { }
     }
 
-    override suspend fun getAppointmentsByUser(userId: Int): Result<List<Appointment>> = ioResult(dispatchers) {
+    override suspend fun getAppointmentsByUser(nmId: Int): Result<List<Appointment>> = ioResult(dispatchers) {
         val token = tokenManager.getTokenOrThrow()
-        val request = GetUserAppointmentsRequest(userId)
+        val request = GetUserAppointmentsRequest(nmId)
         apiService.getAppointmentsByUser(request, token).mapOrThrow { it.toLessonDomain() }
     }
 
-    override suspend fun getUpcomingAppointmentsByUser(userId: Int, limit: Int): Result<List<Appointment>> = ioResult(dispatchers) {
+    override suspend fun getUpcomingAppointmentsByUser(nmId: Int, limit: Int): Result<List<Appointment>> = ioResult(dispatchers) {
         val token = tokenManager.getTokenOrThrow()
-        val request = GetUpcomingUserAppointmentsRequest(userId, limit)
+        val request = GetUpcomingUserAppointmentsRequest(nmId, limit)
         apiService.getUpcomingAppointmentsByUser(request, token).mapOrThrow { it.toLessonDomain() }
     }
 
-    override suspend fun joinLesson(lessonId: Int): Result<Unit> = ioResult(dispatchers) {
+    override suspend fun bookAppointment(lessonId: Int): Result<Unit> = ioResult(dispatchers) {
         val token = tokenManager.getTokenOrThrow()
         val request = CreateUserAppointmentRequest(lessonId)
         apiService.createUserAppointment(request, token).mapOrThrow { }
+    }
+
+    override suspend fun cancelAppointment(lessonId: Int, lpId: Int): Result<Unit> = ioResult(dispatchers) {
+        val token = tokenManager.getTokenOrThrow()
+        val request = CancelUserAppointmentRequest(lessonId, lpId)
+        apiService.cancelUserAppointment(request, token).mapOrThrow {  }
     }
 }

@@ -3,6 +3,7 @@ package com.vurgun.skyfit.data.courses
 import com.vurgun.skyfit.data.core.model.EmptyDataResponse
 import com.vurgun.skyfit.data.courses.model.ActivateLessonRequest
 import com.vurgun.skyfit.data.courses.model.AppointmentDTO
+import com.vurgun.skyfit.data.courses.model.CancelUserAppointmentRequest
 import com.vurgun.skyfit.data.courses.model.CreateLessonRequest
 import com.vurgun.skyfit.data.courses.model.CreateUserAppointmentRequest
 import com.vurgun.skyfit.data.courses.model.DeactivateLessonRequest
@@ -37,6 +38,7 @@ class CourseApiService(private val apiClient: ApiClient) {
         const val GET_APPOINTMENTS_BY_USER = "get/appointments"
         const val GET_UPCOMING_APPOINTMENTS_BY_USER = "get/close/appointments"
         const val CREATE_APPOINTMENT_BY_USER = "create/appointment"
+        const val CANCEL_APPOINTMENT_BY_USER = "cancel/appointment"
     }
 
     internal suspend fun getLessonsByFacility(request: GetFacilityLessonsRequest, token: String): ApiResult<List<LessonDTO>> {
@@ -152,6 +154,18 @@ class CourseApiService(private val apiClient: ApiClient) {
             method = HttpMethod.Post
             bearerAuth(token)
             url(Endpoints.CREATE_APPOINTMENT_BY_USER)
+            setBody(request)
+        }
+    }
+
+    internal suspend fun cancelUserAppointment(
+        request: CancelUserAppointmentRequest,
+        token: String
+    ): ApiResult<EmptyDataResponse> {
+        return apiClient.safeApiCall<EmptyDataResponse> {
+            method = HttpMethod.Post
+            bearerAuth(token)
+            url(Endpoints.CANCEL_APPOINTMENT_BY_USER)
             setBody(request)
         }
     }

@@ -17,6 +17,7 @@ sealed interface DashboardRoute {
 fun NavGraphBuilder.dashboardRoutes(
     goToChatBot: () -> Unit,
     goToSettings: () -> Unit,
+    goToAppointments: () -> Unit,
     goToFacilityCourses: () -> Unit,
 ) {
     composable<DashboardRoute.Home> {
@@ -24,15 +25,19 @@ fun NavGraphBuilder.dashboardRoutes(
             startRoute = DashboardRoute.Home,
             goToChatBot = goToChatBot,
             goToSettings = goToSettings,
+            goToAppointments = goToAppointments,
             goToFacilityCourses = goToFacilityCourses
         )
     }
+
     composable<DashboardRoute.Profile> {
         DashboardRootGraph(
             startRoute = DashboardRoute.Profile,
             goToChatBot = goToChatBot,
             goToSettings = goToSettings,
+            goToAppointments = goToAppointments,
             goToFacilityCourses = goToFacilityCourses
         )
     }
 }
+

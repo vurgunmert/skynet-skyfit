@@ -2,45 +2,33 @@ package com.vurgun.skyfit.feature.calendar.components.screen
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.vurgun.skyfit.ui.core.components.event.AppointmentCardViewData
+import com.vurgun.skyfit.data.courses.domain.model.Appointment
+import com.vurgun.skyfit.data.courses.domain.repository.CourseRepository
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 
-class TrainerAppointmentDetailViewModel : ViewModel() {
+class TrainerAppointmentDetailViewModel(
+    private val courseRepository: CourseRepository
+) : ViewModel() {
 
-    private val _appointment = MutableStateFlow<AppointmentCardViewData?>(null)
-    val appointment: StateFlow<AppointmentCardViewData?> get() = _appointment
+    private val _appointment = MutableStateFlow<Appointment?>(null)
+    val appointment: StateFlow<Appointment?> get() = _appointment
 
     private val _participants = MutableStateFlow<List<ParticipantViewData>>(emptyList())
     val participants: StateFlow<List<ParticipantViewData>> get() = _participants
 
     fun loadData() {
         viewModelScope.launch {
-            // **Simulate fetching appointment details**
-            _appointment.value = AppointmentCardViewData(
-                iconId = 1,
-                title = "Fitness",
-                date = "30/11/2024",
-                hours = "07:00 - 08:00",
-                category = "PT",
-                location = "ironstudio",
-                trainer = "Micheal Blake",
-                capacity = "5",
-                cost = "Free",
-                note = "Try to arrive 5-10 minutes early to warm up and settle in before the class starts.",
-                isFull = false,
-                canNotify = true,
-                status = "Planlanan"
-            )
-
-            // **Simulate fetching participant list**
-            _participants.value = listOf(
-                ParticipantViewData("1", "Selin Kaya"),
-                ParticipantViewData("2", "Ali Çelik"),
-                ParticipantViewData("3", "Deniz Şahin"),
-                ParticipantViewData("4", "Eren Yıldız")
-            )
+//            // **Simulate fetching appointment details**
+//            _appointment.value =
+//            // **Simulate fetching participant list**
+//            _participants.value = listOf(
+//                ParticipantViewData("1", "Selin Kaya"),
+//                ParticipantViewData("2", "Ali Çelik"),
+//                ParticipantViewData("3", "Deniz Şahin"),
+//                ParticipantViewData("4", "Eren Yıldız")
+//            )
         }
     }
 

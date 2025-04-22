@@ -124,7 +124,8 @@ class UserProfileOwnerViewModel(
                             trainer = it.trainerFullName,
                             facility = it.facilityName,
                             location = it.facilityName,
-                            note = it.trainerNote
+                            note = it.trainerNote,
+                            capacityRatio = it.quotaInfo
                         )
                     }
                 }

@@ -9,6 +9,8 @@ import androidx.navigation.compose.rememberNavController
 import com.vurgun.skyfit.feature.auth.AuthRoute
 import com.vurgun.skyfit.feature.auth.authRoutes
 import com.vurgun.skyfit.feature.bodyanalysis.navigation.postureAnalysisRoutes
+import com.vurgun.skyfit.feature.calendar.components.navigation.AppointmentRoute
+import com.vurgun.skyfit.feature.calendar.components.navigation.appointmentRoutes
 import com.vurgun.skyfit.feature.courses.navigation.FacilityCoursesMainRoute
 import com.vurgun.skyfit.feature.courses.navigation.courseLessonsRoutes
 import com.vurgun.skyfit.feature.dashboard.navigation.DashboardRoute
@@ -58,7 +60,12 @@ fun AppNavigationGraph() {
 
             },
             goToSettings = {
-                navigationController.navigate(SettingsRoute.Main)
+                navigationController.navigate(SettingsRoute.Main) {
+                    launchSingleTop = true
+                }
+            },
+            goToAppointments = {
+                navigationController.navigate(AppointmentRoute.Listing)
             },
             goToFacilityCourses = {
                 navigationController.navigate(FacilityCoursesMainRoute)
@@ -66,7 +73,11 @@ fun AppNavigationGraph() {
         )
 
         settingsRoutes(
-            navController = navigationController,
+            onExitSettings = {
+                if (!navigationController.popBackStackSafe()) {
+                    navigationController.navigate(DashboardRoute.Profile)
+                }
+            },
             goToLogin = {
                 navigationController.navigateAndClear(AuthRoute.Login)
             },
@@ -79,12 +90,34 @@ fun AppNavigationGraph() {
             onExit = navigationController::popBackStack,
             onHome = { navigationController.navigateAndClear(DashboardRoute.Home) }
         )
+
+        appointmentRoutes(navigationController)
     }
 }
 
-fun NavController.navigateAndClear(route: Any) {
+fun NavController.navigateAndClear(route: Any, startRoute: Any) {
     navigate(route) {
-        popUpTo(0) { inclusive = true }
+        popUpTo(startRoute) { inclusive = true }
         launchSingleTop = true
+    }
+}
+
+
+fun NavController.navigateAndClear(route: Any) {
+    val startRoute = this.graph.startDestinationRoute
+    navigate(route) {
+        if (startRoute != null) {
+            popUpTo(startRoute) { inclusive = true }
+        }
+        launchSingleTop = true
+    }
+}
+
+fun NavController.popBackStackSafe(): Boolean {
+    return if (this.currentBackStack.value.size > 1) {
+        popBackStack()
+        true
+    } else {
+        false
     }
 }

@@ -2,134 +2,61 @@ package com.vurgun.skyfit.feature.calendar.components.screen
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.vurgun.skyfit.ui.core.components.event.AppointmentCardViewData
-import kotlinx.coroutines.flow.*
+import com.vurgun.skyfit.data.core.domain.model.UserDetail
+import com.vurgun.skyfit.data.courses.domain.model.Appointment
+import com.vurgun.skyfit.data.courses.domain.repository.CourseRepository
+import com.vurgun.skyfit.data.user.repository.UserManager
+import kotlinx.coroutines.async
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 
-class UserAppointmentsViewModel : ViewModel() {
+class UserAppointmentsViewModel(
+    private val userManager: UserManager,
+    private val courseRepository: CourseRepository
+) : ViewModel() {
 
-    private val _appointments = MutableStateFlow<List<AppointmentCardViewData>>(emptyList())
-    val appointments: StateFlow<List<AppointmentCardViewData>> get() = _appointments
+    private val user: UserDetail
+        get() = userManager.user.value as? UserDetail
+            ?: error("❌ current account is not user")
+
+    private val _appointments = MutableStateFlow<List<Appointment>>(emptyList())
+    val appointments: StateFlow<List<Appointment>> get() = _appointments
 
     private val _activeTab = MutableStateFlow(0)
     val activeTab: StateFlow<Int> get() = _activeTab
 
     // Derived states based on active tab selection
-    val filteredAppointments: StateFlow<List<AppointmentCardViewData>> = combine(
+    val filteredAppointments: StateFlow<List<Appointment>> = combine(
         _appointments, _activeTab
     ) { allAppointments, tabIndex ->
         when (tabIndex) {
-            0 -> allAppointments.filter { it.status == "Planlanan" } // Active (future scheduled)
-            1 -> allAppointments.filter { it.status == "İptal" } // Canceled
-            2 -> allAppointments.filter { it.status == "Tamamlandı" || it.status == "Eksik" } // Attendance history
+            0 -> allAppointments.filter { it.status == 1 } // Active (future scheduled)
+            1 -> allAppointments.filter { it.status in listOf(3, 4, 5) } // Canceled
+            2 -> allAppointments.filter { it.status in listOf(6, 7) } // Attendance history
             else -> allAppointments
         }
     }.stateIn(viewModelScope, SharingStarted.Lazily, emptyList())
 
     val tabTitles: StateFlow<List<String>> = appointments.map { allAppointments ->
         listOf(
-            "Aktif (${allAppointments.count { it.status == "Planlanan" }})",
-            "İptal edilen (${allAppointments.count { it.status == "İptal" }})",
-            "Geçmiş (${allAppointments.count { it.status == "Tamamlandı" || it.status == "Eksik" }})"
+            "Aktif (${allAppointments.count { it.status == 1 }})",
+            "İptal Edilen (${allAppointments.count { it.status in listOf(3, 4, 5) }})",
+            "Devamsızlık (${allAppointments.count { it.status in listOf(6, 7) }})"
         )
     }.stateIn(viewModelScope, SharingStarted.Lazily, listOf("Aktif (0)", "İptal edilen (0)", "Geçmiş (0)"))
 
-    fun loadData() {
+    fun refreshData() {
         viewModelScope.launch {
-            val appointments = listOf(
-                AppointmentCardViewData(
-                    iconId = 1,
-                    title = "Shoulders and Abs",
-                    date = "30/11/2024",
-                    hours = "08:00 - 09:00",
-                    category = "Group Fitness",
-                    location = "@ironstudio",
-                    trainer = "Michael Blake",
-                    capacity = "10",
-                    cost = "Free",
-                    note = "Try to arrive 5-10 minutes early to warm up and settle in before the class starts.",
-                    isFull = false,
-                    canNotify = true,
-                    status = "Planlanan" // Scheduled for the future
-                ),
-                AppointmentCardViewData(
-                    iconId = 4,
-                    title = "Reformer Pilates",
-                    date = "30/11/2024",
-                    hours = "08:00 - 09:00",
-                    category = "Pilates",
-                    location = "@ironstudio",
-                    trainer = "Michael Blake",
-                    capacity = "12",
-                    cost = "$20",
-                    note = null,
-                    isFull = false,
-                    canNotify = true,
-                    status = "Eksik" // Missed class (no-show)
-                ),
-                AppointmentCardViewData(
-                    iconId = 3,
-                    title = "Fitness",
-                    date = "30/11/2024",
-                    hours = "08:00 - 09:00",
-                    category = "PT",
-                    location = "@ironstudio",
-                    trainer = "Michael Blake",
-                    capacity = "15",
-                    cost = "$25",
-                    note = null,
-                    isFull = true,
-                    canNotify = true,
-                    status = "Tamamlandı" // Completed class (attended)
-                ),
-                AppointmentCardViewData(
-                    iconId = 2,
-                    title = "Spinning Class",
-                    date = "15/10/2024",
-                    hours = "07:30 - 08:30",
-                    category = "Cycling",
-                    location = "@fitnesshub",
-                    trainer = "Emma Johnson",
-                    capacity = "20",
-                    cost = "$15",
-                    note = "Bring your own water bottle!",
-                    isFull = false,
-                    canNotify = false,
-                    status = "İptal" // Canceled
-                ),
-                AppointmentCardViewData(
-                    iconId =6,
-                    title = "Yoga Flow",
-                    date = "20/10/2024",
-                    hours = "18:00 - 19:00",
-                    category = "Yoga",
-                    location = "@zenstudio",
-                    trainer = "Samantha Green",
-                    capacity = "15",
-                    cost = "Free",
-                    note = "Mats provided, please bring a towel.",
-                    isFull = false,
-                    canNotify = false,
-                    status = "İptal" // Canceled
-                ),
-                AppointmentCardViewData(
-                    iconId = 5,
-                    title = "Stretching & Mobility",
-                    date = "05/09/2024",
-                    hours = "12:00 - 13:00",
-                    category = "Recovery",
-                    location = "@recoverycenter",
-                    trainer = "Lisa Harper",
-                    capacity = "5",
-                    cost = "Free",
-                    note = "Foam rollers provided.",
-                    isFull = false,
-                    canNotify = false,
-                    status = "Eksik" // No-show
-                )
-            )
-
-            _appointments.value = appointments
+            try {
+                _appointments.value = courseRepository.getAppointmentsByUser(user.normalUserId).getOrThrow()
+            } catch (e: Exception) {
+                e.printStackTrace()
+            }
         }
     }
 
@@ -137,12 +64,17 @@ class UserAppointmentsViewModel : ViewModel() {
         _activeTab.value = index
     }
 
-    fun deleteAppointment(appointment: AppointmentCardViewData) {
-        _appointments.value = _appointments.value.filterNot { it == appointment }
-    }
-
-    fun deleteAllAppointments() {
-        _appointments.value = emptyList()
+    fun cancelAppointment(appointment: Appointment) {
+        viewModelScope.launch {
+            try {
+                val cancelJob = async { courseRepository.cancelAppointment(appointment.lessonId, appointment.lpId).getOrThrow() }
+                val refreshJob = async { refreshData() }
+                cancelJob.await()
+                refreshJob.await()
+            } catch (e: Exception) {
+                e.printStackTrace()
+            }
+        }
     }
 
 }

@@ -17,7 +17,6 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Icon
-import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Close
@@ -34,8 +33,8 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
+import com.vurgun.skyfit.data.courses.domain.model.Appointment
 import com.vurgun.skyfit.ui.core.components.event.ActiveAppointmentEventItem
-import com.vurgun.skyfit.ui.core.components.event.AppointmentCardViewData
 import com.vurgun.skyfit.ui.core.components.event.AttendanceAppointmentEventItem
 import com.vurgun.skyfit.ui.core.components.event.BasicAppointmentEventItem
 import com.vurgun.skyfit.ui.core.components.special.SkyFitBadgeTabBarComponent
@@ -44,27 +43,27 @@ import com.vurgun.skyfit.ui.core.components.special.SkyFitScreenHeader
 import com.vurgun.skyfit.ui.core.styling.SkyFitColor
 import com.vurgun.skyfit.ui.core.styling.SkyFitTypography
 import org.jetbrains.compose.resources.stringResource
-import org.koin.compose.koinInject
+import org.koin.compose.viewmodel.koinViewModel
 import skyfit.ui.core.generated.resources.Res
 import skyfit.ui.core.generated.resources.appointments_title
 
 @Composable
 fun MobileUserAppointmentsScreen(
     goToBack: () -> Unit,
-    goToDetails: () -> Unit
+    goToDetails: (Appointment) -> Unit,
+    viewModel: UserAppointmentsViewModel = koinViewModel()
 ) {
-    val viewModel: UserAppointmentsViewModel = koinInject()
 
     val appointments by viewModel.filteredAppointments.collectAsState()
     val activeTab by viewModel.activeTab.collectAsState()
     val tabTitles by viewModel.tabTitles.collectAsState()
 
     var showDeleteDialog by remember { mutableStateOf(false) }
-    var appointmentToDelete by remember { mutableStateOf<AppointmentCardViewData?>(null) }
+    var appointmentToDelete by remember { mutableStateOf<Appointment?>(null) }
     var showDeleteAllDialog by remember { mutableStateOf(false) }
 
     LaunchedEffect(Unit) {
-        viewModel.loadData()
+        viewModel.refreshData()
     }
 
     SkyFitMobileScaffold(
@@ -95,41 +94,41 @@ fun MobileUserAppointmentsScreen(
                         ActiveAppointmentEventItem(
                             title = appointment.title,
                             iconId = appointment.iconId,
-                            date = appointment.date,
-                            timePeriod = appointment.hours,
-                            location = appointment.location,
-                            trainer = appointment.trainer,
-                            note = appointment.note,
+                            date = appointment.startDate.toString(),
+                            timePeriod = "${appointment.startTime} - ${appointment.endTime}",
+                            location = appointment.facilityName,
+                            trainer = appointment.trainerFullName,
+                            note = appointment.trainerNote,
                             onDelete = {
                                 appointmentToDelete = appointment
                                 showDeleteDialog = true
                             },
-                            onClick = goToDetails
+                            onClick = { goToDetails(appointment) }
                         )
                     }
                     1 -> {
                         BasicAppointmentEventItem(
                             title = appointment.title,
                             iconId = appointment.iconId,
-                            date = appointment.date,
-                            timePeriod = appointment.hours,
-                            location = appointment.location,
-                            trainer = appointment.trainer,
-                            note = appointment.note,
-                            onClick = goToDetails
+                            date = appointment.startDate.toString(),
+                            timePeriod = "${appointment.startTime} - ${appointment.endTime}",
+                            location = appointment.facilityName,
+                            trainer = appointment.trainerFullName,
+                            note = appointment.trainerNote,
+                            onClick = { goToDetails(appointment) }
                         )
                     }
                     2 -> {
                         AttendanceAppointmentEventItem(
                             title = appointment.title,
                             iconId = appointment.iconId,
-                            date = appointment.date,
-                            timePeriod = appointment.hours,
-                            location = appointment.location,
-                            trainer = appointment.trainer,
-                            note = appointment.note,
-                            isCompleted = appointment.attended,
-                            onClick = goToDetails
+                            date = appointment.startDate.toString(),
+                            timePeriod = "${appointment.startTime} - ${appointment.endTime}",
+                            location = appointment.facilityName,
+                            trainer = appointment.trainerFullName,
+                            note = appointment.trainerNote,
+                            isCompleted = appointment.status == 2, //TODO: WTF?
+                            onClick = { goToDetails(appointment) }
                         )
                     }
                 }
@@ -142,21 +141,9 @@ fun MobileUserAppointmentsScreen(
         showDialog = showDeleteDialog,
         onDismiss = { showDeleteDialog = false },
         onConfirm = {
-            appointmentToDelete?.let { viewModel.deleteAppointment(it) }
+            appointmentToDelete?.let { viewModel.cancelAppointment(it) }
             showDeleteDialog = false
         }
-    )
-
-    // Confirm Delete All Appointments
-    AppointmentDeleteDialog(
-        showDialog = showDeleteAllDialog,
-        onDismiss = { showDeleteAllDialog = false },
-        onConfirm = {
-            viewModel.deleteAllAppointments()
-            showDeleteAllDialog = false
-        },
-        title = "Tüm Randevuları Sil",
-        message = "Tüm randevuları silmek istediğinize emin misiniz?"
     )
 }
 

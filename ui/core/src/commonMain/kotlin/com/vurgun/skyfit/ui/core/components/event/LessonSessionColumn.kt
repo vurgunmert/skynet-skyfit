@@ -19,6 +19,7 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import com.vurgun.skyfit.data.courses.model.LessonSessionColumnViewData
@@ -47,7 +48,9 @@ fun LessonSessionColumn(
 ) {
     Column(
         modifier.fillMaxWidth()
-            .background(SkyFitColor.background.fillTransparent, RoundedCornerShape(20.dp))
+            .clip(RoundedCornerShape(20.dp))
+            .background(SkyFitColor.background.fillTransparent)
+            .clickable(onClick = { onClickShowAll?.invoke() })
             .padding(16.dp),
         verticalArrangement = Arrangement.spacedBy(16.dp)
     ) {

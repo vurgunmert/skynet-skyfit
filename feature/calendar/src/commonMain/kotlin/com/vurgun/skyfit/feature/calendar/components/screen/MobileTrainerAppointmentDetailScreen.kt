@@ -28,11 +28,13 @@ import androidx.compose.ui.unit.dp
 import com.vurgun.skyfit.ui.core.components.special.SkyFitScaffold
 import com.vurgun.skyfit.ui.core.styling.SkyFitColor
 import com.vurgun.skyfit.ui.core.styling.SkyFitTypography
+import org.koin.compose.viewmodel.koinViewModel
 
 @Composable
-fun MobileTrainerAppointmentDetailScreen(goToBack: () -> Unit) {
-    val viewModel = remember { TrainerAppointmentDetailViewModel() }
-
+fun MobileTrainerAppointmentDetailScreen(
+    goToBack: () -> Unit,
+    viewModel: TrainerAppointmentDetailViewModel = koinViewModel()
+) {
     LaunchedEffect(Unit) {
         viewModel.loadData()
     }
@@ -46,7 +48,7 @@ fun MobileTrainerAppointmentDetailScreen(goToBack: () -> Unit) {
                 MobileUserAppointmentDetailScreenToolbarComponent(
                     title = appointmentData.title,
                     onClickBack = goToBack,
-                    status = appointmentData.status
+                    status = appointmentData.statusName
                 )
             }
         ) {
@@ -56,7 +58,7 @@ fun MobileTrainerAppointmentDetailScreen(goToBack: () -> Unit) {
                     .padding(horizontal = 16.dp)
             ) {
                 MobileUserAppointmentDetailScreenInformationComponent(appointmentData)
-                MobileUserAppointmentDetailScreenNoteComponent(appointmentData.note)
+                MobileUserAppointmentDetailScreenNoteComponent(appointmentData.trainerNote)
 
                 // **Participants List (Trainer Can Mark Attendance)**
                 TrainerAppointmentParticipantsComponent(

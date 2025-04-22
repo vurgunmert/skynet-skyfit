@@ -8,7 +8,10 @@ import kotlinx.coroutines.withContext
 suspend fun <T : Any, R> ApiResult<T>.mapOrThrow(transform: (T) -> R): R {
     return when (this) {
         is ApiResult.Success -> transform(data)
-        is ApiResult.Error -> throw IllegalStateException(message)
+        is ApiResult.Error -> {
+            this.code
+            throw IllegalStateException(message)
+        }
         is ApiResult.Exception -> throw exception
     }
 }

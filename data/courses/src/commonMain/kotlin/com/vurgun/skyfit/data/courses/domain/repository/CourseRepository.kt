@@ -22,11 +22,12 @@ interface CourseRepository {
     // endregion
 
     // region: Appointments
-    suspend fun getAppointmentsByUser(userId: Int): Result<List<Appointment>>
-    suspend fun getUpcomingAppointmentsByUser(userId: Int, limit: Int = 3): Result<List<Appointment>>
+    suspend fun getAppointmentsByUser(nmId: Int): Result<List<Appointment>>
+    suspend fun getUpcomingAppointmentsByUser(nmId: Int, limit: Int = 3): Result<List<Appointment>>
     // endregion
 
     // region: Lesson Participation
-    suspend fun joinLesson(lessonId: Int): Result<Unit>
+    suspend fun bookAppointment(lessonId: Int): Result<Unit>
+    suspend fun cancelAppointment(lessonId: Int, lpId: Int): Result<Unit>
     // endregion
 }

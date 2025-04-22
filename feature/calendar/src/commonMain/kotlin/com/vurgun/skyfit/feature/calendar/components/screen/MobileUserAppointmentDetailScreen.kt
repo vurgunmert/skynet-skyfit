@@ -20,7 +20,6 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Icon
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -33,14 +32,14 @@ import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
-import com.vurgun.skyfit.ui.core.components.event.AppointmentCardViewData
+import com.vurgun.skyfit.data.courses.domain.model.Appointment
 import com.vurgun.skyfit.ui.core.components.special.SkyFitScaffold
 import com.vurgun.skyfit.ui.core.styling.SkyFitColor
 import com.vurgun.skyfit.ui.core.styling.SkyFitTypography
 import org.jetbrains.compose.resources.DrawableResource
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
-import org.koin.compose.koinInject
+import org.koin.compose.viewmodel.koinViewModel
 import skyfit.ui.core.generated.resources.Res
 import skyfit.ui.core.generated.resources.ic_check_circle
 import skyfit.ui.core.generated.resources.ic_chevron_left
@@ -51,15 +50,9 @@ import skyfit.ui.core.generated.resources.trainer_note_label
 
 @Composable
 fun MobileUserAppointmentDetailScreen(
-    goToBack: () -> Unit
+    goToBack: () -> Unit,
+    viewModel: UserAppointmentDetailViewModel = koinViewModel()
 ) {
-    val viewModel: UserAppointmentDetailViewModel = koinInject()
-
-    // Load appointment data once
-    LaunchedEffect(Unit) {
-        viewModel.loadData()
-    }
-
     val appointmentState by viewModel.appointment.collectAsState()
 
     appointmentState?.let { appointmentData ->
@@ -68,16 +61,16 @@ fun MobileUserAppointmentDetailScreen(
                 MobileUserAppointmentDetailScreenToolbarComponent(
                     title = appointmentData.title,
                     onClickBack = goToBack,
-                    status = appointmentData.status
+                    status = appointmentData.statusName
                 )
             }
         ) {
             Column(Modifier.fillMaxSize().padding(horizontal = 16.dp)) {
                 MobileUserAppointmentDetailScreenInformationComponent(appointmentData)
-                MobileUserAppointmentDetailScreenNoteComponent(appointmentData.note)
+                MobileUserAppointmentDetailScreenNoteComponent(appointmentData.trainerNote)
                 Spacer(Modifier.weight(1f))
 
-                if (appointmentData.status == "Planlanan") {
+                if (appointmentData.status == 1) {
                     MobileUserAppointmentDetailScreenCancelActionComponent(onClick = viewModel::cancelAppointment)
                 }
             }
@@ -110,15 +103,15 @@ fun MobileUserAppointmentDetailScreenToolbarComponent(title: String, onClickBack
 
 // 📌 **Appointment Details Grid**
 @Composable
-fun MobileUserAppointmentDetailScreenInformationComponent(appointment: AppointmentCardViewData) {
+fun MobileUserAppointmentDetailScreenInformationComponent(appointment: Appointment) {
     Column(Modifier.fillMaxWidth().padding(vertical = 16.dp)) {
         AppointmentDetailRow(
             leftIconRes = Res.drawable.ic_clock,
             leftTitle = "Tarih - Saat",
-            leftValue = "${appointment.date}\n${appointment.hours}",
+            leftValue = "${appointment.startDate}\n${appointment.startTime}-${appointment.endTime}",
             rightIconRes = Res.drawable.ic_profile,
             rightTitle = "Eğitmen",
-            rightValue = appointment.trainer
+            rightValue = appointment.trainerFullName
         )
 
         Spacer(Modifier.height(16.dp))
@@ -126,10 +119,10 @@ fun MobileUserAppointmentDetailScreenInformationComponent(appointment: Appointme
         AppointmentDetailRow(
             leftIconRes = Res.drawable.ic_location_pin,
             leftTitle = "Studio",
-            leftValue = appointment.location,
+            leftValue = appointment.facilityName,
             rightIconRes = Res.drawable.ic_check_circle,
             rightTitle = "Toplam Katılımcı",
-            rightValue = appointment.capacity ?: "-"
+            rightValue = appointment.quotaInfo ?: "-"
         )
     }
 }

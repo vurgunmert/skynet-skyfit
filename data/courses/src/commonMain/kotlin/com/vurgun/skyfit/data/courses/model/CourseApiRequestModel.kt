@@ -43,14 +43,14 @@ internal data class UpdateLessonRequest(
 @Serializable
 internal data class GetFacilityLessonsRequest(
     val gymId: Int,
-    val startFilterDate: String, // datetime türünde gönderilecek
+    val startFilterDate: String? = null, // datetime türünde gönderilecek
     val endFilterDate: String? = null
 )
 
 @Serializable
 internal data class GetTrainerLessonsRequest(
     val trainerId: Int,
-    val startFilterDate: String, // datetime türünde gönderilecek
+    val startFilterDate: String? = null, // datetime türünde gönderilecek
     val endFilterDate: String? = null
 )
 
@@ -84,6 +84,12 @@ internal data class DeactivateLessonRequest(
 @Serializable
 internal data class CreateUserAppointmentRequest(
     val lessonId: Int
+)
+
+@Serializable
+internal data class CancelUserAppointmentRequest(
+    val lessonId: Int,
+    val lpId: Int,
 )
 
 @Serializable

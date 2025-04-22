@@ -20,6 +20,7 @@ internal fun DashboardRootGraph(
     startRoute: DashboardRoute = DashboardRoute.Home,
     goToChatBot: () -> Unit,
     goToSettings: () -> Unit,
+    goToAppointments: () -> Unit,
     goToFacilityCourses: () -> Unit,
     viewModel: DashboardViewModel = koinViewModel()
 ) {
@@ -69,7 +70,7 @@ internal fun DashboardRootGraph(
                     goToSocial = { },
                     goToProfile = { },
                     goToActivityCalendar = { },
-                    goToAppointments = { },
+                    goToAppointments = goToAppointments,
                     goToFacilityCourses = goToFacilityCourses
                 )
             }
@@ -78,7 +79,8 @@ internal fun DashboardRootGraph(
                 ProfileRoot(
                     userRole = userRole,
                     goToFacilityCourses = goToFacilityCourses,
-                    goToSettings = goToSettings
+                    goToAppointments = goToAppointments,
+                    goToSettings = goToSettings,
                 )
             }
         }

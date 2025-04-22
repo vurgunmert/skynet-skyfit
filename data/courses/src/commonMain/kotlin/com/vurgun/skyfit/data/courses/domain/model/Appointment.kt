@@ -4,8 +4,11 @@ import kotlinx.datetime.Instant
 import kotlinx.datetime.LocalDate
 import kotlinx.datetime.LocalDateTime
 import kotlinx.datetime.LocalTime
+import kotlinx.serialization.Serializable
 
+@Serializable
 data class Appointment(
+    val lpId: Int,
     val lessonId: Int,
     val iconId: Int,
     val title: String,
@@ -30,6 +33,9 @@ data class Appointment(
     // Participation & Status
     val joinedAt: Instant,
     val price: Int,
+    val status: Int,
+    val statusName: String,
     val lessonStatus: Int,
-    val participantStatus: Int
+    val participantStatus: Int,
+    val quotaInfo: String
 )

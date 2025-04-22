@@ -50,7 +50,7 @@ data class AppointmentCardViewData(
     val cost: String? = null,
     val note: String? = null,
     val isFull: Boolean? = null,
-    val canNotify: Boolean = true,
+    val canNotify: Boolean = false,
     val status: String? = null,
     val attended: Boolean = false
 )

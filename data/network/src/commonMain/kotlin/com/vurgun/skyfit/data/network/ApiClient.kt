@@ -39,6 +39,7 @@ class ApiClient(val client: HttpClient) {
                 else -> {
                     val errorResponse: ApiResponse<Unit> = response.body()
                     ApiResult.Error(
+                        code = response.status.value,
                         status = errorResponse.status ?: "error",
                         title = errorResponse.title,
                         message = errorResponse.message

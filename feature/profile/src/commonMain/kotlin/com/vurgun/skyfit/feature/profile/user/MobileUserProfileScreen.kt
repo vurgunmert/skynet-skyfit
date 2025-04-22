@@ -121,7 +121,8 @@ fun MobileUserProfileScreen(
                         LessonSessionColumn(
                             viewData = it,
                             modifier = Modifier,
-                            onClickItem = { goToAppointments() }
+                            onClickItem = { goToAppointments() }, //TODO Probably go appointment detail
+                            onClickShowAll = goToAppointments
                         )
                     }
                 }

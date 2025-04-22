@@ -1,36 +1,31 @@
 package com.vurgun.skyfit.feature.calendar.components.screen
 
 import androidx.lifecycle.ViewModel
-import com.vurgun.skyfit.ui.core.components.event.AppointmentCardViewData
+import androidx.lifecycle.viewModelScope
+import com.vurgun.skyfit.data.courses.domain.model.Appointment
+import com.vurgun.skyfit.data.courses.domain.repository.CourseRepository
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.launch
 
-class UserAppointmentDetailViewModel : ViewModel() {
-    private val _appointment = MutableStateFlow<AppointmentCardViewData?>(null)
-    val appointment: StateFlow<AppointmentCardViewData?> get() = _appointment
+class UserAppointmentDetailViewModel(
+    private val courseRepository: CourseRepository
+) : ViewModel() {
 
-    fun loadData() {
-        _appointment.value = fakeAppointment
+    private val _appointment = MutableStateFlow<Appointment?>(null)
+    val appointment: StateFlow<Appointment?> get() = _appointment
+
+    fun loadData(appointment: Appointment) {
+        _appointment.value = appointment
     }
 
     fun cancelAppointment() {
-        _appointment.update { it?.copy(status = "İptal") }
-    }
+        viewModelScope.launch {
+            appointment.value?.let {
 
-    val fakeAppointment = AppointmentCardViewData(
-        iconId = 3,
-        title = "Shoulders and Abs",
-        date = "30/11/2024",
-        hours = "08:00 - 09:00",
-        category = "Group Fitness",
-        location = "@ironstudio",
-        trainer = "Michael Blake",
-        capacity = "10",
-        cost = "Free",
-        note = "Try to arrive 5-10 minutes early to warm up and settle in before the class starts.",
-        isFull = false,
-        canNotify = true,
-        status = "Planlanan" // Scheduled for the future
-    )
+                courseRepository.cancelAppointment(it.lessonId, it.lpId)
+                    .getOrThrow()
+            }
+        }
+    }
 }

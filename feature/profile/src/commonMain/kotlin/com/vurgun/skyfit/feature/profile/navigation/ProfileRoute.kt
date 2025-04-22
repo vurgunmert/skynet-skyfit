@@ -13,7 +13,8 @@ import com.vurgun.skyfit.ui.core.screen.UnauthorizedAccessScreen
 fun ProfileRoot(
     userRole: UserRole,
     goToFacilityCourses: () -> Unit,
-    goToSettings: () -> Unit
+    goToAppointments: () -> Unit,
+    goToSettings: () -> Unit,
 ) {
     RequireRole(userRole, listOf(UserRole.User, UserRole.Trainer, UserRole.Facility)) {
         when (userRole) {
@@ -37,7 +38,7 @@ fun ProfileRoot(
             UserRole.User -> MobileUserProfileScreen(
                 goToBack = { },
                 goToSettings = goToSettings,
-                goToAppointments = { },
+                goToAppointments = goToAppointments,
                 goToMeasurements = { },
                 goToExercises = { },
                 goToPhotoDiary = { },

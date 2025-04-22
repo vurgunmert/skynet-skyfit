@@ -25,6 +25,7 @@ internal fun AppointmentDTO.toLessonDomain(): Appointment {
     val joinedInstant = Instant.parse(joinedAt)
 
     return Appointment(
+        lpId = lpId,
         lessonId = lessonId,
         iconId = lessonIcon,
         title = typeName,
@@ -46,7 +47,10 @@ internal fun AppointmentDTO.toLessonDomain(): Appointment {
         joinedAt = joinedInstant,
         price = price,
         lessonStatus = lessonStatus,
-        participantStatus = participantStatus
+        participantStatus = participantStatus,
+        status = status,
+        statusName = statusName,
+        quotaInfo = quotaInfo,
     )
 }
 

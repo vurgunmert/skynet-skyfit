@@ -116,15 +116,13 @@ sealed interface SettingsRoute {
 }
 
 fun NavGraphBuilder.settingsRoutes(
-    navController: NavHostController,
+    onExitSettings: () -> Unit,
     goToLogin: () -> Unit,
     goToAddAccount: () -> Unit
 ) {
     composable<SettingsRoute.Main> {
         SettingsRootGraph(
-            onExitSettings = {
-                navController.popBackStack()
-            },
+            onExitSettings = onExitSettings,
             goToLogin = goToLogin,
             goToAddAccount = goToAddAccount
         )
