@@ -26,8 +26,8 @@ import androidx.compose.ui.unit.dp
 import com.vurgun.skyfit.ui.core.components.special.SkyFitMobileScaffold
 import com.vurgun.skyfit.ui.core.components.picker.HeightAndUnitPickerDialog
 import com.vurgun.skyfit.ui.core.components.picker.WeightAndUnitPickerDialog
-import com.vurgun.skyfit.designsystem.components.text.SingleLineInputText
-import com.vurgun.skyfit.designsystem.components.text.TitledMediumRegularText
+import com.vurgun.skyfit.ui.core.components.text.SingleLineInputText
+import com.vurgun.skyfit.ui.core.components.text.TitledMediumRegularText
 import com.vurgun.skyfit.feature.settings.component.AccountSettingsEditableProfileImage
 import com.vurgun.skyfit.feature.settings.component.SettingsEditProfileHeader
 import com.vurgun.skyfit.feature.settings.component.SettingsSelectBodyTypePopupMenu

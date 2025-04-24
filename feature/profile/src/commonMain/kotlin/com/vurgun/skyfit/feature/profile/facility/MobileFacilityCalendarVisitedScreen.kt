@@ -86,7 +86,7 @@ fun MobileFacilityCalendarVisitedScreen(
 
             lessonsColumnViewData?.let {
                 LessonSessionColumn(
-                    viewData = it,
+                    lessons = it.items,
                     onClickItem = viewModel::handleClassSelection
                 )
             }

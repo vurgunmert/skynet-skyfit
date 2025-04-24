@@ -41,13 +41,13 @@ fun MobileExploreExercisesScreen(goToBack: () -> Unit) {
     ) {
         val participants = listOf("123", "48", "129471", "31241", "83940")
         val exercises = listOf(
-            ExerciseCardItemViewData("url1", "Dumbbell Exercise", participants, 4.8),
-            ExerciseCardItemViewData("url2", "Running", participants, 4.7),
-            ExerciseCardItemViewData("url3", "Push Ups", participants, 4.9),
-            ExerciseCardItemViewData("url4", "Core", participants, 4.6),
-            ExerciseCardItemViewData("url5", "Stretching", participants, 4.5),
-            ExerciseCardItemViewData("url6", "Yoga", participants, 4.8),
-            ExerciseCardItemViewData("url7", "HIIT", participants, 4.7)
+            ExerciseCardItemViewData("url1", "Dumbbell Exercise", participants, 4.8f),
+            ExerciseCardItemViewData("url2", "Running", participants, 4.7f),
+            ExerciseCardItemViewData("url3", "Push Ups", participants, 4.9f),
+            ExerciseCardItemViewData("url4", "Core", participants, 4.6f),
+            ExerciseCardItemViewData("url5", "Stretching", participants, 4.5f),
+            ExerciseCardItemViewData("url6", "Yoga", participants, 4.8f),
+            ExerciseCardItemViewData("url7", "HIIT", participants, 4.7f)
         )
 
         MobileExploreExercisesGridComponent(exercises = exercises)
@@ -80,7 +80,7 @@ private fun ExerciseCardItemBox(
     imageUrl: String,
     name: String,
     participants: List<String>,
-    rating: Double,
+    rating: Float,
     onClick: () -> Unit
 ) {
     VerticalExerciseCardItemComponent(
@@ -97,5 +97,5 @@ private data class ExerciseCardItemViewData(
     val imageUrl: String,
     val name: String,
     val participants: List<String>,
-    val rating: Double
+    val rating: Float
 )

@@ -21,8 +21,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.unit.dp
-import com.vurgun.skyfit.designsystem.components.text.MultiLineInputText
-import com.vurgun.skyfit.designsystem.components.text.SingleLineInputText
+import com.vurgun.skyfit.ui.core.components.text.MultiLineInputText
+import com.vurgun.skyfit.ui.core.components.text.SingleLineInputText
 import com.vurgun.skyfit.data.core.domain.model.UserRole
 import com.vurgun.skyfit.feature.onboarding.component.OnboardingStepProgressComponent
 import com.vurgun.skyfit.feature.onboarding.component.OnboardingTitleGroupComponent

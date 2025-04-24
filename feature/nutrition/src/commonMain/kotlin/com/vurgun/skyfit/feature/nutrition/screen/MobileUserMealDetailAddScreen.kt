@@ -26,7 +26,6 @@ import com.vurgun.skyfit.ui.core.components.special.ButtonVariant
 import com.vurgun.skyfit.ui.core.components.special.SkyFitButtonComponent
 import com.vurgun.skyfit.ui.core.components.special.SkyFitMobileScaffold
 import com.vurgun.skyfit.ui.core.components.special.SkyFitScreenHeader
-import com.vurgun.skyfit.ui.core.components.special.SkyFitTextInputComponent
 import com.vurgun.skyfit.ui.core.styling.SkyFitTypography
 import org.jetbrains.compose.resources.painterResource
 import skyfit.ui.core.generated.resources.Res
@@ -101,46 +100,46 @@ private fun MobileMealDetailAddScreenInputComponent() {
     Spacer(Modifier.height(24.dp))
     Text("Besin Adı", style = SkyFitTypography.bodySmallSemibold)
     Spacer(Modifier.height(4.dp))
-    SkyFitTextInputComponent(
-        hint = "Ad Soyad *",
-        value = name,
-        onValueChange = { },
-        leftIconPainter = painterResource(Res.drawable.logo_skyfit),
-        rightIconPainter = painterResource(Res.drawable.logo_skyfit)
-    )
-
-    Spacer(Modifier.height(24.dp))
-    Text("Miktar", style = SkyFitTypography.bodySmallSemibold)
-    Spacer(Modifier.height(4.dp))
-    SkyFitTextInputComponent(
-        hint = "Ad Soyad *",
-        value = count,
-        onValueChange = { },
-        leftIconPainter = painterResource(Res.drawable.logo_skyfit),
-        rightIconPainter = painterResource(Res.drawable.logo_skyfit)
-    )
-
-    Spacer(Modifier.height(24.dp))
-    Text("Zaman Aralığı", style = SkyFitTypography.bodySmallSemibold)
-    Spacer(Modifier.height(4.dp))
-    SkyFitTextInputComponent(
-        hint = "Ad Soyad *",
-        value = timing,
-        onValueChange = { },
-        leftIconPainter = painterResource(Res.drawable.logo_skyfit),
-        rightIconPainter = painterResource(Res.drawable.logo_skyfit)
-    )
-
-    Spacer(Modifier.height(24.dp))
-    Text("Kalori Miktrai", style = SkyFitTypography.bodySmallSemibold)
-    Spacer(Modifier.height(4.dp))
-    SkyFitTextInputComponent(
-        hint = "Kalorie",
-        value = calorieCount,
-        onValueChange = { },
-        leftIconPainter = painterResource(Res.drawable.logo_skyfit),
-        rightIconPainter = painterResource(Res.drawable.logo_skyfit)
-    )
+//    SkyFitTextInputComponent(
+//        hint = "Ad Soyad *",
+//        value = name,
+//        onValueChange = { },
+//        leftIconPainter = painterResource(Res.drawable.logo_skyfit),
+//        rightIconPainter = painterResource(Res.drawable.logo_skyfit)
+//    )
+//
+//    Spacer(Modifier.height(24.dp))
+//    Text("Miktar", style = SkyFitTypography.bodySmallSemibold)
+//    Spacer(Modifier.height(4.dp))
+//    SkyFitTextInputComponent(
+//        hint = "Ad Soyad *",
+//        value = count,
+//        onValueChange = { },
+//        leftIconPainter = painterResource(Res.drawable.logo_skyfit),
+//        rightIconPainter = painterResource(Res.drawable.logo_skyfit)
+//    )
+//
+//    Spacer(Modifier.height(24.dp))
+//    Text("Zaman Aralığı", style = SkyFitTypography.bodySmallSemibold)
+//    Spacer(Modifier.height(4.dp))
+//    SkyFitTextInputComponent(
+//        hint = "Ad Soyad *",
+//        value = timing,
+//        onValueChange = { },
+//        leftIconPainter = painterResource(Res.drawable.logo_skyfit),
+//        rightIconPainter = painterResource(Res.drawable.logo_skyfit)
+//    )
+//
+//    Spacer(Modifier.height(24.dp))
+//    Text("Kalori Miktrai", style = SkyFitTypography.bodySmallSemibold)
+//    Spacer(Modifier.height(4.dp))
+//    SkyFitTextInputComponent(
+//        hint = "Kalorie",
+//        value = calorieCount,
+//        onValueChange = { },
+//        leftIconPainter = painterResource(Res.drawable.logo_skyfit),
+//        rightIconPainter = painterResource(Res.drawable.logo_skyfit)
+//    )
 }
 
 @Composable

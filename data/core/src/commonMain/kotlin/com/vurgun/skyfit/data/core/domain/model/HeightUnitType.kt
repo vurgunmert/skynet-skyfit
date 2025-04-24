@@ -5,11 +5,10 @@ sealed class HeightUnitType(val id: Int, val description: String, val label: Str
     data object FT : HeightUnitType(2, "Feet (ft)", "ft")
 
     companion object {
-        fun from(id: Int): HeightUnitType? {
+        fun from(id: Int): HeightUnitType {
             return when (id) {
-                1 -> CM
                 2 -> FT
-                else -> null
+                else -> CM
             }
         }
 

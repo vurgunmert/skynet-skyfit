@@ -6,7 +6,7 @@ data class TrainerProfileCardItemViewData(
     val followerCount: Int,
     val classCount: Int,
     val videoCount: Int,
-    val rating: Double?
+    val rating: Float?
 )
 
 data class FacilityProfileCardItemViewData(
@@ -14,5 +14,5 @@ data class FacilityProfileCardItemViewData(
     val name: String,
     val memberCount: Int,
     val trainerCount: Int,
-    val rating: Double?
+    val rating: Float?
 )

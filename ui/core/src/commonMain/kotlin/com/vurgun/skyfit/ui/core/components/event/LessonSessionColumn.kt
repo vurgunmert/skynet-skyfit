@@ -37,11 +37,12 @@ import skyfit.ui.core.generated.resources.ic_dots_vertical
 import skyfit.ui.core.generated.resources.ic_location_pin
 import skyfit.ui.core.generated.resources.ic_note
 import skyfit.ui.core.generated.resources.ic_profile_fill
+import skyfit.ui.core.generated.resources.lessons_label
 import skyfit.ui.core.generated.resources.show_all_action
 
 @Composable
 fun LessonSessionColumn(
-    viewData: LessonSessionColumnViewData,
+    lessons: List<LessonSessionItemViewData>,
     onClickItem: ((LessonSessionItemViewData) -> Unit)? = null,
     onClickShowAll: (() -> Unit)? = null,
     modifier: Modifier = Modifier,
@@ -59,14 +60,14 @@ fun LessonSessionColumn(
             horizontalArrangement = Arrangement.spacedBy(8.dp)
         ) {
             Icon(
-                painter = SkyFitAsset.getPainter(viewData.iconId),
+                painter = SkyFitAsset.getPainter(SkyFitAsset.SkyFitIcon.EXERCISES.id),
                 modifier = Modifier.size(24.dp),
-                contentDescription = viewData.title,
+                contentDescription = null,
                 tint = SkyFitColor.icon.default
             )
 
             Text(
-                text = viewData.title,
+                text = stringResource(Res.string.lessons_label),
                 style = SkyFitTypography.bodyLargeSemibold,
                 modifier = Modifier.weight(1f)
             )
@@ -85,7 +86,7 @@ fun LessonSessionColumn(
             modifier = Modifier.fillMaxWidth(),
             verticalArrangement = Arrangement.spacedBy(16.dp)
         ) {
-            viewData.items.forEach { item ->
+            lessons.forEach { item ->
                 AvailableActivityCalendarEventItem(
                     title = item.title,
                     iconId = item.iconId,

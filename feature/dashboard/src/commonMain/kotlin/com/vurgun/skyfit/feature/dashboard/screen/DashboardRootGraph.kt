@@ -9,34 +9,36 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.vurgun.skyfit.feature.dashboard.component.BottomNavigationBar
-import com.vurgun.skyfit.feature.dashboard.navigation.DashboardRoute
 import com.vurgun.skyfit.feature.home.navigation.HomeRoot
-import com.vurgun.skyfit.feature.profile.navigation.ProfileRoot
+import com.vurgun.skyfit.feature.profile.navigation.ProfileOwnerRoot
 import com.vurgun.skyfit.ui.core.components.special.SkyFitMobileScaffold
 import org.koin.compose.viewmodel.koinViewModel
 
+internal sealed class DashboardTab(val route: String) {
+    data object Home : DashboardTab("dashboard/home")
+    data object Profile : DashboardTab("dashboard/profile")
+}
+
 @Composable
-internal fun DashboardRootGraph(
-    startRoute: DashboardRoute = DashboardRoute.Home,
+fun DashboardRoot(
     goToChatBot: () -> Unit,
     goToSettings: () -> Unit,
     goToAppointments: () -> Unit,
     goToFacilityCourses: () -> Unit,
+    goToVisitFacility: (facilityId: Int) -> Unit,
     viewModel: DashboardViewModel = koinViewModel()
 ) {
     val userRole by viewModel.userRole.collectAsStateWithLifecycle()
-
     val internalNavController = rememberNavController()
     val currentBackStackEntry by internalNavController.currentBackStackEntryAsState()
-
-    val currentRoute = currentBackStackEntry?.destination?.route ?: startRoute
+    val currentRoute = currentBackStackEntry?.destination?.route ?: DashboardTab.Home.route
 
     SkyFitMobileScaffold(
         bottomBar = {
             BottomNavigationBar(
                 currentRoute = currentRoute,
                 onClickHome = {
-                    internalNavController.navigate(DashboardRoute.Home) {
+                    internalNavController.navigate(DashboardTab.Home.route) {
                         popUpTo(internalNavController.graph.findStartDestination().id) {
                             saveState = true
                         }
@@ -45,7 +47,7 @@ internal fun DashboardRootGraph(
                     }
                 },
                 onClickProfile = {
-                    internalNavController.navigate(DashboardRoute.Profile) {
+                    internalNavController.navigate(DashboardTab.Profile.route) {
                         popUpTo(internalNavController.graph.findStartDestination().id) {
                             saveState = true
                         }
@@ -59,9 +61,9 @@ internal fun DashboardRootGraph(
     ) {
         NavHost(
             navController = internalNavController,
-            startDestination = startRoute
+            startDestination = DashboardTab.Home.route
         ) {
-            composable<DashboardRoute.Home> {
+            composable(DashboardTab.Home.route) {
                 HomeRoot(
                     userRole = userRole,
                     goToNotifications = { },
@@ -75,12 +77,13 @@ internal fun DashboardRootGraph(
                 )
             }
 
-            composable<DashboardRoute.Profile> {
-                ProfileRoot(
+            composable(DashboardTab.Profile.route) {
+                ProfileOwnerRoot(
                     userRole = userRole,
                     goToFacilityCourses = goToFacilityCourses,
                     goToAppointments = goToAppointments,
                     goToSettings = goToSettings,
+                    goToVisitFacility = goToVisitFacility
                 )
             }
         }

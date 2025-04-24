@@ -14,7 +14,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.unit.dp
 import com.vurgun.skyfit.ui.core.components.text.PasswordInputText
-import com.vurgun.skyfit.designsystem.components.text.SingleLineInputText
+import com.vurgun.skyfit.ui.core.components.text.SingleLineInputText
 import com.vurgun.skyfit.ui.core.components.button.PrimaryLargeButton
 import com.vurgun.skyfit.ui.core.components.special.SkyFitMobileScaffold
 import com.vurgun.skyfit.ui.core.components.special.SkyFitScreenHeader

@@ -5,11 +5,10 @@ sealed class WeightUnitType(val id: Int, val description: String, val shortLabel
     data object LB : WeightUnitType(2, "Pound (lb)", "lb")
 
     companion object {
-        fun from(id: Int): WeightUnitType? {
+        fun from(id: Int): WeightUnitType {
             return when (id) {
-                1 -> KG
                 2 -> LB
-                else -> null
+                else -> KG
             }
         }
 

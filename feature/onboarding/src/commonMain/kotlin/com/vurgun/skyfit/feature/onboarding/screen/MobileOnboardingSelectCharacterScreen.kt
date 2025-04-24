@@ -25,7 +25,7 @@ import com.vurgun.skyfit.feature.onboarding.component.OnboardingActionGroupCompo
 import com.vurgun.skyfit.feature.onboarding.component.OnboardingStepProgressComponent
 import com.vurgun.skyfit.feature.onboarding.component.OnboardingTitleGroupComponent
 import com.vurgun.skyfit.ui.core.components.special.SkyFitMobileScaffold
-import com.vurgun.skyfit.ui.core.components.special.SkyFitSelectableCardComponent
+import com.vurgun.skyfit.ui.core.components.special.SelectableCardComponent
 import com.vurgun.skyfit.ui.core.viewdata.CharacterTypeViewData
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
@@ -97,7 +97,7 @@ private fun MobileOnboardingCharacterSelectionScreenSelectableCardGridComponent(
         horizontalArrangement = Arrangement.spacedBy(12.dp)
     ) {
         items(items) { item ->
-            SkyFitSelectableCardComponent(
+            SelectableCardComponent(
                 isSelected = selectedCharacter == item,
                 onClick = { onCharacterSelected(item) }
             ) {

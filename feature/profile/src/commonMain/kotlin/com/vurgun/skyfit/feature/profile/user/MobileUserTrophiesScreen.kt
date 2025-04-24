@@ -19,7 +19,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.vurgun.skyfit.ui.core.components.image.CircularImage
-import com.vurgun.skyfit.ui.core.components.special.SkyFitImageComponent
+import com.vurgun.skyfit.ui.core.components.image.NetworkImage
 import com.vurgun.skyfit.ui.core.components.special.SkyFitMobileScaffold
 import com.vurgun.skyfit.ui.core.components.special.SkyFitScreenHeader
 import com.vurgun.skyfit.ui.core.styling.SkyFitTypography
@@ -95,8 +95,8 @@ fun MobileUserTrophyItemComponent(
     url: String = "https://ik.imagekit.io/skynet2skyfit/badge_muscle_master.png?updatedAt=1738863832700",
     modifier: Modifier = Modifier
 ) {
-    SkyFitImageComponent(
-        url = url,
+    NetworkImage(
+        imageUrl = url,
         modifier = modifier
     )
 }

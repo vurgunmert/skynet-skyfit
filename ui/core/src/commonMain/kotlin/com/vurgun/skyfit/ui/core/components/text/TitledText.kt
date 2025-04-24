@@ -1,4 +1,4 @@
-package com.vurgun.skyfit.designsystem.components.text
+package com.vurgun.skyfit.ui.core.components.text
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement

@@ -21,8 +21,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.unit.dp
 import com.vurgun.skyfit.ui.core.components.special.SkyFitMobileScaffold
-import com.vurgun.skyfit.designsystem.components.text.MultiLineInputText
-import com.vurgun.skyfit.designsystem.components.text.SingleLineInputText
+import com.vurgun.skyfit.ui.core.components.text.MultiLineInputText
+import com.vurgun.skyfit.ui.core.components.text.SingleLineInputText
 import com.vurgun.skyfit.ui.core.components.special.FitnessTagPickerComponent
 import com.vurgun.skyfit.feature.settings.component.AccountSettingsEditableProfileImage
 import com.vurgun.skyfit.feature.settings.component.SettingsEditProfileHeader

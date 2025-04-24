@@ -17,7 +17,7 @@ import androidx.compose.ui.unit.dp
 import com.vurgun.skyfit.ui.core.styling.SkyFitColor
 
 @Composable
-fun SkyFitSelectableCardComponent(
+fun SelectableCardComponent(
     isSelected: Boolean,
     modifier: Modifier = Modifier,
     onClick: () -> Unit = {},

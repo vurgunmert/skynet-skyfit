@@ -64,7 +64,7 @@ private fun MobileExploreFacilitiesGridComponent(facilities: List<FacilityProfil
                 name = trainer.name,
                 memberCount = trainer.memberCount,
                 trainerCount = trainer.trainerCount,
-                rating = trainer.rating ?: 0.0,
+                rating = trainer.rating ?: 0f,
                 onClick = { /* Handle click */ }
             )
         }

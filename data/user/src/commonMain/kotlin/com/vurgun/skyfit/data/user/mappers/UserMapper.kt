@@ -13,10 +13,10 @@ import com.vurgun.skyfit.data.network.BASE_IMAGE_URL
 import com.vurgun.skyfit.data.user.model.UserAccountTypeDto
 import com.vurgun.skyfit.data.user.model.UserDetailDto
 
-object UserDetailMapper {
+fun serverImageFromPath(path: String?): String =
+    if (path.isNullOrBlank()) "" else BASE_IMAGE_URL + path
 
-    private fun fullPath(path: String?): String =
-        if (path.isNullOrBlank()) "" else BASE_IMAGE_URL + path
+object UserDetailMapper {
 
     fun UserDetailDto.toUserDetail(): UserDetail {
         return UserDetail(
@@ -26,8 +26,8 @@ object UserDetailMapper {
             username = username,
             phone = phone,
             email = email,
-            backgroundImageUrl = fullPath(backgroundImagePath),
-            profileImageUrl = fullPath(profilePhotoPath),
+            backgroundImageUrl = serverImageFromPath(backgroundImagePath),
+            profileImageUrl = serverImageFromPath(profilePhotoPath),
             height = height ?: -1,
             weight = weight ?: -1,
             birthday = birthday.orEmpty(),
@@ -47,8 +47,8 @@ object UserDetailMapper {
             username = username,
             phone = phone,
             email = email,
-            backgroundImageUrl = fullPath(backgroundImagePath),
-            profileImageUrl = fullPath(profilePhotoPath),
+            backgroundImageUrl = serverImageFromPath(backgroundImagePath),
+            profileImageUrl = serverImageFromPath(profilePhotoPath),
             height = height ?: -1,
             weight = weight ?: -1,
             birthday = birthday,
@@ -71,7 +71,7 @@ object UserDetailMapper {
             username = username,
             phone = phone,
             email = email,
-            backgroundImageUrl = fullPath(backgroundImagePath)
+            backgroundImageUrl = serverImageFromPath(backgroundImagePath)
         )
     }
 

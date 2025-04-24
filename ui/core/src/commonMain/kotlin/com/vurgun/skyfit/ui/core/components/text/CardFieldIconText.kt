@@ -1,4 +1,4 @@
-package com.vurgun.skyfit.designsystem.components.text
+package com.vurgun.skyfit.ui.core.components.text
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Row
@@ -38,7 +38,7 @@ fun CardFieldIconText(
             modifier = Modifier.size(16.dp),
             tint = SkyFitColor.icon.secondary
         )
-        Spacer(Modifier.width(8.dp))
+        Spacer(Modifier.width(6.dp))
 
         Text(
             text = text,

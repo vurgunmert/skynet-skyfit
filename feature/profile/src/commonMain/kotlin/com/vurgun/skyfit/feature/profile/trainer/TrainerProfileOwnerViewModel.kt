@@ -6,6 +6,8 @@ import com.vurgun.skyfit.data.core.domain.model.TrainerDetail
 import com.vurgun.skyfit.data.courses.domain.repository.CourseRepository
 import com.vurgun.skyfit.data.courses.mapper.LessonSessionItemViewDataMapper
 import com.vurgun.skyfit.data.courses.model.LessonSessionColumnViewData
+import com.vurgun.skyfit.data.user.domain.TrainerProfile
+import com.vurgun.skyfit.data.user.repository.ProfileRepository
 import com.vurgun.skyfit.data.user.repository.UserManager
 import com.vurgun.skyfit.feature.profile.components.viewdata.LifestyleActionRowViewData
 import com.vurgun.skyfit.feature.profile.user.UserProfileHeaderViewData
@@ -19,7 +21,8 @@ import kotlinx.coroutines.launch
 class TrainerProfileOwnerViewModel(
     private val userManager: UserManager,
     private val courseRepository: CourseRepository,
-    private val lessonSessionItemViewDataMapper: LessonSessionItemViewDataMapper
+    private val lessonSessionItemViewDataMapper: LessonSessionItemViewDataMapper,
+    private val profileRepository: ProfileRepository
 ) : ViewModel() {
 
     private val trainerUser: TrainerDetail
@@ -28,6 +31,9 @@ class TrainerProfileOwnerViewModel(
 
     private val _profileData = MutableStateFlow<UserProfileHeaderViewData?>(null)
     val profileData: StateFlow<UserProfileHeaderViewData?> get() = _profileData
+
+    private val _trainerProfile = MutableStateFlow<TrainerProfile?>(null)
+    val trainerProfile: StateFlow<TrainerProfile?> get() = _trainerProfile
 
     private val _specialtiesRowViewData = MutableStateFlow<LifestyleActionRowViewData?>(null)
     val specialtiesRowViewData: StateFlow<LifestyleActionRowViewData?> get() = _specialtiesRowViewData

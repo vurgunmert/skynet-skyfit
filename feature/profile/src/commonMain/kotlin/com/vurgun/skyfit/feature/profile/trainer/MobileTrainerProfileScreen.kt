@@ -44,13 +44,14 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.vurgun.skyfit.data.courses.model.LessonSessionColumnViewData
-import com.vurgun.skyfit.feature.profile.components.LifestyleActionRow
+import com.vurgun.skyfit.data.user.domain.TrainerProfile
+import com.vurgun.skyfit.data.user.domain.UserProfile
 import com.vurgun.skyfit.feature.profile.components.MobileProfileActionsRow
 import com.vurgun.skyfit.feature.profile.components.MobileProfileBackgroundImage
+import com.vurgun.skyfit.feature.profile.components.TrainerProfileCardPreferenceRow
 import com.vurgun.skyfit.feature.profile.components.UserProfileCardPreferenceRow
 import com.vurgun.skyfit.feature.profile.components.viewdata.LifestyleActionRowViewData
 import com.vurgun.skyfit.feature.profile.components.viewdata.ProfileViewMode
-import com.vurgun.skyfit.feature.profile.user.UserProfileHeaderViewData
 import com.vurgun.skyfit.ui.core.components.event.LessonSessionColumn
 import com.vurgun.skyfit.ui.core.components.image.NetworkImage
 import com.vurgun.skyfit.ui.core.components.special.ButtonSize
@@ -77,6 +78,7 @@ fun MobileTrainerProfileScreen(
     val posts by viewModel.posts.collectAsStateWithLifecycle()
 
     val profileData by viewModel.profileData.collectAsState()
+    val trainerProfile by viewModel.trainerProfile.collectAsState()
     val specialtiesRowViewData by viewModel.specialtiesRowViewData.collectAsState()
 
     val lessonsColumViewData by viewModel.lessonsColumViewData.collectAsState()
@@ -105,7 +107,7 @@ fun MobileTrainerProfileScreen(
             val contentTopPadding = imageHeight * 5 / 10
 
             MobileProfileBackgroundImage(
-                imageUrl = profileData?.backgroundImageUrl,
+                imageUrl = trainerProfile?.backgroundImageUrl,
                 Modifier
                     .align(Alignment.TopStart)
                     .fillMaxWidth()
@@ -123,7 +125,7 @@ fun MobileTrainerProfileScreen(
             ) {
                 Spacer(Modifier.height(contentTopPadding))
 
-                MobileTrainerProfileInfoCardComponent(profileData)
+                MobileTrainerProfileInfoCardComponent(trainerProfile)
 
                 if (viewMode == ProfileViewMode.OWNER) {
                     MobileProfileActionsRow(
@@ -161,7 +163,7 @@ fun MobileTrainerProfileAboutGroupComponent(
 
     if (lessonSessionColumnViewData != null) {
         LessonSessionColumn(
-            viewData = lessonSessionColumnViewData,
+            lessons = lessonSessionColumnViewData.items,
             onClickShowAll = {}
         )
     } else {
@@ -172,8 +174,8 @@ fun MobileTrainerProfileAboutGroupComponent(
 }
 
 @Composable
-fun MobileTrainerProfileInfoCardComponent(viewData: UserProfileHeaderViewData?) {
-    viewData ?: return
+fun MobileTrainerProfileInfoCardComponent(trainerProfile: TrainerProfile?) {
+    trainerProfile ?: return
 
     Box(modifier = Modifier.fillMaxWidth()) {
         Box(
@@ -201,12 +203,74 @@ fun MobileTrainerProfileInfoCardComponent(viewData: UserProfileHeaderViewData?) 
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     Text(
-                        text = viewData.name,
+                        text = trainerProfile.firstName,
                         style = SkyFitTypography.bodyLargeSemibold
                     )
                     Spacer(modifier = Modifier.width(8.dp))
                     Text(
-                        text = viewData.username,
+                        text = "username",
+                        style = SkyFitTypography.bodySmallMedium,
+                        color = SkyFitColor.text.secondary
+                    )
+                }
+
+                Spacer(modifier = Modifier.height(16.dp))
+
+                TrainerProfileCardPreferenceRow(
+                    followerCount = trainerProfile.followerCount.toString(),
+                    lessonCount = trainerProfile.lessonCount.toString(),
+                    postCount = trainerProfile.postCount.toString(),
+                    modifier = Modifier.fillMaxWidth()
+                )
+            }
+        }
+
+        NetworkImage(
+            imageUrl = trainerProfile.profileImageUrl,
+            modifier = Modifier
+                .size(100.dp)
+                .clip(RoundedCornerShape(20.dp))
+                .align(Alignment.TopCenter)
+        )
+    }
+}
+
+@Composable
+fun MobileUserProfileInfoCardComponent(userProfile: UserProfile?) {
+    userProfile ?: return
+
+    Box(modifier = Modifier.fillMaxWidth()) {
+        Box(
+            modifier = Modifier
+                .padding(top = 70.dp)
+                .width(398.dp)
+                .heightIn(max = 140.dp)
+                .background(SkyFitColor.background.fillTransparent, RoundedCornerShape(16.dp))
+        ) {
+            Box(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .background(Color(0xFF012E36).copy(alpha = 0.88f), RoundedCornerShape(16.dp))
+                    .blur(40.dp)
+            )
+
+            Column(
+                modifier = Modifier
+                    .padding(start = 16.dp, top = 36.dp, end = 16.dp, bottom = 16.dp)
+                    .fillMaxWidth(),
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+                Row(
+                    horizontalArrangement = Arrangement.Center,
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Text(
+                        text = userProfile.firstName,
+                        style = SkyFitTypography.bodyLargeSemibold
+                    )
+                    Spacer(modifier = Modifier.width(8.dp))
+                    Text(
+                        text = userProfile.username,
                         style = SkyFitTypography.bodySmallMedium,
                         color = SkyFitColor.text.secondary
                     )
@@ -215,16 +279,16 @@ fun MobileTrainerProfileInfoCardComponent(viewData: UserProfileHeaderViewData?) 
                 Spacer(modifier = Modifier.height(16.dp))
 
                 UserProfileCardPreferenceRow(
-                    height = viewData.height,
-                    weight = viewData.weight,
-                    bodyType = viewData.bodyType,
+                    height = userProfile.height.toString(),
+                    weight = userProfile.weight.toString(),
+                    bodyType = userProfile.bodyType.turkishShort,
                     modifier = Modifier.fillMaxWidth(),
                 )
             }
         }
 
         NetworkImage(
-            imageUrl = viewData.profileImageUrl,
+            imageUrl = userProfile.profileImageUrl,
             modifier = Modifier
                 .size(100.dp)
                 .clip(RoundedCornerShape(20.dp))

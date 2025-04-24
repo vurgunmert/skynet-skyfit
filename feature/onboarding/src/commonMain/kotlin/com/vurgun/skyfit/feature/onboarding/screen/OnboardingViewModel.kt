@@ -193,6 +193,9 @@ internal class OnboardingViewModel(
                     _eventState.value = OnboardingViewEvent.Error(result.message)
                 }
                 OnboardingResult.Success -> {
+                    if (isAccountAddition) {
+                        userManager.getActiveUser(true)
+                    }
                     _eventState.value = OnboardingViewEvent.Completed
                 }
             }

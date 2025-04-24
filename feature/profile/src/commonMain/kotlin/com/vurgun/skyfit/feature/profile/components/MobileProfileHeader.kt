@@ -113,9 +113,43 @@ fun UserProfileCardPreferenceRow(
 }
 
 @Composable
+fun TrainerProfileCardPreferenceRow(
+    followerCount: String,
+    lessonCount: String,
+    postCount: String,
+    modifier: Modifier
+) {
+    Row(
+        modifier.fillMaxWidth(),
+        horizontalArrangement = Arrangement.Center
+    ) {
+        UserProfileCardPreferenceItem(
+            modifier = Modifier.weight(1f),
+            iconRes = null,
+            title = followerCount,
+            subtitle = "Takipçi"
+        )
+        VerticalDivider(Modifier.padding(horizontal = 12.dp))
+        UserProfileCardPreferenceItem(
+            modifier = Modifier.weight(1f),
+            iconRes = null,
+            title = lessonCount,
+            subtitle = "Özel Dersler"
+        )
+        VerticalDivider(Modifier.padding(horizontal = 12.dp))
+        UserProfileCardPreferenceItem(
+            modifier = Modifier.weight(1f),
+            iconRes = null,
+            title = postCount,
+            subtitle = "Paylaşımlar"
+        )
+    }
+}
+
+@Composable
 fun UserProfileCardPreferenceItem(
     modifier: Modifier = Modifier,
-    iconRes: DrawableResource,
+    iconRes: DrawableResource?,
     title: String,
     subtitle: String
 ) {
@@ -131,13 +165,16 @@ fun UserProfileCardPreferenceItem(
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.Center
         ) {
-            Icon(
-                painter = painterResource(iconRes),
-                contentDescription = null,
-                modifier = Modifier.size(24.dp),
-                tint = SkyFitColor.icon.default
-            )
-            Spacer(Modifier.width(2.dp))
+            iconRes?.let {
+                Icon(
+                    painter = painterResource(iconRes),
+                    contentDescription = null,
+                    modifier = Modifier.size(24.dp),
+                    tint = SkyFitColor.icon.default
+                )
+                Spacer(Modifier.width(2.dp))
+            }
+
             Text(text = title, style = SkyFitTypography.bodyMediumSemibold, color = SkyFitColor.text.default)
         }
         Spacer(modifier = Modifier.height(4.dp))

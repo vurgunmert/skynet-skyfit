@@ -6,6 +6,9 @@ import com.vurgun.skyfit.data.core.domain.model.UserDetail
 import com.vurgun.skyfit.data.courses.domain.repository.CourseRepository
 import com.vurgun.skyfit.data.courses.model.LessonSessionColumnViewData
 import com.vurgun.skyfit.data.courses.model.LessonSessionItemViewData
+import com.vurgun.skyfit.data.user.domain.FacilityProfile
+import com.vurgun.skyfit.data.user.domain.UserProfile
+import com.vurgun.skyfit.data.user.repository.ProfileRepository
 import com.vurgun.skyfit.data.user.repository.UserManager
 import com.vurgun.skyfit.feature.profile.components.viewdata.LifestyleActionItemViewData
 import com.vurgun.skyfit.feature.profile.components.viewdata.LifestyleActionRowViewData
@@ -14,15 +17,11 @@ import com.vurgun.skyfit.feature.social.viewdata.SocialPostItemViewData
 import com.vurgun.skyfit.feature.social.viewdata.fakePosts
 import com.vurgun.skyfit.ui.core.styling.SkyFitAsset
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.combine
-import kotlinx.coroutines.flow.stateIn
-import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
 data class UserProfileUiState(
-    val profileData: UserProfileHeaderViewData = UserProfileHeaderViewData(),
+//    val profileData: UserProfileHeaderViewData = UserProfileHeaderViewData(),
     val posts: List<SocialPostItemViewData> = emptyList(),
     val appointments: LessonSessionColumnViewData? = null,
     val showPosts: Boolean = false,
@@ -34,45 +33,56 @@ data class UserProfileUiState(
 
 class UserProfileOwnerViewModel(
     private val userManager: UserManager,
-    private val courseRepository: CourseRepository
+    private val courseRepository: CourseRepository,
+    private val profileRepository: ProfileRepository,
 ) : ViewModel() {
 
     private val user: UserDetail
         get() = userManager.user.value as? UserDetail
             ?: error("❌ current account is not user")
 
+    private val _uiState = MutableStateFlow(UserProfileUiState())
+    val uiState: StateFlow<UserProfileUiState> get() = _uiState
+
     private val _posts = MutableStateFlow<List<SocialPostItemViewData>>(emptyList())
     val posts: StateFlow<List<SocialPostItemViewData>> get() = _posts
 
-    private val _uiState = MutableStateFlow(UserProfileUiState())
-    val uiState: StateFlow<UserProfileUiState> get() = _uiState
+    private val _appointments = MutableStateFlow<List<LessonSessionItemViewData>>(emptyList())
+    val appointments: StateFlow<List<LessonSessionItemViewData>> get() = _appointments
 
     // UI State
     private val _showPosts = MutableStateFlow(false)
     val showPosts: StateFlow<Boolean> get() = _showPosts
 
-    private val _scrollValue = MutableStateFlow(0)
-    private val _firstVisibleItemIndex = MutableStateFlow(0)
+    private val _userProfile = MutableStateFlow<UserProfile?>(null)
+    val userProfile: StateFlow<UserProfile?> get() = _userProfile
 
-    // Derived State for Mini Info Card
-    val showInfoMini = combine(_scrollValue, _firstVisibleItemIndex) { scrollValue, firstItemIndex ->
-        scrollValue > 30 || firstItemIndex > 1
-    }.stateIn(viewModelScope, SharingStarted.Lazily, false)
+    private val _memberFacilityProfile = MutableStateFlow<FacilityProfile?>(null)
+    val memberFacilityProfile: StateFlow<FacilityProfile?> get() = _memberFacilityProfile
 
-    init {
-        val profileViewData = UserProfileHeaderViewData(
-            name = user.firstName,
-            username = user.username,
-            profileImageUrl = user.profileImageUrl,
-            backgroundImageUrl = user.backgroundImageUrl,
-            height = user.height.toString(),
-            weight = user.weight.toString(),
-            bodyType = user.bodyType.turkishShort
-        )
+    fun loadData() {
+        viewModelScope.launch {
+            try {
+                val userProfile = profileRepository.getUserProfile(user.normalUserId).getOrThrow()
+                _userProfile.value = userProfile
+
+                userProfile.memberGymId?.let { gymId ->
+                    _memberFacilityProfile.value = profileRepository.getFacilityProfile(gymId).getOrNull()
+                }
+
+            } catch (e: Exception) {
+                e.printStackTrace()
+            }
+        }
 
         loadAppointments()
+    }
 
+    private fun loadPhotoGallery() {
         val photoDiaryViewData = PhotoGalleryStackViewData()
+    }
+
+    private fun loadExerciseHistory() {
 
         val exercisesViewData = listOf(
             LifestyleActionItemViewData(SkyFitAsset.SkyFitIcon.PUSH_UP.resId, "Şınav"),
@@ -86,6 +96,9 @@ class UserProfileOwnerViewModel(
             title = "Egzersiz Geçmişi",
             items = exercisesViewData
         )
+    }
+
+    private fun loadHabits() {
 
         val habitsViewData = listOf(
             LifestyleActionItemViewData(SkyFitAsset.SkyFitIcon.SLEEP.resId, "Düzensiz Uyku"),
@@ -97,17 +110,6 @@ class UserProfileOwnerViewModel(
             title = "Alışkanlıklar",
             items = habitsViewData
         )
-
-        loadPosts()
-
-        _uiState.update {
-            it.copy(
-                profileData = profileViewData,
-                exercises = exercisesRowViewData,
-                habits = habitsRowViewData,
-                photoDiary = photoDiaryViewData
-            )
-        }
     }
 
     private fun loadAppointments() {
@@ -131,18 +133,7 @@ class UserProfileOwnerViewModel(
                 }
                 .fold(
                     onSuccess = { appointments ->
-                        if (appointments.isNotEmpty()) {
-                            val appointmentsColumnViewData = LessonSessionColumnViewData(
-                                iconId = SkyFitAsset.SkyFitIcon.EXERCISES.id,
-                                title = "Randevularım",
-                                items = appointments
-                            )
-                            _uiState.update {
-                                it.copy(
-                                    appointments = appointmentsColumnViewData
-                                )
-                            }
-                        }
+                        _appointments.value = appointments
                     },
                     onFailure = {
                         print("Failed to get appointments ${it.message}")
@@ -156,8 +147,7 @@ class UserProfileOwnerViewModel(
     }
 
     fun updateScroll(scrollValue: Int, firstItemIndex: Int) {
-        _scrollValue.value = scrollValue
-        _firstVisibleItemIndex.value = firstItemIndex
+
     }
 
     fun toggleShowPosts(show: Boolean) {

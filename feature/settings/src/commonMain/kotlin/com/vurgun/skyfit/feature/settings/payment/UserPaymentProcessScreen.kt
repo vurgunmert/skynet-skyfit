@@ -31,7 +31,7 @@ import com.vurgun.skyfit.ui.core.components.special.ButtonVariant
 import com.vurgun.skyfit.ui.core.components.special.SkyFitButtonComponent
 import com.vurgun.skyfit.ui.core.components.special.SkyFitScaffold
 import com.vurgun.skyfit.ui.core.components.special.SkyFitScreenHeader
-import com.vurgun.skyfit.ui.core.components.special.SkyFitTextInputComponent
+import com.vurgun.skyfit.ui.core.components.text.SingleLineInputText
 import com.vurgun.skyfit.ui.core.styling.SkyFitColor
 import com.vurgun.skyfit.ui.core.styling.SkyFitTypography
 import org.jetbrains.compose.resources.painterResource
@@ -173,56 +173,37 @@ private fun MobileUserActivityCalendarPaymentMethodInputComponent() {
 
     Column(
         Modifier.fillMaxWidth().padding(16.dp),
-        horizontalAlignment = Alignment.Start
+        horizontalAlignment = Alignment.Start,
+        verticalArrangement = Arrangement.spacedBy(24.dp)
     ) {
         Text(
             "Kart Bilgileri",
             style = SkyFitTypography.bodyLargeSemibold
         )
 
-        Spacer(Modifier.height(24.dp))
-        Text(
-            "Kart Üzerindeki İsim",
-            style = SkyFitTypography.bodyMediumSemibold
-        )
-        Spacer(Modifier.height(8.dp))
-        SkyFitTextInputComponent(
+        SingleLineInputText(
+            title = "Kart Üzerindeki İsim",
             hint = "İsim ekle",
             value = cardHolder,
             onValueChange = { cardHolder = it }
         )
 
-        Spacer(Modifier.height(24.dp))
-        Text(
-            "Kart Numarası",
-            style = SkyFitTypography.bodyMediumSemibold
-        )
-        Spacer(Modifier.height(8.dp))
-        SkyFitTextInputComponent(
+        SingleLineInputText(
+            title = "Kart Numarası",
             hint = "Kart Numarası",
             value = cardNo,
             onValueChange = { cardNo = it }
         )
 
-        Spacer(Modifier.height(24.dp))
-        Text(
-            "Son Kullanma Tarihi",
-            style = SkyFitTypography.bodyMediumSemibold
-        )
-        Spacer(Modifier.height(8.dp))
-        SkyFitTextInputComponent(
+        SingleLineInputText(
+            title = "Son Kullanma Tarihi",
             hint = "AA/YY",
             value = expiryDate,
             onValueChange = { expiryDate = it }
         )
 
-        Spacer(Modifier.height(24.dp))
-        Text(
-            "CCV",
-            style = SkyFitTypography.bodyMediumSemibold
-        )
-        Spacer(Modifier.height(8.dp))
-        SkyFitTextInputComponent(
+        SingleLineInputText(
+            title = "CCV",
             hint = "CCV ekle",
             value = cardHolder,
             onValueChange = { cardHolder = it }

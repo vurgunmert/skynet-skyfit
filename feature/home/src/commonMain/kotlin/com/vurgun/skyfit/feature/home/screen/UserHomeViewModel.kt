@@ -26,11 +26,7 @@ class UserHomeViewModel(
     private val _appointments = MutableStateFlow<List<HomeAppointmentItemViewData>>(emptyList())
     val appointments = _appointments.asStateFlow()
 
-    init {
-        loadData()
-    }
-
-    private fun loadData() {
+    fun loadData() {
         viewModelScope.launch {
            courseRepository.getUpcomingAppointmentsByUser(user.normalUserId)
                 .map { appointments ->

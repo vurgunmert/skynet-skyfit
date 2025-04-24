@@ -4,10 +4,12 @@ import com.vurgun.skyfit.data.courses.domain.model.Appointment
 import com.vurgun.skyfit.data.courses.domain.model.Lesson
 import com.vurgun.skyfit.data.courses.domain.model.LessonCreationInfo
 import com.vurgun.skyfit.data.courses.domain.model.LessonUpdateInfo
+import kotlinx.datetime.LocalDate
 
 interface CourseRepository {
 
     // region: Lessons
+    suspend fun getLessonsByFacility(gymId: Int, startDate: LocalDate, endDate: LocalDate? = null): Result<List<Lesson>>
     suspend fun getLessonsByFacility(gymId: Int, startDate: String, endDate: String? = null): Result<List<Lesson>>
     suspend fun getLessonsByTrainer(trainerId: Int, startDate: String, endDate: String?): Result<List<Lesson>>
 

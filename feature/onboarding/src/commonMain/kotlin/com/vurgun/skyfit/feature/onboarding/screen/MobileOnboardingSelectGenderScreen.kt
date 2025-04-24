@@ -21,8 +21,7 @@ import com.vurgun.skyfit.feature.onboarding.component.OnboardingActionGroupCompo
 import com.vurgun.skyfit.feature.onboarding.component.OnboardingStepProgressComponent
 import com.vurgun.skyfit.feature.onboarding.component.OnboardingTitleGroupComponent
 import com.vurgun.skyfit.ui.core.components.special.SkyFitMobileScaffold
-import com.vurgun.skyfit.ui.core.components.special.SkyFitScaffold
-import com.vurgun.skyfit.ui.core.components.special.SkyFitSelectableCardComponent
+import com.vurgun.skyfit.ui.core.components.special.SelectableCardComponent
 import com.vurgun.skyfit.ui.core.styling.SkyFitTypography
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
@@ -79,7 +78,7 @@ fun OnboardingGenderSelectorComponent(
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.spacedBy(8.dp)
         ) {
-            SkyFitSelectableCardComponent(
+            SelectableCardComponent(
                 isSelected = selectedGender == GenderType.MALE,
                 modifier = Modifier.size(112.dp, 104.dp),
                 onClick = { onSelected(GenderType.MALE) }) {
@@ -101,7 +100,7 @@ fun OnboardingGenderSelectorComponent(
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.spacedBy(8.dp)
         ) {
-            SkyFitSelectableCardComponent(
+            SelectableCardComponent(
                 isSelected = selectedGender == GenderType.FEMALE,
                 modifier = Modifier.size(112.dp, 104.dp),
                 onClick = { onSelected(GenderType.FEMALE) }) {

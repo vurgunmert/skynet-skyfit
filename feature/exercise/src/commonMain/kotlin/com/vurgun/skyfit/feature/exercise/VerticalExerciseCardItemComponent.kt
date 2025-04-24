@@ -40,7 +40,7 @@ fun VerticalExerciseCardItemComponent(
     name: String,
     participants: List<String>,
     extraParticipantsCount: Int,
-    rating: Double,
+    rating: Float,
     onClick: () -> Unit
 ) {
     Box(

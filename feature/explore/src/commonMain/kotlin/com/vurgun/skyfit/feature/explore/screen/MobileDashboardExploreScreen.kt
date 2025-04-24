@@ -189,7 +189,7 @@ private fun MobileDashboardExploreScreenFeaturedFacilitiesComponent(
                     name = facility.name,
                     memberCount = facility.memberCount,
                     trainerCount = facility.trainerCount,
-                    rating = facility.rating ?: 0.0,
+                    rating = facility.rating ?: 0f,
                     onClick = onClick
                 )
             }

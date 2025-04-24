@@ -29,8 +29,8 @@ import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.graphics.painter.BitmapPainter
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.dp
-import com.vurgun.skyfit.designsystem.components.text.MultiLineInputText
-import com.vurgun.skyfit.designsystem.components.text.SingleLineInputText
+import com.vurgun.skyfit.ui.core.components.text.MultiLineInputText
+import com.vurgun.skyfit.ui.core.components.text.SingleLineInputText
 import com.vurgun.skyfit.feature.onboarding.component.OnboardingStepProgressComponent
 import com.vurgun.skyfit.feature.onboarding.component.OnboardingTitleGroupComponent
 import com.vurgun.skyfit.ui.core.components.image.SkyFitPickImageWrapper
@@ -38,7 +38,6 @@ import com.vurgun.skyfit.ui.core.components.special.ButtonSize
 import com.vurgun.skyfit.ui.core.components.special.ButtonState
 import com.vurgun.skyfit.ui.core.components.special.ButtonVariant
 import com.vurgun.skyfit.ui.core.components.special.DumbButtonComponent
-import com.vurgun.skyfit.ui.core.components.special.MobileUserSettingsScreenPhotoEditComponent
 import com.vurgun.skyfit.ui.core.components.special.SkyFitButtonComponent
 import com.vurgun.skyfit.ui.core.components.special.SkyFitMobileScaffold
 import com.vurgun.skyfit.ui.core.styling.SkyFitColor

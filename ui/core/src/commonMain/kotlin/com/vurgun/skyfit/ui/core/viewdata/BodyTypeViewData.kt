@@ -8,9 +8,9 @@ sealed class BodyTypeViewData(val id: Int, val name: String, val icon: SkyFitAss
     data object MaleMesomorph : BodyTypeViewData(2, "Mesomorph", SkyFitAsset.BodyTypeIcon.MALE_MESO)
     data object MaleEndomorph : BodyTypeViewData(3, "Endomorph", SkyFitAsset.BodyTypeIcon.MALE_ENDO)
 
-    data object FemaleEctomorph : BodyTypeViewData(4, "Ectomorph", SkyFitAsset.BodyTypeIcon.FEMALE_ECTO)
-    data object FemaleMesomorph : BodyTypeViewData(5, "Mesomorph", SkyFitAsset.BodyTypeIcon.FEMALE_MESO)
-    data object FemaleEndomorph : BodyTypeViewData(6, "Endomorph", SkyFitAsset.BodyTypeIcon.FEMALE_ENDO)
+    data object FemaleEctomorph : BodyTypeViewData(1, "Ectomorph", SkyFitAsset.BodyTypeIcon.FEMALE_ECTO)
+    data object FemaleMesomorph : BodyTypeViewData(2, "Mesomorph", SkyFitAsset.BodyTypeIcon.FEMALE_MESO)
+    data object FemaleEndomorph : BodyTypeViewData(3, "Endomorph", SkyFitAsset.BodyTypeIcon.FEMALE_ENDO)
 
     companion object {
         fun from(gender: GenderType): List<BodyTypeViewData> {

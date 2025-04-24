@@ -33,6 +33,7 @@ import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.vurgun.skyfit.data.courses.domain.model.Appointment
+import com.vurgun.skyfit.ui.core.components.special.SkyFitMobileScaffold
 import com.vurgun.skyfit.ui.core.components.special.SkyFitScaffold
 import com.vurgun.skyfit.ui.core.styling.SkyFitColor
 import com.vurgun.skyfit.ui.core.styling.SkyFitTypography
@@ -56,7 +57,7 @@ fun MobileUserAppointmentDetailScreen(
     val appointmentState by viewModel.appointment.collectAsState()
 
     appointmentState?.let { appointmentData ->
-        SkyFitScaffold(
+        SkyFitMobileScaffold(
             topBar = {
                 MobileUserAppointmentDetailScreenToolbarComponent(
                     title = appointmentData.title,

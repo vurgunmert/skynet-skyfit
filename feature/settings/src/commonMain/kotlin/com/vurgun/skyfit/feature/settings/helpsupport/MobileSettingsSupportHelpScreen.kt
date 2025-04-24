@@ -32,9 +32,9 @@ import com.vurgun.skyfit.ui.core.components.text.BodySmallRegularText
 import com.vurgun.skyfit.ui.core.styling.SkyFitColor
 import com.vurgun.skyfit.ui.core.styling.SkyFitTypography
 import com.vurgun.skyfit.ui.core.components.box.DashedBorderBox
-import com.vurgun.skyfit.designsystem.components.text.MultiLineInputText
-import com.vurgun.skyfit.designsystem.components.text.SingleLineInputText
-import com.vurgun.skyfit.designsystem.components.text.TitledMediumRegularText
+import com.vurgun.skyfit.ui.core.components.text.MultiLineInputText
+import com.vurgun.skyfit.ui.core.components.text.SingleLineInputText
+import com.vurgun.skyfit.ui.core.components.text.TitledMediumRegularText
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
 import skyfit.ui.core.generated.resources.Res

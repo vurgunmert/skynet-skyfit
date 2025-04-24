@@ -1,10 +1,13 @@
 package com.vurgun.skyfit.data.user
 
 import com.vurgun.skyfit.data.core.dataCoreModule
+import com.vurgun.skyfit.data.user.repository.ProfileRepository
+import com.vurgun.skyfit.data.user.repository.ProfileRepositoryImpl
 import com.vurgun.skyfit.data.user.repository.UserManager
 import com.vurgun.skyfit.data.user.repository.UserManagerImpl
 import com.vurgun.skyfit.data.user.repository.UserRepository
 import com.vurgun.skyfit.data.user.repository.UserRepositoryImpl
+import com.vurgun.skyfit.data.user.service.ProfileApiService
 import com.vurgun.skyfit.data.user.service.UserApiService
 import org.koin.core.qualifier.named
 import org.koin.dsl.module
@@ -13,6 +16,7 @@ val dataUserModule = module {
     includes(dataCoreModule)
 
     single<UserApiService> { UserApiService(get()) }
+    single<ProfileApiService> { ProfileApiService(get()) }
 
     single<UserRepository> {
         UserRepositoryImpl(
@@ -28,6 +32,14 @@ val dataUserModule = module {
             appScope = get(named("app-scope-coroutine")),
             storage = get(),
             repository = get(),
+            tokenManager = get()
+        )
+    }
+
+    single<ProfileRepository> {
+        ProfileRepositoryImpl(
+            apiService = get(),
+            dispatchers = get(),
             tokenManager = get()
         )
     }

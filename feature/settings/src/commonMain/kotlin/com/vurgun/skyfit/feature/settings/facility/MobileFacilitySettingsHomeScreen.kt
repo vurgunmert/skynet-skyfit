@@ -139,7 +139,7 @@ fun MobileFacilitySettingsHomeScreen(
 
             SettingsHomeAccountTypesColumn(
                 accounts = accountTypes,
-                selectedTypeId = UserRole.Facility.typeId,
+                selectedTypeId = viewModel.selectedTypeId,
                 onSelectType = viewModel::selectUserType
             )
         }

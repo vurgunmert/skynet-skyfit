@@ -19,6 +19,7 @@ import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import com.vurgun.skyfit.feature.dashboard.navigation.DashboardRoute
+import com.vurgun.skyfit.feature.dashboard.screen.DashboardTab
 import com.vurgun.skyfit.ui.core.components.special.ChatBotButtonComponent
 import com.vurgun.skyfit.ui.core.styling.SkyFitColor
 import org.jetbrains.compose.resources.DrawableResource
@@ -60,14 +61,14 @@ internal fun BottomNavigationBar(
                 horizontalArrangement = Arrangement.spacedBy(24.dp)
             ) {
                 BottomBarItem(
-                    selected = currentRoute == DashboardRoute.Home,
+                    selected = currentRoute == DashboardTab.Home.route,
                     selectedIcon = Res.drawable.ic_home_fill,
                     unselectedIcon = Res.drawable.ic_home,
                     onClick = onClickHome
                 )
 
                 BottomBarItem(
-                    selected = currentRoute == DashboardRoute.Profile,
+                    selected = currentRoute == DashboardTab.Profile.route,
                     selectedIcon = Res.drawable.ic_profile_fill,
                     unselectedIcon = Res.drawable.ic_profile,
                     onClick = onClickProfile

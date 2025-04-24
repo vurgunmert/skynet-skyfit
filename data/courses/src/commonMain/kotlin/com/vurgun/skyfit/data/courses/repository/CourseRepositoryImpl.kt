@@ -27,13 +27,29 @@ import com.vurgun.skyfit.data.network.DispatcherProvider
 import com.vurgun.skyfit.data.network.utils.ioResult
 import com.vurgun.skyfit.data.network.utils.mapOrThrow
 import kotlinx.coroutines.withContext
+import kotlinx.datetime.LocalDate
 
 class CourseRepositoryImpl(
     private val dispatchers: DispatcherProvider,
     private val apiService: CourseApiService,
     private val tokenManager: TokenManager
 ) : CourseRepository {
-    
+
+    override suspend fun getLessonsByFacility(gymId: Int, startDate: LocalDate, endDate: LocalDate?): Result<List<Lesson>> =
+        withContext(dispatchers.io) {
+            val startDateString = startDate.toString()
+            val endDateString = endDate?.toString()
+            runCatching {
+                val token = tokenManager.getTokenOrThrow()
+                val request = GetFacilityLessonsRequest(gymId, startDateString, endDateString)
+                when (val result = apiService.getLessonsByFacility(request, token)) {
+                    is ApiResult.Success -> result.data.toLessonDomainList()
+                    is ApiResult.Error -> throw IllegalStateException(result.message)
+                    is ApiResult.Exception -> throw result.exception
+                }
+            }
+        }
+
     override suspend fun getLessonsByFacility(gymId: Int, startDate: String, endDate: String?): Result<List<Lesson>> =
         withContext(dispatchers.io) {
             runCatching {
@@ -130,6 +146,6 @@ class CourseRepositoryImpl(
     override suspend fun cancelAppointment(lessonId: Int, lpId: Int): Result<Unit> = ioResult(dispatchers) {
         val token = tokenManager.getTokenOrThrow()
         val request = CancelUserAppointmentRequest(lessonId, lpId)
-        apiService.cancelUserAppointment(request, token).mapOrThrow {  }
+        apiService.cancelUserAppointment(request, token).mapOrThrow { }
     }
 }

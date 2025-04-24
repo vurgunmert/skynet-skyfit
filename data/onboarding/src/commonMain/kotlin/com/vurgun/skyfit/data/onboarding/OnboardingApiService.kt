@@ -15,14 +15,6 @@ import kotlin.uuid.Uuid
 
 class OnboardingApiService(private val apiClient: ApiClient) {
 
-//    suspend fun onboardUser(request: OnboardingRequest, token: String): ApiResult<OnboardingResponse> {
-//        return apiClient.multipart<OnboardingResponse>(
-//            url = "auth/onboarding",
-//            formContent = buildOnboardingFormData(request),
-//            token = token
-//        )
-//    }
-
     suspend fun onboardNewAccount(request: OnboardingRequest, token: String): ApiResult<OnboardingResponse> {
         return apiClient.safeApiCall<OnboardingResponse> {
             method = HttpMethod.Post
@@ -35,7 +27,7 @@ class OnboardingApiService(private val apiClient: ApiClient) {
     suspend fun onboardingAdditionalAccount(request: OnboardingRequest, token: String): ApiResult<OnboardingResponse> {
         return apiClient.safeApiCall<OnboardingResponse> {
             method = HttpMethod.Post
-            url("new/user/onboarding")
+            url("new/type/onboarding")
             bearerAuth(token)
             setBody(buildOnboardingFormData(request))
         }
@@ -69,7 +61,7 @@ class OnboardingApiService(private val apiClient: ApiClient) {
                     append(
                         "backgroundImage", bytes,
                         headersOf(
-                            HttpHeaders.ContentType to listOf("image/*"),
+                            HttpHeaders.ContentType to listOf("image/png"),
                             HttpHeaders.ContentDisposition to listOf("filename=${uuid}-background.png")
                         )
                     )

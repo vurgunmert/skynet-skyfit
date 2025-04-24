@@ -62,6 +62,9 @@
     <string name="change_action">Değiştir</string>
     <string name="add_action">Ekle</string>
     <string name="search_action">Ara</string>
+    <string name="unfollow_action">Takipten Çık</string>
+    <string name="follow_action">Takip Et</string>
+    <string name="add_trainer_action">Antrenör Ekle</string>
 
     <!-- 🔷 Gender Options -->
     <string name="gender_female">Kadın</string>
@@ -77,6 +80,8 @@
     <string name="back_to_lessons_action">Dersler'e Dön</string>
 
     <!-- 🔷 Sections / Labels -->
+    <string name="member_label">Üye</string>
+    <string name="trainer_label">Eğitmen</string>
     <string name="members_label">Üyeler</string>
     <string name="trainers_label">Eğitmenler</string>
     <string name="branches_label">Şubeler</string>
@@ -207,6 +212,7 @@
     <string name="profile_image_label">Profil Resmi</string>
     <string name="upcoming_appointments_label">Yaklaşan Randevular</string>
     <string name="show_all_action">Hepsini Görüntüle</string>
+    <string name="our_trainers_label">Antrenörlerimiz</string>
 
 </resources>
 

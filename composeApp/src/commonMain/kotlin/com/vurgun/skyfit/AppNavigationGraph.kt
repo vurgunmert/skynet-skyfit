@@ -9,16 +9,14 @@ import androidx.navigation.compose.rememberNavController
 import com.vurgun.skyfit.feature.auth.AuthRoute
 import com.vurgun.skyfit.feature.auth.authRoutes
 import com.vurgun.skyfit.feature.bodyanalysis.navigation.postureAnalysisRoutes
-import com.vurgun.skyfit.feature.calendar.components.navigation.AppointmentRoute
 import com.vurgun.skyfit.feature.calendar.components.navigation.appointmentRoutes
-import com.vurgun.skyfit.feature.courses.navigation.FacilityCoursesMainRoute
 import com.vurgun.skyfit.feature.courses.navigation.courseLessonsRoutes
 import com.vurgun.skyfit.feature.dashboard.navigation.DashboardRoute
-import com.vurgun.skyfit.feature.dashboard.navigation.dashboardRoutes
 import com.vurgun.skyfit.feature.onboarding.navigation.Onboarding
 import com.vurgun.skyfit.feature.onboarding.navigation.onboardingRoutes
-import com.vurgun.skyfit.feature.settings.navigation.SettingsRoute
 import com.vurgun.skyfit.feature.settings.navigation.settingsRoutes
+import com.vurgun.skyfit.navigation.dashboardRoutes
+import com.vurgun.skyfit.navigation.profileRoutes
 
 @Composable
 fun AppNavigationGraph() {
@@ -39,7 +37,7 @@ fun AppNavigationGraph() {
         authRoutes(
             navController = navigationController,
             goToDashboard = {
-                navigationController.navigateAndClear(DashboardRoute.Home)
+                navigationController.navigateAndClear(DashboardRoute)
             },
             goToOnboarding = {
                 navigationController.navigateAndClear(Onboarding(isAddition = false))
@@ -51,31 +49,16 @@ fun AppNavigationGraph() {
                 navigationController.navigateAndClear(AuthRoute.Login)
             },
             goToDashboard = {
-                navigationController.navigateAndClear(DashboardRoute.Home)
+                navigationController.navigateAndClear(DashboardRoute)
             }
         )
 
-        dashboardRoutes(
-            goToChatBot = {
-
-            },
-            goToSettings = {
-                navigationController.navigate(SettingsRoute.Main) {
-                    launchSingleTop = true
-                }
-            },
-            goToAppointments = {
-                navigationController.navigate(AppointmentRoute.Listing)
-            },
-            goToFacilityCourses = {
-                navigationController.navigate(FacilityCoursesMainRoute)
-            }
-        )
+        dashboardRoutes(navigationController)
 
         settingsRoutes(
             onExitSettings = {
                 if (!navigationController.popBackStackSafe()) {
-                    navigationController.navigate(DashboardRoute.Profile)
+                    navigationController.navigate(DashboardRoute)
                 }
             },
             goToLogin = {
@@ -88,10 +71,12 @@ fun AppNavigationGraph() {
 
         courseLessonsRoutes(
             onExit = navigationController::popBackStack,
-            onHome = { navigationController.navigateAndClear(DashboardRoute.Home) }
+            onHome = { navigationController.navigateAndClear(DashboardRoute) }
         )
 
         appointmentRoutes(navigationController)
+
+        profileRoutes(navigationController)
     }
 }
 

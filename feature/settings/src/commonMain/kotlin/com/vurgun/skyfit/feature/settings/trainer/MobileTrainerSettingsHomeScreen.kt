@@ -122,7 +122,7 @@ fun MobileTrainerSettingsHomeScreen(
 
             SettingsHomeAccountTypesColumn(
                 accounts = accountTypes,
-                selectedTypeId = UserRole.Trainer.typeId,
+                selectedTypeId = viewModel.selectedTypeId,
                 onSelectType = viewModel::selectUserType
             )
         }

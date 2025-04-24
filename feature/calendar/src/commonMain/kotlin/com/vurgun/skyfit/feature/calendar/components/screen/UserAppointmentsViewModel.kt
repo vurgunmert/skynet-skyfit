@@ -67,10 +67,8 @@ class UserAppointmentsViewModel(
     fun cancelAppointment(appointment: Appointment) {
         viewModelScope.launch {
             try {
-                val cancelJob = async { courseRepository.cancelAppointment(appointment.lessonId, appointment.lpId).getOrThrow() }
-                val refreshJob = async { refreshData() }
-                cancelJob.await()
-                refreshJob.await()
+                courseRepository.cancelAppointment(appointment.lessonId, appointment.lpId).getOrThrow()
+                refreshData()
             } catch (e: Exception) {
                 e.printStackTrace()
             }

@@ -138,7 +138,7 @@ private fun ColumnScope.MobileTrainerProfileVisitedAboutGroup(
 
         if (lessonsColumViewData != null) {
             LessonSessionColumn(
-                viewData = lessonsColumViewData,
+                lessons = lessonsColumViewData.items,
                 onClickItem = { goToVisitCalendar() }
             )
         }

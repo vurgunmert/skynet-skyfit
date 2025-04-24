@@ -190,7 +190,7 @@ private fun MobileExerciseActionDetailScreenCategoryComponent() {
             size = ButtonSize.Micro
         )
         Spacer(Modifier.weight(1f))
-        RatingStarComponent(4.8, Modifier.wrapContentWidth())
+        RatingStarComponent(4.8f, Modifier.wrapContentWidth())
     }
 }
 

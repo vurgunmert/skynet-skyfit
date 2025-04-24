@@ -18,6 +18,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.unit.dp
 import com.vurgun.skyfit.ui.core.styling.SkyFitColor
 import com.vurgun.skyfit.ui.core.styling.SkyFitTypography
@@ -48,7 +49,8 @@ fun MobileProfileActionsRow(
 
         Box(
             Modifier
-                .background(SkyFitColor.background.surfaceSecondary, RoundedCornerShape(16.dp))
+                .clip(RoundedCornerShape(16.dp))
+                .background(SkyFitColor.background.surfaceSecondary)
                 .clickable(onClick = if (postsSelected) onClickNewPost else onClickSettings)
                 .padding(12.dp),
             contentAlignment = Alignment.Center

@@ -35,7 +35,7 @@ fun TrainerProfileCardItemBox(
     followerCount: Int,
     classCount: Int,
     videoCount: Int,
-    rating: Double?,
+    rating: Float?,
     onClick: () -> Unit
 ) {
     ProfileCardItemBox(
@@ -46,7 +46,7 @@ fun TrainerProfileCardItemBox(
             Pair("$classCount", "Dersler"),
             Pair("$videoCount", "Videolar")
         ),
-        rating = rating ?: 0.0,
+        rating = rating ?: 0f,
         onClick = onClick
     )
 }
@@ -57,7 +57,7 @@ fun FacilityProfileCardItemBox(
     name: String,
     memberCount: Int,
     trainerCount: Int,
-    rating: Double,
+    rating: Float,
     onClick: () -> Unit
 ) {
     ProfileCardItemBox(
@@ -78,7 +78,7 @@ private fun ProfileCardItemBox(
     imageUrl: String,
     name: String,
     details: List<Pair<String, String>>,
-    rating: Double,
+    rating: Float,
     showRatingInDetail: Boolean = false,
     onClick: () -> Unit
 ) {

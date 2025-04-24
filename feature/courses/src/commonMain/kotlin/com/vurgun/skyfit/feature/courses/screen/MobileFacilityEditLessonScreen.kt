@@ -33,7 +33,6 @@ import androidx.compose.material.Text
 import androidx.compose.material.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -51,9 +50,9 @@ import androidx.compose.ui.window.Dialog
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.vurgun.skyfit.data.core.domain.model.CalendarRecurrence
 import com.vurgun.skyfit.data.core.domain.model.CalendarRecurrenceType
-import com.vurgun.skyfit.designsystem.components.text.MultiLineInputText
-import com.vurgun.skyfit.designsystem.components.text.SingleLineInputText
-import com.vurgun.skyfit.designsystem.components.text.TitledMediumRegularText
+import com.vurgun.skyfit.ui.core.components.text.MultiLineInputText
+import com.vurgun.skyfit.ui.core.components.text.SingleLineInputText
+import com.vurgun.skyfit.ui.core.components.text.TitledMediumRegularText
 import com.vurgun.skyfit.feature.calendar.components.component.calendar.dialog.SingleDatePickerDialog
 import com.vurgun.skyfit.feature.courses.component.LessonSelectCancelDurationPopupMenu
 import com.vurgun.skyfit.feature.courses.component.LessonSelectCapacityPopupMenu

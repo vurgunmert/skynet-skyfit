@@ -18,7 +18,9 @@ class SettingsHomeViewModel(
     private val _uiEvents = MutableSharedFlow<UserSettingsViewEvent>()
     val uiEvents = _uiEvents.asSharedFlow()
 
-    val selectedRole = userManager.userRole
+    val selectedTypeId
+        get() = userManager.userRole.value.typeId
+
     val accountTypes = userManager.accountTypes
 
     init {
@@ -37,7 +39,7 @@ class SettingsHomeViewModel(
     }
 
     fun selectUserType(userTypeId: Int) {
-        if (selectedRole.value.typeId == userTypeId) return
+        if (selectedTypeId == userTypeId) return
         viewModelScope.launch {
             userManager.updateUserType(userTypeId)
         }

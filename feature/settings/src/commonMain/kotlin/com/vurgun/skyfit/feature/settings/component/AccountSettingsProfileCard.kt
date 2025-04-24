@@ -25,7 +25,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.unit.dp
-import com.vurgun.skyfit.designsystem.components.text.CardFieldIconText
+import com.vurgun.skyfit.ui.core.components.text.CardFieldIconText
 import com.vurgun.skyfit.data.core.domain.model.FitnessTagType
 import com.vurgun.skyfit.ui.core.components.button.LargePrimaryIconButton
 import com.vurgun.skyfit.ui.core.components.image.NetworkImage

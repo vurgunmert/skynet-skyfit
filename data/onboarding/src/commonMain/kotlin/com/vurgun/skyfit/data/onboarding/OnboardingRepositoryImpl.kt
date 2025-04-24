@@ -25,12 +25,4 @@ internal class OnboardingRepositoryImpl(
             is ApiResult.Success -> OnboardingResult.Success
         }
     }
-
-    suspend fun submitOnboarding2(request: OnboardingRequest, isAccountAddition: Boolean) = ioResult(dispatchers) {
-        val token = tokenManager.getTokenOrThrow()
-        when {
-            isAccountAddition -> apiService.onboardingAdditionalAccount(request, token)
-            else -> apiService.onboardNewAccount(request, token)
-        }
-    }
 }

@@ -1,5 +1,6 @@
 package com.vurgun.skyfit.feature.settings.user
 
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -12,16 +13,14 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.vurgun.skyfit.data.core.domain.model.UserRole
 import com.vurgun.skyfit.feature.settings.component.SettingsHomeAccountTypesColumn
-import com.vurgun.skyfit.ui.core.components.menu.MobileSettingsMenuItemDividerComponent
-import com.vurgun.skyfit.ui.core.components.menu.SettingsMenuItem
 import com.vurgun.skyfit.ui.core.components.button.PrimaryLargeButton
+import com.vurgun.skyfit.ui.core.components.menu.MobileSettingsMenuItemComponent
+import com.vurgun.skyfit.ui.core.components.menu.MobileSettingsMenuItemDividerComponent
 import com.vurgun.skyfit.ui.core.components.special.SkyFitMobileScaffold
 import com.vurgun.skyfit.ui.core.components.special.SkyFitScreenHeader
 import kotlinx.coroutines.flow.collectLatest
 import org.jetbrains.compose.resources.stringResource
-import org.koin.compose.koinInject
 import org.koin.compose.viewmodel.koinViewModel
 import skyfit.ui.core.generated.resources.Res
 import skyfit.ui.core.generated.resources.ic_bell
@@ -43,7 +42,7 @@ fun MobileUserSettingsHomeScreen(
     goToPaymentHistory: () -> Unit,
     goToNotifications: () -> Unit,
     goToHelp: () -> Unit,
-    viewModel: SettingsHomeViewModel = koinViewModel()
+    viewModel: SettingsHomeViewModel = koinViewModel<SettingsHomeViewModel>()
 ) {
     val accountTypes by viewModel.accountTypes.collectAsStateWithLifecycle()
 
@@ -74,16 +73,17 @@ fun MobileUserSettingsHomeScreen(
                 .padding(start = 21.dp, end = 11.dp, top = 24.dp, bottom = 96.dp)
                 .fillMaxSize()
                 .padding(12.dp)
-                .verticalScroll(rememberScrollState())
+                .verticalScroll(rememberScrollState()),
+            verticalArrangement = Arrangement.spacedBy(32.dp)
         ) {
 
-            SettingsMenuItem(
+            MobileSettingsMenuItemComponent(
                 iconRes = Res.drawable.ic_profile,
                 text = stringResource(Res.string.settings_account_label),
                 onClick = goToAccount
             )
 
-            SettingsMenuItem(
+            MobileSettingsMenuItemComponent(
                 iconRes = Res.drawable.ic_credit_card,
                 text = stringResource(Res.string.settings_payment_history_label),
                 onClick = goToPaymentHistory
@@ -91,7 +91,7 @@ fun MobileUserSettingsHomeScreen(
 
             MobileSettingsMenuItemDividerComponent()
 
-            SettingsMenuItem(
+            MobileSettingsMenuItemComponent(
                 iconRes = Res.drawable.ic_bell,
                 text = stringResource(Res.string.settings_notifications_label),
                 onClick = goToNotifications
@@ -99,7 +99,7 @@ fun MobileUserSettingsHomeScreen(
 
             MobileSettingsMenuItemDividerComponent()
 
-            SettingsMenuItem(
+            MobileSettingsMenuItemComponent(
                 iconRes = Res.drawable.ic_question_circle,
                 text = stringResource(Res.string.settings_support_label),
                 onClick = goToHelp
@@ -107,7 +107,7 @@ fun MobileUserSettingsHomeScreen(
 
             SettingsHomeAccountTypesColumn(
                 accounts = accountTypes,
-                selectedTypeId = UserRole.Trainer.typeId,
+                selectedTypeId = viewModel.selectedTypeId,
                 onSelectType = viewModel::selectUserType
             )
         }

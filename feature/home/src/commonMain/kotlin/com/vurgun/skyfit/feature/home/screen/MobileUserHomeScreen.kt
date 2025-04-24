@@ -5,6 +5,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -29,6 +30,10 @@ fun MobileUserHomeScreen(
 
     val appointments by viewModel.appointments.collectAsStateWithLifecycle()
 
+    LaunchedEffect(Unit) {
+        viewModel.loadData()
+    }
+
     SkyFitMobileScaffold(
         topBar = {
             MobileDashboardHomeToolbarComponent(
@@ -44,12 +49,10 @@ fun MobileUserHomeScreen(
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {
 
-            viewModel.characterType?.let { characterType ->
-                CharacterImage(
-                    characterType = characterType,
-                    modifier = Modifier
-                )
-            }
+            CharacterImage(
+                characterType = viewModel.characterType,
+                modifier = Modifier
+            )
 
             if (appointments.isNotEmpty()) {
                 MobileUserHomeUpcomingAppointmentsComponent(
