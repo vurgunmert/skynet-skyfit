@@ -1,5 +1,6 @@
 package com.vurgun.skyfit.data.courses.mapper
 
+import com.vurgun.skyfit.data.courses.domain.model.Appointment
 import com.vurgun.skyfit.data.courses.domain.model.Lesson
 import com.vurgun.skyfit.data.courses.model.LessonSessionItemViewData
 
@@ -20,6 +21,23 @@ class LessonSessionItemViewDataMapper {
             capacityRatio = lesson.capacityRatio,
             isActive = lesson.status == 1,
             lessonId = lesson.lessonId
+        )
+    }
+
+    fun map(
+        appointment: Appointment
+    ): LessonSessionItemViewData {
+        return LessonSessionItemViewData(
+            lessonId = appointment.lessonId,
+            iconId = appointment.iconId,
+            title = appointment.title,
+            date = appointment.startDate.toString(),
+            hours = "${appointment.startTime} - ${appointment.endTime}",
+            trainer = appointment.trainerFullName,
+            facility = appointment.facilityName,
+            location = appointment.facilityName,
+            note = appointment.trainerNote,
+            capacityRatio = appointment.quotaInfo
         )
     }
 }

@@ -3,6 +3,7 @@ package com.vurgun.skyfit.data.user.mappers
 import com.vurgun.skyfit.data.core.domain.model.BodyType
 import com.vurgun.skyfit.data.core.domain.model.HeightUnitType
 import com.vurgun.skyfit.data.core.domain.model.WeightUnitType
+import com.vurgun.skyfit.data.core.utility.parseServerToDateOnly
 import com.vurgun.skyfit.data.user.domain.FacilityProfile
 import com.vurgun.skyfit.data.user.domain.TrainerProfile
 import com.vurgun.skyfit.data.user.domain.UserProfile
@@ -27,13 +28,15 @@ object ProfileMapper {
             firstName = name,
             lastName = surname,
             username = username,
-            memberGymId = 10 //TODO: RUN DEBUG DELETE
+            memberGymId = 10, //gymId
+            memberGymJoinedAt = gymJoinDate?.parseServerToDateOnly()
         )
     }
 
     fun TrainerProfileDto.toDomain(): TrainerProfile {
         return TrainerProfile(
             userId = userId,
+            username = username,
             trainerId = trainerId,
             profileImageUrl = serverImageFromPath(profilePhoto),
             backgroundImageUrl = serverImageFromPath(backgroundImage),

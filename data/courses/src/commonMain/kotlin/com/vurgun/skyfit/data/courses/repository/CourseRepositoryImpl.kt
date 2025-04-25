@@ -1,6 +1,7 @@
 package com.vurgun.skyfit.data.courses.repository
 
 import com.vurgun.skyfit.data.core.storage.TokenManager
+import com.vurgun.skyfit.data.core.utility.formatToServerDate
 import com.vurgun.skyfit.data.courses.CourseApiService
 import com.vurgun.skyfit.data.courses.domain.model.Appointment
 import com.vurgun.skyfit.data.courses.domain.model.Lesson
@@ -36,19 +37,7 @@ class CourseRepositoryImpl(
 ) : CourseRepository {
 
     override suspend fun getLessonsByFacility(gymId: Int, startDate: LocalDate, endDate: LocalDate?): Result<List<Lesson>> =
-        withContext(dispatchers.io) {
-            val startDateString = startDate.toString()
-            val endDateString = endDate?.toString()
-            runCatching {
-                val token = tokenManager.getTokenOrThrow()
-                val request = GetFacilityLessonsRequest(gymId, startDateString, endDateString)
-                when (val result = apiService.getLessonsByFacility(request, token)) {
-                    is ApiResult.Success -> result.data.toLessonDomainList()
-                    is ApiResult.Error -> throw IllegalStateException(result.message)
-                    is ApiResult.Exception -> throw result.exception
-                }
-            }
-        }
+        getLessonsByFacility(gymId, startDate.formatToServerDate(), endDate?.formatToServerDate())
 
     override suspend fun getLessonsByFacility(gymId: Int, startDate: String, endDate: String?): Result<List<Lesson>> =
         withContext(dispatchers.io) {
@@ -75,6 +64,9 @@ class CourseRepositoryImpl(
                 }
             }
         }
+
+    override suspend fun getLessonsByTrainer(trainerId: Int, startDate: LocalDate, endDate: LocalDate?): Result<List<Lesson>> =
+        getLessonsByTrainer(trainerId, startDate.formatToServerDate(), endDate?.formatToServerDate())
 
     override suspend fun getLessonsByTrainer(trainerId: Int, startDate: String, endDate: String?): Result<List<Lesson>> =
         withContext(dispatchers.io) {

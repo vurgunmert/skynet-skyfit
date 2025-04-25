@@ -1,6 +1,7 @@
-package com.vurgun.skyfit.feature.profile.facility
+package com.vurgun.skyfit.feature.profile.facility.owner
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxWithConstraints
@@ -28,10 +29,14 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.vurgun.skyfit.data.courses.model.LessonSessionItemViewData
 import com.vurgun.skyfit.data.user.domain.FacilityProfile
+import com.vurgun.skyfit.feature.calendar.components.component.calendar.weekly.CalendarWeekDaySelector
+import com.vurgun.skyfit.feature.calendar.components.component.calendar.weekly.CalendarWeekDaySelectorState
+import com.vurgun.skyfit.feature.calendar.components.component.calendar.weekly.CalendarWeekDaySelectorViewModel
 import com.vurgun.skyfit.feature.profile.components.MobileProfileActionsRow
 import com.vurgun.skyfit.feature.profile.components.MobileProfileBackgroundImage
 import com.vurgun.skyfit.feature.profile.components.PhotoGalleryEmptyStackCard
@@ -40,17 +45,13 @@ import com.vurgun.skyfit.feature.profile.components.VerticalProfileStatisticItem
 import com.vurgun.skyfit.feature.profile.components.VerticalTrainerProfileCardsRow
 import com.vurgun.skyfit.feature.profile.components.viewdata.PhotoGalleryStackViewData
 import com.vurgun.skyfit.feature.profile.components.viewdata.TrainerProfileCardItemViewData
-import com.vurgun.skyfit.feature.profile.facility.viewmodel.FacilityProfileOwnerAction
-import com.vurgun.skyfit.feature.profile.facility.viewmodel.FacilityProfileOwnerEffect
-import com.vurgun.skyfit.feature.profile.facility.viewmodel.FacilityProfileOwnerUiState
-import com.vurgun.skyfit.feature.profile.facility.viewmodel.FacilityProfileOwnerViewModel
 import com.vurgun.skyfit.feature.social.components.SocialPostCard
 import com.vurgun.skyfit.feature.social.components.SocialQuickPostInputCard
 import com.vurgun.skyfit.ui.core.components.button.SkyFitPrimaryCircularBackButton
 import com.vurgun.skyfit.ui.core.components.button.SkyFitSecondaryIconButton
 import com.vurgun.skyfit.ui.core.components.divider.VerticalDivider
+import com.vurgun.skyfit.ui.core.components.event.AvailableActivityCalendarEventItem
 import com.vurgun.skyfit.ui.core.components.event.LessonSessionColumn
-import com.vurgun.skyfit.ui.core.components.loader.CircularLoader
 import com.vurgun.skyfit.ui.core.components.loader.FullScreenLoader
 import com.vurgun.skyfit.ui.core.components.special.ButtonSize
 import com.vurgun.skyfit.ui.core.components.special.ButtonState
@@ -59,6 +60,7 @@ import com.vurgun.skyfit.ui.core.components.special.RatingStarComponent
 import com.vurgun.skyfit.ui.core.components.special.SkyFitButtonComponent
 import com.vurgun.skyfit.ui.core.components.special.SkyFitMobileScaffold
 import com.vurgun.skyfit.ui.core.screen.ErrorScreen
+import com.vurgun.skyfit.ui.core.styling.SkyFitAsset
 import com.vurgun.skyfit.ui.core.styling.SkyFitColor
 import com.vurgun.skyfit.ui.core.styling.SkyFitTypography
 import org.jetbrains.compose.resources.painterResource
@@ -71,8 +73,10 @@ import skyfit.ui.core.generated.resources.follow_action
 import skyfit.ui.core.generated.resources.ic_calendar_dots
 import skyfit.ui.core.generated.resources.ic_location_pin
 import skyfit.ui.core.generated.resources.ic_send
+import skyfit.ui.core.generated.resources.lessons_label
 import skyfit.ui.core.generated.resources.member_label
 import skyfit.ui.core.generated.resources.our_trainers_label
+import skyfit.ui.core.generated.resources.show_all_action
 import skyfit.ui.core.generated.resources.trainer_label
 import skyfit.ui.core.generated.resources.unfollow_action
 
@@ -214,7 +218,6 @@ private fun MobileFacilityProfileOwnerContent(
     }
 }
 
-
 internal object FacilityProfileComponent {
 
     //region Trainers
@@ -293,7 +296,7 @@ internal object FacilityProfileComponent {
         modifier: Modifier = Modifier,
     ) {
         if (lessons.isEmpty()) {
-            MobileFacilityLessonsEmptyCard(
+            MobileFacilityProfileOwner_LessonsEmptyCard(
                 onClickAdd = goToLessons
             )
         } else {
@@ -308,19 +311,74 @@ internal object FacilityProfileComponent {
 
     @Composable
     fun MobileFacilityProfileVisitor_Lessons(
+        calendarUiState: CalendarWeekDaySelectorState,
+        calendarViewModel: CalendarWeekDaySelectorViewModel,
         lessons: List<LessonSessionItemViewData>,
-        goToLessons: () -> Unit,
         goToVisitCalendar: () -> Unit,
         modifier: Modifier = Modifier,
     ) {
-        if (lessons.isEmpty()) return
+        Column(
+            modifier.fillMaxWidth()
+                .clip(RoundedCornerShape(20.dp))
+                .background(SkyFitColor.background.fillTransparent)
+                .clickable(onClick = goToVisitCalendar)
+                .padding(16.dp),
+            verticalArrangement = Arrangement.spacedBy(16.dp)
+        ) {
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.spacedBy(8.dp)
+            ) {
+                Icon(
+                    painter = SkyFitAsset.getPainter(SkyFitAsset.SkyFitIcon.EXERCISES.id),
+                    modifier = Modifier.size(24.dp),
+                    contentDescription = null,
+                    tint = SkyFitColor.icon.default
+                )
 
-        LessonSessionColumn(
-            lessons = lessons,
-            onClickShowAll = goToVisitCalendar,
-            onClickItem = { goToVisitCalendar() },
-            modifier = modifier
-        )
+                Text(
+                    text = stringResource(Res.string.lessons_label),
+                    style = SkyFitTypography.bodyLargeSemibold,
+                    modifier = Modifier.weight(1f)
+                )
+
+                Text(
+                    text = stringResource(Res.string.show_all_action),
+                    style = SkyFitTypography.bodyXSmall,
+                    color = SkyFitColor.border.secondaryButton,
+                    modifier = Modifier.clickable(onClick = goToVisitCalendar)
+                )
+            }
+
+            CalendarWeekDaySelector(
+                daysOfWeek = calendarUiState.weekDays,
+                onDaySelected = calendarViewModel::setSelectedDate,
+                onPreviousWeek = calendarViewModel::loadPreviousWeek,
+                onNextWeek = calendarViewModel::loadNextWeek
+            )
+
+            if (lessons.isEmpty()) {
+                NoLessonOnSelectedDaysEventItem()
+            } else {
+                Column(
+                    modifier = Modifier.fillMaxWidth(),
+                    verticalArrangement = Arrangement.spacedBy(16.dp)
+                ) {
+                    lessons.forEach { item ->
+                        AvailableActivityCalendarEventItem(
+                            title = item.title,
+                            iconId = item.iconId,
+                            date = item.date.toString(),
+                            timePeriod = item.hours.toString(),
+                            location = item.location.toString(),
+                            trainer = item.trainer.toString(),
+                            capacity = item.capacityRatio.toString(),
+                            note = item.note
+                        )
+                    }
+                }
+            }
+        }
     }
     //endregion Lessons
 
@@ -440,10 +498,11 @@ internal object FacilityProfileComponent {
     @Composable
     fun MobileFacilityProfileVisitor_HeaderCard(
         profile: FacilityProfile,
-        onClickFollow: () -> Unit = {},
-        onClickUnFollow: () -> Unit = {},
-        onClickBookingCalendar: () -> Unit = {},
-        onClickMessage: () -> Unit = {}
+        isFollowedByVisitor: Boolean,
+        onClickFollow: () -> Unit,
+        onClickUnFollow: () -> Unit,
+        onClickBookingCalendar: () -> Unit,
+        onClickMessage: () -> Unit
     ) {
         BoxWithConstraints(
             modifier = Modifier
@@ -515,12 +574,10 @@ internal object FacilityProfileComponent {
 
                 Spacer(modifier = Modifier.height(16.dp))
 
-                val isFollowed = false //TODO: GET FROM API
-
                 SkyFitButtonComponent(
                     modifier = Modifier.fillMaxWidth(),
-                    text = stringResource(if (isFollowed) Res.string.unfollow_action else Res.string.follow_action),
-                    onClick = if (isFollowed) onClickUnFollow else onClickFollow,
+                    text = stringResource(if (isFollowedByVisitor) Res.string.unfollow_action else Res.string.follow_action),
+                    onClick = if (isFollowedByVisitor) onClickUnFollow else onClickFollow,
                     variant = ButtonVariant.Primary,
                     size = ButtonSize.Large
                 )
@@ -536,7 +593,7 @@ internal object FacilityProfileComponent {
                         size = ButtonSize.Large,
                         leftIconPainter = painterResource(Res.drawable.ic_calendar_dots)
                     )
-                    if (isFollowed) {
+                    if (isFollowedByVisitor) {
                         Spacer(modifier = Modifier.width(10.dp))
                         SkyFitSecondaryIconButton(
                             painter = painterResource(Res.drawable.ic_send),
@@ -548,4 +605,28 @@ internal object FacilityProfileComponent {
         }
     }
 
+    @Composable
+    private fun MobileFacilityProfileOwner_LessonsEmptyCard(onClickAdd: () -> Unit) {
+        Column(Modifier.fillMaxWidth().padding(16.dp)) {
+            Text("Ozel Dersler", style = SkyFitTypography.bodyLargeSemibold)
+            Spacer(Modifier.height(16.dp))
+            Box(
+                Modifier
+                    .padding(horizontal = 16.dp)
+                    .fillMaxWidth()
+                    .background(SkyFitColor.background.surfaceSecondary, RoundedCornerShape(16.dp))
+                    .padding(vertical = 34.dp),
+                contentAlignment = Alignment.Center
+            ) {
+                SkyFitButtonComponent(
+                    modifier = Modifier.wrapContentWidth(),
+                    text = "Ders Ekle",
+                    onClick = onClickAdd,
+                    variant = ButtonVariant.Primary,
+                    size = ButtonSize.Medium,
+                    state = ButtonState.Rest
+                )
+            }
+        }
+    }
 }

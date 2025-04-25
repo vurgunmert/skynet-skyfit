@@ -11,6 +11,7 @@ interface CourseRepository {
     // region: Lessons
     suspend fun getLessonsByFacility(gymId: Int, startDate: LocalDate, endDate: LocalDate? = null): Result<List<Lesson>>
     suspend fun getLessonsByFacility(gymId: Int, startDate: String, endDate: String? = null): Result<List<Lesson>>
+    suspend fun getLessonsByTrainer(trainerId: Int, startDate: LocalDate, endDate: LocalDate?): Result<List<Lesson>>
     suspend fun getLessonsByTrainer(trainerId: Int, startDate: String, endDate: String?): Result<List<Lesson>>
 
     suspend fun getUpcomingLessonsByFacility(gymId: Int, limit: Int = 3): Result<List<Lesson>>

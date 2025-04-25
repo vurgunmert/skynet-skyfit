@@ -1,4 +1,4 @@
-package com.vurgun.skyfit.feature.profile.facility.viewmodel
+package com.vurgun.skyfit.feature.profile.facility.owner
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -115,6 +115,12 @@ class FacilityProfileOwnerViewModel(
         }
     }
 
+    private fun emitEffect(effect: FacilityProfileOwnerEffect) {
+        viewModelScope.launch {
+            _effect.emit(effect)
+        }
+    }
+
     private suspend fun fetchGallery(): PhotoGalleryStackViewData {
         return PhotoGalleryStackViewData(
             title = "Salonu Keşfet",
@@ -131,11 +137,5 @@ class FacilityProfileOwnerViewModel(
         return courseRepository.getUpcomingLessonsByFacility(facilityId)
             .map { it.map(lessonMapper::map) }
             .getOrDefault(emptyList())
-    }
-
-    private fun emitEffect(effect: FacilityProfileOwnerEffect) {
-        viewModelScope.launch {
-            _effect.emit(effect)
-        }
     }
 }

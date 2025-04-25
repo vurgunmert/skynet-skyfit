@@ -2,9 +2,9 @@ package com.vurgun.skyfit.feature.profile.navigation
 
 import androidx.compose.runtime.Composable
 import com.vurgun.skyfit.data.core.domain.model.UserRole
-import com.vurgun.skyfit.feature.profile.facility.MobileFacilityProfileOwnerScreen
-import com.vurgun.skyfit.feature.profile.trainer.MobileTrainerProfileScreen
-import com.vurgun.skyfit.feature.profile.user.MobileUserProfileOwnerScreen
+import com.vurgun.skyfit.feature.profile.facility.owner.MobileFacilityProfileOwnerScreen
+import com.vurgun.skyfit.feature.profile.trainer.owner.MobileTrainerProfileOwnerScreen
+import com.vurgun.skyfit.feature.profile.user.owner.MobileUserProfileOwnerScreen
 import com.vurgun.skyfit.feature.settings.component.rbac.RequireRole
 import com.vurgun.skyfit.ui.core.screen.UnauthorizedAccessScreen
 import kotlinx.serialization.Serializable
@@ -28,7 +28,7 @@ fun ProfileOwnerRoot(
                 goToBack = { }
             )
 
-            UserRole.Trainer -> MobileTrainerProfileScreen(
+            UserRole.Trainer -> MobileTrainerProfileOwnerScreen(
                 goToSettings = goToSettings,
                 goToCreatePost = { }
             )
@@ -37,9 +37,6 @@ fun ProfileOwnerRoot(
                 goToBack = { },
                 goToSettings = goToSettings,
                 goToAppointments = goToAppointments,
-                goToMeasurements = { },
-                goToExercises = { },
-                goToPhotoDiary = { },
                 goToCreatePost = { },
                 onVisitFacility = goToVisitFacility
             )
@@ -53,10 +50,13 @@ fun ProfileOwnerRoot(
 data class VisitFacilityProfileRoute(val facilityId: Int)
 
 @Serializable
-data class VisitFacilityProfileCalendarRoute(val facilityId: Int)
+data class VisitFacilityProfileScheduleRoute(val facilityId: Int)
 
 @Serializable
 data class VisitTrainerProfileRoute(val trainerId: Int)
 
 @Serializable
-data class VisitUserProfileRoute(val userId: Int)
+data class VisitTrainerProfileScheduleRoute(val trainerId: Int)
+
+@Serializable
+data class VisitUserProfileRoute(val normalUserId: Int)

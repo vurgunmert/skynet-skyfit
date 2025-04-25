@@ -3,6 +3,7 @@ package com.vurgun.skyfit.data.user.domain
 import com.vurgun.skyfit.data.core.domain.model.BodyType
 import com.vurgun.skyfit.data.core.domain.model.HeightUnitType
 import com.vurgun.skyfit.data.core.domain.model.WeightUnitType
+import kotlinx.datetime.LocalDate
 
 data class UserProfile(
     val userId: Int,
@@ -18,7 +19,8 @@ data class UserProfile(
     val firstName: String,
     val lastName: String,
     val username: String,
-    val memberGymId: Int?
+    val memberGymId: Int?,
+    val memberGymJoinedAt: LocalDate?
 ) {
     val fullName = "$firstName $lastName"
 }

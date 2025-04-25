@@ -23,6 +23,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.unit.dp
 import com.vurgun.skyfit.ui.core.components.special.SkyFitCheckBoxComponent
 import com.vurgun.skyfit.ui.core.components.special.SkyFitListItemCardComponent
+import com.vurgun.skyfit.ui.core.components.text.BodyMediumRegularText
 import com.vurgun.skyfit.ui.core.components.text.BodyMediumSemiboldText
 import com.vurgun.skyfit.ui.core.components.text.BodySmallRegularText
 import com.vurgun.skyfit.ui.core.styling.SkyFitAsset
@@ -135,9 +136,10 @@ fun AvailableActivityCalendarEventItem(
     note: String? = null,
     isFull: Boolean = false,
     isNotifyMeEnabled: Boolean = false,
-    onNotifyMeChanged: ((enabled: Boolean) -> Unit)? = null
+    onNotifyMeChanged: ((enabled: Boolean) -> Unit)? = null,
+    modifier: Modifier = Modifier
 ) {
-    EventItemColumn {
+    EventItemColumn(modifier) {
         AvailableActivityEventTitleRow(title, iconId, date, capacity, isFull)
         Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
             EventTimeText(timePeriod, modifier = Modifier.weight(1f))
@@ -443,4 +445,52 @@ fun TrainerHomeLessonEventItem(
     }
 }
 
+@Composable
+fun SelectableLessonEventItem(
+    title: String,
+    iconId: Int,
+    date: String,
+    timePeriod: String,
+    location: String,
+    trainer: String,
+    capacity: String,
+    note: String? = null,
+    selected: Boolean = false,
+    isFull: Boolean = false,
+    isNotifyMeEnabled: Boolean = false,
+    onNotifyMeChanged: ((enabled: Boolean) -> Unit)? = null,
+    modifier: Modifier = Modifier
+) {
+    EventItemColumn(modifier) {
+        AvailableActivityEventTitleRow(title, iconId, date, capacity, isFull)
+        Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+            EventTimeText(timePeriod, modifier = Modifier.weight(1f))
+            EventTrainerText(trainer, modifier = Modifier.weight(1f))
+        }
+        EventLocationText(location)
+
+        note.takeUnless { it.isNullOrEmpty() }?.let {
+            EventNoteText(it)
+        }
+
+        if (isFull) {
+            SkyFitCheckBoxComponent(
+                checked = isNotifyMeEnabled,
+                onCheckedChange = { onNotifyMeChanged?.invoke(it) },
+                label = stringResource(Res.string.lesson_notify_me_action),
+                modifier = Modifier.fillMaxWidth().background(SkyFitColor.background.surfaceCriticalActive, RoundedCornerShape(8.dp))
+                    .padding(8.dp)
+            )
+        }
+    }
+}
+
+@Composable
+fun NoLessonOnSelectedDaysEventItem(
+    modifier: Modifier = Modifier
+) {
+    EventItemColumn(modifier) {
+        BodyMediumRegularText("Seçtiğiniz tarihlerde herhangi bir ders görünmüyor. Uygun bir gün seçmeyi deneyin.")
+    }
+}
 //endregion LessonEvents

@@ -1,4 +1,4 @@
-package com.vurgun.skyfit.feature.profile.trainer
+package com.vurgun.skyfit.feature.profile.trainer.schedule
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
@@ -14,7 +14,6 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Icon
-import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -24,8 +23,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.vurgun.skyfit.data.courses.model.LessonSessionColumnViewData
 import com.vurgun.skyfit.feature.calendar.components.component.calendar.monthly.CalendarRangeDateSelectorCard
-import com.vurgun.skyfit.feature.profile.facility.FacilityCalendarVisitedViewModel
-import com.vurgun.skyfit.feature.profile.facility.MobileFacilityCalendarVisitedScreenCreateActionComponent
+import com.vurgun.skyfit.feature.profile.facility.schedule.FacilityProfileScheduleViewModel
 import com.vurgun.skyfit.ui.core.components.special.SkyFitCircularImageComponent
 import com.vurgun.skyfit.ui.core.components.special.SkyFitMobileScaffold
 import com.vurgun.skyfit.ui.core.components.special.SkyFitScreenHeader
@@ -33,44 +31,43 @@ import com.vurgun.skyfit.ui.core.components.special.UserCircleAvatarItem
 import com.vurgun.skyfit.ui.core.styling.SkyFitColor
 import com.vurgun.skyfit.ui.core.styling.SkyFitTypography
 import org.jetbrains.compose.resources.painterResource
+import org.koin.compose.viewmodel.koinViewModel
 import skyfit.ui.core.generated.resources.Res
 import skyfit.ui.core.generated.resources.logo_skyfit
 
 @Composable
-fun MobileTrainerCalendarVisitedScreen(
-    goToBack: () -> Unit
+fun MobileTrainerProfileScheduleScreen(
+    goToBack: () -> Unit,
+    viewModel: TrainerProfileScheduleViewModel = koinViewModel()
 ) {
 
     val showCreateAction: Boolean = true
-
-    val viewModel = FacilityCalendarVisitedViewModel()
-    val lessonsColumnViewData by viewModel.lessonsColumnViewData.collectAsState()
-
-    SkyFitMobileScaffold(
-        topBar = {
-            SkyFitScreenHeader("Randevu Al", onClickBack = goToBack)
-        },
-        bottomBar = {
-            if (showCreateAction) {
-                MobileTrainerCalendarVisitedScreenCreateActionComponent()
-            }
-        }
-    ) {
-        Column(
-            modifier = Modifier.fillMaxSize().verticalScroll(rememberScrollState()),
-            horizontalAlignment = Alignment.CenterHorizontally,
-        ) {
-            MobileTrainerCalendarVisitedScreenInfoComponent()
-
-            CalendarRangeDateSelectorCard(
-                onSelectionChanged = { start, end ->
-                    // TODO: Set date
-                }
-            )
-
-            MobileTrainerCalendarVisitedScreenPrivateClassesComponent(lessonsColumnViewData)
-        }
-    }
+//
+//    SkyFitMobileScaffold(
+//        topBar = {
+//            SkyFitScreenHeader("Randevu Al", onClickBack = goToBack)
+//        },
+//        bottomBar = {
+//            if (showCreateAction) {
+//                MobileTrainerCalendarVisitedScreenCreateActionComponent()
+//            }
+//        }
+//    ) {
+//        Column(
+//            modifier = Modifier.fillMaxSize().verticalScroll(rememberScrollState()),
+//            horizontalAlignment = Alignment.CenterHorizontally,
+//        ) {
+//            MobileTrainerCalendarVisitedScreenInfoComponent()
+//
+//            CalendarRangeDateSelectorCard(
+//                onSelectionChanged = { start, end ->
+//                    // TODO: Set date
+//                }
+//            )
+//
+//            MobileTrainerCalendarVisitedScreenPrivateClassesComponent(lessonsColumnViewData)
+//        }
+//    }
 }
 
 @Composable
@@ -142,5 +139,5 @@ private fun MobileTrainerCalendarVisitedScreenPrivateClassesComponent(lessonsCol
 
 @Composable
 private fun MobileTrainerCalendarVisitedScreenCreateActionComponent() {
-    MobileFacilityCalendarVisitedScreenCreateActionComponent(onClick = {})
+//    MobileFacilityCalendarVisitedScreenCreateActionComponent(onClick = {})
 }

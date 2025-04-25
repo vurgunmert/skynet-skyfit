@@ -17,7 +17,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
-import com.vurgun.skyfit.feature.profile.user.UserProfileHeaderViewData
 import com.vurgun.skyfit.ui.core.components.divider.VerticalDivider
 import com.vurgun.skyfit.ui.core.components.image.NetworkImage
 import com.vurgun.skyfit.ui.core.styling.SkyFitColor
@@ -29,32 +28,32 @@ import skyfit.ui.core.generated.resources.ic_dna
 import skyfit.ui.core.generated.resources.ic_height
 import skyfit.ui.core.generated.resources.ic_overweight
 
-@Composable
-fun MobileProfileHeader(
-    viewData: UserProfileHeaderViewData
-) {
-    BoxWithConstraints {
-        val width = maxWidth
-        val imageHeight = width * 9 / 16
-        val contentTopPadding = imageHeight * 3 / 10
-
-        if (!viewData.showInfoMini) {
-            MobileProfileBackgroundImage(viewData.profileImageUrl, imageHeight)
-        }
-
-        Column(
-            Modifier
-                .padding(top = if (viewData.showInfoMini) 16.dp else contentTopPadding)
-                .fillMaxWidth()
-        ) {
-            if (viewData.showInfoMini) {
-                MobileProfileHeaderMini(viewData)
-            } else {
-                MobileProfileHeaderMini(viewData)
-            }
-        }
-    }
-}
+//@Composable
+//fun MobileProfileHeader(
+//    viewData: UserProfileHeaderViewData
+//) {
+//    BoxWithConstraints {
+//        val width = maxWidth
+//        val imageHeight = width * 9 / 16
+//        val contentTopPadding = imageHeight * 3 / 10
+//
+//        if (!viewData.showInfoMini) {
+//            MobileProfileBackgroundImage(viewData.profileImageUrl, imageHeight)
+//        }
+//
+//        Column(
+//            Modifier
+//                .padding(top = if (viewData.showInfoMini) 16.dp else contentTopPadding)
+//                .fillMaxWidth()
+//        ) {
+//            if (viewData.showInfoMini) {
+//                MobileProfileHeaderMini(viewData)
+//            } else {
+//                MobileProfileHeaderMini(viewData)
+//            }
+//        }
+//    }
+//}
 
 @Composable
 fun MobileProfileBackgroundImage(imageUrl: String?, height: Dp) {

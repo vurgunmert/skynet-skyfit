@@ -14,6 +14,7 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
@@ -46,9 +47,10 @@ private fun CalendarMonthDaySelectorItem(
 ) {
     Box(
         modifier = Modifier
-            .size(size)
-            .background(state.backgroundColor, shape = CircleShape)
-            .clickable(enabled = onClick != null) { onClick?.invoke() },
+            .clip(CircleShape)
+            .clickable(enabled = onClick != null) { onClick?.invoke() }
+            .background(state.backgroundColor)
+            .size(size),
         contentAlignment = Alignment.Center
     ) {
         Text(

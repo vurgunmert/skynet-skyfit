@@ -1,4 +1,4 @@
-package com.vurgun.skyfit.feature.profile.facility.viewmodel
+package com.vurgun.skyfit.feature.profile.facility.visitor
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -11,6 +11,10 @@ import com.vurgun.skyfit.data.user.domain.FacilityProfile
 import com.vurgun.skyfit.data.user.repository.ProfileRepository
 import com.vurgun.skyfit.data.user.repository.UserManager
 import com.vurgun.skyfit.feature.profile.components.viewdata.TrainerProfileCardItemViewData
+import com.vurgun.skyfit.feature.profile.facility.owner.FacilityProfileOwnerUiState
+import com.vurgun.skyfit.feature.profile.user.owner.UserProfileOwnerAction
+import com.vurgun.skyfit.feature.profile.user.owner.UserProfileOwnerUiState
+import com.vurgun.skyfit.feature.social.viewdata.SocialPostItemViewData
 import kotlinx.coroutines.async
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -26,18 +30,22 @@ sealed interface FacilityProfileVisitorUiState {
     data class Content(
         val profile: FacilityProfile,
         val lessons: List<LessonSessionItemViewData> = emptyList(),
-        val trainers: List<TrainerProfileCardItemViewData> = emptyList()
+        val trainers: List<TrainerProfileCardItemViewData> = emptyList(),
+        val posts: List<SocialPostItemViewData> = emptyList(),
+        val postsVisible: Boolean = false,
+        val isFollowedByVisitor: Boolean = false
     ) : FacilityProfileVisitorUiState
 }
 
 sealed interface FacilityProfileVisitorAction {
     data object Exit : FacilityProfileVisitorAction
-    data object FollowFacility : FacilityProfileVisitorAction
-    data object UnfollowFacility : FacilityProfileVisitorAction
+    data object Follow : FacilityProfileVisitorAction
+    data object Unfollow : FacilityProfileVisitorAction
     data class ChangeDate(val date: LocalDate) : FacilityProfileVisitorAction
     data class NavigateToTrainer(val trainerId: Int) : FacilityProfileVisitorAction
     data object NavigateToCalendar : FacilityProfileVisitorAction
     data object NavigateToChat : FacilityProfileVisitorAction
+    data class TogglePostVisibility(val visible: Boolean) : FacilityProfileVisitorAction
 }
 
 sealed interface FacilityProfileVisitorEffect {
@@ -65,22 +73,16 @@ class FacilityProfileVisitorViewModel(
 
     private var currentFacilityId: Int? = null
 
-
     fun onAction(action: FacilityProfileVisitorAction) {
         when (action) {
-            is FacilityProfileVisitorAction.FollowFacility -> followFacility()
-            is FacilityProfileVisitorAction.UnfollowFacility -> unfollowFacility()
+            is FacilityProfileVisitorAction.Follow -> followFacility()
+            is FacilityProfileVisitorAction.Unfollow -> unfollowFacility()
             is FacilityProfileVisitorAction.ChangeDate -> updateLessons(action.date)
             is FacilityProfileVisitorAction.NavigateToTrainer -> emitEffect(FacilityProfileVisitorEffect.NavigateToTrainer(action.trainerId))
             is FacilityProfileVisitorAction.Exit -> emitEffect(FacilityProfileVisitorEffect.NavigateBack)
             is FacilityProfileVisitorAction.NavigateToCalendar -> emitEffect(FacilityProfileVisitorEffect.NavigateToCalendar)
             is FacilityProfileVisitorAction.NavigateToChat -> emitEffect(FacilityProfileVisitorEffect.NavigateToChat)
-        }
-    }
-
-    private fun emitEffect(effect: FacilityProfileVisitorEffect) {
-        viewModelScope.launch {
-            _effect.emit(effect)
+            is FacilityProfileVisitorAction.TogglePostVisibility -> togglePostVisibility(action.visible)
         }
     }
 
@@ -122,17 +124,32 @@ class FacilityProfileVisitorViewModel(
         }
     }
 
-    private suspend fun fetchLessons(facilityId: Int, date: LocalDate = LocalDate.now()): List<LessonSessionItemViewData> {
-        return courseRepository.getLessonsByFacility(facilityId, date, date)
-            .map { it.map(lessonSessionItemViewDataMapper::map) }
-            .getOrDefault(emptyList())
-    }
-
     fun followFacility() {
         // TODO: ("Not yet implemented")
     }
 
     fun unfollowFacility() {
         // TODO: ("Not yet implemented")
+    }
+
+    private fun togglePostVisibility(visible: Boolean) {
+        viewModelScope.launch {
+            val currentState = _uiState.value
+            if (currentState is FacilityProfileVisitorUiState.Content) {
+                _uiState.value = currentState.copy(postsVisible = visible)
+            }
+        }
+    }
+
+    private suspend fun fetchLessons(facilityId: Int, date: LocalDate = LocalDate.now()): List<LessonSessionItemViewData> {
+        return courseRepository.getLessonsByFacility(facilityId, date, date)
+            .map { it.map(lessonSessionItemViewDataMapper::map) }
+            .getOrDefault(emptyList())
+    }
+
+    private fun emitEffect(effect: FacilityProfileVisitorEffect) {
+        viewModelScope.launch {
+            _effect.emit(effect)
+        }
     }
 }

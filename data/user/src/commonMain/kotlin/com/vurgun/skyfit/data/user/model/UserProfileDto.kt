@@ -17,4 +17,6 @@ data class UserProfileDto(
     val name: String,
     val surname: String,
     val username: String,
+    val gymId: Int?,
+    val gymJoinDate: String?
 )

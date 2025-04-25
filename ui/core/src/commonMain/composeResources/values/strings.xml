@@ -86,6 +86,10 @@
     <string name="trainers_label">Eğitmenler</string>
     <string name="branches_label">Şubeler</string>
     <string name="lessons_label">Dersler</string>
+    <string name="follower_label">Takipçi</string>
+    <string name="private_lessons_label">Özel Dersler</string>
+    <string name="posts_label">Paylaşımlar</string>
+    <string name="specialities_label">Uzmanlık Alanları</string>
 
     <!-- 🔷 Lesson Related -->
     <string name="lesson_status_completed">Tamamlandı</string>
@@ -149,6 +153,7 @@
     <string name="lesson_cost_label">Ücret</string>
     <string name="lesson_create_private_action">Özel Ders Oluştur</string>
     <string name="lesson_edit_cancel_message">Geri dönerseniz değişikler kaydedilmeyecek</string>
+    <string name="lesson_select_label">Ders Seç</string>
 
     <string name="recurrence_none_label">Tekrar yok</string>
     <string name="recurrence_daily_label">Her gün</string>

@@ -1,4 +1,4 @@
-package com.vurgun.skyfit.feature.profile.user
+package com.vurgun.skyfit.feature.profile.user.throphies
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column

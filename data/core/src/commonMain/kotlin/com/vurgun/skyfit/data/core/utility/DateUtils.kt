@@ -27,8 +27,9 @@ fun generateDaysInMonth(month: LocalDate): List<LocalDate> {
         LocalDate(month.year, month.monthNumber, it)
     }
 
+    val maxDays = 42
     val nextMonth = nextMonth(month)
-    val trailingDays = (1..42 - leadingDays.size - currentMonthDays.size).map {
+    val trailingDays = (1..maxDays - leadingDays.size - currentMonthDays.size).map {
         LocalDate(nextMonth.year, nextMonth.monthNumber, it)
     }
 
@@ -149,4 +150,8 @@ fun LocalDateTime.formatToServerTime(): String {
     val minute = this.minute.toString().padStart(2, '0')
     val second = this.second.toString().padStart(2, '0')
     return "$hour:$minute:$second"
+}
+
+fun String.parseServerToDateOnly(): LocalDate {
+    return LocalDate.parse(this.substringBefore("T"))
 }

@@ -1,4 +1,4 @@
-package com.vurgun.skyfit.feature.profile.facility
+package com.vurgun.skyfit.feature.profile.facility.gallery
 
 import androidx.compose.runtime.Composable
 import com.vurgun.skyfit.ui.core.components.special.SkyFitMobileScaffold
