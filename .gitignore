@@ -143,3 +143,12 @@ androidApp/google-services.json
 iosApp/GoogleService-Info.plist
 firebase-debug.log
 firebase-debug.*.log
+
+# Recursively ignore all build directories in submodules
+**/build/
+**/.gradle/
+**/intermediates/
+**/.transforms/
+**/tmp/
+**/outputs/
+

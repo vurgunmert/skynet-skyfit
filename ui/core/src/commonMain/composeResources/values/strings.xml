@@ -90,6 +90,7 @@
     <string name="private_lessons_label">Özel Dersler</string>
     <string name="posts_label">Paylaşımlar</string>
     <string name="specialities_label">Uzmanlık Alanları</string>
+    <string name="videos_label">Videolar</string>
 
     <!-- 🔷 Lesson Related -->
     <string name="lesson_status_completed">Tamamlandı</string>
@@ -218,6 +219,7 @@
     <string name="upcoming_appointments_label">Yaklaşan Randevular</string>
     <string name="show_all_action">Hepsini Görüntüle</string>
     <string name="our_trainers_label">Antrenörlerimiz</string>
+    <string name="our_coaches_label">Eğitmenlerimiz</string>
 
 </resources>
 

@@ -31,7 +31,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.unit.dp
 import com.vurgun.skyfit.feature.profile.components.FacilityProfileCardItemBox
-import com.vurgun.skyfit.feature.profile.components.TrainerProfileCardItemBox
+import com.vurgun.skyfit.feature.profile.components.VerticalTrainerProfileCard
 import com.vurgun.skyfit.feature.profile.components.viewdata.FacilityProfileCardItemViewData
 import com.vurgun.skyfit.feature.profile.components.viewdata.TrainerProfileCardItemViewData
 import com.vurgun.skyfit.ui.core.components.image.NetworkImage
@@ -154,11 +154,11 @@ private fun MobileDashboardExploreScreenFeaturedTrainersComponent(
             horizontalArrangement = Arrangement.spacedBy(16.dp)
         ) {
             items(trainers) { trainer ->
-                TrainerProfileCardItemBox(
+                VerticalTrainerProfileCard(
                     imageUrl = trainer.imageUrl,
                     name = trainer.name,
                     followerCount = trainer.followerCount,
-                    classCount = trainer.classCount,
+                    lessonCount = trainer.classCount,
                     videoCount = trainer.videoCount,
                     rating = trainer.rating,
                     onClick = onClick

@@ -9,4 +9,7 @@ data class GetUserProfileRequest(val nmId: Int)
 data class GetTrainerProfileRequest(val trainerId: Int)
 
 @Serializable
+data class GetFacilityTrainerProfilesRequest(val gymId: Int)
+
+@Serializable
 data class GetFacilityProfileRequest(val gymId: Int)

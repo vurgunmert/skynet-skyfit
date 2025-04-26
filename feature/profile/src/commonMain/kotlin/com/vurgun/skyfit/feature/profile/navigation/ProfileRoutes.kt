@@ -5,8 +5,8 @@ import com.vurgun.skyfit.data.core.domain.model.UserRole
 import com.vurgun.skyfit.feature.profile.facility.owner.MobileFacilityProfileOwnerScreen
 import com.vurgun.skyfit.feature.profile.trainer.owner.MobileTrainerProfileOwnerScreen
 import com.vurgun.skyfit.feature.profile.user.owner.MobileUserProfileOwnerScreen
-import com.vurgun.skyfit.feature.settings.component.rbac.RequireRole
 import com.vurgun.skyfit.ui.core.screen.UnauthorizedAccessScreen
+import com.vurgun.skyfit.ui.core.utils.RequireRole
 import kotlinx.serialization.Serializable
 
 @Composable

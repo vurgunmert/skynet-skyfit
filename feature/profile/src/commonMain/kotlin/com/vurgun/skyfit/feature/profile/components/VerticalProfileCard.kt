@@ -27,13 +27,18 @@ import com.vurgun.skyfit.ui.core.components.image.NetworkImage
 import com.vurgun.skyfit.ui.core.components.special.RatingStarComponent
 import com.vurgun.skyfit.ui.core.styling.SkyFitColor
 import com.vurgun.skyfit.ui.core.styling.SkyFitTypography
+import org.jetbrains.compose.resources.stringResource
+import skyfit.ui.core.generated.resources.Res
+import skyfit.ui.core.generated.resources.follower_label
+import skyfit.ui.core.generated.resources.lessons_label
+import skyfit.ui.core.generated.resources.videos_label
 
 @Composable
-fun TrainerProfileCardItemBox(
-    imageUrl: String,
+fun VerticalTrainerProfileCard(
+    imageUrl: String?,
     name: String,
     followerCount: Int,
-    classCount: Int,
+    lessonCount: Int,
     videoCount: Int,
     rating: Float?,
     onClick: () -> Unit
@@ -42,9 +47,9 @@ fun TrainerProfileCardItemBox(
         imageUrl = imageUrl,
         name = name,
         details = listOf(
-            Pair("$followerCount", "Takipçi"),
-            Pair("$classCount", "Dersler"),
-            Pair("$videoCount", "Videolar")
+            Pair("$followerCount", stringResource(Res.string.follower_label)),
+            Pair("$lessonCount", stringResource(Res.string.lessons_label)),
+            Pair("$videoCount", stringResource(Res.string.videos_label))
         ),
         rating = rating ?: 0f,
         onClick = onClick
@@ -75,7 +80,7 @@ fun FacilityProfileCardItemBox(
 
 @Composable
 private fun ProfileCardItemBox(
-    imageUrl: String,
+    imageUrl: String?,
     name: String,
     details: List<Pair<String, String>>,
     rating: Float,
@@ -95,17 +100,14 @@ private fun ProfileCardItemBox(
                 .clip(RoundedCornerShape(16.dp)),
         )
 
-        // Rating Star
         RatingStarComponent(rating, Modifier.align(Alignment.TopEnd).padding(8.dp))
 
-        // Details Box
         Box(
             Modifier
                 .align(Alignment.BottomStart)
                 .fillMaxWidth()
                 .height(96.dp)
         ) {
-            // Background Blur
             Box(
                 modifier = Modifier
                     .fillMaxSize()
@@ -113,7 +115,6 @@ private fun ProfileCardItemBox(
                     .blur(16.dp, edgeTreatment = BlurredEdgeTreatment.Unbounded)
             )
 
-            // Content
             Column(
                 Modifier
                     .align(Alignment.BottomCenter)

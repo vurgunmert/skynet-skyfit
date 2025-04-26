@@ -48,11 +48,11 @@ fun VerticalTrainerProfileCardsRow(
         contentPadding = PaddingValues(start = contentPaddingStart)
     ) {
         items(trainers) { trainer ->
-            TrainerProfileCardItemBox(
+            VerticalTrainerProfileCard(
                 imageUrl = trainer.imageUrl,
                 name = trainer.name,
                 followerCount = trainer.followerCount,
-                classCount = trainer.classCount,
+                lessonCount = trainer.classCount,
                 videoCount = trainer.videoCount,
                 rating = trainer.rating,
                 onClick = onClick

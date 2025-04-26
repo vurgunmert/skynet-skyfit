@@ -7,7 +7,6 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.navigation.NavGraphBuilder
-import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
@@ -15,7 +14,7 @@ import com.vurgun.skyfit.data.user.repository.UserManager
 import com.vurgun.skyfit.data.core.domain.model.UserRole
 import com.vurgun.skyfit.feature.settings.account.MobileSettingsManageAccountsScreen
 import com.vurgun.skyfit.feature.settings.changepassword.SettingsChangePasswordScreen
-import com.vurgun.skyfit.feature.settings.component.rbac.RequireRole
+import com.vurgun.skyfit.ui.core.utils.RequireRole
 import com.vurgun.skyfit.feature.settings.facility.MobileFacilitySettingsHomeScreen
 import com.vurgun.skyfit.feature.settings.facility.branch.MobileFacilitySettingsManageBranchesScreen
 import com.vurgun.skyfit.feature.settings.facility.member.MobileFacilityAddMemberScreen

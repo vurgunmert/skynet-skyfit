@@ -35,7 +35,6 @@ sealed interface TrainerProfileVisitorAction {
     data object Exit : TrainerProfileVisitorAction
     data object Follow : TrainerProfileVisitorAction
     data object Unfollow : TrainerProfileVisitorAction
-    data class ChangeDate(val date: LocalDate) : TrainerProfileVisitorAction
     data object NavigateToSchedule : TrainerProfileVisitorAction
     data object NavigateToChat : TrainerProfileVisitorAction
 }
@@ -66,7 +65,6 @@ class TrainerProfileVisitorViewModel(
 
     fun onAction(action: TrainerProfileVisitorAction) {
         when (action) {
-            is TrainerProfileVisitorAction.ChangeDate -> updateLessons(action.date)
             TrainerProfileVisitorAction.Exit -> emitEffect(TrainerProfileVisitorEffect.NavigateBack)
             TrainerProfileVisitorAction.NavigateToSchedule -> emitEffect(TrainerProfileVisitorEffect.NavigateToSchedule)
             TrainerProfileVisitorAction.NavigateToChat -> emitEffect(TrainerProfileVisitorEffect.NavigateToChat)
@@ -97,21 +95,6 @@ class TrainerProfileVisitorViewModel(
         }
     }
 
-    fun updateLessons(date: LocalDate = LocalDate.now()) {
-        val id = currentTrainerId ?: return
-        viewModelScope.launch {
-            val currentState = _uiState.value
-            if (currentState is TrainerProfileVisitorUiState.Content) {
-                try {
-                    val newLessons = fetchLessons(id, date)
-                    _uiState.value = currentState.copy(lessons = newLessons)
-                } catch (e: Exception) {
-                    _uiState.value = TrainerProfileVisitorUiState.Error("Failed to update lessons: ${e.message}")
-                }
-            }
-        }
-    }
-
     fun followTrainer() {
         // TODO: ("Not yet implemented")
     }
@@ -120,8 +103,8 @@ class TrainerProfileVisitorViewModel(
         // TODO: ("Not yet implemented")
     }
 
-    private suspend fun fetchLessons(facilityId: Int, date: LocalDate = LocalDate.now()): List<LessonSessionItemViewData> {
-        return courseRepository.getLessonsByTrainer(facilityId, date, date)
+    private suspend fun fetchLessons(trainerId: Int): List<LessonSessionItemViewData> {
+        return courseRepository.getUpcomingLessonsByTrainer(trainerId)
             .map { it.map(lessonMapper::map) }
             .getOrDefault(emptyList())
     }

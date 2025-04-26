@@ -52,6 +52,7 @@ import com.vurgun.skyfit.ui.core.components.button.SkyFitSecondaryIconButton
 import com.vurgun.skyfit.ui.core.components.divider.VerticalDivider
 import com.vurgun.skyfit.ui.core.components.event.AvailableActivityCalendarEventItem
 import com.vurgun.skyfit.ui.core.components.event.LessonSessionColumn
+import com.vurgun.skyfit.ui.core.components.event.NoLessonOnSelectedDaysEventItem
 import com.vurgun.skyfit.ui.core.components.loader.FullScreenLoader
 import com.vurgun.skyfit.ui.core.components.special.ButtonSize
 import com.vurgun.skyfit.ui.core.components.special.ButtonState

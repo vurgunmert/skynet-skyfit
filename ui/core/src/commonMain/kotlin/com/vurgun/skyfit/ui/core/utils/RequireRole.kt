@@ -1,4 +1,4 @@
-package com.vurgun.skyfit.feature.settings.component.rbac
+package com.vurgun.skyfit.ui.core.utils
 
 import androidx.compose.runtime.Composable
 import com.vurgun.skyfit.data.core.domain.model.UserRole

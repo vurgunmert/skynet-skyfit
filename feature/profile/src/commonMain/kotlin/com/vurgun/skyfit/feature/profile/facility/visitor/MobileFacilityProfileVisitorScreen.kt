@@ -9,6 +9,8 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.runtime.Composable
@@ -23,15 +25,21 @@ import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.vurgun.skyfit.data.user.domain.FacilityTrainerProfile
 import com.vurgun.skyfit.feature.calendar.components.component.calendar.weekly.CalendarWeekDaySelectorViewModel
 import com.vurgun.skyfit.feature.calendar.components.component.calendar.weekly.rememberWeekDaySelectorState
 import com.vurgun.skyfit.feature.profile.components.MobileProfileBackgroundImage
+import com.vurgun.skyfit.feature.profile.components.VerticalTrainerProfileCard
 import com.vurgun.skyfit.feature.profile.facility.owner.FacilityProfileComponent
 import com.vurgun.skyfit.ui.core.components.loader.FullScreenLoader
 import com.vurgun.skyfit.ui.core.components.special.SkyFitMobileScaffold
+import com.vurgun.skyfit.ui.core.components.text.BodyLargeSemiboldText
 import com.vurgun.skyfit.ui.core.screen.ErrorScreen
 import com.vurgun.skyfit.ui.core.styling.SkyFitColor
+import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.viewmodel.koinViewModel
+import skyfit.ui.core.generated.resources.Res
+import skyfit.ui.core.generated.resources.our_coaches_label
 
 @Composable
 fun MobileFacilityProfileVisitorScreen(
@@ -76,7 +84,7 @@ fun MobileFacilityProfileVisitorScreen(
 
 @Composable
 private fun FacilityProfileVisitorContent(
-    uiState: FacilityProfileVisitorUiState.Content,
+    content: FacilityProfileVisitorUiState.Content,
     onAction: (FacilityProfileVisitorAction) -> Unit
 ) {
     val calendarViewModel: CalendarWeekDaySelectorViewModel = viewModel()
@@ -109,7 +117,7 @@ private fun FacilityProfileVisitorContent(
             val imageHeight = width * 9 / 16
 
             MobileProfileBackgroundImage(
-                imageUrl = uiState.profile.backgroundImageUrl,
+                imageUrl = content.profile.backgroundImageUrl,
                 Modifier
                     .align(Alignment.TopStart)
                     .fillMaxWidth()
@@ -130,8 +138,8 @@ private fun FacilityProfileVisitorContent(
                 Spacer(Modifier.height(contentTopPadding))
 
                 FacilityProfileComponent.MobileFacilityProfileVisitor_HeaderCard(
-                    profile = uiState.profile,
-                    isFollowedByVisitor = uiState.isFollowedByVisitor,
+                    profile = content.profile,
+                    isFollowedByVisitor = content.isFollowedByVisitor,
                     onClickFollow = { onAction(FacilityProfileVisitorAction.Follow) },
                     onClickUnFollow = { onAction(FacilityProfileVisitorAction.Unfollow) },
                     onClickBookingCalendar = { onAction(FacilityProfileVisitorAction.NavigateToCalendar) },
@@ -141,10 +149,19 @@ private fun FacilityProfileVisitorContent(
                 FacilityProfileComponent.MobileFacilityProfileVisitor_Lessons(
                     calendarUiState = calendarUiState,
                     calendarViewModel = calendarViewModel,
-                    lessons = uiState.lessons,
+                    lessons = content.lessons,
                     goToVisitCalendar = { onAction(FacilityProfileVisitorAction.NavigateToCalendar) },
                     modifier = Modifier
                 )
+
+                if (content.trainers.isNotEmpty()) {
+                    FacilityProfileVisitor_Trainers(
+                        trainers = content.trainers,
+                        onClick = { trainerId ->
+                            onAction(FacilityProfileVisitorAction.NavigateToTrainer(trainerId))
+                        }
+                    )
+                }
 
                 Spacer(Modifier.height(124.dp))
             }
@@ -152,6 +169,36 @@ private fun FacilityProfileVisitorContent(
             FacilityProfileComponent.MobileFacilityProfileVisitor_TopBar(onClickBack = {
                 onAction(FacilityProfileVisitorAction.Exit)
             })
+        }
+    }
+}
+
+@Composable
+private fun FacilityProfileVisitor_Trainers(
+    trainers: List<FacilityTrainerProfile>,
+    onClick: (trainerId: Int) -> Unit
+) {
+    Column(
+        modifier = Modifier.fillMaxWidth(),
+        verticalArrangement = Arrangement.spacedBy(12.dp)
+    ) {
+        BodyLargeSemiboldText(text = stringResource(Res.string.our_coaches_label))
+
+        LazyRow(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.spacedBy(16.dp)
+        ) {
+            items(trainers) { trainer ->
+                VerticalTrainerProfileCard(
+                    imageUrl = trainer.profileImageUrl,
+                    name = trainer.fullName,
+                    followerCount = trainer.followerCount,
+                    lessonCount = trainer.lessonTypeCount,
+                    videoCount = trainer.videoCount,
+                    rating = trainer.point,
+                    onClick = { onClick(trainer.trainerId) }
+                )
+            }
         }
     }
 }

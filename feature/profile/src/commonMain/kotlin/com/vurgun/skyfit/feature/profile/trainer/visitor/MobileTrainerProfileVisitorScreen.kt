@@ -118,13 +118,6 @@ private fun TrainerProfileVisitorContent(
     content: TrainerProfileVisitorUiState.Content,
     onAction: (TrainerProfileVisitorAction) -> Unit,
 ) {
-    val calendarViewModel: CalendarWeekDaySelectorViewModel = viewModel()
-    val calendarUiState = rememberWeekDaySelectorState(calendarViewModel)
-
-    LaunchedEffect(calendarUiState.selectedDate) {
-        onAction(TrainerProfileVisitorAction.ChangeDate(calendarUiState.selectedDate))
-    }
-
     val scrollState = rememberScrollState()
 
     var backgroundAlpha by remember { mutableStateOf(1f) }
@@ -137,7 +130,6 @@ private fun TrainerProfileVisitorContent(
             else -> (1f - (scrollY / transitionThreshold))
         }
     }
-
 
     SkyFitMobileScaffold {
         BoxWithConstraints(
@@ -176,15 +168,13 @@ private fun TrainerProfileVisitorContent(
                     onUnfollow = { onAction(TrainerProfileVisitorAction.Unfollow) },
                     onSchedule = { onAction(TrainerProfileVisitorAction.NavigateToSchedule) }
                 )
-            }
 
-            TrainerProfileVisitorComponent.MobileTrainerProfileVisitor_Lessons(
-                calendarUiState = calendarUiState,
-                calendarViewModel = calendarViewModel,
-                lessons = content.lessons,
-                goToVisitCalendar = { onAction(TrainerProfileVisitorAction.NavigateToSchedule) },
-                modifier = Modifier
-            )
+                TrainerProfileVisitorComponent.MobileTrainerProfileVisitor_Lessons(
+                    lessons = content.lessons,
+                    goToVisitCalendar = { onAction(TrainerProfileVisitorAction.NavigateToSchedule) },
+                    modifier = Modifier
+                )
+            }
 
             TrainerProfileVisitorComponent.MobileTrainerProfileVisitor_TopBar(onClickBack = {
                 onAction(TrainerProfileVisitorAction.Exit)
@@ -215,7 +205,6 @@ private object TrainerProfileVisitorComponent {
             Box(
                 modifier = Modifier
                     .padding(top = 70.dp)
-                    .padding(horizontal = 16.dp)
                     .width(398.dp)
                     .background(SkyFitColor.background.fillTransparent, RoundedCornerShape(16.dp))
             ) {
@@ -246,7 +235,7 @@ private object TrainerProfileVisitorComponent {
 
                     Row(
                         modifier = Modifier.fillMaxWidth(),
-                        horizontalArrangement = Arrangement.SpaceAround,
+                        horizontalArrangement = Arrangement.SpaceEvenly,
                         verticalAlignment = Alignment.CenterVertically
                     ) {
                         VerticalProfileStatisticItem(
@@ -360,12 +349,12 @@ private object TrainerProfileVisitorComponent {
 
     @Composable
     fun MobileTrainerProfileVisitor_Lessons(
-        calendarUiState: CalendarWeekDaySelectorState,
-        calendarViewModel: CalendarWeekDaySelectorViewModel,
         lessons: List<LessonSessionItemViewData>,
         goToVisitCalendar: () -> Unit,
         modifier: Modifier = Modifier,
     ) {
+        if (lessons.isEmpty()) return
+
         Column(
             modifier.fillMaxWidth()
                 .clip(RoundedCornerShape(20.dp))
@@ -398,13 +387,6 @@ private object TrainerProfileVisitorComponent {
                     modifier = Modifier.clickable(onClick = goToVisitCalendar)
                 )
             }
-
-            CalendarWeekDaySelector(
-                daysOfWeek = calendarUiState.weekDays,
-                onDaySelected = calendarViewModel::setSelectedDate,
-                onPreviousWeek = calendarViewModel::loadPreviousWeek,
-                onNextWeek = calendarViewModel::loadNextWeek
-            )
 
             if (lessons.isNotEmpty()) {
                 Column(

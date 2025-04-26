@@ -34,7 +34,7 @@ kotlin {
             implementation(projects.data.core)
             implementation(projects.data.user)
             implementation(projects.data.courses)
-            implementation(projects.feature.settings)
+            implementation(projects.data.settings)
             implementation(projects.feature.calendar)
             implementation(projects.feature.social)
 

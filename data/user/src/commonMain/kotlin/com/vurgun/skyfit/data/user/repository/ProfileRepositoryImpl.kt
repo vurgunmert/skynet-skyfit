@@ -5,10 +5,15 @@ import com.vurgun.skyfit.data.network.DispatcherProvider
 import com.vurgun.skyfit.data.network.utils.ioResult
 import com.vurgun.skyfit.data.network.utils.mapOrThrow
 import com.vurgun.skyfit.data.user.domain.FacilityProfile
+import com.vurgun.skyfit.data.user.domain.FacilityTrainerProfile
 import com.vurgun.skyfit.data.user.domain.TrainerProfile
 import com.vurgun.skyfit.data.user.domain.UserProfile
-import com.vurgun.skyfit.data.user.mappers.ProfileMapper.toDomain
+import com.vurgun.skyfit.data.user.mappers.ProfileMapper.toDomainFacilityProfile
+import com.vurgun.skyfit.data.user.mappers.ProfileMapper.toFacilityTrainerProfiles
+import com.vurgun.skyfit.data.user.mappers.ProfileMapper.toDomainTrainerProfile
+import com.vurgun.skyfit.data.user.mappers.ProfileMapper.toDomainUserProfile
 import com.vurgun.skyfit.data.user.model.GetFacilityProfileRequest
+import com.vurgun.skyfit.data.user.model.GetFacilityTrainerProfilesRequest
 import com.vurgun.skyfit.data.user.model.GetTrainerProfileRequest
 import com.vurgun.skyfit.data.user.model.GetUserProfileRequest
 import com.vurgun.skyfit.data.user.service.ProfileApiService
@@ -22,18 +27,24 @@ class ProfileRepositoryImpl(
     override suspend fun getUserProfile(normalUserId: Int): Result<UserProfile> = ioResult(dispatchers) {
         val token = tokenManager.getTokenOrThrow()
         val request = GetUserProfileRequest(normalUserId)
-        apiService.getUserProfile(request, token).mapOrThrow { it.toDomain() }
+        apiService.getUserProfile(request, token).mapOrThrow { it.toDomainUserProfile() }
     }
 
     override suspend fun getTrainerProfile(trainerId: Int): Result<TrainerProfile> = ioResult(dispatchers) {
         val token = tokenManager.getTokenOrThrow()
         val request = GetTrainerProfileRequest(trainerId)
-        apiService.getTrainerProfile(request, token).mapOrThrow { it.toDomain() }
+        apiService.getTrainerProfile(request, token).mapOrThrow { it.toDomainTrainerProfile() }
+    }
+
+    override suspend fun getFacilityTrainerProfiles(facilityId: Int): Result<List<FacilityTrainerProfile>> = ioResult(dispatchers) {
+        val token = tokenManager.getTokenOrThrow()
+        val request = GetFacilityTrainerProfilesRequest(facilityId)
+        apiService.getFacilityTrainerProfiles(request, token).mapOrThrow { it.toFacilityTrainerProfiles() }
     }
 
     override suspend fun getFacilityProfile(facilityId: Int): Result<FacilityProfile> = ioResult(dispatchers) {
         val token = tokenManager.getTokenOrThrow()
         val request = GetFacilityProfileRequest(facilityId)
-        apiService.getFacilityProfile(request, token).mapOrThrow { it.toDomain() }
+        apiService.getFacilityProfile(request, token).mapOrThrow { it.toDomainFacilityProfile() }
     }
 }

@@ -8,12 +8,9 @@ import com.vurgun.skyfit.data.courses.domain.repository.CourseRepository
 import com.vurgun.skyfit.data.courses.mapper.LessonSessionItemViewDataMapper
 import com.vurgun.skyfit.data.courses.model.LessonSessionItemViewData
 import com.vurgun.skyfit.data.user.domain.FacilityProfile
+import com.vurgun.skyfit.data.user.domain.FacilityTrainerProfile
 import com.vurgun.skyfit.data.user.repository.ProfileRepository
 import com.vurgun.skyfit.data.user.repository.UserManager
-import com.vurgun.skyfit.feature.profile.components.viewdata.TrainerProfileCardItemViewData
-import com.vurgun.skyfit.feature.profile.facility.owner.FacilityProfileOwnerUiState
-import com.vurgun.skyfit.feature.profile.user.owner.UserProfileOwnerAction
-import com.vurgun.skyfit.feature.profile.user.owner.UserProfileOwnerUiState
 import com.vurgun.skyfit.feature.social.viewdata.SocialPostItemViewData
 import kotlinx.coroutines.async
 import kotlinx.coroutines.flow.MutableSharedFlow
@@ -30,7 +27,7 @@ sealed interface FacilityProfileVisitorUiState {
     data class Content(
         val profile: FacilityProfile,
         val lessons: List<LessonSessionItemViewData> = emptyList(),
-        val trainers: List<TrainerProfileCardItemViewData> = emptyList(),
+        val trainers: List<FacilityTrainerProfile> = emptyList(),
         val posts: List<SocialPostItemViewData> = emptyList(),
         val postsVisible: Boolean = false,
         val isFollowedByVisitor: Boolean = false
@@ -93,15 +90,13 @@ class FacilityProfileVisitorViewModel(
 
             val profileDeferred = async { profileRepository.getFacilityProfile(facilityId).getOrThrow() }
             val lessonsDeferred = async { fetchLessons(facilityId) }
+            val trainersDeferred = async { fetchTrainers(facilityId) }
 
             try {
-                val profile = profileDeferred.await()
-                val lessons = lessonsDeferred.await()
-
                 _uiState.value = FacilityProfileVisitorUiState.Content(
-                    profile = profile,
-                    lessons = lessons,
-                    trainers = emptyList() // TODO: Fetch trainers if needed
+                    profile = profileDeferred.await(),
+                    lessons = lessonsDeferred.await(),
+                    trainers = trainersDeferred.await()
                 )
             } catch (e: Exception) {
                 _uiState.value = FacilityProfileVisitorUiState.Error(e.message ?: "Error loading profile")
@@ -139,6 +134,10 @@ class FacilityProfileVisitorViewModel(
                 _uiState.value = currentState.copy(postsVisible = visible)
             }
         }
+    }
+
+    private suspend fun fetchTrainers(facilityId: Int): List<FacilityTrainerProfile> {
+        return profileRepository.getFacilityTrainerProfiles(facilityId).getOrDefault(emptyList())
     }
 
     private suspend fun fetchLessons(facilityId: Int, date: LocalDate = LocalDate.now()): List<LessonSessionItemViewData> {

@@ -75,3 +75,13 @@ fun BodyLargeMediumText(text: String, modifier: Modifier = Modifier, color: Colo
         modifier = modifier
     )
 }
+
+@Composable
+fun BodyLargeSemiboldText(text: String, modifier: Modifier = Modifier, color: Color? = null) {
+    Text(
+        text = text,
+        style = SkyFitTypography.bodyLargeSemibold,
+        color = color ?: SkyFitColor.text.default,
+        modifier = modifier
+    )
+}

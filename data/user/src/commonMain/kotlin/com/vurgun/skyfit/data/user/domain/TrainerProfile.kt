@@ -1,5 +1,8 @@
 package com.vurgun.skyfit.data.user.domain
 
+import com.vurgun.skyfit.data.core.domain.model.BodyType
+import kotlinx.datetime.LocalDate
+
 data class TrainerProfile(
     val userId: Int,
     val username: String,
@@ -14,6 +17,29 @@ data class TrainerProfile(
     val postCount: Int,
     val lessonCount: Int,
     val followerCount: Int,
+    val point: Float = 0f
+) {
+    val fullName = "$firstName $lastName"
+}
+
+data class FacilityTrainerProfile(
+    val trainerId: Int,
+    val userId: Int,
+    val firstName: String,
+    val lastName: String,
+    val bio: String,
+    val height: Int,
+    val weight: Int,
+    val birthday: LocalDate,
+    val genderName: String,
+    val bodyType: BodyType,
+    val bodyTypeName: String,
+    val profileImageUrl: String?,
+    val backgroundImageUrl: String?,
+    val lessonTypeCount: Int,
+    val followerCount: Int,
+    val videoCount: Int,
+    val point: Float,
 ) {
     val fullName = "$firstName $lastName"
 }
