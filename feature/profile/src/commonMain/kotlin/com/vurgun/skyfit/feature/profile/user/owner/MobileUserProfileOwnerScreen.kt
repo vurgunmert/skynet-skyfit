@@ -1,7 +1,6 @@
 package com.vurgun.skyfit.feature.profile.user.owner
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -47,8 +46,9 @@ import com.vurgun.skyfit.ui.core.components.event.AvailableActivityCalendarEvent
 import com.vurgun.skyfit.ui.core.components.image.NetworkImage
 import com.vurgun.skyfit.ui.core.components.loader.FullScreenLoader
 import com.vurgun.skyfit.ui.core.components.special.SkyFitMobileScaffold
+import com.vurgun.skyfit.ui.core.components.text.BodyLargeMediumText
 import com.vurgun.skyfit.ui.core.components.text.BodyMediumRegularText
-import com.vurgun.skyfit.ui.core.components.text.BodyMediumSemiboldText
+import com.vurgun.skyfit.ui.core.components.text.CardFieldIconText
 import com.vurgun.skyfit.ui.core.screen.ErrorScreen
 import com.vurgun.skyfit.ui.core.styling.SkyFitAsset
 import com.vurgun.skyfit.ui.core.styling.SkyFitColor
@@ -59,6 +59,10 @@ import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.viewmodel.koinViewModel
 import skyfit.ui.core.generated.resources.Res
 import skyfit.ui.core.generated.resources.appointments_title
+import skyfit.ui.core.generated.resources.ic_clock
+import skyfit.ui.core.generated.resources.member_since_day_zero
+import skyfit.ui.core.generated.resources.member_since_days_few
+import skyfit.ui.core.generated.resources.member_since_days_many
 import skyfit.ui.core.generated.resources.show_all_action
 
 @Composable
@@ -167,11 +171,14 @@ private object MobileUserProfileOwnerComponent {
                     if (content.postsVisible) {
                         // TODO: Posts
                     } else {
-                        content.memberFacilityProfile?.let {
-                            MobileUserProfileOwner_MemberFacilityCard(
-                                facilityProfile = it,
-                                memberDays = content.profile.memberGymJoinedAt?.daysUntil(LocalDate.now()),
-                                onClick = { onAction(UserProfileOwnerAction.NavigateToVisitFacility(it.gymId)) })
+                        content.memberFacilityProfile?.let { facility ->
+                            content.profile.memberGymJoinedAt?.let { joinedDate ->
+                                MemberFacilityCard(
+                                    profile = facility,
+                                    memberDays = joinedDate.daysUntil(LocalDate.now()),
+                                    onClick = { onAction(UserProfileOwnerAction.NavigateToVisitFacility(facility.gymId)) }
+                                )
+                            }
                         }
 
                         MobileUserProfileOwner_UpcomingAppointments(
@@ -313,23 +320,24 @@ private object MobileUserProfileOwnerComponent {
         }
     }
 
+
     @Composable
-    fun MobileUserProfileOwner_MemberFacilityCard(
-        facilityProfile: FacilityProfile,
-        memberDays: Int?,
+    fun MemberFacilityCard(
+        profile: FacilityProfile,
+        memberDays: Int,
         onClick: () -> Unit
     ) {
         Row(
             Modifier
                 .clip(RoundedCornerShape(16.dp))
                 .clickable(onClick = onClick)
+                .background(SkyFitColor.background.surfaceSecondary)
                 .fillMaxWidth()
-                .border(1.dp, SkyFitColor.border.secondaryButtonHover, RoundedCornerShape(16.dp))
                 .padding(16.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
             NetworkImage(
-                imageUrl = facilityProfile.backgroundImageUrl,
+                imageUrl = profile.backgroundImageUrl,
                 modifier = Modifier
                     .size(60.dp)
                     .clip(CircleShape)
@@ -337,15 +345,31 @@ private object MobileUserProfileOwnerComponent {
             Spacer(Modifier.width(16.dp))
 
             Column(Modifier.weight(1f)) {
-                BodyMediumRegularText(
-                    text = facilityProfile.facilityName,
-                    color = SkyFitColor.text.secondary
-                )
-                memberDays?.let { days ->
-                    BodyMediumSemiboldText(
-                        text = "$days gün önce katıldın"
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    BodyLargeMediumText(
+                        text = profile.facilityName
+                    )
+                    BodyMediumRegularText(
+                        text = " @${profile.username}",
+                        color = SkyFitColor.text.secondary
                     )
                 }
+                Spacer(Modifier.height(8.dp))
+
+                val memberText = when {
+                    memberDays == 0 -> stringResource(Res.string.member_since_day_zero)
+                    memberDays in 1..10 -> stringResource(Res.string.member_since_days_few, memberDays)
+                    else -> stringResource(Res.string.member_since_days_many, memberDays)
+                }
+
+                CardFieldIconText(
+                    text = memberText,
+                    iconRes = Res.drawable.ic_clock,
+                    modifier = Modifier.fillMaxWidth()
+                )
             }
         }
     }

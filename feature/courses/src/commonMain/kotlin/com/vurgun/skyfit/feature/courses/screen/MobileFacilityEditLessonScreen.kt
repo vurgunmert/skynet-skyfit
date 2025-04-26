@@ -53,7 +53,7 @@ import com.vurgun.skyfit.data.core.domain.model.CalendarRecurrenceType
 import com.vurgun.skyfit.ui.core.components.text.MultiLineInputText
 import com.vurgun.skyfit.ui.core.components.text.SingleLineInputText
 import com.vurgun.skyfit.ui.core.components.text.TitledMediumRegularText
-import com.vurgun.skyfit.feature.calendar.components.component.calendar.dialog.SingleDatePickerDialog
+import com.vurgun.skyfit.feature.calendar.component.dialog.SingleDatePickerDialog
 import com.vurgun.skyfit.feature.courses.component.LessonSelectCancelDurationPopupMenu
 import com.vurgun.skyfit.feature.courses.component.LessonSelectCapacityPopupMenu
 import com.vurgun.skyfit.feature.courses.component.LessonSelectRecurrenceTypePopupMenu

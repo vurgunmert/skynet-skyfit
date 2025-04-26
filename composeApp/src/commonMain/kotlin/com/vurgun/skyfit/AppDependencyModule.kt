@@ -5,7 +5,7 @@ import com.vurgun.skyfit.data.network.dataNetworkModule
 import com.vurgun.skyfit.data.user.dataUserModule
 import com.vurgun.skyfit.feature.auth.featureAuthModule
 import com.vurgun.skyfit.feature.bodyanalysis.featurePostureAnalysis
-import com.vurgun.skyfit.feature.calendar.components.featureCalendarModule
+import com.vurgun.skyfit.feature.calendar.featureCalendarModule
 import com.vurgun.skyfit.feature.courses.featureCoursesModule
 import com.vurgun.skyfit.feature.dashboard.featureDashboardModule
 import com.vurgun.skyfit.feature.home.featureHomeModule

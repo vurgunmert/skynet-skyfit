@@ -100,8 +100,8 @@ internal fun LessonDTO.toLessonDomain(): Lesson {
 
 internal fun List<LessonDTO>.toLessonDomainList(): List<Lesson> = map { it.toLessonDomain() }
 
-internal fun ScheduledLessonDetailDTO.toScheduledLessonDetail() {
-    ScheduledLessonDetail(
+internal fun ScheduledLessonDetailDTO.toScheduledLessonDetail(): ScheduledLessonDetail {
+    return ScheduledLessonDetail(
         lessonId = lessonId,
         title = typeName,
         startDate = startDate.parseServerToDateOnly(),

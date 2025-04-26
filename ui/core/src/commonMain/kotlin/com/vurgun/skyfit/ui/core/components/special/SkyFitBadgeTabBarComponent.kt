@@ -32,8 +32,7 @@ fun SkyFitBadgeTabBarComponent(
     titles: List<String>,
     selectedTabIndex: Int,
     onTabSelected: (Int) -> Unit,
-    deleteAllEnabled: Boolean = false,
-    onDeleteAll: () -> Unit = {}
+    onFilter: () -> Unit = {}
 ) {
     Row(
         modifier = Modifier
@@ -51,17 +50,15 @@ fun SkyFitBadgeTabBarComponent(
 
         Spacer(Modifier.weight(1f))
 
-        if (deleteAllEnabled) {
-            Text(
-                text = "Hepsini Sil",
-                color = SkyFitColor.text.linkInverse,
-                style = SkyFitTypography.bodyMediumRegular,
-                softWrap = true,
-                modifier = Modifier
-                    .clickable(onClick = onDeleteAll)
-                    .padding(start = 8.dp, end = 16.dp)
-            )
-        }
+        Text(
+            text = "Filtre",
+            color = SkyFitColor.text.linkInverse,
+            style = SkyFitTypography.bodyMediumRegular,
+            softWrap = true,
+            modifier = Modifier
+                .clickable(onClick = onFilter)
+                .padding(start = 8.dp, end = 16.dp)
+        )
     }
 }
 

@@ -30,7 +30,8 @@ fun ProfileOwnerRoot(
 
             UserRole.Trainer -> MobileTrainerProfileOwnerScreen(
                 goToSettings = goToSettings,
-                goToCreatePost = { }
+                goToCreatePost = { },
+                goToAppointments = goToAppointments
             )
 
             UserRole.User -> MobileUserProfileOwnerScreen(

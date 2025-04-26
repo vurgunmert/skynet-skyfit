@@ -32,6 +32,7 @@ sealed interface FacilityProfileScheduleAction {
 sealed interface FacilityProfileScheduleEffect {
     data object NavigateBack : FacilityProfileScheduleEffect
     data class ShowBookingError(val message: String) : FacilityProfileScheduleEffect
+    data class NavigateToAppointmentDetail(val lpId: Int) : FacilityProfileScheduleEffect
 }
 
 class FacilityProfileScheduleViewModel(
@@ -106,7 +107,7 @@ class FacilityProfileScheduleViewModel(
 
         viewModelScope.launch {
             try {
-                courseRepository.bookAppointment(lessonId = selectedLesson.lessonId).getOrThrow()
+                val response = courseRepository.bookAppointment(lessonId = selectedLesson.lessonId).getOrThrow()
 
                 _lessons.value = _lessons.value.map { it.copy(selected = false) }
                 _isBookingEnabled.value = false
@@ -115,8 +116,7 @@ class FacilityProfileScheduleViewModel(
                 val id = currentFacilityId ?: return@launch
                 _lessons.value = fetchLessons(id, selectedStartDate, selectedEndDate)
 
-                // TODO: effect:
-                // emitEffect(FacilityProfileScheduleEffect.ShowBookingSuccess)
+                emitEffect(FacilityProfileScheduleEffect.NavigateToAppointmentDetail(lpId = response.lpId))
 
             } catch (e: Exception) {
                 emitEffect(FacilityProfileScheduleEffect.ShowBookingError(e.message ?: "Derse kayıt hatası"))

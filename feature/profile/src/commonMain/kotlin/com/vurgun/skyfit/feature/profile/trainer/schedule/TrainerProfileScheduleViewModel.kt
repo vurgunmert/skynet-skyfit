@@ -8,6 +8,8 @@ import com.vurgun.skyfit.data.courses.mapper.LessonSessionItemViewDataMapper
 import com.vurgun.skyfit.data.courses.model.LessonSessionItemViewData
 import com.vurgun.skyfit.data.user.domain.TrainerProfile
 import com.vurgun.skyfit.data.user.repository.ProfileRepository
+import com.vurgun.skyfit.feature.profile.facility.schedule.FacilityProfileScheduleEffect
+import com.vurgun.skyfit.feature.profile.trainer.owner.TrainerProfileOwnerAction
 import kotlinx.coroutines.async
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -32,6 +34,7 @@ sealed interface TrainerProfileScheduleAction {
 sealed interface TrainerProfileScheduleEffect {
     data object NavigateBack : TrainerProfileScheduleEffect
     data class ShowBookingError(val message: String) : TrainerProfileScheduleEffect
+    data class NavigateToAppointmentDetail(val lpId: Int) : TrainerProfileScheduleEffect
 }
 
 class TrainerProfileScheduleViewModel(
@@ -107,7 +110,7 @@ class TrainerProfileScheduleViewModel(
 
         viewModelScope.launch {
             try {
-                courseRepository.bookAppointment(lessonId = selectedLesson.lessonId).getOrThrow()
+                val response = courseRepository.bookAppointment(lessonId = selectedLesson.lessonId).getOrThrow()
 
                 _lessons.value = _lessons.value.map { it.copy(selected = false) }
                 _isBookingEnabled.value = false
@@ -116,8 +119,7 @@ class TrainerProfileScheduleViewModel(
                 val id = currentTrainerId ?: return@launch
                 _lessons.value = fetchLessons(id, selectedStartDate, selectedEndDate)
 
-                // TODO effect:
-                // emitEffect(FacilityProfileScheduleEffect.ShowBookingSuccess)
+                emitEffect(TrainerProfileScheduleEffect.NavigateToAppointmentDetail(lpId = response.lpId))
 
             } catch (e: Exception) {
                 emitEffect(TrainerProfileScheduleEffect.ShowBookingError(e.message ?: "Derse kayıt hatası"))

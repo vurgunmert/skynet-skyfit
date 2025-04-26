@@ -5,9 +5,11 @@ import com.vurgun.skyfit.data.core.utility.formatToServerDate
 import com.vurgun.skyfit.data.courses.CourseApiService
 import com.vurgun.skyfit.data.courses.domain.model.Appointment
 import com.vurgun.skyfit.data.courses.domain.model.AppointmentDetail
+import com.vurgun.skyfit.data.courses.domain.model.CreateAppointmentResponse
 import com.vurgun.skyfit.data.courses.domain.model.Lesson
 import com.vurgun.skyfit.data.courses.domain.model.LessonCreationInfo
 import com.vurgun.skyfit.data.courses.domain.model.LessonUpdateInfo
+import com.vurgun.skyfit.data.courses.domain.model.ScheduledLessonDetail
 import com.vurgun.skyfit.data.courses.domain.repository.CourseRepository
 import com.vurgun.skyfit.data.courses.mapper.toAppointmentDetailDomain
 import com.vurgun.skyfit.data.courses.mapper.toCreateLessonRequest
@@ -98,7 +100,7 @@ class CourseRepositoryImpl(
         apiService.createLesson(request, token).mapOrThrow { }
     }
 
-    override suspend fun getScheduledLesson(lessonId: Int): Result<Unit> = ioResult(dispatchers) {
+    override suspend fun getScheduledLessonDetail(lessonId: Int): Result<ScheduledLessonDetail> = ioResult(dispatchers) {
         val token = tokenManager.getTokenOrThrow()
         val request = GetScheduledLessonDetailRequest(lessonId)
         apiService.getScheduledLessonDetail(request, token).mapOrThrow { it.toScheduledLessonDetail() }
@@ -146,10 +148,10 @@ class CourseRepositoryImpl(
         apiService.getUpcomingAppointmentsByUser(request, token).mapOrThrow { it.toLessonDomain() }
     }
 
-    override suspend fun bookAppointment(lessonId: Int): Result<Unit> = ioResult(dispatchers) {
+    override suspend fun bookAppointment(lessonId: Int): Result<CreateAppointmentResponse> = ioResult(dispatchers) {
         val token = tokenManager.getTokenOrThrow()
         val request = CreateUserAppointmentRequest(lessonId)
-        apiService.createUserAppointment(request, token).mapOrThrow { }
+        apiService.createUserAppointment(request, token).mapOrThrow { CreateAppointmentResponse(it.lpId) }
     }
 
     override suspend fun cancelAppointment(lessonId: Int, lpId: Int): Result<Unit> = ioResult(dispatchers) {

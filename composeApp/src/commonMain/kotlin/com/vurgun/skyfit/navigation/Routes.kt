@@ -4,7 +4,7 @@ import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
 import androidx.navigation.toRoute
-import com.vurgun.skyfit.feature.calendar.components.navigation.AppointmentRoute
+import com.vurgun.skyfit.feature.calendar.navigation.AppointmentRoute
 import com.vurgun.skyfit.feature.courses.navigation.FacilityCoursesMainRoute
 import com.vurgun.skyfit.feature.dashboard.navigation.DashboardRoute
 import com.vurgun.skyfit.feature.dashboard.screen.DashboardRoot
@@ -60,7 +60,9 @@ fun NavGraphBuilder.profileRoutes(navController: NavController) {
         MobileFacilityProfileScheduleScreen(
             facilityId = facilityId,
             goToBack = navController::navigateUp,
-            goToAppointmentDetail = { /*TODO()*/ },
+            goToAppointmentDetail = { lpId ->
+                navController.navigate(AppointmentRoute.UserAppointmentDetail(lpId))
+            },
         )
     }
 
@@ -69,7 +71,10 @@ fun NavGraphBuilder.profileRoutes(navController: NavController) {
 
         MobileTrainerProfileScheduleScreen(
             trainerId = trainerId,
-            goToBack = navController::navigateUp
+            goToBack = navController::navigateUp,
+            goToAppointmentDetail = { lpId ->
+                navController.navigate(AppointmentRoute.UserAppointmentDetail(lpId))
+            }
         )
     }
 }
@@ -86,7 +91,7 @@ fun NavGraphBuilder.dashboardRoutes(
                 }
             },
             goToAppointments = {
-                navController.navigate(AppointmentRoute.Listing)
+                navController.navigate(AppointmentRoute.AppointmentListing)
             },
             goToFacilityCourses = {
                 navController.navigate(FacilityCoursesMainRoute)

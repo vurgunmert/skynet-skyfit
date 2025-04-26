@@ -66,6 +66,7 @@ import skyfit.ui.core.generated.resources.logo_skyfit
 fun MobileTrainerProfileOwnerScreen(
     goToSettings: () -> Unit,
     goToCreatePost: () -> Unit,
+    goToAppointments: () -> Unit,
     viewModel: TrainerProfileOwnerViewModel = koinViewModel()
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
@@ -75,6 +76,7 @@ fun MobileTrainerProfileOwnerScreen(
             when (effect) {
                 TrainerProfileOwnerEffect.NavigateToCreatePost -> goToCreatePost()
                 TrainerProfileOwnerEffect.NavigateToSettings -> goToSettings()
+                TrainerProfileOwnerEffect.NavigateToAppointments -> goToAppointments()
             }
         }
     }
@@ -158,17 +160,17 @@ private fun MobileTrainerProfileOwnerContent(
 
                 } else {
                     if (content.specialties == null) {
-                        TrainerProfileComponent.MobileTrainerProfileOwner_NoSpeciality(onClickAdd = {})
+//                        TrainerProfileComponent.MobileTrainerProfileOwner_NoSpeciality(onClickAdd = {})
                     } else {
                         LifestyleActionRow(viewData = content.specialties)
                     }
 
                     if (content.lessons.isEmpty()) {
-                        TrainerProfileComponent.MobileTrainerProfileOwner_NoLesson(onClickAdd = {})
+//                        TrainerProfileComponent.MobileTrainerProfileOwner_NoLesson(onClickAdd = {})
                     } else {
                         LessonSessionColumn(
                             lessons = content.lessons,
-                            onClickShowAll = {}
+                            onClickShowAll = { onAction(TrainerProfileOwnerAction.NavigateToAppointments) }
                         )
                     }
                 }

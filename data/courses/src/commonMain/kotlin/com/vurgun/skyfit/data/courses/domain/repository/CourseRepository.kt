@@ -2,9 +2,11 @@ package com.vurgun.skyfit.data.courses.domain.repository
 
 import com.vurgun.skyfit.data.courses.domain.model.Appointment
 import com.vurgun.skyfit.data.courses.domain.model.AppointmentDetail
+import com.vurgun.skyfit.data.courses.domain.model.CreateAppointmentResponse
 import com.vurgun.skyfit.data.courses.domain.model.Lesson
 import com.vurgun.skyfit.data.courses.domain.model.LessonCreationInfo
 import com.vurgun.skyfit.data.courses.domain.model.LessonUpdateInfo
+import com.vurgun.skyfit.data.courses.domain.model.ScheduledLessonDetail
 import kotlinx.datetime.LocalDate
 
 interface CourseRepository {
@@ -31,9 +33,9 @@ interface CourseRepository {
     // endregion
 
     // region: Lesson Participation
-    suspend fun bookAppointment(lessonId: Int): Result<Unit>
+    suspend fun bookAppointment(lessonId: Int): Result<CreateAppointmentResponse>
     suspend fun cancelAppointment(lessonId: Int, lpId: Int): Result<Unit>
     // endregion
-    suspend fun getScheduledLesson(lessonId: Int): Result<Unit>
+    suspend fun getScheduledLessonDetail(lessonId: Int): Result<ScheduledLessonDetail>
     suspend fun getAppointmentDetail(lpId: Int): Result<AppointmentDetail>
 }

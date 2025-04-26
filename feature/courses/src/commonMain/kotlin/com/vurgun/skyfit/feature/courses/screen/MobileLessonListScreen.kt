@@ -23,14 +23,12 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.compose.LocalLifecycleOwner
-import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.vurgun.skyfit.data.courses.domain.model.Lesson
 import com.vurgun.skyfit.data.courses.model.LessonSessionItemViewData
-import com.vurgun.skyfit.feature.calendar.components.component.calendar.weekly.CalendarWeekDaySelector
-import com.vurgun.skyfit.feature.calendar.components.component.calendar.weekly.CalendarWeekDaySelectorViewModel
-import com.vurgun.skyfit.feature.calendar.components.component.calendar.weekly.rememberWeekDaySelectorState
+import com.vurgun.skyfit.feature.calendar.component.weekly.CalendarWeekDaySelector
+import com.vurgun.skyfit.feature.calendar.component.weekly.CalendarWeekDaySelectorViewModel
+import com.vurgun.skyfit.feature.calendar.component.weekly.rememberWeekDaySelectorState
 import com.vurgun.skyfit.feature.courses.component.LessonEventItemPopupMenu
 import com.vurgun.skyfit.ui.core.components.button.SecondaryMediumButton
 import com.vurgun.skyfit.ui.core.components.event.EditableLessonEventItem
@@ -39,8 +37,6 @@ import com.vurgun.skyfit.ui.core.components.special.SkyFitMobileScaffold
 import com.vurgun.skyfit.ui.core.components.special.SkyFitScreenHeader
 import com.vurgun.skyfit.ui.core.styling.SkyFitColor
 import com.vurgun.skyfit.ui.core.styling.SkyFitTypography
-import kotlinx.coroutines.flow.launchIn
-import kotlinx.coroutines.flow.onEach
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.viewmodel.koinViewModel

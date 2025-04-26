@@ -49,7 +49,7 @@ internal fun MobileOnboardingFacilityProfileTagsScreen(
             }
 
             is OnboardingViewEvent.Error -> {
-                ErrorDialog(event.message, onDismiss = viewModel::clearError)
+                ErrorDialog(message = event.message, onDismiss = viewModel::clearError)
             }
 
             OnboardingViewEvent.InProgress -> {

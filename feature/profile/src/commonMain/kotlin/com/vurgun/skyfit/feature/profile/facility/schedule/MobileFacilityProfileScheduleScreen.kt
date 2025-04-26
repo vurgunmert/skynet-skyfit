@@ -33,7 +33,7 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.vurgun.skyfit.data.courses.model.LessonSessionItemViewData
 import com.vurgun.skyfit.data.user.domain.FacilityProfile
-import com.vurgun.skyfit.feature.calendar.components.component.calendar.monthly.CalendarRangeDateSelectorCard
+import com.vurgun.skyfit.feature.calendar.component.monthly.CalendarRangeDateSelectorCard
 import com.vurgun.skyfit.ui.core.components.dialog.ErrorDialog
 import com.vurgun.skyfit.ui.core.components.event.NoLessonOnSelectedDaysEventItem
 import com.vurgun.skyfit.ui.core.components.event.SelectableLessonEventItem
@@ -66,7 +66,7 @@ import skyfit.ui.core.generated.resources.lesson_select_label
 fun MobileFacilityProfileScheduleScreen(
     facilityId: Int,
     goToBack: () -> Unit,
-    goToAppointmentDetail: () -> Unit,
+    goToAppointmentDetail: (lpId: Int) -> Unit,
     viewModel: FacilityProfileScheduleViewModel = koinViewModel()
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
@@ -81,6 +81,7 @@ fun MobileFacilityProfileScheduleScreen(
                 is FacilityProfileScheduleEffect.ShowBookingError -> {
                     bookingError = effect.message
                 }
+                is FacilityProfileScheduleEffect.NavigateToAppointmentDetail -> goToAppointmentDetail(effect.lpId)
             }
         }
     }

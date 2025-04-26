@@ -34,9 +34,9 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.vurgun.skyfit.data.courses.model.LessonSessionItemViewData
 import com.vurgun.skyfit.data.user.domain.FacilityProfile
-import com.vurgun.skyfit.feature.calendar.components.component.calendar.weekly.CalendarWeekDaySelector
-import com.vurgun.skyfit.feature.calendar.components.component.calendar.weekly.CalendarWeekDaySelectorState
-import com.vurgun.skyfit.feature.calendar.components.component.calendar.weekly.CalendarWeekDaySelectorViewModel
+import com.vurgun.skyfit.feature.calendar.component.weekly.CalendarWeekDaySelector
+import com.vurgun.skyfit.feature.calendar.component.weekly.CalendarWeekDaySelectorState
+import com.vurgun.skyfit.feature.calendar.component.weekly.CalendarWeekDaySelectorViewModel
 import com.vurgun.skyfit.feature.profile.components.MobileProfileActionsRow
 import com.vurgun.skyfit.feature.profile.components.MobileProfileBackgroundImage
 import com.vurgun.skyfit.feature.profile.components.PhotoGalleryEmptyStackCard

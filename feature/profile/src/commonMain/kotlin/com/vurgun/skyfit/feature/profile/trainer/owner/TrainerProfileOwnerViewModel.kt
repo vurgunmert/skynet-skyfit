@@ -38,11 +38,13 @@ sealed interface TrainerProfileOwnerAction {
     data class TogglePostVisibility(val visible: Boolean) : TrainerProfileOwnerAction
     data object NavigateToSettings : TrainerProfileOwnerAction
     data object NavigateToCreatePost : TrainerProfileOwnerAction
+    data object NavigateToAppointments : TrainerProfileOwnerAction
 }
 
 sealed interface TrainerProfileOwnerEffect {
     data object NavigateToSettings : TrainerProfileOwnerEffect
     data object NavigateToCreatePost : TrainerProfileOwnerEffect
+    data object NavigateToAppointments : TrainerProfileOwnerEffect
 }
 
 class TrainerProfileOwnerViewModel(
@@ -67,6 +69,7 @@ class TrainerProfileOwnerViewModel(
             is TrainerProfileOwnerAction.TogglePostVisibility -> togglePostVisibility(action.visible)
             is TrainerProfileOwnerAction.NavigateToCreatePost -> emitEffect(TrainerProfileOwnerEffect.NavigateToCreatePost)
             is TrainerProfileOwnerAction.NavigateToSettings -> emitEffect(TrainerProfileOwnerEffect.NavigateToSettings)
+            is TrainerProfileOwnerAction.NavigateToAppointments -> emitEffect(TrainerProfileOwnerEffect.NavigateToAppointments)
         }
     }
 

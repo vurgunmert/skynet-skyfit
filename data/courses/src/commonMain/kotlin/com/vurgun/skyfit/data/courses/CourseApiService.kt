@@ -5,6 +5,7 @@ import com.vurgun.skyfit.data.courses.model.ActivateLessonRequest
 import com.vurgun.skyfit.data.courses.model.AppointmentDTO
 import com.vurgun.skyfit.data.courses.model.AppointmentDetailDTO
 import com.vurgun.skyfit.data.courses.model.CancelUserAppointmentRequest
+import com.vurgun.skyfit.data.courses.model.CreateAppointmentDTO
 import com.vurgun.skyfit.data.courses.model.CreateLessonRequest
 import com.vurgun.skyfit.data.courses.model.CreateUserAppointmentRequest
 import com.vurgun.skyfit.data.courses.model.DeactivateLessonRequest
@@ -22,6 +23,7 @@ import com.vurgun.skyfit.data.courses.model.ScheduledLessonDetailDTO
 import com.vurgun.skyfit.data.courses.model.UpdateLessonRequest
 import com.vurgun.skyfit.data.network.ApiClient
 import com.vurgun.skyfit.data.network.ApiResult
+import com.vurgun.skyfit.data.network.utils.mapOrThrow
 import io.ktor.client.request.bearerAuth
 import io.ktor.client.request.setBody
 import io.ktor.client.request.url
@@ -176,8 +178,8 @@ class CourseApiService(private val apiClient: ApiClient) {
     internal suspend fun createUserAppointment(
         request: CreateUserAppointmentRequest,
         token: String
-    ): ApiResult<EmptyDataResponse> {
-        return apiClient.safeApiCall<EmptyDataResponse> {
+    ): ApiResult<CreateAppointmentDTO> {
+        return apiClient.safeApiCall<CreateAppointmentDTO> {
             method = HttpMethod.Post
             bearerAuth(token)
             url(Endpoints.CREATE_APPOINTMENT_BY_USER)

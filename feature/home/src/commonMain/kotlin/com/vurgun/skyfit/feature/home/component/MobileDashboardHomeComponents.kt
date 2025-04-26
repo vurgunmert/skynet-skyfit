@@ -41,8 +41,8 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.vurgun.skyfit.data.core.domain.model.CharacterType
 import com.vurgun.skyfit.data.courses.model.LessonSessionItemViewData
-import com.vurgun.skyfit.feature.calendar.components.component.calendar.MobileUserActivityHourlyCalendarComponent
-import com.vurgun.skyfit.feature.calendar.components.component.calendar.SkyFitColoredCalendarComponent
+import com.vurgun.skyfit.feature.calendar.component.MobileUserActivityHourlyCalendarComponent
+import com.vurgun.skyfit.feature.calendar.component.SkyFitColoredCalendarComponent
 import com.vurgun.skyfit.ui.core.components.button.SkyFitCircularProgressIconButton
 import com.vurgun.skyfit.ui.core.components.event.FacilityHomeLessonEventItem
 import com.vurgun.skyfit.ui.core.components.event.TrainerHomeLessonEventItem
