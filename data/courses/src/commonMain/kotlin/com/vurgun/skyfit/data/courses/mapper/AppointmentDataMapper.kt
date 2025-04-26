@@ -1,7 +1,11 @@
 package com.vurgun.skyfit.data.courses.mapper
 
+import com.vurgun.skyfit.data.core.utility.parseServerToDateOnly
+import com.vurgun.skyfit.data.core.utility.parseServerToHHMMTime
 import com.vurgun.skyfit.data.courses.domain.model.Appointment
+import com.vurgun.skyfit.data.courses.domain.model.AppointmentDetail
 import com.vurgun.skyfit.data.courses.model.AppointmentDTO
+import com.vurgun.skyfit.data.courses.model.AppointmentDetailDTO
 import kotlinx.datetime.Instant
 import kotlinx.datetime.LocalDate
 import kotlinx.datetime.LocalDateTime
@@ -55,3 +59,22 @@ internal fun AppointmentDTO.toLessonDomain(): Appointment {
 }
 
 internal fun List<AppointmentDTO>.toLessonDomain() = this.map { it.toLessonDomain() }
+
+internal fun AppointmentDetailDTO.toAppointmentDetailDomain(): AppointmentDetail {
+    return AppointmentDetail(
+        lpId = lpId,
+        lessonId = lessonId,
+        nmId = nmId,
+        status = status,
+        statusName = statusName,
+        title = typeName,
+        startDate = startDate.parseServerToDateOnly(),
+        startTime = startTime.parseServerToHHMMTime(),
+        endDate = endDate.parseServerToDateOnly(),
+        endTime = endTime.parseServerToHHMMTime(),
+        trainerFullName = "$trainerName $trainerSurname",
+        trainerNote = trainerNote,
+        gymName = gymName,
+        participantCount = totalParticipants
+    )
+}

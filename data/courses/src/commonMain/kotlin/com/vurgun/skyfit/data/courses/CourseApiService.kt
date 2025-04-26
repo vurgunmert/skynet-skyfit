@@ -3,18 +3,22 @@ package com.vurgun.skyfit.data.courses
 import com.vurgun.skyfit.data.core.model.EmptyDataResponse
 import com.vurgun.skyfit.data.courses.model.ActivateLessonRequest
 import com.vurgun.skyfit.data.courses.model.AppointmentDTO
+import com.vurgun.skyfit.data.courses.model.AppointmentDetailDTO
 import com.vurgun.skyfit.data.courses.model.CancelUserAppointmentRequest
 import com.vurgun.skyfit.data.courses.model.CreateLessonRequest
 import com.vurgun.skyfit.data.courses.model.CreateUserAppointmentRequest
 import com.vurgun.skyfit.data.courses.model.DeactivateLessonRequest
 import com.vurgun.skyfit.data.courses.model.DeleteLessonRequest
+import com.vurgun.skyfit.data.courses.model.GetAppointmentDetailRequest
 import com.vurgun.skyfit.data.courses.model.GetFacilityLessonsRequest
+import com.vurgun.skyfit.data.courses.model.GetScheduledLessonDetailRequest
 import com.vurgun.skyfit.data.courses.model.GetTrainerLessonsRequest
 import com.vurgun.skyfit.data.courses.model.GetUpcomingFacilityLessonsRequest
 import com.vurgun.skyfit.data.courses.model.GetUpcomingTrainerLessonsRequest
 import com.vurgun.skyfit.data.courses.model.GetUpcomingUserAppointmentsRequest
 import com.vurgun.skyfit.data.courses.model.GetUserAppointmentsRequest
 import com.vurgun.skyfit.data.courses.model.LessonDTO
+import com.vurgun.skyfit.data.courses.model.ScheduledLessonDetailDTO
 import com.vurgun.skyfit.data.courses.model.UpdateLessonRequest
 import com.vurgun.skyfit.data.network.ApiClient
 import com.vurgun.skyfit.data.network.ApiResult
@@ -35,8 +39,10 @@ class CourseApiService(private val apiClient: ApiClient) {
         const val GET_UPCOMING_LESSONS_BY_GYM = "get/close/lessons/gym"
         const val GET_LESSONS_BY_TRAINER = "get/trainer/lessons"
         const val GET_UPCOMING_LESSONS_BY_TRAINER = "get/close/trainer/lessons"
+        const val GET_SCHEDULED_LESSON_DETAIL = "get/lesson/details"
         const val GET_APPOINTMENTS_BY_USER = "get/appointments"
         const val GET_UPCOMING_APPOINTMENTS_BY_USER = "get/close/appointments"
+        const val GET_APPOINTMENT_DETAIL = "get/appointment/details"
         const val CREATE_APPOINTMENT_BY_USER = "create/appointment"
         const val CANCEL_APPOINTMENT_BY_USER = "cancel/appointment"
     }
@@ -89,6 +95,18 @@ class CourseApiService(private val apiClient: ApiClient) {
         }
     }
 
+    internal suspend fun getScheduledLessonDetail(
+        request: GetScheduledLessonDetailRequest,
+        token: String
+    ): ApiResult<ScheduledLessonDetailDTO> {
+        return apiClient.safeApiCall<ScheduledLessonDetailDTO> {
+            method = HttpMethod.Post
+            bearerAuth(token)
+            url(Endpoints.GET_SCHEDULED_LESSON_DETAIL)
+            setBody(request)
+        }
+    }
+
     internal suspend fun updateLesson(request: UpdateLessonRequest, token: String): ApiResult<EmptyDataResponse> {
         return apiClient.safeApiCall<EmptyDataResponse> {
             method = HttpMethod.Put
@@ -130,6 +148,15 @@ class CourseApiService(private val apiClient: ApiClient) {
             method = HttpMethod.Post
             bearerAuth(token)
             url(Endpoints.GET_APPOINTMENTS_BY_USER)
+            setBody(request)
+        }
+    }
+
+    internal suspend fun getAppointmentDetail(request: GetAppointmentDetailRequest, token: String): ApiResult<AppointmentDetailDTO> {
+        return apiClient.safeApiCall<AppointmentDetailDTO> {
+            method = HttpMethod.Post
+            bearerAuth(token)
+            url(Endpoints.GET_APPOINTMENT_DETAIL)
             setBody(request)
         }
     }

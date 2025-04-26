@@ -19,9 +19,7 @@ import kotlinx.datetime.LocalDate
 sealed interface FacilityProfileScheduleUiState {
     data object Loading : FacilityProfileScheduleUiState
     data class Error(val message: String) : FacilityProfileScheduleUiState
-    data class Content(
-        val profile: FacilityProfile
-    ) : FacilityProfileScheduleUiState
+    data class Content(val profile: FacilityProfile) : FacilityProfileScheduleUiState
 }
 
 sealed interface FacilityProfileScheduleAction {
@@ -117,7 +115,7 @@ class FacilityProfileScheduleViewModel(
                 val id = currentFacilityId ?: return@launch
                 _lessons.value = fetchLessons(id, selectedStartDate, selectedEndDate)
 
-                // Optional effect:
+                // TODO: effect:
                 // emitEffect(FacilityProfileScheduleEffect.ShowBookingSuccess)
 
             } catch (e: Exception) {

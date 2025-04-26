@@ -15,6 +15,7 @@ import com.vurgun.skyfit.feature.profile.navigation.VisitFacilityProfileSchedule
 import com.vurgun.skyfit.feature.profile.navigation.VisitTrainerProfileRoute
 import com.vurgun.skyfit.feature.profile.navigation.VisitTrainerProfileScheduleRoute
 import com.vurgun.skyfit.feature.profile.navigation.VisitUserProfileRoute
+import com.vurgun.skyfit.feature.profile.trainer.schedule.MobileTrainerProfileScheduleScreen
 import com.vurgun.skyfit.feature.profile.trainer.visitor.MobileTrainerProfileVisitorScreen
 import com.vurgun.skyfit.feature.profile.user.visitor.MobileUserProfileVisitorScreen
 import com.vurgun.skyfit.feature.settings.navigation.SettingsRoute
@@ -60,6 +61,15 @@ fun NavGraphBuilder.profileRoutes(navController: NavController) {
             facilityId = facilityId,
             goToBack = navController::navigateUp,
             goToAppointmentDetail = { /*TODO()*/ },
+        )
+    }
+
+    composable<VisitTrainerProfileScheduleRoute> {
+        val trainerId = it.toRoute<VisitTrainerProfileScheduleRoute>().trainerId
+
+        MobileTrainerProfileScheduleScreen(
+            trainerId = trainerId,
+            goToBack = navController::navigateUp
         )
     }
 }

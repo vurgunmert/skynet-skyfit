@@ -72,6 +72,11 @@ internal data class DeleteLessonRequest(
 )
 
 @Serializable
+internal data class GetScheduledLessonDetailRequest(
+    val lessonId: Int
+)
+
+@Serializable
 internal data class ActivateLessonRequest(
     val lessonId: Int
 )
@@ -84,6 +89,11 @@ internal data class DeactivateLessonRequest(
 @Serializable
 internal data class CreateUserAppointmentRequest(
     val lessonId: Int
+)
+
+@Serializable
+internal data class GetAppointmentDetailRequest(
+    val lpId: Int
 )
 
 @Serializable

@@ -4,20 +4,25 @@ import com.vurgun.skyfit.data.core.storage.TokenManager
 import com.vurgun.skyfit.data.core.utility.formatToServerDate
 import com.vurgun.skyfit.data.courses.CourseApiService
 import com.vurgun.skyfit.data.courses.domain.model.Appointment
+import com.vurgun.skyfit.data.courses.domain.model.AppointmentDetail
 import com.vurgun.skyfit.data.courses.domain.model.Lesson
 import com.vurgun.skyfit.data.courses.domain.model.LessonCreationInfo
 import com.vurgun.skyfit.data.courses.domain.model.LessonUpdateInfo
 import com.vurgun.skyfit.data.courses.domain.repository.CourseRepository
+import com.vurgun.skyfit.data.courses.mapper.toAppointmentDetailDomain
 import com.vurgun.skyfit.data.courses.mapper.toCreateLessonRequest
 import com.vurgun.skyfit.data.courses.mapper.toLessonDomain
 import com.vurgun.skyfit.data.courses.mapper.toLessonDomainList
+import com.vurgun.skyfit.data.courses.mapper.toScheduledLessonDetail
 import com.vurgun.skyfit.data.courses.mapper.toUpdateLessonRequest
 import com.vurgun.skyfit.data.courses.model.ActivateLessonRequest
 import com.vurgun.skyfit.data.courses.model.CancelUserAppointmentRequest
 import com.vurgun.skyfit.data.courses.model.CreateUserAppointmentRequest
 import com.vurgun.skyfit.data.courses.model.DeactivateLessonRequest
 import com.vurgun.skyfit.data.courses.model.DeleteLessonRequest
+import com.vurgun.skyfit.data.courses.model.GetAppointmentDetailRequest
 import com.vurgun.skyfit.data.courses.model.GetFacilityLessonsRequest
+import com.vurgun.skyfit.data.courses.model.GetScheduledLessonDetailRequest
 import com.vurgun.skyfit.data.courses.model.GetTrainerLessonsRequest
 import com.vurgun.skyfit.data.courses.model.GetUpcomingFacilityLessonsRequest
 import com.vurgun.skyfit.data.courses.model.GetUpcomingTrainerLessonsRequest
@@ -93,6 +98,12 @@ class CourseRepositoryImpl(
         apiService.createLesson(request, token).mapOrThrow { }
     }
 
+    override suspend fun getScheduledLesson(lessonId: Int): Result<Unit> = ioResult(dispatchers) {
+        val token = tokenManager.getTokenOrThrow()
+        val request = GetScheduledLessonDetailRequest(lessonId)
+        apiService.getScheduledLessonDetail(request, token).mapOrThrow { it.toScheduledLessonDetail() }
+    }
+
     override suspend fun updateLesson(info: LessonUpdateInfo): Result<Unit> = ioResult(dispatchers) {
         val token = tokenManager.getTokenOrThrow()
         val request = info.toUpdateLessonRequest()
@@ -121,6 +132,12 @@ class CourseRepositoryImpl(
         val token = tokenManager.getTokenOrThrow()
         val request = GetUserAppointmentsRequest(nmId)
         apiService.getAppointmentsByUser(request, token).mapOrThrow { it.toLessonDomain() }
+    }
+
+    override suspend fun getAppointmentDetail(lpId: Int): Result<AppointmentDetail> = ioResult(dispatchers) {
+        val token = tokenManager.getTokenOrThrow()
+        val request = GetAppointmentDetailRequest(lpId)
+        apiService.getAppointmentDetail(request, token).mapOrThrow { it.toAppointmentDetailDomain() }
     }
 
     override suspend fun getUpcomingAppointmentsByUser(nmId: Int, limit: Int): Result<List<Appointment>> = ioResult(dispatchers) {

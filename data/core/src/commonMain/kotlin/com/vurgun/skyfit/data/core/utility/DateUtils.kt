@@ -4,6 +4,7 @@ import kotlinx.datetime.Clock
 import kotlinx.datetime.DateTimeUnit
 import kotlinx.datetime.LocalDate
 import kotlinx.datetime.LocalDateTime
+import kotlinx.datetime.LocalTime
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.isoDayNumber
 import kotlinx.datetime.minus
@@ -154,4 +155,7 @@ fun LocalDateTime.formatToServerTime(): String {
 
 fun String.parseServerToDateOnly(): LocalDate {
     return LocalDate.parse(this.substringBefore("T"))
+}
+fun String.parseServerToHHMMTime(): LocalTime {
+    return LocalTime.parse(this.substring(0, 5))
 }

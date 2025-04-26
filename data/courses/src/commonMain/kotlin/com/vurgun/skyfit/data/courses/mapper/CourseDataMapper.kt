@@ -3,11 +3,15 @@ package com.vurgun.skyfit.data.courses.mapper
 
 import com.vurgun.skyfit.data.core.utility.formatToServerDate
 import com.vurgun.skyfit.data.core.utility.formatToServerTime
+import com.vurgun.skyfit.data.core.utility.parseServerToDateOnly
+import com.vurgun.skyfit.data.core.utility.parseServerToHHMMTime
 import com.vurgun.skyfit.data.courses.domain.model.Lesson
 import com.vurgun.skyfit.data.courses.domain.model.LessonCreationInfo
 import com.vurgun.skyfit.data.courses.domain.model.LessonUpdateInfo
+import com.vurgun.skyfit.data.courses.domain.model.ScheduledLessonDetail
 import com.vurgun.skyfit.data.courses.model.CreateLessonRequest
 import com.vurgun.skyfit.data.courses.model.LessonDTO
+import com.vurgun.skyfit.data.courses.model.ScheduledLessonDetailDTO
 import com.vurgun.skyfit.data.courses.model.UpdateLessonRequest
 import kotlinx.datetime.Instant
 import kotlinx.datetime.LocalDate
@@ -95,3 +99,20 @@ internal fun LessonDTO.toLessonDomain(): Lesson {
 }
 
 internal fun List<LessonDTO>.toLessonDomainList(): List<Lesson> = map { it.toLessonDomain() }
+
+internal fun ScheduledLessonDetailDTO.toScheduledLessonDetail() {
+    ScheduledLessonDetail(
+        lessonId = lessonId,
+        title = typeName,
+        startDate = startDate.parseServerToDateOnly(),
+        endDate = endDate.parseServerToDateOnly(),
+        startTime = startTime.parseServerToHHMMTime(),
+        endTime = endTime.parseServerToHHMMTime(),
+        trainerFullName = "$trainerName $trainerSurname",
+        facilityName = gymName,
+        trainerNote = trainerNote,
+        participantCount = totalParticipants,
+        status = status,
+        statusName = statusName
+    )
+}

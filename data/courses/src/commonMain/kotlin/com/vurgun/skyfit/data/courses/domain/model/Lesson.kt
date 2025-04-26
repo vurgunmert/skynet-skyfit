@@ -6,6 +6,7 @@ import kotlinx.datetime.LocalDateTime
 import kotlinx.datetime.LocalTime
 import kotlinx.serialization.Serializable
 
+
 @Serializable
 data class Lesson(
     val lessonId: Int,
@@ -32,6 +33,22 @@ data class Lesson(
 
     // Payment & Status
     val price: Int,
+    val status: Int,
+    val statusName: String,
+)
+
+@Serializable
+data class ScheduledLessonDetail(
+    val lessonId: Int,
+    val title: String,
+    val startDate: LocalDate,
+    val endDate: LocalDate,
+    val startTime: LocalTime,
+    val endTime: LocalTime,
+    val trainerFullName: String,
+    val facilityName: String,
+    val trainerNote: String? = null,
+    val participantCount: Int,
     val status: Int,
     val statusName: String,
 )

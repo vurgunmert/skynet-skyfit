@@ -1,6 +1,10 @@
 package com.vurgun.skyfit.feature.profile.trainer.schedule
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -11,133 +15,273 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Icon
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.unit.dp
-import com.vurgun.skyfit.data.courses.model.LessonSessionColumnViewData
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.vurgun.skyfit.data.courses.model.LessonSessionItemViewData
+import com.vurgun.skyfit.data.user.domain.TrainerProfile
 import com.vurgun.skyfit.feature.calendar.components.component.calendar.monthly.CalendarRangeDateSelectorCard
-import com.vurgun.skyfit.feature.profile.facility.schedule.FacilityProfileScheduleViewModel
-import com.vurgun.skyfit.ui.core.components.special.SkyFitCircularImageComponent
+import com.vurgun.skyfit.ui.core.components.dialog.ErrorDialog
+import com.vurgun.skyfit.ui.core.components.event.NoLessonOnSelectedDaysEventItem
+import com.vurgun.skyfit.ui.core.components.event.SelectableLessonEventItem
+import com.vurgun.skyfit.ui.core.components.image.NetworkImage
+import com.vurgun.skyfit.ui.core.components.loader.FullScreenLoader
+import com.vurgun.skyfit.ui.core.components.special.ButtonSize
+import com.vurgun.skyfit.ui.core.components.special.ButtonState
+import com.vurgun.skyfit.ui.core.components.special.ButtonVariant
+import com.vurgun.skyfit.ui.core.components.special.SkyFitButtonComponent
 import com.vurgun.skyfit.ui.core.components.special.SkyFitMobileScaffold
 import com.vurgun.skyfit.ui.core.components.special.SkyFitScreenHeader
-import com.vurgun.skyfit.ui.core.components.special.UserCircleAvatarItem
+import com.vurgun.skyfit.ui.core.components.text.BodyLargeMediumText
+import com.vurgun.skyfit.ui.core.components.text.BodyMediumRegularText
+import com.vurgun.skyfit.ui.core.components.text.CardFieldIconText
+import com.vurgun.skyfit.ui.core.screen.ErrorScreen
+import com.vurgun.skyfit.ui.core.styling.SkyFitAsset
 import com.vurgun.skyfit.ui.core.styling.SkyFitColor
 import com.vurgun.skyfit.ui.core.styling.SkyFitTypography
 import org.jetbrains.compose.resources.painterResource
+import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.viewmodel.koinViewModel
 import skyfit.ui.core.generated.resources.Res
-import skyfit.ui.core.generated.resources.logo_skyfit
+import skyfit.ui.core.generated.resources.appointment_book_action
+import skyfit.ui.core.generated.resources.appointment_create_action
+import skyfit.ui.core.generated.resources.ic_check
+import skyfit.ui.core.generated.resources.ic_location_pin
+import skyfit.ui.core.generated.resources.lesson_select_label
 
 @Composable
 fun MobileTrainerProfileScheduleScreen(
+    trainerId: Int,
     goToBack: () -> Unit,
     viewModel: TrainerProfileScheduleViewModel = koinViewModel()
 ) {
 
-    val showCreateAction: Boolean = true
-//
-//    SkyFitMobileScaffold(
-//        topBar = {
-//            SkyFitScreenHeader("Randevu Al", onClickBack = goToBack)
-//        },
-//        bottomBar = {
-//            if (showCreateAction) {
-//                MobileTrainerCalendarVisitedScreenCreateActionComponent()
-//            }
-//        }
-//    ) {
-//        Column(
-//            modifier = Modifier.fillMaxSize().verticalScroll(rememberScrollState()),
-//            horizontalAlignment = Alignment.CenterHorizontally,
-//        ) {
-//            MobileTrainerCalendarVisitedScreenInfoComponent()
-//
-//            CalendarRangeDateSelectorCard(
-//                onSelectionChanged = { start, end ->
-//                    // TODO: Set date
-//                }
-//            )
-//
-//            MobileTrainerCalendarVisitedScreenPrivateClassesComponent(lessonsColumnViewData)
-//        }
-//    }
-}
+    val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+    val lessons by viewModel.lessons.collectAsStateWithLifecycle()
+    val isAppointmentAllowed by viewModel.isBookingEnabled.collectAsStateWithLifecycle()
+    var bookingError by remember { mutableStateOf<String?>(null) }
 
-@Composable
-private fun MobileTrainerCalendarVisitedScreenInfoComponent() {
-    Column(
-        Modifier.padding(16.dp)
-            .fillMaxWidth()
-            .background(SkyFitColor.background.surfaceSecondary, RoundedCornerShape(16.dp))
-            .padding(16.dp)
-    ) {
-        Row {
-            Icon(
-                painter = painterResource(Res.drawable.logo_skyfit),
-                contentDescription = "Info",
-                tint = SkyFitColor.icon.default,
-                modifier = Modifier.size(24.dp)
-            )
-            Spacer(Modifier.width(8.dp))
-            Text(
-                text = "Antrenör Bilgileri",
-                style = SkyFitTypography.bodyLargeSemibold
-            )
-        }
-
-        Spacer(Modifier.height(16.dp))
-        Row {
-            SkyFitCircularImageComponent(
-                modifier = Modifier.size(60.dp),
-                item = UserCircleAvatarItem("")
-            )
-
-            Spacer(Modifier.width(16.dp))
-            Column {
-                Row {
-                    Text(
-                        text = "Jordan Blake",
-                        style = SkyFitTypography.bodyLargeMedium,
-                        color = SkyFitColor.text.default
-                    )
-                    Text(
-                        text = "@mblake",
-                        style = SkyFitTypography.bodyMediumRegular,
-                        color = SkyFitColor.text.secondary
-                    )
-                }
-                Spacer(Modifier.height(8.dp))
-                Row {
-                    Icon(
-                        painter = painterResource(Res.drawable.logo_skyfit),
-                        contentDescription = "Location",
-                        tint = SkyFitColor.icon.default,
-                        modifier = Modifier.size(16.dp)
-                    )
-                    Text(
-                        text = "@ironstudio",
-                        style = SkyFitTypography.bodySmall,
-                        color = SkyFitColor.text.secondary
-                    )
+    LaunchedEffect(Unit) {
+        viewModel.effect.collect { effect ->
+            when (effect) {
+                is TrainerProfileScheduleEffect.NavigateBack -> goToBack()
+                is TrainerProfileScheduleEffect.ShowBookingError -> {
+                    bookingError = effect.message
                 }
             }
         }
     }
+
+    LaunchedEffect(Unit) {
+        viewModel.loadData(trainerId)
+    }
+
+    when (uiState) {
+        TrainerProfileScheduleUiState.Loading -> FullScreenLoader()
+        is TrainerProfileScheduleUiState.Error -> {
+            val message = (uiState as TrainerProfileScheduleUiState.Error).message
+            ErrorScreen(message, goToBack)
+        }
+
+        is TrainerProfileScheduleUiState.Content -> {
+            val content = (uiState as TrainerProfileScheduleUiState.Content)
+
+            SkyFitMobileScaffold(
+                topBar = {
+                    SkyFitScreenHeader(stringResource(Res.string.appointment_book_action), onClickBack = goToBack)
+                },
+                bottomBar = {
+                    if (isAppointmentAllowed) {
+                        MobileTrainerProfileScheduleComponent.BookAction(onClick = {
+                            viewModel.onAction(TrainerProfileScheduleAction.BookAppointment)
+                        })
+                    }
+                }
+            ) {
+                Column(
+                    modifier = Modifier
+                        .padding(16.dp)
+                        .fillMaxSize()
+                        .verticalScroll(rememberScrollState()),
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                ) {
+
+                    Spacer(Modifier.height(4.dp))
+
+                    MobileTrainerProfileScheduleComponent.ProfileCard(content.profile)
+
+                    Spacer(Modifier.height(48.dp))
+
+                    CalendarRangeDateSelectorCard(
+                        onSelectionChanged = { startDate, endDate ->
+                            viewModel.onAction(TrainerProfileScheduleAction.ChangeDate(startDate, endDate))
+                        }
+                    )
+
+                    Spacer(Modifier.height(16.dp))
+
+                    MobileTrainerProfileScheduleComponent.SelectableLessonsList(
+                        lessons = lessons,
+                        onClickItem = {
+                            viewModel.onAction(TrainerProfileScheduleAction.ToggleLessonSelection(it))
+                        },
+                        onFilter = {}
+                    )
+
+                    Spacer(Modifier.height(112.dp))
+                }
+            }
+        }
+
+    }
+
+    if (bookingError != null) {
+        ErrorDialog(
+            message = bookingError,
+            onDismiss = { bookingError = null }
+        )
+    }
 }
 
-@Composable
-private fun MobileTrainerCalendarVisitedScreenPrivateClassesComponent(lessonsColumnViewData: LessonSessionColumnViewData?) {
-//    MobileFacilityCalendarVisitedScreenPrivateClassesComponent(calendarClasses, {})
-}
+private object MobileTrainerProfileScheduleComponent {
 
-@Composable
-private fun MobileTrainerCalendarVisitedScreenCreateActionComponent() {
-//    MobileFacilityCalendarVisitedScreenCreateActionComponent(onClick = {})
+    @Composable
+    fun ProfileCard(profile: TrainerProfile) {
+        Row(
+            Modifier
+                .clip(RoundedCornerShape(16.dp))
+                .fillMaxWidth()
+                .background(SkyFitColor.background.surfaceSecondary)
+                .padding(16.dp),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            NetworkImage(
+                imageUrl = profile.backgroundImageUrl,
+                modifier = Modifier
+                    .size(60.dp)
+                    .clip(CircleShape)
+            )
+            Spacer(Modifier.width(16.dp))
+
+            Column(Modifier.weight(1f)) {
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    BodyLargeMediumText(
+                        text = profile.fullName
+                    )
+                    BodyMediumRegularText(
+                        text = " @${profile.username}",
+                        color = SkyFitColor.text.secondary
+                    )
+                }
+                Spacer(Modifier.height(8.dp))
+                CardFieldIconText(
+                    text = profile.gymName,
+                    iconRes = Res.drawable.ic_location_pin,
+                    modifier = Modifier.fillMaxWidth()
+                )
+            }
+        }
+    }
+
+    @Composable
+    fun SelectableLessonsList(
+        lessons: List<LessonSessionItemViewData>,
+        onClickItem: (LessonSessionItemViewData) -> Unit,
+        onFilter: () -> Unit,
+        modifier: Modifier = Modifier,
+    ) {
+        Column(
+            modifier.fillMaxWidth()
+                .clip(RoundedCornerShape(20.dp))
+                .background(SkyFitColor.background.fillTransparent)
+                .padding(16.dp),
+            verticalArrangement = Arrangement.spacedBy(16.dp)
+        ) {
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.spacedBy(8.dp)
+            ) {
+                Icon(
+                    painter = SkyFitAsset.getPainter(SkyFitAsset.SkyFitIcon.EXERCISES.id),
+                    modifier = Modifier.size(24.dp),
+                    contentDescription = null,
+                    tint = SkyFitColor.icon.default
+                )
+
+                Text(
+                    text = stringResource(Res.string.lesson_select_label),
+                    style = SkyFitTypography.bodyLargeSemibold,
+                    modifier = Modifier.weight(1f)
+                )
+
+                // TODO: Filter
+            }
+
+            if (lessons.isEmpty()) {
+                NoLessonOnSelectedDaysEventItem()
+            } else {
+                Column(
+                    modifier = Modifier.fillMaxWidth(),
+                    verticalArrangement = Arrangement.spacedBy(16.dp)
+                ) {
+                    lessons.forEach { item ->
+                        SelectableLessonEventItem(
+                            title = item.title,
+                            iconId = item.iconId,
+                            date = item.date.toString(),
+                            timePeriod = item.hours.toString(),
+                            location = item.location.toString(),
+                            trainer = item.trainer.toString(),
+                            capacity = item.capacityRatio.toString(),
+                            note = item.note,
+                            modifier = Modifier
+                                .then(
+                                    if (item.selected) {
+                                        Modifier.border(
+                                            width = 1.dp,
+                                            color = SkyFitColor.border.secondaryButton,
+                                            shape = RoundedCornerShape(16.dp)
+                                        )
+                                    } else {
+                                        Modifier
+                                    }
+                                )
+                                .clickable { onClickItem(item) }
+                        )
+                    }
+                }
+            }
+        }
+    }
+
+    @Composable
+    fun BookAction(onClick: () -> Unit) {
+        Box(Modifier.fillMaxWidth().padding(32.dp)) {
+            SkyFitButtonComponent(
+                modifier = Modifier.fillMaxWidth(),
+                text = stringResource(Res.string.appointment_create_action),
+                onClick = onClick,
+                variant = ButtonVariant.Primary,
+                size = ButtonSize.Large,
+                state = ButtonState.Rest,
+                leftIconPainter = painterResource(Res.drawable.ic_check)
+            )
+        }
+    }
 }

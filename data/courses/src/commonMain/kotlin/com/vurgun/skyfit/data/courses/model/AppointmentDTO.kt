@@ -27,3 +27,22 @@ internal data class AppointmentDTO(
     val participantStatus: Int,
     val joinedAt: String,
 )
+
+@Serializable
+data class AppointmentDetailDTO(
+    val lpId: Int,
+    val lessonId: Int,
+    val nmId: Int,
+    val status: Int,
+    val statusName: String,
+    val typeName: String,
+    val startDate: String,
+    val startTime: String,
+    val endDate: String,
+    val endTime: String,
+    val trainerName: String,
+    val trainerSurname: String,
+    val trainerNote: String?,
+    val gymName: String,
+    val totalParticipants: Int,
+)

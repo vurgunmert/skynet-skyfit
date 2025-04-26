@@ -17,7 +17,7 @@ data class TrainerProfileDto(
     val postCount: Int,
     val lessonCount: Int,
     val followerCount: Int,
-    val point: Float?
+    val point: Float? = null
 )
 
 @Serializable

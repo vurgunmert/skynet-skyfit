@@ -22,3 +22,20 @@ internal data class LessonDTO(
     val status: Int,
     val statusName: String,
 )
+
+@Serializable
+internal data class ScheduledLessonDetailDTO(
+    val lessonId: Int,
+    val startDate: String,
+    val startTime: String,
+    val endDate: String,
+    val endTime: String,
+    val typeName: String,
+    val status: Int,
+    val statusName: String,
+    val trainerName: String,
+    val trainerSurname: String,
+    val trainerNote: String?,
+    val gymName: String,
+    val totalParticipants: Int,
+)

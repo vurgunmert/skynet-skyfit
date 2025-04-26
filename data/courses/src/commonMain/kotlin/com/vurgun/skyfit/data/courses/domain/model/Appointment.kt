@@ -39,3 +39,20 @@ data class Appointment(
     val participantStatus: Int,
     val quotaInfo: String
 )
+
+data class AppointmentDetail(
+    val lpId: Int,
+    val lessonId: Int,
+    val nmId: Int,
+    val status: Int,
+    val statusName: String,
+    val title: String,
+    val startDate: LocalDate,
+    val startTime: LocalTime,
+    val endDate: LocalDate,
+    val endTime: LocalTime,
+    val trainerFullName: String,
+    val trainerNote: String?,
+    val gymName: String,
+    val participantCount: Int,
+)
