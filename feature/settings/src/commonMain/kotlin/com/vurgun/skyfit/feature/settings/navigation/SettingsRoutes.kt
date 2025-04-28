@@ -10,11 +10,11 @@ import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import com.vurgun.skyfit.data.user.repository.UserManager
-import com.vurgun.skyfit.data.core.domain.model.UserRole
+import com.vurgun.skyfit.core.data.domain.repository.UserManager
+import com.vurgun.skyfit.core.data.domain.model.UserRole
 import com.vurgun.skyfit.feature.settings.account.MobileSettingsManageAccountsScreen
 import com.vurgun.skyfit.feature.settings.changepassword.SettingsChangePasswordScreen
-import com.vurgun.skyfit.ui.core.utils.RequireRole
+import com.vurgun.skyfit.core.ui.utils.RequireRole
 import com.vurgun.skyfit.feature.settings.facility.MobileFacilitySettingsHomeScreen
 import com.vurgun.skyfit.feature.settings.facility.branch.MobileFacilitySettingsManageBranchesScreen
 import com.vurgun.skyfit.feature.settings.facility.member.MobileFacilityAddMemberScreen
@@ -36,7 +36,7 @@ import com.vurgun.skyfit.feature.settings.user.MobileUserSettingsEditProfileScre
 import com.vurgun.skyfit.feature.settings.user.MobileUserSettingsHomeScreen
 import com.vurgun.skyfit.feature.settings.user.MobileUserSettingsNotificationsScreen
 import com.vurgun.skyfit.feature.settings.user.MobileUserSettingsPaymentHistoryScreen
-import com.vurgun.skyfit.ui.core.screen.UnauthorizedAccessScreen
+import com.vurgun.skyfit.core.ui.screen.UnauthorizedAccessScreen
 import kotlinx.serialization.Serializable
 import org.koin.compose.koinInject
 

@@ -13,22 +13,22 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.unit.dp
-import com.vurgun.skyfit.ui.core.components.text.PasswordInputText
-import com.vurgun.skyfit.ui.core.components.text.SingleLineInputText
-import com.vurgun.skyfit.ui.core.components.button.PrimaryLargeButton
-import com.vurgun.skyfit.ui.core.components.special.SkyFitMobileScaffold
-import com.vurgun.skyfit.ui.core.components.special.SkyFitScreenHeader
+import com.vurgun.skyfit.core.ui.components.text.PasswordInputText
+import com.vurgun.skyfit.core.ui.components.text.SingleLineInputText
+import com.vurgun.skyfit.core.ui.components.button.PrimaryLargeButton
+import com.vurgun.skyfit.core.ui.components.special.SkyFitMobileScaffold
+import com.vurgun.skyfit.core.ui.components.special.SkyFitScreenHeader
 import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.koinInject
-import skyfit.ui.core.generated.resources.Res
-import skyfit.ui.core.generated.resources.settings_change_my_password_label
-import skyfit.ui.core.generated.resources.settings_change_password_action
-import skyfit.ui.core.generated.resources.settings_current_password_hint
-import skyfit.ui.core.generated.resources.settings_current_password_label
-import skyfit.ui.core.generated.resources.settings_new_password_again_hint
-import skyfit.ui.core.generated.resources.settings_new_password_again_label
-import skyfit.ui.core.generated.resources.settings_new_password_hint
-import skyfit.ui.core.generated.resources.settings_new_password_label
+import skyfit.core.ui.generated.resources.Res
+import skyfit.core.ui.generated.resources.settings_change_my_password_label
+import skyfit.core.ui.generated.resources.settings_change_password_action
+import skyfit.core.ui.generated.resources.settings_current_password_hint
+import skyfit.core.ui.generated.resources.settings_current_password_label
+import skyfit.core.ui.generated.resources.settings_new_password_again_hint
+import skyfit.core.ui.generated.resources.settings_new_password_again_label
+import skyfit.core.ui.generated.resources.settings_new_password_hint
+import skyfit.core.ui.generated.resources.settings_new_password_label
 
 @Composable
 fun SettingsChangePasswordScreen(goToBack: () -> Unit) {

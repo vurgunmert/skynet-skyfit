@@ -53,16 +53,16 @@ import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.vurgun.skyfit.feature.home.component.MobileDashboardHomeToolbarComponent
 import com.vurgun.skyfit.feature.home.component.MobileTrainerHomeUpcomingAppointmentsComponent
-import com.vurgun.skyfit.ui.core.components.button.PrimaryMediumButton
-import com.vurgun.skyfit.ui.core.components.special.CharacterImage
-import com.vurgun.skyfit.ui.core.components.special.SkyFitMobileScaffold
-import com.vurgun.skyfit.ui.core.styling.SkyFitColor
-import com.vurgun.skyfit.ui.core.styling.SkyFitTypography
+import com.vurgun.skyfit.core.ui.components.button.PrimaryMediumButton
+import com.vurgun.skyfit.core.ui.components.special.CharacterImage
+import com.vurgun.skyfit.core.ui.components.special.SkyFitMobileScaffold
+import com.vurgun.skyfit.core.ui.styling.SkyFitColor
+import com.vurgun.skyfit.core.ui.styling.SkyFitTypography
 import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.viewmodel.koinViewModel
-import skyfit.ui.core.generated.resources.Res
-import skyfit.ui.core.generated.resources.lesson_add_action
-import skyfit.ui.core.generated.resources.upcoming_appointments_label
+import skyfit.core.ui.generated.resources.Res
+import skyfit.core.ui.generated.resources.lesson_add_action
+import skyfit.core.ui.generated.resources.upcoming_appointments_label
 import kotlin.math.sign
 
 @Composable

@@ -11,10 +11,10 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import com.vurgun.skyfit.data.core.utility.getTurkishMonthName
-import com.vurgun.skyfit.ui.core.components.icon.ActionIcon
-import com.vurgun.skyfit.ui.core.components.icon.IconAsset
-import com.vurgun.skyfit.ui.core.components.text.BodyMediumSemiboldText
+import com.vurgun.skyfit.core.data.utility.getTurkishMonthName
+import com.vurgun.skyfit.core.ui.components.icon.ActionIcon
+import com.vurgun.skyfit.core.ui.components.icon.IconAsset
+import com.vurgun.skyfit.core.ui.components.text.BodyMediumSemiboldText
 import kotlinx.datetime.LocalDate
 
 @Composable

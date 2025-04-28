@@ -20,8 +20,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import com.vurgun.skyfit.ui.core.styling.SkyFitColor
-import com.vurgun.skyfit.ui.core.styling.SkyFitTypography
+import com.vurgun.skyfit.core.ui.styling.SkyFitColor
+import com.vurgun.skyfit.core.ui.styling.SkyFitTypography
 
 @Composable
 fun SkyFitFourDigitClockComponent(

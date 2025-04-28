@@ -18,17 +18,16 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
-import com.vurgun.skyfit.feature.dashboard.navigation.DashboardRoute
 import com.vurgun.skyfit.feature.dashboard.screen.DashboardTab
-import com.vurgun.skyfit.ui.core.components.special.ChatBotButtonComponent
-import com.vurgun.skyfit.ui.core.styling.SkyFitColor
+import com.vurgun.skyfit.core.ui.components.special.ChatBotButtonComponent
+import com.vurgun.skyfit.core.ui.styling.SkyFitColor
 import org.jetbrains.compose.resources.DrawableResource
 import org.jetbrains.compose.resources.painterResource
-import skyfit.ui.core.generated.resources.Res
-import skyfit.ui.core.generated.resources.ic_home
-import skyfit.ui.core.generated.resources.ic_home_fill
-import skyfit.ui.core.generated.resources.ic_profile
-import skyfit.ui.core.generated.resources.ic_profile_fill
+import skyfit.core.ui.generated.resources.Res
+import skyfit.core.ui.generated.resources.ic_home
+import skyfit.core.ui.generated.resources.ic_home_fill
+import skyfit.core.ui.generated.resources.ic_profile
+import skyfit.core.ui.generated.resources.ic_profile_fill
 
 @Composable
 internal fun BottomNavigationBar(

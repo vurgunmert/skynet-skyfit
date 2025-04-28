@@ -2,9 +2,9 @@ package com.vurgun.skyfit
 
 import androidx.compose.ui.window.Window
 import androidx.compose.ui.window.application
-import com.vurgun.skyfit.data.core.storage.LocalSettingsStore
-import com.vurgun.skyfit.data.core.storage.provideLocalSettings
-import com.vurgun.skyfit.ui.core.styling.LocalDimensions
+import com.vurgun.skyfit.core.data.storage.LocalSettingsStore
+import com.vurgun.skyfit.core.data.storage.provideLocalSettings
+import com.vurgun.skyfit.core.ui.styling.LocalDimensions
 import org.koin.dsl.module
 import java.awt.Dimension
 

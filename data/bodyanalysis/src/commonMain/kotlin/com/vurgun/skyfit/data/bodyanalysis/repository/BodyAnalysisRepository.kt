@@ -1,11 +1,10 @@
 package com.vurgun.skyfit.data.bodyanalysis.repository
 
-import com.vurgun.skyfit.data.network.commonHttpClient
+import com.vurgun.skyfit.core.network.commonHttpClient
 import io.ktor.client.call.body
 import io.ktor.client.request.header
 import io.ktor.client.request.post
 import io.ktor.client.request.setBody
-import io.ktor.client.statement.HttpResponse
 import io.ktor.http.ContentType
 import io.ktor.http.contentType
 import kotlinx.serialization.SerialName

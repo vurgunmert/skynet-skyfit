@@ -2,7 +2,7 @@ package com.vurgun.skyfit.feature.settings.trainer
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.vurgun.skyfit.ui.core.components.menu.SettingsSwitchOptionItem
+import com.vurgun.skyfit.core.ui.components.menu.SettingsSwitchOptionItem
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.update

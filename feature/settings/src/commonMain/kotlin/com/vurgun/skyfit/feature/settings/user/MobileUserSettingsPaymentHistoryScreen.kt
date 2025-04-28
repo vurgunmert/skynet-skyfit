@@ -10,8 +10,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.vurgun.skyfit.feature.settings.payment.PaymentHistoryItem
 import com.vurgun.skyfit.feature.settings.payment.PaymentHistoryItemComponent
-import com.vurgun.skyfit.ui.core.components.special.SkyFitMobileScaffold
-import com.vurgun.skyfit.ui.core.components.special.SkyFitScreenHeader
+import com.vurgun.skyfit.core.ui.components.special.SkyFitMobileScaffold
+import com.vurgun.skyfit.core.ui.components.special.SkyFitScreenHeader
 
 @Composable
 fun MobileUserSettingsPaymentHistoryScreen(goToBack: () -> Unit) {

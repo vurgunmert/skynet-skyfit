@@ -1,7 +1,7 @@
 package com.vurgun.skyfit.data.courses.mapper
 
-import com.vurgun.skyfit.data.core.utility.parseServerToDateOnly
-import com.vurgun.skyfit.data.core.utility.parseServerToHHMMTime
+import com.vurgun.skyfit.core.data.utility.parseServerToDateOnly
+import com.vurgun.skyfit.core.data.utility.parseServerToHHMMTime
 import com.vurgun.skyfit.data.courses.domain.model.Appointment
 import com.vurgun.skyfit.data.courses.domain.model.AppointmentDetail
 import com.vurgun.skyfit.data.courses.model.AppointmentDTO

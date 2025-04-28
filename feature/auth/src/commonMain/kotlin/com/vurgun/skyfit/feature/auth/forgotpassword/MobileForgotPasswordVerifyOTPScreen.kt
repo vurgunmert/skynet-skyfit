@@ -21,28 +21,47 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import cafe.adriel.voyager.core.screen.Screen
+import cafe.adriel.voyager.koin.koinScreenModel
+import cafe.adriel.voyager.navigator.LocalNavigator
+import cafe.adriel.voyager.navigator.currentOrThrow
+import com.vurgun.skyfit.core.ui.components.special.SkyFitLogoComponent
+import com.vurgun.skyfit.core.ui.components.special.SkyFitMobileScaffold
+import com.vurgun.skyfit.core.ui.components.text.SecondaryMediumText
+import com.vurgun.skyfit.core.ui.styling.LocalPadding
+import com.vurgun.skyfit.core.ui.styling.SkyFitTypography
+import com.vurgun.skyfit.core.ui.utils.KeyboardState
+import com.vurgun.skyfit.core.ui.utils.LocalWindowSize
+import com.vurgun.skyfit.core.ui.utils.formatPhoneNumber
+import com.vurgun.skyfit.core.ui.utils.keyboardAsState
 import com.vurgun.skyfit.feature.auth.component.OTPInputTextField
 import com.vurgun.skyfit.feature.auth.login.MobileOTPVerificationActionGroup
-import com.vurgun.skyfit.ui.core.components.special.SkyFitLogoComponent
-import com.vurgun.skyfit.ui.core.components.special.SkyFitMobileScaffold
-import com.vurgun.skyfit.ui.core.components.text.SecondaryMediumText
-import com.vurgun.skyfit.ui.core.styling.LocalPadding
-import com.vurgun.skyfit.ui.core.styling.SkyFitTypography
-import com.vurgun.skyfit.ui.core.utils.KeyboardState
-import com.vurgun.skyfit.ui.core.utils.formatPhoneNumber
-import com.vurgun.skyfit.ui.core.utils.keyboardAsState
 import kotlinx.coroutines.flow.collectLatest
 import org.jetbrains.compose.resources.stringResource
-import org.koin.compose.koinInject
-import skyfit.ui.core.generated.resources.Res
-import skyfit.ui.core.generated.resources.auth_code_sent_message
-import skyfit.ui.core.generated.resources.auth_forgot_password_action
+import skyfit.core.ui.generated.resources.Res
+import skyfit.core.ui.generated.resources.auth_code_sent_message
+import skyfit.core.ui.generated.resources.auth_forgot_password_action
+
+class ForgotPasswordVerifyOTPScreen : Screen {
+
+    @Composable
+    override fun Content() {
+        val windowSize = LocalWindowSize.current
+        val appNavigator = LocalNavigator.currentOrThrow
+        val viewModel = koinScreenModel<ForgotPasswordVerifyOTPViewModel>()
+
+        MobileForgotPasswordVerifyOTPScreen(
+            goToReset = { appNavigator.replace(ForgotPasswordResetScreen()) },
+            viewModel = viewModel
+        )
+    }
+}
 
 @Composable
-fun MobileForgotPasswordVerifyOTPScreen(
-    goToReset: () -> Unit
+private fun MobileForgotPasswordVerifyOTPScreen(
+    goToReset: () -> Unit,
+    viewModel: ForgotPasswordVerifyOTPViewModel
 ) {
-    val viewModel: ForgotPasswordVerifyOTPViewModel = koinInject()
 
     val enteredOtp by viewModel.enteredOtp.collectAsState()
     val isLoading by viewModel.isLoading.collectAsState()
@@ -62,12 +81,14 @@ fun MobileForgotPasswordVerifyOTPScreen(
     }
 
     LaunchedEffect(viewModel) {
-        viewModel.events.collectLatest { event ->
-            when (event) {
-                ForgotPasswordVerifyOTPViewEvent.GoToResetPassword -> { goToReset() }
+        viewModel.effect.collectLatest { effect ->
+            when (effect) {
+                ForgotPasswordVerifyOTPEffect.GoToResetPassword -> {
+                    goToReset()
+                }
 
-                is ForgotPasswordVerifyOTPViewEvent.ShowError -> {
-                    errorMessage = event.message
+                is ForgotPasswordVerifyOTPEffect.ShowError -> {
+                    errorMessage = effect.message
                 }
             }
         }

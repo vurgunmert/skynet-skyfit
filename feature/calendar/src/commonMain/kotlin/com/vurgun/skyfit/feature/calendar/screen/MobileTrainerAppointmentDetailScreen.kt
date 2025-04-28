@@ -25,11 +25,11 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.vurgun.skyfit.ui.core.components.loader.FullScreenLoader
-import com.vurgun.skyfit.ui.core.components.special.SkyFitMobileScaffold
-import com.vurgun.skyfit.ui.core.screen.ErrorScreen
-import com.vurgun.skyfit.ui.core.styling.SkyFitColor
-import com.vurgun.skyfit.ui.core.styling.SkyFitTypography
+import com.vurgun.skyfit.core.ui.components.loader.FullScreenLoader
+import com.vurgun.skyfit.core.ui.components.special.SkyFitMobileScaffold
+import com.vurgun.skyfit.core.ui.screen.ErrorScreen
+import com.vurgun.skyfit.core.ui.styling.SkyFitColor
+import com.vurgun.skyfit.core.ui.styling.SkyFitTypography
 import org.koin.compose.viewmodel.koinViewModel
 
 @Composable

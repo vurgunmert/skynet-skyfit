@@ -32,14 +32,14 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.vurgun.skyfit.ui.core.components.image.NetworkImage
-import com.vurgun.skyfit.ui.core.components.special.ButtonSize
-import com.vurgun.skyfit.ui.core.components.special.ButtonState
-import com.vurgun.skyfit.ui.core.components.special.ButtonVariant
-import com.vurgun.skyfit.ui.core.components.special.SkyFitButtonComponent
-import com.vurgun.skyfit.ui.core.components.special.SkyFitScaffold
-import com.vurgun.skyfit.ui.core.components.special.SkyFitScreenHeader
-import com.vurgun.skyfit.ui.core.styling.SkyFitColor
+import com.vurgun.skyfit.core.ui.components.image.NetworkImage
+import com.vurgun.skyfit.core.ui.components.special.ButtonSize
+import com.vurgun.skyfit.core.ui.components.special.ButtonState
+import com.vurgun.skyfit.core.ui.components.special.ButtonVariant
+import com.vurgun.skyfit.core.ui.components.special.SkyFitButtonComponent
+import com.vurgun.skyfit.core.ui.components.special.SkyFitScaffold
+import com.vurgun.skyfit.core.ui.components.special.SkyFitScreenHeader
+import com.vurgun.skyfit.core.ui.styling.SkyFitColor
 
 @Composable
 fun MobileExploreChallengeDetailScreen(

@@ -1,6 +1,6 @@
 package com.vurgun.skyfit.feature.home
 
-import com.vurgun.skyfit.data.core.dataCoreModule
+import com.vurgun.skyfit.core.data.dataCoreModule
 import com.vurgun.skyfit.data.courses.dataCoursesModule
 import com.vurgun.skyfit.feature.home.screen.FacilityHomeViewModel
 import com.vurgun.skyfit.feature.home.screen.TrainerHomeViewModel

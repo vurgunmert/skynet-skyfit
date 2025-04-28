@@ -33,23 +33,23 @@ import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.vurgun.skyfit.ui.core.components.loader.FullScreenLoader
-import com.vurgun.skyfit.ui.core.components.special.SkyFitMobileScaffold
-import com.vurgun.skyfit.ui.core.screen.ErrorScreen
-import com.vurgun.skyfit.ui.core.styling.SkyFitColor
-import com.vurgun.skyfit.ui.core.styling.SkyFitTypography
+import com.vurgun.skyfit.core.ui.components.loader.FullScreenLoader
+import com.vurgun.skyfit.core.ui.components.special.SkyFitMobileScaffold
+import com.vurgun.skyfit.core.ui.screen.ErrorScreen
+import com.vurgun.skyfit.core.ui.styling.SkyFitColor
+import com.vurgun.skyfit.core.ui.styling.SkyFitTypography
 import org.jetbrains.compose.resources.DrawableResource
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.viewmodel.koinViewModel
-import skyfit.ui.core.generated.resources.Res
-import skyfit.ui.core.generated.resources.cancel_action
-import skyfit.ui.core.generated.resources.ic_check_circle
-import skyfit.ui.core.generated.resources.ic_chevron_left
-import skyfit.ui.core.generated.resources.ic_clock
-import skyfit.ui.core.generated.resources.ic_location_pin
-import skyfit.ui.core.generated.resources.ic_profile
-import skyfit.ui.core.generated.resources.trainer_note_label
+import skyfit.core.ui.generated.resources.Res
+import skyfit.core.ui.generated.resources.cancel_action
+import skyfit.core.ui.generated.resources.ic_check_circle
+import skyfit.core.ui.generated.resources.ic_chevron_left
+import skyfit.core.ui.generated.resources.ic_clock
+import skyfit.core.ui.generated.resources.ic_location_pin
+import skyfit.core.ui.generated.resources.ic_profile
+import skyfit.core.ui.generated.resources.trainer_note_label
 
 @Composable
 fun MobileUserAppointmentDetailScreen(

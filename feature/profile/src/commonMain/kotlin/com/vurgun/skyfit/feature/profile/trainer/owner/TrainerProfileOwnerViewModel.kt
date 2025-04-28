@@ -2,18 +2,18 @@ package com.vurgun.skyfit.feature.profile.trainer.owner
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.vurgun.skyfit.data.core.domain.model.TrainerDetail
+import com.vurgun.skyfit.core.data.domain.model.TrainerDetail
 import com.vurgun.skyfit.data.courses.domain.repository.CourseRepository
 import com.vurgun.skyfit.data.courses.mapper.LessonSessionItemViewDataMapper
 import com.vurgun.skyfit.data.courses.model.LessonSessionItemViewData
-import com.vurgun.skyfit.data.user.domain.TrainerProfile
-import com.vurgun.skyfit.data.user.repository.ProfileRepository
-import com.vurgun.skyfit.data.user.repository.UserManager
+import com.vurgun.skyfit.core.data.domain.model.TrainerProfile
+import com.vurgun.skyfit.core.data.domain.repository.ProfileRepository
+import com.vurgun.skyfit.core.data.domain.repository.UserManager
 import com.vurgun.skyfit.feature.profile.components.viewdata.LifestyleActionItemViewData
 import com.vurgun.skyfit.feature.profile.components.viewdata.LifestyleActionRowViewData
 import com.vurgun.skyfit.feature.profile.components.viewdata.PhotoGalleryStackViewData
 import com.vurgun.skyfit.feature.social.viewdata.SocialPostItemViewData
-import com.vurgun.skyfit.ui.core.styling.SkyFitAsset
+import com.vurgun.skyfit.core.ui.styling.SkyFitAsset
 import kotlinx.coroutines.async
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow

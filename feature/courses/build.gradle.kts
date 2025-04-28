@@ -36,9 +36,8 @@ kotlin {
         val desktopMain by getting
 
         commonMain.dependencies {
-            implementation(projects.ui.core)
-            implementation(projects.data.core)
-            implementation(projects.data.user)
+            implementation(projects.core.ui)
+            implementation(projects.core.data)
             implementation(projects.data.courses)
             implementation(projects.data.settings)
 

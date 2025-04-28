@@ -6,16 +6,16 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.material.Divider
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import com.vurgun.skyfit.ui.core.components.text.BodyMediumRegularText
-import com.vurgun.skyfit.ui.core.styling.SkyFitColor
-import com.vurgun.skyfit.ui.core.components.popup.BasicPopupMenu
-import com.vurgun.skyfit.ui.core.components.popup.SelectablePopupMenuItem
+import com.vurgun.skyfit.core.ui.components.text.BodyMediumRegularText
+import com.vurgun.skyfit.core.ui.styling.SkyFitColor
+import com.vurgun.skyfit.core.ui.components.popup.BasicPopupMenu
+import com.vurgun.skyfit.core.ui.components.popup.SelectablePopupMenuItem
 import org.jetbrains.compose.resources.stringResource
-import skyfit.ui.core.generated.resources.Res
-import skyfit.ui.core.generated.resources.settings_support_issue_account_label
-import skyfit.ui.core.generated.resources.settings_support_issue_other_label
-import skyfit.ui.core.generated.resources.settings_support_issue_payment_label
-import skyfit.ui.core.generated.resources.settings_support_issue_technical_label
+import skyfit.core.ui.generated.resources.Res
+import skyfit.core.ui.generated.resources.settings_support_issue_account_label
+import skyfit.core.ui.generated.resources.settings_support_issue_other_label
+import skyfit.core.ui.generated.resources.settings_support_issue_payment_label
+import skyfit.core.ui.generated.resources.settings_support_issue_technical_label
 
 @Composable
 fun SelectSupportSubjectPopupMenu(

@@ -21,32 +21,59 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.unit.dp
-import com.vurgun.skyfit.ui.core.components.button.PrimaryLargeButton
-import com.vurgun.skyfit.ui.core.components.button.SecondaryLargeButton
-import com.vurgun.skyfit.ui.core.components.special.SkyFitLogoComponent
-import com.vurgun.skyfit.ui.core.components.special.SkyFitMobileScaffold
-import com.vurgun.skyfit.ui.core.components.text.PasswordTextInput
-import com.vurgun.skyfit.ui.core.styling.SkyFitColor
-import com.vurgun.skyfit.ui.core.styling.SkyFitTypography
-import com.vurgun.skyfit.ui.core.utils.KeyboardState
-import com.vurgun.skyfit.ui.core.utils.keyboardAsState
+import cafe.adriel.voyager.core.screen.Screen
+import cafe.adriel.voyager.koin.koinScreenModel
+import cafe.adriel.voyager.navigator.LocalNavigator
+import cafe.adriel.voyager.navigator.currentOrThrow
+import com.vurgun.skyfit.core.navigation.SharedScreen
+import com.vurgun.skyfit.core.navigation.popTo
+import com.vurgun.skyfit.core.navigation.replaceAllWith
+import com.vurgun.skyfit.core.ui.components.button.PrimaryLargeButton
+import com.vurgun.skyfit.core.ui.components.button.SecondaryLargeButton
+import com.vurgun.skyfit.core.ui.components.special.SkyFitLogoComponent
+import com.vurgun.skyfit.core.ui.components.special.SkyFitMobileScaffold
+import com.vurgun.skyfit.core.ui.components.text.PasswordTextInput
+import com.vurgun.skyfit.core.ui.styling.SkyFitColor
+import com.vurgun.skyfit.core.ui.styling.SkyFitTypography
+import com.vurgun.skyfit.core.ui.utils.KeyboardState
+import com.vurgun.skyfit.core.ui.utils.LocalWindowSize
+import com.vurgun.skyfit.core.ui.utils.keyboardAsState
 import kotlinx.coroutines.flow.collectLatest
 import org.jetbrains.compose.resources.stringResource
-import org.koin.compose.viewmodel.koinViewModel
-import skyfit.ui.core.generated.resources.Res
-import skyfit.ui.core.generated.resources.auth_password_input_hint
-import skyfit.ui.core.generated.resources.auth_password_repeat_input_hint
-import skyfit.ui.core.generated.resources.auth_password_reset_message
-import skyfit.ui.core.generated.resources.auth_password_reset_title
-import skyfit.ui.core.generated.resources.cancel_action
-import skyfit.ui.core.generated.resources.continue_action
+import skyfit.core.ui.generated.resources.Res
+import skyfit.core.ui.generated.resources.auth_password_input_hint
+import skyfit.core.ui.generated.resources.auth_password_repeat_input_hint
+import skyfit.core.ui.generated.resources.auth_password_reset_message
+import skyfit.core.ui.generated.resources.auth_password_reset_title
+import skyfit.core.ui.generated.resources.cancel_action
+import skyfit.core.ui.generated.resources.continue_action
+
+class ForgotPasswordResetScreen : Screen {
+
+    @Composable
+    override fun Content() {
+        val windowSize = LocalWindowSize.current
+        val appNavigator = LocalNavigator.currentOrThrow
+        val viewModel = koinScreenModel<PasswordResetViewModel>()
+
+        MobileForgotPasswordResetScreen(
+            goToLogin = {
+                appNavigator.popTo(SharedScreen.Login)
+            },
+            goToDashboard = {
+                appNavigator.replaceAllWith(SharedScreen.Dashboard)
+            },
+            viewModel = viewModel
+        )
+    }
+}
 
 @Composable
 fun MobileForgotPasswordResetScreen(
     goToLogin: () -> Unit,
-    goToDashboard: () -> Unit
+    goToDashboard: () -> Unit,
+    viewModel: PasswordResetViewModel
 ) {
-    val viewModel: PasswordResetViewModel = koinViewModel()
 
     val password by viewModel.password.collectAsState()
     val confirmPassword by viewModel.confirmPassword.collectAsState()
@@ -55,10 +82,10 @@ fun MobileForgotPasswordResetScreen(
     var errorMessage by remember { mutableStateOf<String?>(null) }
 
     LaunchedEffect(viewModel) {
-        viewModel.uiEvents.collectLatest { event ->
-            when (event) {
+        viewModel.effect.collectLatest { effect ->
+            when (effect) {
                 is PasswordResetViewEvent.Error -> {
-                    errorMessage = event.message
+                    errorMessage = effect.message
                 }
 
                 PasswordResetViewEvent.GoToDashboard -> {

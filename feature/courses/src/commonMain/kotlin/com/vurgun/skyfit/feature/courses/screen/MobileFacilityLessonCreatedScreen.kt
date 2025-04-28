@@ -17,20 +17,20 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import com.vurgun.skyfit.ui.core.components.button.PrimaryLargeButton
-import com.vurgun.skyfit.ui.core.components.button.SecondaryLargeButton
-import com.vurgun.skyfit.ui.core.components.event.AppointmentCardViewData
-import com.vurgun.skyfit.ui.core.components.event.DetailedLessonEventItem
-import com.vurgun.skyfit.ui.core.components.special.SkyFitMobileScaffold
-import com.vurgun.skyfit.ui.core.styling.SkyFitTypography
+import com.vurgun.skyfit.core.ui.components.button.PrimaryLargeButton
+import com.vurgun.skyfit.core.ui.components.button.SecondaryLargeButton
+import com.vurgun.skyfit.core.ui.components.event.AppointmentCardViewData
+import com.vurgun.skyfit.core.ui.components.event.DetailedLessonEventItem
+import com.vurgun.skyfit.core.ui.components.special.SkyFitMobileScaffold
+import com.vurgun.skyfit.core.ui.styling.SkyFitTypography
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
-import skyfit.ui.core.generated.resources.Res
-import skyfit.ui.core.generated.resources.back_to_lessons_action
-import skyfit.ui.core.generated.resources.go_to_home_action
-import skyfit.ui.core.generated.resources.img_check_mark_blue_box
-import skyfit.ui.core.generated.resources.lesson_create_action
-import skyfit.ui.core.generated.resources.lesson_created_message
+import skyfit.core.ui.generated.resources.Res
+import skyfit.core.ui.generated.resources.back_to_lessons_action
+import skyfit.core.ui.generated.resources.go_to_home_action
+import skyfit.core.ui.generated.resources.img_check_mark_blue_box
+import skyfit.core.ui.generated.resources.lesson_create_action
+import skyfit.core.ui.generated.resources.lesson_created_message
 
 @Composable
 fun MobileFacilityLessonCreatedScreen(

@@ -31,24 +31,20 @@ dependencyResolutionManagement {
 }
 
 include(":composeApp")
-include(":ui:core")
 
-include(":data:auth")
+include(":core:network")
+include(":core:data")
+include(":core:ui")
+include(":core:navigation")
+
 include(":data:bodyanalysis")
 include(":data:calendar")
-include(":data:core")
 include(":data:courses")
-include(":data:exercise")
-include(":data:explore")
 include(":data:messaging")
-include(":data:network")
-include(":data:notification")
 include(":data:onboarding")
-include(":data:profile")
 include(":data:settings")
-include(":data:social")
-include(":data:user")
 
+include(":feature:splash")
 include(":feature:auth")
 include(":feature:onboarding")
 include(":feature:dashboard")

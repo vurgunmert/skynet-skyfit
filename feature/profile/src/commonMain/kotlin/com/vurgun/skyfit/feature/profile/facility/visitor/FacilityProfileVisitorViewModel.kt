@@ -2,15 +2,15 @@ package com.vurgun.skyfit.feature.profile.facility.visitor
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.vurgun.skyfit.data.core.domain.model.BaseUserDetail
-import com.vurgun.skyfit.data.core.utility.now
+import com.vurgun.skyfit.core.data.domain.model.BaseUserDetail
+import com.vurgun.skyfit.core.data.utility.now
 import com.vurgun.skyfit.data.courses.domain.repository.CourseRepository
 import com.vurgun.skyfit.data.courses.mapper.LessonSessionItemViewDataMapper
 import com.vurgun.skyfit.data.courses.model.LessonSessionItemViewData
-import com.vurgun.skyfit.data.user.domain.FacilityProfile
-import com.vurgun.skyfit.data.user.domain.FacilityTrainerProfile
-import com.vurgun.skyfit.data.user.repository.ProfileRepository
-import com.vurgun.skyfit.data.user.repository.UserManager
+import com.vurgun.skyfit.core.data.domain.model.FacilityProfile
+import com.vurgun.skyfit.core.data.domain.model.FacilityTrainerProfile
+import com.vurgun.skyfit.core.data.domain.repository.ProfileRepository
+import com.vurgun.skyfit.core.data.domain.repository.UserManager
 import com.vurgun.skyfit.feature.social.viewdata.SocialPostItemViewData
 import kotlinx.coroutines.async
 import kotlinx.coroutines.flow.MutableSharedFlow

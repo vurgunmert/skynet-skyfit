@@ -40,13 +40,13 @@ import com.vurgun.skyfit.data.bodyanalysis.model.LeftPostureResponse
 import com.vurgun.skyfit.data.bodyanalysis.model.PostureFinding
 import com.vurgun.skyfit.data.bodyanalysis.model.PostureType
 import com.vurgun.skyfit.data.bodyanalysis.model.RightPostureResponse
-import com.vurgun.skyfit.ui.core.components.button.SecondaryMicroButton
-import com.vurgun.skyfit.ui.core.styling.SkyFitColor
-import com.vurgun.skyfit.ui.core.styling.SkyFitTypography
+import com.vurgun.skyfit.core.ui.components.button.SecondaryMicroButton
+import com.vurgun.skyfit.core.ui.styling.SkyFitColor
+import com.vurgun.skyfit.core.ui.styling.SkyFitTypography
 import org.jetbrains.compose.resources.ExperimentalResourceApi
 import org.jetbrains.compose.resources.painterResource
-import skyfit.ui.core.generated.resources.Res
-import skyfit.ui.core.generated.resources.ic_close_circle
+import skyfit.core.ui.generated.resources.Res
+import skyfit.core.ui.generated.resources.ic_close_circle
 
 @OptIn(ExperimentalResourceApi::class)
 @Composable

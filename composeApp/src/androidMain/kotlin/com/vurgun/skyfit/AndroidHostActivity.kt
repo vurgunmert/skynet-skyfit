@@ -6,8 +6,8 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.core.view.WindowCompat
 import androidx.core.view.WindowInsetsControllerCompat
-import com.vurgun.skyfit.data.core.storage.LocalSettingsStore
-import com.vurgun.skyfit.data.core.storage.provideLocalSettings
+import com.vurgun.skyfit.core.data.storage.LocalSettingsStore
+import com.vurgun.skyfit.core.data.storage.provideLocalSettings
 import org.koin.android.ext.koin.androidContext
 import org.koin.dsl.module
 

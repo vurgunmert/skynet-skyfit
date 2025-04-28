@@ -34,21 +34,20 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import com.vurgun.skyfit.data.courses.domain.model.Appointment
-import com.vurgun.skyfit.ui.core.components.dialog.ErrorDialog
-import com.vurgun.skyfit.ui.core.components.event.ActiveAppointmentEventItem
-import com.vurgun.skyfit.ui.core.components.event.AttendanceAppointmentEventItem
-import com.vurgun.skyfit.ui.core.components.event.BasicAppointmentEventItem
-import com.vurgun.skyfit.ui.core.components.special.SkyFitBadgeTabBarComponent
-import com.vurgun.skyfit.ui.core.components.special.SkyFitMobileScaffold
-import com.vurgun.skyfit.ui.core.components.special.SkyFitScreenHeader
-import com.vurgun.skyfit.ui.core.styling.SkyFitColor
-import com.vurgun.skyfit.ui.core.styling.SkyFitTypography
-import org.jetbrains.compose.resources.getString
+import com.vurgun.skyfit.core.ui.components.dialog.ErrorDialog
+import com.vurgun.skyfit.core.ui.components.event.ActiveAppointmentEventItem
+import com.vurgun.skyfit.core.ui.components.event.AttendanceAppointmentEventItem
+import com.vurgun.skyfit.core.ui.components.event.BasicAppointmentEventItem
+import com.vurgun.skyfit.core.ui.components.special.SkyFitBadgeTabBarComponent
+import com.vurgun.skyfit.core.ui.components.special.SkyFitMobileScaffold
+import com.vurgun.skyfit.core.ui.components.special.SkyFitScreenHeader
+import com.vurgun.skyfit.core.ui.styling.SkyFitColor
+import com.vurgun.skyfit.core.ui.styling.SkyFitTypography
 import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.viewmodel.koinViewModel
-import skyfit.ui.core.generated.resources.Res
-import skyfit.ui.core.generated.resources.appointments_title
-import skyfit.ui.core.generated.resources.error_cancel_appointment_title
+import skyfit.core.ui.generated.resources.Res
+import skyfit.core.ui.generated.resources.appointments_title
+import skyfit.core.ui.generated.resources.error_cancel_appointment_title
 
 @Composable
 fun MobileUserAppointmentListingScreen(

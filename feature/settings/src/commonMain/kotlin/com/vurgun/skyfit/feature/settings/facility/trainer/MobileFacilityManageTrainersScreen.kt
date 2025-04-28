@@ -26,23 +26,23 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.vurgun.skyfit.data.settings.domain.model.Trainer
-import com.vurgun.skyfit.ui.core.components.image.NetworkImage
-import com.vurgun.skyfit.ui.core.components.special.ButtonSize
-import com.vurgun.skyfit.ui.core.components.special.ButtonState
-import com.vurgun.skyfit.ui.core.components.special.ButtonVariant
-import com.vurgun.skyfit.ui.core.components.special.SkyFitButtonComponent
-import com.vurgun.skyfit.ui.core.components.special.SkyFitMobileScaffold
-import com.vurgun.skyfit.ui.core.components.special.SkyFitScreenHeader
-import com.vurgun.skyfit.ui.core.components.special.SkyFitSearchTextInputComponent
-import com.vurgun.skyfit.ui.core.styling.SkyFitColor
-import com.vurgun.skyfit.ui.core.styling.SkyFitTypography
+import com.vurgun.skyfit.core.ui.components.image.NetworkImage
+import com.vurgun.skyfit.core.ui.components.special.ButtonSize
+import com.vurgun.skyfit.core.ui.components.special.ButtonState
+import com.vurgun.skyfit.core.ui.components.special.ButtonVariant
+import com.vurgun.skyfit.core.ui.components.special.SkyFitButtonComponent
+import com.vurgun.skyfit.core.ui.components.special.SkyFitMobileScaffold
+import com.vurgun.skyfit.core.ui.components.special.SkyFitScreenHeader
+import com.vurgun.skyfit.core.ui.components.special.SkyFitSearchTextInputComponent
+import com.vurgun.skyfit.core.ui.styling.SkyFitColor
+import com.vurgun.skyfit.core.ui.styling.SkyFitTypography
 import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.viewmodel.koinViewModel
-import skyfit.ui.core.generated.resources.Res
-import skyfit.ui.core.generated.resources.add_action
-import skyfit.ui.core.generated.resources.delete_action
-import skyfit.ui.core.generated.resources.search_action
-import skyfit.ui.core.generated.resources.trainers_label
+import skyfit.core.ui.generated.resources.Res
+import skyfit.core.ui.generated.resources.add_action
+import skyfit.core.ui.generated.resources.delete_action
+import skyfit.core.ui.generated.resources.search_action
+import skyfit.core.ui.generated.resources.trainers_label
 
 @Composable
 internal fun MobileFacilityManageTrainersScreen(

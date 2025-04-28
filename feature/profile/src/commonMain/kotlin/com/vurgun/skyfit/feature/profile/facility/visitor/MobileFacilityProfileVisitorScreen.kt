@@ -25,21 +25,21 @@ import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
-import com.vurgun.skyfit.data.user.domain.FacilityTrainerProfile
+import com.vurgun.skyfit.core.data.domain.model.FacilityTrainerProfile
 import com.vurgun.skyfit.feature.calendar.component.weekly.CalendarWeekDaySelectorViewModel
 import com.vurgun.skyfit.feature.calendar.component.weekly.rememberWeekDaySelectorState
 import com.vurgun.skyfit.feature.profile.components.MobileProfileBackgroundImage
 import com.vurgun.skyfit.feature.profile.components.VerticalTrainerProfileCard
 import com.vurgun.skyfit.feature.profile.facility.owner.FacilityProfileComponent
-import com.vurgun.skyfit.ui.core.components.loader.FullScreenLoader
-import com.vurgun.skyfit.ui.core.components.special.SkyFitMobileScaffold
-import com.vurgun.skyfit.ui.core.components.text.BodyLargeSemiboldText
-import com.vurgun.skyfit.ui.core.screen.ErrorScreen
-import com.vurgun.skyfit.ui.core.styling.SkyFitColor
+import com.vurgun.skyfit.core.ui.components.loader.FullScreenLoader
+import com.vurgun.skyfit.core.ui.components.special.SkyFitMobileScaffold
+import com.vurgun.skyfit.core.ui.components.text.BodyLargeSemiboldText
+import com.vurgun.skyfit.core.ui.screen.ErrorScreen
+import com.vurgun.skyfit.core.ui.styling.SkyFitColor
 import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.viewmodel.koinViewModel
-import skyfit.ui.core.generated.resources.Res
-import skyfit.ui.core.generated.resources.our_coaches_label
+import skyfit.core.ui.generated.resources.Res
+import skyfit.core.ui.generated.resources.our_coaches_label
 
 @Composable
 fun MobileFacilityProfileVisitorScreen(

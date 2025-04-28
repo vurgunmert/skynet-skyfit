@@ -1,11 +1,11 @@
 package com.vurgun.skyfit.feature.home.navigation
 
 import androidx.compose.runtime.Composable
-import com.vurgun.skyfit.data.core.domain.model.UserRole
+import com.vurgun.skyfit.core.data.domain.model.UserRole
 import com.vurgun.skyfit.feature.home.screen.MobileFacilityHomeScreen
 import com.vurgun.skyfit.feature.home.screen.MobileTrainerHomeScreen
 import com.vurgun.skyfit.feature.home.screen.MobileUserHomeScreen
-import com.vurgun.skyfit.ui.core.screen.UnauthorizedAccessScreen
+import com.vurgun.skyfit.core.ui.screen.UnauthorizedAccessScreen
 
 @Composable
 fun HomeRoot(

@@ -12,9 +12,9 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import com.vurgun.skyfit.ui.core.components.menu.SkyFitSettingsSwitchOptionItemComponent
-import com.vurgun.skyfit.ui.core.components.special.SkyFitMobileScaffold
-import com.vurgun.skyfit.ui.core.components.special.SkyFitScreenHeader
+import com.vurgun.skyfit.core.ui.components.menu.SkyFitSettingsSwitchOptionItemComponent
+import com.vurgun.skyfit.core.ui.components.special.SkyFitMobileScaffold
+import com.vurgun.skyfit.core.ui.components.special.SkyFitScreenHeader
 
 @Composable
 fun MobileUserSettingsNotificationsScreen(goToBack: () -> Unit) {

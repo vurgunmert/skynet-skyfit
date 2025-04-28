@@ -30,13 +30,13 @@ import androidx.compose.ui.graphics.drawscope.drawIntoCanvas
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.dp
 import coil3.compose.AsyncImage
-import com.vurgun.skyfit.ui.core.components.button.SkyFitIconButton
-import com.vurgun.skyfit.ui.core.components.special.SkyFitScaffold
-import com.vurgun.skyfit.ui.core.styling.SkyFitColor
+import com.vurgun.skyfit.core.ui.components.button.SkyFitIconButton
+import com.vurgun.skyfit.core.ui.components.special.SkyFitScaffold
+import com.vurgun.skyfit.core.ui.styling.SkyFitColor
 import moe.tlaster.precompose.navigation.Navigator
 import org.jetbrains.compose.resources.painterResource
-import skyfit.ui.core.generated.resources.Res
-import skyfit.ui.core.generated.resources.logo_skyfit
+import skyfit.core.ui.generated.resources.Res
+import skyfit.core.ui.generated.resources.logo_skyfit
 
 @Composable
 fun MobileUserMealDetailAddPhotoScreen(rootNavigator: Navigator) {

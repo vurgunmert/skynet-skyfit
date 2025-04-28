@@ -27,32 +27,48 @@ import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
-import com.vurgun.skyfit.feature.auth.component.MobileLoginWelcomeGroup
-import com.vurgun.skyfit.ui.core.components.button.PrimaryLargeButton
-import com.vurgun.skyfit.ui.core.components.special.SkyFitMobileScaffold
-import com.vurgun.skyfit.ui.core.components.text.PasswordTextInput
-import com.vurgun.skyfit.ui.core.components.text.PersonNameTextInput
-import com.vurgun.skyfit.ui.core.styling.LocalPadding
-import com.vurgun.skyfit.ui.core.styling.SkyFitColor
-import com.vurgun.skyfit.ui.core.styling.SkyFitTypography
-import com.vurgun.skyfit.ui.core.utils.KeyboardState
-import com.vurgun.skyfit.ui.core.utils.keyboardAsState
+import cafe.adriel.voyager.core.screen.Screen
+import cafe.adriel.voyager.koin.koinScreenModel
+import cafe.adriel.voyager.navigator.LocalNavigator
+import cafe.adriel.voyager.navigator.currentOrThrow
+import com.vurgun.skyfit.core.ui.components.button.PrimaryLargeButton
+import com.vurgun.skyfit.core.ui.components.special.SkyFitMobileScaffold
+import com.vurgun.skyfit.core.ui.components.text.PasswordTextInput
+import com.vurgun.skyfit.core.ui.components.text.PersonNameTextInput
+import com.vurgun.skyfit.core.ui.styling.LocalPadding
+import com.vurgun.skyfit.core.ui.styling.SkyFitColor
+import com.vurgun.skyfit.core.ui.styling.SkyFitTypography
+import com.vurgun.skyfit.core.ui.utils.KeyboardState
+import com.vurgun.skyfit.core.ui.utils.LocalWindowSize
+import com.vurgun.skyfit.core.ui.utils.keyboardAsState
+import com.vurgun.skyfit.feature.auth.component.LoginWelcomeGroup
 import kotlinx.coroutines.flow.collectLatest
 import org.jetbrains.compose.resources.stringResource
-import org.koin.compose.viewmodel.koinViewModel
-import skyfit.ui.core.generated.resources.Res
-import skyfit.ui.core.generated.resources.auth_password_input_hint
-import skyfit.ui.core.generated.resources.auth_password_repeat_input_hint
-import skyfit.ui.core.generated.resources.auth_register_action
-import skyfit.ui.core.generated.resources.user_username_label
+import skyfit.core.ui.generated.resources.Res
+import skyfit.core.ui.generated.resources.auth_password_input_hint
+import skyfit.core.ui.generated.resources.auth_password_repeat_input_hint
+import skyfit.core.ui.generated.resources.auth_register_action
+import skyfit.core.ui.generated.resources.user_username_label
+
+class CreatePasswordScreen: Screen {
+
+    @Composable
+    override fun Content() {
+
+        val windowSize = LocalWindowSize.current
+        val appNavigator = LocalNavigator.currentOrThrow
+        val viewModel: PasswordCreateViewModel = koinScreenModel()
+
+    }
+}
 
 @Composable
-fun MobileCreatePasswordScreen(
+private fun MobileCreatePasswordScreen(
     goToOnboarding: () -> Unit,
     goToTermsAndConditions: () -> Unit,
     goToPrivacyPolicy: () -> Unit,
+    viewModel: PasswordCreateViewModel
 ) {
-    val viewModel: PasswordCreateViewModel = koinViewModel()
 
     val username by viewModel.username.collectAsState()
     val password by viewModel.password.collectAsState()
@@ -77,11 +93,11 @@ fun MobileCreatePasswordScreen(
     LaunchedEffect(viewModel) {
         viewModel.uiEvents.collectLatest { event ->
             when (event) {
-                is CreatePasswordViewEvent.GoToOnboarding -> {
+                is CreatePasswordEffect.GoToOnboarding -> {
                     goToOnboarding()
                 }
 
-                is CreatePasswordViewEvent.Error -> {
+                is CreatePasswordEffect.ShowError -> {
                     errorMessage = event.message
                 }
             }
@@ -101,7 +117,7 @@ fun MobileCreatePasswordScreen(
                 .imePadding(),
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {
-            MobileLoginWelcomeGroup()
+            LoginWelcomeGroup()
 
             Spacer(Modifier.height(48.dp))
             MobileRegisterInputGroupComponent(

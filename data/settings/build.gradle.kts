@@ -28,9 +28,8 @@ kotlin {
 
     sourceSets {
         commonMain.dependencies {
-            implementation(projects.data.network)
-            implementation(projects.data.core)
-            implementation(projects.data.user)
+            implementation(projects.core.network)
+            implementation(projects.core.data)
 
             implementation(libs.koin.core)
         }

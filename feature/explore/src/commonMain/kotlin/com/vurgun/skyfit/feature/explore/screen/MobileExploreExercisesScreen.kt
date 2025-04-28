@@ -17,10 +17,10 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.vurgun.skyfit.feature.exercise.VerticalExerciseCardItemComponent
-import com.vurgun.skyfit.ui.core.components.special.SkyFitScaffold
-import com.vurgun.skyfit.ui.core.components.special.SkyFitScreenHeader
-import com.vurgun.skyfit.ui.core.components.special.SkyFitSearchFilterBarComponent
-import com.vurgun.skyfit.ui.core.components.special.SkyFitSearchTextInputComponent
+import com.vurgun.skyfit.core.ui.components.special.SkyFitScaffold
+import com.vurgun.skyfit.core.ui.components.special.SkyFitScreenHeader
+import com.vurgun.skyfit.core.ui.components.special.SkyFitSearchFilterBarComponent
+import com.vurgun.skyfit.core.ui.components.special.SkyFitSearchTextInputComponent
 
 @Composable
 fun MobileExploreExercisesScreen(goToBack: () -> Unit) {

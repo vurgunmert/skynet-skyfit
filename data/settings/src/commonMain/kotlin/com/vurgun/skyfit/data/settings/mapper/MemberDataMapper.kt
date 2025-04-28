@@ -1,6 +1,6 @@
 package com.vurgun.skyfit.data.settings.mapper
 
-import com.vurgun.skyfit.data.network.BASE_HOST_URL
+import com.vurgun.skyfit.core.network.BASE_HOST_URL
 import com.vurgun.skyfit.data.settings.domain.model.Member
 import com.vurgun.skyfit.data.settings.domain.model.Trainer
 import com.vurgun.skyfit.data.settings.model.MemberDto

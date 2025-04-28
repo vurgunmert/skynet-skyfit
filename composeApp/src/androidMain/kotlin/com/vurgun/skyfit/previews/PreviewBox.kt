@@ -9,7 +9,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import com.vurgun.skyfit.ui.core.styling.SkyFitColor
+import com.vurgun.skyfit.core.ui.styling.SkyFitColor
 
 @Composable
 fun PreviewBox(content: @Composable BoxScope.() -> Unit) {

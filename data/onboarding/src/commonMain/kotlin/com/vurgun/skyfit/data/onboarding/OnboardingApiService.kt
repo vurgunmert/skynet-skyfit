@@ -1,7 +1,7 @@
 package com.vurgun.skyfit.data.onboarding
 
-import com.vurgun.skyfit.data.network.ApiClient
-import com.vurgun.skyfit.data.network.ApiResult
+import com.vurgun.skyfit.core.network.ApiClient
+import com.vurgun.skyfit.core.network.ApiResult
 import io.ktor.client.request.bearerAuth
 import io.ktor.client.request.forms.MultiPartFormDataContent
 import io.ktor.client.request.forms.formData

@@ -12,18 +12,18 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.vurgun.skyfit.data.core.domain.model.UserRole
+import com.vurgun.skyfit.core.data.domain.model.UserRole
 import com.vurgun.skyfit.feature.onboarding.component.OnboardingTitleGroupComponent
-import com.vurgun.skyfit.ui.core.components.button.SkyFitTextButton
-import com.vurgun.skyfit.ui.core.components.special.SkyFitLogoComponent
-import com.vurgun.skyfit.ui.core.components.special.SkyFitMobileScaffold
+import com.vurgun.skyfit.core.ui.components.button.SkyFitTextButton
+import com.vurgun.skyfit.core.ui.components.special.SkyFitLogoComponent
+import com.vurgun.skyfit.core.ui.components.special.SkyFitMobileScaffold
 import org.jetbrains.compose.resources.stringResource
-import skyfit.ui.core.generated.resources.Res
-import skyfit.ui.core.generated.resources.onboarding_welcome_message
-import skyfit.ui.core.generated.resources.onboarding_welcome_title
-import skyfit.ui.core.generated.resources.user_type_facility
-import skyfit.ui.core.generated.resources.user_type_trainer
-import skyfit.ui.core.generated.resources.user_type_user
+import skyfit.core.ui.generated.resources.Res
+import skyfit.core.ui.generated.resources.onboarding_welcome_message
+import skyfit.core.ui.generated.resources.onboarding_welcome_title
+import skyfit.core.ui.generated.resources.user_type_facility
+import skyfit.core.ui.generated.resources.user_type_trainer
+import skyfit.core.ui.generated.resources.user_type_user
 
 @Composable
 internal fun OnboardingUserTypeSelectionScreen(

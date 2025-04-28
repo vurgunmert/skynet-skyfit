@@ -23,9 +23,9 @@
 //import androidx.compose.ui.graphics.Color
 //import androidx.compose.ui.unit.dp
 //import com.vurgun.skyfit.feature.profile.user.owner.UserProfileHeaderViewData
-//import com.vurgun.skyfit.ui.core.components.image.NetworkImage
-//import com.vurgun.skyfit.ui.core.styling.SkyFitColor
-//import com.vurgun.skyfit.ui.core.styling.SkyFitTypography
+//import com.vurgun.skyfit.core.ui.components.image.NetworkImage
+//import com.vurgun.skyfit.core.ui.styling.SkyFitColor
+//import com.vurgun.skyfit.core.ui.styling.SkyFitTypography
 //
 //@Composable
 //fun MobileProfileHeaderMini(viewData: UserProfileHeaderViewData) {

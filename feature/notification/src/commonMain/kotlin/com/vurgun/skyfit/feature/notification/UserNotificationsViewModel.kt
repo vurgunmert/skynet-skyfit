@@ -3,10 +3,10 @@ package com.vurgun.skyfit.feature.notification
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.vurgun.skyfit.data.notification.model.NotificationCategory
-import com.vurgun.skyfit.data.notification.model.NotificationPriority
-import com.vurgun.skyfit.data.notification.model.NotificationType
-import com.vurgun.skyfit.data.notification.model.SkyFitNotification
+import com.vurgun.skyfit.core.data.model.NotificationCategory
+import com.vurgun.skyfit.core.data.model.NotificationPriority
+import com.vurgun.skyfit.core.data.model.NotificationType
+import com.vurgun.skyfit.core.data.model.SkyFitNotification
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.map

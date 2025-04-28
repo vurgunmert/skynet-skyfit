@@ -1,8 +1,8 @@
 package com.vurgun.skyfit.data.settings.repository
 
-import com.vurgun.skyfit.data.core.model.EmptyDataResponse
-import com.vurgun.skyfit.data.network.ApiClient
-import com.vurgun.skyfit.data.network.ApiResult
+import com.vurgun.skyfit.core.data.model.EmptyDTO
+import com.vurgun.skyfit.core.network.ApiClient
+import com.vurgun.skyfit.core.network.ApiResult
 import com.vurgun.skyfit.data.settings.model.AddGymMemberRequest
 import com.vurgun.skyfit.data.settings.model.AddGymTrainerRequest
 import com.vurgun.skyfit.data.settings.model.DeleteGymMemberRequest
@@ -32,8 +32,8 @@ class SettingsApiService(private val apiClient: ApiClient) {
         const val DELETE_GYM_TRAINER = "delete/gym/trainer"
     }
 
-    suspend fun addGymMember(request: AddGymMemberRequest, token: String): ApiResult<EmptyDataResponse> {
-        return apiClient.safeApiCall<EmptyDataResponse> {
+    suspend fun addGymMember(request: AddGymMemberRequest, token: String): ApiResult<EmptyDTO> {
+        return apiClient.safeApiCall<EmptyDTO> {
             method = HttpMethod.Post
             bearerAuth(token)
             url(Endpoints.ADD_GYM_USER)
@@ -59,8 +59,8 @@ class SettingsApiService(private val apiClient: ApiClient) {
         }
     }
 
-    suspend fun deleteGymMember(request: DeleteGymMemberRequest, token: String): ApiResult<EmptyDataResponse> {
-        return apiClient.safeApiCall<EmptyDataResponse> {
+    suspend fun deleteGymMember(request: DeleteGymMemberRequest, token: String): ApiResult<EmptyDTO> {
+        return apiClient.safeApiCall<EmptyDTO> {
             method = HttpMethod.Delete
             bearerAuth(token)
             url(Endpoints.DELETE_GYM_MEMBER)
@@ -68,8 +68,8 @@ class SettingsApiService(private val apiClient: ApiClient) {
         }
     }
 
-    suspend fun addGymTrainer(request: AddGymTrainerRequest, token: String): ApiResult<EmptyDataResponse> {
-        return apiClient.safeApiCall<EmptyDataResponse> {
+    suspend fun addGymTrainer(request: AddGymTrainerRequest, token: String): ApiResult<EmptyDTO> {
+        return apiClient.safeApiCall<EmptyDTO> {
             method = HttpMethod.Post
             bearerAuth(token)
             url(Endpoints.ADD_GYM_TRAINER)
@@ -95,8 +95,8 @@ class SettingsApiService(private val apiClient: ApiClient) {
         }
     }
 
-    suspend fun deleteGymTrainer(request: DeleteGymTrainerRequest, token: String): ApiResult<EmptyDataResponse> {
-        return apiClient.safeApiCall<EmptyDataResponse> {
+    suspend fun deleteGymTrainer(request: DeleteGymTrainerRequest, token: String): ApiResult<EmptyDTO> {
+        return apiClient.safeApiCall<EmptyDTO> {
             method = HttpMethod.Delete
             bearerAuth(token)
             url(Endpoints.DELETE_GYM_TRAINER)

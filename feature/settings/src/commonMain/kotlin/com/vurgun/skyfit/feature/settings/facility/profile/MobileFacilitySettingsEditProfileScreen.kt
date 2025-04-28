@@ -10,7 +10,6 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -23,23 +22,22 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.vurgun.skyfit.feature.settings.component.AccountSettingsEditableProfileImage
 import com.vurgun.skyfit.feature.settings.component.SettingsEditProfileHeader
-import com.vurgun.skyfit.ui.core.components.special.FitnessTagPickerComponent
-import com.vurgun.skyfit.ui.core.components.special.MobileSettingsDeleteAccountBottomSheet
-import com.vurgun.skyfit.ui.core.components.special.MobileUserSettingsScreenSaveActionComponent
-import com.vurgun.skyfit.ui.core.components.special.SkyFitMobileScaffold
-import com.vurgun.skyfit.ui.core.components.special.SkyFitSelectToEnterMultilineInputComponent
-import com.vurgun.skyfit.ui.core.styling.SkyFitColor
+import com.vurgun.skyfit.core.ui.components.special.FitnessTagPickerComponent
+import com.vurgun.skyfit.core.ui.components.special.MobileSettingsDeleteAccountBottomSheet
+import com.vurgun.skyfit.core.ui.components.special.MobileUserSettingsScreenSaveActionComponent
+import com.vurgun.skyfit.core.ui.components.special.SkyFitMobileScaffold
+import com.vurgun.skyfit.core.ui.components.special.SkyFitSelectToEnterMultilineInputComponent
 import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.viewmodel.koinViewModel
-import skyfit.ui.core.generated.resources.Res
-import skyfit.ui.core.generated.resources.background_image_label
-import skyfit.ui.core.generated.resources.ic_pencil
-import skyfit.ui.core.generated.resources.mandatory_workplace_name_label
-import skyfit.ui.core.generated.resources.settings_edit_profile_address_hint
-import skyfit.ui.core.generated.resources.settings_edit_profile_address_label
-import skyfit.ui.core.generated.resources.settings_edit_profile_biography_hint
-import skyfit.ui.core.generated.resources.settings_edit_profile_biography_label
-import skyfit.ui.core.generated.resources.workplace_name_hint
+import skyfit.core.ui.generated.resources.Res
+import skyfit.core.ui.generated.resources.background_image_label
+import skyfit.core.ui.generated.resources.ic_pencil
+import skyfit.core.ui.generated.resources.mandatory_workplace_name_label
+import skyfit.core.ui.generated.resources.settings_edit_profile_address_hint
+import skyfit.core.ui.generated.resources.settings_edit_profile_address_label
+import skyfit.core.ui.generated.resources.settings_edit_profile_biography_hint
+import skyfit.core.ui.generated.resources.settings_edit_profile_biography_label
+import skyfit.core.ui.generated.resources.workplace_name_hint
 
 @Composable
 fun MobileFacilitySettingsEditProfileScreen(

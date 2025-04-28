@@ -6,7 +6,7 @@ import com.vurgun.skyfit.data.bodyanalysis.model.LeftPostureResponse
 import com.vurgun.skyfit.data.bodyanalysis.model.PostureAnalysisRequest
 import com.vurgun.skyfit.data.bodyanalysis.model.PostureType
 import com.vurgun.skyfit.data.bodyanalysis.model.RightPostureResponse
-import com.vurgun.skyfit.data.network.commonHttpClient
+import com.vurgun.skyfit.core.network.commonHttpClient
 import io.ktor.client.call.body
 import io.ktor.client.request.post
 import io.ktor.client.request.setBody

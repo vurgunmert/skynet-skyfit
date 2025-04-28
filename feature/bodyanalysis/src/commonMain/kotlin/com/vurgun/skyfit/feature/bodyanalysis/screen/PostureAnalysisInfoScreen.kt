@@ -7,7 +7,6 @@ import androidx.compose.foundation.layout.BoxScope
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -20,15 +19,15 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import com.vurgun.skyfit.ui.core.components.icon.ActionIcon
-import com.vurgun.skyfit.ui.core.components.text.BodySmallRegularText
-import com.vurgun.skyfit.ui.core.components.text.BodySmallSemiboldText
-import com.vurgun.skyfit.ui.core.styling.LocalPadding
-import com.vurgun.skyfit.ui.core.styling.SkyFitColor
+import com.vurgun.skyfit.core.ui.components.icon.ActionIcon
+import com.vurgun.skyfit.core.ui.components.text.BodySmallRegularText
+import com.vurgun.skyfit.core.ui.components.text.BodySmallSemiboldText
+import com.vurgun.skyfit.core.ui.styling.LocalPadding
+import com.vurgun.skyfit.core.ui.styling.SkyFitColor
 import org.jetbrains.compose.resources.painterResource
-import skyfit.ui.core.generated.resources.Res
-import skyfit.ui.core.generated.resources.ic_close_circle
-import skyfit.ui.core.generated.resources.ic_info_circle
+import skyfit.core.ui.generated.resources.Res
+import skyfit.core.ui.generated.resources.ic_close_circle
+import skyfit.core.ui.generated.resources.ic_info_circle
 
 @Composable
 internal fun BoxScope.PostureAnalysisInfoScreen(

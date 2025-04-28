@@ -11,7 +11,7 @@ import androidx.navigation.compose.rememberNavController
 import com.vurgun.skyfit.feature.dashboard.component.BottomNavigationBar
 import com.vurgun.skyfit.feature.home.navigation.HomeRoot
 import com.vurgun.skyfit.feature.profile.navigation.ProfileOwnerRoot
-import com.vurgun.skyfit.ui.core.components.special.SkyFitMobileScaffold
+import com.vurgun.skyfit.core.ui.components.special.SkyFitMobileScaffold
 import org.koin.compose.viewmodel.koinViewModel
 
 internal sealed class DashboardTab(val route: String) {

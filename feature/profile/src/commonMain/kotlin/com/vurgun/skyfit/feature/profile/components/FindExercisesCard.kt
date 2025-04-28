@@ -8,10 +8,10 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import com.vurgun.skyfit.ui.core.components.special.ButtonSize
-import com.vurgun.skyfit.ui.core.components.special.ButtonState
-import com.vurgun.skyfit.ui.core.components.special.ButtonVariant
-import com.vurgun.skyfit.ui.core.components.special.SkyFitButtonComponent
+import com.vurgun.skyfit.core.ui.components.special.ButtonSize
+import com.vurgun.skyfit.core.ui.components.special.ButtonState
+import com.vurgun.skyfit.core.ui.components.special.ButtonVariant
+import com.vurgun.skyfit.core.ui.components.special.SkyFitButtonComponent
 
 @Composable
 fun FindExercisesCard(

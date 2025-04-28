@@ -14,7 +14,6 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -23,33 +22,150 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import cafe.adriel.voyager.core.screen.Screen
+import cafe.adriel.voyager.koin.koinScreenModel
+import cafe.adriel.voyager.navigator.LocalNavigator
+import cafe.adriel.voyager.navigator.currentOrThrow
+import com.vurgun.skyfit.core.navigation.SharedScreen
+import com.vurgun.skyfit.core.navigation.replaceAllWith
+import com.vurgun.skyfit.core.navigation.replaceWith
+import com.vurgun.skyfit.core.ui.components.button.PrimaryLargeButton
+import com.vurgun.skyfit.core.ui.components.special.SkyFitLogoComponent
+import com.vurgun.skyfit.core.ui.components.special.SkyFitMobileScaffold
+import com.vurgun.skyfit.core.ui.components.text.SecondaryMediumText
+import com.vurgun.skyfit.core.ui.components.text.SecondaryMediumUnderlinedText
+import com.vurgun.skyfit.core.ui.styling.LocalPadding
+import com.vurgun.skyfit.core.ui.styling.SkyFitColor
+import com.vurgun.skyfit.core.ui.styling.SkyFitTypography
+import com.vurgun.skyfit.core.ui.utils.CollectEffect
+import com.vurgun.skyfit.core.ui.utils.LocalWindowSize
+import com.vurgun.skyfit.core.ui.utils.WindowSize
+import com.vurgun.skyfit.core.ui.utils.formatPhoneNumber
 import com.vurgun.skyfit.feature.auth.component.OTPInputTextField
-import com.vurgun.skyfit.ui.core.components.button.PrimaryLargeButton
-import com.vurgun.skyfit.ui.core.components.special.SkyFitLogoComponent
-import com.vurgun.skyfit.ui.core.components.special.SkyFitMobileScaffold
-import com.vurgun.skyfit.ui.core.components.text.SecondaryMediumText
-import com.vurgun.skyfit.ui.core.components.text.SecondaryMediumUnderlinedText
-import com.vurgun.skyfit.ui.core.styling.LocalPadding
-import com.vurgun.skyfit.ui.core.styling.SkyFitColor
-import com.vurgun.skyfit.ui.core.styling.SkyFitTypography
-import com.vurgun.skyfit.ui.core.utils.formatPhoneNumber
-import kotlinx.coroutines.flow.collectLatest
+import com.vurgun.skyfit.feature.auth.register.CreatePasswordScreen
 import org.jetbrains.compose.resources.stringResource
-import org.koin.compose.koinInject
-import skyfit.ui.core.generated.resources.Res
-import skyfit.ui.core.generated.resources.auth_code_not_received_message
-import skyfit.ui.core.generated.resources.auth_code_sent_message
-import skyfit.ui.core.generated.resources.auth_resend_code_action
-import skyfit.ui.core.generated.resources.auth_resend_timer_message
-import skyfit.ui.core.generated.resources.auth_verify_action
+import skyfit.core.ui.generated.resources.Res
+import skyfit.core.ui.generated.resources.auth_code_not_received_message
+import skyfit.core.ui.generated.resources.auth_code_sent_message
+import skyfit.core.ui.generated.resources.auth_resend_code_action
+import skyfit.core.ui.generated.resources.auth_resend_timer_message
+import skyfit.core.ui.generated.resources.auth_verify_action
+
+class LoginVerifyOTPScreen : Screen {
+
+    @Composable
+    override fun Content() {
+        val windowSize = LocalWindowSize.current
+        val appNavigator = LocalNavigator.currentOrThrow
+        val viewModel: LoginOTPVerificationViewModel = koinScreenModel()
+
+        if (windowSize == WindowSize.EXPANDED) {
+            ExpandedLoginVerifyOTPScreen(
+                goToCreatePassword = {
+                    appNavigator.replace(CreatePasswordScreen())
+                },
+                goToDashboard = {
+                    appNavigator.replaceAllWith(SharedScreen.Dashboard)
+                },
+                goToOnboarding = {
+                    appNavigator.replaceWith(SharedScreen.Onboarding)
+                },
+                viewModel = viewModel
+            )
+        } else {
+            MobileLoginVerifyOTPScreen(
+                goToCreatePassword = {
+                    appNavigator.replace(CreatePasswordScreen())
+                },
+                goToDashboard = {
+                    appNavigator.replaceAllWith(SharedScreen.Dashboard)
+                },
+                goToOnboarding = {
+                    appNavigator.replaceWith(SharedScreen.Onboarding)
+                },
+                viewModel = viewModel
+            )
+        }
+    }
+}
 
 @Composable
-fun MobileLoginVerifyOTPScreen(
+private fun ExpandedLoginVerifyOTPScreen(
     goToCreatePassword: () -> Unit,
     goToDashboard: () -> Unit,
     goToOnboarding: () -> Unit,
+    viewModel: LoginOTPVerificationViewModel,
 ) {
-    val viewModel: LoginOTPVerificationViewModel = koinInject()
+    val enteredOtp by viewModel.enteredOtp.collectAsState()
+    val isLoading by viewModel.isLoading.collectAsState()
+    val phoneNumber by viewModel.phoneNumber.collectAsState("")
+    val isResendEnabled by viewModel.isResendEnabled.collectAsState()
+    val countdownTime by viewModel.countdownTime.collectAsState()
+    val otpLength = viewModel.otpLength
+
+    var errorMessage by remember { mutableStateOf<String?>(null) }
+
+    CollectEffect(viewModel.effect) { event ->
+        when (event) {
+            is LoginOTPVerificationEffect.GoToRegister -> goToCreatePassword()
+            is LoginOTPVerificationEffect.GoToDashboard -> goToDashboard()
+            is LoginOTPVerificationEffect.GoToOnboarding -> goToOnboarding()
+            is LoginOTPVerificationEffect.ShowError -> errorMessage = event.message
+        }
+    }
+
+    Row(
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(32.dp),
+        horizontalArrangement = Arrangement.spacedBy(32.dp),
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        // Left: Logo + welcome
+        Column(
+            modifier = Modifier.weight(1f),
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.Center
+        ) {
+            SkyFitLogoComponent()
+            Spacer(Modifier.height(36.dp))
+            SecondaryMediumText(
+                text = stringResource(Res.string.auth_code_sent_message, formatPhoneNumber(phoneNumber))
+            )
+        }
+
+        // Right: OTP inputs
+        Column(
+            modifier = Modifier
+                .weight(1f)
+                .verticalScroll(rememberScrollState())
+                .imePadding(),
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.spacedBy(48.dp)
+        ) {
+            OTPInputTextField(onCodeReady = viewModel::onOtpChanged)
+
+            MobileOTPVerificationActionGroup(
+                onClickConfirm = viewModel::submitCode,
+                onClickResend = viewModel::resendOTP,
+                isConfirmEnabled = enteredOtp.length == otpLength && !isLoading,
+                isResendEnabled = isResendEnabled,
+                isLoading = isLoading,
+                countdownTime = countdownTime,
+                errorMessage = errorMessage
+            )
+        }
+    }
+}
+
+
+@Composable
+private fun MobileLoginVerifyOTPScreen(
+    goToCreatePassword: () -> Unit,
+    goToDashboard: () -> Unit,
+    goToOnboarding: () -> Unit,
+    viewModel: LoginOTPVerificationViewModel
+) {
 
     val enteredOtp by viewModel.enteredOtp.collectAsState()
     val isLoading by viewModel.isLoading.collectAsState()
@@ -60,24 +176,22 @@ fun MobileLoginVerifyOTPScreen(
 
     var errorMessage by remember { mutableStateOf<String?>(null) }
 
-    LaunchedEffect(viewModel) {
-        viewModel.events.collectLatest { event ->
-            when (event) {
-                is LoginOTPVerificationViewEvent.GoToRegister -> {
-                    goToCreatePassword()
-                }
+    CollectEffect(viewModel.effect) { event ->
+        when (event) {
+            is LoginOTPVerificationEffect.GoToRegister -> {
+                goToCreatePassword()
+            }
 
-                is LoginOTPVerificationViewEvent.GoToDashboard -> {
-                    goToDashboard()
-                }
+            is LoginOTPVerificationEffect.GoToDashboard -> {
+                goToDashboard()
+            }
 
-                is LoginOTPVerificationViewEvent.GoToOnboarding -> {
-                    goToOnboarding()
-                }
+            is LoginOTPVerificationEffect.GoToOnboarding -> {
+                goToOnboarding()
+            }
 
-                is LoginOTPVerificationViewEvent.ShowError -> {
-                    errorMessage = event.message
-                }
+            is LoginOTPVerificationEffect.ShowError -> {
+                errorMessage = event.message
             }
         }
     }
@@ -109,7 +223,6 @@ fun MobileLoginVerifyOTPScreen(
         }
     }
 }
-
 
 @Composable
 private fun MobileOTPVerificationTextGroup(phoneNumber: String) {

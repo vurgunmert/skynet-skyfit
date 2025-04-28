@@ -2,11 +2,11 @@ package com.vurgun.skyfit.feature.calendar.component.weekly
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.vurgun.skyfit.data.core.utility.getStartOfWeek
-import com.vurgun.skyfit.data.core.utility.getTurkishDayAbbreviation
-import com.vurgun.skyfit.data.core.utility.nextWeek
-import com.vurgun.skyfit.data.core.utility.now
-import com.vurgun.skyfit.data.core.utility.previousWeek
+import com.vurgun.skyfit.core.data.utility.getStartOfWeek
+import com.vurgun.skyfit.core.data.utility.getTurkishDayAbbreviation
+import com.vurgun.skyfit.core.data.utility.nextWeek
+import com.vurgun.skyfit.core.data.utility.now
+import com.vurgun.skyfit.core.data.utility.previousWeek
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow

@@ -2,9 +2,9 @@ package com.vurgun.skyfit.feature.calendar.component.monthly
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.vurgun.skyfit.data.core.utility.generateDaysInMonth
-import com.vurgun.skyfit.data.core.utility.now
-import com.vurgun.skyfit.data.core.utility.withDayOfMonth
+import com.vurgun.skyfit.core.data.utility.generateDaysInMonth
+import com.vurgun.skyfit.core.data.utility.now
+import com.vurgun.skyfit.core.data.utility.withDayOfMonth
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow

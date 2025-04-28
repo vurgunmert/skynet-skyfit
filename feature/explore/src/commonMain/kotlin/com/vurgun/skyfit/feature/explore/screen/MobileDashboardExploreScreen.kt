@@ -34,16 +34,19 @@ import com.vurgun.skyfit.feature.profile.components.FacilityProfileCardItemBox
 import com.vurgun.skyfit.feature.profile.components.VerticalTrainerProfileCard
 import com.vurgun.skyfit.feature.profile.components.viewdata.FacilityProfileCardItemViewData
 import com.vurgun.skyfit.feature.profile.components.viewdata.TrainerProfileCardItemViewData
-import com.vurgun.skyfit.ui.core.components.image.NetworkImage
-import com.vurgun.skyfit.ui.core.components.special.ButtonSize
-import com.vurgun.skyfit.ui.core.components.special.ButtonState
-import com.vurgun.skyfit.ui.core.components.special.ButtonVariant
-import com.vurgun.skyfit.ui.core.components.special.SkyFitButtonComponent
-import com.vurgun.skyfit.ui.core.components.special.SkyFitMobileScaffold
-import com.vurgun.skyfit.ui.core.components.special.SkyFitSearchFilterBarComponent
-import com.vurgun.skyfit.ui.core.components.special.SkyFitSearchTextInputComponent
-import com.vurgun.skyfit.ui.core.styling.SkyFitColor
-import com.vurgun.skyfit.ui.core.styling.SkyFitTypography
+import com.vurgun.skyfit.core.ui.components.image.NetworkImage
+import com.vurgun.skyfit.core.ui.components.special.ButtonSize
+import com.vurgun.skyfit.core.ui.components.special.ButtonState
+import com.vurgun.skyfit.core.ui.components.special.ButtonVariant
+import com.vurgun.skyfit.core.ui.components.special.SkyFitButtonComponent
+import com.vurgun.skyfit.core.ui.components.special.SkyFitMobileScaffold
+import com.vurgun.skyfit.core.ui.components.special.SkyFitSearchFilterBarComponent
+import com.vurgun.skyfit.core.ui.components.special.SkyFitSearchTextInputComponent
+import com.vurgun.skyfit.core.ui.styling.SkyFitColor
+import com.vurgun.skyfit.core.ui.styling.SkyFitTypography
+import org.jetbrains.compose.resources.painterResource
+import skyfit.core.ui.generated.resources.Res
+import skyfit.core.ui.generated.resources.ic_chevron_right
 
 @Composable
 fun MobileExploreScreen(
@@ -304,9 +307,10 @@ private fun MobileDashboardExploreScreenFeaturedChallengesComponent(onClick: () 
 private fun MobileDashboardExploreScreenTitleActionComponent(title: String) {
     Row(Modifier.fillMaxWidth()) {
         Text(
-            title, style = SkyFitTypography.heading4,
+            text = title,
+            style = SkyFitTypography.heading4,
             modifier = Modifier.weight(1f)
         )
-        Icon(imageVector = Icons.Default.KeyboardArrowRight, contentDescription = title, tint = SkyFitColor.icon.default)
+        Icon(painter = painterResource(Res.drawable.ic_chevron_right), contentDescription = title, tint = SkyFitColor.icon.default)
     }
 }

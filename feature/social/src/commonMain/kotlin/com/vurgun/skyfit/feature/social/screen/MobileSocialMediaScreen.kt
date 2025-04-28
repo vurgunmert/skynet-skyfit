@@ -13,7 +13,6 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
-import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -21,15 +20,14 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.vurgun.skyfit.feature.social.components.SocialPostCard
-import com.vurgun.skyfit.ui.core.components.special.SkyFitCircularImageComponent
-import com.vurgun.skyfit.ui.core.components.button.SkyFitIconButton
-import com.vurgun.skyfit.ui.core.components.special.SkyFitMobileScaffold
-import com.vurgun.skyfit.ui.core.components.special.UserCircleAvatarItem
-import com.vurgun.skyfit.ui.core.styling.SkyFitColor
-import com.vurgun.skyfit.ui.core.styling.SkyFitTypography
+import com.vurgun.skyfit.core.ui.components.special.SkyFitCircularImageComponent
+import com.vurgun.skyfit.core.ui.components.button.SkyFitIconButton
+import com.vurgun.skyfit.core.ui.components.special.SkyFitMobileScaffold
+import com.vurgun.skyfit.core.ui.components.special.UserCircleAvatarItem
+import com.vurgun.skyfit.core.ui.styling.SkyFitTypography
 import org.jetbrains.compose.resources.painterResource
-import skyfit.ui.core.generated.resources.Res
-import skyfit.ui.core.generated.resources.logo_skyfit
+import skyfit.core.ui.generated.resources.Res
+import skyfit.core.ui.generated.resources.logo_skyfit
 
 @Composable
 fun MobileSocialMediaScreen(

@@ -5,19 +5,19 @@ import androidx.compose.material.Divider
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import com.vurgun.skyfit.ui.core.components.popup.TextPopupMenuItem
-import com.vurgun.skyfit.ui.core.components.popup.BasicPopupMenu
-import com.vurgun.skyfit.ui.core.styling.SkyFitColor
+import com.vurgun.skyfit.core.ui.components.popup.TextPopupMenuItem
+import com.vurgun.skyfit.core.ui.components.popup.BasicPopupMenu
+import com.vurgun.skyfit.core.ui.styling.SkyFitColor
 import org.jetbrains.compose.resources.stringResource
-import skyfit.ui.core.generated.resources.Res
-import skyfit.ui.core.generated.resources.activate_action
-import skyfit.ui.core.generated.resources.delete_action
-import skyfit.ui.core.generated.resources.disable_action
-import skyfit.ui.core.generated.resources.edit_action
-import skyfit.ui.core.generated.resources.ic_check_circle
-import skyfit.ui.core.generated.resources.ic_close_circle
-import skyfit.ui.core.generated.resources.ic_delete
-import skyfit.ui.core.generated.resources.ic_pencil
+import skyfit.core.ui.generated.resources.Res
+import skyfit.core.ui.generated.resources.activate_action
+import skyfit.core.ui.generated.resources.delete_action
+import skyfit.core.ui.generated.resources.disable_action
+import skyfit.core.ui.generated.resources.edit_action
+import skyfit.core.ui.generated.resources.ic_check_circle
+import skyfit.core.ui.generated.resources.ic_close_circle
+import skyfit.core.ui.generated.resources.ic_delete
+import skyfit.core.ui.generated.resources.ic_pencil
 
 @Composable
 fun LessonEventItemPopupMenu(

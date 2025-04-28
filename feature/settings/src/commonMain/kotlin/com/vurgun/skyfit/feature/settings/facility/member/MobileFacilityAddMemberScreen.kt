@@ -14,17 +14,17 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.vurgun.skyfit.ui.core.components.button.SecondaryMicroButton
-import com.vurgun.skyfit.ui.core.components.special.SkyFitScaffold
-import com.vurgun.skyfit.ui.core.components.special.SkyFitScreenHeader
-import com.vurgun.skyfit.ui.core.components.special.SkyFitSearchTextInputComponent
+import com.vurgun.skyfit.core.ui.components.button.SecondaryMicroButton
+import com.vurgun.skyfit.core.ui.components.special.SkyFitScaffold
+import com.vurgun.skyfit.core.ui.components.special.SkyFitScreenHeader
+import com.vurgun.skyfit.core.ui.components.special.SkyFitSearchTextInputComponent
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.viewmodel.koinViewModel
-import skyfit.ui.core.generated.resources.Res
-import skyfit.ui.core.generated.resources.add_action
-import skyfit.ui.core.generated.resources.ic_plus
-import skyfit.ui.core.generated.resources.search_action
+import skyfit.core.ui.generated.resources.Res
+import skyfit.core.ui.generated.resources.add_action
+import skyfit.core.ui.generated.resources.ic_plus
+import skyfit.core.ui.generated.resources.search_action
 
 @Composable
 internal fun MobileFacilityAddMemberScreen(

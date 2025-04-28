@@ -28,10 +28,9 @@ kotlin {
 
     sourceSets {
         commonMain.dependencies {
-            implementation(projects.data.core)
+            implementation(projects.core.data)
             implementation(projects.data.settings)
-            implementation(projects.data.network)
-            implementation(projects.data.user)
+            implementation(projects.core.network)
 
             implementation(libs.kotlinx.coroutines.core)
 

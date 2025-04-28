@@ -17,14 +17,14 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import com.vurgun.skyfit.ui.core.styling.SkyFitColor
-import com.vurgun.skyfit.ui.core.styling.SkyFitTypography
+import com.vurgun.skyfit.core.ui.styling.SkyFitColor
+import com.vurgun.skyfit.core.ui.styling.SkyFitTypography
 import kotlinx.datetime.LocalDate
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
-import skyfit.ui.core.generated.resources.Res
-import skyfit.ui.core.generated.resources.calendar_select_date_range
-import skyfit.ui.core.generated.resources.ic_calendar_dots
+import skyfit.core.ui.generated.resources.Res
+import skyfit.core.ui.generated.resources.calendar_select_date_range
+import skyfit.core.ui.generated.resources.ic_calendar_dots
 
 @Composable
 fun CalendarRangeDateSelectorCard(

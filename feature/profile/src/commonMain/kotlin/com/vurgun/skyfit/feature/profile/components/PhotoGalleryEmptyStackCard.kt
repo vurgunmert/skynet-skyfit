@@ -13,15 +13,15 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import com.vurgun.skyfit.ui.core.components.special.ButtonSize
-import com.vurgun.skyfit.ui.core.components.special.ButtonState
-import com.vurgun.skyfit.ui.core.components.special.ButtonVariant
-import com.vurgun.skyfit.ui.core.components.special.SkyFitButtonComponent
-import com.vurgun.skyfit.ui.core.styling.SkyFitColor
-import com.vurgun.skyfit.ui.core.styling.SkyFitTypography
+import com.vurgun.skyfit.core.ui.components.special.ButtonSize
+import com.vurgun.skyfit.core.ui.components.special.ButtonState
+import com.vurgun.skyfit.core.ui.components.special.ButtonVariant
+import com.vurgun.skyfit.core.ui.components.special.SkyFitButtonComponent
+import com.vurgun.skyfit.core.ui.styling.SkyFitColor
+import com.vurgun.skyfit.core.ui.styling.SkyFitTypography
 import org.jetbrains.compose.resources.painterResource
-import skyfit.ui.core.generated.resources.Res
-import skyfit.ui.core.generated.resources.logo_skyfit
+import skyfit.core.ui.generated.resources.Res
+import skyfit.core.ui.generated.resources.logo_skyfit
 
 @Composable
 fun PhotoGalleryEmptyStackCard(

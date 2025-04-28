@@ -20,10 +20,10 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import com.vurgun.skyfit.ui.core.components.icon.ActionIcon
-import com.vurgun.skyfit.ui.core.components.icon.IconAsset
-import com.vurgun.skyfit.ui.core.components.text.BodyMediumSemiboldText
-import com.vurgun.skyfit.ui.core.styling.SkyFitColor
+import com.vurgun.skyfit.core.ui.components.icon.ActionIcon
+import com.vurgun.skyfit.core.ui.components.icon.IconAsset
+import com.vurgun.skyfit.core.ui.components.text.BodyMediumSemiboldText
+import com.vurgun.skyfit.core.ui.styling.SkyFitColor
 import kotlinx.datetime.LocalDate
 
 // TODO: Probably use this directly in the filters

@@ -2,13 +2,11 @@ package com.vurgun.skyfit.feature.home.screen
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.vurgun.skyfit.data.user.repository.UserManager
-import com.vurgun.skyfit.data.core.domain.model.UserDetail
+import com.vurgun.skyfit.core.data.domain.repository.UserManager
+import com.vurgun.skyfit.core.data.domain.model.UserDetail
 import com.vurgun.skyfit.data.courses.domain.repository.CourseRepository
 import com.vurgun.skyfit.feature.home.component.HomeAppointmentItemViewData
-import com.vurgun.skyfit.ui.core.components.event.AppointmentCardViewData
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 

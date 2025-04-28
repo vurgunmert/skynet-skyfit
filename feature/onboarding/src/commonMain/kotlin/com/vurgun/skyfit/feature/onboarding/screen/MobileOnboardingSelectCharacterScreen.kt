@@ -24,14 +24,14 @@ import androidx.compose.ui.unit.dp
 import com.vurgun.skyfit.feature.onboarding.component.OnboardingActionGroupComponent
 import com.vurgun.skyfit.feature.onboarding.component.OnboardingStepProgressComponent
 import com.vurgun.skyfit.feature.onboarding.component.OnboardingTitleGroupComponent
-import com.vurgun.skyfit.ui.core.components.special.SkyFitMobileScaffold
-import com.vurgun.skyfit.ui.core.components.special.SelectableCardComponent
-import com.vurgun.skyfit.ui.core.viewdata.CharacterTypeViewData
+import com.vurgun.skyfit.core.ui.components.special.SkyFitMobileScaffold
+import com.vurgun.skyfit.core.ui.components.special.SelectableCardComponent
+import com.vurgun.skyfit.core.ui.viewdata.CharacterTypeViewData
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
-import skyfit.ui.core.generated.resources.Res
-import skyfit.ui.core.generated.resources.onboarding_character_message
-import skyfit.ui.core.generated.resources.onboarding_character_title
+import skyfit.core.ui.generated.resources.Res
+import skyfit.core.ui.generated.resources.onboarding_character_message
+import skyfit.core.ui.generated.resources.onboarding_character_title
 
 @Composable
 internal fun MobileOnboardingCharacterSelectionScreen(

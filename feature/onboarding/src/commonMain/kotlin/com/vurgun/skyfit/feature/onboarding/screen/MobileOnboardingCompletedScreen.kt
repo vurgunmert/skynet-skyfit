@@ -14,15 +14,15 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.vurgun.skyfit.feature.onboarding.component.OnboardingTitleGroupComponent
-import com.vurgun.skyfit.ui.core.components.button.PrimaryLargeButton
-import com.vurgun.skyfit.ui.core.components.special.SkyFitMobileScaffold
+import com.vurgun.skyfit.core.ui.components.button.PrimaryLargeButton
+import com.vurgun.skyfit.core.ui.components.special.SkyFitMobileScaffold
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
-import skyfit.ui.core.generated.resources.Res
-import skyfit.ui.core.generated.resources.logo_skyfit
-import skyfit.ui.core.generated.resources.onboarding_get_started_action
-import skyfit.ui.core.generated.resources.onboarding_ready_message
-import skyfit.ui.core.generated.resources.onboarding_ready_title
+import skyfit.core.ui.generated.resources.Res
+import skyfit.core.ui.generated.resources.logo_skyfit
+import skyfit.core.ui.generated.resources.onboarding_get_started_action
+import skyfit.core.ui.generated.resources.onboarding_ready_message
+import skyfit.core.ui.generated.resources.onboarding_ready_title
 
 @Composable
 internal fun MobileOnboardingCompletedScreen(

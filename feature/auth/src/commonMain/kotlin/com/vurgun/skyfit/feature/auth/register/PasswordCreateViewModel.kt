@@ -1,9 +1,10 @@
 package com.vurgun.skyfit.feature.auth.register
 
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
-import com.vurgun.skyfit.data.auth.domain.model.CreatePasswordResult
-import com.vurgun.skyfit.data.auth.domain.repository.AuthRepository
+import cafe.adriel.voyager.core.model.ScreenModel
+import cafe.adriel.voyager.core.model.screenModelScope
+import com.vurgun.skyfit.core.data.domain.model.CreatePasswordResult
+import com.vurgun.skyfit.core.data.domain.repository.AuthRepository
+import com.vurgun.skyfit.core.data.utility.emitOrNull
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
@@ -14,14 +15,14 @@ import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 
-sealed class CreatePasswordViewEvent {
-    data object GoToOnboarding : CreatePasswordViewEvent()
-    data class Error(val message: String?) : CreatePasswordViewEvent()
+sealed class CreatePasswordEffect {
+    data object GoToOnboarding : CreatePasswordEffect()
+    data class ShowError(val message: String?) : CreatePasswordEffect()
 }
 
 class PasswordCreateViewModel(
     private val authRepository: AuthRepository
-) : ViewModel() {
+) : ScreenModel {
 
     private val _username = MutableStateFlow("")
     val username: StateFlow<String> = _username
@@ -32,13 +33,13 @@ class PasswordCreateViewModel(
     private val _isLoading = MutableStateFlow(false)
     val isLoading: StateFlow<Boolean> = _isLoading.asStateFlow()
 
-    private val _uiEvents = MutableSharedFlow<CreatePasswordViewEvent>()
+    private val _uiEvents = MutableSharedFlow<CreatePasswordEffect>()
     val uiEvents = _uiEvents.asSharedFlow()
 
     val isRegisterEnabled: StateFlow<Boolean> =
         combine(username, password, confirmPassword, isLoading) { name, pass, confirmPass, loading ->
             name.isNotBlank() && pass.length >= 6 && !loading
-        }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), false)
+        }.stateIn(screenModelScope, SharingStarted.WhileSubscribed(5000), false)
 
     fun setFullName(name: String) {
         _username.value = name
@@ -55,7 +56,7 @@ class PasswordCreateViewModel(
     fun onRegisterClicked() {
         if (!isRegisterEnabled.value) return
 
-        viewModelScope.launch {
+        screenModelScope.launch {
             _isLoading.value = true
             try {
                 val result = authRepository.createPassword(
@@ -64,8 +65,8 @@ class PasswordCreateViewModel(
                     againPassword = confirmPassword.value
                 )
                 when (result) {
-                    is CreatePasswordResult.Error -> _uiEvents.emit(CreatePasswordViewEvent.Error(result.message))
-                    CreatePasswordResult.Success -> _uiEvents.emit(CreatePasswordViewEvent.GoToOnboarding)
+                    is CreatePasswordResult.Error -> _uiEvents.emitOrNull(CreatePasswordEffect.ShowError(result.message))
+                    CreatePasswordResult.Success -> _uiEvents.emitOrNull(CreatePasswordEffect.GoToOnboarding)
                 }
             } finally {
                 _isLoading.value = false

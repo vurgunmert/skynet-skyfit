@@ -30,9 +30,8 @@ kotlin {
 
     sourceSets {
         commonMain.dependencies {
-            implementation(projects.ui.core)
-            implementation(projects.data.core)
-            implementation(projects.data.notification)
+            implementation(projects.core.ui)
+            implementation(projects.core.data)
 
             implementation(libs.koin.core)
             implementation(libs.bundles.koin.compose)

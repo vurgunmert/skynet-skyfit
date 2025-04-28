@@ -1,6 +1,6 @@
 package com.vurgun.skyfit.data.courses
 
-import com.vurgun.skyfit.data.core.model.EmptyDataResponse
+import com.vurgun.skyfit.core.data.model.EmptyDTO
 import com.vurgun.skyfit.data.courses.model.ActivateLessonRequest
 import com.vurgun.skyfit.data.courses.model.AppointmentDTO
 import com.vurgun.skyfit.data.courses.model.AppointmentDetailDTO
@@ -21,9 +21,8 @@ import com.vurgun.skyfit.data.courses.model.GetUserAppointmentsRequest
 import com.vurgun.skyfit.data.courses.model.LessonDTO
 import com.vurgun.skyfit.data.courses.model.ScheduledLessonDetailDTO
 import com.vurgun.skyfit.data.courses.model.UpdateLessonRequest
-import com.vurgun.skyfit.data.network.ApiClient
-import com.vurgun.skyfit.data.network.ApiResult
-import com.vurgun.skyfit.data.network.utils.mapOrThrow
+import com.vurgun.skyfit.core.network.ApiClient
+import com.vurgun.skyfit.core.network.ApiResult
 import io.ktor.client.request.bearerAuth
 import io.ktor.client.request.setBody
 import io.ktor.client.request.url
@@ -88,8 +87,8 @@ class CourseApiService(private val apiClient: ApiClient) {
         }
     }
 
-    internal suspend fun createLesson(request: CreateLessonRequest, token: String): ApiResult<EmptyDataResponse> {
-        return apiClient.safeApiCall<EmptyDataResponse> {
+    internal suspend fun createLesson(request: CreateLessonRequest, token: String): ApiResult<EmptyDTO> {
+        return apiClient.safeApiCall<EmptyDTO> {
             method = HttpMethod.Post
             bearerAuth(token)
             url(Endpoints.CREATE_LESSON)
@@ -109,8 +108,8 @@ class CourseApiService(private val apiClient: ApiClient) {
         }
     }
 
-    internal suspend fun updateLesson(request: UpdateLessonRequest, token: String): ApiResult<EmptyDataResponse> {
-        return apiClient.safeApiCall<EmptyDataResponse> {
+    internal suspend fun updateLesson(request: UpdateLessonRequest, token: String): ApiResult<EmptyDTO> {
+        return apiClient.safeApiCall<EmptyDTO> {
             method = HttpMethod.Put
             bearerAuth(token)
             url(Endpoints.UPDATE_LESSON)
@@ -118,8 +117,8 @@ class CourseApiService(private val apiClient: ApiClient) {
         }
     }
 
-    internal suspend fun deactivateLesson(request: DeactivateLessonRequest, token: String): ApiResult<EmptyDataResponse> {
-        return apiClient.safeApiCall<EmptyDataResponse> {
+    internal suspend fun deactivateLesson(request: DeactivateLessonRequest, token: String): ApiResult<EmptyDTO> {
+        return apiClient.safeApiCall<EmptyDTO> {
             method = HttpMethod.Put
             bearerAuth(token)
             url(Endpoints.DEACTIVATE_LESSON)
@@ -127,8 +126,8 @@ class CourseApiService(private val apiClient: ApiClient) {
         }
     }
 
-    internal suspend fun activateLesson(request: ActivateLessonRequest, token: String): ApiResult<EmptyDataResponse> {
-        return apiClient.safeApiCall<EmptyDataResponse> {
+    internal suspend fun activateLesson(request: ActivateLessonRequest, token: String): ApiResult<EmptyDTO> {
+        return apiClient.safeApiCall<EmptyDTO> {
             method = HttpMethod.Put
             bearerAuth(token)
             url(Endpoints.ACTIVATE_LESSON)
@@ -136,8 +135,8 @@ class CourseApiService(private val apiClient: ApiClient) {
         }
     }
 
-    internal suspend fun deleteLesson(request: DeleteLessonRequest, token: String): ApiResult<EmptyDataResponse> {
-        return apiClient.safeApiCall<EmptyDataResponse> {
+    internal suspend fun deleteLesson(request: DeleteLessonRequest, token: String): ApiResult<EmptyDTO> {
+        return apiClient.safeApiCall<EmptyDTO> {
             method = HttpMethod.Delete
             bearerAuth(token)
             url(Endpoints.DELETE_LESSON)
@@ -190,8 +189,8 @@ class CourseApiService(private val apiClient: ApiClient) {
     internal suspend fun cancelUserAppointment(
         request: CancelUserAppointmentRequest,
         token: String
-    ): ApiResult<EmptyDataResponse> {
-        return apiClient.safeApiCall<EmptyDataResponse> {
+    ): ApiResult<EmptyDTO> {
+        return apiClient.safeApiCall<EmptyDTO> {
             method = HttpMethod.Post
             bearerAuth(token)
             url(Endpoints.CANCEL_APPOINTMENT_BY_USER)

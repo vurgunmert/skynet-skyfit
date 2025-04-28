@@ -1,9 +1,9 @@
 package com.vurgun.skyfit.data.settings.repository
 
-import com.vurgun.skyfit.data.core.storage.TokenManager
-import com.vurgun.skyfit.data.network.DispatcherProvider
-import com.vurgun.skyfit.data.network.utils.ioResult
-import com.vurgun.skyfit.data.network.utils.mapOrThrow
+import com.vurgun.skyfit.core.data.storage.TokenManager
+import com.vurgun.skyfit.core.network.DispatcherProvider
+import com.vurgun.skyfit.core.network.utils.ioResult
+import com.vurgun.skyfit.core.network.utils.mapOrThrow
 import com.vurgun.skyfit.data.settings.domain.model.Member
 import com.vurgun.skyfit.data.settings.domain.model.Trainer
 import com.vurgun.skyfit.data.settings.domain.repository.MemberRepository

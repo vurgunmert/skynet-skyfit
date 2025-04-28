@@ -11,15 +11,15 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import com.vurgun.skyfit.ui.core.components.button.PrimaryMediumButton
-import com.vurgun.skyfit.ui.core.styling.SkyFitColor
-import com.vurgun.skyfit.ui.core.styling.SkyFitTypography
+import com.vurgun.skyfit.core.ui.components.button.PrimaryMediumButton
+import com.vurgun.skyfit.core.ui.styling.SkyFitColor
+import com.vurgun.skyfit.core.ui.styling.SkyFitTypography
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
-import skyfit.ui.core.generated.resources.Res
-import skyfit.ui.core.generated.resources.ic_chevron_left
-import skyfit.ui.core.generated.resources.save_action
-import skyfit.ui.core.generated.resources.settings_account_label
+import skyfit.core.ui.generated.resources.Res
+import skyfit.core.ui.generated.resources.ic_chevron_left
+import skyfit.core.ui.generated.resources.save_action
+import skyfit.core.ui.generated.resources.settings_account_label
 
 @Composable
 fun SettingsEditProfileHeader(

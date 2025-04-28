@@ -20,20 +20,20 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.unit.dp
-import com.vurgun.skyfit.ui.core.styling.SkyFitColor
-import com.vurgun.skyfit.ui.core.styling.SkyFitTypography
+import com.vurgun.skyfit.core.ui.styling.SkyFitColor
+import com.vurgun.skyfit.core.ui.styling.SkyFitTypography
 import com.vurgun.skyfit.feature.social.components.SkyFitPostCardItemComponent.InteractionRow
 import com.vurgun.skyfit.feature.social.components.SkyFitPostCardItemComponent.ProfileImage
 import com.vurgun.skyfit.feature.social.components.SkyFitPostCardItemComponent.SkyFitPostItemUserInfoRow
 import com.vurgun.skyfit.feature.social.viewdata.SocialPostItemViewData
-import com.vurgun.skyfit.ui.core.components.image.NetworkImage
+import com.vurgun.skyfit.core.ui.components.image.NetworkImage
 import org.jetbrains.compose.resources.DrawableResource
 import org.jetbrains.compose.resources.painterResource
-import skyfit.ui.core.generated.resources.Res
-import skyfit.ui.core.generated.resources.ic_arrow_replay
-import skyfit.ui.core.generated.resources.ic_chat
-import skyfit.ui.core.generated.resources.ic_heart
-import skyfit.ui.core.generated.resources.ic_share
+import skyfit.core.ui.generated.resources.Res
+import skyfit.core.ui.generated.resources.ic_arrow_replay
+import skyfit.core.ui.generated.resources.ic_chat
+import skyfit.core.ui.generated.resources.ic_heart
+import skyfit.core.ui.generated.resources.ic_share
 
 @Composable
 fun SocialPostCard(

@@ -2,13 +2,13 @@ package com.vurgun.skyfit.feature.profile.facility.owner
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.vurgun.skyfit.data.core.domain.model.FacilityDetail
+import com.vurgun.skyfit.core.data.domain.model.FacilityDetail
 import com.vurgun.skyfit.data.courses.domain.repository.CourseRepository
 import com.vurgun.skyfit.data.courses.mapper.LessonSessionItemViewDataMapper
 import com.vurgun.skyfit.data.courses.model.LessonSessionItemViewData
-import com.vurgun.skyfit.data.user.domain.FacilityProfile
-import com.vurgun.skyfit.data.user.repository.ProfileRepository
-import com.vurgun.skyfit.data.user.repository.UserManager
+import com.vurgun.skyfit.core.data.domain.model.FacilityProfile
+import com.vurgun.skyfit.core.data.domain.repository.ProfileRepository
+import com.vurgun.skyfit.core.data.domain.repository.UserManager
 import com.vurgun.skyfit.feature.profile.components.viewdata.PhotoGalleryStackViewData
 import com.vurgun.skyfit.feature.profile.components.viewdata.TrainerProfileCardItemViewData
 import com.vurgun.skyfit.feature.social.viewdata.SocialPostItemViewData

@@ -2,7 +2,7 @@ package com.vurgun.skyfit.feature.settings.facility.member
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.vurgun.skyfit.data.core.model.MissingTokenException
+import com.vurgun.skyfit.core.data.domain.model.MissingTokenException
 import com.vurgun.skyfit.data.settings.domain.model.Member
 import com.vurgun.skyfit.data.settings.domain.repository.MemberRepository
 import kotlinx.coroutines.flow.MutableStateFlow

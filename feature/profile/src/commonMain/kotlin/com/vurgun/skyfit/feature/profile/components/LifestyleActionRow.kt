@@ -27,9 +27,9 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.vurgun.skyfit.feature.profile.components.viewdata.LifestyleActionItemViewData
 import com.vurgun.skyfit.feature.profile.components.viewdata.LifestyleActionRowViewData
-import com.vurgun.skyfit.ui.core.styling.SkyFitAsset
-import com.vurgun.skyfit.ui.core.styling.SkyFitColor
-import com.vurgun.skyfit.ui.core.styling.SkyFitTypography
+import com.vurgun.skyfit.core.ui.styling.SkyFitAsset
+import com.vurgun.skyfit.core.ui.styling.SkyFitColor
+import com.vurgun.skyfit.core.ui.styling.SkyFitTypography
 
 @Composable
 fun LifestyleActionRow(

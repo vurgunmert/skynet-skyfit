@@ -18,18 +18,18 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
-import com.vurgun.skyfit.data.core.utility.now
+import com.vurgun.skyfit.core.data.utility.now
 import com.vurgun.skyfit.feature.calendar.component.monthly.CalendarSingleDateSelector
-import com.vurgun.skyfit.ui.core.components.button.PrimaryDialogButton
-import com.vurgun.skyfit.ui.core.components.button.SecondaryDialogButton
-import com.vurgun.skyfit.ui.core.components.text.BodyMediumRegularText
-import com.vurgun.skyfit.ui.core.styling.SkyFitColor
+import com.vurgun.skyfit.core.ui.components.button.PrimaryDialogButton
+import com.vurgun.skyfit.core.ui.components.button.SecondaryDialogButton
+import com.vurgun.skyfit.core.ui.components.text.BodyMediumRegularText
+import com.vurgun.skyfit.core.ui.styling.SkyFitColor
 import kotlinx.datetime.LocalDate
 import org.jetbrains.compose.resources.stringResource
-import skyfit.ui.core.generated.resources.Res
-import skyfit.ui.core.generated.resources.calendar_select_date
-import skyfit.ui.core.generated.resources.cancel_action
-import skyfit.ui.core.generated.resources.confirm_action
+import skyfit.core.ui.generated.resources.Res
+import skyfit.core.ui.generated.resources.calendar_select_date
+import skyfit.core.ui.generated.resources.cancel_action
+import skyfit.core.ui.generated.resources.confirm_action
 
 @Composable
 fun DatePickerDialog(

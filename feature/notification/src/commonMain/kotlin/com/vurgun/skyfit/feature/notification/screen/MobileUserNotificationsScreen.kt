@@ -29,19 +29,19 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import com.vurgun.skyfit.data.notification.model.SkyFitNotification
+import com.vurgun.skyfit.core.data.model.SkyFitNotification
 import com.vurgun.skyfit.feature.notification.UserNotificationsViewModel
 import com.vurgun.skyfit.feature.notification.component.NotificationItemSwipeDismissBackground
 import com.vurgun.skyfit.feature.notification.component.SkyFitNotificationItem
-import com.vurgun.skyfit.ui.core.components.special.ButtonSize
-import com.vurgun.skyfit.ui.core.components.special.ButtonState
-import com.vurgun.skyfit.ui.core.components.special.ButtonVariant
-import com.vurgun.skyfit.ui.core.components.special.SkyFitBadgeTabBarComponent
-import com.vurgun.skyfit.ui.core.components.special.SkyFitButtonComponent
-import com.vurgun.skyfit.ui.core.components.special.SkyFitMobileScaffold
-import com.vurgun.skyfit.ui.core.components.special.SkyFitScreenHeader
-import com.vurgun.skyfit.ui.core.styling.SkyFitColor
-import com.vurgun.skyfit.ui.core.styling.SkyFitTypography
+import com.vurgun.skyfit.core.ui.components.special.ButtonSize
+import com.vurgun.skyfit.core.ui.components.special.ButtonState
+import com.vurgun.skyfit.core.ui.components.special.ButtonVariant
+import com.vurgun.skyfit.core.ui.components.special.SkyFitBadgeTabBarComponent
+import com.vurgun.skyfit.core.ui.components.special.SkyFitButtonComponent
+import com.vurgun.skyfit.core.ui.components.special.SkyFitMobileScaffold
+import com.vurgun.skyfit.core.ui.components.special.SkyFitScreenHeader
+import com.vurgun.skyfit.core.ui.styling.SkyFitColor
+import com.vurgun.skyfit.core.ui.styling.SkyFitTypography
 import org.koin.compose.koinInject
 
 @Composable

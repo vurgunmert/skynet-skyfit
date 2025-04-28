@@ -22,10 +22,10 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.unit.dp
-import com.vurgun.skyfit.ui.core.components.icon.IconAsset
-import com.vurgun.skyfit.ui.core.components.text.BodyMediumRegularText
-import com.vurgun.skyfit.ui.core.styling.SkyFitColor
-import com.vurgun.skyfit.ui.core.styling.SkyFitTypography
+import com.vurgun.skyfit.core.ui.components.icon.IconAsset
+import com.vurgun.skyfit.core.ui.components.text.BodyMediumRegularText
+import com.vurgun.skyfit.core.ui.styling.SkyFitColor
+import com.vurgun.skyfit.core.ui.styling.SkyFitTypography
 import kotlinx.datetime.LocalDate
 import org.jetbrains.compose.resources.painterResource
 

@@ -2,7 +2,7 @@ package com.vurgun.skyfit.feature.messaging.chatbot
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.vurgun.skyfit.data.core.utility.now
+import com.vurgun.skyfit.core.data.utility.now
 import com.vurgun.skyfit.data.messaging.ChatbotApiUseCase
 import com.vurgun.skyfit.feature.messaging.component.ChatMessageItem
 import kotlinx.coroutines.flow.MutableStateFlow

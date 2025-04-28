@@ -6,16 +6,16 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.material.Divider
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import com.vurgun.skyfit.data.core.domain.model.CalendarRecurrenceType
-import com.vurgun.skyfit.ui.core.components.popup.SelectablePopupMenuItem
-import com.vurgun.skyfit.ui.core.components.popup.BasicPopupMenu
-import com.vurgun.skyfit.ui.core.components.text.BodyMediumRegularText
-import com.vurgun.skyfit.ui.core.styling.SkyFitColor
+import com.vurgun.skyfit.core.data.domain.model.CalendarRecurrenceType
+import com.vurgun.skyfit.core.ui.components.popup.SelectablePopupMenuItem
+import com.vurgun.skyfit.core.ui.components.popup.BasicPopupMenu
+import com.vurgun.skyfit.core.ui.components.text.BodyMediumRegularText
+import com.vurgun.skyfit.core.ui.styling.SkyFitColor
 import org.jetbrains.compose.resources.stringResource
-import skyfit.ui.core.generated.resources.Res
-import skyfit.ui.core.generated.resources.recurrence_daily_label
-import skyfit.ui.core.generated.resources.recurrence_none_label
-import skyfit.ui.core.generated.resources.recurrence_weekly_label
+import skyfit.core.ui.generated.resources.Res
+import skyfit.core.ui.generated.resources.recurrence_daily_label
+import skyfit.core.ui.generated.resources.recurrence_none_label
+import skyfit.core.ui.generated.resources.recurrence_weekly_label
 
 @Composable
 fun LessonSelectRecurrenceTypePopupMenu(

@@ -1,12 +1,15 @@
 package com.vurgun.skyfit.feature.auth.login
 
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
-import com.vurgun.skyfit.data.auth.domain.model.AuthLoginResult
-import com.vurgun.skyfit.data.auth.domain.repository.AuthRepository
-import com.vurgun.skyfit.data.user.repository.UserManager
+import cafe.adriel.voyager.core.model.ScreenModel
+import cafe.adriel.voyager.core.model.screenModelScope
+import com.vurgun.skyfit.core.data.domain.model.AuthLoginResult
+import com.vurgun.skyfit.core.data.domain.repository.AuthRepository
+import com.vurgun.skyfit.core.data.domain.repository.UserManager
+import com.vurgun.skyfit.core.data.utility.SingleSharedFlow
+import com.vurgun.skyfit.core.data.utility.emitOrNull
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asSharedFlow
@@ -14,17 +17,17 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 
-sealed class LoginViewEvent {
-    data object GoToDashboard : LoginViewEvent()
-    data object GoToOTPVerification : LoginViewEvent()
-    data object GoToOnboarding : LoginViewEvent()
-    data class ShowError(val message: String?) : LoginViewEvent()
+sealed class LoginEffect {
+    data object GoToDashboard : LoginEffect()
+    data object GoToOTPVerification : LoginEffect()
+    data object GoToOnboarding : LoginEffect()
+    data class ShowError(val message: String?) : LoginEffect()
 }
 
 class LoginViewModel(
     private val authRepository: AuthRepository,
     private val userManager: UserManager,
-) : ViewModel() {
+) : ScreenModel {
 
     // State
     private val _phoneNumber = MutableStateFlow("")
@@ -39,20 +42,18 @@ class LoginViewModel(
     private val _isLoading = MutableStateFlow(false)
     val isLoading: StateFlow<Boolean> = _isLoading
 
-    private val _uiEvents = MutableSharedFlow<LoginViewEvent>()
-    val uiEvents = _uiEvents.asSharedFlow()
+    private val _effect = SingleSharedFlow<LoginEffect>()
+    val effect: SharedFlow<LoginEffect> = _effect
 
-    // Derived State
     val isLoginEnabled: StateFlow<Boolean> = _phoneNumber.map { it.length == 10 }
-        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), false)
+        .stateIn(screenModelScope, SharingStarted.WhileSubscribed(5000), false)
 
-    // Event Handlers
     fun onPhoneNumberChanged(value: String) {
-        _phoneNumber.value = value
+        _phoneNumber.value = value.trim()
     }
 
     fun onPasswordChanged(value: String) {
-        _password.value = value
+        _password.value = value.trim()
     }
 
     fun togglePasswordVisibility() {
@@ -62,24 +63,24 @@ class LoginViewModel(
     fun submitLogin() {
         if (_isLoading.value) return
 
-        viewModelScope.launch {
+        screenModelScope.launch {
             _isLoading.value = true
             try {
                 val event = when (val result = authRepository.login(_phoneNumber.value, _password.value)) {
                     is AuthLoginResult.Success -> {
                         try {
                             userManager.getActiveUser(true).getOrThrow()
-                            LoginViewEvent.GoToDashboard
+                            LoginEffect.GoToDashboard
                         } catch (e: Exception) {
-                            LoginViewEvent.ShowError(e.message)
+                            LoginEffect.ShowError(e.message)
                         }
                     }
 
-                    is AuthLoginResult.OTPVerificationRequired -> LoginViewEvent.GoToOTPVerification
-                    is AuthLoginResult.OnboardingRequired -> LoginViewEvent.GoToOnboarding
-                    is AuthLoginResult.Error -> LoginViewEvent.ShowError(result.message)
+                    is AuthLoginResult.OTPVerificationRequired -> LoginEffect.GoToOTPVerification
+                    is AuthLoginResult.OnboardingRequired -> LoginEffect.GoToOnboarding
+                    is AuthLoginResult.Error -> LoginEffect.ShowError(result.message)
                 }
-                _uiEvents.emit(event)
+                _effect.emitOrNull(event)
             } finally {
                 _isLoading.value = false
             }

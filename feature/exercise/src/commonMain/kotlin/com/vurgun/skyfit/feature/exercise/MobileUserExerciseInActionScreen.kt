@@ -62,23 +62,23 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import com.vurgun.skyfit.ui.core.components.button.SkyFitIconButton
-import com.vurgun.skyfit.ui.core.components.image.NetworkImage
-import com.vurgun.skyfit.ui.core.components.special.ButtonSize
-import com.vurgun.skyfit.ui.core.components.special.ButtonState
-import com.vurgun.skyfit.ui.core.components.special.ButtonVariant
-import com.vurgun.skyfit.ui.core.components.special.SkyFitButtonComponent
-import com.vurgun.skyfit.ui.core.styling.SkyFitColor
-import com.vurgun.skyfit.ui.core.styling.SkyFitTypography
+import com.vurgun.skyfit.core.ui.components.button.SkyFitIconButton
+import com.vurgun.skyfit.core.ui.components.image.NetworkImage
+import com.vurgun.skyfit.core.ui.components.special.ButtonSize
+import com.vurgun.skyfit.core.ui.components.special.ButtonState
+import com.vurgun.skyfit.core.ui.components.special.ButtonVariant
+import com.vurgun.skyfit.core.ui.components.special.SkyFitButtonComponent
+import com.vurgun.skyfit.core.ui.styling.SkyFitColor
+import com.vurgun.skyfit.core.ui.styling.SkyFitTypography
 import org.jetbrains.compose.resources.painterResource
-import skyfit.ui.core.generated.resources.Res
-import skyfit.ui.core.generated.resources.ic_chevron_left
-import skyfit.ui.core.generated.resources.ic_chevron_right
-import skyfit.ui.core.generated.resources.ic_close_circle
-import skyfit.ui.core.generated.resources.ic_list
-import skyfit.ui.core.generated.resources.ic_music
-import skyfit.ui.core.generated.resources.ic_pause
-import skyfit.ui.core.generated.resources.ic_trophy
+import skyfit.core.ui.generated.resources.Res
+import skyfit.core.ui.generated.resources.ic_chevron_left
+import skyfit.core.ui.generated.resources.ic_chevron_right
+import skyfit.core.ui.generated.resources.ic_close_circle
+import skyfit.core.ui.generated.resources.ic_list
+import skyfit.core.ui.generated.resources.ic_music
+import skyfit.core.ui.generated.resources.ic_pause
+import skyfit.core.ui.generated.resources.ic_trophy
 
 private enum class MobileUserExerciseInActionScreenStep {
     SESSION,
@@ -662,7 +662,7 @@ private fun MusicControlsPopup(
                 modifier = Modifier.fillMaxWidth()
             ) {
                 IconButton(onClick = onPrevious) {
-                    Icon(Icons.Filled.ArrowBack, contentDescription = "Previous", tint = Color.White)
+                    Icon(painter = painterResource(Res.drawable.ic_chevron_left), contentDescription = "Previous", tint = Color.White)
                 }
                 IconButton(onClick = onPause) {
                     Icon(

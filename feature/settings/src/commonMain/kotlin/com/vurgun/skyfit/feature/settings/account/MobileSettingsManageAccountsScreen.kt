@@ -17,20 +17,20 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.vurgun.skyfit.data.core.domain.model.UserAccountType
-import com.vurgun.skyfit.ui.core.components.button.SecondaryLargeButton
-import com.vurgun.skyfit.ui.core.components.image.CircleNetworkImage
-import com.vurgun.skyfit.ui.core.components.special.SkyFitMobileScaffold
-import com.vurgun.skyfit.ui.core.components.special.SkyFitScreenHeader
-import com.vurgun.skyfit.ui.core.components.text.BodyMediumSemiboldText
-import com.vurgun.skyfit.ui.core.styling.SkyFitColor
+import com.vurgun.skyfit.core.data.domain.model.UserAccountType
+import com.vurgun.skyfit.core.ui.components.button.SecondaryLargeButton
+import com.vurgun.skyfit.core.ui.components.image.CircleNetworkImage
+import com.vurgun.skyfit.core.ui.components.special.SkyFitMobileScaffold
+import com.vurgun.skyfit.core.ui.components.special.SkyFitScreenHeader
+import com.vurgun.skyfit.core.ui.components.text.BodyMediumSemiboldText
+import com.vurgun.skyfit.core.ui.styling.SkyFitColor
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.viewmodel.koinViewModel
-import skyfit.ui.core.generated.resources.Res
-import skyfit.ui.core.generated.resources.accounts_title
-import skyfit.ui.core.generated.resources.add_account_action
-import skyfit.ui.core.generated.resources.ic_minus
+import skyfit.core.ui.generated.resources.Res
+import skyfit.core.ui.generated.resources.accounts_title
+import skyfit.core.ui.generated.resources.add_account_action
+import skyfit.core.ui.generated.resources.ic_minus
 
 @Composable
 fun MobileSettingsManageAccountsScreen(

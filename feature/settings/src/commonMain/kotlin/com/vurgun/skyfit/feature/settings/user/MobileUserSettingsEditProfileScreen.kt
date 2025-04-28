@@ -23,28 +23,28 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.unit.dp
-import com.vurgun.skyfit.ui.core.components.special.SkyFitMobileScaffold
-import com.vurgun.skyfit.ui.core.components.picker.HeightAndUnitPickerDialog
-import com.vurgun.skyfit.ui.core.components.picker.WeightAndUnitPickerDialog
-import com.vurgun.skyfit.ui.core.components.text.SingleLineInputText
-import com.vurgun.skyfit.ui.core.components.text.TitledMediumRegularText
+import com.vurgun.skyfit.core.ui.components.special.SkyFitMobileScaffold
+import com.vurgun.skyfit.core.ui.components.picker.HeightAndUnitPickerDialog
+import com.vurgun.skyfit.core.ui.components.picker.WeightAndUnitPickerDialog
+import com.vurgun.skyfit.core.ui.components.text.SingleLineInputText
+import com.vurgun.skyfit.core.ui.components.text.TitledMediumRegularText
 import com.vurgun.skyfit.feature.settings.component.AccountSettingsEditableProfileImage
 import com.vurgun.skyfit.feature.settings.component.SettingsEditProfileHeader
 import com.vurgun.skyfit.feature.settings.component.SettingsSelectBodyTypePopupMenu
 import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.koinInject
-import skyfit.ui.core.generated.resources.Res
-import skyfit.ui.core.generated.resources.ic_chevron_down
-import skyfit.ui.core.generated.resources.ic_pencil
-import skyfit.ui.core.generated.resources.settings_edit_profile_body_type_label
-import skyfit.ui.core.generated.resources.settings_edit_profile_height_label
-import skyfit.ui.core.generated.resources.settings_edit_profile_username_hint
-import skyfit.ui.core.generated.resources.settings_edit_profile_username_label
-import skyfit.ui.core.generated.resources.settings_edit_profile_weight_label
-import skyfit.ui.core.generated.resources.user_first_name_hint
-import skyfit.ui.core.generated.resources.user_first_name_mandatory_label
-import skyfit.ui.core.generated.resources.user_last_name_hint
-import skyfit.ui.core.generated.resources.user_last_name_mandatory_label
+import skyfit.core.ui.generated.resources.Res
+import skyfit.core.ui.generated.resources.ic_chevron_down
+import skyfit.core.ui.generated.resources.ic_pencil
+import skyfit.core.ui.generated.resources.settings_edit_profile_body_type_label
+import skyfit.core.ui.generated.resources.settings_edit_profile_height_label
+import skyfit.core.ui.generated.resources.settings_edit_profile_username_hint
+import skyfit.core.ui.generated.resources.settings_edit_profile_username_label
+import skyfit.core.ui.generated.resources.settings_edit_profile_weight_label
+import skyfit.core.ui.generated.resources.user_first_name_hint
+import skyfit.core.ui.generated.resources.user_first_name_mandatory_label
+import skyfit.core.ui.generated.resources.user_last_name_hint
+import skyfit.core.ui.generated.resources.user_last_name_mandatory_label
 
 @Composable
 fun MobileUserSettingsEditProfileScreen(goToBack: () -> Unit) {

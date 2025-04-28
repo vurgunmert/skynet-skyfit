@@ -1,11 +1,11 @@
 package com.vurgun.skyfit.feature.settings.user
 
 import androidx.lifecycle.ViewModel
-import com.vurgun.skyfit.data.user.repository.UserManager
-import com.vurgun.skyfit.data.core.domain.model.BodyType
-import com.vurgun.skyfit.data.core.domain.model.HeightUnitType
-import com.vurgun.skyfit.data.core.domain.model.UserDetail
-import com.vurgun.skyfit.data.core.domain.model.WeightUnitType
+import com.vurgun.skyfit.core.data.domain.repository.UserManager
+import com.vurgun.skyfit.core.data.domain.model.BodyType
+import com.vurgun.skyfit.core.data.domain.model.HeightUnitType
+import com.vurgun.skyfit.core.data.domain.model.UserDetail
+import com.vurgun.skyfit.core.data.domain.model.WeightUnitType
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.update

@@ -30,21 +30,21 @@ import com.vurgun.skyfit.feature.calendar.component.weekly.CalendarWeekDaySelect
 import com.vurgun.skyfit.feature.calendar.component.weekly.CalendarWeekDaySelectorViewModel
 import com.vurgun.skyfit.feature.calendar.component.weekly.rememberWeekDaySelectorState
 import com.vurgun.skyfit.feature.courses.component.LessonEventItemPopupMenu
-import com.vurgun.skyfit.ui.core.components.button.SecondaryMediumButton
-import com.vurgun.skyfit.ui.core.components.event.EditableLessonEventItem
-import com.vurgun.skyfit.ui.core.components.loader.FullScreenLoader
-import com.vurgun.skyfit.ui.core.components.special.SkyFitMobileScaffold
-import com.vurgun.skyfit.ui.core.components.special.SkyFitScreenHeader
-import com.vurgun.skyfit.ui.core.styling.SkyFitColor
-import com.vurgun.skyfit.ui.core.styling.SkyFitTypography
+import com.vurgun.skyfit.core.ui.components.button.SecondaryMediumButton
+import com.vurgun.skyfit.core.ui.components.event.EditableLessonEventItem
+import com.vurgun.skyfit.core.ui.components.loader.FullScreenLoader
+import com.vurgun.skyfit.core.ui.components.special.SkyFitMobileScaffold
+import com.vurgun.skyfit.core.ui.components.special.SkyFitScreenHeader
+import com.vurgun.skyfit.core.ui.styling.SkyFitColor
+import com.vurgun.skyfit.core.ui.styling.SkyFitTypography
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.viewmodel.koinViewModel
-import skyfit.ui.core.generated.resources.Res
-import skyfit.ui.core.generated.resources.ic_plus
-import skyfit.ui.core.generated.resources.lesson_add_action
-import skyfit.ui.core.generated.resources.lessons_label
-import skyfit.ui.core.generated.resources.status_out_of_use
+import skyfit.core.ui.generated.resources.Res
+import skyfit.core.ui.generated.resources.ic_plus
+import skyfit.core.ui.generated.resources.lesson_add_action
+import skyfit.core.ui.generated.resources.lessons_label
+import skyfit.core.ui.generated.resources.status_out_of_use
 
 @Composable
 fun MobileFacilityLessonListScreen(

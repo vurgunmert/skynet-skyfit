@@ -12,8 +12,8 @@ import androidx.compose.ui.Modifier
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.vurgun.skyfit.feature.home.component.MobileDashboardHomeToolbarComponent
 import com.vurgun.skyfit.feature.home.component.MobileUserHomeUpcomingAppointmentsComponent
-import com.vurgun.skyfit.ui.core.components.special.CharacterImage
-import com.vurgun.skyfit.ui.core.components.special.SkyFitMobileScaffold
+import com.vurgun.skyfit.core.ui.components.special.CharacterImage
+import com.vurgun.skyfit.core.ui.components.special.SkyFitMobileScaffold
 import org.koin.compose.viewmodel.koinViewModel
 
 @Composable

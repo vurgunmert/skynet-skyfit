@@ -21,7 +21,6 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Icon
 import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowForward
 import androidx.compose.material.icons.filled.Face
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -37,13 +36,15 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.vurgun.skyfit.ui.core.components.special.SkyFitMobileScaffold
-import com.vurgun.skyfit.ui.core.components.special.SkyFitScreenHeader
-import com.vurgun.skyfit.ui.core.components.special.SkyFitSearchFilterBarComponent
-import com.vurgun.skyfit.ui.core.components.special.SkyFitSearchTextInputComponent
+import com.vurgun.skyfit.core.ui.components.special.SkyFitMobileScaffold
+import com.vurgun.skyfit.core.ui.components.special.SkyFitScreenHeader
+import com.vurgun.skyfit.core.ui.components.special.SkyFitSearchFilterBarComponent
+import com.vurgun.skyfit.core.ui.components.special.SkyFitSearchTextInputComponent
 import org.jetbrains.compose.resources.painterResource
-import skyfit.ui.core.generated.resources.Res
-import skyfit.ui.core.generated.resources.logo_skyfit
+import skyfit.core.ui.generated.resources.Res
+import skyfit.core.ui.generated.resources.ic_chevron_right
+import skyfit.core.ui.generated.resources.ic_posture_fill
+import skyfit.core.ui.generated.resources.logo_skyfit
 
 @Composable
 fun MobileExploreCommunitiesScreen(
@@ -117,12 +118,12 @@ private fun MobileExploreFeaturedCommunitiesComponent() {
                 )
                 Spacer(modifier = Modifier.height(4.dp))
                 Row(verticalAlignment = Alignment.CenterVertically) {
-                    Icon(imageVector = Icons.Default.Face, contentDescription = "Members", tint = Color.Black)
+                    Icon(painter = painterResource(Res.drawable.ic_posture_fill), contentDescription = "Members", tint = Color.Black)
                     Spacer(modifier = Modifier.width(4.dp))
                     Text(text = featuredCommunity.members, fontSize = 14.sp, color = Color.Black)
                 }
             }
-            Icon(imageVector = Icons.Default.ArrowForward, contentDescription = "Go", tint = Color.Black)
+            Icon(painter = painterResource(Res.drawable.ic_chevron_right), contentDescription = "Go", tint = Color.Black)
         }
     }
 }
@@ -197,7 +198,7 @@ private fun CommunityCard(community: Community) {
                 Text(text = community.members, fontSize = 14.sp, color = Color.Gray)
             }
         }
-        Icon(imageVector = Icons.Default.ArrowForward, contentDescription = "Go", tint = Color.Gray)
+        Icon(painter = painterResource(Res.drawable.ic_chevron_right), contentDescription = "Go", tint = Color.Gray)
     }
 }
 

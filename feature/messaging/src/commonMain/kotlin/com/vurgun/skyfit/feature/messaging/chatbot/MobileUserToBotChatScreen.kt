@@ -19,9 +19,9 @@ import androidx.compose.ui.unit.dp
 import com.vurgun.skyfit.feature.messaging.component.SkyFitChatMessageBubble
 import com.vurgun.skyfit.feature.messaging.component.SkyFitChatMessageBubbleShimmer
 import com.vurgun.skyfit.feature.messaging.component.SkyFitChatMessageInputComponent
-import com.vurgun.skyfit.ui.core.components.special.SkyFitScaffold
-import com.vurgun.skyfit.ui.core.components.special.SkyFitScreenHeader
-import com.vurgun.skyfit.ui.core.styling.SkyFitColor
+import com.vurgun.skyfit.core.ui.components.special.SkyFitScaffold
+import com.vurgun.skyfit.core.ui.components.special.SkyFitScreenHeader
+import com.vurgun.skyfit.core.ui.styling.SkyFitColor
 import org.koin.compose.koinInject
 
 @Composable

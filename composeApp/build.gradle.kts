@@ -45,12 +45,12 @@ kotlin {
         val desktopMain by getting
 
         commonMain.dependencies {
-            implementation(projects.ui.core)
+            implementation(projects.core.ui)
+            implementation(projects.core.navigation)
 
-            implementation(projects.data.core)
-            implementation(projects.data.network)
-            implementation(projects.data.user)
+            implementation(projects.core.data)
 
+            implementation(projects.feature.splash)
             implementation(projects.feature.auth)
             implementation(projects.feature.onboarding)
             implementation(projects.feature.dashboard)
@@ -63,23 +63,8 @@ kotlin {
             implementation(projects.feature.home)
             implementation(projects.feature.bodyanalysis)
 
-            // Kotlinx
-            implementation(libs.kotlinx.coroutines.core)
-            implementation(libs.kotlinx.serialization)
-            implementation(libs.kotlinx.datetime)
-
-            // Koin for dependency injection
             implementation(libs.koin.core)
-            implementation(libs.bundles.koin.compose)
-
-            // peekaboo for Camera work
-//            implementation(libs.peekaboo.ui)
-//            implementation(libs.peekaboo.image.picker)
-
-            // Coil for image loading
-            implementation(libs.coil.compose)
-            implementation(libs.coil.network.ktor)
-//            implementation("network.chaintech:compose-multiplatform-media-player:1.0.30")
+            implementation(libs.koin.compose)
         }
 
         androidMain.dependencies {

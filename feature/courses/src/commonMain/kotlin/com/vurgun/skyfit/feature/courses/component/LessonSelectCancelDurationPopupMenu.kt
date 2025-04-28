@@ -6,10 +6,10 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.material.Divider
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import com.vurgun.skyfit.ui.core.components.popup.SelectablePopupMenuItem
-import com.vurgun.skyfit.ui.core.components.popup.BasicPopupMenu
-import com.vurgun.skyfit.ui.core.components.text.BodyMediumRegularText
-import com.vurgun.skyfit.ui.core.styling.SkyFitColor
+import com.vurgun.skyfit.core.ui.components.popup.SelectablePopupMenuItem
+import com.vurgun.skyfit.core.ui.components.popup.BasicPopupMenu
+import com.vurgun.skyfit.core.ui.components.text.BodyMediumRegularText
+import com.vurgun.skyfit.core.ui.styling.SkyFitColor
 
 @Composable
 fun LessonSelectCancelDurationPopupMenu(

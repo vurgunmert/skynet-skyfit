@@ -11,11 +11,11 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import com.vurgun.skyfit.data.core.utility.now
+import com.vurgun.skyfit.core.data.utility.now
 import com.vurgun.skyfit.feature.calendar.component.LegacySkyFitCalendarGridComponent
 import com.vurgun.skyfit.feature.calendar.component.MobileUserActivityHourlyCalendarComponent
-import com.vurgun.skyfit.ui.core.components.special.SkyFitMobileScaffold
-import com.vurgun.skyfit.ui.core.components.special.SkyFitScreenHeader
+import com.vurgun.skyfit.core.ui.components.special.SkyFitMobileScaffold
+import com.vurgun.skyfit.core.ui.components.special.SkyFitScreenHeader
 import kotlinx.datetime.LocalDate
 
 @Composable

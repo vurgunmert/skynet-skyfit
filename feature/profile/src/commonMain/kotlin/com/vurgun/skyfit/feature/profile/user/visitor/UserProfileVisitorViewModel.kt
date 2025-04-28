@@ -5,8 +5,8 @@ import androidx.lifecycle.viewModelScope
 import com.vurgun.skyfit.data.courses.domain.repository.CourseRepository
 import com.vurgun.skyfit.data.courses.mapper.LessonSessionItemViewDataMapper
 import com.vurgun.skyfit.data.courses.model.LessonSessionItemViewData
-import com.vurgun.skyfit.data.user.domain.UserProfile
-import com.vurgun.skyfit.data.user.repository.ProfileRepository
+import com.vurgun.skyfit.core.data.domain.model.UserProfile
+import com.vurgun.skyfit.core.data.domain.repository.ProfileRepository
 import com.vurgun.skyfit.feature.profile.components.viewdata.LifestyleActionItemViewData
 import com.vurgun.skyfit.feature.social.viewdata.SocialPostItemViewData
 import com.vurgun.skyfit.feature.social.viewdata.fakePosts

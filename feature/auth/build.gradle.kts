@@ -32,10 +32,9 @@ kotlin {
         val desktopMain by getting
 
         commonMain.dependencies {
-            implementation(projects.ui.core)
-            implementation(projects.data.core)
-            implementation(projects.data.auth)
-            implementation(projects.data.user)
+            implementation(projects.core.ui)
+            implementation(projects.core.data)
+            implementation(projects.core.navigation)
 
             implementation(libs.koin.core)
             implementation(libs.bundles.koin.compose)

@@ -1,6 +1,6 @@
 package com.vurgun.skyfit.data.messaging
 
-import com.vurgun.skyfit.data.network.commonHttpClient
+import com.vurgun.skyfit.core.network.commonHttpClient
 import io.ktor.client.call.body
 import io.ktor.client.request.header
 import io.ktor.client.request.post

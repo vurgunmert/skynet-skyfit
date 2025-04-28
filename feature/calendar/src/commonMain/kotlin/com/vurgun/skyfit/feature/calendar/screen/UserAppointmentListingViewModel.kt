@@ -2,11 +2,11 @@ package com.vurgun.skyfit.feature.calendar.screen
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.vurgun.skyfit.data.core.domain.model.UserDetail
-import com.vurgun.skyfit.data.core.utility.emitIn
+import com.vurgun.skyfit.core.data.domain.model.UserDetail
+import com.vurgun.skyfit.core.data.utility.emitIn
 import com.vurgun.skyfit.data.courses.domain.model.Appointment
 import com.vurgun.skyfit.data.courses.domain.repository.CourseRepository
-import com.vurgun.skyfit.data.user.repository.UserManager
+import com.vurgun.skyfit.core.data.domain.repository.UserManager
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharedFlow

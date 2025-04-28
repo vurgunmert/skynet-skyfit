@@ -22,18 +22,17 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.vurgun.skyfit.data.bodyanalysis.model.PostureType
-import com.vurgun.skyfit.ui.core.components.text.BodyMediumSemiboldText
-import com.vurgun.skyfit.ui.core.styling.LocalPadding
-import com.vurgun.skyfit.ui.core.styling.SkyFitColor
+import com.vurgun.skyfit.core.ui.components.text.BodyMediumSemiboldText
+import com.vurgun.skyfit.core.ui.styling.LocalPadding
+import com.vurgun.skyfit.core.ui.styling.SkyFitColor
 import org.jetbrains.compose.resources.DrawableResource
 import org.jetbrains.compose.resources.painterResource
-import skyfit.ui.core.generated.resources.Res
-import skyfit.ui.core.generated.resources.posture_option_view_back
-import skyfit.ui.core.generated.resources.posture_option_view_front
-import skyfit.ui.core.generated.resources.posture_option_view_left
-import skyfit.ui.core.generated.resources.posture_option_view_right
-import skyfit.ui.core.generated.resources.ic_check_circle
-import skyfit.ui.core.generated.resources.ic_info_circle
+import skyfit.core.ui.generated.resources.Res
+import skyfit.core.ui.generated.resources.posture_option_view_back
+import skyfit.core.ui.generated.resources.posture_option_view_front
+import skyfit.core.ui.generated.resources.posture_option_view_left
+import skyfit.core.ui.generated.resources.posture_option_view_right
+import skyfit.core.ui.generated.resources.ic_check_circle
 
 @Composable
 fun BoxScope.PostureAnalysisOptionsScreen(

@@ -1,8 +1,8 @@
 package com.vurgun.skyfit.feature.profile
 
+import com.vurgun.skyfit.core.data.dataCoreModule
 import com.vurgun.skyfit.data.courses.dataCoursesModule
 import com.vurgun.skyfit.data.settings.dataSettingsModule
-import com.vurgun.skyfit.data.user.dataUserModule
 import com.vurgun.skyfit.feature.profile.facility.owner.FacilityProfileOwnerViewModel
 import com.vurgun.skyfit.feature.profile.facility.schedule.FacilityProfileScheduleViewModel
 import com.vurgun.skyfit.feature.profile.facility.visitor.FacilityProfileVisitorViewModel
@@ -14,7 +14,7 @@ import org.koin.core.module.dsl.viewModel
 import org.koin.dsl.module
 
 val featureProfileModule = module {
-    includes(dataCoursesModule, dataUserModule, dataSettingsModule)
+    includes(dataCoursesModule, dataCoreModule, dataSettingsModule)
 
     viewModel { UserProfileOwnerViewModel(get(), get(), get(), get()) }
 

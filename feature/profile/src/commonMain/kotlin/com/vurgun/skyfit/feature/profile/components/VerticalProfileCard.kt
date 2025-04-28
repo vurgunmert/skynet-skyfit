@@ -22,16 +22,16 @@ import androidx.compose.ui.draw.blur
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
-import com.vurgun.skyfit.ui.core.components.divider.VerticalDivider
-import com.vurgun.skyfit.ui.core.components.image.NetworkImage
-import com.vurgun.skyfit.ui.core.components.special.RatingStarComponent
-import com.vurgun.skyfit.ui.core.styling.SkyFitColor
-import com.vurgun.skyfit.ui.core.styling.SkyFitTypography
+import com.vurgun.skyfit.core.ui.components.divider.VerticalDivider
+import com.vurgun.skyfit.core.ui.components.image.NetworkImage
+import com.vurgun.skyfit.core.ui.components.special.RatingStarComponent
+import com.vurgun.skyfit.core.ui.styling.SkyFitColor
+import com.vurgun.skyfit.core.ui.styling.SkyFitTypography
 import org.jetbrains.compose.resources.stringResource
-import skyfit.ui.core.generated.resources.Res
-import skyfit.ui.core.generated.resources.follower_label
-import skyfit.ui.core.generated.resources.lessons_label
-import skyfit.ui.core.generated.resources.videos_label
+import skyfit.core.ui.generated.resources.Res
+import skyfit.core.ui.generated.resources.follower_label
+import skyfit.core.ui.generated.resources.lessons_label
+import skyfit.core.ui.generated.resources.videos_label
 
 @Composable
 fun VerticalTrainerProfileCard(

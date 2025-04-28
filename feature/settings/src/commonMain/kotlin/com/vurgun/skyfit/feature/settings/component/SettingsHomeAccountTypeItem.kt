@@ -17,14 +17,14 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import com.vurgun.skyfit.data.core.domain.model.UserAccountType
-import com.vurgun.skyfit.ui.core.components.image.CircleNetworkImage
-import com.vurgun.skyfit.ui.core.components.menu.MobileSettingsMenuItemDividerComponent
-import com.vurgun.skyfit.ui.core.components.text.BodyMediumSemiboldText
-import com.vurgun.skyfit.ui.core.styling.SkyFitColor
+import com.vurgun.skyfit.core.data.domain.model.UserAccountType
+import com.vurgun.skyfit.core.ui.components.image.CircleNetworkImage
+import com.vurgun.skyfit.core.ui.components.menu.MobileSettingsMenuItemDividerComponent
+import com.vurgun.skyfit.core.ui.components.text.BodyMediumSemiboldText
+import com.vurgun.skyfit.core.ui.styling.SkyFitColor
 import org.jetbrains.compose.resources.painterResource
-import skyfit.ui.core.generated.resources.Res
-import skyfit.ui.core.generated.resources.ic_checkbox_fill
+import skyfit.core.ui.generated.resources.Res
+import skyfit.core.ui.generated.resources.ic_checkbox_fill
 
 @Composable
 internal fun SettingsHomeAccountTypeItem(

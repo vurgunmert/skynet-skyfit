@@ -2,14 +2,13 @@ package com.vurgun.skyfit.feature.profile.trainer.visitor
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.vurgun.skyfit.data.core.domain.model.BaseUserDetail
-import com.vurgun.skyfit.data.core.utility.now
+import com.vurgun.skyfit.core.data.domain.model.BaseUserDetail
 import com.vurgun.skyfit.data.courses.domain.repository.CourseRepository
 import com.vurgun.skyfit.data.courses.mapper.LessonSessionItemViewDataMapper
 import com.vurgun.skyfit.data.courses.model.LessonSessionItemViewData
-import com.vurgun.skyfit.data.user.domain.TrainerProfile
-import com.vurgun.skyfit.data.user.repository.ProfileRepository
-import com.vurgun.skyfit.data.user.repository.UserManager
+import com.vurgun.skyfit.core.data.domain.model.TrainerProfile
+import com.vurgun.skyfit.core.data.domain.repository.ProfileRepository
+import com.vurgun.skyfit.core.data.domain.repository.UserManager
 import com.vurgun.skyfit.feature.social.viewdata.SocialPostItemViewData
 import kotlinx.coroutines.async
 import kotlinx.coroutines.flow.MutableSharedFlow
@@ -17,7 +16,6 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
-import kotlinx.datetime.LocalDate
 
 sealed interface TrainerProfileVisitorUiState {
     data object Loading : TrainerProfileVisitorUiState
