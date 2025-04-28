@@ -80,11 +80,12 @@ fun NavGraphBuilder.profileRoutes(navController: NavController) {
 }
 
 fun NavGraphBuilder.dashboardRoutes(
-    navController: NavController
+    navController: NavController,
+    goToPostureAnalysis: () -> Unit
 ) {
     composable<DashboardRoute> {
         DashboardRoot(
-            goToChatBot = { navController.popBackStack() },
+            goToChatBot = goToPostureAnalysis,
             goToSettings = {
                 navController.navigate(SettingsRoute.Main) {
                     launchSingleTop = true

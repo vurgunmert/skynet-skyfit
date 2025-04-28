@@ -14,6 +14,8 @@ import io.ktor.http.ContentType
 import io.ktor.http.contentType
 import io.ktor.util.encodeBase64
 import kotlinx.serialization.json.Json
+import kotlinx.serialization.json.JsonObject
+import kotlinx.serialization.json.jsonObject
 
 class PostureAnalysisRepository {
 
@@ -22,7 +24,7 @@ class PostureAnalysisRepository {
     private suspend fun requestAnalysis(
         byteArray: ByteArray,
         orientation: String
-    ): String {
+    ): JsonObject {
         val base64Image = byteArray.encodeBase64()
         val requestBody = PostureAnalysisRequest(
             image = base64Image,
@@ -34,26 +36,27 @@ class PostureAnalysisRepository {
             setBody(Json.encodeToString(PostureAnalysisRequest.serializer(), requestBody))
         }
 
-        return response.body()
+        val rawJson = response.body<String>()
+        return Json.parseToJsonElement(rawJson).jsonObject
     }
 
     suspend fun analyzeFront(byteArray: ByteArray): FrontPostureResponse {
         val json = requestAnalysis(byteArray, PostureType.Front.orientation)
-        return Json.decodeFromString(FrontPostureResponse.serializer(), json)
+        return FrontPostureResponse.fromJsonObject(json)
     }
 
     suspend fun analyzeBack(byteArray: ByteArray): BackPostureResponse {
         val json = requestAnalysis(byteArray, PostureType.Back.orientation)
-        return Json.decodeFromString(BackPostureResponse.serializer(), json)
+        return BackPostureResponse.fromJsonObject(json)
     }
 
     suspend fun analyzeLeft(byteArray: ByteArray): LeftPostureResponse {
         val json = requestAnalysis(byteArray, PostureType.Left.orientation)
-        return Json.decodeFromString(LeftPostureResponse.serializer(), json)
+        return LeftPostureResponse.fromJsonObject(json)
     }
 
     suspend fun analyzeRight(byteArray: ByteArray): RightPostureResponse {
         val json = requestAnalysis(byteArray, PostureType.Right.orientation)
-        return Json.decodeFromString(RightPostureResponse.serializer(), json)
+        return RightPostureResponse.fromJsonObject(json)
     }
 }

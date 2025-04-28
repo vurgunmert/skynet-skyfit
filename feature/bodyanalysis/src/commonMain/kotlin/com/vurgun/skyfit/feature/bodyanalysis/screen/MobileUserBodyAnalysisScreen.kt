@@ -109,8 +109,6 @@ fun MobileUserBodyAnalysisScreen(
     SkyFitScaffold {
         Box(Modifier.fillMaxSize()) {
 
-            /** 🔹 INFO SCREEN */
-            /** 🔹 INFO SCREEN */
             if (uiState is MobileUserBodyAnalysisState.Info) {
                 MobileUserBodyAnalysisScreenInfoComponent(
                     Modifier.align(Alignment.Center),
@@ -121,9 +119,6 @@ fun MobileUserBodyAnalysisScreen(
                 )
             }
 
-            /** 🔹 POSTURE OPTIONS */
-
-            /** 🔹 POSTURE OPTIONS */
             if (uiState is MobileUserBodyAnalysisState.PostureOptions) {
 //                MobileUserBodyAnalysisScreenPostureOptionsComponent(
 //                    onClickFront = { viewModel.selectPosture(PostureType.FRONT) },
@@ -165,9 +160,6 @@ fun MobileUserBodyAnalysisScreen(
                 }
             }
 
-            /** 🔹 SCANNING PROGRESS */
-
-            /** 🔹 SCANNING PROGRESS */
             if (uiState is MobileUserBodyAnalysisState.Scanning) {
                 MobileUserBodyAnalysisScreenScanningComponent(
                     capturedImage = capturedImage,
@@ -175,9 +167,6 @@ fun MobileUserBodyAnalysisScreen(
                 )
             }
 
-            /** 🔹 POSTURE CAPTURE RESULTS */
-
-            /** 🔹 POSTURE CAPTURE RESULTS */
             if (uiState is MobileUserBodyAnalysisState.CaptureResult) {
                 MobileUserBodyAnalysisScreenCaptureResultComponent(
                     capturedImage = capturedImage,
@@ -188,9 +177,6 @@ fun MobileUserBodyAnalysisScreen(
                 )
             }
 
-            /** 🔹 CAPTURE RESULT INSIGHT */
-
-            /** 🔹 CAPTURE RESULT INSIGHT */
             if (uiState is MobileUserBodyAnalysisState.CaptureResultInsight) {
                 MobileUserBodyAnalysisScreenCaptureResultInsightComponent(
                     capturedImage = capturedImage,
@@ -198,9 +184,6 @@ fun MobileUserBodyAnalysisScreen(
                 )
             }
 
-            /** 🔹 CAPTURE RESULT EXIT */
-
-            /** 🔹 CAPTURE RESULT EXIT */
             if (uiState is MobileUserBodyAnalysisState.CaptureResultExit) {
                 MobileUserBodyAnalysisScreenExitActionComponent(
                     showDialog = true,

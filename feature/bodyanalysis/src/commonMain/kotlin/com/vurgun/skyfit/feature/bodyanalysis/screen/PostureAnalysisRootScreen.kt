@@ -56,6 +56,7 @@ fun PostureAnalysisRootScreen(
     val viewModel: PostureAnalysisViewModel = koinViewModel()
     val uiState by viewModel.uiState.collectAsState()
     var showExitDialog by remember { mutableStateOf(false) }
+    var showResultDialog by remember { mutableStateOf(false) }
 
     SkyFitMobileFillScaffold {
         Box(Modifier.fillMaxSize()) {
@@ -83,7 +84,8 @@ fun PostureAnalysisRootScreen(
                 }
 
                 PostureAnalysisUIState.Mode.Result -> {
-                    PostureAnalysisResultScreen(viewModel)
+                    showResultDialog = true
+//                    PostureAnalysisResultScreen(viewModel)
                 }
             }
 
@@ -93,10 +95,20 @@ fun PostureAnalysisRootScreen(
                     .windowInsetsPadding(WindowInsets.systemBars)
                     .fillMaxWidth(),
                 uiState = uiState,
-                onClickBack = { showExitDialog = true },
+                onClickBack = onExit, //{ showExitDialog = true },
                 onToggleGuide = viewModel::toggleGuideOverlay,
                 onToggleGrid = viewModel::toggleGrid,
                 onClickInfo = viewModel::toggleInfo
+            )
+        }
+
+        if (showResultDialog) {
+            PostureAnalysisResultDialog(
+                viewModel = viewModel,
+                onDismiss = {
+                    showResultDialog = false
+                    viewModel.toggleInfo()
+                }
             )
         }
     }

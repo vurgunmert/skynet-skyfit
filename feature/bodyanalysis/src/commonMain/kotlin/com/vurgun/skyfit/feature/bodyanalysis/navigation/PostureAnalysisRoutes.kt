@@ -1,5 +1,6 @@
 package com.vurgun.skyfit.feature.bodyanalysis.navigation
 
+import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
 import com.vurgun.skyfit.feature.bodyanalysis.screen.PostureAnalysisRootScreen
@@ -27,9 +28,11 @@ sealed interface PostureAnalysisRoute {
 }
 
 fun NavGraphBuilder.postureAnalysisRoutes(
-    onExit: () -> Unit
+    navController: NavController
 ) {
     composable<PostureAnalysisRoute.Root> {
-        PostureAnalysisRootScreen(onExit)
+        PostureAnalysisRootScreen(onExit = {
+            navController.navigateUp()
+        })
     }
 }

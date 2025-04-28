@@ -8,6 +8,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.rememberNavController
 import com.vurgun.skyfit.feature.auth.AuthRoute
 import com.vurgun.skyfit.feature.auth.authRoutes
+import com.vurgun.skyfit.feature.bodyanalysis.navigation.PostureAnalysisRoute
 import com.vurgun.skyfit.feature.bodyanalysis.navigation.postureAnalysisRoutes
 import com.vurgun.skyfit.feature.calendar.navigation.appointmentRoutes
 import com.vurgun.skyfit.feature.courses.navigation.courseLessonsRoutes
@@ -29,9 +30,7 @@ fun AppNavigationGraph() {
     ) {
 
         postureAnalysisRoutes(
-            onExit = {
-
-            }
+            navController = navigationController
         )
 
         authRoutes(
@@ -53,7 +52,11 @@ fun AppNavigationGraph() {
             }
         )
 
-        dashboardRoutes(navigationController)
+        dashboardRoutes(
+            navController = navigationController,
+            goToPostureAnalysis = {
+                navigationController.navigate(PostureAnalysisRoute.Root)
+            })
 
         settingsRoutes(
             onExitSettings = {

@@ -31,6 +31,7 @@ sealed class PostureAnalysisResult {
 data class PostureState(
     val type: PostureType,
     val byteArray: ByteArray? = null,
+    val bitmap: ImageBitmap? = null,
     val result: PostureAnalysisResult? = null
 ) {
     val completed get() = result != null
@@ -146,10 +147,10 @@ class PostureAnalysisViewModel(
             )
         }
 
-        analyzeImage(byteArray, postureType)
+        analyzeImage(bitmap, byteArray, postureType)
     }
 
-    private fun analyzeImage(byteArray: ByteArray, type: PostureType) {
+    private fun analyzeImage(bitmap: ImageBitmap, byteArray: ByteArray, type: PostureType) {
         viewModelScope.launch {
             try {
                 //TODO: HERE WE NEED TO STORE RESULTS SOMWHERE UNTIL ALL ARE READY
@@ -162,7 +163,7 @@ class PostureAnalysisViewModel(
 
                 _uiState.update { currentState ->
                     val updatedStates = currentState.postureStates.map {
-                        if (it.type == type) it.copy(byteArray = byteArray, result = result)
+                        if (it.type == type) it.copy(byteArray = byteArray, bitmap = bitmap, result = result)
                         else it
                     }
 
