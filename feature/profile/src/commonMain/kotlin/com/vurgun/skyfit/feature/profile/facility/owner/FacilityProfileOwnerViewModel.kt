@@ -1,19 +1,19 @@
 package com.vurgun.skyfit.feature.profile.facility.owner
 
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
+import cafe.adriel.voyager.core.model.ScreenModel
+import cafe.adriel.voyager.core.model.screenModelScope
 import com.vurgun.skyfit.core.data.domain.model.FacilityDetail
+import com.vurgun.skyfit.core.data.domain.model.FacilityProfile
+import com.vurgun.skyfit.core.data.domain.model.FacilityTrainerProfile
+import com.vurgun.skyfit.core.data.domain.repository.ProfileRepository
+import com.vurgun.skyfit.core.data.domain.repository.UserManager
+import com.vurgun.skyfit.core.data.utility.SingleSharedFlow
 import com.vurgun.skyfit.data.courses.domain.repository.CourseRepository
 import com.vurgun.skyfit.data.courses.mapper.LessonSessionItemViewDataMapper
 import com.vurgun.skyfit.data.courses.model.LessonSessionItemViewData
-import com.vurgun.skyfit.core.data.domain.model.FacilityProfile
-import com.vurgun.skyfit.core.data.domain.repository.ProfileRepository
-import com.vurgun.skyfit.core.data.domain.repository.UserManager
 import com.vurgun.skyfit.feature.profile.components.viewdata.PhotoGalleryStackViewData
-import com.vurgun.skyfit.feature.profile.components.viewdata.TrainerProfileCardItemViewData
 import com.vurgun.skyfit.feature.social.viewdata.SocialPostItemViewData
 import kotlinx.coroutines.async
-import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -26,7 +26,7 @@ sealed interface FacilityProfileOwnerUiState {
         val profile: FacilityProfile,
         val gallery: PhotoGalleryStackViewData? = null,
         val lessons: List<LessonSessionItemViewData> = emptyList(),
-        val trainers: List<TrainerProfileCardItemViewData> = emptyList(),
+        val trainers: List<FacilityTrainerProfile> = emptyList(),
         val posts: List<SocialPostItemViewData> = emptyList(),
         val postsVisible: Boolean = false
     ) : FacilityProfileOwnerUiState
@@ -56,12 +56,12 @@ class FacilityProfileOwnerViewModel(
     private val courseRepository: CourseRepository,
     private val profileRepository: ProfileRepository,
     private val lessonMapper: LessonSessionItemViewDataMapper
-) : ViewModel() {
+) : ScreenModel {
 
     private val _uiState = MutableStateFlow<FacilityProfileOwnerUiState>(FacilityProfileOwnerUiState.Loading)
     val uiState: StateFlow<FacilityProfileOwnerUiState> = _uiState
 
-    private val _effect = MutableSharedFlow<FacilityProfileOwnerEffect>()
+    private val _effect = SingleSharedFlow<FacilityProfileOwnerEffect>()
     val effect: SharedFlow<FacilityProfileOwnerEffect> = _effect
 
     private val facilityUser: FacilityDetail
@@ -85,20 +85,18 @@ class FacilityProfileOwnerViewModel(
     }
 
     fun loadProfile(facilityId: Int) {
-        viewModelScope.launch {
+        screenModelScope.launch {
             _uiState.value = FacilityProfileOwnerUiState.Loading
 
             val profileDeferred = async { profileRepository.getFacilityProfile(facilityId).getOrThrow() }
             val lessonsDeferred = async { fetchLessons(facilityId) }
+            val trainersDeferred = async { fetchTrainers(facilityId) }
 
             try {
-                val profile = profileDeferred.await()
-                val lessons = lessonsDeferred.await()
-
                 _uiState.value = FacilityProfileOwnerUiState.Content(
-                    profile = profile,
-                    lessons = lessons,
-                    trainers = emptyList() // TODO: Fetch trainers if needed
+                    profile = profileDeferred.await(),
+                    lessons = lessonsDeferred.await(),
+                    trainers = trainersDeferred.await()
                 )
             } catch (e: Exception) {
                 _uiState.value = FacilityProfileOwnerUiState.Error(e.message ?: "Error loading profile")
@@ -107,7 +105,7 @@ class FacilityProfileOwnerViewModel(
     }
 
     private fun togglePostVisibility(visible: Boolean) {
-        viewModelScope.launch {
+        screenModelScope.launch {
             val currentState = _uiState.value
             if (currentState is FacilityProfileOwnerUiState.Content) {
                 _uiState.value = currentState.copy(postsVisible = visible)
@@ -116,7 +114,7 @@ class FacilityProfileOwnerViewModel(
     }
 
     private fun emitEffect(effect: FacilityProfileOwnerEffect) {
-        viewModelScope.launch {
+        screenModelScope.launch {
             _effect.emit(effect)
         }
     }
@@ -137,5 +135,9 @@ class FacilityProfileOwnerViewModel(
         return courseRepository.getUpcomingLessonsByFacility(facilityId)
             .map { it.map(lessonMapper::map) }
             .getOrDefault(emptyList())
+    }
+
+    private suspend fun fetchTrainers(facilityId: Int): List<FacilityTrainerProfile> {
+        return profileRepository.getFacilityTrainerProfiles(facilityId).getOrDefault(emptyList())
     }
 }

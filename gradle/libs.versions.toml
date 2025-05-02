@@ -2,7 +2,6 @@
 
 # Kotlin
 kotlin = "2.1.10"
-ksp = "2.1.10-1.0.31"
 kotlinx-serialization = "1.8.1"
 kotlinx-datetime = "0.6.1"
 kotlinx-coroutines = "1.10.1"
@@ -17,7 +16,6 @@ androidx-lifecycle = "2.8.4"
 
 # UI
 compose-plugin = "1.7.3"
-compose-navigation="2.8.9"
 
 # Dependency Injection
 koin = "4.1.0-Beta4"
@@ -51,17 +49,13 @@ kotlinx-coroutines-swing = { group = "org.jetbrains.kotlinx", name = "kotlinx-co
 koin-android = { module = "io.insert-koin:koin-android", version.ref = "koin" }
 koin-core = { module = "io.insert-koin:koin-core", version.ref = "koin" }
 koin-compose = { module = "io.insert-koin:koin-compose", version.ref = "koin" }
-koin-compose-viewmodel = { module = "io.insert-koin:koin-compose-viewmodel", version.ref = "koin" }
-koin-compose-viewmodel-navigation = { module = "io.insert-koin:koin-compose-viewmodel-navigation", version.ref = "koin" }
+#koin-compose-viewmodel = { module = "io.insert-koin:koin-compose-viewmodel", version.ref = "koin" }
+#koin-compose-viewmodel-navigation = { module = "io.insert-koin:koin-compose-viewmodel-navigation", version.ref = "koin" }
 
 # Android
 androidx-activity-compose = { module = "androidx.activity:activity-compose", version.ref = "androidx-activityCompose" }
-androidx-lifecycle-viewmodel = { group = "org.jetbrains.androidx.lifecycle", name = "lifecycle-viewmodel", version.ref = "androidx-lifecycle" }
-androidx-lifecycle-viewmodel-compose = { group = "org.jetbrains.androidx.lifecycle", name = "lifecycle-viewmodel-compose", version.ref = "androidx-lifecycle" }
-androidx-lifecycle-runtime-compose = { group = "org.jetbrains.androidx.lifecycle", name = "lifecycle-runtime-compose", version.ref = "androidx-lifecycle" }
 
 # Navigation
-navigation-compose = { group = "androidx.navigation", name = "navigation-compose",  version.ref = "compose-navigation" }
 voyager-navigator = { group = "cafe.adriel.voyager", name = "voyager-navigator", version.ref = "voyager"}
 voyager-screenmodel = { group = "cafe.adriel.voyager", name = "voyager-screenmodel", version.ref = "voyager"}
 voyager-transitions = { group = "cafe.adriel.voyager", name = "voyager-transitions", version.ref = "voyager"}
@@ -69,7 +63,6 @@ voyager-koin = { group = "cafe.adriel.voyager", name = "voyager-koin", version.r
 
 # Coil (Image Loading)
 coil-compose = { module = "io.coil-kt.coil3:coil-compose", version.ref = "coil" }
-coil-network-ktor = { module = "io.coil-kt.coil3:coil-network-ktor3", version.ref = "coil" }
 
 # Peekaboo (Camera & Image Picker)
 peekaboo-ui = { module = "io.github.onseok:peekaboo-ui", version.ref = "peekaboo" }
@@ -97,7 +90,8 @@ datastore-preferences-core = { group = "androidx.datastore", name = "datastore-p
 
 [bundles]
 kotlin = ["kotlinx-datetime", "kotlinx-coroutines-core", "kotlinx-serialization"]
-koin-compose = ["koin-compose", "koin-compose-viewmodel", "koin-compose-viewmodel-navigation"]
+koin-compose = ["koin-compose"]
+feature-core = ["koin-core", "koin-compose", "kotlinx-serialization"]
 voyager = ["voyager-navigator", "voyager-screenmodel", "voyager-transitions", "voyager-koin"]
 
 [plugins]

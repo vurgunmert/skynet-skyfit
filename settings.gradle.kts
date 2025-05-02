@@ -36,6 +36,7 @@ include(":core:network")
 include(":core:data")
 include(":core:ui")
 include(":core:navigation")
+include(":core:utils")
 
 include(":data:bodyanalysis")
 include(":data:calendar")

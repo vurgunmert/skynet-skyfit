@@ -33,6 +33,12 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.min
+import cafe.adriel.voyager.core.screen.Screen
+import cafe.adriel.voyager.koin.koinScreenModel
+import cafe.adriel.voyager.navigator.LocalNavigator
+import cafe.adriel.voyager.navigator.currentOrThrow
+import com.vurgun.skyfit.core.navigation.SharedScreen
+import com.vurgun.skyfit.core.navigation.push
 import com.vurgun.skyfit.core.ui.components.special.ButtonSize
 import com.vurgun.skyfit.core.ui.components.special.ButtonVariant
 import com.vurgun.skyfit.core.ui.components.special.SkyFitButtonComponent
@@ -42,7 +48,6 @@ import com.vurgun.skyfit.core.ui.styling.SkyFitColor
 import com.vurgun.skyfit.core.ui.styling.SkyFitTypography
 import org.jetbrains.compose.resources.DrawableResource
 import org.jetbrains.compose.resources.painterResource
-import org.koin.compose.koinInject
 import skyfit.core.ui.generated.resources.Res
 import skyfit.core.ui.generated.resources.background_chatbot
 import skyfit.core.ui.generated.resources.body_scan_fill_semi_left
@@ -52,14 +57,30 @@ import skyfit.core.ui.generated.resources.chatbot_shortcut_meal_report_left
 import skyfit.core.ui.generated.resources.ic_lightning
 import skyfit.core.ui.generated.resources.logo_skyfit
 
+class UserChatBotScreen : Screen {
+
+    @Composable
+    override fun Content() {
+        val navigator = LocalNavigator.currentOrThrow
+        val viewModel = koinScreenModel<ChatbotViewModel>()
+
+        MobileUserChatBotScreen(
+            goToBack = { navigator.pop() },
+            goToPostureAnalysis = { navigator.push(SharedScreen.PostureAnalysis) },
+            goToChatBot = { },
+            viewModel = viewModel
+        )
+    }
+}
+
 @Composable
-fun MobileUserChatBotScreen(
+private fun MobileUserChatBotScreen(
     goToBack: () -> Unit,
     goToPostureAnalysis: () -> Unit,
     goToChatBot: () -> Unit,
+    viewModel: ChatbotViewModel
 ) {
 
-    val viewModel: ChatbotViewModel = koinInject()
     val showIntro = viewModel.isIntroEnabled.collectAsState().value
 
     SkyFitMobileScaffold(

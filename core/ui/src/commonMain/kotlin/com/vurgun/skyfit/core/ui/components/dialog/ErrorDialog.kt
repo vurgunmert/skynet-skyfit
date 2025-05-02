@@ -10,6 +10,10 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -24,6 +28,19 @@ import skyfit.core.ui.generated.resources.Res
 import skyfit.core.ui.generated.resources.error_generic_message
 import skyfit.core.ui.generated.resources.error_generic_title
 import skyfit.core.ui.generated.resources.ok_action
+
+class ErrorDialogState {
+    var message by mutableStateOf<String?>(null)
+    fun show(message: String) {
+        this.message = message
+    }
+    fun dismiss() {
+        this.message = null
+    }
+}
+
+@Composable
+fun rememberErrorDialogState(): ErrorDialogState = remember { ErrorDialogState() }
 
 @Composable
 fun ErrorDialog(

@@ -30,6 +30,7 @@ import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Edit
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -41,15 +42,17 @@ import androidx.compose.ui.draw.blur
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import cafe.adriel.voyager.core.screen.Screen
+import cafe.adriel.voyager.koin.koinScreenModel
+import cafe.adriel.voyager.navigator.LocalNavigator
+import cafe.adriel.voyager.navigator.currentOrThrow
 import com.vurgun.skyfit.core.data.domain.model.TrainerProfile
-import com.vurgun.skyfit.feature.profile.components.LifestyleActionRow
-import com.vurgun.skyfit.feature.profile.components.MobileProfileActionsRow
-import com.vurgun.skyfit.feature.profile.components.MobileProfileBackgroundImage
-import com.vurgun.skyfit.feature.profile.components.TrainerProfileCardPreferenceRow
+import com.vurgun.skyfit.core.navigation.SharedScreen
+import com.vurgun.skyfit.core.navigation.findRootNavigator
+import com.vurgun.skyfit.core.navigation.push
 import com.vurgun.skyfit.core.ui.components.event.LessonSessionColumn
 import com.vurgun.skyfit.core.ui.components.image.NetworkImage
-import com.vurgun.skyfit.core.ui.components.loader.FullScreenLoader
+import com.vurgun.skyfit.core.ui.components.loader.FullScreenLoaderContent
 import com.vurgun.skyfit.core.ui.components.special.ButtonSize
 import com.vurgun.skyfit.core.ui.components.special.ButtonVariant
 import com.vurgun.skyfit.core.ui.components.special.SkyFitButtonComponent
@@ -57,39 +60,58 @@ import com.vurgun.skyfit.core.ui.components.special.SkyFitMobileScaffold
 import com.vurgun.skyfit.core.ui.screen.ErrorScreen
 import com.vurgun.skyfit.core.ui.styling.SkyFitColor
 import com.vurgun.skyfit.core.ui.styling.SkyFitTypography
+import com.vurgun.skyfit.core.ui.utils.CollectEffect
+import com.vurgun.skyfit.feature.profile.components.LifestyleActionRow
+import com.vurgun.skyfit.feature.profile.components.MobileProfileActionsRow
+import com.vurgun.skyfit.feature.profile.components.MobileProfileBackgroundImage
+import com.vurgun.skyfit.feature.profile.components.TrainerProfileCardPreferenceRow
 import org.jetbrains.compose.resources.painterResource
-import org.koin.compose.viewmodel.koinViewModel
 import skyfit.core.ui.generated.resources.Res
 import skyfit.core.ui.generated.resources.logo_skyfit
 
-@Composable
-fun MobileTrainerProfileOwnerScreen(
-    goToSettings: () -> Unit,
-    goToCreatePost: () -> Unit,
-    goToAppointments: () -> Unit,
-    viewModel: TrainerProfileOwnerViewModel = koinViewModel()
-) {
-    val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+class TrainerProfileOwnerScreen : Screen {
 
-    LaunchedEffect(Unit) {
-        viewModel.effect.collect { effect ->
+    @Composable
+    override fun Content() {
+        val appNavigator = LocalNavigator.currentOrThrow.findRootNavigator()
+        val viewModel = koinScreenModel<TrainerProfileOwnerViewModel>()
+
+        CollectEffect(viewModel.effect) { effect ->
             when (effect) {
-                TrainerProfileOwnerEffect.NavigateToCreatePost -> goToCreatePost()
-                TrainerProfileOwnerEffect.NavigateToSettings -> goToSettings()
-                TrainerProfileOwnerEffect.NavigateToAppointments -> goToAppointments()
+                TrainerProfileOwnerEffect.NavigateToCreatePost -> {
+                    appNavigator.push(SharedScreen.CreatePost)
+                }
+
+                TrainerProfileOwnerEffect.NavigateToSettings -> {
+                    appNavigator.push(SharedScreen.Settings)
+                }
+
+                TrainerProfileOwnerEffect.NavigateToAppointments -> {
+                    appNavigator.push(SharedScreen.TrainerAppointmentListing)
+                }
             }
         }
+
+        LaunchedEffect(Unit) {
+            viewModel.loadProfile()
+        }
+
+        MobileTrainerProfileOwnerScreen(viewModel = viewModel)
     }
 
-    LaunchedEffect(Unit) {
-        viewModel.loadProfile()
-    }
+}
+
+@Composable
+private fun MobileTrainerProfileOwnerScreen(
+    viewModel: TrainerProfileOwnerViewModel
+) {
+    val uiState by viewModel.uiState.collectAsState()
 
     when (uiState) {
-        is TrainerProfileOwnerUiState.Loading -> FullScreenLoader()
+        is TrainerProfileOwnerUiState.Loading -> FullScreenLoaderContent()
         is TrainerProfileOwnerUiState.Error -> {
             val message = (uiState as TrainerProfileOwnerUiState.Error).message
-            ErrorScreen(message = message, onBack = {  /* TODO: Where to go? */ })
+            ErrorScreen(message = message, onConfirm = {  /* TODO: Where to go? */ })
         }
 
         is TrainerProfileOwnerUiState.Content -> {

@@ -5,6 +5,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -16,7 +17,8 @@ import cafe.adriel.voyager.koin.koinScreenModel
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
 import com.vurgun.skyfit.core.navigation.SharedScreen
-import com.vurgun.skyfit.core.navigation.replaceWith
+import com.vurgun.skyfit.core.navigation.replace
+import com.vurgun.skyfit.core.navigation.replaceAll
 import com.vurgun.skyfit.core.ui.screen.ErrorScreen
 import com.vurgun.skyfit.core.ui.styling.SkyFitColor
 import com.vurgun.skyfit.core.ui.utils.CollectEffect
@@ -28,7 +30,7 @@ import skyfit.core.ui.generated.resources.Res
 import skyfit.core.ui.generated.resources.error_generic_message
 import skyfit.core.ui.generated.resources.logo_skyfit
 
-class SplashScreen : Screen {
+internal class SplashScreen : Screen {
 
     @Composable
     override fun Content() {
@@ -39,21 +41,25 @@ class SplashScreen : Screen {
         CollectEffect(viewModel.effect) { effect ->
             when (effect) {
                 SplashEffect.NavigateToDashboard -> {
-                    appNavigator.replaceWith(SharedScreen.Dashboard)
+                    appNavigator.replaceAll(SharedScreen.Dashboard)
                 }
 
-                SplashEffect.NavigateToLogin -> {
-                    appNavigator.replaceWith(SharedScreen.Login)
+                SplashEffect.NavigateToAuth -> {
+                    appNavigator.replace(SharedScreen.Authorization)
                 }
 
                 SplashEffect.NavigateToMaintenance -> {
-                    appNavigator.replaceWith(SharedScreen.Maintenance)
+                    appNavigator.replace(SharedScreen.Maintenance)
                 }
 
                 is SplashEffect.ShowError -> {
                     errorMessage = effect.message ?: getString(Res.string.error_generic_message)
                 }
             }
+        }
+
+        LaunchedEffect(Unit) {
+            viewModel.loadData()
         }
 
         if (errorMessage.isNullOrEmpty()) {

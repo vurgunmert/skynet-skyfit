@@ -15,6 +15,7 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -23,56 +24,79 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import androidx.lifecycle.viewmodel.compose.viewModel
+import cafe.adriel.voyager.core.screen.Screen
+import cafe.adriel.voyager.koin.koinScreenModel
+import cafe.adriel.voyager.navigator.LocalNavigator
+import cafe.adriel.voyager.navigator.currentOrThrow
 import com.vurgun.skyfit.core.data.domain.model.FacilityTrainerProfile
-import com.vurgun.skyfit.feature.calendar.component.weekly.CalendarWeekDaySelectorViewModel
-import com.vurgun.skyfit.feature.calendar.component.weekly.rememberWeekDaySelectorState
-import com.vurgun.skyfit.feature.profile.components.MobileProfileBackgroundImage
-import com.vurgun.skyfit.feature.profile.components.VerticalTrainerProfileCard
-import com.vurgun.skyfit.feature.profile.facility.owner.FacilityProfileComponent
-import com.vurgun.skyfit.core.ui.components.loader.FullScreenLoader
+import com.vurgun.skyfit.core.navigation.SharedScreen
+import com.vurgun.skyfit.core.navigation.findRootNavigator
+import com.vurgun.skyfit.core.navigation.push
+import com.vurgun.skyfit.core.ui.components.loader.FullScreenLoaderContent
 import com.vurgun.skyfit.core.ui.components.special.SkyFitMobileScaffold
 import com.vurgun.skyfit.core.ui.components.text.BodyLargeSemiboldText
 import com.vurgun.skyfit.core.ui.screen.ErrorScreen
 import com.vurgun.skyfit.core.ui.styling.SkyFitColor
+import com.vurgun.skyfit.core.ui.utils.CollectEffect
+import com.vurgun.skyfit.feature.calendar.component.weekly.rememberCalendarWeekDaySelectorController
+import com.vurgun.skyfit.feature.calendar.component.weekly.rememberWeekDaySelectorState
+import com.vurgun.skyfit.feature.profile.components.MobileProfileBackgroundImage
+import com.vurgun.skyfit.feature.profile.components.VerticalTrainerProfileCard
+import com.vurgun.skyfit.feature.profile.facility.owner.FacilityProfileComponent
 import org.jetbrains.compose.resources.stringResource
-import org.koin.compose.viewmodel.koinViewModel
 import skyfit.core.ui.generated.resources.Res
 import skyfit.core.ui.generated.resources.our_coaches_label
 
-@Composable
-fun MobileFacilityProfileVisitorScreen(
-    facilityId: Int,
-    goToBack: () -> Unit,
-    goToVisitCalendar: () -> Unit,
-    goToVisitTrainerProfile: (trainerId: Int) -> Unit,
-    goToChat: () -> Unit,
-    viewModel: FacilityProfileVisitorViewModel = koinViewModel()
-) {
-    val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+class FacilityProfileVisitorScreen(private val facilityId: Int) : Screen {
 
-    LaunchedEffect(Unit) {
-        viewModel.effect.collect { effect ->
+    @Composable
+    override fun Content() {
+        val appNavigator = LocalNavigator.currentOrThrow.findRootNavigator()
+        val viewModel = koinScreenModel<FacilityProfileVisitorViewModel>()
+
+        CollectEffect(viewModel.effect) { effect ->
             when (effect) {
-                is FacilityProfileVisitorEffect.NavigateToTrainer -> goToVisitTrainerProfile(effect.trainerId)
-                FacilityProfileVisitorEffect.NavigateToChat -> goToChat()
-                FacilityProfileVisitorEffect.NavigateToCalendar -> goToVisitCalendar()
-                FacilityProfileVisitorEffect.NavigateBack -> goToBack()
+                FacilityProfileVisitorEffect.NavigateToBack -> {
+                    appNavigator.pop()
+                }
+
+                is FacilityProfileVisitorEffect.NavigateToTrainer -> {
+                    appNavigator.push(SharedScreen.TrainerProfileVisitor(effect.trainerId))
+                }
+
+                is FacilityProfileVisitorEffect.NavigateToSchedule -> {
+                    appNavigator.push(SharedScreen.FacilitySchedule(effect.facilityId))
+                }
+
+                is FacilityProfileVisitorEffect.NavigateToChat -> {
+                    appNavigator.push(SharedScreen.UserChat(effect.visitorId))
+                }
             }
         }
-    }
 
-    LaunchedEffect(facilityId) {
-        viewModel.loadProfile(facilityId)
+        LaunchedEffect(facilityId) {
+            viewModel.loadProfile(facilityId)
+        }
+
+        MobileFacilityProfileVisitorScreen(
+            viewModel = viewModel
+        )
     }
+}
+
+
+@Composable
+private fun MobileFacilityProfileVisitorScreen(
+    viewModel: FacilityProfileVisitorViewModel
+) {
+    val uiState by viewModel.uiState.collectAsState()
 
     when (uiState) {
-        is FacilityProfileVisitorUiState.Loading -> FullScreenLoader()
+        is FacilityProfileVisitorUiState.Loading -> FullScreenLoaderContent()
 
         is FacilityProfileVisitorUiState.Error -> {
             val message = (uiState as FacilityProfileVisitorUiState.Error).message
-            ErrorScreen(message, onBack = goToBack)
+            ErrorScreen(message = message, onConfirm = { viewModel.onAction(FacilityProfileVisitorAction.NavigateToBack) })
         }
 
         is FacilityProfileVisitorUiState.Content -> {
@@ -87,8 +111,8 @@ private fun FacilityProfileVisitorContent(
     content: FacilityProfileVisitorUiState.Content,
     onAction: (FacilityProfileVisitorAction) -> Unit
 ) {
-    val calendarViewModel: CalendarWeekDaySelectorViewModel = viewModel()
-    val calendarUiState = rememberWeekDaySelectorState(calendarViewModel)
+    val weekDaySelectorController = rememberCalendarWeekDaySelectorController()
+    val calendarUiState = rememberWeekDaySelectorState(weekDaySelectorController)
 
     LaunchedEffect(calendarUiState.selectedDate) {
         onAction(FacilityProfileVisitorAction.ChangeDate(calendarUiState.selectedDate))
@@ -148,7 +172,7 @@ private fun FacilityProfileVisitorContent(
 
                 FacilityProfileComponent.MobileFacilityProfileVisitor_Lessons(
                     calendarUiState = calendarUiState,
-                    calendarViewModel = calendarViewModel,
+                    calendarViewModel = weekDaySelectorController,
                     lessons = content.lessons,
                     goToVisitCalendar = { onAction(FacilityProfileVisitorAction.NavigateToCalendar) },
                     modifier = Modifier
@@ -167,7 +191,7 @@ private fun FacilityProfileVisitorContent(
             }
 
             FacilityProfileComponent.MobileFacilityProfileVisitor_TopBar(onClickBack = {
-                onAction(FacilityProfileVisitorAction.Exit)
+                onAction(FacilityProfileVisitorAction.NavigateToBack)
             })
         }
     }

@@ -1,30 +1,30 @@
 package com.vurgun.skyfit.feature.onboarding.screen
 
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
-import com.vurgun.skyfit.core.data.domain.repository.UserManager
+import cafe.adriel.voyager.core.model.ScreenModel
+import cafe.adriel.voyager.core.model.screenModelScope
 import com.vurgun.skyfit.core.data.domain.model.FitnessTagType
 import com.vurgun.skyfit.core.data.domain.model.GenderType
 import com.vurgun.skyfit.core.data.domain.model.GoalType
 import com.vurgun.skyfit.core.data.domain.model.HeightUnitType
 import com.vurgun.skyfit.core.data.domain.model.UserRole
 import com.vurgun.skyfit.core.data.domain.model.WeightUnitType
+import com.vurgun.skyfit.core.data.domain.repository.UserManager
+import com.vurgun.skyfit.core.ui.viewdata.BodyTypeViewData
+import com.vurgun.skyfit.core.ui.viewdata.CharacterTypeViewData
 import com.vurgun.skyfit.data.onboarding.OnboardingRepository
 import com.vurgun.skyfit.data.onboarding.OnboardingRequest
 import com.vurgun.skyfit.data.onboarding.OnboardingResult
-import com.vurgun.skyfit.core.ui.viewdata.BodyTypeViewData
-import com.vurgun.skyfit.core.ui.viewdata.CharacterTypeViewData
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 
 internal sealed class OnboardingViewEvent {
-    data object Idle: OnboardingViewEvent()
-    data object InProgress: OnboardingViewEvent()
-    data object Completed: OnboardingViewEvent()
-    data class Error(val message: String?): OnboardingViewEvent()
-    data object NavigateToLogin: OnboardingViewEvent()
+    data object Idle : OnboardingViewEvent()
+    data object InProgress : OnboardingViewEvent()
+    data object Completed : OnboardingViewEvent()
+    data class Error(val message: String?) : OnboardingViewEvent()
+    data object NavigateToLogin : OnboardingViewEvent()
 }
 
 internal data class SelectableUserRole(
@@ -35,7 +35,7 @@ internal data class SelectableUserRole(
 internal class OnboardingViewModel(
     private val onboardingRepository: OnboardingRepository,
     private val userManager: UserManager
-) : ViewModel() {
+) : ScreenModel {
 
     private var isAccountAddition: Boolean = false
     private val _availableUserRoles = MutableStateFlow(
@@ -48,7 +48,7 @@ internal class OnboardingViewModel(
     val availableUserRoles: StateFlow<List<SelectableUserRole>> = _availableUserRoles
 
     init {
-        viewModelScope.launch {
+        screenModelScope.launch {
             val registeredRoles = userManager.getAccountTypes().map { UserRole.fromId(it.typeId) }
 
             _availableUserRoles.value = _availableUserRoles.value.map { selectable ->
@@ -182,16 +182,18 @@ internal class OnboardingViewModel(
             goals = currentState.goals?.map { it.id }
         )
 
-        viewModelScope.launch {
+        screenModelScope.launch {
             _eventState.value = OnboardingViewEvent.InProgress
 
-            when(val result = onboardingRepository.submitOnboarding(request, isAccountAddition)) {
+            when (val result = onboardingRepository.submitOnboarding(request, isAccountAddition)) {
                 OnboardingResult.Unauthorized -> {
                     _eventState.value = OnboardingViewEvent.NavigateToLogin
                 }
+
                 is OnboardingResult.Error -> {
                     _eventState.value = OnboardingViewEvent.Error(result.message)
                 }
+
                 OnboardingResult.Success -> {
                     if (isAccountAddition) {
                         userManager.getActiveUser(true)

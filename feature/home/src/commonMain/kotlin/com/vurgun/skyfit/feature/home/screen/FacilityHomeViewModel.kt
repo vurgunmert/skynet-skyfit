@@ -1,23 +1,39 @@
 package com.vurgun.skyfit.feature.home.screen
 
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
+import cafe.adriel.voyager.core.model.ScreenModel
+import cafe.adriel.voyager.core.model.screenModelScope
 import com.vurgun.skyfit.core.data.domain.model.FacilityDetail
-import com.vurgun.skyfit.data.courses.domain.model.Lesson
+import com.vurgun.skyfit.core.data.domain.repository.UserManager
+import com.vurgun.skyfit.core.data.utility.SingleSharedFlow
+import com.vurgun.skyfit.core.data.utility.emitOrNull
 import com.vurgun.skyfit.data.courses.domain.repository.CourseRepository
 import com.vurgun.skyfit.data.courses.mapper.LessonSessionItemViewDataMapper
 import com.vurgun.skyfit.data.courses.model.LessonSessionItemViewData
-import com.vurgun.skyfit.core.data.domain.repository.UserManager
-import com.vurgun.skyfit.feature.home.component.HomeAppointmentItemViewData
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
+
+sealed interface FacilityHomeAction {
+    data object NavigateToNotifications : FacilityHomeAction
+    data object NavigateToConversations : FacilityHomeAction
+    data object NavigateToManageLessons : FacilityHomeAction
+}
+
+sealed interface FacilityHomeEffect {
+    data object NavigateToNotifications : FacilityHomeEffect
+    data object NavigateToConversations : FacilityHomeEffect
+    data object NavigateToManageLessons : FacilityHomeEffect
+}
 
 class FacilityHomeViewModel(
     private val userManager: UserManager,
     private val courseRepository: CourseRepository,
     private val mapper: LessonSessionItemViewDataMapper
-) : ViewModel() {
+) : ScreenModel {
+
+    private val _effect = SingleSharedFlow<FacilityHomeEffect>()
+    val effect: SharedFlow<FacilityHomeEffect> = _effect
 
     private val facilityUser: FacilityDetail
         get() = userManager.user.value as? FacilityDetail
@@ -30,22 +46,34 @@ class FacilityHomeViewModel(
         loadData()
     }
 
+    fun onAction(action: FacilityHomeAction) {
+        when (action) {
+            FacilityHomeAction.NavigateToConversations -> {
+                emitEffect(FacilityHomeEffect.NavigateToConversations)
+            }
+
+            FacilityHomeAction.NavigateToManageLessons -> {
+                emitEffect(FacilityHomeEffect.NavigateToManageLessons)
+            }
+
+            FacilityHomeAction.NavigateToNotifications -> {
+                emitEffect(FacilityHomeEffect.NavigateToNotifications)
+            }
+        }
+    }
+
     private fun loadData() {
-        viewModelScope.launch {
+        screenModelScope.launch {
             _appointments.value = courseRepository.getUpcomingLessonsByFacility(facilityUser.gymId)
                 .getOrNull()?.let { list ->
                     list.map { mapper.map(it) }
                 }.orEmpty()
         }
     }
-}
 
-fun Lesson.toHomeViewData(): HomeAppointmentItemViewData {
-    return HomeAppointmentItemViewData(
-        lessonId = lessonId,
-        iconId = iconId,
-        title = title,
-        time = startTime.toString(),
-        location = facilityName
-    )
+    private fun emitEffect(effect: FacilityHomeEffect) {
+        screenModelScope.launch {
+            _effect.emitOrNull(effect)
+        }
+    }
 }

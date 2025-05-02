@@ -6,29 +6,63 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.vurgun.skyfit.feature.home.component.MobileDashboardHomeToolbarComponent
-import com.vurgun.skyfit.feature.home.component.MobileUserHomeUpcomingAppointmentsComponent
+import cafe.adriel.voyager.core.screen.Screen
+import cafe.adriel.voyager.koin.koinScreenModel
+import cafe.adriel.voyager.navigator.LocalNavigator
+import cafe.adriel.voyager.navigator.currentOrThrow
+import com.vurgun.skyfit.core.navigation.SharedScreen
+import com.vurgun.skyfit.core.navigation.findRootNavigator
+import com.vurgun.skyfit.core.navigation.push
 import com.vurgun.skyfit.core.ui.components.special.CharacterImage
 import com.vurgun.skyfit.core.ui.components.special.SkyFitMobileScaffold
-import org.koin.compose.viewmodel.koinViewModel
+import com.vurgun.skyfit.core.ui.utils.CollectEffect
+import com.vurgun.skyfit.core.ui.utils.LocalWindowSize
+import com.vurgun.skyfit.core.ui.utils.WindowSize
+import com.vurgun.skyfit.feature.home.component.MobileDashboardHomeToolbarComponent
+import com.vurgun.skyfit.feature.home.component.MobileUserHomeUpcomingAppointmentsComponent
+
+class UserHomeScreen : Screen {
+
+    @Composable
+    override fun Content() {
+        val windowSize = LocalWindowSize.current
+        val appNavigator = LocalNavigator.currentOrThrow.findRootNavigator()
+        val viewModel = koinScreenModel<UserHomeViewModel>()
+
+        CollectEffect(viewModel.effect) { effect ->
+            when (effect) {
+                UserHomeEffect.NavigateToConversations -> {
+                    appNavigator.push(SharedScreen.Conversations)
+                }
+
+                UserHomeEffect.NavigateToAppointments -> {
+                    appNavigator.push(SharedScreen.UserAppointmentListing)
+                }
+
+                UserHomeEffect.NavigateToNotifications -> {
+                    appNavigator.push(SharedScreen.Notifications)
+                }
+            }
+        }
+
+        if (windowSize == WindowSize.EXPANDED) {
+            UserHomeCompact(viewModel) //TODO: Expanded
+        } else {
+            UserHomeCompact(viewModel)
+        }
+    }
+
+}
 
 @Composable
-fun MobileUserHomeScreen(
-    goToNotifications: () -> Unit,
-    goToMessages: () -> Unit,
-    goToExplore: () -> Unit,
-    goToSocial: () -> Unit,
-    goToProfile: () -> Unit,
-    goToActivityCalendar: () -> Unit,
-    goToAppointments: () -> Unit,
-    viewModel: UserHomeViewModel = koinViewModel()
+private fun UserHomeCompact(
+    viewModel: UserHomeViewModel
 ) {
-
-    val appointments by viewModel.appointments.collectAsStateWithLifecycle()
+    val appointments by viewModel.appointments.collectAsState()
 
     LaunchedEffect(Unit) {
         viewModel.loadData()
@@ -37,8 +71,8 @@ fun MobileUserHomeScreen(
     SkyFitMobileScaffold(
         topBar = {
             MobileDashboardHomeToolbarComponent(
-                onClickNotifications = goToNotifications,
-                onClickMessages = goToMessages
+                onClickNotifications = { viewModel.onAction(UserHomeAction.NavigateToNotifications) },
+                onClickMessages = { viewModel.onAction(UserHomeAction.NavigateToConversations) }
             )
         }
     ) {
@@ -57,7 +91,7 @@ fun MobileUserHomeScreen(
             if (appointments.isNotEmpty()) {
                 MobileUserHomeUpcomingAppointmentsComponent(
                     appointments = appointments,
-                    onClickShowAll = goToAppointments
+                    onClickShowAll = { viewModel.onAction(UserHomeAction.NavigateToAppointments) }
                 )
             }
         }

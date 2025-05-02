@@ -23,6 +23,7 @@ import androidx.compose.material.Icon
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -34,17 +35,19 @@ import androidx.compose.ui.draw.blur
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.vurgun.skyfit.core.data.utility.now
-import com.vurgun.skyfit.data.courses.model.LessonSessionItemViewData
+import cafe.adriel.voyager.core.screen.Screen
+import cafe.adriel.voyager.koin.koinScreenModel
+import cafe.adriel.voyager.navigator.LocalNavigator
+import cafe.adriel.voyager.navigator.currentOrThrow
 import com.vurgun.skyfit.core.data.domain.model.FacilityProfile
 import com.vurgun.skyfit.core.data.domain.model.UserProfile
-import com.vurgun.skyfit.feature.profile.components.MobileProfileActionsRow
-import com.vurgun.skyfit.feature.profile.components.MobileProfileBackgroundImage
-import com.vurgun.skyfit.feature.profile.components.UserProfileCardPreferenceRow
+import com.vurgun.skyfit.core.data.utility.now
+import com.vurgun.skyfit.core.navigation.SharedScreen
+import com.vurgun.skyfit.core.navigation.findRootNavigator
+import com.vurgun.skyfit.core.navigation.push
 import com.vurgun.skyfit.core.ui.components.event.AvailableActivityCalendarEventItem
 import com.vurgun.skyfit.core.ui.components.image.NetworkImage
-import com.vurgun.skyfit.core.ui.components.loader.FullScreenLoader
+import com.vurgun.skyfit.core.ui.components.loader.FullScreenLoaderContent
 import com.vurgun.skyfit.core.ui.components.special.SkyFitMobileScaffold
 import com.vurgun.skyfit.core.ui.components.text.BodyLargeMediumText
 import com.vurgun.skyfit.core.ui.components.text.BodyMediumRegularText
@@ -53,10 +56,14 @@ import com.vurgun.skyfit.core.ui.screen.ErrorScreen
 import com.vurgun.skyfit.core.ui.styling.SkyFitAsset
 import com.vurgun.skyfit.core.ui.styling.SkyFitColor
 import com.vurgun.skyfit.core.ui.styling.SkyFitTypography
+import com.vurgun.skyfit.core.ui.utils.CollectEffect
+import com.vurgun.skyfit.data.courses.model.LessonSessionItemViewData
+import com.vurgun.skyfit.feature.profile.components.MobileProfileActionsRow
+import com.vurgun.skyfit.feature.profile.components.MobileProfileBackgroundImage
+import com.vurgun.skyfit.feature.profile.components.UserProfileCardPreferenceRow
 import kotlinx.datetime.LocalDate
 import kotlinx.datetime.daysUntil
 import org.jetbrains.compose.resources.stringResource
-import org.koin.compose.viewmodel.koinViewModel
 import skyfit.core.ui.generated.resources.Res
 import skyfit.core.ui.generated.resources.appointments_title
 import skyfit.core.ui.generated.resources.ic_clock
@@ -65,38 +72,58 @@ import skyfit.core.ui.generated.resources.member_since_days_few
 import skyfit.core.ui.generated.resources.member_since_days_many
 import skyfit.core.ui.generated.resources.show_all_action
 
-@Composable
-fun MobileUserProfileOwnerScreen(
-    goToBack: () -> Unit,
-    goToSettings: () -> Unit,
-    goToAppointments: () -> Unit,
-    goToCreatePost: () -> Unit,
-    onVisitFacility: (gymId: Int) -> Unit,
-    viewModel: UserProfileOwnerViewModel = koinViewModel()
-) {
-    val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+class UserProfileOwnerScreen : Screen {
 
-    LaunchedEffect(Unit) {
-        viewModel.effect.collect { effect ->
+    @Composable
+    override fun Content() {
+        val localNavigator = LocalNavigator.currentOrThrow.findRootNavigator()
+        val appNavigator = LocalNavigator.currentOrThrow.findRootNavigator()
+        val viewModel = koinScreenModel<UserProfileOwnerViewModel>()
+
+        CollectEffect(viewModel.effect) { effect ->
             when (effect) {
-                UserProfileOwnerEffect.NavigateBack -> goToBack()
-                UserProfileOwnerEffect.NavigateToAppointments -> goToAppointments()
-                UserProfileOwnerEffect.NavigateToCreatePost -> goToCreatePost()
-                UserProfileOwnerEffect.NavigateToSettings -> goToSettings()
-                is UserProfileOwnerEffect.NavigateToVisitFacility -> onVisitFacility(effect.gymId)
+                UserProfileOwnerEffect.NavigateBack -> {
+                    localNavigator.pop()
+                }
+
+                UserProfileOwnerEffect.NavigateToAppointments -> {
+                    appNavigator.push(SharedScreen.UserAppointmentListing)
+                }
+
+                UserProfileOwnerEffect.NavigateToCreatePost -> {
+                    appNavigator.push(SharedScreen.CreatePost)
+                }
+
+                UserProfileOwnerEffect.NavigateToSettings -> {
+                    appNavigator.push(SharedScreen.Settings)
+                }
+
+                is UserProfileOwnerEffect.NavigateToVisitFacility -> {
+                    appNavigator.push(SharedScreen.FacilityProfileVisitor(effect.gymId))
+                }
             }
         }
+
+        MobileUserProfileOwnerScreen(viewModel = viewModel)
     }
+}
+
+
+@Composable
+fun MobileUserProfileOwnerScreen(
+    viewModel: UserProfileOwnerViewModel
+) {
+    val uiState by viewModel.uiState.collectAsState()
 
     LaunchedEffect(Unit) {
         viewModel.loadProfile()
     }
 
     when (uiState) {
-        is UserProfileOwnerUiState.Loading -> FullScreenLoader()
+        is UserProfileOwnerUiState.Loading -> FullScreenLoaderContent()
         is UserProfileOwnerUiState.Error -> {
             val message = (uiState as UserProfileOwnerUiState.Error).message
-            ErrorScreen(message = message, onBack = goToBack)
+            ErrorScreen(message = message, onConfirm = { viewModel.onAction(UserProfileOwnerAction.NavigateBack) })
         }
 
         is UserProfileOwnerUiState.Content -> {

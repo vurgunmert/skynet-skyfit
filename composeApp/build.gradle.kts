@@ -7,7 +7,6 @@ plugins {
     alias(libs.plugins.androidApplication)
     alias(libs.plugins.composeMultiplatform)
     alias(libs.plugins.composeCompiler)
-    alias(libs.plugins.kotlinSerialization)
 }
 
 kotlin {
@@ -45,10 +44,9 @@ kotlin {
         val desktopMain by getting
 
         commonMain.dependencies {
+            implementation(projects.core.data)
             implementation(projects.core.ui)
             implementation(projects.core.navigation)
-
-            implementation(projects.core.data)
 
             implementation(projects.feature.splash)
             implementation(projects.feature.auth)
@@ -62,6 +60,8 @@ kotlin {
             implementation(projects.feature.appointments)
             implementation(projects.feature.home)
             implementation(projects.feature.bodyanalysis)
+            implementation(projects.feature.notification)
+            implementation(projects.feature.messaging)
 
             implementation(libs.koin.core)
             implementation(libs.koin.compose)

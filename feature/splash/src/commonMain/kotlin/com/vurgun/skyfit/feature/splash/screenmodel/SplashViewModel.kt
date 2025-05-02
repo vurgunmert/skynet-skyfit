@@ -9,25 +9,21 @@ import com.vurgun.skyfit.feature.splash.domain.SplashUseCase
 import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.launch
 
-sealed interface SplashEffect {
+internal sealed interface SplashEffect {
     data object NavigateToMaintenance : SplashEffect
-    data object NavigateToLogin : SplashEffect
+    data object NavigateToAuth : SplashEffect
     data object NavigateToDashboard : SplashEffect
     data class ShowError(val message: String?) : SplashEffect
 }
 
-class SplashViewModel(
+internal class SplashViewModel(
     private val splashUseCase: SplashUseCase
 ) : ScreenModel {
 
     private val _effect = SingleSharedFlow<SplashEffect>()
     val effect: SharedFlow<SplashEffect> = _effect
 
-    init {
-        loadData()
-    }
-
-    private fun loadData() {
+    fun loadData() {
         screenModelScope.launch {
             try {
                 val result = splashUseCase.execute()
@@ -41,7 +37,7 @@ class SplashViewModel(
     private fun SplashResult.toEffect(): SplashEffect {
         return when (this) {
             is SplashResult.Maintenance -> SplashEffect.NavigateToMaintenance
-            is SplashResult.UserNotFound -> SplashEffect.NavigateToLogin
+            is SplashResult.UserNotFound -> SplashEffect.NavigateToAuth
             is SplashResult.UserAvailable -> SplashEffect.NavigateToDashboard
         }
     }

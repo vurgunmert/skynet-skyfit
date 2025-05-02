@@ -1,12 +1,14 @@
 package com.vurgun.skyfit.feature.calendar.component.weekly
 
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import com.vurgun.skyfit.core.data.utility.getStartOfWeek
 import com.vurgun.skyfit.core.data.utility.getTurkishDayAbbreviation
 import com.vurgun.skyfit.core.data.utility.nextWeek
 import com.vurgun.skyfit.core.data.utility.now
 import com.vurgun.skyfit.core.data.utility.previousWeek
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
@@ -21,13 +23,19 @@ data class CalendarWeekDaySelectorState(
     val weekDays: List<CalendarWeekDayItemModel>
 )
 
-class CalendarWeekDaySelectorViewModel : ViewModel() {
-
+class CalendarWeekDaySelectorController(
+    private val coroutineScope: CoroutineScope
+) {
     private val _selectedDate = MutableStateFlow(LocalDate.now())
     val selectedDate: StateFlow<LocalDate> = _selectedDate
 
-    val weekDays: StateFlow<List<CalendarWeekDayItemModel>> = _selectedDate.map { generateWeekDays(it) }
-        .stateIn(viewModelScope, SharingStarted.Eagerly, generateWeekDays(LocalDate.now()))
+    val weekDays: StateFlow<List<CalendarWeekDayItemModel>> = _selectedDate
+        .map { generateWeekDays(it) }
+        .stateIn(
+            coroutineScope,
+            SharingStarted.Eagerly,
+            generateWeekDays(LocalDate.now())
+        )
 
     fun setSelectedDate(date: LocalDate) {
         _selectedDate.value = date
@@ -54,3 +62,8 @@ class CalendarWeekDaySelectorViewModel : ViewModel() {
     }
 }
 
+@Composable
+fun rememberCalendarWeekDaySelectorController(): CalendarWeekDaySelectorController {
+    val scope = rememberCoroutineScope()
+    return remember { CalendarWeekDaySelectorController(scope) }
+}

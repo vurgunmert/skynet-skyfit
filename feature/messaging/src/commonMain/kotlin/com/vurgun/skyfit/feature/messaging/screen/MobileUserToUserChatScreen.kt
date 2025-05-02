@@ -21,25 +21,43 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import com.vurgun.skyfit.feature.messaging.component.SkyFitChatMessageBubble
-import com.vurgun.skyfit.feature.messaging.component.SkyFitChatMessageInputComponent
+import cafe.adriel.voyager.core.screen.Screen
+import cafe.adriel.voyager.koin.koinScreenModel
+import cafe.adriel.voyager.navigator.LocalNavigator
+import cafe.adriel.voyager.navigator.currentOrThrow
 import com.vurgun.skyfit.core.ui.components.special.SkyFitCircularImageComponent
 import com.vurgun.skyfit.core.ui.components.special.SkyFitMobileScaffold
 import com.vurgun.skyfit.core.ui.components.special.UserCircleAvatarItem
 import com.vurgun.skyfit.core.ui.styling.SkyFitColor
 import com.vurgun.skyfit.core.ui.styling.SkyFitTypography
 import com.vurgun.skyfit.core.ui.utils.keyboardAsState
+import com.vurgun.skyfit.feature.messaging.component.SkyFitChatMessageBubble
+import com.vurgun.skyfit.feature.messaging.component.SkyFitChatMessageInputComponent
 import org.jetbrains.compose.resources.painterResource
 import org.koin.compose.koinInject
 import skyfit.core.ui.generated.resources.Res
 import skyfit.core.ui.generated.resources.logo_skyfit
 
+class UserToUserChatScreen : Screen {
+
+    @Composable
+    override fun Content() {
+        val navigator = LocalNavigator.currentOrThrow
+        val viewModel = koinScreenModel<ChatViewModel>()
+
+        MobileUserToUserChatScreen(
+            goToBack = { navigator.pop() }
+        )
+    }
+}
+
+
 @Composable
-fun MobileUserToUserChatScreen(
+private fun MobileUserToUserChatScreen(
     goToBack: () -> Unit
 ) {
 
-    val viewModel: SkyFitConversationViewModel = koinInject()
+    val viewModel: ChatViewModel = koinInject()
     val messages by viewModel.messages.collectAsState()
     val keyboardState by keyboardAsState()
 

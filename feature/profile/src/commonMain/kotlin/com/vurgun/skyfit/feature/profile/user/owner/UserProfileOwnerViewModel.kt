@@ -1,21 +1,23 @@
 package com.vurgun.skyfit.feature.profile.user.owner
 
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
-import com.vurgun.skyfit.core.data.domain.model.UserDetail
-import com.vurgun.skyfit.data.courses.domain.repository.CourseRepository
-import com.vurgun.skyfit.data.courses.mapper.LessonSessionItemViewDataMapper
-import com.vurgun.skyfit.data.courses.model.LessonSessionItemViewData
+import cafe.adriel.voyager.core.model.ScreenModel
+import cafe.adriel.voyager.core.model.screenModelScope
 import com.vurgun.skyfit.core.data.domain.model.FacilityProfile
+import com.vurgun.skyfit.core.data.domain.model.UserDetail
 import com.vurgun.skyfit.core.data.domain.model.UserProfile
 import com.vurgun.skyfit.core.data.domain.repository.ProfileRepository
 import com.vurgun.skyfit.core.data.domain.repository.UserManager
+import com.vurgun.skyfit.core.data.utility.SingleSharedFlow
+import com.vurgun.skyfit.core.data.utility.emitOrNull
+import com.vurgun.skyfit.core.ui.styling.SkyFitAsset
+import com.vurgun.skyfit.data.courses.domain.repository.CourseRepository
+import com.vurgun.skyfit.data.courses.mapper.LessonSessionItemViewDataMapper
+import com.vurgun.skyfit.data.courses.model.LessonSessionItemViewData
 import com.vurgun.skyfit.feature.profile.components.viewdata.LifestyleActionItemViewData
 import com.vurgun.skyfit.feature.profile.components.viewdata.LifestyleActionRowViewData
 import com.vurgun.skyfit.feature.profile.components.viewdata.PhotoGalleryStackViewData
 import com.vurgun.skyfit.feature.social.viewdata.SocialPostItemViewData
 import com.vurgun.skyfit.feature.social.viewdata.fakePosts
-import com.vurgun.skyfit.core.ui.styling.SkyFitAsset
 import kotlinx.coroutines.async
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -51,7 +53,7 @@ sealed interface UserProfileOwnerEffect {
     data object NavigateToAppointments : UserProfileOwnerEffect
     data object NavigateToSettings : UserProfileOwnerEffect
     data object NavigateToCreatePost : UserProfileOwnerEffect
-    data class NavigateToVisitFacility(val gymId: Int): UserProfileOwnerEffect
+    data class NavigateToVisitFacility(val gymId: Int) : UserProfileOwnerEffect
 }
 
 class UserProfileOwnerViewModel(
@@ -59,12 +61,12 @@ class UserProfileOwnerViewModel(
     private val courseRepository: CourseRepository,
     private val profileRepository: ProfileRepository,
     private val lessonMapper: LessonSessionItemViewDataMapper,
-) : ViewModel() {
+) : ScreenModel {
 
     private val _uiState = MutableStateFlow<UserProfileOwnerUiState>(UserProfileOwnerUiState.Loading)
     val uiState: StateFlow<UserProfileOwnerUiState> = _uiState
 
-    private val _effect = MutableSharedFlow<UserProfileOwnerEffect>()
+    private val _effect = SingleSharedFlow<UserProfileOwnerEffect>()
     val effect: SharedFlow<UserProfileOwnerEffect> = _effect
 
     private val user: UserDetail
@@ -83,7 +85,7 @@ class UserProfileOwnerViewModel(
     }
 
     fun loadProfile() {
-        viewModelScope.launch {
+        screenModelScope.launch {
             _uiState.value = UserProfileOwnerUiState.Loading
             val profileDeferred = async { profileRepository.getUserProfile(user.normalUserId).getOrThrow() }
             val appointmentsDeferred = async { fetchAppointments(user.normalUserId) }
@@ -110,7 +112,7 @@ class UserProfileOwnerViewModel(
     }
 
     private fun togglePostVisibility(visible: Boolean) {
-        viewModelScope.launch {
+        screenModelScope.launch {
             val currentState = _uiState.value
             if (currentState is UserProfileOwnerUiState.Content) {
                 _uiState.value = currentState.copy(postsVisible = visible)
@@ -119,8 +121,8 @@ class UserProfileOwnerViewModel(
     }
 
     private fun emitEffect(effect: UserProfileOwnerEffect) {
-        viewModelScope.launch {
-            _effect.emit(effect)
+        screenModelScope.launch {
+            _effect.emitOrNull(effect)
         }
     }
 

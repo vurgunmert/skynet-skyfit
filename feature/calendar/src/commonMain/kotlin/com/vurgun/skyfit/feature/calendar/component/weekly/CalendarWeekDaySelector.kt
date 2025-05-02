@@ -125,8 +125,8 @@ private fun DaySelectorDayItem(
 }
 
 @Composable
-fun rememberWeekDaySelectorState(viewModel: CalendarWeekDaySelectorViewModel): CalendarWeekDaySelectorState {
-    val selectedDate by viewModel.selectedDate.collectAsState()
-    val weekDays by viewModel.weekDays.collectAsState()
+fun rememberWeekDaySelectorState(weekDaySelectorController: CalendarWeekDaySelectorController): CalendarWeekDaySelectorState {
+    val selectedDate by weekDaySelectorController.selectedDate.collectAsState()
+    val weekDays by weekDaySelectorController.weekDays.collectAsState()
     return CalendarWeekDaySelectorState(selectedDate, weekDays)
 }

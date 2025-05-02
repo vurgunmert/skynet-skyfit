@@ -18,9 +18,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
-import com.vurgun.skyfit.feature.dashboard.screen.DashboardTab
+import cafe.adriel.voyager.core.screen.Screen
 import com.vurgun.skyfit.core.ui.components.special.ChatBotButtonComponent
 import com.vurgun.skyfit.core.ui.styling.SkyFitColor
+import com.vurgun.skyfit.feature.home.screen.HomeScreen
+import com.vurgun.skyfit.feature.profile.ProfileScreen
 import org.jetbrains.compose.resources.DrawableResource
 import org.jetbrains.compose.resources.painterResource
 import skyfit.core.ui.generated.resources.Res
@@ -32,10 +34,10 @@ import skyfit.core.ui.generated.resources.ic_profile_fill
 @Composable
 internal fun BottomNavigationBar(
     modifier: Modifier = Modifier,
-    currentRoute: Any,
+    currentScreen: Screen,
     onClickHome: () -> Unit,
     onClickProfile: () -> Unit,
-    onClickChatBot: () -> Unit
+    onClickAppAction: () -> Unit
 ) {
     Box(
         Modifier.fillMaxWidth(),
@@ -60,14 +62,14 @@ internal fun BottomNavigationBar(
                 horizontalArrangement = Arrangement.spacedBy(24.dp)
             ) {
                 BottomBarItem(
-                    selected = currentRoute == DashboardTab.Home.route,
+                    selected = currentScreen is HomeScreen,
                     selectedIcon = Res.drawable.ic_home_fill,
                     unselectedIcon = Res.drawable.ic_home,
                     onClick = onClickHome
                 )
 
                 BottomBarItem(
-                    selected = currentRoute == DashboardTab.Profile.route,
+                    selected = currentScreen is ProfileScreen,
                     selectedIcon = Res.drawable.ic_profile_fill,
                     unselectedIcon = Res.drawable.ic_profile,
                     onClick = onClickProfile
@@ -79,7 +81,7 @@ internal fun BottomNavigationBar(
             modifier = Modifier
                 .align(Alignment.BottomEnd)
                 .padding(bottom = 112.dp, end = 20.dp),
-            onClick = onClickChatBot
+            onClick = onClickAppAction
         )
     }
 }

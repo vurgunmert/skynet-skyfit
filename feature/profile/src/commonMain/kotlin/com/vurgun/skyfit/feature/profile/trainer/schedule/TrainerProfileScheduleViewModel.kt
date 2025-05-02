@@ -1,13 +1,13 @@
 package com.vurgun.skyfit.feature.profile.trainer.schedule
 
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
+import cafe.adriel.voyager.core.model.ScreenModel
+import cafe.adriel.voyager.core.model.screenModelScope
+import com.vurgun.skyfit.core.data.domain.model.TrainerProfile
+import com.vurgun.skyfit.core.data.domain.repository.ProfileRepository
 import com.vurgun.skyfit.core.data.utility.now
 import com.vurgun.skyfit.data.courses.domain.repository.CourseRepository
 import com.vurgun.skyfit.data.courses.mapper.LessonSessionItemViewDataMapper
 import com.vurgun.skyfit.data.courses.model.LessonSessionItemViewData
-import com.vurgun.skyfit.core.data.domain.model.TrainerProfile
-import com.vurgun.skyfit.core.data.domain.repository.ProfileRepository
 import kotlinx.coroutines.async
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -39,7 +39,7 @@ class TrainerProfileScheduleViewModel(
     private val profileRepository: ProfileRepository,
     private val courseRepository: CourseRepository,
     private val lessonMapper: LessonSessionItemViewDataMapper
-) : ViewModel() {
+) : ScreenModel {
 
     private val _uiState = MutableStateFlow<TrainerProfileScheduleUiState>(TrainerProfileScheduleUiState.Loading)
     val uiState: StateFlow<TrainerProfileScheduleUiState> = _uiState
@@ -74,7 +74,7 @@ class TrainerProfileScheduleViewModel(
     fun loadData(trainerId: Int) {
         currentTrainerId = trainerId
 
-        viewModelScope.launch {
+        screenModelScope.launch {
             _uiState.value = TrainerProfileScheduleUiState.Loading
 
             val profileDeferred = async { profileRepository.getTrainerProfile(trainerId).getOrThrow() }
@@ -106,7 +106,7 @@ class TrainerProfileScheduleViewModel(
     private fun bookAppointment() {
         val selectedLesson = _lessons.value.firstOrNull { it.selected } ?: return
 
-        viewModelScope.launch {
+        screenModelScope.launch {
             try {
                 val response = courseRepository.bookAppointment(lessonId = selectedLesson.lessonId).getOrThrow()
 
@@ -130,7 +130,7 @@ class TrainerProfileScheduleViewModel(
         endDate: LocalDate?
     ) {
         val id = currentTrainerId ?: return
-        viewModelScope.launch {
+        screenModelScope.launch {
             val currentState = _uiState.value
             if (currentState is TrainerProfileScheduleUiState.Content) {
                 try {
@@ -153,7 +153,7 @@ class TrainerProfileScheduleViewModel(
     }
 
     private fun emitEffect(effect: TrainerProfileScheduleEffect) {
-        viewModelScope.launch {
+        screenModelScope.launch {
             _effect.emit(effect)
         }
     }

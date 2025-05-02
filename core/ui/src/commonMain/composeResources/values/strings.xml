@@ -155,6 +155,7 @@
     <string name="lesson_create_private_action">Özel Ders Oluştur</string>
     <string name="lesson_edit_cancel_message">Geri dönerseniz değişikler kaydedilmeyecek</string>
     <string name="lesson_select_label">Ders Seç</string>
+    <string name="facility_no_lesson_on_selected_date_message">Seçilen tarihte herhangi bir ders planlanmamış. Yeni bir ders ekleyin ya da farklı bir gün seçin.</string>
 
     <string name="recurrence_none_label">Tekrar yok</string>
     <string name="recurrence_daily_label">Her gün</string>
@@ -234,6 +235,11 @@
 
     <string name="error_cancel_appointment_title">Randevu İptal Edilemedi</string>
     <string name="error_cancel_appointment_message">Randevuyu iptal ederken bir hata oluştu. Lütfen tekrar deneyin.</string>
+
+    <string name="error_save_profile_title">Profil Kaydedilemedi</string>
+    <string name="error_save_profile_message">Profilinizi kaydederken bir hata oluştu. Lütfen internet bağlantınızı kontrol edip tekrar deneyin.</string>
+
+
 </resources>
 
 <!--    Use snake_case + purpose-based suffixes:-->

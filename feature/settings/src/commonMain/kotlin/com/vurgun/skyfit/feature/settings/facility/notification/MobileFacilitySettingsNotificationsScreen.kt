@@ -9,17 +9,36 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import com.vurgun.skyfit.core.ui.components.special.SkyFitScreenHeader
+import cafe.adriel.voyager.core.screen.Screen
+import cafe.adriel.voyager.koin.koinScreenModel
+import cafe.adriel.voyager.navigator.LocalNavigator
+import cafe.adriel.voyager.navigator.currentOrThrow
 import com.vurgun.skyfit.core.ui.components.menu.SkyFitSettingsSwitchOptionItemComponent
 import com.vurgun.skyfit.core.ui.components.special.SkyFitMobileScaffold
+import com.vurgun.skyfit.core.ui.components.special.SkyFitScreenHeader
+
+class FacilitySettingsNotificationsScreen : Screen {
+
+    @Composable
+    override fun Content() {
+        val navigator = LocalNavigator.currentOrThrow
+        val viewModel = koinScreenModel<FacilityNotificationSettingsViewModel>()
+
+        MobileFacilitySettingsNotificationsScreen(
+            goToBack = { navigator.pop() },
+            viewModel = viewModel
+        )
+    }
+}
+
 
 @Composable
-fun MobileFacilitySettingsNotificationsScreen(goToBack: () -> Unit) {
-
-    val viewModel = remember { FacilityNotificationSettingsViewModel() }
+fun MobileFacilitySettingsNotificationsScreen(
+    goToBack: () -> Unit,
+    viewModel: FacilityNotificationSettingsViewModel
+) {
     val options by viewModel.options.collectAsState()
 
     LaunchedEffect(Unit) {

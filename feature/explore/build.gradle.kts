@@ -32,13 +32,11 @@ kotlin {
         commonMain.dependencies {
             implementation(projects.core.ui)
             implementation(projects.core.data)
+            implementation(projects.core.navigation)
             implementation(projects.feature.exercise)
             implementation(projects.feature.profile)
 
-            implementation(libs.koin.core)
-            implementation(libs.bundles.koin.compose)
-
-            implementation(libs.kotlinx.serialization)
+            implementation(libs.bundles.feature.core)
         }
     }
 }

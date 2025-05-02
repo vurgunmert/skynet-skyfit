@@ -23,17 +23,16 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Icon
 import androidx.compose.material.Text
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.KeyboardArrowRight
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.unit.dp
-import com.vurgun.skyfit.feature.profile.components.FacilityProfileCardItemBox
-import com.vurgun.skyfit.feature.profile.components.VerticalTrainerProfileCard
-import com.vurgun.skyfit.feature.profile.components.viewdata.FacilityProfileCardItemViewData
-import com.vurgun.skyfit.feature.profile.components.viewdata.TrainerProfileCardItemViewData
+import cafe.adriel.voyager.core.screen.Screen
+import cafe.adriel.voyager.koin.koinScreenModel
+import cafe.adriel.voyager.navigator.LocalNavigator
+import cafe.adriel.voyager.navigator.currentOrThrow
+import com.vurgun.skyfit.core.navigation.findRootNavigator
 import com.vurgun.skyfit.core.ui.components.image.NetworkImage
 import com.vurgun.skyfit.core.ui.components.special.ButtonSize
 import com.vurgun.skyfit.core.ui.components.special.ButtonState
@@ -44,12 +43,35 @@ import com.vurgun.skyfit.core.ui.components.special.SkyFitSearchFilterBarCompone
 import com.vurgun.skyfit.core.ui.components.special.SkyFitSearchTextInputComponent
 import com.vurgun.skyfit.core.ui.styling.SkyFitColor
 import com.vurgun.skyfit.core.ui.styling.SkyFitTypography
+import com.vurgun.skyfit.feature.profile.components.FacilityProfileCardItemBox
+import com.vurgun.skyfit.feature.profile.components.VerticalTrainerProfileCard
+import com.vurgun.skyfit.feature.profile.components.viewdata.FacilityProfileCardItemViewData
+import com.vurgun.skyfit.feature.profile.components.viewdata.TrainerProfileCardItemViewData
 import org.jetbrains.compose.resources.painterResource
 import skyfit.core.ui.generated.resources.Res
 import skyfit.core.ui.generated.resources.ic_chevron_right
 
+class ExploreScreen : Screen {
+
+    @Composable
+    override fun Content() {
+        val appNavigator = LocalNavigator.currentOrThrow.findRootNavigator()
+        val navigator = LocalNavigator.currentOrThrow
+        val viewModel = koinScreenModel<DashboardExploreScreenViewModel>()
+
+        MobileExploreScreen(
+            goToExercise = { TODO() },
+            goToVisitTrainer = { TODO() },
+            goToVisitFacility = { TODO() },
+            goToExploreCommunities = { TODO() },
+            goToExploreChallenges = { TODO() }
+        )
+    }
+
+}
+
 @Composable
-fun MobileExploreScreen(
+private fun MobileExploreScreen(
     goToExercise: () -> Unit,
     goToVisitTrainer: () -> Unit,
     goToVisitFacility: () -> Unit,
@@ -79,21 +101,26 @@ fun MobileExploreScreen(
             verticalArrangement = Arrangement.spacedBy(24.dp)
         ) {
             MobileDashboardExploreScreenFeaturedExercisesComponent(
-                onClick = goToExercise)
+                onClick = goToExercise
+            )
 
             MobileDashboardExploreScreenFeaturedTrainersComponent(
                 trainers,
-                onClick = goToVisitTrainer)
+                onClick = goToVisitTrainer
+            )
 
             MobileDashboardExploreScreenFeaturedFacilitiesComponent(
                 facilities,
-                onClick = goToVisitFacility)
+                onClick = goToVisitFacility
+            )
 
             MobileDashboardExploreScreenFeaturedCommunitiesComponent(
-                onClick = goToExploreCommunities)
+                onClick = goToExploreCommunities
+            )
 
             MobileDashboardExploreScreenFeaturedChallengesComponent(
-                onClick = goToExploreChallenges)
+                onClick = goToExploreChallenges
+            )
 
             Spacer(Modifier.height(124.dp))
         }

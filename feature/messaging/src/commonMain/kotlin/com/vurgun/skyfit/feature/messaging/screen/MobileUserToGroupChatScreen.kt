@@ -44,7 +44,7 @@ import skyfit.core.ui.generated.resources.logo_skyfit
 fun MobileUserToGroupChatScreen(
     goToBack: () -> Unit
 ) {
-    val viewModel: SkyFitConversationViewModel = koinInject()
+    val viewModel: ChatViewModel = koinInject()
     val messages by viewModel.messages.collectAsState()
     val keyboardState by keyboardAsState()
     val scrollState = rememberLazyListState()

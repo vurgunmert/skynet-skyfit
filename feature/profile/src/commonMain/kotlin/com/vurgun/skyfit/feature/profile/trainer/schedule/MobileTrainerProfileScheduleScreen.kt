@@ -22,6 +22,7 @@ import androidx.compose.material.Icon
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -30,15 +31,18 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.vurgun.skyfit.data.courses.model.LessonSessionItemViewData
+import cafe.adriel.voyager.core.screen.Screen
+import cafe.adriel.voyager.koin.koinScreenModel
+import cafe.adriel.voyager.navigator.LocalNavigator
+import cafe.adriel.voyager.navigator.currentOrThrow
 import com.vurgun.skyfit.core.data.domain.model.TrainerProfile
-import com.vurgun.skyfit.feature.calendar.component.monthly.CalendarRangeDateSelectorCard
+import com.vurgun.skyfit.core.navigation.SharedScreen
+import com.vurgun.skyfit.core.navigation.push
 import com.vurgun.skyfit.core.ui.components.dialog.ErrorDialog
 import com.vurgun.skyfit.core.ui.components.event.NoLessonOnSelectedDaysEventItem
 import com.vurgun.skyfit.core.ui.components.event.SelectableLessonEventItem
 import com.vurgun.skyfit.core.ui.components.image.NetworkImage
-import com.vurgun.skyfit.core.ui.components.loader.FullScreenLoader
+import com.vurgun.skyfit.core.ui.components.loader.FullScreenLoaderContent
 import com.vurgun.skyfit.core.ui.components.special.ButtonSize
 import com.vurgun.skyfit.core.ui.components.special.ButtonState
 import com.vurgun.skyfit.core.ui.components.special.ButtonVariant
@@ -52,9 +56,11 @@ import com.vurgun.skyfit.core.ui.screen.ErrorScreen
 import com.vurgun.skyfit.core.ui.styling.SkyFitAsset
 import com.vurgun.skyfit.core.ui.styling.SkyFitColor
 import com.vurgun.skyfit.core.ui.styling.SkyFitTypography
+import com.vurgun.skyfit.core.ui.utils.CollectEffect
+import com.vurgun.skyfit.data.courses.model.LessonSessionItemViewData
+import com.vurgun.skyfit.feature.calendar.component.monthly.CalendarRangeDateSelectorCard
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
-import org.koin.compose.viewmodel.koinViewModel
 import skyfit.core.ui.generated.resources.Res
 import skyfit.core.ui.generated.resources.appointment_book_action
 import skyfit.core.ui.generated.resources.appointment_create_action
@@ -62,40 +68,60 @@ import skyfit.core.ui.generated.resources.ic_check
 import skyfit.core.ui.generated.resources.ic_location_pin
 import skyfit.core.ui.generated.resources.lesson_select_label
 
-@Composable
-fun MobileTrainerProfileScheduleScreen(
-    trainerId: Int,
-    goToBack: () -> Unit,
-    goToAppointmentDetail: (lpId: Int) -> Unit,
-    viewModel: TrainerProfileScheduleViewModel = koinViewModel()
-) {
+class TrainerProfileScheduleScreen(private val trainerId: Int) : Screen {
 
-    val uiState by viewModel.uiState.collectAsStateWithLifecycle()
-    val lessons by viewModel.lessons.collectAsStateWithLifecycle()
-    val isAppointmentAllowed by viewModel.isBookingEnabled.collectAsStateWithLifecycle()
-    var bookingError by remember { mutableStateOf<String?>(null) }
+    @Composable
+    override fun Content() {
+        val navigator = LocalNavigator.currentOrThrow
+        val viewModel = koinScreenModel<TrainerProfileScheduleViewModel>()
+        var bookingError by remember { mutableStateOf<String?>(null) }
 
-    LaunchedEffect(Unit) {
-        viewModel.effect.collect { effect ->
+        CollectEffect(viewModel.effect) { effect ->
             when (effect) {
-                is TrainerProfileScheduleEffect.NavigateBack -> goToBack()
+                is TrainerProfileScheduleEffect.NavigateBack -> {
+                    navigator.pop()
+                }
+
                 is TrainerProfileScheduleEffect.ShowBookingError -> {
                     bookingError = effect.message
                 }
-                is TrainerProfileScheduleEffect.NavigateToAppointmentDetail -> goToAppointmentDetail(effect.lpId)
+
+                is TrainerProfileScheduleEffect.NavigateToAppointmentDetail -> {
+                    navigator.push(SharedScreen.UserAppointmentDetail(effect.lpId))
+                }
             }
         }
-    }
 
-    LaunchedEffect(Unit) {
-        viewModel.loadData(trainerId)
+        LaunchedEffect(Unit) {
+            viewModel.loadData(trainerId)
+        }
+
+        MobileTrainerProfileScheduleScreen(viewModel)
+
+        if (bookingError != null) {
+            ErrorDialog(
+                message = bookingError,
+                onDismiss = { bookingError = null }
+            )
+        }
     }
+}
+
+
+@Composable
+fun MobileTrainerProfileScheduleScreen(
+    viewModel: TrainerProfileScheduleViewModel
+) {
+
+    val uiState by viewModel.uiState.collectAsState()
+    val lessons by viewModel.lessons.collectAsState()
+    val isAppointmentAllowed by viewModel.isBookingEnabled.collectAsState()
 
     when (uiState) {
-        TrainerProfileScheduleUiState.Loading -> FullScreenLoader()
+        TrainerProfileScheduleUiState.Loading -> FullScreenLoaderContent()
         is TrainerProfileScheduleUiState.Error -> {
             val message = (uiState as TrainerProfileScheduleUiState.Error).message
-            ErrorScreen(message, goToBack)
+            ErrorScreen(message = message, onConfirm = { viewModel.onAction(TrainerProfileScheduleAction.NavigateBack) })
         }
 
         is TrainerProfileScheduleUiState.Content -> {
@@ -103,7 +129,10 @@ fun MobileTrainerProfileScheduleScreen(
 
             SkyFitMobileScaffold(
                 topBar = {
-                    SkyFitScreenHeader(stringResource(Res.string.appointment_book_action), onClickBack = goToBack)
+                    SkyFitScreenHeader(
+                        title = stringResource(Res.string.appointment_book_action),
+                        onClickBack = { viewModel.onAction(TrainerProfileScheduleAction.NavigateBack) }
+                    )
                 },
                 bottomBar = {
                     if (isAppointmentAllowed) {
@@ -148,13 +177,6 @@ fun MobileTrainerProfileScheduleScreen(
             }
         }
 
-    }
-
-    if (bookingError != null) {
-        ErrorDialog(
-            message = bookingError,
-            onDismiss = { bookingError = null }
-        )
     }
 }
 

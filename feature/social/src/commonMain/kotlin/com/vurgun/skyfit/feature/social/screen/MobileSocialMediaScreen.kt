@@ -19,22 +19,43 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import com.vurgun.skyfit.feature.social.components.SocialPostCard
-import com.vurgun.skyfit.core.ui.components.special.SkyFitCircularImageComponent
+import cafe.adriel.voyager.core.screen.Screen
+import cafe.adriel.voyager.koin.koinScreenModel
+import cafe.adriel.voyager.navigator.LocalNavigator
+import cafe.adriel.voyager.navigator.currentOrThrow
+import com.vurgun.skyfit.core.navigation.SharedScreen
+import com.vurgun.skyfit.core.navigation.findRootNavigator
+import com.vurgun.skyfit.core.navigation.push
 import com.vurgun.skyfit.core.ui.components.button.SkyFitIconButton
+import com.vurgun.skyfit.core.ui.components.special.SkyFitCircularImageComponent
 import com.vurgun.skyfit.core.ui.components.special.SkyFitMobileScaffold
 import com.vurgun.skyfit.core.ui.components.special.UserCircleAvatarItem
 import com.vurgun.skyfit.core.ui.styling.SkyFitTypography
+import com.vurgun.skyfit.feature.social.components.SocialPostCard
 import org.jetbrains.compose.resources.painterResource
 import skyfit.core.ui.generated.resources.Res
 import skyfit.core.ui.generated.resources.logo_skyfit
 
+class SocialMediaScreen : Screen {
+
+    @Composable
+    override fun Content() {
+        val appNavigator = LocalNavigator.currentOrThrow.findRootNavigator()
+        val viewModel = koinScreenModel<SocialMediaViewModel>()
+
+        MobileSocialMediaScreen(
+            goToCreatePost = { appNavigator.push(SharedScreen.CreatePost) },
+            viewModel = viewModel
+        )
+    }
+}
+
 @Composable
-fun MobileSocialMediaScreen(
+private fun MobileSocialMediaScreen(
     goToCreatePost: () -> Unit,
+    viewModel: SocialMediaViewModel
 ) {
 
-    val viewModel = UserSocialMediaViewModel()
     val posts = viewModel.posts.collectAsState().value
 
     SkyFitMobileScaffold(
@@ -50,7 +71,8 @@ fun MobileSocialMediaScreen(
             contentPadding = PaddingValues(bottom = 80.dp)
         ) {
             items(posts) {
-                SocialPostCard(it,
+                SocialPostCard(
+                    it,
                     onClick = {},
                     onClickComment = {},
                     onClickLike = {},

@@ -19,7 +19,7 @@ import kotlinx.datetime.LocalDate
 
 @Composable
 fun CalendarDateSelector(
-    viewModel: CalendarDateSelectorViewModel,
+    viewModel: CalendarDateSelectorController,
     modifier: Modifier = Modifier,
     onSelectionChanged: (start: LocalDate, end: LocalDate?) -> Unit
 ) {

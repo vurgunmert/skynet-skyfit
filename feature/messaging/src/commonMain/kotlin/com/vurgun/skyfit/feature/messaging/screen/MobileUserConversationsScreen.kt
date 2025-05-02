@@ -30,6 +30,11 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.dp
+import cafe.adriel.voyager.core.screen.Screen
+import cafe.adriel.voyager.navigator.LocalNavigator
+import cafe.adriel.voyager.navigator.currentOrThrow
+import com.vurgun.skyfit.core.navigation.SharedScreen
+import com.vurgun.skyfit.core.navigation.push
 import com.vurgun.skyfit.core.ui.components.special.SkyFitCircleAvatarRowComponent
 import com.vurgun.skyfit.core.ui.components.special.SkyFitMobileScaffold
 import com.vurgun.skyfit.core.ui.components.special.SkyFitNumberBadge
@@ -42,13 +47,28 @@ import org.jetbrains.compose.resources.painterResource
 import skyfit.core.ui.generated.resources.Res
 import skyfit.core.ui.generated.resources.logo_skyfit
 
+class ConversationsScreen : Screen {
+
+    @Composable
+    override fun Content() {
+        val navigator = LocalNavigator.currentOrThrow
+        val viewModel = UserConversationsViewModel()
+
+        MobileUserConversationsScreen(
+            goToBack = { navigator.pop() },
+            goToChat = { navigator.push(SharedScreen.UserChat(0)) },
+            viewModel = viewModel
+        )
+    }
+}
+
 @Composable
 fun MobileUserConversationsScreen(
     goToBack: () -> Unit,
     goToChat: () -> Unit,
+    viewModel: UserConversationsViewModel
 ) {
 
-    val viewModel = UserConversationsViewModel()
     val conversations = viewModel.converstations
 
     SkyFitMobileScaffold(
@@ -68,8 +88,10 @@ fun MobileUserConversationsScreen(
             if (conversations.isEmpty()) {
                 MobileUserConversationsEmptyComponent()
             } else {
-                MobileUserConversationsComponent(conversations,
-                    onClickConversation = goToChat)
+                MobileUserConversationsComponent(
+                    conversations,
+                    onClickConversation = goToChat
+                )
                 Spacer(Modifier.height(48.dp))
             }
         }

@@ -1,7 +1,7 @@
 package com.vurgun.skyfit.feature.calendar.screen
 
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
+import cafe.adriel.voyager.core.model.ScreenModel
+import cafe.adriel.voyager.core.model.screenModelScope
 import com.vurgun.skyfit.data.courses.domain.model.ScheduledLessonDetail
 import com.vurgun.skyfit.data.courses.domain.repository.CourseRepository
 import kotlinx.coroutines.flow.MutableSharedFlow
@@ -26,7 +26,7 @@ sealed interface TrainerAppointmentDetailEffect {
 
 class TrainerAppointmentDetailViewModel(
     private val courseRepository: CourseRepository
-) : ViewModel() {
+) : ScreenModel {
 
     private val _uiState = MutableStateFlow<TrainerAppointmentDetailUiState>(TrainerAppointmentDetailUiState.Loading)
     val uiState: StateFlow<TrainerAppointmentDetailUiState> get() = _uiState
@@ -41,7 +41,7 @@ class TrainerAppointmentDetailViewModel(
     }
 
     fun loadAppointment(lessonId: Int) {
-        viewModelScope.launch {
+        screenModelScope.launch {
             try {
                 val lesson = courseRepository.getScheduledLessonDetail(lessonId).getOrThrow()
                 _uiState.value = TrainerAppointmentDetailUiState.Content(lesson)
@@ -64,7 +64,7 @@ class TrainerAppointmentDetailViewModel(
     }
 
     private fun emitEffect(effect: TrainerAppointmentDetailEffect) {
-        viewModelScope.launch {
+        screenModelScope.launch {
             _effect.emit(effect)
         }
     }

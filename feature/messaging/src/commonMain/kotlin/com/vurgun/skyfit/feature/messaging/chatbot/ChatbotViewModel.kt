@@ -1,7 +1,7 @@
 package com.vurgun.skyfit.feature.messaging.chatbot
 
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
+import cafe.adriel.voyager.core.model.ScreenModel
+import cafe.adriel.voyager.core.model.screenModelScope
 import com.vurgun.skyfit.core.data.utility.now
 import com.vurgun.skyfit.data.messaging.ChatbotApiUseCase
 import com.vurgun.skyfit.feature.messaging.component.ChatMessageItem
@@ -10,7 +10,7 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import kotlinx.datetime.LocalDate
 
-class ChatbotViewModel(private val useCase: ChatbotApiUseCase) : ViewModel() {
+class ChatbotViewModel(private val useCase: ChatbotApiUseCase) : ScreenModel {
 
     private val _messages = MutableStateFlow<List<ChatMessageItem>>(emptyList())
     val messages: StateFlow<List<ChatMessageItem>> get() = _messages
@@ -22,7 +22,7 @@ class ChatbotViewModel(private val useCase: ChatbotApiUseCase) : ViewModel() {
     val isIntroEnabled: StateFlow<Boolean> get() = _isIntroEnabled
 
     fun sendQuery(userInput: String) {
-        viewModelScope.launch {
+        screenModelScope.launch {
             addMessage(ChatMessageItem(content = userInput, time = LocalDate.now().toString(), isUser = true))
 
             // Set loading state

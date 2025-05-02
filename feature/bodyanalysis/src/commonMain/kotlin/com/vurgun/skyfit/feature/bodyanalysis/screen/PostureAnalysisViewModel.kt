@@ -1,8 +1,8 @@
 package com.vurgun.skyfit.feature.bodyanalysis.screen
 
 import androidx.compose.ui.graphics.ImageBitmap
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
+import cafe.adriel.voyager.core.model.ScreenModel
+import cafe.adriel.voyager.core.model.screenModelScope
 import com.kashif.cameraK.controller.CameraController
 import com.kashif.cameraK.result.ImageCaptureResult
 import com.kashif.imagesaverplugin.ImageSaverPlugin
@@ -57,7 +57,7 @@ data class PostureAnalysisUIState(
 
 class PostureAnalysisViewModel(
     private val postureAnalysisRepository: PostureAnalysisRepository
-) : ViewModel() {
+) : ScreenModel {
 
     private val _uiState = MutableStateFlow(PostureAnalysisUIState())
     val uiState: StateFlow<PostureAnalysisUIState> = _uiState
@@ -100,7 +100,7 @@ class PostureAnalysisViewModel(
         cameraController: CameraController,
         imageSaverPlugin: ImageSaverPlugin
     ) {
-        viewModelScope.launch {
+        screenModelScope.launch {
             val postureType = uiState.value.currentPosture ?: return@launch
 
             _uiState.update { it.copy(isCaptureLoading = true) }
@@ -151,7 +151,7 @@ class PostureAnalysisViewModel(
     }
 
     private fun analyzeImage(bitmap: ImageBitmap, byteArray: ByteArray, type: PostureType) {
-        viewModelScope.launch {
+        screenModelScope.launch {
             try {
                 //TODO: HERE WE NEED TO STORE RESULTS SOMWHERE UNTIL ALL ARE READY
                 val result: PostureAnalysisResult = when (type) {

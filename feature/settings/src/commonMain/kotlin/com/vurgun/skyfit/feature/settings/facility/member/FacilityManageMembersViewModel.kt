@@ -1,7 +1,7 @@
 package com.vurgun.skyfit.feature.settings.facility.member
 
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
+import cafe.adriel.voyager.core.model.ScreenModel
+import cafe.adriel.voyager.core.model.screenModelScope
 import com.vurgun.skyfit.core.data.domain.model.MissingTokenException
 import com.vurgun.skyfit.data.settings.domain.model.Member
 import com.vurgun.skyfit.data.settings.domain.repository.MemberRepository
@@ -21,7 +21,7 @@ internal data class ManageMembersUiState(
 
 internal class FacilityManageMembersViewModel(
     private val memberRepository: MemberRepository
-) : ViewModel() {
+) : ScreenModel {
 
     private val _uiState = MutableStateFlow(ManageMembersUiState())
     internal val uiState: StateFlow<ManageMembersUiState> = _uiState.asStateFlow()
@@ -38,7 +38,7 @@ internal class FacilityManageMembersViewModel(
     }
 
     fun refreshGymMembers() {
-        viewModelScope.launch {
+        screenModelScope.launch {
             _uiState.update { it.copy(isLoading = true, error = null, unauthorized = false) }
 
             memberRepository.getFacilityMembers(gymId = 10).fold(
@@ -66,7 +66,7 @@ internal class FacilityManageMembersViewModel(
     }
 
     fun deleteMember(memberId: Int) {
-        viewModelScope.launch {
+        screenModelScope.launch {
             _uiState.update { it.copy(isLoading = true, error = null) }
 
             memberRepository.deleteFacilityMember(gymId = 10, userId = memberId).fold(

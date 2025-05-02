@@ -1,7 +1,7 @@
 package com.vurgun.skyfit.feature.settings.facility.trainer
 
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
+import cafe.adriel.voyager.core.model.ScreenModel
+import cafe.adriel.voyager.core.model.screenModelScope
 import com.vurgun.skyfit.core.data.domain.model.MissingTokenException
 import com.vurgun.skyfit.data.settings.domain.model.Trainer
 import com.vurgun.skyfit.data.settings.domain.repository.TrainerRepository
@@ -21,7 +21,7 @@ internal data class FacilityAddTrainersUiState(
 
 internal class FacilityAddTrainerViewModel(
     private val trainerRepository: TrainerRepository
-) : ViewModel() {
+) : ScreenModel {
 
     private val _uiState = MutableStateFlow(FacilityAddTrainersUiState())
     val uiState: StateFlow<FacilityAddTrainersUiState> = _uiState.asStateFlow()
@@ -38,7 +38,7 @@ internal class FacilityAddTrainerViewModel(
     }
 
     fun refreshPlatformTrainers() {
-        viewModelScope.launch {
+        screenModelScope.launch {
             _uiState.update { it.copy(isLoading = true, error = null, unauthorized = false) }
 
             trainerRepository.getPlatformTrainers(gymId = 10).fold(
@@ -66,7 +66,7 @@ internal class FacilityAddTrainerViewModel(
     }
 
     fun addTrainer(trainerId: Int) {
-        viewModelScope.launch {
+        screenModelScope.launch {
             _uiState.update { it.copy(isLoading = true, error = null) }
 
             trainerRepository.addFacilityTrainer(gymId = 10, userId = trainerId).fold(

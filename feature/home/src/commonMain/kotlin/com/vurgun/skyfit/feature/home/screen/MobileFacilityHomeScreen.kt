@@ -17,6 +17,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -25,27 +26,64 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import cafe.adriel.voyager.core.screen.Screen
+import cafe.adriel.voyager.koin.koinScreenModel
+import cafe.adriel.voyager.navigator.LocalNavigator
+import cafe.adriel.voyager.navigator.currentOrThrow
+import com.vurgun.skyfit.core.navigation.SharedScreen
+import com.vurgun.skyfit.core.navigation.findRootNavigator
+import com.vurgun.skyfit.core.navigation.push
+import com.vurgun.skyfit.core.ui.components.special.SkyFitMobileScaffold
+import com.vurgun.skyfit.core.ui.utils.CollectEffect
+import com.vurgun.skyfit.core.ui.utils.LocalWindowSize
+import com.vurgun.skyfit.core.ui.utils.WindowSize
 import com.vurgun.skyfit.feature.home.component.MobileDashboardHomeToolbarComponent
 import com.vurgun.skyfit.feature.home.component.MobileDashboardHomeUpcomingAppointmentsComponent
-import com.vurgun.skyfit.core.ui.components.special.SkyFitMobileScaffold
-import org.koin.compose.viewmodel.koinViewModel
+
+class FacilityHomeScreen : Screen {
+
+    @Composable
+    override fun Content() {
+        val windowSize = LocalWindowSize.current
+        val appNavigator = LocalNavigator.currentOrThrow.findRootNavigator()
+
+        val viewModel = koinScreenModel<FacilityHomeViewModel>()
+
+        CollectEffect(viewModel.effect) { effect ->
+            when (effect) {
+                FacilityHomeEffect.NavigateToConversations -> {
+                    appNavigator.push(SharedScreen.Conversations)
+                }
+
+                FacilityHomeEffect.NavigateToManageLessons -> {
+                    appNavigator.push(SharedScreen.FacilityManageLessons)
+                }
+
+                FacilityHomeEffect.NavigateToNotifications -> {
+                    appNavigator.push(SharedScreen.Notifications)
+                }
+            }
+        }
+
+        if (windowSize == WindowSize.EXPANDED) {
+            FacilityHomeCompact(viewModel) //TODO: Expanded
+        } else {
+            FacilityHomeCompact(viewModel)
+        }
+    }
+}
 
 @Composable
-fun MobileFacilityHomeScreen(
-    goToCourses: () -> Unit,
-    goToNotifications: () -> Unit,
-    goToMessages: () -> Unit,
-    viewModel: FacilityHomeViewModel = koinViewModel(key = "FacilityHome")
+private fun FacilityHomeCompact(
+    viewModel: FacilityHomeViewModel
 ) {
-
-    val appointments by viewModel.appointments.collectAsStateWithLifecycle()
+    val appointments by viewModel.appointments.collectAsState()
 
     SkyFitMobileScaffold(
         topBar = {
             MobileDashboardHomeToolbarComponent(
-                onClickNotifications = goToNotifications,
-                onClickMessages = goToMessages
+                onClickNotifications = { viewModel.onAction(FacilityHomeAction.NavigateToNotifications) },
+                onClickMessages = { viewModel.onAction(FacilityHomeAction.NavigateToConversations) }
             )
         }
     ) {
@@ -56,12 +94,12 @@ fun MobileFacilityHomeScreen(
 
             if (appointments.isEmpty()) {
                 MobileDashboardHomeFacilityNoClassComponent(
-                    onClick = goToCourses
+                    onClick = { viewModel.onAction(FacilityHomeAction.NavigateToManageLessons) }
                 )
             } else {
                 MobileDashboardHomeUpcomingAppointmentsComponent(
                     appointments = appointments,
-                    onClickShowAll = goToCourses
+                    onClickShowAll = { viewModel.onAction(FacilityHomeAction.NavigateToManageLessons) }
                 )
             }
 

@@ -9,7 +9,7 @@ class SplashUseCase(
 ) {
     suspend fun execute(): SplashResult = when {
         appConfigRepository.isAppInMaintenance() -> SplashResult.Maintenance
-        userManager.getActiveUser(forceRefresh = true).isSuccess -> SplashResult.UserAvailable
+        userManager.getActiveUser(forceRefresh = true).getOrNull() != null -> SplashResult.UserAvailable
         else -> SplashResult.UserNotFound
     }
 }

@@ -1,10 +1,10 @@
 package com.vurgun.skyfit.feature.explore.screen
 
-import androidx.lifecycle.ViewModel
+import cafe.adriel.voyager.core.model.ScreenModel
 import com.vurgun.skyfit.feature.profile.components.viewdata.FacilityProfileCardItemViewData
 import com.vurgun.skyfit.feature.profile.components.viewdata.TrainerProfileCardItemViewData
 
-class DashboardExploreScreenViewModel : ViewModel() {
+class DashboardExploreScreenViewModel : ScreenModel {
 
     val trainers = listOf(
         TrainerProfileCardItemViewData("https://ik.imagekit.io/skynet2skyfit/download-5.jpg?updatedAt=1740259432295", "Lucas Bennett", 1800, 13, 32, 4.8f),

@@ -1,7 +1,6 @@
 package com.vurgun.skyfit.feature.settings.facility.profile
 
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -14,23 +13,26 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import com.vurgun.skyfit.feature.settings.component.AccountSettingsEditableProfileImage
-import com.vurgun.skyfit.feature.settings.component.SettingsEditProfileHeader
+import cafe.adriel.voyager.core.screen.Screen
+import cafe.adriel.voyager.koin.koinScreenModel
+import cafe.adriel.voyager.navigator.LocalNavigator
+import cafe.adriel.voyager.navigator.currentOrThrow
+import com.vurgun.skyfit.core.ui.components.dialog.ErrorDialog
+import com.vurgun.skyfit.core.ui.components.dialog.rememberErrorDialogState
+import com.vurgun.skyfit.core.ui.components.loader.FullScreenLoaderContent
 import com.vurgun.skyfit.core.ui.components.special.FitnessTagPickerComponent
-import com.vurgun.skyfit.core.ui.components.special.MobileSettingsDeleteAccountBottomSheet
-import com.vurgun.skyfit.core.ui.components.special.MobileUserSettingsScreenSaveActionComponent
 import com.vurgun.skyfit.core.ui.components.special.SkyFitMobileScaffold
 import com.vurgun.skyfit.core.ui.components.special.SkyFitSelectToEnterMultilineInputComponent
+import com.vurgun.skyfit.core.ui.utils.CollectEffect
+import com.vurgun.skyfit.feature.settings.shared.component.AccountSettingsEditableProfileImage
+import com.vurgun.skyfit.feature.settings.shared.component.SettingsEditProfileHeader
 import org.jetbrains.compose.resources.stringResource
-import org.koin.compose.viewmodel.koinViewModel
 import skyfit.core.ui.generated.resources.Res
 import skyfit.core.ui.generated.resources.background_image_label
+import skyfit.core.ui.generated.resources.error_save_profile_title
 import skyfit.core.ui.generated.resources.ic_pencil
 import skyfit.core.ui.generated.resources.mandatory_workplace_name_label
 import skyfit.core.ui.generated.resources.settings_edit_profile_address_hint
@@ -39,39 +41,66 @@ import skyfit.core.ui.generated.resources.settings_edit_profile_biography_hint
 import skyfit.core.ui.generated.resources.settings_edit_profile_biography_label
 import skyfit.core.ui.generated.resources.workplace_name_hint
 
+class FacilitySettingsEditProfileScreen : Screen {
+
+    @Composable
+    override fun Content() {
+        val navigator = LocalNavigator.currentOrThrow
+        val viewModel = koinScreenModel<FacilityEditProfileViewModel>()
+        val uiState by viewModel.uiState.collectAsState()
+        val saveErrorDialog = rememberErrorDialogState()
+
+        CollectEffect(viewModel.effect) { effect ->
+            when (effect) {
+                FacilityEditProfileEffect.NavigateToBack -> navigator.pop()
+                is FacilityEditProfileEffect.ShowSaveError -> saveErrorDialog.show(effect.message)
+            }
+        }
+
+        LaunchedEffect(Unit) {
+            viewModel.loadData()
+        }
+
+        when (uiState) {
+            FacilityEditProfileUiState.Loading -> FullScreenLoaderContent()
+            is FacilityEditProfileUiState.Error -> {
+                val message = (uiState as FacilityEditProfileUiState.Error).message
+                saveErrorDialog.show(message)
+            }
+
+            is FacilityEditProfileUiState.Content -> {
+                val formState = (uiState as FacilityEditProfileUiState.Content).form
+                MobileFacilitySettingsEditProfileScreen(
+                    viewModel = viewModel,
+                    formState = formState
+                )
+            }
+        }
+
+        saveErrorDialog.message?.let { message ->
+            ErrorDialog(
+                title = stringResource(Res.string.error_save_profile_title),
+                message = message,
+                onDismiss = saveErrorDialog::dismiss
+            )
+        }
+    }
+}
+
 @Composable
 fun MobileFacilitySettingsEditProfileScreen(
-    goToBack: () -> Unit,
-    viewModel: FacilityManageProfileViewModel = koinViewModel()
+    viewModel: FacilityEditProfileViewModel,
+    formState: FacilityEditProfileFormState
 ) {
-    val accountState by viewModel.accountState.collectAsState()
     val scrollState = rememberScrollState()
-
-    var showDeleteConfirm by remember { mutableStateOf(false) }
-
-    LaunchedEffect(Unit) {
-        viewModel.loadData()
-    }
 
     SkyFitMobileScaffold(
         topBar = {
             SettingsEditProfileHeader(
-                showSave = accountState.isUpdated,
-                onClickSave = viewModel::saveChanges,
-                onClickBack = goToBack
+                showSave = formState.isUpdated,
+                onClickSave = { viewModel.onAction(FacilityEditProfileAction.SaveChanges) },
+                onClickBack = { viewModel.onAction(FacilityEditProfileAction.NavigateToBack) }
             )
-        },
-        bottomBar = {
-            if (showDeleteConfirm) {
-                MobileSettingsDeleteAccountBottomSheet(
-                    onCancelClicked = { showDeleteConfirm = false },
-                    onDeleteClicked = {}
-                )
-            } else if (accountState.isUpdated) {
-                Box(Modifier.fillMaxWidth().padding(24.dp)) {
-                    MobileUserSettingsScreenSaveActionComponent(onClick = viewModel::saveChanges)
-                }
-            }
         }
     ) {
         Column(
@@ -93,30 +122,30 @@ fun MobileFacilitySettingsEditProfileScreen(
             SkyFitSelectToEnterMultilineInputComponent(
                 title = stringResource(Res.string.mandatory_workplace_name_label),
                 hint = stringResource(Res.string.workplace_name_hint),
-                value = accountState.name,
-                onValueChange = { viewModel.updateName(it) },
+                value = formState.name,
+                onValueChange = { viewModel.onAction(FacilityEditProfileAction.UpdateName(it)) },
                 rightIconRes = Res.drawable.ic_pencil
             )
 
             SkyFitSelectToEnterMultilineInputComponent(
                 title = stringResource(Res.string.settings_edit_profile_biography_label),
                 hint = stringResource(Res.string.settings_edit_profile_biography_hint),
-                value = accountState.biography,
-                onValueChange = { viewModel.updateBiography(it) },
+                value = formState.biography,
+                onValueChange = { viewModel.onAction(FacilityEditProfileAction.UpdateBiography(it)) },
                 rightIconRes = Res.drawable.ic_pencil
             )
 
             SkyFitSelectToEnterMultilineInputComponent(
                 title = stringResource(Res.string.settings_edit_profile_address_label),
                 hint = stringResource(Res.string.settings_edit_profile_address_hint),
-                value = accountState.location,
-                onValueChange = { viewModel.updateLocation(it) },
+                value = formState.location,
+                onValueChange = { viewModel.onAction(FacilityEditProfileAction.UpdateLocation(it)) },
                 rightIconRes = Res.drawable.ic_pencil
             )
 
             FitnessTagPickerComponent(
-                selectedTags = accountState.profileTags,
-                onTagsSelected = viewModel::updateTags
+                selectedTags = formState.profileTags,
+                onTagsSelected = { viewModel.onAction(FacilityEditProfileAction.UpdateTags(it)) },
             )
 
             Spacer(Modifier.height(124.dp))

@@ -21,6 +21,7 @@ import androidx.compose.material.Icon
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -32,31 +33,49 @@ import androidx.compose.ui.draw.blur
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.vurgun.skyfit.data.courses.model.LessonSessionItemViewData
+import cafe.adriel.voyager.core.screen.Screen
+import cafe.adriel.voyager.koin.koinScreenModel
+import cafe.adriel.voyager.navigator.LocalNavigator
+import cafe.adriel.voyager.navigator.currentOrThrow
 import com.vurgun.skyfit.core.data.domain.model.UserProfile
-import com.vurgun.skyfit.feature.profile.components.MobileProfileBackgroundImage
-import com.vurgun.skyfit.feature.profile.components.UserProfileCardPreferenceRow
 import com.vurgun.skyfit.core.ui.components.event.AvailableActivityCalendarEventItem
 import com.vurgun.skyfit.core.ui.components.image.NetworkImage
-import com.vurgun.skyfit.core.ui.components.loader.FullScreenLoader
+import com.vurgun.skyfit.core.ui.components.loader.FullScreenLoaderContent
 import com.vurgun.skyfit.core.ui.components.special.SkyFitMobileScaffold
 import com.vurgun.skyfit.core.ui.screen.ErrorScreen
 import com.vurgun.skyfit.core.ui.styling.SkyFitAsset
 import com.vurgun.skyfit.core.ui.styling.SkyFitColor
 import com.vurgun.skyfit.core.ui.styling.SkyFitTypography
+import com.vurgun.skyfit.data.courses.model.LessonSessionItemViewData
+import com.vurgun.skyfit.feature.profile.components.MobileProfileBackgroundImage
+import com.vurgun.skyfit.feature.profile.components.UserProfileCardPreferenceRow
 import org.jetbrains.compose.resources.stringResource
-import org.koin.compose.viewmodel.koinViewModel
 import skyfit.core.ui.generated.resources.Res
 import skyfit.core.ui.generated.resources.appointments_title
+
+class UserProfileVisitorScreen(private val normalUserId: Int) : Screen {
+
+    @Composable
+    override fun Content() {
+        val navigator = LocalNavigator.currentOrThrow
+        val viewModel = koinScreenModel<UserProfileVisitorViewModel>()
+
+        MobileUserProfileVisitorScreen(
+            normalUserId = normalUserId,
+            goToBack = { navigator.pop() },
+            viewModel = viewModel
+        )
+    }
+}
+
 
 @Composable
 fun MobileUserProfileVisitorScreen(
     normalUserId: Int,
     goToBack: () -> Unit,
-    viewModel: UserProfileVisitorViewModel = koinViewModel()
+    viewModel: UserProfileVisitorViewModel
 ) {
-    val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+    val uiState by viewModel.uiState.collectAsState()
 
     LaunchedEffect(Unit) {
         viewModel.effect.collect { effect ->
@@ -71,10 +90,10 @@ fun MobileUserProfileVisitorScreen(
     }
 
     when (uiState) {
-        is UserProfileVisitorUiState.Loading -> FullScreenLoader()
+        is UserProfileVisitorUiState.Loading -> FullScreenLoaderContent()
         is UserProfileVisitorUiState.Error -> {
             val message = (uiState as UserProfileVisitorUiState.Error).message
-            ErrorScreen(message = message, onBack = goToBack)
+            ErrorScreen(message = message, onConfirm = goToBack)
         }
 
         is UserProfileVisitorUiState.Content -> {

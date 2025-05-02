@@ -10,34 +10,52 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import cafe.adriel.voyager.core.screen.Screen
+import cafe.adriel.voyager.koin.koinScreenModel
+import cafe.adriel.voyager.navigator.LocalNavigator
+import cafe.adriel.voyager.navigator.currentOrThrow
 import com.vurgun.skyfit.core.ui.components.button.SecondaryMicroButton
-import com.vurgun.skyfit.core.ui.components.special.SkyFitScaffold
+import com.vurgun.skyfit.core.ui.components.special.SkyFitMobileScaffold
 import com.vurgun.skyfit.core.ui.components.special.SkyFitScreenHeader
 import com.vurgun.skyfit.core.ui.components.special.SkyFitSearchTextInputComponent
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
-import org.koin.compose.viewmodel.koinViewModel
 import skyfit.core.ui.generated.resources.Res
 import skyfit.core.ui.generated.resources.add_action
 import skyfit.core.ui.generated.resources.ic_plus
 import skyfit.core.ui.generated.resources.search_action
 
+class FacilityAddMemberScreen : Screen {
+
+    @Composable
+    override fun Content() {
+        val navigator = LocalNavigator.currentOrThrow
+        val viewModel = koinScreenModel<FacilityAddMembersViewModel>()
+
+        LaunchedEffect(Unit) {
+            viewModel.refreshPlatformMembers()
+        }
+
+        MobileFacilityAddMemberScreen(
+            goToBack = { navigator.pop() },
+            viewModel = viewModel
+        )
+    }
+}
+
+
 @Composable
 internal fun MobileFacilityAddMemberScreen(
     goToBack: () -> Unit,
-    viewModel: FacilityAddMembersViewModel = koinViewModel()
+    viewModel: FacilityAddMembersViewModel
 ) {
-    val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+    val uiState by viewModel.uiState.collectAsState()
 
-    LaunchedEffect(Unit) {
-        viewModel.refreshPlatformMembers()
-    }
-
-    SkyFitScaffold(
+    SkyFitMobileScaffold(
         topBar = {
             Column(Modifier.fillMaxWidth()) {
                 SkyFitScreenHeader(stringResource(Res.string.add_action), onClickBack = goToBack)

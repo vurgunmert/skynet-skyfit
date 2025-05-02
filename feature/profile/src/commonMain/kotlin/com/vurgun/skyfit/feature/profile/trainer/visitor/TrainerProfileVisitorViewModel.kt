@@ -1,14 +1,14 @@
 package com.vurgun.skyfit.feature.profile.trainer.visitor
 
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
+import cafe.adriel.voyager.core.model.ScreenModel
+import cafe.adriel.voyager.core.model.screenModelScope
 import com.vurgun.skyfit.core.data.domain.model.BaseUserDetail
-import com.vurgun.skyfit.data.courses.domain.repository.CourseRepository
-import com.vurgun.skyfit.data.courses.mapper.LessonSessionItemViewDataMapper
-import com.vurgun.skyfit.data.courses.model.LessonSessionItemViewData
 import com.vurgun.skyfit.core.data.domain.model.TrainerProfile
 import com.vurgun.skyfit.core.data.domain.repository.ProfileRepository
 import com.vurgun.skyfit.core.data.domain.repository.UserManager
+import com.vurgun.skyfit.data.courses.domain.repository.CourseRepository
+import com.vurgun.skyfit.data.courses.mapper.LessonSessionItemViewDataMapper
+import com.vurgun.skyfit.data.courses.model.LessonSessionItemViewData
 import com.vurgun.skyfit.feature.social.viewdata.SocialPostItemViewData
 import kotlinx.coroutines.async
 import kotlinx.coroutines.flow.MutableSharedFlow
@@ -48,7 +48,7 @@ class TrainerProfileVisitorViewModel(
     private val courseRepository: CourseRepository,
     private val lessonMapper: LessonSessionItemViewDataMapper,
     private val profileRepository: ProfileRepository
-) : ViewModel() {
+) : ScreenModel {
 
     private val _uiState = MutableStateFlow<TrainerProfileVisitorUiState>(TrainerProfileVisitorUiState.Loading)
     val uiState: StateFlow<TrainerProfileVisitorUiState> = _uiState
@@ -73,7 +73,7 @@ class TrainerProfileVisitorViewModel(
 
     fun loadProfile(trainerId: Int) {
         currentTrainerId = trainerId
-        viewModelScope.launch {
+        screenModelScope.launch {
             _uiState.value = TrainerProfileVisitorUiState.Loading
 
             val profileDeferred = async { profileRepository.getTrainerProfile(trainerId).getOrThrow() }
@@ -108,7 +108,7 @@ class TrainerProfileVisitorViewModel(
     }
 
     private fun emitEffect(effect: TrainerProfileVisitorEffect) {
-        viewModelScope.launch {
+        screenModelScope.launch {
             _effect.emit(effect)
         }
     }

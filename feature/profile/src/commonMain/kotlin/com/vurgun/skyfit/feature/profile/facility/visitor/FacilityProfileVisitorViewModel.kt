@@ -1,19 +1,19 @@
 package com.vurgun.skyfit.feature.profile.facility.visitor
 
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
+import cafe.adriel.voyager.core.model.ScreenModel
+import cafe.adriel.voyager.core.model.screenModelScope
 import com.vurgun.skyfit.core.data.domain.model.BaseUserDetail
-import com.vurgun.skyfit.core.data.utility.now
-import com.vurgun.skyfit.data.courses.domain.repository.CourseRepository
-import com.vurgun.skyfit.data.courses.mapper.LessonSessionItemViewDataMapper
-import com.vurgun.skyfit.data.courses.model.LessonSessionItemViewData
 import com.vurgun.skyfit.core.data.domain.model.FacilityProfile
 import com.vurgun.skyfit.core.data.domain.model.FacilityTrainerProfile
 import com.vurgun.skyfit.core.data.domain.repository.ProfileRepository
 import com.vurgun.skyfit.core.data.domain.repository.UserManager
+import com.vurgun.skyfit.core.data.utility.SingleSharedFlow
+import com.vurgun.skyfit.core.data.utility.now
+import com.vurgun.skyfit.data.courses.domain.repository.CourseRepository
+import com.vurgun.skyfit.data.courses.mapper.LessonSessionItemViewDataMapper
+import com.vurgun.skyfit.data.courses.model.LessonSessionItemViewData
 import com.vurgun.skyfit.feature.social.viewdata.SocialPostItemViewData
 import kotlinx.coroutines.async
-import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -35,7 +35,7 @@ sealed interface FacilityProfileVisitorUiState {
 }
 
 sealed interface FacilityProfileVisitorAction {
-    data object Exit : FacilityProfileVisitorAction
+    data object NavigateToBack : FacilityProfileVisitorAction
     data object Follow : FacilityProfileVisitorAction
     data object Unfollow : FacilityProfileVisitorAction
     data class ChangeDate(val date: LocalDate) : FacilityProfileVisitorAction
@@ -46,10 +46,10 @@ sealed interface FacilityProfileVisitorAction {
 }
 
 sealed interface FacilityProfileVisitorEffect {
-    data object NavigateBack : FacilityProfileVisitorEffect
+    data object NavigateToBack : FacilityProfileVisitorEffect
     data class NavigateToTrainer(val trainerId: Int) : FacilityProfileVisitorEffect
-    data object NavigateToChat : FacilityProfileVisitorEffect
-    data object NavigateToCalendar : FacilityProfileVisitorEffect
+    data class NavigateToChat(val visitorId: Int) : FacilityProfileVisitorEffect
+    data class NavigateToSchedule(val facilityId: Int) : FacilityProfileVisitorEffect
 }
 
 class FacilityProfileVisitorViewModel(
@@ -57,12 +57,12 @@ class FacilityProfileVisitorViewModel(
     private val courseRepository: CourseRepository,
     private val lessonSessionItemViewDataMapper: LessonSessionItemViewDataMapper,
     private val profileRepository: ProfileRepository
-) : ViewModel() {
+) : ScreenModel {
 
     private val _uiState = MutableStateFlow<FacilityProfileVisitorUiState>(FacilityProfileVisitorUiState.Loading)
     val uiState: StateFlow<FacilityProfileVisitorUiState> = _uiState
 
-    private val _effect = MutableSharedFlow<FacilityProfileVisitorEffect>()
+    private val _effect = SingleSharedFlow<FacilityProfileVisitorEffect>()
     val effect: SharedFlow<FacilityProfileVisitorEffect> = _effect
 
     private val visitor: BaseUserDetail
@@ -76,16 +76,16 @@ class FacilityProfileVisitorViewModel(
             is FacilityProfileVisitorAction.Unfollow -> unfollowFacility()
             is FacilityProfileVisitorAction.ChangeDate -> updateLessons(action.date)
             is FacilityProfileVisitorAction.NavigateToTrainer -> emitEffect(FacilityProfileVisitorEffect.NavigateToTrainer(action.trainerId))
-            is FacilityProfileVisitorAction.Exit -> emitEffect(FacilityProfileVisitorEffect.NavigateBack)
-            is FacilityProfileVisitorAction.NavigateToCalendar -> emitEffect(FacilityProfileVisitorEffect.NavigateToCalendar)
-            is FacilityProfileVisitorAction.NavigateToChat -> emitEffect(FacilityProfileVisitorEffect.NavigateToChat)
+            is FacilityProfileVisitorAction.NavigateToBack -> emitEffect(FacilityProfileVisitorEffect.NavigateToBack)
+            is FacilityProfileVisitorAction.NavigateToCalendar -> emitEffect(FacilityProfileVisitorEffect.NavigateToSchedule(currentFacilityId!!))
+            is FacilityProfileVisitorAction.NavigateToChat -> emitEffect(FacilityProfileVisitorEffect.NavigateToChat(visitor.userId))
             is FacilityProfileVisitorAction.TogglePostVisibility -> togglePostVisibility(action.visible)
         }
     }
 
     fun loadProfile(facilityId: Int) {
         currentFacilityId = facilityId
-        viewModelScope.launch {
+        screenModelScope.launch {
             _uiState.value = FacilityProfileVisitorUiState.Loading
 
             val profileDeferred = async { profileRepository.getFacilityProfile(facilityId).getOrThrow() }
@@ -104,9 +104,9 @@ class FacilityProfileVisitorViewModel(
         }
     }
 
-    fun updateLessons(date: LocalDate = LocalDate.now()) {
+    private fun updateLessons(date: LocalDate = LocalDate.now()) {
         val id = currentFacilityId ?: return
-        viewModelScope.launch {
+        screenModelScope.launch {
             val currentState = _uiState.value
             if (currentState is FacilityProfileVisitorUiState.Content) {
                 try {
@@ -119,16 +119,16 @@ class FacilityProfileVisitorViewModel(
         }
     }
 
-    fun followFacility() {
+    private fun followFacility() {
         // TODO: ("Not yet implemented")
     }
 
-    fun unfollowFacility() {
+    private fun unfollowFacility() {
         // TODO: ("Not yet implemented")
     }
 
     private fun togglePostVisibility(visible: Boolean) {
-        viewModelScope.launch {
+        screenModelScope.launch {
             val currentState = _uiState.value
             if (currentState is FacilityProfileVisitorUiState.Content) {
                 _uiState.value = currentState.copy(postsVisible = visible)
@@ -147,7 +147,7 @@ class FacilityProfileVisitorViewModel(
     }
 
     private fun emitEffect(effect: FacilityProfileVisitorEffect) {
-        viewModelScope.launch {
+        screenModelScope.launch {
             _effect.emit(effect)
         }
     }

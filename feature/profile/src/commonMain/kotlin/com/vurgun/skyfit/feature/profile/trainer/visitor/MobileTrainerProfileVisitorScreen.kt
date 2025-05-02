@@ -30,21 +30,19 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.vurgun.skyfit.data.courses.model.LessonSessionItemViewData
+import androidx.compose.runtime.collectAsState
+import cafe.adriel.voyager.core.screen.Screen
+import cafe.adriel.voyager.koin.koinScreenModel
+import cafe.adriel.voyager.navigator.LocalNavigator
+import cafe.adriel.voyager.navigator.currentOrThrow
 import com.vurgun.skyfit.core.data.domain.model.TrainerProfile
-import com.vurgun.skyfit.feature.profile.components.LifestyleActionRow
-import com.vurgun.skyfit.feature.profile.components.MobileProfileActionTabsRow
-import com.vurgun.skyfit.feature.profile.components.MobileProfileBackgroundImage
-import com.vurgun.skyfit.feature.profile.components.MobileVisitedProfileActionsComponent
-import com.vurgun.skyfit.feature.profile.components.VerticalProfileStatisticItem
-import com.vurgun.skyfit.feature.profile.components.viewdata.LifestyleActionItemViewData
-import com.vurgun.skyfit.feature.profile.components.viewdata.LifestyleActionRowViewData
+import com.vurgun.skyfit.core.navigation.SharedScreen
+import com.vurgun.skyfit.core.navigation.push
 import com.vurgun.skyfit.core.ui.components.button.SkyFitPrimaryCircularBackButton
 import com.vurgun.skyfit.core.ui.components.divider.VerticalDivider
 import com.vurgun.skyfit.core.ui.components.event.AvailableActivityCalendarEventItem
 import com.vurgun.skyfit.core.ui.components.image.NetworkImage
-import com.vurgun.skyfit.core.ui.components.loader.FullScreenLoader
+import com.vurgun.skyfit.core.ui.components.loader.FullScreenLoaderContent
 import com.vurgun.skyfit.core.ui.components.special.ButtonSize
 import com.vurgun.skyfit.core.ui.components.special.ButtonVariant
 import com.vurgun.skyfit.core.ui.components.special.SkyFitButtonComponent
@@ -53,9 +51,16 @@ import com.vurgun.skyfit.core.ui.screen.ErrorScreen
 import com.vurgun.skyfit.core.ui.styling.SkyFitAsset
 import com.vurgun.skyfit.core.ui.styling.SkyFitColor
 import com.vurgun.skyfit.core.ui.styling.SkyFitTypography
+import com.vurgun.skyfit.data.courses.model.LessonSessionItemViewData
+import com.vurgun.skyfit.feature.profile.components.LifestyleActionRow
+import com.vurgun.skyfit.feature.profile.components.MobileProfileActionTabsRow
+import com.vurgun.skyfit.feature.profile.components.MobileProfileBackgroundImage
+import com.vurgun.skyfit.feature.profile.components.MobileVisitedProfileActionsComponent
+import com.vurgun.skyfit.feature.profile.components.VerticalProfileStatisticItem
+import com.vurgun.skyfit.feature.profile.components.viewdata.LifestyleActionItemViewData
+import com.vurgun.skyfit.feature.profile.components.viewdata.LifestyleActionRowViewData
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
-import org.koin.compose.viewmodel.koinViewModel
 import skyfit.core.ui.generated.resources.Res
 import skyfit.core.ui.generated.resources.appointment_book_action
 import skyfit.core.ui.generated.resources.follow_action
@@ -69,15 +74,32 @@ import skyfit.core.ui.generated.resources.show_all_action
 import skyfit.core.ui.generated.resources.specialities_label
 import skyfit.core.ui.generated.resources.unfollow_action
 
+class TrainerProfileVisitorScreen(private val trainerId: Int) : Screen {
+
+    @Composable
+    override fun Content() {
+        val navigator = LocalNavigator.currentOrThrow
+        val viewModel = koinScreenModel<TrainerProfileVisitorViewModel>()
+
+        MobileTrainerProfileVisitorScreen(
+            trainerId = trainerId,
+            goToBack = { navigator.pop() },
+            goToChat = { navigator.push(SharedScreen.UserChat(trainerId)) },
+            goToSchedule = { navigator.push(SharedScreen.TrainerSchedule(trainerId)) },
+            viewModel = viewModel
+        )
+    }
+}
+
 @Composable
-fun MobileTrainerProfileVisitorScreen(
+private fun MobileTrainerProfileVisitorScreen(
     trainerId: Int,
     goToBack: () -> Unit,
     goToChat: () -> Unit,
     goToSchedule: () -> Unit,
-    viewModel: TrainerProfileVisitorViewModel = koinViewModel()
+    viewModel: TrainerProfileVisitorViewModel
 ) {
-    val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+    val uiState by viewModel.uiState.collectAsState()
 
     LaunchedEffect(Unit) {
         viewModel.effect.collect { effect ->
@@ -94,11 +116,11 @@ fun MobileTrainerProfileVisitorScreen(
     }
 
     when (uiState) {
-        is TrainerProfileVisitorUiState.Loading -> FullScreenLoader()
+        is TrainerProfileVisitorUiState.Loading -> FullScreenLoaderContent()
 
         is TrainerProfileVisitorUiState.Error -> {
             val message = (uiState as TrainerProfileVisitorUiState.Error).message
-            ErrorScreen(message, onBack = goToBack)
+            ErrorScreen(message = message, onConfirm = goToBack)
         }
 
         is TrainerProfileVisitorUiState.Content -> {

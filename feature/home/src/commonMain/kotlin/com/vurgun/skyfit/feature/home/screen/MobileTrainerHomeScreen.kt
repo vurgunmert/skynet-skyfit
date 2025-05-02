@@ -50,36 +50,71 @@ import androidx.compose.ui.text.rememberTextMeasurer
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.vurgun.skyfit.feature.home.component.MobileDashboardHomeToolbarComponent
-import com.vurgun.skyfit.feature.home.component.MobileTrainerHomeUpcomingAppointmentsComponent
+import androidx.compose.runtime.collectAsState
+import cafe.adriel.voyager.core.screen.Screen
+import cafe.adriel.voyager.koin.koinScreenModel
+import cafe.adriel.voyager.navigator.LocalNavigator
+import cafe.adriel.voyager.navigator.currentOrThrow
+import com.vurgun.skyfit.core.navigation.SharedScreen
+import com.vurgun.skyfit.core.navigation.findRootNavigator
+import com.vurgun.skyfit.core.navigation.push
 import com.vurgun.skyfit.core.ui.components.button.PrimaryMediumButton
 import com.vurgun.skyfit.core.ui.components.special.CharacterImage
 import com.vurgun.skyfit.core.ui.components.special.SkyFitMobileScaffold
 import com.vurgun.skyfit.core.ui.styling.SkyFitColor
 import com.vurgun.skyfit.core.ui.styling.SkyFitTypography
+import com.vurgun.skyfit.core.ui.utils.CollectEffect
+import com.vurgun.skyfit.core.ui.utils.LocalWindowSize
+import com.vurgun.skyfit.core.ui.utils.WindowSize
+import com.vurgun.skyfit.feature.home.component.MobileDashboardHomeToolbarComponent
+import com.vurgun.skyfit.feature.home.component.MobileTrainerHomeUpcomingAppointmentsComponent
 import org.jetbrains.compose.resources.stringResource
-import org.koin.compose.viewmodel.koinViewModel
 import skyfit.core.ui.generated.resources.Res
 import skyfit.core.ui.generated.resources.lesson_add_action
 import skyfit.core.ui.generated.resources.upcoming_appointments_label
 import kotlin.math.sign
 
+class TrainerHomeScreen : Screen {
+
+    @Composable
+    override fun Content() {
+        val windowSize = LocalWindowSize.current
+        val appNavigator = LocalNavigator.currentOrThrow.findRootNavigator()
+        val viewModel = koinScreenModel<TrainerHomeViewModel>()
+
+        CollectEffect(viewModel.effect) { effect ->
+            when (effect) {
+                TrainerHomeEffect.NavigateToAppointments -> {
+                    appNavigator.push(SharedScreen.TrainerAppointmentListing)
+                }
+                TrainerHomeEffect.NavigateToConversations -> {
+                    appNavigator.push(SharedScreen.Conversations)
+                }
+                TrainerHomeEffect.NavigateToNotifications -> {
+                    appNavigator.push(SharedScreen.Notifications)
+                }
+            }
+        }
+
+        if (windowSize == WindowSize.EXPANDED) {
+            TrainerHomeCompact(viewModel) //TODO: Expanded
+        } else {
+            TrainerHomeCompact(viewModel)
+        }
+    }
+}
+
 @Composable
-fun MobileTrainerHomeScreen(
-    goToNotifications: () -> Unit,
-    goToMessages: () -> Unit,
-    goToProfile: () -> Unit,
-    goToAppointments: () -> Unit,
-    viewModel: TrainerHomeViewModel = koinViewModel()
+private fun TrainerHomeCompact(
+    viewModel: TrainerHomeViewModel
 ) {
-    val appointments by viewModel.appointments.collectAsStateWithLifecycle()
+    val appointments by viewModel.appointments.collectAsState()
 
     SkyFitMobileScaffold(
         topBar = {
             MobileDashboardHomeToolbarComponent(
-                onClickNotifications = goToNotifications,
-                onClickMessages = goToMessages
+                onClickNotifications = { viewModel.onAction(TrainerHomeAction.NavigateToNotifications) },
+                onClickMessages = { viewModel.onAction(TrainerHomeAction.NavigateToConversations) }
             )
         }
     ) {
@@ -90,12 +125,10 @@ fun MobileTrainerHomeScreen(
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {
 
-            viewModel.characterType?.let { characterType ->
-                CharacterImage(
-                    characterType = characterType,
-                    modifier = Modifier
-                )
-            }
+            CharacterImage(
+                characterType = viewModel.characterType,
+                modifier = Modifier
+            )
 
             Spacer(Modifier.height(24.dp))
 
@@ -106,7 +139,7 @@ fun MobileTrainerHomeScreen(
             } else {
                 MobileTrainerHomeUpcomingAppointmentsComponent(
                     appointments = appointments,
-                    onClickShowAll = goToAppointments
+                    onClickShowAll = { viewModel.onAction(TrainerHomeAction.NavigateToAppointments) }
                 )
             }
 

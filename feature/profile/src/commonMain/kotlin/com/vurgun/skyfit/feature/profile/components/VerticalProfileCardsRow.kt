@@ -9,8 +9,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import com.vurgun.skyfit.core.data.domain.model.FacilityTrainerProfile
 import com.vurgun.skyfit.feature.profile.components.viewdata.FacilityProfileCardItemViewData
-import com.vurgun.skyfit.feature.profile.components.viewdata.TrainerProfileCardItemViewData
 
 @Composable
 fun VerticalFacilityProfileCardsRow(
@@ -37,7 +37,7 @@ fun VerticalFacilityProfileCardsRow(
 
 @Composable
 fun VerticalTrainerProfileCardsRow(
-    trainers: List<TrainerProfileCardItemViewData>,
+    trainers: List<FacilityTrainerProfile>,
     onClick: () -> Unit = {},
     modifier: Modifier = Modifier,
     contentPaddingStart: Dp
@@ -49,12 +49,12 @@ fun VerticalTrainerProfileCardsRow(
     ) {
         items(trainers) { trainer ->
             VerticalTrainerProfileCard(
-                imageUrl = trainer.imageUrl,
-                name = trainer.name,
+                imageUrl = trainer.profileImageUrl,
+                name = trainer.fullName,
                 followerCount = trainer.followerCount,
-                lessonCount = trainer.classCount,
+                lessonCount = trainer.lessonTypeCount,
                 videoCount = trainer.videoCount,
-                rating = trainer.rating,
+                rating = trainer.point,
                 onClick = onClick
             )
         }

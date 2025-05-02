@@ -1,7 +1,7 @@
 package com.vurgun.skyfit.feature.bodyanalysis.screen
 
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
+import cafe.adriel.voyager.core.model.ScreenModel
+import cafe.adriel.voyager.core.model.screenModelScope
 import com.vurgun.skyfit.data.bodyanalysis.model.PostureType
 import com.vurgun.skyfit.data.bodyanalysis.repository.BodyAnalysisRepository
 import com.vurgun.skyfit.data.bodyanalysis.repository.BodyTypeAnalysisRepository
@@ -12,17 +12,17 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 
 sealed class MobileUserBodyAnalysisState {
-    object Info : MobileUserBodyAnalysisState()
-    object PostureOptions : MobileUserBodyAnalysisState()
+    data object Info : MobileUserBodyAnalysisState()
+    data object PostureOptions : MobileUserBodyAnalysisState()
     data class CameraPreview(val postureType: PostureType, val showGuide: Boolean = true) : MobileUserBodyAnalysisState()
-    object Scanning : MobileUserBodyAnalysisState()
-    object CaptureResult : MobileUserBodyAnalysisState()
-    object CaptureResultInsight : MobileUserBodyAnalysisState()
-    object CaptureResultExit : MobileUserBodyAnalysisState()
+    data object Scanning : MobileUserBodyAnalysisState()
+    data object CaptureResult : MobileUserBodyAnalysisState()
+    data object CaptureResultInsight : MobileUserBodyAnalysisState()
+    data object CaptureResultExit : MobileUserBodyAnalysisState()
 }
 
 
-class MobileUserBodyAnalysisViewModel : ViewModel() {
+class MobileUserBodyAnalysisViewModel : ScreenModel {
 
     private val _uiState = MutableStateFlow<MobileUserBodyAnalysisState>(MobileUserBodyAnalysisState.Info)
     val uiState: StateFlow<MobileUserBodyAnalysisState> = _uiState.asStateFlow()
@@ -57,7 +57,7 @@ class MobileUserBodyAnalysisViewModel : ViewModel() {
         if (encodedBase64Image != null) {
             //TODO: Body Analysis
 
-            viewModelScope.launch {
+            screenModelScope.launch {
                 val response = bodyAnalysisRepository.sendBase64EncodedImage(encodedBase64Image)
                 //TODO: In what format we can handle this -> Ahmet?
                 print(response)
@@ -67,7 +67,7 @@ class MobileUserBodyAnalysisViewModel : ViewModel() {
 
             //TODO: Body Type Analysis
 
-            viewModelScope.launch {
+            screenModelScope.launch {
                 //TODO: Can we send base64 instead of a image url -> Ahmet?
 //                val predictionResponse = bodyTypeAnalysisRepository.sendImageUrl("https://source.roboflow.com/CECMTkNg4zdmZ0o2pq6HcI85gRj1/xN6r5Nl2vq6t24LQBsKH/thumb.jpg")
 //                println(predictionResponse)

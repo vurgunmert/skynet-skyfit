@@ -5,9 +5,9 @@ import kotlinx.coroutines.flow.MutableSharedFlow
 
 fun <T> SingleSharedFlow(): MutableSharedFlow<T> =
     MutableSharedFlow(
-        replay = 1,
+        replay = 0,
         extraBufferCapacity = 1,
-        onBufferOverflow = BufferOverflow.DROP_OLDEST
+        onBufferOverflow = BufferOverflow.DROP_LATEST
     )
 
 suspend fun <T> MutableSharedFlow<T>.emitOrNull(value: T) {

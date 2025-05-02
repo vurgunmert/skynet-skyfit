@@ -89,15 +89,15 @@ private fun ProfileCardItemBox(
 ) {
     Box(
         Modifier
-            .size(186.dp, 278.dp)
+            .clip(RoundedCornerShape(16.dp))
             .clickable { onClick() }
+            .size(186.dp, 278.dp)
     ) {
         // Profile Image
         NetworkImage(
             imageUrl = imageUrl,
             modifier = Modifier
-                .fillMaxSize()
-                .clip(RoundedCornerShape(16.dp)),
+                .fillMaxSize(),
         )
 
         RatingStarComponent(rating, Modifier.align(Alignment.TopEnd).padding(8.dp))

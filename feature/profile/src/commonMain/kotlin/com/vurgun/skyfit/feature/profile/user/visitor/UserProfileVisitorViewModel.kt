@@ -1,12 +1,13 @@
 package com.vurgun.skyfit.feature.profile.user.visitor
 
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
+import cafe.adriel.voyager.core.model.ScreenModel
+import cafe.adriel.voyager.core.model.screenModelScope
+import com.vurgun.skyfit.core.data.domain.model.UserProfile
+import com.vurgun.skyfit.core.data.domain.repository.ProfileRepository
+import com.vurgun.skyfit.core.data.utility.emitOrNull
 import com.vurgun.skyfit.data.courses.domain.repository.CourseRepository
 import com.vurgun.skyfit.data.courses.mapper.LessonSessionItemViewDataMapper
 import com.vurgun.skyfit.data.courses.model.LessonSessionItemViewData
-import com.vurgun.skyfit.core.data.domain.model.UserProfile
-import com.vurgun.skyfit.core.data.domain.repository.ProfileRepository
 import com.vurgun.skyfit.feature.profile.components.viewdata.LifestyleActionItemViewData
 import com.vurgun.skyfit.feature.social.viewdata.SocialPostItemViewData
 import com.vurgun.skyfit.feature.social.viewdata.fakePosts
@@ -43,7 +44,7 @@ class UserProfileVisitorViewModel(
     private val courseRepository: CourseRepository,
     private val profileRepository: ProfileRepository,
     private val lessonMapper: LessonSessionItemViewDataMapper,
-) : ViewModel() {
+) : ScreenModel {
 
     private val _uiState = MutableStateFlow<UserProfileVisitorUiState>(UserProfileVisitorUiState.Loading)
     val uiState: StateFlow<UserProfileVisitorUiState> = _uiState
@@ -59,7 +60,7 @@ class UserProfileVisitorViewModel(
     }
 
     fun loadProfile(normalUserId: Int) {
-        viewModelScope.launch {
+        screenModelScope.launch {
             _uiState.value = UserProfileVisitorUiState.Loading
             val profileDeferred = async { profileRepository.getUserProfile(normalUserId).getOrThrow() }
             val appointmentsDeferred = async { fetchAppointments(normalUserId) }
@@ -80,7 +81,7 @@ class UserProfileVisitorViewModel(
     }
 
     private fun togglePostVisibility(visible: Boolean) {
-        viewModelScope.launch {
+        screenModelScope.launch {
             val currentState = _uiState.value
             if (currentState is UserProfileVisitorUiState.Content) {
                 _uiState.value = currentState.copy(postsVisible = visible)
@@ -89,8 +90,8 @@ class UserProfileVisitorViewModel(
     }
 
     private fun emitEffect(effect: UserProfileVisitorEffect) {
-        viewModelScope.launch {
-            _effect.emit(effect)
+        screenModelScope.launch {
+            _effect.emitOrNull(effect)
         }
     }
 

@@ -32,9 +32,8 @@ fun CalendarSingleDateSelectorFilter(
     modifier: Modifier = Modifier,
     onSelectionChanged: (start: LocalDate) -> Unit
 ) {
-    val viewModel = remember { CalendarDateSelectorViewModel(CalendarSelectionMode.Single) }
-
-    val state by viewModel.state.collectAsState()
+    val dateSelectorController = rememberCalendarSelectorController(CalendarSelectionMode.Single)
+    val state by dateSelectorController.state.collectAsState()
 
     LaunchedEffect(state.selectedStartDate) {
         onSelectionChanged(state.selectedStartDate)
@@ -61,7 +60,7 @@ fun CalendarSingleDateSelectorFilter(
         if (expanded) {
             Spacer(Modifier.height(16.dp))
 
-            CalendarDateSelector(viewModel) { _, _ -> }
+            CalendarDateSelector(dateSelectorController) { _, _ -> }
         }
 
         Spacer(Modifier.height(16.dp))
@@ -74,13 +73,12 @@ fun CalendarSingleDateSelectorFilter(
 fun CalendarSingleDateSelector(
     onSelectionChanged: (start: LocalDate) -> Unit
 ) {
-    val viewModel = remember { CalendarDateSelectorViewModel(CalendarSelectionMode.Single) }
-
-    val state by viewModel.state.collectAsState()
+    val dateSelectorController = rememberCalendarSelectorController(CalendarSelectionMode.Single)
+    val state by dateSelectorController.state.collectAsState()
 
     LaunchedEffect(state.selectedStartDate) {
         onSelectionChanged(state.selectedStartDate)
     }
 
-    CalendarDateSelector(viewModel) { _, _ -> }
+    CalendarDateSelector(dateSelectorController) { _, _ -> }
 }

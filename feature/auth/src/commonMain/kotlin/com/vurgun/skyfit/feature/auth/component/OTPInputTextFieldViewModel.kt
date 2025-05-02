@@ -1,11 +1,10 @@
 package com.vurgun.skyfit.feature.auth.component
 
-import androidx.lifecycle.ViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 
-class OTPInputTextFieldViewModel : ViewModel() {
+class OTPInputTextFieldViewModel {
 
     private val _state = MutableStateFlow(OtpState())
     val state = _state.asStateFlow()

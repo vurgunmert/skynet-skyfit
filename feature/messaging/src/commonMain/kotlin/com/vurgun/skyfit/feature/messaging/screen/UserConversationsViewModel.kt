@@ -2,7 +2,6 @@ package com.vurgun.skyfit.feature.messaging.screen
 
 class UserConversationsViewModel {
 
-
     var converstations = listOf(
         UserConversationItem(),
         UserConversationItem(),
@@ -11,6 +10,4 @@ class UserConversationsViewModel {
         UserConversationItem(),
         UserConversationItem(),
     )
-
-
 }

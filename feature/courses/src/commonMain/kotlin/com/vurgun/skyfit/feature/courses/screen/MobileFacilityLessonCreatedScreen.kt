@@ -17,6 +17,12 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import cafe.adriel.voyager.core.screen.Screen
+import cafe.adriel.voyager.koin.koinScreenModel
+import cafe.adriel.voyager.navigator.LocalNavigator
+import cafe.adriel.voyager.navigator.currentOrThrow
+import com.vurgun.skyfit.core.navigation.SharedScreen
+import com.vurgun.skyfit.core.navigation.popUntil
 import com.vurgun.skyfit.core.ui.components.button.PrimaryLargeButton
 import com.vurgun.skyfit.core.ui.components.button.SecondaryLargeButton
 import com.vurgun.skyfit.core.ui.components.event.AppointmentCardViewData
@@ -32,12 +38,28 @@ import skyfit.core.ui.generated.resources.img_check_mark_blue_box
 import skyfit.core.ui.generated.resources.lesson_create_action
 import skyfit.core.ui.generated.resources.lesson_created_message
 
+class FacilityLessonCreatedScreen : Screen {
+    @Composable
+    override fun Content() {
+        val navigator = LocalNavigator.currentOrThrow
+        val viewModel = koinScreenModel<FacilityLessonEditViewModel>() //TODO: try passing viewdata instead
+
+        MobileFacilityLessonCreatedScreen(
+            goToListing = { navigator.popUntil(SharedScreen.FacilityManageLessons) },
+            goToNewLesson = { navigator.replace(FacilityLessonEditScreen()) },
+            goToDashboard = { navigator.popUntil(SharedScreen.Dashboard) },
+            viewModel = viewModel
+        )
+    }
+
+}
+
 @Composable
-fun MobileFacilityLessonCreatedScreen(
+private fun MobileFacilityLessonCreatedScreen(
     goToListing: () -> Unit,
     goToNewLesson: () -> Unit,
     goToDashboard: () -> Unit,
-    viewModel: FacilityEditLessonViewModel
+    viewModel: FacilityLessonEditViewModel
 ) {
 
     val item = AppointmentCardViewData(

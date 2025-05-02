@@ -5,23 +5,27 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import com.vurgun.skyfit.core.ui.components.special.SkyFitMobileScaffold
+import cafe.adriel.voyager.core.screen.Screen
+import com.vurgun.skyfit.core.ui.components.special.SkyFitScaffold
 import com.vurgun.skyfit.core.ui.components.text.BodyMediumRegularText
 import com.vurgun.skyfit.core.ui.styling.SkyFitColor
 
-@Composable
-fun UnauthorizedAccessScreen() {
+class UnauthorizedAccessScreen(private val showBack: Boolean = false) : Screen {
 
-    SkyFitMobileScaffold {
+    @Composable
+    override fun Content() {
+        SkyFitScaffold {
+            Box(
+                Modifier.fillMaxSize(),
+                contentAlignment = Alignment.Center
+            ) {
+                //TODO: showBack
 
-        Box(
-            Modifier.fillMaxSize(),
-            contentAlignment = Alignment.Center
-        ) {
-            BodyMediumRegularText(
-                text = "UNAUTHORIZED SCREEN ACCESS",
-                color = SkyFitColor.text.criticalActive
-            )
+                BodyMediumRegularText(
+                    text = "Yetkisiz ekran erişimi. Bu alana erişim izniniz bulunmamaktadır.",
+                    color = SkyFitColor.text.criticalActive
+                )
+            }
         }
     }
 }

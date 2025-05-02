@@ -1,19 +1,21 @@
 package com.vurgun.skyfit.feature.profile.trainer.owner
 
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
+import cafe.adriel.voyager.core.model.ScreenModel
+import cafe.adriel.voyager.core.model.screenModelScope
 import com.vurgun.skyfit.core.data.domain.model.TrainerDetail
-import com.vurgun.skyfit.data.courses.domain.repository.CourseRepository
-import com.vurgun.skyfit.data.courses.mapper.LessonSessionItemViewDataMapper
-import com.vurgun.skyfit.data.courses.model.LessonSessionItemViewData
 import com.vurgun.skyfit.core.data.domain.model.TrainerProfile
 import com.vurgun.skyfit.core.data.domain.repository.ProfileRepository
 import com.vurgun.skyfit.core.data.domain.repository.UserManager
+import com.vurgun.skyfit.core.data.utility.SingleSharedFlow
+import com.vurgun.skyfit.core.data.utility.emitOrNull
+import com.vurgun.skyfit.core.ui.styling.SkyFitAsset
+import com.vurgun.skyfit.data.courses.domain.repository.CourseRepository
+import com.vurgun.skyfit.data.courses.mapper.LessonSessionItemViewDataMapper
+import com.vurgun.skyfit.data.courses.model.LessonSessionItemViewData
 import com.vurgun.skyfit.feature.profile.components.viewdata.LifestyleActionItemViewData
 import com.vurgun.skyfit.feature.profile.components.viewdata.LifestyleActionRowViewData
 import com.vurgun.skyfit.feature.profile.components.viewdata.PhotoGalleryStackViewData
 import com.vurgun.skyfit.feature.social.viewdata.SocialPostItemViewData
-import com.vurgun.skyfit.core.ui.styling.SkyFitAsset
 import kotlinx.coroutines.async
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -52,12 +54,12 @@ class TrainerProfileOwnerViewModel(
     private val courseRepository: CourseRepository,
     private val lessonMapper: LessonSessionItemViewDataMapper,
     private val profileRepository: ProfileRepository
-) : ViewModel() {
+) : ScreenModel {
 
     private val _uiState = MutableStateFlow<TrainerProfileOwnerUiState>(TrainerProfileOwnerUiState.Loading)
     val uiState: StateFlow<TrainerProfileOwnerUiState> = _uiState
 
-    private val _effect = MutableSharedFlow<TrainerProfileOwnerEffect>()
+    private val _effect = SingleSharedFlow<TrainerProfileOwnerEffect>()
     val effect: SharedFlow<TrainerProfileOwnerEffect> = _effect
 
     private val trainerUser: TrainerDetail
@@ -74,7 +76,7 @@ class TrainerProfileOwnerViewModel(
     }
 
     fun loadProfile() {
-        viewModelScope.launch {
+        screenModelScope.launch {
             _uiState.value = TrainerProfileOwnerUiState.Loading
 
             val profileDeferred = async { profileRepository.getTrainerProfile(trainerUser.trainerId).getOrThrow() }
@@ -117,7 +119,7 @@ class TrainerProfileOwnerViewModel(
     }
 
     private fun togglePostVisibility(visible: Boolean) {
-        viewModelScope.launch {
+        screenModelScope.launch {
             val currentState = _uiState.value
             if (currentState is TrainerProfileOwnerUiState.Content) {
                 _uiState.value = currentState.copy(postsVisible = visible)
@@ -126,8 +128,8 @@ class TrainerProfileOwnerViewModel(
     }
 
     private fun emitEffect(effect: TrainerProfileOwnerEffect) {
-        viewModelScope.launch {
-            _effect.emit(effect)
+        screenModelScope.launch {
+            _effect.emitOrNull(effect)
         }
     }
 }

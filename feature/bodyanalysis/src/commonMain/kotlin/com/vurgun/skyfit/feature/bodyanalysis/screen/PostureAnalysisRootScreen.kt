@@ -29,6 +29,10 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.unit.dp
+import cafe.adriel.voyager.core.screen.Screen
+import cafe.adriel.voyager.koin.koinScreenModel
+import cafe.adriel.voyager.navigator.LocalNavigator
+import cafe.adriel.voyager.navigator.currentOrThrow
 import com.vurgun.skyfit.core.ui.components.button.PrimaryIconButton
 import com.vurgun.skyfit.core.ui.components.button.SecondaryFlatIconButton
 import com.vurgun.skyfit.core.ui.components.button.SecondaryIconButton
@@ -36,7 +40,6 @@ import com.vurgun.skyfit.core.ui.components.image.SkyFitPickImageWrapper
 import com.vurgun.skyfit.core.ui.components.special.SkyFitMobileFillScaffold
 import com.vurgun.skyfit.core.ui.styling.SkyFitColor
 import org.jetbrains.compose.resources.painterResource
-import org.koin.compose.viewmodel.koinViewModel
 import skyfit.core.ui.generated.resources.Res
 import skyfit.core.ui.generated.resources.body_analysis_grid
 import skyfit.core.ui.generated.resources.ic_camera
@@ -49,11 +52,25 @@ import skyfit.core.ui.generated.resources.ic_visibility_hide
 import skyfit.core.ui.generated.resources.ic_visibility_show
 import skyfit.core.ui.generated.resources.posture_guide_view_front
 
-@Composable
-fun PostureAnalysisRootScreen(
-    onExit: () -> Unit
-) {
-    val viewModel: PostureAnalysisViewModel = koinViewModel()
+class PostureAnalysisScreen: Screen {
+
+    @Composable
+    override fun Content() {
+        val navigator = LocalNavigator.currentOrThrow
+        val viewModel = koinScreenModel<PostureAnalysisViewModel>()
+
+        PostureAnalysisRootScreen(
+            onExit = { navigator.pop() },
+            viewModel =viewModel
+        )
+    }
+}
+
+    @Composable
+private fun PostureAnalysisRootScreen(
+    onExit: () -> Unit,
+    viewModel: PostureAnalysisViewModel
+    ) {
     val uiState by viewModel.uiState.collectAsState()
     var showExitDialog by remember { mutableStateOf(false) }
     var showResultDialog by remember { mutableStateOf(false) }

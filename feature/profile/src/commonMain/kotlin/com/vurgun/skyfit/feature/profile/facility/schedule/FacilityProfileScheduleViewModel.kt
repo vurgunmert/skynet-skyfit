@@ -1,15 +1,15 @@
 package com.vurgun.skyfit.feature.profile.facility.schedule
 
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
+import cafe.adriel.voyager.core.model.ScreenModel
+import cafe.adriel.voyager.core.model.screenModelScope
+import com.vurgun.skyfit.core.data.domain.model.FacilityProfile
+import com.vurgun.skyfit.core.data.domain.repository.ProfileRepository
+import com.vurgun.skyfit.core.data.utility.SingleSharedFlow
 import com.vurgun.skyfit.core.data.utility.now
 import com.vurgun.skyfit.data.courses.domain.repository.CourseRepository
 import com.vurgun.skyfit.data.courses.mapper.LessonSessionItemViewDataMapper
 import com.vurgun.skyfit.data.courses.model.LessonSessionItemViewData
-import com.vurgun.skyfit.core.data.domain.model.FacilityProfile
-import com.vurgun.skyfit.core.data.domain.repository.ProfileRepository
 import kotlinx.coroutines.async
-import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -39,7 +39,7 @@ class FacilityProfileScheduleViewModel(
     private val profileRepository: ProfileRepository,
     private val courseRepository: CourseRepository,
     private val lessonMapper: LessonSessionItemViewDataMapper
-) : ViewModel() {
+) : ScreenModel {
 
     private val _uiState = MutableStateFlow<FacilityProfileScheduleUiState>(FacilityProfileScheduleUiState.Loading)
     val uiState: StateFlow<FacilityProfileScheduleUiState> = _uiState
@@ -47,7 +47,7 @@ class FacilityProfileScheduleViewModel(
     private val _lessons = MutableStateFlow<List<LessonSessionItemViewData>>(emptyList())
     val lessons: StateFlow<List<LessonSessionItemViewData>> = _lessons
 
-    private val _effect = MutableSharedFlow<FacilityProfileScheduleEffect>()
+    private val _effect = SingleSharedFlow<FacilityProfileScheduleEffect>()
     val effect: SharedFlow<FacilityProfileScheduleEffect> = _effect
 
     private val _isBookingEnabled = MutableStateFlow(false)
@@ -73,7 +73,7 @@ class FacilityProfileScheduleViewModel(
     fun loadData(facilityId: Int) {
         currentFacilityId = facilityId
 
-        viewModelScope.launch {
+        screenModelScope.launch {
             _uiState.value = FacilityProfileScheduleUiState.Loading
 
             val profileDeferred = async { profileRepository.getFacilityProfile(facilityId).getOrThrow() }
@@ -105,7 +105,7 @@ class FacilityProfileScheduleViewModel(
     private fun bookAppointment() {
         val selectedLesson = _lessons.value.firstOrNull { it.selected } ?: return
 
-        viewModelScope.launch {
+        screenModelScope.launch {
             try {
                 val response = courseRepository.bookAppointment(lessonId = selectedLesson.lessonId).getOrThrow()
 
@@ -129,7 +129,7 @@ class FacilityProfileScheduleViewModel(
         endDate: LocalDate?
     ) {
         val id = currentFacilityId ?: return
-        viewModelScope.launch {
+        screenModelScope.launch {
             val currentState = _uiState.value
             if (currentState is FacilityProfileScheduleUiState.Content) {
                 try {
@@ -152,7 +152,7 @@ class FacilityProfileScheduleViewModel(
     }
 
     private fun emitEffect(effect: FacilityProfileScheduleEffect) {
-        viewModelScope.launch {
+        screenModelScope.launch {
             _effect.emit(effect)
         }
     }

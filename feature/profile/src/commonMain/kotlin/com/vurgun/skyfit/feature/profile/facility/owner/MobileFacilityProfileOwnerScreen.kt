@@ -22,6 +22,7 @@ import androidx.compose.material.Icon
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -31,29 +32,22 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.vurgun.skyfit.data.courses.model.LessonSessionItemViewData
+import cafe.adriel.voyager.core.screen.Screen
+import cafe.adriel.voyager.koin.koinScreenModel
+import cafe.adriel.voyager.navigator.LocalNavigator
+import cafe.adriel.voyager.navigator.currentOrThrow
 import com.vurgun.skyfit.core.data.domain.model.FacilityProfile
-import com.vurgun.skyfit.feature.calendar.component.weekly.CalendarWeekDaySelector
-import com.vurgun.skyfit.feature.calendar.component.weekly.CalendarWeekDaySelectorState
-import com.vurgun.skyfit.feature.calendar.component.weekly.CalendarWeekDaySelectorViewModel
-import com.vurgun.skyfit.feature.profile.components.MobileProfileActionsRow
-import com.vurgun.skyfit.feature.profile.components.MobileProfileBackgroundImage
-import com.vurgun.skyfit.feature.profile.components.PhotoGalleryEmptyStackCard
-import com.vurgun.skyfit.feature.profile.components.PhotoGalleryStackCard
-import com.vurgun.skyfit.feature.profile.components.VerticalProfileStatisticItem
-import com.vurgun.skyfit.feature.profile.components.VerticalTrainerProfileCardsRow
-import com.vurgun.skyfit.feature.profile.components.viewdata.PhotoGalleryStackViewData
-import com.vurgun.skyfit.feature.profile.components.viewdata.TrainerProfileCardItemViewData
-import com.vurgun.skyfit.feature.social.components.SocialPostCard
-import com.vurgun.skyfit.feature.social.components.SocialQuickPostInputCard
+import com.vurgun.skyfit.core.data.domain.model.FacilityTrainerProfile
+import com.vurgun.skyfit.core.navigation.SharedScreen
+import com.vurgun.skyfit.core.navigation.findRootNavigator
+import com.vurgun.skyfit.core.navigation.push
 import com.vurgun.skyfit.core.ui.components.button.SkyFitPrimaryCircularBackButton
 import com.vurgun.skyfit.core.ui.components.button.SkyFitSecondaryIconButton
 import com.vurgun.skyfit.core.ui.components.divider.VerticalDivider
 import com.vurgun.skyfit.core.ui.components.event.AvailableActivityCalendarEventItem
 import com.vurgun.skyfit.core.ui.components.event.LessonSessionColumn
 import com.vurgun.skyfit.core.ui.components.event.NoLessonOnSelectedDaysEventItem
-import com.vurgun.skyfit.core.ui.components.loader.FullScreenLoader
+import com.vurgun.skyfit.core.ui.components.loader.FullScreenLoaderContent
 import com.vurgun.skyfit.core.ui.components.special.ButtonSize
 import com.vurgun.skyfit.core.ui.components.special.ButtonState
 import com.vurgun.skyfit.core.ui.components.special.ButtonVariant
@@ -64,9 +58,22 @@ import com.vurgun.skyfit.core.ui.screen.ErrorScreen
 import com.vurgun.skyfit.core.ui.styling.SkyFitAsset
 import com.vurgun.skyfit.core.ui.styling.SkyFitColor
 import com.vurgun.skyfit.core.ui.styling.SkyFitTypography
+import com.vurgun.skyfit.core.ui.utils.CollectEffect
+import com.vurgun.skyfit.data.courses.model.LessonSessionItemViewData
+import com.vurgun.skyfit.feature.calendar.component.weekly.CalendarWeekDaySelector
+import com.vurgun.skyfit.feature.calendar.component.weekly.CalendarWeekDaySelectorController
+import com.vurgun.skyfit.feature.calendar.component.weekly.CalendarWeekDaySelectorState
+import com.vurgun.skyfit.feature.profile.components.MobileProfileActionsRow
+import com.vurgun.skyfit.feature.profile.components.MobileProfileBackgroundImage
+import com.vurgun.skyfit.feature.profile.components.PhotoGalleryEmptyStackCard
+import com.vurgun.skyfit.feature.profile.components.PhotoGalleryStackCard
+import com.vurgun.skyfit.feature.profile.components.VerticalProfileStatisticItem
+import com.vurgun.skyfit.feature.profile.components.VerticalTrainerProfileCardsRow
+import com.vurgun.skyfit.feature.profile.components.viewdata.PhotoGalleryStackViewData
+import com.vurgun.skyfit.feature.social.components.SocialPostCard
+import com.vurgun.skyfit.feature.social.components.SocialQuickPostInputCard
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
-import org.koin.compose.viewmodel.koinViewModel
 import skyfit.core.ui.generated.resources.Res
 import skyfit.core.ui.generated.resources.add_trainer_action
 import skyfit.core.ui.generated.resources.appointment_book_action
@@ -81,36 +88,56 @@ import skyfit.core.ui.generated.resources.show_all_action
 import skyfit.core.ui.generated.resources.trainer_label
 import skyfit.core.ui.generated.resources.unfollow_action
 
-@Composable
-fun MobileFacilityProfileOwnerScreen(
-    goToBack: () -> Unit,
-    goToLessonListing: () -> Unit,
-    goToSettings: () -> Unit,
-    goToCreatePost: () -> Unit,
-    goToTrainers: () -> Unit,
-    goToPhotoGallery: () -> Unit,
-    viewModel: FacilityProfileOwnerViewModel = koinViewModel()
-) {
-    val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+class FacilityProfileOwnerScreen : Screen {
 
-    LaunchedEffect(Unit) {
-        viewModel.effect.collect { effect ->
+    @Composable
+    override fun Content() {
+        val appNavigator = LocalNavigator.currentOrThrow.findRootNavigator()
+        val dashboardNavigator = LocalNavigator.currentOrThrow
+        val viewModel = koinScreenModel<FacilityProfileOwnerViewModel>()
+
+        CollectEffect(viewModel.effect) { effect ->
             when (effect) {
-                FacilityProfileOwnerEffect.NavigateBack -> goToBack()
-                FacilityProfileOwnerEffect.NavigateToCreatePost -> goToCreatePost()
-                FacilityProfileOwnerEffect.NavigateToGallery -> goToPhotoGallery()
-                FacilityProfileOwnerEffect.NavigateToLessonListing -> goToLessonListing()
-                FacilityProfileOwnerEffect.NavigateToSettings -> goToSettings()
-                FacilityProfileOwnerEffect.NavigateToTrainers -> goToTrainers()
+                FacilityProfileOwnerEffect.NavigateBack -> {
+                    dashboardNavigator.pop()
+                }
+
+                FacilityProfileOwnerEffect.NavigateToCreatePost -> {
+                    appNavigator.push(SharedScreen.CreatePost)
+                }
+
+                FacilityProfileOwnerEffect.NavigateToGallery -> {}
+                FacilityProfileOwnerEffect.NavigateToLessonListing -> {
+                    appNavigator.push(SharedScreen.FacilityManageLessons)
+                }
+
+                FacilityProfileOwnerEffect.NavigateToSettings -> {
+                    appNavigator.push(SharedScreen.Settings)
+                }
+
+                FacilityProfileOwnerEffect.NavigateToTrainers -> {
+                    appNavigator.push(SharedScreen.Settings)
+                }
             }
         }
+
+        MobileFacilityProfileOwnerScreen(viewModel = viewModel)
     }
+}
+
+@Composable
+fun MobileFacilityProfileOwnerScreen(
+    viewModel: FacilityProfileOwnerViewModel
+) {
+    val uiState by viewModel.uiState.collectAsState()
 
     when (uiState) {
-        is FacilityProfileOwnerUiState.Loading -> FullScreenLoader()
+        is FacilityProfileOwnerUiState.Loading -> FullScreenLoaderContent()
         is FacilityProfileOwnerUiState.Error -> {
             val message = (uiState as FacilityProfileOwnerUiState.Error).message
-            ErrorScreen(message = message, onBack = goToBack)
+            ErrorScreen(
+                message = message,
+                onConfirm = { viewModel.onAction(FacilityProfileOwnerAction.NavigateBack) })
         }
 
         is FacilityProfileOwnerUiState.Content -> {
@@ -224,7 +251,7 @@ internal object FacilityProfileComponent {
     //region Trainers
     @Composable
     private fun MobileFacilityProfileTrainersRow(
-        trainers: List<TrainerProfileCardItemViewData>,
+        trainers: List<FacilityTrainerProfile>,
         onClick: () -> Unit
     ) {
         Column(modifier = Modifier.fillMaxWidth()) {
@@ -233,13 +260,17 @@ internal object FacilityProfileComponent {
                 style = SkyFitTypography.bodyLargeSemibold,
                 modifier = Modifier.padding(horizontal = 12.dp, vertical = 16.dp)
             )
-            VerticalTrainerProfileCardsRow(trainers, contentPaddingStart = 12.dp)
+            VerticalTrainerProfileCardsRow(
+                trainers = trainers,
+                onClick = onClick,
+                contentPaddingStart = 12.dp
+            )
         }
     }
 
     @Composable
     fun MobileFacilityProfileOwner_Trainers(
-        trainers: List<TrainerProfileCardItemViewData>,
+        trainers: List<FacilityTrainerProfile>,
         goToVisitTrainerProfile: () -> Unit,
     ) {
         if (trainers.isEmpty()) {
@@ -250,18 +281,6 @@ internal object FacilityProfileComponent {
                 onClick = goToVisitTrainerProfile
             )
         }
-    }
-
-    @Composable
-    fun MobileFacilityProfileVisitor_Trainers(
-        trainers: List<TrainerProfileCardItemViewData>,
-        goToVisitTrainerProfile: () -> Unit,
-    ) {
-        if (trainers.isEmpty()) return
-        MobileFacilityProfileTrainersRow(
-            trainers = trainers,
-            onClick = goToVisitTrainerProfile
-        )
     }
 
     @Composable
@@ -313,7 +332,7 @@ internal object FacilityProfileComponent {
     @Composable
     fun MobileFacilityProfileVisitor_Lessons(
         calendarUiState: CalendarWeekDaySelectorState,
-        calendarViewModel: CalendarWeekDaySelectorViewModel,
+        calendarViewModel: CalendarWeekDaySelectorController,
         lessons: List<LessonSessionItemViewData>,
         goToVisitCalendar: () -> Unit,
         modifier: Modifier = Modifier,

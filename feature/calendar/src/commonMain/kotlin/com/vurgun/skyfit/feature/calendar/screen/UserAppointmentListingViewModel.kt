@@ -1,12 +1,12 @@
 package com.vurgun.skyfit.feature.calendar.screen
 
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
+import cafe.adriel.voyager.core.model.ScreenModel
+import cafe.adriel.voyager.core.model.screenModelScope
 import com.vurgun.skyfit.core.data.domain.model.UserDetail
+import com.vurgun.skyfit.core.data.domain.repository.UserManager
 import com.vurgun.skyfit.core.data.utility.emitIn
 import com.vurgun.skyfit.data.courses.domain.model.Appointment
 import com.vurgun.skyfit.data.courses.domain.repository.CourseRepository
-import com.vurgun.skyfit.core.data.domain.repository.UserManager
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharedFlow
@@ -35,7 +35,7 @@ sealed interface UserAppointmentListingEffect {
 class UserAppointmentListingViewModel(
     private val userManager: UserManager,
     private val courseRepository: CourseRepository
-) : ViewModel() {
+) : ScreenModel {
 
     private val _effect = MutableSharedFlow<UserAppointmentListingEffect>()
     val effect: SharedFlow<UserAppointmentListingEffect> = _effect
@@ -60,7 +60,7 @@ class UserAppointmentListingViewModel(
             2 -> allAppointments.filter { it.status in listOf(6, 7) } // Attendance history
             else -> allAppointments
         }
-    }.stateIn(viewModelScope, SharingStarted.Lazily, emptyList())
+    }.stateIn(screenModelScope, SharingStarted.Lazily, emptyList())
 
     val tabTitles: StateFlow<List<String>> = appointments.map { allAppointments ->
         listOf(
@@ -68,25 +68,25 @@ class UserAppointmentListingViewModel(
             "İptal (${allAppointments.count { it.status in listOf(3, 4, 5) }})",
             "Devamsızlık (${allAppointments.count { it.status in listOf(6, 7) }})"
         )
-    }.stateIn(viewModelScope, SharingStarted.Lazily, listOf("Aktif (0)", "İptal (0)", "Devamsızlık (0)"))
+    }.stateIn(screenModelScope, SharingStarted.Lazily, listOf("Aktif (0)", "İptal (0)", "Devamsızlık (0)"))
 
     fun onAction(action: UserAppointmentListingAction) {
         when (action) {
             UserAppointmentListingAction.NavigateToBack ->
-                _effect.emitIn(viewModelScope, UserAppointmentListingEffect.NavigateToBack)
+                _effect.emitIn(screenModelScope, UserAppointmentListingEffect.NavigateToBack)
 
             UserAppointmentListingAction.ShowFilter ->
-                _effect.emitIn(viewModelScope, UserAppointmentListingEffect.ShowFilter)
+                _effect.emitIn(screenModelScope, UserAppointmentListingEffect.ShowFilter)
 
             is UserAppointmentListingAction.CancelAppointment -> cancelAppointment(action.appointment)
             is UserAppointmentListingAction.ChangeTab -> updateActiveTab(action.index)
             is UserAppointmentListingAction.NavigateToDetail ->
-                _effect.emitIn(viewModelScope, UserAppointmentListingEffect.NavigateToDetail(action.lpId))
+                _effect.emitIn(screenModelScope, UserAppointmentListingEffect.NavigateToDetail(action.lpId))
         }
     }
 
     fun refreshData() {
-        viewModelScope.launch {
+        screenModelScope.launch {
             try {
                 _appointments.value = courseRepository.getAppointmentsByUser(user.normalUserId).getOrThrow()
             } catch (e: Exception) {
@@ -100,12 +100,12 @@ class UserAppointmentListingViewModel(
     }
 
     fun cancelAppointment(appointment: Appointment) {
-        viewModelScope.launch {
+        screenModelScope.launch {
             try {
                 courseRepository.cancelAppointment(appointment.lessonId, appointment.lpId).getOrThrow()
                 refreshData()
             } catch (e: Exception) {
-                _effect.emitIn(viewModelScope, UserAppointmentListingEffect.ShowCancelError(e.message ?: "Randevu iptal hatasi"))
+                _effect.emitIn(screenModelScope, UserAppointmentListingEffect.ShowCancelError(e.message ?: "Randevu iptal hatasi"))
             }
         }
     }

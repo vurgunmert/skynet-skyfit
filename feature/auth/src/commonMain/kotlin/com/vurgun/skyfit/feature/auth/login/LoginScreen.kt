@@ -27,13 +27,19 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.unit.dp
+import cafe.adriel.voyager.core.registry.ScreenRegistry
+import cafe.adriel.voyager.core.registry.rememberScreen
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.koin.koinScreenModel
 import cafe.adriel.voyager.navigator.LocalNavigator
+import cafe.adriel.voyager.navigator.Navigator
 import cafe.adriel.voyager.navigator.currentOrThrow
+import cafe.adriel.voyager.transitions.SlideTransition
 import com.vurgun.skyfit.core.navigation.SharedScreen
-import com.vurgun.skyfit.core.navigation.replaceAllWith
-import com.vurgun.skyfit.core.navigation.replaceWith
+import com.vurgun.skyfit.core.navigation.findRootNavigator
+import com.vurgun.skyfit.core.navigation.push
+import com.vurgun.skyfit.core.navigation.replace
+import com.vurgun.skyfit.core.navigation.replaceAll
 import com.vurgun.skyfit.core.ui.components.button.PrimaryLargeButton
 import com.vurgun.skyfit.core.ui.components.special.SideBySideLayout
 import com.vurgun.skyfit.core.ui.components.special.SkyFitMobileScaffold
@@ -49,10 +55,9 @@ import com.vurgun.skyfit.core.ui.utils.KeyboardState
 import com.vurgun.skyfit.core.ui.utils.LocalWindowSize
 import com.vurgun.skyfit.core.ui.utils.WindowSize
 import com.vurgun.skyfit.core.ui.utils.keyboardAsState
+import com.vurgun.skyfit.feature.auth.AuthFlow
+import com.vurgun.skyfit.feature.auth.authScreenFlowModule
 import com.vurgun.skyfit.feature.auth.component.LoginWelcomeGroup
-import com.vurgun.skyfit.feature.auth.forgotpassword.ForgotPasswordScreen
-import com.vurgun.skyfit.feature.auth.legal.PrivacyPolicyScreen
-import com.vurgun.skyfit.feature.auth.legal.TermsAndConditionsScreen
 import kotlinx.coroutines.flow.collectLatest
 import org.jetbrains.compose.resources.stringResource
 import skyfit.core.ui.generated.resources.Res
@@ -62,33 +67,52 @@ import skyfit.core.ui.generated.resources.auth_login_password_action
 import skyfit.core.ui.generated.resources.auth_password_input_hint
 import skyfit.core.ui.generated.resources.user_phone_number_label
 
+class AuthFlowScreen : Screen {
+
+    @Composable
+    override fun Content() {
+
+        ScreenRegistry {
+            authScreenFlowModule()
+        }
+
+        val login = rememberScreen(AuthFlow.Login)
+        Navigator(login) { navigator ->
+            SlideTransition(navigator)
+        }
+    }
+}
+
+
 class LoginScreen : Screen {
 
     @Composable
     override fun Content() {
         val windowSize = LocalWindowSize.current
-        val appNavigator = LocalNavigator.currentOrThrow
+        val navigator = LocalNavigator.currentOrThrow
+        val appNavigator = LocalNavigator.currentOrThrow.findRootNavigator()
+
         val viewModel = koinScreenModel<LoginViewModel>()
 
         LoginContent(
             isExpanded = windowSize == WindowSize.EXPANDED,
             goToOtp = {
-                appNavigator.push(LoginVerifyOTPScreen())
+                navigator.push(AuthFlow.LoginVerifyOTP)
             },
             goToOnboarding = {
-                appNavigator.replaceWith(SharedScreen.Onboarding)
+                navigator.replace(SharedScreen.Onboarding)
             },
             goToDashboard = {
-                appNavigator.replaceAllWith(SharedScreen.Dashboard)
+                appNavigator.replaceAll(SharedScreen.Dashboard)
             },
             goToForgotPassword = {
-                appNavigator.push(ForgotPasswordScreen())
+                navigator.push(AuthFlow.ForgotPassword)
             },
             goToPrivacyPolicy = {
-                appNavigator.push(PrivacyPolicyScreen())
+                navigator.push(AuthFlow.PrivacyPolicy)
             },
             goToTermsAndConditions = {
-                appNavigator.push(TermsAndConditionsScreen())
+                navigator.push(AuthFlow.TermsAndConditions)
             },
             viewModel = viewModel
         )
