@@ -25,10 +25,10 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.unit.dp
-import com.vurgun.skyfit.core.ui.components.text.CardFieldIconText
 import com.vurgun.skyfit.core.data.domain.model.FitnessTagType
 import com.vurgun.skyfit.core.ui.components.button.LargePrimaryIconButton
 import com.vurgun.skyfit.core.ui.components.image.NetworkImage
+import com.vurgun.skyfit.core.ui.components.text.CardFieldIconText
 import com.vurgun.skyfit.core.ui.styling.SkyFitColor
 import com.vurgun.skyfit.core.ui.styling.SkyFitTypography
 import org.jetbrains.compose.resources.painterResource
@@ -163,9 +163,9 @@ fun UserAccountSettingsProfileCard(
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.spacedBy(8.dp)
             ) {
-                CardFieldIconText(Res.drawable.ic_info_circle, "127 cm", Modifier.weight(1f))
-                CardFieldIconText(Res.drawable.ic_info_circle, "63 kg", Modifier.weight(1f))
-                CardFieldIconText(Res.drawable.ic_info_circle, "Ecto", Modifier.weight(1f))
+                CardFieldIconText(Res.drawable.ic_info_circle, height, Modifier.weight(1f))
+                CardFieldIconText(Res.drawable.ic_info_circle, weight, Modifier.weight(1f))
+                CardFieldIconText(Res.drawable.ic_info_circle, bodyType, Modifier.weight(1f))
             }
         }
     )

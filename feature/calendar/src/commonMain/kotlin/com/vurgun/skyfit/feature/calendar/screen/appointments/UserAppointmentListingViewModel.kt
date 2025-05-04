@@ -1,13 +1,13 @@
-package com.vurgun.skyfit.feature.calendar.screen
+package com.vurgun.skyfit.feature.calendar.screen.appointments
 
 import cafe.adriel.voyager.core.model.ScreenModel
 import cafe.adriel.voyager.core.model.screenModelScope
 import com.vurgun.skyfit.core.data.domain.model.UserDetail
 import com.vurgun.skyfit.core.data.domain.repository.UserManager
+import com.vurgun.skyfit.core.data.utility.SingleSharedFlow
 import com.vurgun.skyfit.core.data.utility.emitIn
 import com.vurgun.skyfit.data.courses.domain.model.Appointment
 import com.vurgun.skyfit.data.courses.domain.repository.CourseRepository
-import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.SharingStarted
@@ -37,7 +37,7 @@ class UserAppointmentListingViewModel(
     private val courseRepository: CourseRepository
 ) : ScreenModel {
 
-    private val _effect = MutableSharedFlow<UserAppointmentListingEffect>()
+    private val _effect = SingleSharedFlow<UserAppointmentListingEffect>()
     val effect: SharedFlow<UserAppointmentListingEffect> = _effect
 
     private val user: UserDetail
@@ -95,11 +95,11 @@ class UserAppointmentListingViewModel(
         }
     }
 
-    fun updateActiveTab(index: Int) {
+    private fun updateActiveTab(index: Int) {
         _activeTab.value = index
     }
 
-    fun cancelAppointment(appointment: Appointment) {
+    private fun cancelAppointment(appointment: Appointment) {
         screenModelScope.launch {
             try {
                 courseRepository.cancelAppointment(appointment.lessonId, appointment.lpId).getOrThrow()

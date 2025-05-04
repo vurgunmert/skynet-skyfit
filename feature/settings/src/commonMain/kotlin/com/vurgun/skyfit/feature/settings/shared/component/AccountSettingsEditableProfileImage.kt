@@ -47,8 +47,9 @@ fun AccountSettingsEditableProfileImage(
     url: String?,
     modifier: Modifier = Modifier,
     onClickDelete: () -> Unit,
-    onImageChanged: (ImageBitmap) -> Unit
+    onImageChanged: (ByteArray?, ImageBitmap?) -> Unit
 ) {
+    var selectedImageByteArray by remember { mutableStateOf<ByteArray?>(null) }
     var selectedImage by remember { mutableStateOf<ImageBitmap?>(null) }
 
     Column(
@@ -78,11 +79,14 @@ fun AccountSettingsEditableProfileImage(
                         modifier = Modifier.fillMaxSize()
                     )
                     ProfileImageActions(
-                        onPick = { selectedImage = it },
+                        onPick = { byteArray, bitmap ->
+                            selectedImageByteArray = byteArray
+                            selectedImage = bitmap
+                        },
                         onDelete = onClickDelete,
                         isAdd = false
                     )
-                    onImageChanged(selectedImage!!)
+                    onImageChanged(selectedImageByteArray, selectedImage)
                 }
 
                 url.isNullOrEmpty() -> {
@@ -92,7 +96,10 @@ fun AccountSettingsEditableProfileImage(
                         modifier = Modifier.size(100.dp)
                     )
                     ProfileImageActions(
-                        onPick = { selectedImage = it },
+                        onPick = { byteArray, bitmap ->
+                            selectedImageByteArray = byteArray
+                            selectedImage = bitmap
+                        },
                         onDelete = onClickDelete,
                         isAdd = true
                     )
@@ -104,7 +111,10 @@ fun AccountSettingsEditableProfileImage(
                         modifier = Modifier.fillMaxSize(),
                     )
                     ProfileImageActions(
-                        onPick = { selectedImage = it },
+                        onPick = { byteArray, bitmap ->
+                            selectedImageByteArray = byteArray
+                            selectedImage = bitmap
+                        },
                         onDelete = onClickDelete,
                         isAdd = false
                     )
@@ -116,7 +126,7 @@ fun AccountSettingsEditableProfileImage(
 
 @Composable
 private fun ProfileImageActions(
-    onPick: (ImageBitmap) -> Unit,
+    onPick: (ByteArray, ImageBitmap) -> Unit,
     onDelete: () -> Unit,
     isAdd: Boolean
 ) {
@@ -124,8 +134,8 @@ private fun ProfileImageActions(
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        SkyFitPickImageWrapper(onImagesSelected = { _, bitmap ->
-            onPick(bitmap)
+        SkyFitPickImageWrapper(onImagesSelected = { byteArray, bitmap ->
+            onPick(byteArray, bitmap)
         }) {
             PillText(
                 text = stringResource(

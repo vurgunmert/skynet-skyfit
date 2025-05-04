@@ -13,3 +13,43 @@ data class GetFacilityTrainerProfilesRequest(val gymId: Int)
 
 @Serializable
 data class GetFacilityProfileRequest(val gymId: Int)
+
+@Serializable
+data class UpdateUserProfileRequest(
+    val userId: Int,
+    val profilePhoto: ByteArray?,
+    val backgroundImage: ByteArray?,
+    val username: String,
+    val name: String,
+    val surname: String,
+    val height: Int,
+    val weight: Int,
+    val bodyTypeId: Int
+)
+
+@Serializable
+data class UpdateTrainerProfileRequest(
+    val trainerId: Int,
+    val profilePhoto: ByteArray?,
+    val backgroundImage: ByteArray?,
+    val username: String,
+    val name: String,
+    val surname: String,
+    val bio: String,
+    val profileTags: List<Int>
+)
+
+@Serializable
+data class UpdateFacilityProfileRequest(
+    val gymId: Int,
+    val backgroundImage: ByteArray,
+    val gymName: String,
+    val gymAdress: String,
+    val bio: String,
+    val profileTags: List<Int>
+)
+
+@Serializable
+data class DeleteProfileTagRequest(
+    val tagId: Int
+)

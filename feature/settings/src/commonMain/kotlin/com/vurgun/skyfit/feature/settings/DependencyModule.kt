@@ -15,6 +15,7 @@ import com.vurgun.skyfit.feature.settings.shared.account.ManageAccountsViewModel
 import com.vurgun.skyfit.feature.settings.shared.changepassword.ChangePasswordViewModel
 import com.vurgun.skyfit.feature.settings.trainer.profile.TrainerSettingsEditProfileViewModel
 import com.vurgun.skyfit.feature.settings.trainer.profile.TrainerSettingsManageProfileViewModel
+import com.vurgun.skyfit.feature.settings.user.profile.UserSettingsEditProfileViewModel
 import com.vurgun.skyfit.feature.settings.user.profile.UserSettingsManageProfileViewModel
 import org.koin.dsl.module
 
@@ -25,7 +26,8 @@ val featureSettingsModule = module {
     factory { ChangePasswordViewModel() }
     factory { ManageAccountsViewModel(get()) }
 
-    factory { UserSettingsManageProfileViewModel(get()) }
+    factory { UserSettingsManageProfileViewModel(get(), get()) }
+    factory { UserSettingsEditProfileViewModel(get(), get()) }
 
     factory { TrainerSettingsManageProfileViewModel(get(), get()) }
     factory { TrainerSettingsEditProfileViewModel(get(), get()) }

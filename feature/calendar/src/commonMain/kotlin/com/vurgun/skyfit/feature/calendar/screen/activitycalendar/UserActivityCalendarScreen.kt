@@ -1,4 +1,4 @@
-package com.vurgun.skyfit.feature.calendar.screen
+package com.vurgun.skyfit.feature.calendar.screen.activitycalendar
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -20,8 +20,11 @@ import com.vurgun.skyfit.core.ui.components.special.SkyFitScreenHeader
 import com.vurgun.skyfit.feature.calendar.component.LegacySkyFitCalendarGridComponent
 import com.vurgun.skyfit.feature.calendar.component.MobileUserActivityHourlyCalendarComponent
 import kotlinx.datetime.LocalDate
+import org.jetbrains.compose.resources.stringResource
+import skyfit.core.ui.generated.resources.Res
+import skyfit.core.ui.generated.resources.calendar_label
 
-class UserActivityCalendarScreen: Screen {
+class UserActivityCalendarScreen : Screen {
 
     @Composable
     override fun Content() {
@@ -39,11 +42,16 @@ private fun MobileUserActivityCalendarScreen(goToBack: () -> Unit) {
 
     SkyFitMobileScaffold(
         topBar = {
-            SkyFitScreenHeader("Takvim", onClickBack = goToBack)
+            SkyFitScreenHeader(
+                title = stringResource(Res.string.calendar_label),
+                onClickBack = goToBack
+            )
         }
     ) {
         Column(
-            modifier = Modifier.fillMaxSize().verticalScroll(rememberScrollState()),
+            modifier = Modifier
+                .fillMaxSize()
+                .verticalScroll(rememberScrollState()),
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {
             MobileUserActivityGridCalendarComponent()

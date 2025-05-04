@@ -24,10 +24,14 @@ import cafe.adriel.voyager.koin.koinScreenModel
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
 import com.vurgun.skyfit.core.ui.components.button.PrimaryLargeButton
+import com.vurgun.skyfit.core.ui.components.dialog.rememberErrorDialogState
+import com.vurgun.skyfit.core.ui.components.loader.FullScreenLoaderContent
 import com.vurgun.skyfit.core.ui.components.menu.SettingsMenuItem
 import com.vurgun.skyfit.core.ui.components.special.MobileSettingsDeleteAccountBottomSheet
 import com.vurgun.skyfit.core.ui.components.special.SkyFitMobileScaffold
 import com.vurgun.skyfit.core.ui.components.special.SkyFitScreenHeader
+import com.vurgun.skyfit.core.ui.screen.ErrorScreen
+import com.vurgun.skyfit.core.ui.utils.CollectEffect
 import com.vurgun.skyfit.feature.settings.shared.account.ManageAccountsScreen
 import com.vurgun.skyfit.feature.settings.shared.changepassword.ChangePasswordScreen
 import com.vurgun.skyfit.feature.settings.shared.component.UserAccountSettingsProfileCard
@@ -48,44 +52,75 @@ class UserSettingsManageProfileScreen : Screen {
 
     @Composable
     override fun Content() {
-        val settingsNavigator = LocalNavigator.currentOrThrow
+        val navigator = LocalNavigator.currentOrThrow
         val viewModel = koinScreenModel<UserSettingsManageProfileViewModel>()
+        val uiState by viewModel.uiState.collectAsState()
+        val deleteProfileErrorDialogState = rememberErrorDialogState()
 
-        MobileUserSettingsAccountScreen(
-            goToBack = { settingsNavigator.pop() },
-            goToEditProfile = { settingsNavigator.push(UserSettingsEditProfileScreen()) },
-            goToChangePassword = { settingsNavigator.push(ChangePasswordScreen()) },
-            goToManageAccounts = { settingsNavigator.push(ManageAccountsScreen()) },
-            viewModel = viewModel
-        )
+        CollectEffect(viewModel.effect) { effect ->
+            when (effect) {
+                UserManageProfileEffect.NavigateToAccounts -> {
+                    navigator.push(ManageAccountsScreen())
+                }
+
+                UserManageProfileEffect.NavigateToBack -> {
+                    navigator.pop()
+                }
+
+                UserManageProfileEffect.NavigateToChangePassword -> {
+                    navigator.push(ChangePasswordScreen())
+                }
+
+                UserManageProfileEffect.NavigateToEdit -> {
+                    navigator.push(UserSettingsEditProfileScreen())
+                }
+
+                is UserManageProfileEffect.ShowDeleteProfileError -> deleteProfileErrorDialogState.show(effect.message)
+            }
+        }
+
+        LaunchedEffect(Unit) {
+            viewModel.loadData()
+        }
+
+        when (uiState) {
+            UserManageProfileUiState.Loading -> FullScreenLoaderContent()
+            is UserManageProfileUiState.Error -> {
+                val message = (uiState as UserManageProfileUiState.Error).message
+                ErrorScreen(message = message, onConfirm = { viewModel.onAction(UserManageProfileAction.NavigateToBack) })
+            }
+
+            is UserManageProfileUiState.Content -> {
+                val content = (uiState as UserManageProfileUiState.Content)
+
+                MobileUserSettingsAccountScreen(
+                    content = content,
+                    onAction = viewModel::onAction
+                )
+            }
+        }
     }
 }
 
 @Composable
 private fun MobileUserSettingsAccountScreen(
-    goToBack: () -> Unit,
-    goToEditProfile: () -> Unit,
-    goToChangePassword: () -> Unit,
-    goToManageAccounts: () -> Unit,
-    viewModel: UserSettingsManageProfileViewModel
+    content: UserManageProfileUiState.Content,
+    onAction: (UserManageProfileAction) -> Unit
 ) {
-    val account by viewModel.accountState.collectAsState()
-
+    val account = content.form
     var showDeleteConfirm by remember { mutableStateOf(false) }
-
-    LaunchedEffect(Unit) {
-        viewModel.loadData()
-    }
 
     SkyFitMobileScaffold(
         topBar = {
-            SkyFitScreenHeader(stringResource(Res.string.settings_account_label), onClickBack = goToBack)
+            SkyFitScreenHeader(
+                stringResource(Res.string.settings_account_label),
+                onClickBack = { onAction(UserManageProfileAction.NavigateToBack) })
         },
         bottomBar = {
             if (showDeleteConfirm) {
                 MobileSettingsDeleteAccountBottomSheet(
                     onCancelClicked = { showDeleteConfirm = false },
-                    onDeleteClicked = viewModel::deleteAccount
+                    onDeleteClicked = { onAction(UserManageProfileAction.DeleteProfile) }
                 )
             }
         }
@@ -103,29 +138,29 @@ private fun MobileUserSettingsAccountScreen(
                 foregroundImageUrl = account.profileImageUrl,
                 name = account.firstName,
                 social = account.userName,
-                height = account.height.toString(),
-                weight = account.weight.toString(),
+                height = "${account.height} ${account.heightUnit.label}",
+                weight = "${account.weight} ${account.weightUnit.shortLabel}",
                 bodyType = account.bodyType.turkishShort,
-                onClick = goToEditProfile,
+                onClick = { onAction(UserManageProfileAction.NavigateToEdit) },
             )
 
             SettingsMenuItem(
                 iconRes = Res.drawable.ic_lock,
                 text = stringResource(Res.string.settings_change_my_password_label),
-                onClick = goToChangePassword
+                onClick = { onAction(UserManageProfileAction.NavigateToChangePassword) }
             )
 
-            if (viewModel.hasMultipleAccounts) {
+            if (content.hasMultipleProfiles) {
                 SettingsMenuItem(
                     iconRes = Res.drawable.ic_profile,
                     text = stringResource(Res.string.accounts_title),
-                    onClick = goToManageAccounts
+                    onClick = { onAction(UserManageProfileAction.NavigateToAccounts) }
                 )
             } else {
                 SettingsMenuItem(
                     iconRes = Res.drawable.ic_plus,
                     text = stringResource(Res.string.add_account_action),
-                    onClick = goToManageAccounts
+                    onClick = { onAction(UserManageProfileAction.NavigateToAccounts) }
                 )
             }
 

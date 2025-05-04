@@ -71,6 +71,7 @@ kotlin {
             api(libs.bundles.voyager)
 
             implementation(libs.coil.compose)
+            implementation(libs.coil.network)
         }
 
         androidMain.dependencies {

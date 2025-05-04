@@ -1,4 +1,4 @@
-package com.vurgun.skyfit.feature.calendar.screen
+package com.vurgun.skyfit.feature.calendar.screen.activitycalendar
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -40,6 +40,7 @@ import com.vurgun.skyfit.feature.calendar.component.SkyFitDailyActivityItem
 import com.vurgun.skyfit.feature.calendar.component.SkyFitFourDigitClockComponent
 import org.jetbrains.compose.resources.painterResource
 import skyfit.core.ui.generated.resources.Res
+import skyfit.core.ui.generated.resources.ic_clock
 import skyfit.core.ui.generated.resources.logo_skyfit
 
 private enum class MobileUserActivityCalendarAddStep {
@@ -65,7 +66,7 @@ private fun MobileUserActivityCalendarAddActivityScreen(
     goToBack: () -> Unit
 ) {
 
-    val step = MobileUserActivityCalendarAddStep.CONFIRM
+    val step = MobileUserActivityCalendarAddStep.ADDING
     var activityName by remember { mutableStateOf("Yuruyus") }
 
     SkyFitMobileScaffold(
@@ -168,7 +169,7 @@ private fun MobileUserActivityCalendarAddActivityScreenAddTimeActionComponent(on
             variant = ButtonVariant.Primary,
             size = ButtonSize.Large,
             state = ButtonState.Rest,
-            leftIconPainter = painterResource(Res.drawable.logo_skyfit)
+            leftIconPainter = painterResource(Res.drawable.ic_clock)
         )
     }
 }

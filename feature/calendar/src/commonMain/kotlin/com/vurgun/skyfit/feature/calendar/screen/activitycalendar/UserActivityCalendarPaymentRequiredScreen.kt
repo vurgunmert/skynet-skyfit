@@ -1,4 +1,4 @@
-package com.vurgun.skyfit.feature.calendar.screen
+package com.vurgun.skyfit.feature.calendar.screen.activitycalendar
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -31,13 +31,13 @@ import org.jetbrains.compose.resources.painterResource
 import skyfit.core.ui.generated.resources.Res
 import skyfit.core.ui.generated.resources.logo_skyfit
 
-class UserActivityCalendarAddedScreen : Screen {
+class UserActivityCalendarPaymentRequiredScreen : Screen {
 
     @Composable
     override fun Content() {
         val navigator = LocalNavigator.currentOrThrow
 
-        MobileUserActivityCalendarAddedScreen(
+        MobileUserActivityCalendarPaymentRequiredScreen(
             goToBack = { navigator.pop() }
         )
     }
@@ -45,31 +45,31 @@ class UserActivityCalendarAddedScreen : Screen {
 }
 
 @Composable
-private fun MobileUserActivityCalendarAddedScreen(
+private fun MobileUserActivityCalendarPaymentRequiredScreen(
     goToBack: () -> Unit
 ) {
-
     SkyFitScaffold {
         Column(
             modifier = Modifier.fillMaxSize().verticalScroll(rememberScrollState()),
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {
-            Spacer(Modifier.height(60.dp))
-            MobileUserActivityCalendarAddedComponent(
-                onClickCalendar = {},
-                onClickDashboard = {}
+            Spacer(Modifier.height(32.dp))
+            MobileUserActivityCalendarPaymentRequiredComponent(
+                onClickContinue = {},
+                onClickCancel = {}
             )
         }
     }
 }
 
+
 @Composable
-private fun MobileUserActivityCalendarAddedComponent(
-    onClickCalendar: () -> Unit,
-    onClickDashboard: () -> Unit
+private fun MobileUserActivityCalendarPaymentRequiredComponent(
+    onClickContinue: () -> Unit,
+    onClickCancel: () -> Unit
 ) {
     val appointmentCardItem = AppointmentCardViewData(
-        iconId = 2,
+        iconId = 3,
         title = "Shoulders and Abs",
         date = "30/11/2024",
         hours = "08:00 - 09:00",
@@ -94,7 +94,7 @@ private fun MobileUserActivityCalendarAddedComponent(
         Spacer(Modifier.height(24.dp))
 
         Text(
-            "Etkinlik Eklendi",
+            "Etkinliği eklemek için ödeme yapmalısnız",
             style = SkyFitTypography.heading4,
             textAlign = TextAlign.Center
         )
@@ -106,17 +106,16 @@ private fun MobileUserActivityCalendarAddedComponent(
         Spacer(Modifier.height(24.dp))
 
         SkyFitButtonComponent(
-            modifier = Modifier.fillMaxWidth(), text = "Takvim",
-            onClick = onClickCalendar,
+            modifier = Modifier.fillMaxWidth(), text = "Odeme Yap",
+            onClick = onClickContinue,
             variant = ButtonVariant.Primary,
             size = ButtonSize.Large,
-            state = ButtonState.Rest,
-            rightIconPainter = painterResource(Res.drawable.logo_skyfit)
+            state = ButtonState.Rest
         )
         Spacer(Modifier.height(14.dp))
         SkyFitButtonComponent(
-            modifier = Modifier.fillMaxWidth(), text = "Ana Sayfa",
-            onClick = onClickDashboard,
+            modifier = Modifier.fillMaxWidth(), text = "İptal",
+            onClick = onClickCancel,
             variant = ButtonVariant.Secondary,
             size = ButtonSize.Large,
             state = ButtonState.Rest

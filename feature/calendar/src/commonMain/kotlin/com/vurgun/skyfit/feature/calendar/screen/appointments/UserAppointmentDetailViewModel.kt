@@ -1,4 +1,4 @@
-package com.vurgun.skyfit.feature.calendar.screen
+package com.vurgun.skyfit.feature.calendar.screen.appointments
 
 import cafe.adriel.voyager.core.model.ScreenModel
 import cafe.adriel.voyager.core.model.screenModelScope

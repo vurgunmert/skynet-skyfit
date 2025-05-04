@@ -91,6 +91,7 @@
     <string name="posts_label">Paylaşımlar</string>
     <string name="specialities_label">Uzmanlık Alanları</string>
     <string name="videos_label">Videolar</string>
+    <string name="calendar_label">Takvim</string>
 
     <!-- 🔷 Lesson Related -->
     <string name="lesson_status_completed">Tamamlandı</string>

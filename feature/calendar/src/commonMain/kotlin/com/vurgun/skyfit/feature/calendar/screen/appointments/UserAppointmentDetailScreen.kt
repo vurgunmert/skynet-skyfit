@@ -1,4 +1,4 @@
-package com.vurgun.skyfit.feature.calendar.screen
+package com.vurgun.skyfit.feature.calendar.screen.appointments
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border

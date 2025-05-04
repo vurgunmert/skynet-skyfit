@@ -98,7 +98,7 @@ class TrainerSettingsEditProfileViewModel(
                 _uiState.value = TrainerEditProfileUiState.Content(formState)
 
             } catch (e: Exception) {
-                _uiState.value = TrainerEditProfileUiState.Error(e.message ?: "Profile getirme hatasi")
+                _uiState.value = TrainerEditProfileUiState.Error(e.message ?: "Profil getirme hatasi")
             }
         }
     }

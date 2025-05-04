@@ -69,7 +69,8 @@ val dataCoreModule = module {
         ProfileRepositoryImpl(
             apiService = get(),
             dispatchers = get(),
-            tokenManager = get()
+            tokenManager = get(),
+            remoteImageDataSource = get()
         )
     }
 

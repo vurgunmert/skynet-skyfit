@@ -27,11 +27,16 @@ import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.koin.koinScreenModel
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
+import com.vurgun.skyfit.core.ui.components.dialog.ErrorDialog
+import com.vurgun.skyfit.core.ui.components.dialog.rememberErrorDialogState
+import com.vurgun.skyfit.core.ui.components.loader.FullScreenLoaderContent
 import com.vurgun.skyfit.core.ui.components.picker.HeightAndUnitPickerDialog
 import com.vurgun.skyfit.core.ui.components.picker.WeightAndUnitPickerDialog
 import com.vurgun.skyfit.core.ui.components.special.SkyFitMobileScaffold
 import com.vurgun.skyfit.core.ui.components.text.SingleLineInputText
 import com.vurgun.skyfit.core.ui.components.text.TitledMediumRegularText
+import com.vurgun.skyfit.core.ui.screen.ErrorScreen
+import com.vurgun.skyfit.core.ui.utils.CollectEffect
 import com.vurgun.skyfit.feature.settings.shared.component.AccountSettingsEditableProfileImage
 import com.vurgun.skyfit.feature.settings.shared.component.SettingsEditProfileHeader
 import com.vurgun.skyfit.feature.settings.shared.component.SettingsSelectBodyTypePopupMenu
@@ -54,22 +59,56 @@ class UserSettingsEditProfileScreen : Screen {
     @Composable
     override fun Content() {
         val navigator = LocalNavigator.currentOrThrow
-        val viewModel = koinScreenModel<UserSettingsManageProfileViewModel>()
+        val viewModel = koinScreenModel<UserSettingsEditProfileViewModel>()
+        val uiState by viewModel.uiState.collectAsState()
+        val saveError = rememberErrorDialogState()
 
-        MobileUserSettingsEditProfileScreen(
-            goToBack = { navigator.pop() },
-            viewModel = viewModel
-        )
+        CollectEffect(viewModel.effect) { effect ->
+            when (effect) {
+                UserEditProfileEffect.NavigateToBack -> navigator.pop()
+                is UserEditProfileEffect.ShowSaveError -> saveError.show(effect.message)
+            }
+        }
+
+        LaunchedEffect(Unit) {
+            viewModel.loadData()
+        }
+
+        when (uiState) {
+            UserEditProfileUiState.Loading -> FullScreenLoaderContent()
+            is UserEditProfileUiState.Error -> {
+                val message = (uiState as UserEditProfileUiState.Error).message
+                ErrorScreen(
+                    message = message,
+                    onConfirm = { navigator.pop() }
+                )
+            }
+
+            is UserEditProfileUiState.Content -> {
+                val formState = (uiState as UserEditProfileUiState.Content).form
+
+                MobileUserSettingsEditProfileScreen(
+                    viewModel = viewModel,
+                    formState = formState
+                )
+            }
+        }
+
+        saveError.message?.let { message ->
+            ErrorDialog(
+                title = "PROFIL guncelleme hatasi",
+                message = message,
+                onDismiss = saveError::dismiss
+            )
+        }
     }
 }
 
 @Composable
 private fun MobileUserSettingsEditProfileScreen(
-    goToBack: () -> Unit,
-    viewModel: UserSettingsManageProfileViewModel
+    viewModel: UserSettingsEditProfileViewModel,
+    formState: UserEditProfileFormState
 ) {
-
-    val userAccountState by viewModel.accountState.collectAsState()
 
     var showWeightDialog by remember { mutableStateOf(false) }
     var showHeightDialog by remember { mutableStateOf(false) }
@@ -79,16 +118,12 @@ private fun MobileUserSettingsEditProfileScreen(
     val firstNameFocusRequester = remember { FocusRequester() }
     val lastNameFocusRequester = remember { FocusRequester() }
 
-    LaunchedEffect(Unit) {
-        viewModel.loadData()
-    }
-
     SkyFitMobileScaffold(
         topBar = {
             SettingsEditProfileHeader(
-                showSave = userAccountState.isUpdated,
-                onClickSave = viewModel::saveChanges,
-                onClickBack = goToBack
+                showSave = formState.isUpdated,
+                onClickSave = { viewModel.onAction(UserEditProfileAction.SaveChanges) },
+                onClickBack = { viewModel.onAction(UserEditProfileAction.NavigateToBack) }
             )
         }
     ) {
@@ -104,19 +139,25 @@ private fun MobileUserSettingsEditProfileScreen(
             Row {
                 AccountSettingsEditableProfileImage(
                     title = "Arkaplan Resmi",
-                    url = null,
+                    url = formState.backgroundImageUrl,
                     modifier = Modifier.weight(1f),
-                    onClickDelete = { },
-                    onImageChanged = {}
+                    onClickDelete = {
+                        viewModel.onAction(UserEditProfileAction.DeleteBackgroundImage)
+                    },
+                    onImageChanged = { bytes, imageBitmap ->
+                        viewModel.onAction(UserEditProfileAction.UpdateBackgroundImage(bytes))
+                    }
                 )
                 Spacer(Modifier.width(16.dp))
                 AccountSettingsEditableProfileImage(
                     title = "Profil Resmi",
-                    url = null,
+                    url = formState.profileImageUrl,
                     modifier = Modifier.weight(1f),
-                    onClickDelete = { },
-                    onImageChanged = {
-                        //TODO: Picked image should be stored
+                    onClickDelete = {
+                        viewModel.onAction(UserEditProfileAction.DeleteProfileImage)
+                    },
+                    onImageChanged = { bytes, imageBitmap ->
+                        viewModel.onAction(UserEditProfileAction.UpdateProfileImage(bytes))
                     }
                 )
             }
@@ -124,8 +165,8 @@ private fun MobileUserSettingsEditProfileScreen(
             SingleLineInputText(
                 title = stringResource(Res.string.settings_edit_profile_username_label),
                 hint = stringResource(Res.string.settings_edit_profile_username_hint),
-                value = userAccountState.userName,
-                onValueChange = { viewModel.updateUserName(it) },
+                value = formState.userName,
+                onValueChange = { viewModel.onAction(UserEditProfileAction.UpdateUserName(it)) },
                 rightIconRes = Res.drawable.ic_pencil,
                 focusRequester = userNameFocusRequester,
                 nextFocusRequester = firstNameFocusRequester
@@ -136,8 +177,8 @@ private fun MobileUserSettingsEditProfileScreen(
                     modifier = Modifier.weight(1f),
                     title = stringResource(Res.string.user_first_name_mandatory_label),
                     hint = stringResource(Res.string.user_first_name_hint),
-                    value = userAccountState.firstName,
-                    onValueChange = { viewModel.updateFirstName(it) },
+                    value = formState.firstName,
+                    onValueChange = { viewModel.onAction(UserEditProfileAction.UpdateFirstName(it)) },
                     rightIconRes = Res.drawable.ic_pencil,
                     focusRequester = firstNameFocusRequester,
                     nextFocusRequester = lastNameFocusRequester
@@ -147,8 +188,8 @@ private fun MobileUserSettingsEditProfileScreen(
                     modifier = Modifier.weight(1f),
                     title = stringResource(Res.string.user_last_name_mandatory_label),
                     hint = stringResource(Res.string.user_last_name_hint),
-                    value = userAccountState.lastName,
-                    onValueChange = { viewModel.updateLastName(it) },
+                    value = formState.lastName,
+                    onValueChange = { viewModel.onAction(UserEditProfileAction.UpdateLastName(it)) },
                     rightIconRes = Res.drawable.ic_pencil,
                     focusRequester = lastNameFocusRequester
                 )
@@ -156,22 +197,22 @@ private fun MobileUserSettingsEditProfileScreen(
 
             TitledMediumRegularText(
                 modifier = Modifier.fillMaxWidth().clickable { showHeightDialog = true },
-                title = stringResource(Res.string.settings_edit_profile_height_label, userAccountState.heightUnit.label),
-                value = userAccountState.height.toString(),
+                title = stringResource(Res.string.settings_edit_profile_height_label, formState.heightUnit.label),
+                value = formState.height.toString(),
                 rightIconRes = Res.drawable.ic_chevron_down
             )
 
             TitledMediumRegularText(
                 modifier = Modifier.fillMaxWidth().clickable { showWeightDialog = true },
-                title = stringResource(Res.string.settings_edit_profile_weight_label, userAccountState.weightUnit.shortLabel),
-                value = userAccountState.weight.toString(),
+                title = stringResource(Res.string.settings_edit_profile_weight_label, formState.weightUnit.shortLabel),
+                value = formState.weight.toString(),
                 rightIconRes = Res.drawable.ic_chevron_down
             )
 
             TitledMediumRegularText(
                 modifier = Modifier.fillMaxWidth().clickable { showBodyTypeDialog = true },
                 title = stringResource(Res.string.settings_edit_profile_body_type_label),
-                value = userAccountState.bodyType.turkishShort,
+                value = formState.bodyType.turkishShort,
                 rightIconRes = Res.drawable.ic_chevron_down
             )
             if (showBodyTypeDialog) {
@@ -180,19 +221,18 @@ private fun MobileUserSettingsEditProfileScreen(
                     modifier = Modifier.fillMaxWidth(),
                     isOpen = showBodyTypeDialog,
                     onDismiss = { showBodyTypeDialog = false },
-                    selectedBodyType = userAccountState.bodyType,
-                    onSelectionChanged = viewModel::updateBodyType
+                    selectedBodyType = formState.bodyType,
+                    onSelectionChanged = { viewModel.onAction(UserEditProfileAction.UpdateBodyType(it)) },
                 )
             }
         }
 
         if (showHeightDialog) {
             HeightAndUnitPickerDialog(
-                height = userAccountState.height,
-                heightUnit = userAccountState.heightUnit,
+                height = formState.height,
+                heightUnit = formState.heightUnit,
                 onConfirm = { height, unit ->
-                    viewModel.updateHeight(height)
-                    viewModel.updateHeightUnit(unit)
+                    viewModel.onAction(UserEditProfileAction.UpdateHeight(height))
                 },
                 onDismiss = { showHeightDialog = false }
             )
@@ -200,11 +240,10 @@ private fun MobileUserSettingsEditProfileScreen(
 
         if (showWeightDialog) {
             WeightAndUnitPickerDialog(
-                weight = userAccountState.weight,
-                weightUnit = userAccountState.weightUnit,
+                weight = formState.weight,
+                weightUnit = formState.weightUnit,
                 onConfirm = { weight, unit ->
-                    viewModel.updateWeight(weight)
-                    viewModel.updateWeightUnit(unit)
+                    viewModel.onAction(UserEditProfileAction.UpdateWeight(weight))
                 },
                 onDismiss = { showWeightDialog = false }
             )

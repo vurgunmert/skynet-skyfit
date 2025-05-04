@@ -29,6 +29,8 @@ sealed class SharedScreen : ScreenProvider {
     data object CommunityDetail: SharedScreen()
 
     // Calendar
+    data object UserActivityCalendar: SharedScreen()
+    data object UserActivityCalendarSearch: SharedScreen()
 
     // Appointments
     data object UserAppointmentListing : SharedScreen()

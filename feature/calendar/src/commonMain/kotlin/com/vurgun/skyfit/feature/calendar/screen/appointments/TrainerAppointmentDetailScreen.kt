@@ -1,4 +1,4 @@
-package com.vurgun.skyfit.feature.calendar.screen
+package com.vurgun.skyfit.feature.calendar.screen.appointments
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement

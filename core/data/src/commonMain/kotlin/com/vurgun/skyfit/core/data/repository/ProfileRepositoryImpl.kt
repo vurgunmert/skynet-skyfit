@@ -13,16 +13,19 @@ import com.vurgun.skyfit.core.data.model.GetFacilityProfileRequest
 import com.vurgun.skyfit.core.data.model.GetFacilityTrainerProfilesRequest
 import com.vurgun.skyfit.core.data.model.GetTrainerProfileRequest
 import com.vurgun.skyfit.core.data.model.GetUserProfileRequest
+import com.vurgun.skyfit.core.data.model.UpdateUserProfileRequest
 import com.vurgun.skyfit.core.data.service.ProfileApiService
 import com.vurgun.skyfit.core.data.storage.TokenManager
 import com.vurgun.skyfit.core.network.DispatcherProvider
+import com.vurgun.skyfit.core.network.RemoteImageDataSource
 import com.vurgun.skyfit.core.network.utils.ioResult
 import com.vurgun.skyfit.core.network.utils.mapOrThrow
 
 class ProfileRepositoryImpl(
     private val apiService: ProfileApiService,
     private val dispatchers: DispatcherProvider,
-    private val tokenManager: TokenManager
+    private val tokenManager: TokenManager,
+    private val remoteImageDataSource: RemoteImageDataSource
 ) : ProfileRepository {
 
     override suspend fun getUserProfile(normalUserId: Int): Result<UserProfile> = ioResult(dispatchers) {
@@ -47,5 +50,35 @@ class ProfileRepositoryImpl(
         val token = tokenManager.getTokenOrThrow()
         val request = GetFacilityProfileRequest(facilityId)
         apiService.getFacilityProfile(request, token).mapOrThrow { it.toDomainFacilityProfile() }
+    }
+
+    override suspend fun updateUserProfile(
+        normalUserId: Int,
+        username: String,
+        profileImageBytes: ByteArray?,
+        backgroundImageBytes: ByteArray?,
+        name: String,
+        surname: String,
+        height: Int,
+        weight: Int,
+        bodyTypeId: Int
+    ): Result<Unit> = ioResult(dispatchers) {
+        val token = tokenManager.getTokenOrThrow()
+        val request = UpdateUserProfileRequest(
+            userId = normalUserId,
+            profilePhoto = profileImageBytes,
+            backgroundImage = backgroundImageBytes,
+            username = username,
+            name = name,
+            surname = surname,
+            height = height,
+            weight = weight,
+            bodyTypeId = bodyTypeId
+        )
+        apiService.updateUserProfile(request, token).mapOrThrow { }
+    }
+
+    override suspend fun fetchImageBytes(url: String): ByteArray {
+        return remoteImageDataSource.getImageBytes(url)
     }
 }

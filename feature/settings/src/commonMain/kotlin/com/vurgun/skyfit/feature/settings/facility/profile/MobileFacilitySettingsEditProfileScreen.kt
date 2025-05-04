@@ -116,7 +116,7 @@ fun MobileFacilitySettingsEditProfileScreen(
                 url = null,
                 modifier = Modifier.fillMaxWidth(),
                 onClickDelete = { },
-                onImageChanged = { }
+                onImageChanged = { bytes, imageBitmap ->  }
             )
 
             SkyFitSelectToEnterMultilineInputComponent(

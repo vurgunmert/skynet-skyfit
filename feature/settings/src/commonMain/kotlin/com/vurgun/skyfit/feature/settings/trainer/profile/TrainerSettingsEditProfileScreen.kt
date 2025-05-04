@@ -124,7 +124,7 @@ fun MobileTrainerSettingsEditProfileScreen(
                     url = null,
                     modifier = Modifier.weight(1f),
                     onClickDelete = { },
-                    onImageChanged = {}
+                    onImageChanged = { bytes, imageBitmap ->  }
                 )
                 Spacer(Modifier.width(16.dp))
                 AccountSettingsEditableProfileImage(
@@ -132,9 +132,7 @@ fun MobileTrainerSettingsEditProfileScreen(
                     url = null,
                     modifier = Modifier.weight(1f),
                     onClickDelete = { },
-                    onImageChanged = {
-                        //TODO: Picked image should be stored
-                    }
+                    onImageChanged = { bytes, imageBitmap ->  }
                 )
             }
 

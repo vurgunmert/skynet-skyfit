@@ -64,7 +64,7 @@ private fun AppScreen() {
             coursesScreenModule()
         }
 
-        val splashScreen = rememberScreen(SharedScreen.Splash)
+        val splashScreen = rememberScreen(SharedScreen.Splash) //TODO SPLASH
 
         Navigator(splashScreen) { navigator ->
             CrossfadeTransition(navigator)

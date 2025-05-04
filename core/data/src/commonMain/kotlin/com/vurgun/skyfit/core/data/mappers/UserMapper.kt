@@ -88,7 +88,7 @@ object UserDetailMapper {
         return this.map {
             UserAccountType(
                 typeId = it.usertypeId,
-                profilePhoto = it.profilePhoto, //TODO: probably this one is also path
+                profilePhoto = serverImageFromPath(it.profilePhoto),
                 typeName = it.typeName,
                 fullName = it.name
             )
