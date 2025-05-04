@@ -5,7 +5,7 @@ data class FacilityProfile(
     val gymId: Int,
     val username: String,
     val profileImageUrl: String?,
-    val backgroundImageUrl: String,
+    val backgroundImageUrl: String?,
     val facilityName: String,
     val gymAddress: String,
     val bio: String,

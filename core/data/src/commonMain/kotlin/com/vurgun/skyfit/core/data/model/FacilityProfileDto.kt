@@ -8,7 +8,7 @@ data class FacilityProfileDto(
     val gymId: Int,
     val username: String,
     val profilePhoto: String?,
-    val backgroundImage: String,
+    val backgroundImage: String?,
     val gymName: String,
     val gymAdress: String,
     val bio: String,

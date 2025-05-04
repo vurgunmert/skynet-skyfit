@@ -69,10 +69,10 @@ class FacilitySettingsEditProfileScreen : Screen {
             }
 
             is FacilityEditProfileUiState.Content -> {
-                val formState = (uiState as FacilityEditProfileUiState.Content).form
+                val content = (uiState as FacilityEditProfileUiState.Content)
                 MobileFacilitySettingsEditProfileScreen(
-                    viewModel = viewModel,
-                    formState = formState
+                    content = content,
+                    onAction = viewModel::onAction
                 )
             }
         }
@@ -89,17 +89,18 @@ class FacilitySettingsEditProfileScreen : Screen {
 
 @Composable
 fun MobileFacilitySettingsEditProfileScreen(
-    viewModel: FacilityEditProfileViewModel,
-    formState: FacilityEditProfileFormState
+    content: FacilityEditProfileUiState.Content,
+    onAction: (FacilityEditProfileAction) -> Unit,
 ) {
+    val formState = content.form
     val scrollState = rememberScrollState()
 
     SkyFitMobileScaffold(
         topBar = {
             SettingsEditProfileHeader(
                 showSave = formState.isUpdated,
-                onClickSave = { viewModel.onAction(FacilityEditProfileAction.SaveChanges) },
-                onClickBack = { viewModel.onAction(FacilityEditProfileAction.NavigateToBack) }
+                onClickSave = { onAction(FacilityEditProfileAction.SaveChanges) },
+                onClickBack = { onAction(FacilityEditProfileAction.NavigateToBack) }
             )
         }
     ) {
@@ -115,15 +116,19 @@ fun MobileFacilitySettingsEditProfileScreen(
                 title = stringResource(Res.string.background_image_label),
                 url = null,
                 modifier = Modifier.fillMaxWidth(),
-                onClickDelete = { },
-                onImageChanged = { bytes, imageBitmap ->  }
+                onClickDelete = {
+                    onAction(FacilityEditProfileAction.DeleteBackgroundImage)
+                },
+                onImageChanged = { bytes, _ ->
+                    onAction(FacilityEditProfileAction.UpdateBackgroundImage(bytes))
+                }
             )
 
             SkyFitSelectToEnterMultilineInputComponent(
                 title = stringResource(Res.string.mandatory_workplace_name_label),
                 hint = stringResource(Res.string.workplace_name_hint),
                 value = formState.name,
-                onValueChange = { viewModel.onAction(FacilityEditProfileAction.UpdateName(it)) },
+                onValueChange = { onAction(FacilityEditProfileAction.UpdateName(it)) },
                 rightIconRes = Res.drawable.ic_pencil
             )
 
@@ -131,7 +136,7 @@ fun MobileFacilitySettingsEditProfileScreen(
                 title = stringResource(Res.string.settings_edit_profile_biography_label),
                 hint = stringResource(Res.string.settings_edit_profile_biography_hint),
                 value = formState.biography,
-                onValueChange = { viewModel.onAction(FacilityEditProfileAction.UpdateBiography(it)) },
+                onValueChange = { onAction(FacilityEditProfileAction.UpdateBiography(it)) },
                 rightIconRes = Res.drawable.ic_pencil
             )
 
@@ -139,13 +144,13 @@ fun MobileFacilitySettingsEditProfileScreen(
                 title = stringResource(Res.string.settings_edit_profile_address_label),
                 hint = stringResource(Res.string.settings_edit_profile_address_hint),
                 value = formState.location,
-                onValueChange = { viewModel.onAction(FacilityEditProfileAction.UpdateLocation(it)) },
+                onValueChange = { onAction(FacilityEditProfileAction.UpdateLocation(it)) },
                 rightIconRes = Res.drawable.ic_pencil
             )
 
             FitnessTagPickerComponent(
                 selectedTags = formState.profileTags,
-                onTagsSelected = { viewModel.onAction(FacilityEditProfileAction.UpdateTags(it)) },
+                onTagsSelected = { onAction(FacilityEditProfileAction.UpdateTags(it)) },
             )
 
             Spacer(Modifier.height(124.dp))

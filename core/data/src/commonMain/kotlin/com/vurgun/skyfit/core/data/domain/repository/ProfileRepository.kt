@@ -36,7 +36,7 @@ interface ProfileRepository {
         profileTags: List<Int>
     ): Result<Unit>
 
-    suspend fun updateTrainerProfile(
+    suspend fun updateFacilityProfile(
         gymId: Int,
         backgroundImageBytes: ByteArray?,
         name: String,

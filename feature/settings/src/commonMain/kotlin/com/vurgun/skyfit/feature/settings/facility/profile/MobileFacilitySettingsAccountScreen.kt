@@ -130,9 +130,9 @@ private fun MobileFacilitySettingsAccountScreen(
 
             FacilityAccountSettingsProfileCard(
                 backgroundImageUrl = accountState.backgroundImageUrl,
-                name = accountState.name.toString(),
-                address = accountState.location.toString(),
-                note = accountState.biography.toString(),
+                name = accountState.name,
+                address = accountState.location,
+                note = accountState.biography,
                 tags = accountState.profileTags,
                 onClick = { viewModel.onAction(FacilityManageProfileAction.NavigateToEditProfile) }
             )

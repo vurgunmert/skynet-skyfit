@@ -30,7 +30,7 @@ object ProfileMapper {
             firstName = name,
             lastName = surname,
             username = username,
-            memberGymId = 10, //gymId
+            memberGymId = gymId,
             memberGymJoinedAt = gymJoinDate?.parseServerToDateOnly()
         )
     }

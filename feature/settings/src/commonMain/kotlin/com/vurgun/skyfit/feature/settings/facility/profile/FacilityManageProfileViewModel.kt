@@ -20,10 +20,10 @@ sealed interface FacilityManageProfileUiState {
 }
 
 data class FacilityManageAccountFormState(
-    val name: String? = null,
-    val biography: String? = null,
+    val name: String,
+    val biography: String,
     val backgroundImageUrl: String? = null,
-    val location: String? = null,
+    val location: String,
     val profileTags: List<FitnessTagType> = emptyList(),
     val isUpdated: Boolean = false
 )

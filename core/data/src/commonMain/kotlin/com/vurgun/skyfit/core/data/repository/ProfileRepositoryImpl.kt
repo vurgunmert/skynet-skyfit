@@ -104,7 +104,7 @@ class ProfileRepositoryImpl(
         apiService.updateTrainerProfile(request, token).mapOrThrow { }
     }
 
-    override suspend fun updateTrainerProfile(
+    override suspend fun updateFacilityProfile(
         gymId: Int,
         backgroundImageBytes: ByteArray?,
         name: String,
