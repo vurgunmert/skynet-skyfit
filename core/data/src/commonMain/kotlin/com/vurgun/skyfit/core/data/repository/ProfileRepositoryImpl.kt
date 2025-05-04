@@ -13,6 +13,8 @@ import com.vurgun.skyfit.core.data.model.GetFacilityProfileRequest
 import com.vurgun.skyfit.core.data.model.GetFacilityTrainerProfilesRequest
 import com.vurgun.skyfit.core.data.model.GetTrainerProfileRequest
 import com.vurgun.skyfit.core.data.model.GetUserProfileRequest
+import com.vurgun.skyfit.core.data.model.UpdateFacilityProfileRequest
+import com.vurgun.skyfit.core.data.model.UpdateTrainerProfileRequest
 import com.vurgun.skyfit.core.data.model.UpdateUserProfileRequest
 import com.vurgun.skyfit.core.data.service.ProfileApiService
 import com.vurgun.skyfit.core.data.storage.TokenManager
@@ -76,6 +78,50 @@ class ProfileRepositoryImpl(
             bodyTypeId = bodyTypeId
         )
         apiService.updateUserProfile(request, token).mapOrThrow { }
+    }
+
+    override suspend fun updateTrainerProfile(
+        trainerId: Int,
+        username: String,
+        profileImageBytes: ByteArray?,
+        backgroundImageBytes: ByteArray?,
+        firstName: String,
+        lastName: String,
+        bio: String,
+        profileTags: List<Int>
+    ): Result<Unit> = ioResult(dispatchers) {
+        val token = tokenManager.getTokenOrThrow()
+        val request = UpdateTrainerProfileRequest(
+            trainerId = trainerId,
+            profilePhoto = profileImageBytes,
+            backgroundImage = backgroundImageBytes,
+            username = username,
+            name = firstName,
+            surname = lastName,
+            bio = bio,
+            profileTags = profileTags
+        )
+        apiService.updateTrainerProfile(request, token).mapOrThrow { }
+    }
+
+    override suspend fun updateTrainerProfile(
+        gymId: Int,
+        backgroundImageBytes: ByteArray?,
+        name: String,
+        address: String,
+        bio: String,
+        profileTags: List<Int>
+    ): Result<Unit> = ioResult(dispatchers) {
+        val token = tokenManager.getTokenOrThrow()
+        val request = UpdateFacilityProfileRequest(
+            gymId = gymId,
+            backgroundImage = backgroundImageBytes,
+            name = name,
+            bio = bio,
+            address = address,
+            profileTags = profileTags
+        )
+        apiService.updateFacilityProfile(request, token).mapOrThrow { }
     }
 
     override suspend fun fetchImageBytes(url: String): ByteArray {

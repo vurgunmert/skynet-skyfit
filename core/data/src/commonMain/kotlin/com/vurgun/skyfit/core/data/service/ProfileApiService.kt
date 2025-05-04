@@ -90,7 +90,7 @@ class ProfileApiService(private val apiClient: ApiClient) {
             method = HttpMethod.Put
             bearerAuth(token)
             url(Endpoint.UPDATE_TRAINER_PROFILE)
-            setBody(request)
+            setBody(buildTrainerProfileFormData(request))
         }
     }
 
@@ -99,7 +99,7 @@ class ProfileApiService(private val apiClient: ApiClient) {
             method = HttpMethod.Put
             bearerAuth(token)
             url(Endpoint.UPDATE_FACILITY_PROFILE)
-            setBody(request)
+            setBody(buildFacilityProfileFormData(request))
         }
     }
 
@@ -110,6 +110,59 @@ class ProfileApiService(private val apiClient: ApiClient) {
             url(Endpoint.DELETE_A_TAG)
             setBody(request)
         }
+    }
+
+    private fun buildFacilityProfileFormData(request: UpdateFacilityProfileRequest): MultiPartFormDataContent {
+        return MultiPartFormDataContent(
+            formData {
+                append("gymName", request.name)
+                append("gymAdress", request.address)
+                append("bio", request.bio)
+                append("profileTags", request.profileTags.toString())
+
+                request.backgroundImage?.let { bytes ->
+                    append(
+                        "backgroundImage", bytes,
+                        headersOf(
+                            HttpHeaders.ContentType to listOf("image/png"),
+                            HttpHeaders.ContentDisposition to listOf("filename=${request.gymId}-background-image.png")
+                        )
+                    )
+                }
+            }
+        )
+    }
+
+    private fun buildTrainerProfileFormData(request: UpdateTrainerProfileRequest): MultiPartFormDataContent {
+        return MultiPartFormDataContent(
+            formData {
+                append("username", request.username)
+                append("name", request.name)
+                append("surname", request.surname)
+                append("bio", request.bio)
+                append("profileTags", request.profileTags.toString())
+
+                request.profilePhoto?.let { bytes ->
+                    append(
+                        "profilePhoto", bytes,
+                        headersOf(
+                            HttpHeaders.ContentType to listOf("image/png"),
+                            HttpHeaders.ContentDisposition to listOf("filename=${request.trainerId}-profile-image.png")
+                        )
+                    )
+                }
+
+                request.backgroundImage?.let { bytes ->
+                    append(
+                        "backgroundImage", bytes,
+                        headersOf(
+                            HttpHeaders.ContentType to listOf("image/png"),
+                            HttpHeaders.ContentDisposition to listOf("filename=${request.trainerId}-background-image.png")
+                        )
+                    )
+                }
+            }
+        )
     }
 
     private fun buildUserProfileFormData(request: UpdateUserProfileRequest): MultiPartFormDataContent {

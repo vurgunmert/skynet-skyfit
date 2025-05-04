@@ -7,7 +7,9 @@ import com.vurgun.skyfit.core.data.domain.model.TrainerDetail
 import com.vurgun.skyfit.core.data.domain.repository.ProfileRepository
 import com.vurgun.skyfit.core.data.domain.repository.UserManager
 import com.vurgun.skyfit.core.data.utility.SingleSharedFlow
+import com.vurgun.skyfit.core.data.utility.emitIn
 import com.vurgun.skyfit.core.data.utility.emitOrNull
+import kotlinx.coroutines.async
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -20,26 +22,60 @@ sealed interface TrainerEditProfileUiState {
 }
 
 data class TrainerEditProfileFormState(
-    val userName: String? = null,
-    val firstName: String? = null,
-    val lastName: String? = null,
-    val biography: String? = null,
+    val userName: String,
+    val firstName: String,
+    val lastName: String,
+    val biography: String,
     val profileImageUrl: String? = null,
+    val profileImageBytes: ByteArray? = null,
     val backgroundImageUrl: String? = null,
+    val backgroundImageBytes: ByteArray? = null,
     val profileTags: List<FitnessTagType> = emptyList(),
     val isUpdated: Boolean = false
-)
+) {
+    override fun equals(other: Any?): Boolean {
+        if (this === other) return true
+        if (other !is TrainerEditProfileFormState) return false
+
+        return userName == other.userName &&
+                firstName == other.firstName &&
+                lastName == other.lastName &&
+                biography == other.biography &&
+                profileImageUrl == other.profileImageUrl &&
+                profileImageBytes contentEquals other.profileImageBytes &&
+                backgroundImageUrl == other.backgroundImageUrl &&
+                backgroundImageBytes contentEquals other.backgroundImageBytes &&
+                profileTags == other.profileTags &&
+                isUpdated == other.isUpdated
+    }
+
+    override fun hashCode(): Int {
+        var result = userName.hashCode()
+        result = 31 * result + firstName.hashCode()
+        result = 31 * result + lastName.hashCode()
+        result = 31 * result + biography.hashCode()
+        result = 31 * result + (profileImageUrl?.hashCode() ?: 0)
+        result = 31 * result + (profileImageBytes?.contentHashCode() ?: 0)
+        result = 31 * result + (backgroundImageUrl?.hashCode() ?: 0)
+        result = 31 * result + (backgroundImageBytes?.contentHashCode() ?: 0)
+        result = 31 * result + profileTags.hashCode()
+        result = 31 * result + isUpdated.hashCode()
+        return result
+    }
+}
 
 sealed class TrainerEditProfileAction {
     data object NavigateToBack : TrainerEditProfileAction()
-    data class UpdateProfileImage(val value: String) : TrainerEditProfileAction()
-    data class UpdateBackgroundImage(val value: String) : TrainerEditProfileAction()
+    data object SaveChanges : TrainerEditProfileAction()
+    data class UpdateProfileImage(val value: ByteArray?) : TrainerEditProfileAction()
+    data class UpdateBackgroundImage(val value: ByteArray?) : TrainerEditProfileAction()
+    data object DeleteProfileImage : TrainerEditProfileAction()
+    data object DeleteBackgroundImage : TrainerEditProfileAction()
     data class UpdateUserName(val value: String) : TrainerEditProfileAction()
     data class UpdateFirstName(val value: String) : TrainerEditProfileAction()
     data class UpdateLastName(val value: String) : TrainerEditProfileAction()
     data class UpdateBiography(val value: String) : TrainerEditProfileAction()
     data class UpdateTags(val tags: List<FitnessTagType>) : TrainerEditProfileAction()
-    data object SaveChanges : TrainerEditProfileAction()
 }
 
 sealed class TrainerEditProfileEffect {
@@ -66,8 +102,14 @@ class TrainerSettingsEditProfileViewModel(
 
     fun onAction(action: TrainerEditProfileAction) {
         when (action) {
-            is TrainerEditProfileAction.UpdateProfileImage -> updateForm { copy(profileImageUrl = action.value) }
-            is TrainerEditProfileAction.UpdateBackgroundImage -> updateForm { copy(backgroundImageUrl = action.value) }
+            is TrainerEditProfileAction.UpdateProfileImage -> updateForm { copy(profileImageBytes = action.value) }
+            is TrainerEditProfileAction.DeleteProfileImage ->
+                updateForm { copy(profileImageBytes = null, profileImageUrl = null) }
+
+            is TrainerEditProfileAction.UpdateBackgroundImage -> updateForm { copy(backgroundImageBytes = action.value) }
+            is TrainerEditProfileAction.DeleteBackgroundImage ->
+                updateForm { copy(backgroundImageBytes = null, backgroundImageUrl = null) }
+
             is TrainerEditProfileAction.UpdateUserName -> updateForm { copy(userName = action.value) }
             is TrainerEditProfileAction.UpdateFirstName -> updateForm { copy(firstName = action.value) }
             is TrainerEditProfileAction.UpdateLastName -> updateForm { copy(lastName = action.value) }
@@ -83,14 +125,23 @@ class TrainerSettingsEditProfileViewModel(
             try {
                 val trainerProfile = profileRepository.getTrainerProfile(trainerUser.trainerId).getOrThrow()
 
+                val profileImageUrl = trainerProfile.profileImageUrl
+                val backgroundImageUrl = trainerProfile.backgroundImageUrl
+
+                // Load image bytes in parallel
+                val profileImageDeferred = profileImageUrl?.let { async { profileRepository.fetchImageBytes(it) } }
+                val backgroundImageDeferred = backgroundImageUrl?.let { async { profileRepository.fetchImageBytes(it) } }
+
                 val formState = TrainerEditProfileFormState(
                     userName = trainerProfile.username,
                     firstName = trainerProfile.firstName,
                     lastName = trainerProfile.lastName,
                     biography = trainerProfile.bio,
-                    profileImageUrl = trainerProfile.profileImageUrl,
-                    backgroundImageUrl = trainerProfile.backgroundImageUrl,
-                    profileTags = emptyList(), //TODO: TAGS
+                    profileImageUrl = profileImageUrl,
+                    profileImageBytes = profileImageDeferred?.await(),
+                    backgroundImageUrl = backgroundImageUrl,
+                    backgroundImageBytes = backgroundImageDeferred?.await(),
+                    profileTags = emptyList(), //TODO: WAITING TAGS in API
                     isUpdated = false
                 )
 
@@ -105,15 +156,37 @@ class TrainerSettingsEditProfileViewModel(
 
     private fun updateForm(update: TrainerEditProfileFormState.() -> TrainerEditProfileFormState) {
         val current = (_uiState.value as? TrainerEditProfileUiState.Content)?.form ?: return
-        val updated = update(current).copy(isUpdated = current != initialState)
+        val newForm = update(current)
+        val updated = newForm.copy(isUpdated = newForm != initialState)
         _uiState.value = TrainerEditProfileUiState.Content(updated)
     }
 
     private fun saveChanges() {
         val form = (_uiState.value as? TrainerEditProfileUiState.Content)?.form ?: return
-        initialState = form.copy(isUpdated = false)
-        _uiState.value = TrainerEditProfileUiState.Content(initialState!!)
-        emitEffect(TrainerEditProfileEffect.NavigateToBack)
+
+        screenModelScope.launch {
+            _uiState.value = TrainerEditProfileUiState.Loading
+
+            try {
+                profileRepository.updateTrainerProfile(
+                    trainerId = trainerUser.trainerId,
+                    username = form.userName,
+                    profileImageBytes = form.profileImageBytes,
+                    backgroundImageBytes = form.backgroundImageBytes,
+                    firstName = form.firstName,
+                    lastName = form.lastName,
+                    bio = form.biography,
+                    profileTags = form.profileTags.map { it.id }
+                )
+
+                initialState = form.copy(isUpdated = false)
+                _uiState.value = TrainerEditProfileUiState.Content(initialState!!)
+                _effect.emitIn(screenModelScope, TrainerEditProfileEffect.NavigateToBack)
+
+            } catch (e: Exception) {
+                _effect.emitIn(screenModelScope, TrainerEditProfileEffect.ShowSaveError(e.message ?: "Kaydetme hatasi"))
+            }
+        }
     }
 
     private fun emitEffect(effect: TrainerEditProfileEffect) {

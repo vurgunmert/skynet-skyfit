@@ -42,9 +42,9 @@ data class UpdateTrainerProfileRequest(
 @Serializable
 data class UpdateFacilityProfileRequest(
     val gymId: Int,
-    val backgroundImage: ByteArray,
-    val gymName: String,
-    val gymAdress: String,
+    val backgroundImage: ByteArray?,
+    val name: String,
+    val address: String,
     val bio: String,
     val profileTags: List<Int>
 )

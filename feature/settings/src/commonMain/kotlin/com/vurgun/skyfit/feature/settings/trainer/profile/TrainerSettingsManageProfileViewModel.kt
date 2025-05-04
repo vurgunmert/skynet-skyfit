@@ -16,19 +16,21 @@ import kotlinx.coroutines.launch
 sealed interface TrainerManageProfileUiState {
     data object Loading : TrainerManageProfileUiState
     data class Error(val message: String) : TrainerManageProfileUiState
-    data class Content(val form: TrainerProfileFormState) : TrainerManageProfileUiState
+    data class Content(
+        val form: TrainerManageProfileFormState,
+        val hasMultipleProfiles: Boolean
+    ) : TrainerManageProfileUiState
 }
 
-data class TrainerProfileFormState(
-    val userName: String? = null,
-    val firstName: String? = null,
-    val lastName: String? = null,
+data class TrainerManageProfileFormState(
+    val userName: String,
+    val firstName: String,
+    val lastName: String,
     val email: String? = null,
-    val biography: String? = null,
+    val biography: String,
     val profileImageUrl: String? = null,
     val backgroundImageUrl: String? = null,
-    val profileTags: List<FitnessTagType> = emptyList(),
-    val isUpdated: Boolean = false
+    val profileTags: List<FitnessTagType> = emptyList()
 )
 
 sealed class TrainerManageProfileAction {
@@ -62,10 +64,6 @@ class TrainerSettingsManageProfileViewModel(
         get() = userManager.user.value as? TrainerDetail
             ?: error("❌ User is not a Trainer")
 
-    val hasMultipleAccounts = userManager.accountTypes.value.size > 1
-
-    private var initialForm: TrainerProfileFormState? = null
-
     fun onAction(action: TrainerManageProfileAction) {
         when (action) {
             TrainerManageProfileAction.DeleteAccount -> deleteAccount()
@@ -81,7 +79,7 @@ class TrainerSettingsManageProfileViewModel(
             try {
                 val trainerProfile = profileRepository.getTrainerProfile(trainerUser.trainerId).getOrThrow()
 
-                val formState = TrainerProfileFormState(
+                val formState = TrainerManageProfileFormState(
                     userName = trainerProfile.username,
                     firstName = trainerProfile.firstName,
                     lastName = trainerProfile.lastName,
@@ -89,10 +87,11 @@ class TrainerSettingsManageProfileViewModel(
                     profileImageUrl = trainerProfile.profileImageUrl,
                     backgroundImageUrl = trainerProfile.backgroundImageUrl,
                     profileTags = emptyList(), //TODO: TAGS
-                    isUpdated = false
                 )
-                initialForm = formState
-                _uiState.value = TrainerManageProfileUiState.Content(formState)
+                _uiState.value = TrainerManageProfileUiState.Content(
+                    form = formState,
+                    hasMultipleProfiles = userManager.accountTypes.value.size > 1
+                )
             } catch (e: Exception) {
                 _uiState.value = TrainerManageProfileUiState.Error(e.message ?: "Profil getirme hatasi")
             }

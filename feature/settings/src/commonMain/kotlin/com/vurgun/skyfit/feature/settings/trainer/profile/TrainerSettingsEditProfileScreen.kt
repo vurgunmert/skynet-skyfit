@@ -60,7 +60,7 @@ class TrainerSettingsEditProfileScreen : Screen {
         val saveErrorDialog = rememberErrorDialogState()
 
         CollectEffect(viewModel.effect) { effect ->
-            when(effect) {
+            when (effect) {
                 TrainerEditProfileEffect.NavigateToBack -> navigator.pop()
                 is TrainerEditProfileEffect.ShowSaveError -> saveErrorDialog.show(effect.message)
             }
@@ -79,8 +79,8 @@ class TrainerSettingsEditProfileScreen : Screen {
             )
 
             is TrainerEditProfileUiState.Content -> {
-                val account = (uiState as TrainerEditProfileUiState.Content).form
-                MobileTrainerSettingsEditProfileScreen(viewModel, account)
+                val content = (uiState as TrainerEditProfileUiState.Content)
+                MobileTrainerSettingsEditProfileScreen(content, viewModel::onAction)
             }
         }
 
@@ -96,9 +96,10 @@ class TrainerSettingsEditProfileScreen : Screen {
 
 @Composable
 fun MobileTrainerSettingsEditProfileScreen(
-    viewModel: TrainerSettingsEditProfileViewModel,
-    account: TrainerEditProfileFormState
+    content: TrainerEditProfileUiState.Content,
+    onAction: (TrainerEditProfileAction) -> Unit
 ) {
+    val account = content.form
     val userNameFocusRequester = remember { FocusRequester() }
     val firstNameFocusRequester = remember { FocusRequester() }
     val lastNameFocusRequester = remember { FocusRequester() }
@@ -107,8 +108,8 @@ fun MobileTrainerSettingsEditProfileScreen(
         topBar = {
             SettingsEditProfileHeader(
                 showSave = account.isUpdated,
-                onClickSave = { viewModel.onAction(TrainerEditProfileAction.SaveChanges) },
-                onClickBack = { viewModel.onAction(TrainerEditProfileAction.NavigateToBack) }
+                onClickSave = { onAction(TrainerEditProfileAction.SaveChanges) },
+                onClickBack = { onAction(TrainerEditProfileAction.NavigateToBack) }
             )
         }) {
         Column(
@@ -121,18 +122,22 @@ fun MobileTrainerSettingsEditProfileScreen(
             Row {
                 AccountSettingsEditableProfileImage(
                     title = stringResource(Res.string.background_image_label),
-                    url = null,
+                    url = account.backgroundImageUrl,
                     modifier = Modifier.weight(1f),
                     onClickDelete = { },
-                    onImageChanged = { bytes, imageBitmap ->  }
+                    onImageChanged = { bytes, _ ->
+                        onAction(TrainerEditProfileAction.UpdateBackgroundImage(bytes))
+                    }
                 )
                 Spacer(Modifier.width(16.dp))
                 AccountSettingsEditableProfileImage(
                     title = stringResource(Res.string.profile_image_label),
-                    url = null,
+                    url = account.profileImageUrl,
                     modifier = Modifier.weight(1f),
                     onClickDelete = { },
-                    onImageChanged = { bytes, imageBitmap ->  }
+                    onImageChanged = { bytes, _ ->
+                        onAction(TrainerEditProfileAction.UpdateProfileImage(bytes))
+                    }
                 )
             }
 
@@ -140,7 +145,7 @@ fun MobileTrainerSettingsEditProfileScreen(
                 title = stringResource(Res.string.settings_edit_profile_username_label),
                 hint = stringResource(Res.string.settings_edit_profile_username_hint),
                 value = account.userName,
-                onValueChange = { viewModel.onAction(TrainerEditProfileAction.UpdateUserName(it)) },
+                onValueChange = { onAction(TrainerEditProfileAction.UpdateUserName(it)) },
                 rightIconRes = Res.drawable.ic_pencil,
                 focusRequester = userNameFocusRequester,
                 nextFocusRequester = firstNameFocusRequester
@@ -152,7 +157,7 @@ fun MobileTrainerSettingsEditProfileScreen(
                     title = stringResource(Res.string.user_first_name_mandatory_label),
                     hint = stringResource(Res.string.user_first_name_hint),
                     value = account.firstName,
-                    onValueChange = { viewModel.onAction(TrainerEditProfileAction.UpdateFirstName(it)) },
+                    onValueChange = { onAction(TrainerEditProfileAction.UpdateFirstName(it)) },
                     rightIconRes = Res.drawable.ic_pencil,
                     focusRequester = firstNameFocusRequester,
                     nextFocusRequester = lastNameFocusRequester
@@ -163,7 +168,7 @@ fun MobileTrainerSettingsEditProfileScreen(
                     title = stringResource(Res.string.user_last_name_mandatory_label),
                     hint = stringResource(Res.string.user_last_name_hint),
                     value = account.lastName,
-                    onValueChange = { viewModel.onAction(TrainerEditProfileAction.UpdateLastName(it)) },
+                    onValueChange = { onAction(TrainerEditProfileAction.UpdateLastName(it)) },
                     rightIconRes = Res.drawable.ic_pencil,
                     focusRequester = lastNameFocusRequester
                 )
@@ -173,13 +178,13 @@ fun MobileTrainerSettingsEditProfileScreen(
                 title = stringResource(Res.string.settings_edit_profile_biography_label),
                 hint = stringResource(Res.string.settings_edit_profile_biography_hint),
                 value = account.biography,
-                onValueChange = { viewModel.onAction(TrainerEditProfileAction.UpdateBiography(it)) },
+                onValueChange = { onAction(TrainerEditProfileAction.UpdateBiography(it)) },
                 rightIconRes = Res.drawable.ic_pencil
             )
 
             FitnessTagPickerComponent(
                 selectedTags = account.profileTags,
-                onTagsSelected = { viewModel.onAction(TrainerEditProfileAction.UpdateTags(it)) }
+                onTagsSelected = { onAction(TrainerEditProfileAction.UpdateTags(it)) }
             )
 
             Spacer(Modifier.height(124.dp))

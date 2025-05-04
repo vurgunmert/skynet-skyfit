@@ -23,14 +23,14 @@ sealed interface UserEditProfileUiState {
 }
 
 data class UserEditProfileFormState(
-    val userName: String = "",
-    val firstName: String = "",
-    val lastName: String = "",
-    val height: Int = 170,
+    val userName: String,
+    val firstName: String,
+    val lastName: String,
+    val height: Int,
     val heightUnit: HeightUnitType = HeightUnitType.CM,
-    val weight: Int = 70,
+    val weight: Int,
     val weightUnit: WeightUnitType = WeightUnitType.KG,
-    val bodyType: BodyType = BodyType.ECTOMORPH,
+    val bodyType: BodyType,
     val profileImageUrl: String? = null,
     val profileImageBytes: ByteArray? = null,
     val backgroundImageUrl: String? = null,

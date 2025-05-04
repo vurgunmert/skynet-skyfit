@@ -132,7 +132,7 @@ fun UserAccountSettingsProfileCard(
     backgroundImageUrl: String?,
     foregroundImageUrl: String?,
     name: String,
-    social: String,
+    username: String,
     height: String,
     weight: String,
     bodyType: String,
@@ -155,7 +155,7 @@ fun UserAccountSettingsProfileCard(
                 horizontalArrangement = Arrangement.spacedBy(8.dp)
             ) {
                 CardFieldIconText(Res.drawable.ic_profile_fill, name, Modifier.weight(1f))
-                CardFieldIconText(Res.drawable.ic_at_symbol, social, Modifier.weight(1f))
+                CardFieldIconText(Res.drawable.ic_at_symbol, username, Modifier.weight(1f))
             }
 
             Row(
@@ -177,8 +177,8 @@ fun TrainerAccountSettingsProfileCard(
     backgroundImageUrl: String?,
     foregroundImageUrl: String?,
     name: String,
-    social: String,
-    note: String,
+    username: String,
+    biography: String,
     tags: List<FitnessTagType>,
     onClick: () -> Unit
 ) {
@@ -199,13 +199,13 @@ fun TrainerAccountSettingsProfileCard(
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.spacedBy(8.dp)
             ) {
-                CardFieldIconText(Res.drawable.ic_profile_fill, "Maxine", Modifier.weight(1f))
-                CardFieldIconText(Res.drawable.ic_at_symbol, "maxjacobson", Modifier.weight(1f))
+                CardFieldIconText(Res.drawable.ic_profile_fill, name, Modifier.weight(1f))
+                CardFieldIconText(Res.drawable.ic_at_symbol, username, Modifier.weight(1f))
             }
 
             CardFieldIconText(
                 iconRes = Res.drawable.ic_note,
-                text = note,
+                text = biography,
                 modifier = Modifier.fillMaxWidth()
             )
 

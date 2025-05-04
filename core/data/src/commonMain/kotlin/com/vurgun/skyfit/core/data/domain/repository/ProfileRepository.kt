@@ -6,10 +6,13 @@ import com.vurgun.skyfit.core.data.domain.model.TrainerProfile
 import com.vurgun.skyfit.core.data.domain.model.UserProfile
 
 interface ProfileRepository {
+    suspend fun fetchImageBytes(url: String): ByteArray
+
     suspend fun getUserProfile(normalUserId: Int): Result<UserProfile>
     suspend fun getTrainerProfile(trainerId: Int): Result<TrainerProfile>
     suspend fun getFacilityProfile(facilityId: Int): Result<FacilityProfile>
     suspend fun getFacilityTrainerProfiles(facilityId: Int): Result<List<FacilityTrainerProfile>>
+
     suspend fun updateUserProfile(
         normalUserId: Int,
         username: String,
@@ -22,5 +25,23 @@ interface ProfileRepository {
         bodyTypeId: Int
     ): Result<Unit>
 
-    suspend fun fetchImageBytes(url: String): ByteArray
+    suspend fun updateTrainerProfile(
+        trainerId: Int,
+        username: String,
+        profileImageBytes: ByteArray?,
+        backgroundImageBytes: ByteArray?,
+        firstName: String,
+        lastName: String,
+        bio: String,
+        profileTags: List<Int>
+    ): Result<Unit>
+
+    suspend fun updateTrainerProfile(
+        gymId: Int,
+        backgroundImageBytes: ByteArray?,
+        name: String,
+        address: String,
+        bio: String,
+        profileTags: List<Int>
+    ): Result<Unit>
 }

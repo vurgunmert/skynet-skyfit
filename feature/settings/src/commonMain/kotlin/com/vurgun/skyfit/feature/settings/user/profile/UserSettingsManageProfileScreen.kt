@@ -137,7 +137,7 @@ private fun MobileUserSettingsAccountScreen(
                 backgroundImageUrl = account.backgroundImageUrl,
                 foregroundImageUrl = account.profileImageUrl,
                 name = account.firstName,
-                social = account.userName,
+                username = account.userName,
                 height = "${account.height} ${account.heightUnit.label}",
                 weight = "${account.weight} ${account.weightUnit.shortLabel}",
                 bodyType = account.bodyType.turkishShort,

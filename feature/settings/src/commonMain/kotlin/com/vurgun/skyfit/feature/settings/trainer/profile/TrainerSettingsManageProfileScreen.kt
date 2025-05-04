@@ -92,8 +92,8 @@ class TrainerSettingsManageProfileScreen : Screen {
             )
 
             is TrainerManageProfileUiState.Content -> {
-                val account = (uiState as TrainerManageProfileUiState.Content).form
-                MobileTrainerSettingsAccountScreen(viewModel, account)
+                val content = (uiState as TrainerManageProfileUiState.Content)
+                MobileTrainerSettingsAccountScreen(content, viewModel::onAction)
             }
         }
     }
@@ -102,10 +102,10 @@ class TrainerSettingsManageProfileScreen : Screen {
 
 @Composable
 private fun MobileTrainerSettingsAccountScreen(
-    viewModel: TrainerSettingsManageProfileViewModel,
-    account: TrainerProfileFormState
+    content: TrainerManageProfileUiState.Content,
+    onAction: (TrainerManageProfileAction) -> Unit
 ) {
-
+    val account = content.form
     var showDeleteConfirm by remember { mutableStateOf(false) }
 
 
@@ -113,13 +113,13 @@ private fun MobileTrainerSettingsAccountScreen(
         topBar = {
             SkyFitScreenHeader(
                 title = stringResource(Res.string.settings_account_label),
-                onClickBack = { viewModel.onAction(TrainerManageProfileAction.NavigateToBack) })
+                onClickBack = { onAction(TrainerManageProfileAction.NavigateToBack) })
         },
         bottomBar = {
             if (showDeleteConfirm) {
                 MobileSettingsDeleteAccountBottomSheet(
                     onCancelClicked = { showDeleteConfirm = false },
-                    onDeleteClicked = { viewModel.onAction(TrainerManageProfileAction.DeleteAccount) }
+                    onDeleteClicked = { onAction(TrainerManageProfileAction.DeleteAccount) }
                 )
             }
         }
@@ -133,32 +133,32 @@ private fun MobileTrainerSettingsAccountScreen(
         ) {
 
             TrainerAccountSettingsProfileCard(
-                onClick = { viewModel.onAction(TrainerManageProfileAction.NavigateToEditProfile) },
+                onClick = { onAction(TrainerManageProfileAction.NavigateToEditProfile) },
                 backgroundImageUrl = account.backgroundImageUrl,
                 foregroundImageUrl = account.profileImageUrl,
-                name = account.firstName.toString(),
-                social = account.email?.substringBefore("@").toString(),
-                note = account.biography.toString(),
+                name = account.firstName,
+                username = account.userName,
+                biography = account.biography,
                 tags = account.profileTags
             )
 
             SettingsMenuItem(
                 iconRes = Res.drawable.ic_lock,
                 text = stringResource(Res.string.settings_change_my_password_label),
-                onClick = { viewModel.onAction(TrainerManageProfileAction.NavigateToBack) }
+                onClick = { onAction(TrainerManageProfileAction.NavigateToChangePassword) }
             )
 
-            if (viewModel.hasMultipleAccounts) {
+            if (content.hasMultipleProfiles) {
                 SettingsMenuItem(
                     iconRes = Res.drawable.ic_profile,
                     text = stringResource(Res.string.accounts_title),
-                    onClick = { viewModel.onAction(TrainerManageProfileAction.NavigateToManageAccounts) }
+                    onClick = { onAction(TrainerManageProfileAction.NavigateToManageAccounts) }
                 )
             } else {
                 SettingsMenuItem(
                     iconRes = Res.drawable.ic_plus,
                     text = stringResource(Res.string.add_account_action),
-                    onClick = { viewModel.onAction(TrainerManageProfileAction.NavigateToManageAccounts) }
+                    onClick = { onAction(TrainerManageProfileAction.NavigateToManageAccounts) }
                 )
             }
 
