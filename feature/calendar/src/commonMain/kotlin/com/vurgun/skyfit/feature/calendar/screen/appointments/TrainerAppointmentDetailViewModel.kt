@@ -2,6 +2,8 @@ package com.vurgun.skyfit.feature.calendar.screen.appointments
 
 import cafe.adriel.voyager.core.model.ScreenModel
 import cafe.adriel.voyager.core.model.screenModelScope
+import com.vurgun.skyfit.core.data.domain.model.LessonParticipant
+import com.vurgun.skyfit.core.data.utility.emitIn
 import com.vurgun.skyfit.data.courses.domain.model.ScheduledLessonDetail
 import com.vurgun.skyfit.data.courses.domain.repository.CourseRepository
 import kotlinx.coroutines.flow.MutableSharedFlow
@@ -13,11 +15,15 @@ import kotlinx.coroutines.launch
 sealed interface TrainerAppointmentDetailUiState {
     data object Loading : TrainerAppointmentDetailUiState
     data class Error(val message: String) : TrainerAppointmentDetailUiState
-    data class Content(val lesson: ScheduledLessonDetail) : TrainerAppointmentDetailUiState
+    data class Content(
+        val lesson: ScheduledLessonDetail,
+        val participants: List<LessonParticipant>
+    ) : TrainerAppointmentDetailUiState
 }
 
 sealed interface TrainerAppointmentDetailAction {
     data object NavigateToBack : TrainerAppointmentDetailAction
+    data class EvaluateParticipant(val participant: LessonParticipant, val evaluation: String) : TrainerAppointmentDetailAction
 }
 
 sealed interface TrainerAppointmentDetailEffect {
@@ -36,7 +42,11 @@ class TrainerAppointmentDetailViewModel(
 
     fun onAction(action: TrainerAppointmentDetailAction) {
         when (action) {
-            TrainerAppointmentDetailAction.NavigateToBack -> emitEffect(TrainerAppointmentDetailEffect.NavigateToBack)
+            TrainerAppointmentDetailAction.NavigateToBack ->
+                _effect.emitIn(screenModelScope, TrainerAppointmentDetailEffect.NavigateToBack)
+
+            is TrainerAppointmentDetailAction.EvaluateParticipant ->
+                evaluateParticipant(action.participant, action.evaluation)
         }
     }
 
@@ -44,34 +54,37 @@ class TrainerAppointmentDetailViewModel(
         screenModelScope.launch {
             try {
                 val lesson = courseRepository.getScheduledLessonDetail(lessonId).getOrThrow()
-                _uiState.value = TrainerAppointmentDetailUiState.Content(lesson)
+
+                val participants = courseRepository.getLessonParticipants(lessonId).getOrDefault(emptyList())
+
+                _uiState.value = TrainerAppointmentDetailUiState.Content(lesson, participants)
             } catch (e: Exception) {
                 _uiState.value = TrainerAppointmentDetailUiState.Error(e.message ?: "Ders getirme hatasi")
             }
         }
     }
 
-    private fun loadParticipants() {
-        //            // **Simulate fetching appointment details**
-//            _appointment.value =
-//            // **Simulate fetching participant list**
-//            _participants.value = listOf(
-//                ParticipantViewData("1", "Selin Kaya"),
-//                ParticipantViewData("2", "Ali Çelik"),
-//                ParticipantViewData("3", "Deniz Şahin"),
-//                ParticipantViewData("4", "Eren Yıldız")
-//            )
-    }
+    private fun evaluateParticipant(
+        participant: LessonParticipant,
+        evaluation: String
+    ) {
+        val currentState = _uiState.value as? TrainerAppointmentDetailUiState.Content ?: return
 
-    private fun emitEffect(effect: TrainerAppointmentDetailEffect) {
+        val updatedParticipants = currentState.participants.map {
+            if (it.lpId == participant.lpId) {
+                it.copy(trainerEvaluation = evaluation)
+            } else {
+                it
+            }
+        }
+
         screenModelScope.launch {
-            _effect.emit(effect)
+            try {
+                courseRepository.evaluateParticipants(participant.lpId, updatedParticipants)
+                _uiState.value = currentState.copy(participants = updatedParticipants)
+            } catch (e: Exception) {
+                e.printStackTrace()
+            }
         }
     }
 }
-
-data class ParticipantViewData(
-    val id: String,
-    val name: String,
-    var isPresent: Boolean = false
-)

@@ -27,9 +27,9 @@ import com.vurgun.skyfit.core.ui.components.dialog.rememberErrorDialogState
 import com.vurgun.skyfit.core.ui.components.event.ActiveAppointmentEventItem
 import com.vurgun.skyfit.core.ui.components.event.AttendanceAppointmentEventItem
 import com.vurgun.skyfit.core.ui.components.event.BasicAppointmentEventItem
-import com.vurgun.skyfit.core.ui.components.special.SkyFitBadgeTabBarComponent
 import com.vurgun.skyfit.core.ui.components.special.SkyFitMobileScaffold
 import com.vurgun.skyfit.core.ui.components.special.SkyFitScreenHeader
+import com.vurgun.skyfit.core.ui.components.special.TextNumberBadgeTabBarComponent
 import com.vurgun.skyfit.core.ui.utils.CollectEffect
 import com.vurgun.skyfit.data.courses.domain.model.Appointment
 import org.jetbrains.compose.resources.stringResource
@@ -50,7 +50,7 @@ class UserAppointmentListingScreen : Screen {
                 UserAppointmentListingEffect.NavigateToBack ->
                     navigator.pop()
 
-                UserAppointmentListingEffect.ShowFilter -> Unit //TODO
+                UserAppointmentListingEffect.ShowFilter -> TODO()
 
                 is UserAppointmentListingEffect.NavigateToDetail ->
                     navigator.push(SharedScreen.UserAppointmentDetail(effect.lpId))
@@ -101,7 +101,7 @@ private fun MobileUserAppointmentListingScreen(
             Column {
                 SkyFitScreenHeader(stringResource(Res.string.appointments_title), onClickBack = goToBack)
 
-                SkyFitBadgeTabBarComponent(
+                TextNumberBadgeTabBarComponent(
                     titles = tabTitles,
                     selectedTabIndex = activeTab,
                     onTabSelected = { index -> viewModel.onAction(UserAppointmentListingAction.ChangeTab(index)) },

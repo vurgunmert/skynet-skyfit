@@ -175,7 +175,7 @@ private fun FacilityProfileVisitorContent(
                     calendarViewModel = weekDaySelectorController,
                     lessons = content.lessons,
                     goToVisitCalendar = { onAction(FacilityProfileVisitorAction.NavigateToCalendar) },
-                    modifier = Modifier
+                    modifier = Modifier.fillMaxWidth()
                 )
 
                 if (content.trainers.isNotEmpty()) {

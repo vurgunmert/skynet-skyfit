@@ -76,7 +76,7 @@ fun AvailableActivityEventTitleRow(title: String, iconId: Int? = null, date: Str
 @Composable
 fun BasicAppointmentEventTitleRow(title: String, iconId: Int? = null, date: String) {
     EventTitleRow(title = title, iconId = iconId, endContent = {
-        BodyMediumSemiboldText(text = date)
+        BodyMediumSemiboldText(text = date, color = SkyFitColor.text.secondary)
     })
 }
 

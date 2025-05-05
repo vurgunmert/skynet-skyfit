@@ -39,7 +39,7 @@ import com.vurgun.skyfit.core.navigation.push
 import com.vurgun.skyfit.core.ui.components.special.ButtonSize
 import com.vurgun.skyfit.core.ui.components.special.ButtonState
 import com.vurgun.skyfit.core.ui.components.special.ButtonVariant
-import com.vurgun.skyfit.core.ui.components.special.SkyFitBadgeTabBarComponent
+import com.vurgun.skyfit.core.ui.components.special.TextNumberBadgeTabBarComponent
 import com.vurgun.skyfit.core.ui.components.special.SkyFitButtonComponent
 import com.vurgun.skyfit.core.ui.components.special.SkyFitMobileScaffold
 import com.vurgun.skyfit.core.ui.components.special.SkyFitScreenHeader
@@ -93,7 +93,7 @@ private fun MobileUserNotificationsScreen(
         topBar = {
             Column {
                 SkyFitScreenHeader("Bildirimler", onClickBack = goBack)
-                SkyFitBadgeTabBarComponent(tabTitles, activeTab, onTabSelected = { activeTab = it })
+                TextNumberBadgeTabBarComponent(tabTitles, activeTab, onTabSelected = { activeTab = it })
             }
         },
         bottomBar = {

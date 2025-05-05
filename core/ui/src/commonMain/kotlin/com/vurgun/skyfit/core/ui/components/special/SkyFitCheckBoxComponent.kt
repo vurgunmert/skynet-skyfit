@@ -47,3 +47,24 @@ fun SkyFitCheckBoxComponent(
         Text(label, style = SkyFitTypography.bodyMediumRegular)
     }
 }
+
+@Composable
+fun SkyFitCheckBox(
+    checked: Boolean,
+    onCheckedChange: (Boolean) -> Unit,
+    modifier: Modifier = Modifier,
+    enabled: Boolean = true,
+    colors: CheckboxColors = CheckboxDefaults.colors(
+        checkedColor = SkyFitColor.icon.default,
+        checkmarkColor = SkyFitColor.icon.inverseSecondary,
+        uncheckedColor = SkyFitColor.icon.default,
+    )
+) {
+    Checkbox(
+        checked = checked,
+        onCheckedChange = onCheckedChange,
+        enabled = enabled,
+        colors = colors,
+        modifier = Modifier.size(16.dp).padding(2.dp)
+    )
+}

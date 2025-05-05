@@ -1,7 +1,13 @@
 package com.vurgun.skyfit.data.courses.repository
 
+import com.vurgun.skyfit.core.data.domain.model.LessonParticipant
+import com.vurgun.skyfit.core.data.mappers.ProfileMapper.toDomainLessonParticipants
 import com.vurgun.skyfit.core.data.storage.TokenManager
 import com.vurgun.skyfit.core.data.utility.formatToServerDate
+import com.vurgun.skyfit.core.network.ApiResult
+import com.vurgun.skyfit.core.network.DispatcherProvider
+import com.vurgun.skyfit.core.network.utils.ioResult
+import com.vurgun.skyfit.core.network.utils.mapOrThrow
 import com.vurgun.skyfit.data.courses.CourseApiService
 import com.vurgun.skyfit.data.courses.domain.model.Appointment
 import com.vurgun.skyfit.data.courses.domain.model.AppointmentDetail
@@ -22,18 +28,16 @@ import com.vurgun.skyfit.data.courses.model.CancelUserAppointmentRequest
 import com.vurgun.skyfit.data.courses.model.CreateUserAppointmentRequest
 import com.vurgun.skyfit.data.courses.model.DeactivateLessonRequest
 import com.vurgun.skyfit.data.courses.model.DeleteLessonRequest
+import com.vurgun.skyfit.data.courses.model.EvaluateParticipantsRequest
 import com.vurgun.skyfit.data.courses.model.GetAppointmentDetailRequest
 import com.vurgun.skyfit.data.courses.model.GetFacilityLessonsRequest
+import com.vurgun.skyfit.data.courses.model.GetLessonParticipantsRequest
 import com.vurgun.skyfit.data.courses.model.GetScheduledLessonDetailRequest
 import com.vurgun.skyfit.data.courses.model.GetTrainerLessonsRequest
 import com.vurgun.skyfit.data.courses.model.GetUpcomingFacilityLessonsRequest
 import com.vurgun.skyfit.data.courses.model.GetUpcomingTrainerLessonsRequest
 import com.vurgun.skyfit.data.courses.model.GetUpcomingUserAppointmentsRequest
 import com.vurgun.skyfit.data.courses.model.GetUserAppointmentsRequest
-import com.vurgun.skyfit.core.network.ApiResult
-import com.vurgun.skyfit.core.network.DispatcherProvider
-import com.vurgun.skyfit.core.network.utils.ioResult
-import com.vurgun.skyfit.core.network.utils.mapOrThrow
 import kotlinx.coroutines.withContext
 import kotlinx.datetime.LocalDate
 
@@ -158,5 +162,20 @@ class CourseRepositoryImpl(
         val token = tokenManager.getTokenOrThrow()
         val request = CancelUserAppointmentRequest(lessonId, lpId)
         apiService.cancelUserAppointment(request, token).mapOrThrow { }
+    }
+
+    override suspend fun getLessonParticipants(lessonId: Int): Result<List<LessonParticipant>> = ioResult(dispatchers) {
+        val token = tokenManager.getTokenOrThrow()
+        val request = GetLessonParticipantsRequest(lessonId)
+        apiService.getLessonParticipants(request, token).mapOrThrow { it.toDomainLessonParticipants() }
+    }
+
+    override suspend fun evaluateParticipants(lessonId: Int, participants: List<LessonParticipant>): Result<Unit> = ioResult(dispatchers) {
+        val token = tokenManager.getTokenOrThrow()
+        val request = EvaluateParticipantsRequest(
+            lessonId = lessonId,
+            participants = participants.map { EvaluateParticipantsRequest.EvaluatedParticipant(it.lpId, it.trainerEvaluation) }
+        )
+        apiService.evaluateParticipants(request, token).mapOrThrow { }
     }
 }

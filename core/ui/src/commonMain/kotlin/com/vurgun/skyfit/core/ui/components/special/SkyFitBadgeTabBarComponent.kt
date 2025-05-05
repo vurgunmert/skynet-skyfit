@@ -28,7 +28,7 @@ import com.vurgun.skyfit.core.ui.styling.SkyFitColor
 import com.vurgun.skyfit.core.ui.styling.SkyFitTypography
 
 @Composable
-fun SkyFitBadgeTabBarComponent(
+fun TextNumberBadgeTabBarComponent(
     titles: List<String>,
     selectedTabIndex: Int,
     onTabSelected: (Int) -> Unit,
@@ -41,7 +41,7 @@ fun SkyFitBadgeTabBarComponent(
         verticalAlignment = Alignment.CenterVertically
     ) {
         titles.forEachIndexed { index, title ->
-            TabItem(
+            TextNumberBadgeTabItem(
                 title = title,
                 isSelected = index == selectedTabIndex,
                 onClick = { onTabSelected(index) }
@@ -63,7 +63,7 @@ fun SkyFitBadgeTabBarComponent(
 }
 
 @Composable
-private fun TabItem(
+private fun TextNumberBadgeTabItem(
     title: String,
     isSelected: Boolean,
     onClick: () -> Unit

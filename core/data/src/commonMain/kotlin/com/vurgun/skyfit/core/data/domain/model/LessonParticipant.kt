@@ -1,0 +1,15 @@
+package com.vurgun.skyfit.core.data.domain.model
+
+data class LessonParticipant(
+    val lpId: Int,
+    val lessonId: Int,
+    val firstName: String,
+    val lastName: String,
+    val profileImageUrl: String?,
+    val username: String,
+    val trainerEvaluation: String?,
+) {
+    val evaluated: Boolean = trainerEvaluation != null
+}
+
+

@@ -13,6 +13,9 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Icon
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
@@ -30,7 +33,12 @@ fun CalendarRangeDateSelectorCard(
     modifier: Modifier = Modifier,
     onSelectionChanged: (start: LocalDate, end: LocalDate?) -> Unit
 ) {
-    val dateSelectorController = rememberCalendarSelectorController(CalendarSelectionMode.Range)
+    val dateSelectorController = rememberNonEmptyCalendarSelectorController(CalendarSelectionMode.Range)
+    val state by dateSelectorController.state.collectAsState()
+
+    LaunchedEffect(state.selectedStartDate, state.selectedEndDate) {
+        state.selectedStartDate?.let { onSelectionChanged(it, state.selectedEndDate) }
+    }
 
     Column(
         modifier
@@ -58,6 +66,6 @@ fun CalendarRangeDateSelectorCard(
             )
         }
         Spacer(Modifier.height(16.dp))
-        CalendarDateSelector(dateSelectorController, onSelectionChanged = onSelectionChanged)
+        CalendarDateSelector(dateSelectorController) { _, _ -> }
     }
 }

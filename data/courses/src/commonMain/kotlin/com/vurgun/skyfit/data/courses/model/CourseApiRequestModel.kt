@@ -77,6 +77,23 @@ internal data class GetScheduledLessonDetailRequest(
 )
 
 @Serializable
+internal data class GetLessonParticipantsRequest(
+    val lessonId: Int
+)
+
+@Serializable
+internal data class EvaluateParticipantsRequest(
+    val lessonId: Int,
+    val participants: List<EvaluatedParticipant>
+) {
+    @Serializable
+    data class EvaluatedParticipant(
+        val lpId: Int,
+        val trainerEvaluation: String?,
+    )
+}
+
+@Serializable
 internal data class ActivateLessonRequest(
     val lessonId: Int
 )

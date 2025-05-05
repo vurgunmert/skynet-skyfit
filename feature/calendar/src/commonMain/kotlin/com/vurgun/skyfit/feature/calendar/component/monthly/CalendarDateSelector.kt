@@ -21,7 +21,7 @@ import kotlinx.datetime.LocalDate
 fun CalendarDateSelector(
     viewModel: CalendarDateSelectorController,
     modifier: Modifier = Modifier,
-    onSelectionChanged: (start: LocalDate, end: LocalDate?) -> Unit
+    onSelectionChanged: (start: LocalDate?, end: LocalDate?) -> Unit
 ) {
     val state by viewModel.state.collectAsState()
 

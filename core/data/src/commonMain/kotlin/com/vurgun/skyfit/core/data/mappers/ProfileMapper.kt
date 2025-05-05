@@ -6,10 +6,12 @@ import com.vurgun.skyfit.core.data.domain.model.WeightUnitType
 import com.vurgun.skyfit.core.data.utility.parseServerToDateOnly
 import com.vurgun.skyfit.core.data.domain.model.FacilityProfile
 import com.vurgun.skyfit.core.data.domain.model.FacilityTrainerProfile
+import com.vurgun.skyfit.core.data.domain.model.LessonParticipant
 import com.vurgun.skyfit.core.data.domain.model.TrainerProfile
 import com.vurgun.skyfit.core.data.domain.model.UserProfile
 import com.vurgun.skyfit.core.data.model.FacilityProfileDto
 import com.vurgun.skyfit.core.data.model.FacilityTrainerProfileDTO
+import com.vurgun.skyfit.core.data.model.LessonParticipantDTO
 import com.vurgun.skyfit.core.data.model.TrainerProfileDTO
 import com.vurgun.skyfit.core.data.model.UserProfileDTO
 
@@ -96,5 +98,21 @@ object ProfileMapper {
             memberCount = gymMemberCount,
             point = point
         )
+    }
+
+    fun LessonParticipantDTO.toDomainLessonParticipant(): LessonParticipant {
+        return LessonParticipant(
+            lpId = lpId,
+            lessonId = lessonId,
+            firstName = name,
+            lastName = surname,
+            profileImageUrl = serverImageFromPath(profilePhoto),
+            username = username,
+            trainerEvaluation = trainerEvaluation
+        )
+    }
+
+    fun List<LessonParticipantDTO>.toDomainLessonParticipants(): List<LessonParticipant> {
+        return this.map { it.toDomainLessonParticipant() }
     }
 }

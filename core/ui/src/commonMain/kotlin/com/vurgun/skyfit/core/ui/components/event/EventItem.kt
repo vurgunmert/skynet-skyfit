@@ -175,9 +175,9 @@ fun BasicAppointmentEventItem(
     location: String,
     trainer: String,
     note: String? = null,
-    onClick: () -> Unit
+    onClick: (() -> Unit)? = null
 ) {
-    BasicLessonEventItem(title, iconId, date, timePeriod, location, trainer, note)
+    BasicLessonEventItem(title, iconId, date, timePeriod, location, trainer, note, onClick)
 }
 
 @Composable
@@ -242,9 +242,10 @@ fun BasicLessonEventItem(
     timePeriod: String,
     location: String,
     trainer: String,
-    note: String? = null
+    note: String? = null,
+    onClick: (() -> Unit)? = null
 ) {
-    EventItemColumn {
+    EventItemColumn(Modifier.clickable(enabled = onClick != null, onClick = { onClick?.invoke() })) {
         BasicAppointmentEventTitleRow(title, iconId, date)
         Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
             EventTimeText(timePeriod, modifier = Modifier.weight(1f))

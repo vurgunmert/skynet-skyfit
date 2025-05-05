@@ -1,6 +1,7 @@
 package com.vurgun.skyfit.core.ui.components.button
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -95,28 +96,28 @@ fun SecondaryLargeButton(
 //}
 
 
-@Composable
-fun SecondaryMediumButton(
-    text: String,
-    modifier: Modifier = Modifier.wrapContentWidth(),
-    leftIconPainter: Painter? = null,
-    rightIconPainter: Painter? = null,
-    isEnabled: Boolean = true,
-    isLoading: Boolean = false,
-    onClick: () -> Unit
-) {
-    SkyFitButtonComponent(
-        text = text,
-        onClick = onClick,
-        variant = ButtonVariant.Secondary,
-        size = ButtonSize.Medium,
-        state = if (isLoading) ButtonState.Loading else ButtonState.Rest,
-        modifier = modifier,
-        isEnabled = isEnabled,
-        leftIconPainter = leftIconPainter,
-        rightIconPainter = rightIconPainter
-    )
-}
+//@Composable
+//fun SecondaryMediumButton(
+//    text: String,
+//    modifier: Modifier = Modifier.wrapContentWidth(),
+//    leftIconPainter: Painter? = null,
+//    rightIconPainter: Painter? = null,
+//    isEnabled: Boolean = true,
+//    isLoading: Boolean = false,
+//    onClick: () -> Unit
+//) {
+//    SkyFitButtonComponent(
+//        text = text,
+//        onClick = onClick,
+//        variant = ButtonVariant.Secondary,
+//        size = ButtonSize.Medium,
+//        state = if (isLoading) ButtonState.Loading else ButtonState.Rest,
+//        modifier = modifier,
+//        isEnabled = isEnabled,
+//        leftIconPainter = leftIconPainter,
+//        rightIconPainter = rightIconPainter
+//    )
+//}
 
 
 @Composable
@@ -222,29 +223,134 @@ fun PrimaryMicroButton(
 fun PrimaryMediumButton(
     text: String,
     modifier: Modifier = Modifier,
+    enabled: Boolean = true,
     rightIconRes: DrawableResource? = null,
     onClick: () -> Unit
 ) {
+    if (enabled) {
+        Row(
+            modifier = modifier
+                .clip(CircleShape)
+                .clickable { onClick() }
+                .background(SkyFitColor.specialty.buttonBgRest)
+                .padding(horizontal = 24.dp, vertical = 8.dp),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Text(
+                text = text,
+                style = SkyFitTypography.bodyMediumMedium.copy(color = SkyFitColor.text.inverse)
+            )
+            rightIconRes?.let {
+                Spacer(Modifier.width(4.dp))
+                Icon(
+                    painter = painterResource(it),
+                    contentDescription = null,
+                    modifier = Modifier.size(12.dp),
+                    tint = SkyFitColor.icon.inverse
+                )
+            }
+        }
+    } else {
+        Row(
+            modifier = modifier
+                .clip(CircleShape)
+                .background(SkyFitColor.specialty.buttonBgDisabled)
+                .padding(horizontal = 24.dp, vertical = 8.dp),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Text(
+                text = text,
+                style = SkyFitTypography.bodyMediumMedium.copy(color = SkyFitColor.text.disabled)
+            )
+            rightIconRes?.let {
+                Spacer(Modifier.width(4.dp))
+                Icon(
+                    painter = painterResource(it),
+                    contentDescription = null,
+                    modifier = Modifier.size(12.dp),
+                    tint = SkyFitColor.icon.disabled
+                )
+            }
+        }
+    }
+}
+
+
+@Composable
+fun SecondaryMediumButton(
+    text: String,
+    modifier: Modifier = Modifier,
+    enabled: Boolean = true,
+    rightIconRes: DrawableResource? = null,
+    onClick: () -> Unit
+) {
+    if (enabled) {
+        Row(
+            modifier = modifier
+                .clip(CircleShape)
+                .clickable { onClick() }
+                .background(SkyFitColor.specialty.secondaryButtonRest)
+                .border(1.dp, SkyFitColor.border.secondaryButton, CircleShape)
+                .padding(horizontal = 24.dp, vertical = 8.dp),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Text(
+                text = text,
+                style = SkyFitTypography.bodyMediumMedium.copy(color = SkyFitColor.text.default)
+            )
+            rightIconRes?.let {
+                Spacer(Modifier.width(4.dp))
+                Icon(
+                    painter = painterResource(it),
+                    contentDescription = null,
+                    modifier = Modifier.size(12.dp),
+                    tint = SkyFitColor.icon.inverse
+                )
+            }
+        }
+    } else {
+        Row(
+            modifier = modifier
+                .clip(CircleShape)
+                .background(SkyFitColor.specialty.secondaryButtonRest)
+                .border(1.dp, SkyFitColor.border.secondaryButtonDisabled, CircleShape)
+                .padding(horizontal = 24.dp, vertical = 8.dp),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Text(
+                text = text,
+                style = SkyFitTypography.bodyMediumMedium.copy(color = SkyFitColor.text.disabled)
+            )
+            rightIconRes?.let {
+                Spacer(Modifier.width(4.dp))
+                Icon(
+                    painter = painterResource(it),
+                    contentDescription = null,
+                    modifier = Modifier.size(12.dp),
+                    tint = SkyFitColor.icon.disabled
+                )
+            }
+        }
+    }
+}
+
+@Composable
+fun SecondaryDestructiveMicroButton(
+    text: String,
+    onClick: () -> Unit
+) {
     Row(
-        modifier = modifier
+        modifier = Modifier
             .clip(CircleShape)
             .clickable { onClick() }
-            .background(SkyFitColor.specialty.buttonBgRest)
-            .padding(horizontal = 24.dp, vertical = 8.dp),
+            .background(SkyFitColor.specialty.secondaryButtonRest)
+            .border(1.dp, SkyFitColor.border.critical, CircleShape)
+            .padding(horizontal = 16.dp, vertical = 6.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
         Text(
             text = text,
-            style = SkyFitTypography.bodyMediumMedium.copy(color = SkyFitColor.text.inverse)
+            style = SkyFitTypography.bodyMediumMedium.copy(color = SkyFitColor.text.criticalOnBgFill)
         )
-        rightIconRes?.let {
-            Spacer(Modifier.width(4.dp))
-            Icon(
-                painter = painterResource(it),
-                contentDescription = null,
-                modifier = Modifier.size(12.dp),
-                tint = SkyFitColor.icon.inverse
-            )
-        }
     }
 }

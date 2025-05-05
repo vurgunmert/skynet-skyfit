@@ -374,7 +374,8 @@ internal object FacilityProfileComponent {
                 daysOfWeek = calendarUiState.weekDays,
                 onDaySelected = calendarViewModel::setSelectedDate,
                 onPreviousWeek = calendarViewModel::loadPreviousWeek,
-                onNextWeek = calendarViewModel::loadNextWeek
+                onNextWeek = calendarViewModel::loadNextWeek,
+                modifier = Modifier.fillMaxWidth()
             )
 
             if (lessons.isEmpty()) {

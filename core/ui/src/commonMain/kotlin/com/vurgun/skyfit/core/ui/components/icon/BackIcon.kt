@@ -9,11 +9,12 @@ import skyfit.core.ui.generated.resources.ic_chevron_left
 
 @Composable
 fun BackIcon(
-    onClick: () -> Unit
+    onClick: () -> Unit,
+    modifier: Modifier = Modifier
 ) {
     ActionIcon(
         res = Res.drawable.ic_chevron_left,
-        modifier = Modifier.size(16.dp),
+        modifier = modifier.size(16.dp),
         onClick = onClick
     )
 }

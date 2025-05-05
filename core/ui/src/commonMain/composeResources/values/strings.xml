@@ -65,6 +65,8 @@
     <string name="unfollow_action">Takipten Çık</string>
     <string name="follow_action">Takip Et</string>
     <string name="add_trainer_action">Antrenör Ekle</string>
+    <string name="reset_action">Sıfırla</string>
+    <string name="filter_action">Filtrele</string>
 
     <!-- 🔷 Gender Options -->
     <string name="gender_female">Kadın</string>
@@ -92,9 +94,14 @@
     <string name="specialities_label">Uzmanlık Alanları</string>
     <string name="videos_label">Videolar</string>
     <string name="calendar_label">Takvim</string>
+    <string name="event_name_label">Etkinlik Adı</string>
+    <string name="time_label">Saat</string>
+    <string name="date_label">Tarih</string>
 
     <!-- 🔷 Lesson Related -->
     <string name="lesson_status_completed">Tamamlandı</string>
+    <string name="lesson_status_active">Aktif</string>
+    <string name="lesson_status_cancelled">İptal Edilen</string>
     <string name="lesson_status_missing">Eksik</string>
     <string name="lesson_create_action">Yeni Ders Oluştur</string>
     <string name="lesson_created_message">Ders Oluşturuldu</string>

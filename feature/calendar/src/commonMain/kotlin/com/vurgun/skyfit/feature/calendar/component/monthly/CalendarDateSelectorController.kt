@@ -18,7 +18,7 @@ import kotlinx.datetime.minus
 import kotlinx.datetime.plus
 
 data class DateRangeSelectorState(
-    val selectedStartDate: LocalDate,
+    val selectedStartDate: LocalDate?,
     val selectedEndDate: LocalDate?,
     val visibleMonth: LocalDate,
     val days: List<CalendarMonthDaySelectorItemModel>
@@ -28,13 +28,17 @@ enum class CalendarSelectionMode {
     Single,
     Range
 }
+
 class CalendarDateSelectorController(
+    initialStartDate: LocalDate? = null,
+    initialEndDate: LocalDate? = null,
+    initialVisibleMonth: LocalDate,
     private val selectionMode: CalendarSelectionMode = CalendarSelectionMode.Range,
     private val coroutineScope: CoroutineScope
 ) {
-    private val _startDate = MutableStateFlow(LocalDate.now())
-    private val _endDate = MutableStateFlow<LocalDate?>(null)
-    private val _visibleMonth = MutableStateFlow(LocalDate.now().withDayOfMonth(1))
+    private val _startDate = MutableStateFlow(initialStartDate)
+    private val _endDate = MutableStateFlow(initialEndDate)
+    private val _visibleMonth = MutableStateFlow(initialVisibleMonth)
 
     val state: StateFlow<DateRangeSelectorState> = combine(
         _startDate, _endDate, _visibleMonth
@@ -77,6 +81,11 @@ class CalendarDateSelectorController(
     fun loadNextMonth() {
         _visibleMonth.value = _visibleMonth.value.plus(1, DateTimeUnit.MONTH)
     }
+
+    fun reset() {
+        _startDate.value = LocalDate.now()
+        _endDate.value = null
+    }
 }
 
 fun generateMonthDays(
@@ -107,11 +116,36 @@ fun generateMonthDays(
 }
 
 @Composable
-fun rememberCalendarSelectorController(
-    selectionMode: CalendarSelectionMode = CalendarSelectionMode.Range
+fun rememberNonEmptyCalendarSelectorController(
+    selectionMode: CalendarSelectionMode = CalendarSelectionMode.Range,
+    initialStartDate: LocalDate = LocalDate.now(),
+    initialEndDate: LocalDate? = null
+): CalendarDateSelectorController {
+    val scope = rememberCoroutineScope()
+    return remember(selectionMode, initialStartDate, initialEndDate) {
+        CalendarDateSelectorController(
+            initialStartDate = initialStartDate,
+            initialEndDate = initialEndDate,
+            initialVisibleMonth = initialStartDate.withDayOfMonth(1),
+            selectionMode = selectionMode,
+            coroutineScope = scope
+        )
+    }
+}
+
+@Composable
+fun rememberEmptySelectCalendarSelectorController(
+    selectionMode: CalendarSelectionMode = CalendarSelectionMode.Single,
+    initialStartDate: LocalDate? = null,
 ): CalendarDateSelectorController {
     val scope = rememberCoroutineScope()
     return remember(selectionMode) {
-        CalendarDateSelectorController(selectionMode, scope)
+        CalendarDateSelectorController(
+            initialStartDate = initialStartDate,
+            initialEndDate = null,
+            initialVisibleMonth = LocalDate.now().withDayOfMonth(1),
+            selectionMode = selectionMode,
+            coroutineScope = scope
+        )
     }
 }

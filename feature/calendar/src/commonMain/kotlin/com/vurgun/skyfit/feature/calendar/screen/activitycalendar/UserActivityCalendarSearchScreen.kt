@@ -30,7 +30,7 @@ import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
 import com.vurgun.skyfit.core.data.domain.model.WorkoutType
 import com.vurgun.skyfit.core.ui.components.button.PrimaryMicroButton
-import com.vurgun.skyfit.core.ui.components.chip.SecondaryChip
+import com.vurgun.skyfit.core.ui.components.chip.SecondaryPillChip
 import com.vurgun.skyfit.core.ui.components.special.SkyFitMobileScaffold
 import com.vurgun.skyfit.core.ui.components.special.SkyFitSearchTextInputComponent
 import com.vurgun.skyfit.core.ui.components.text.BodyMediumSemiboldText
@@ -180,7 +180,7 @@ private fun ActivityCalendarSearchScreenFilterChips(
         items(categoryChips) { (id, label) ->
             val selected = state.searchQuery.isBlank() && state.selectedCategoryId == id
 
-            SecondaryChip(
+            SecondaryPillChip(
                 text = label,
                 selected = selected,
                 onClick = { viewModel.onAction(UserActivityCalendarSearchAction.SelectCategory(id)) }

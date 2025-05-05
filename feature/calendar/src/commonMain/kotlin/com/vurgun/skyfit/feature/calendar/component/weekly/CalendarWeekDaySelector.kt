@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.requiredSizeIn
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.Icon
@@ -40,21 +41,26 @@ fun CalendarWeekDaySelector(
     daysOfWeek: List<CalendarWeekDayItemModel>,
     onDaySelected: (LocalDate) -> Unit,
     onPreviousWeek: () -> Unit,
-    onNextWeek: () -> Unit
+    onNextWeek: () -> Unit,
+    modifier: Modifier = Modifier
 ) {
     Column(
-        modifier = Modifier
+        modifier = modifier
             .fillMaxWidth()
             .padding(vertical = 16.dp)
     ) {
         // Labels (Pzt, Sal...)
         Row(
-            modifier = Modifier.fillMaxWidth(),
+            modifier = Modifier.fillMaxWidth().padding(horizontal = 24.dp),
             horizontalArrangement = Arrangement.spacedBy(4.dp, Alignment.CenterHorizontally),
             verticalAlignment = Alignment.CenterVertically,
         ) {
             daysOfWeek.forEach { day ->
-                Box(Modifier.size(40.dp), contentAlignment = Alignment.Center) {
+                Box(
+                    Modifier
+                        .requiredSizeIn(minWidth = 36.dp, minHeight = 36.dp, maxWidth = 40.dp, maxHeight = 40.dp),
+                    contentAlignment = Alignment.Center
+                ) {
                     BodyMediumRegularText(text = day.dayName)
                 }
             }
@@ -99,7 +105,7 @@ private fun DaySelectorDayItem(
 ) {
     Box(
         modifier = Modifier
-            .size(40.dp)
+            .requiredSizeIn(minWidth = 36.dp, minHeight = 36.dp, maxWidth = 40.dp, maxHeight = 40.dp)
             .clip(CircleShape)
             .background(
                 color = SkyFitColor.background.surfaceActive,

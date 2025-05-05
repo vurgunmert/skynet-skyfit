@@ -270,7 +270,7 @@ private fun EmptyLessonListItem(onClickNew: () -> Unit) {
         Spacer(Modifier.height(16.dp))
         SecondaryMediumButton(
             text = stringResource(Res.string.lesson_add_action),
-            rightIconPainter = painterResource(Res.drawable.ic_plus),
+            rightIconRes = Res.drawable.ic_plus,
             onClick = onClickNew
         )
     }

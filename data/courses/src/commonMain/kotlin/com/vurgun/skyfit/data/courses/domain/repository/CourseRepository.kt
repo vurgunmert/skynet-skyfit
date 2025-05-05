@@ -1,5 +1,6 @@
 package com.vurgun.skyfit.data.courses.domain.repository
 
+import com.vurgun.skyfit.core.data.domain.model.LessonParticipant
 import com.vurgun.skyfit.data.courses.domain.model.Appointment
 import com.vurgun.skyfit.data.courses.domain.model.AppointmentDetail
 import com.vurgun.skyfit.data.courses.domain.model.CreateAppointmentResponse
@@ -38,4 +39,6 @@ interface CourseRepository {
     // endregion
     suspend fun getScheduledLessonDetail(lessonId: Int): Result<ScheduledLessonDetail>
     suspend fun getAppointmentDetail(lpId: Int): Result<AppointmentDetail>
+    suspend fun getLessonParticipants(lessonId: Int): Result<List<LessonParticipant>>
+    suspend fun evaluateParticipants(lessonId: Int, participants: List<LessonParticipant>): Result<Unit>
 }

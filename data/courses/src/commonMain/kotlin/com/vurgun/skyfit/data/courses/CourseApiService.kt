@@ -1,6 +1,7 @@
 package com.vurgun.skyfit.data.courses
 
 import com.vurgun.skyfit.core.data.model.EmptyDTO
+import com.vurgun.skyfit.core.data.model.LessonParticipantDTO
 import com.vurgun.skyfit.data.courses.model.ActivateLessonRequest
 import com.vurgun.skyfit.data.courses.model.AppointmentDTO
 import com.vurgun.skyfit.data.courses.model.AppointmentDetailDTO
@@ -23,6 +24,8 @@ import com.vurgun.skyfit.data.courses.model.ScheduledLessonDetailDTO
 import com.vurgun.skyfit.data.courses.model.UpdateLessonRequest
 import com.vurgun.skyfit.core.network.ApiClient
 import com.vurgun.skyfit.core.network.ApiResult
+import com.vurgun.skyfit.data.courses.model.EvaluateParticipantsRequest
+import com.vurgun.skyfit.data.courses.model.GetLessonParticipantsRequest
 import io.ktor.client.request.bearerAuth
 import io.ktor.client.request.setBody
 import io.ktor.client.request.url
@@ -46,6 +49,8 @@ class CourseApiService(private val apiClient: ApiClient) {
         const val GET_APPOINTMENT_DETAIL = "get/appointment/details"
         const val CREATE_APPOINTMENT_BY_USER = "create/appointment"
         const val CANCEL_APPOINTMENT_BY_USER = "cancel/appointment"
+        const val GET_LESSON_PARTICIPANTS = "get/lesson/participants"
+        const val EVALUATE_PARTICIPANTS = "complete/lesson"
     }
 
     internal suspend fun getLessonsByFacility(request: GetFacilityLessonsRequest, token: String): ApiResult<List<LessonDTO>> {
@@ -194,6 +199,30 @@ class CourseApiService(private val apiClient: ApiClient) {
             method = HttpMethod.Post
             bearerAuth(token)
             url(Endpoints.CANCEL_APPOINTMENT_BY_USER)
+            setBody(request)
+        }
+    }
+
+    internal suspend fun getLessonParticipants(
+        request: GetLessonParticipantsRequest,
+        token: String
+    ): ApiResult<List<LessonParticipantDTO>> {
+        return apiClient.safeApiCall<List<LessonParticipantDTO>> {
+            method = HttpMethod.Post
+            bearerAuth(token)
+            url(Endpoints.GET_LESSON_PARTICIPANTS)
+            setBody(request)
+        }
+    }
+
+    internal suspend fun evaluateParticipants(
+        request: EvaluateParticipantsRequest,
+        token: String
+    ): ApiResult<EmptyDTO> {
+        return apiClient.safeApiCall<EmptyDTO> {
+            method = HttpMethod.Post
+            bearerAuth(token)
+            url(Endpoints.EVALUATE_PARTICIPANTS)
             setBody(request)
         }
     }
