@@ -88,19 +88,19 @@ fun MobileDashboardHomeToolbarComponent(
             .padding(horizontal = 24.dp, vertical = 8.dp),
         horizontalArrangement = Arrangement.End
     ) {
-        Icon(
-            painter = painterResource(Res.drawable.ic_bell),
-            contentDescription = null,
-            tint = SkyFitColor.text.default,
-            modifier = Modifier.size(20.dp).clickable(onClick = onClickNotifications)
-        )
-        Spacer(Modifier.width(10.dp))
-        Icon(
-            painter = painterResource(Res.drawable.ic_chat),
-            contentDescription = null,
-            tint = SkyFitColor.text.default,
-            modifier = Modifier.size(20.dp).clickable(onClick = onClickMessages)
-        )
+//        Icon(
+//            painter = painterResource(Res.drawable.ic_bell),
+//            contentDescription = null,
+//            tint = SkyFitColor.text.default,
+//            modifier = Modifier.size(20.dp).clickable(onClick = onClickNotifications)
+//        )
+//        Spacer(Modifier.width(10.dp))
+//        Icon(
+//            painter = painterResource(Res.drawable.ic_chat),
+//            contentDescription = null,
+//            tint = SkyFitColor.text.default,
+//            modifier = Modifier.size(20.dp).clickable(onClick = onClickMessages)
+//        )
     }
 }
 
