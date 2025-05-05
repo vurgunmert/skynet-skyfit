@@ -241,7 +241,7 @@ class TrainerAppointmentListingFilterScreen(
                     text = stringResource(Res.string.filter_action),
                     modifier = Modifier.fillMaxWidth(),
                     onClick = {
-                        val selectedFilter = TrainerAppointmentFilter(
+                        val selectedFilter = TrainerAppointmentListingFilter(
                             selectedTitles = selectedTitleSet.value,
                             selectedHours = selectedHourSet.value,
                             selectedDates = selectedDateSet.value

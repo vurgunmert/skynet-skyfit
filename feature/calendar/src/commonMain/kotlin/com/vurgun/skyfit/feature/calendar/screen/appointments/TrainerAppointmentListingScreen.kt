@@ -110,61 +110,71 @@ class TrainerAppointmentListingScreen : Screen {
                 is TrainerAppointmentListingUiState.Content -> {
                     val content = (uiState as TrainerAppointmentListingUiState.Content)
 
-                    LazyColumn(
-                        modifier = Modifier
-                            .fillMaxSize()
-                            .padding(16.dp),
-                        verticalArrangement = Arrangement.spacedBy(16.dp)
-                    ) {
-
-                        if (content.currentFilter.hasAny) {
-                            item {
-                                FlowRow(
-                                    Modifier.fillMaxWidth(),
-                                    verticalArrangement = Arrangement.spacedBy(16.dp),
-                                    horizontalArrangement = Arrangement.spacedBy(16.dp)
-                                ) {
-                                    content.currentFilter.selectedTitles.forEach { filterForTitle ->
-                                        SecondaryPillChip(filterForTitle, selected = false, onClick = {
-                                            viewModel.onAction(TrainerAppointmentListingAction.RemoveTitleFilter(filterForTitle))
-                                        })
-                                    }
-                                    content.currentFilter.selectedHours.forEach { filterForTime ->
-                                        SecondaryPillChip(filterForTime.toString(), selected = false, onClick = {
-                                            viewModel.onAction(TrainerAppointmentListingAction.RemoveTimeFilter(filterForTime))
-                                        })
-                                    }
-                                    content.currentFilter.selectedDates.forEach { filterForDate ->
-                                        SecondaryPillChip(filterForDate.toString(), selected = false, onClick = {
-                                            viewModel.onAction(TrainerAppointmentListingAction.RemoveDateFilter(filterForDate))
-                                        })
-                                    }
-                                }
-                            }
-                        }
-
-                        items(content.filteredLessons) { lesson ->
-
-                            BasicAppointmentEventItem(
-                                title = lesson.title,
-                                iconId = lesson.iconId,
-                                date = lesson.startDate.formatToSlashedDate(),
-                                timePeriod = "${lesson.startTime} - ${lesson.endTime}",
-                                location = lesson.facilityName,
-                                trainer = lesson.trainerFullName,
-                                note = lesson.trainerNote,
-                                onClick = { viewModel.onAction(TrainerAppointmentListingAction.NavigateToDetail(lesson.lessonId)) }
-                            )
-                        }
-                    }
+                    TrainerAppointmentListingContent(content, viewModel::onAction)
                 }
             }
         }
     }
 }
 
+@OptIn(ExperimentalLayoutApi::class)
 @Composable
-private fun TrainerAppointmentListingTabItem(
+private fun TrainerAppointmentListingContent(
+    content: TrainerAppointmentListingUiState.Content,
+    onAction: (TrainerAppointmentListingAction) -> Unit
+) {
+    LazyColumn(
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(16.dp),
+        verticalArrangement = Arrangement.spacedBy(16.dp)
+    ) {
+
+        if (content.currentFilter.hasAny) {
+            item {
+                FlowRow(
+                    Modifier.fillMaxWidth(),
+                    verticalArrangement = Arrangement.spacedBy(16.dp),
+                    horizontalArrangement = Arrangement.spacedBy(16.dp)
+                ) {
+                    content.currentFilter.selectedTitles.forEach { filterForTitle ->
+                        SecondaryPillChip(filterForTitle, selected = false, onClick = {
+                            onAction(TrainerAppointmentListingAction.RemoveTitleFilter(filterForTitle))
+                        })
+                    }
+                    content.currentFilter.selectedHours.forEach { filterForTime ->
+                        SecondaryPillChip(filterForTime.toString(), selected = false, onClick = {
+                            onAction(TrainerAppointmentListingAction.RemoveTimeFilter(filterForTime))
+                        })
+                    }
+                    content.currentFilter.selectedDates.forEach { filterForDate ->
+                        SecondaryPillChip(filterForDate.toString(), selected = false, onClick = {
+                            onAction(TrainerAppointmentListingAction.RemoveDateFilter(filterForDate))
+                        })
+                    }
+                }
+            }
+        }
+
+        items(content.filteredLessons) { lesson ->
+
+            BasicAppointmentEventItem(
+                title = lesson.title,
+                iconId = lesson.iconId,
+                date = lesson.startDate.formatToSlashedDate(),
+                timePeriod = "${lesson.startTime} - ${lesson.endTime}",
+                location = lesson.facilityName,
+                trainer = lesson.trainerFullName,
+                note = lesson.trainerNote,
+                onClick = { onAction(TrainerAppointmentListingAction.NavigateToDetail(lesson.lessonId)) }
+            )
+        }
+    }
+}
+
+
+@Composable
+fun AppointmentListingTabItem(
     text: String,
     selected: Boolean,
     onClick: () -> Unit = {}
@@ -207,17 +217,17 @@ private fun TrainerAppointmentListingTabRow(
             Modifier.fillMaxWidth(),
             verticalAlignment = Alignment.CenterVertically
         ) {
-            TrainerAppointmentListingTabItem(
+            AppointmentListingTabItem(
                 text = stringResource(Res.string.lesson_status_completed),
                 selected = selectedTab == TrainerAppointmentListingTab.Completed,
                 onClick = { onTabSelected(TrainerAppointmentListingTab.Completed) }
             )
-            TrainerAppointmentListingTabItem(
+            AppointmentListingTabItem(
                 text = stringResource(Res.string.lesson_status_active),
                 selected = selectedTab == TrainerAppointmentListingTab.Active,
                 onClick = { onTabSelected(TrainerAppointmentListingTab.Active) }
             )
-            TrainerAppointmentListingTabItem(
+            AppointmentListingTabItem(
                 text = stringResource(Res.string.lesson_status_cancelled),
                 selected = selectedTab == TrainerAppointmentListingTab.Cancelled,
                 onClick = { onTabSelected(TrainerAppointmentListingTab.Cancelled) }

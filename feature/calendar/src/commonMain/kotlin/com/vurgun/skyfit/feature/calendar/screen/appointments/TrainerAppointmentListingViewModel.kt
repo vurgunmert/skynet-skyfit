@@ -16,7 +16,7 @@ import kotlinx.coroutines.launch
 import kotlinx.datetime.LocalDate
 import kotlinx.datetime.LocalTime
 
-data class TrainerAppointmentFilter(
+data class TrainerAppointmentListingFilter(
     val selectedTitles: Set<String> = emptySet(),
     val selectedHours: Set<LocalTime> = emptySet(),
     val selectedDates: Set<LocalDate> = emptySet()
@@ -32,7 +32,7 @@ sealed class TrainerAppointmentListingUiState {
         val lessons: List<Lesson> = emptyList(),
         val filteredLessons: List<Lesson> = emptyList(),
         val tabCounts: Map<TrainerAppointmentListingTab, Int> = emptyMap(),
-        val currentFilter: TrainerAppointmentFilter = TrainerAppointmentFilter()
+        val currentFilter: TrainerAppointmentListingFilter = TrainerAppointmentListingFilter()
     ) : TrainerAppointmentListingUiState()
 }
 
@@ -130,7 +130,7 @@ class TrainerAppointmentListingViewModel(
                 val tabCounts = allLessons.mapNotNull { it.toTabType() }.groupingBy { it }.eachCount()
                 val prevState = _uiState.value as? TrainerAppointmentListingUiState.Content
                 val selectedTab = prevState?.activeTab ?: TrainerAppointmentListingTab.Completed
-                val currentFilter = prevState?.currentFilter ?: TrainerAppointmentFilter()
+                val currentFilter = prevState?.currentFilter ?: TrainerAppointmentListingFilter()
 
                 // Reapply filter if exists
                 val filtered = allLessons
@@ -167,7 +167,7 @@ class TrainerAppointmentListingViewModel(
     }
 
     fun applyFilter(
-        filter: TrainerAppointmentFilter,
+        filter: TrainerAppointmentListingFilter,
         tab: TrainerAppointmentListingTab? = null
     ) {
         val current = _uiState.value as? TrainerAppointmentListingUiState.Content ?: return
@@ -195,7 +195,7 @@ class TrainerAppointmentListingViewModel(
     fun resetFilter() {
         val current = _uiState.value as? TrainerAppointmentListingUiState.Content ?: return
         _uiState.value = current.copy(
-            currentFilter = TrainerAppointmentFilter(),
+            currentFilter = TrainerAppointmentListingFilter(),
             filteredLessons = current.lessons
         )
     }

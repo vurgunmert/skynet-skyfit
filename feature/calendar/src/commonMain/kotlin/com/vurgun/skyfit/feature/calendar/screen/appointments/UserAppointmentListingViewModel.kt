@@ -2,27 +2,33 @@ package com.vurgun.skyfit.feature.calendar.screen.appointments
 
 import cafe.adriel.voyager.core.model.ScreenModel
 import cafe.adriel.voyager.core.model.screenModelScope
+import com.vurgun.skyfit.core.data.domain.model.TrainerProfile
 import com.vurgun.skyfit.core.data.domain.model.UserDetail
 import com.vurgun.skyfit.core.data.domain.repository.UserManager
 import com.vurgun.skyfit.core.data.utility.SingleSharedFlow
 import com.vurgun.skyfit.core.data.utility.emitIn
 import com.vurgun.skyfit.data.courses.domain.model.Appointment
 import com.vurgun.skyfit.data.courses.domain.repository.CourseRepository
+import com.vurgun.skyfit.feature.calendar.screen.appointments.UserAppointmentListingTab.Active
+import com.vurgun.skyfit.feature.calendar.screen.appointments.UserAppointmentListingTab.Cancelled
+import com.vurgun.skyfit.feature.calendar.screen.appointments.UserAppointmentListingTab.Completed
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharedFlow
-import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.combine
-import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
+import kotlinx.datetime.LocalDate
+import kotlinx.datetime.LocalTime
 
 sealed interface UserAppointmentListingAction {
     data object NavigateToBack : UserAppointmentListingAction
     data object ShowFilter : UserAppointmentListingAction
-    data class ChangeTab(val index: Int) : UserAppointmentListingAction
+    data class ChangeTab(val tab: UserAppointmentListingTab) : UserAppointmentListingAction
     data class CancelAppointment(val appointment: Appointment) : UserAppointmentListingAction
     data class NavigateToDetail(val lpId: Int) : UserAppointmentListingAction
+    data class RemoveTitleFilter(val title: String) : UserAppointmentListingAction
+    data class RemoveTimeFilter(val time: LocalTime) : UserAppointmentListingAction
+    data class RemoveDateFilter(val date: LocalDate) : UserAppointmentListingAction
+    data class RemoveTrainerFilter(val trainer: TrainerProfile) : UserAppointmentListingAction
 }
 
 sealed interface UserAppointmentListingEffect {
@@ -32,10 +38,40 @@ sealed interface UserAppointmentListingEffect {
     data class NavigateToDetail(val lpId: Int) : UserAppointmentListingEffect
 }
 
+data class UserAppointmentListingFilter(
+    val selectedDates: Set<LocalDate> = emptySet(),
+    val selectedHours: Set<LocalTime> = emptySet(),
+    val selectedTitles: Set<String> = emptySet(),
+    val selectedTrainers: Set<TrainerProfile> = emptySet(),
+) {
+    val hasAny get() = selectedDates.isNotEmpty() || selectedHours.isNotEmpty() || selectedTitles.isNotEmpty() || selectedTrainers.isNotEmpty()
+}
+
+sealed class UserAppointmentListingTab(val statusTypes: List<Int>, val label: String) {
+    data object Active : UserAppointmentListingTab(listOf(1), "Aktif")
+    data object Cancelled : UserAppointmentListingTab(listOf(3, 4, 5), "İptal")
+    data object Completed : UserAppointmentListingTab(listOf(6, 7), "Devamsızlık")
+}
+
+sealed class UserAppointmentListingUiState {
+    data object Loading : UserAppointmentListingUiState()
+    data class Error(val message: String) : UserAppointmentListingUiState()
+    data class Content(
+        val activeTab: UserAppointmentListingTab = UserAppointmentListingTab.Active,
+        val appointments: List<Appointment> = emptyList(),
+        val filteredAppointments: List<Appointment> = emptyList(),
+        val tabTitles: List<String> = emptyList(),
+        val currentFilter: UserAppointmentListingFilter = UserAppointmentListingFilter()
+    ) : UserAppointmentListingUiState()
+}
+
 class UserAppointmentListingViewModel(
     private val userManager: UserManager,
     private val courseRepository: CourseRepository
 ) : ScreenModel {
+
+    private val _uiState = MutableStateFlow<UserAppointmentListingUiState>(UserAppointmentListingUiState.Loading)
+    val uiState: StateFlow<UserAppointmentListingUiState> = _uiState
 
     private val _effect = SingleSharedFlow<UserAppointmentListingEffect>()
     val effect: SharedFlow<UserAppointmentListingEffect> = _effect
@@ -43,32 +79,11 @@ class UserAppointmentListingViewModel(
     private val user: UserDetail
         get() = userManager.user.value as? UserDetail
             ?: error("❌ current account is not user")
+    private val allTabs: List<UserAppointmentListingTab> = listOf(Active, Cancelled, Completed)
 
-    private val _appointments = MutableStateFlow<List<Appointment>>(emptyList())
-    val appointments: StateFlow<List<Appointment>> get() = _appointments
-
-    private val _activeTab = MutableStateFlow(0)
-    val activeTab: StateFlow<Int> get() = _activeTab
-
-    // Derived states based on active tab selection
-    val filteredAppointments: StateFlow<List<Appointment>> = combine(
-        _appointments, _activeTab
-    ) { allAppointments, tabIndex ->
-        when (tabIndex) {
-            0 -> allAppointments.filter { it.status == 1 } // Active (future scheduled)
-            1 -> allAppointments.filter { it.status in listOf(3, 4, 5) } // Canceled
-            2 -> allAppointments.filter { it.status in listOf(6, 7) } // Attendance history
-            else -> allAppointments
-        }
-    }.stateIn(screenModelScope, SharingStarted.Lazily, emptyList())
-
-    val tabTitles: StateFlow<List<String>> = appointments.map { allAppointments ->
-        listOf(
-            "Aktif (${allAppointments.count { it.status == 1 }})",
-            "İptal (${allAppointments.count { it.status in listOf(3, 4, 5) }})",
-            "Devamsızlık (${allAppointments.count { it.status in listOf(6, 7) }})"
-        )
-    }.stateIn(screenModelScope, SharingStarted.Lazily, listOf("Aktif (0)", "İptal (0)", "Devamsızlık (0)"))
+    init {
+        refreshData()
+    }
 
     fun onAction(action: UserAppointmentListingAction) {
         when (action) {
@@ -78,25 +93,84 @@ class UserAppointmentListingViewModel(
             UserAppointmentListingAction.ShowFilter ->
                 _effect.emitIn(screenModelScope, UserAppointmentListingEffect.ShowFilter)
 
-            is UserAppointmentListingAction.CancelAppointment -> cancelAppointment(action.appointment)
-            is UserAppointmentListingAction.ChangeTab -> updateActiveTab(action.index)
+            is UserAppointmentListingAction.CancelAppointment ->
+                cancelAppointment(action.appointment)
+
             is UserAppointmentListingAction.NavigateToDetail ->
                 _effect.emitIn(screenModelScope, UserAppointmentListingEffect.NavigateToDetail(action.lpId))
+
+            is UserAppointmentListingAction.ChangeTab -> {
+                val current = _uiState.value as? UserAppointmentListingUiState.Content ?: return
+                val newTab = action.tab
+                applyFilter(current.currentFilter, tab = newTab)
+            }
+
+            is UserAppointmentListingAction.RemoveDateFilter -> {
+                val current = _uiState.value as? UserAppointmentListingUiState.Content ?: return
+                val updatedFilter = current.currentFilter.copy(
+                    selectedDates = current.currentFilter.selectedDates - action.date
+                )
+                applyFilter(updatedFilter)
+            }
+
+            is UserAppointmentListingAction.RemoveTimeFilter -> {
+                val current = _uiState.value as? UserAppointmentListingUiState.Content ?: return
+                val updatedFilter = current.currentFilter.copy(
+                    selectedHours = current.currentFilter.selectedHours - action.time
+                )
+                applyFilter(updatedFilter)
+            }
+
+            is UserAppointmentListingAction.RemoveTitleFilter -> {
+                val current = _uiState.value as? UserAppointmentListingUiState.Content ?: return
+                val updatedFilter = current.currentFilter.copy(
+                    selectedTitles = current.currentFilter.selectedTitles - action.title
+                )
+                applyFilter(updatedFilter)
+            }
+
+            is UserAppointmentListingAction.RemoveTrainerFilter -> {
+                val current = _uiState.value as? UserAppointmentListingUiState.Content ?: return
+                val updatedFilter = current.currentFilter.copy(
+                    selectedTrainers = current.currentFilter.selectedTrainers - action.trainer
+                )
+                applyFilter(updatedFilter)
+            }
         }
     }
 
     fun refreshData() {
         screenModelScope.launch {
             try {
-                _appointments.value = courseRepository.getAppointmentsByUser(user.normalUserId).getOrThrow()
+                val result = courseRepository.getAppointmentsByUser(user.normalUserId).getOrThrow()
+                val currentState = _uiState.value as? UserAppointmentListingUiState.Content
+                val currentTab = currentState?.activeTab ?: UserAppointmentListingTab.Active
+                val currentFilter = currentState?.currentFilter ?: UserAppointmentListingFilter()
+                val tabCounts = allTabs.map { tab ->
+                    tab.label + " (" + result.count { it.status in tab.statusTypes } + ")"
+                }
+
+                val filtered = result
+                    .filter { it.status in currentTab.statusTypes }
+                    .filter {
+                        (currentFilter.selectedTitles.isEmpty() || it.title in currentFilter.selectedTitles) &&
+                                (currentFilter.selectedDates.isEmpty() || it.startDate in currentFilter.selectedDates) &&
+                                (currentFilter.selectedHours.isEmpty() || it.startTime in currentFilter.selectedHours) &&
+                                (currentFilter.selectedTrainers.isEmpty() || currentFilter.selectedTrainers.any { t -> t.trainerId == it.trainerId })
+                    }
+
+                _uiState.value = UserAppointmentListingUiState.Content(
+                    activeTab = currentTab,
+                    appointments = result,
+                    filteredAppointments = filtered,
+                    tabTitles = tabCounts,
+                    currentFilter = currentFilter
+                )
             } catch (e: Exception) {
                 e.printStackTrace()
+                _uiState.value = UserAppointmentListingUiState.Error(e.message ?: "Veri alınamadı")
             }
         }
-    }
-
-    private fun updateActiveTab(index: Int) {
-        _activeTab.value = index
     }
 
     private fun cancelAppointment(appointment: Appointment) {
@@ -105,8 +179,40 @@ class UserAppointmentListingViewModel(
                 courseRepository.cancelAppointment(appointment.lessonId, appointment.lpId).getOrThrow()
                 refreshData()
             } catch (e: Exception) {
-                _effect.emitIn(screenModelScope, UserAppointmentListingEffect.ShowCancelError(e.message ?: "Randevu iptal hatasi"))
+                _effect.emitIn(screenModelScope, UserAppointmentListingEffect.ShowCancelError(e.message ?: "Randevu iptal hatası"))
             }
         }
+    }
+
+    fun applyFilter(
+        filter: UserAppointmentListingFilter,
+        tab: UserAppointmentListingTab? = null
+    ) {
+        val current = _uiState.value as? UserAppointmentListingUiState.Content ?: return
+        val selectedTab = tab ?: current.activeTab
+
+        val filtered = current.appointments
+            .filter { it.status in selectedTab.statusTypes }
+            .filter {
+                (filter.selectedTitles.isEmpty() || it.title in filter.selectedTitles) &&
+                        (filter.selectedDates.isEmpty() || it.startDate in filter.selectedDates) &&
+                        (filter.selectedHours.isEmpty() || it.startTime in filter.selectedHours) &&
+                        (filter.selectedTrainers.isEmpty() || filter.selectedTrainers.any { t -> t.trainerId == it.trainerId })
+            }
+
+        _uiState.value = current.copy(
+            activeTab = selectedTab,
+            currentFilter = filter,
+            filteredAppointments = filtered
+        )
+    }
+
+    fun resetFilter() {
+        val current = _uiState.value as? UserAppointmentListingUiState.Content ?: return
+        _uiState.value = current.copy(
+            currentFilter = UserAppointmentListingFilter(),
+            filteredAppointments = current.appointments
+                .filter { it.status in current.activeTab.statusTypes }
+        )
     }
 }

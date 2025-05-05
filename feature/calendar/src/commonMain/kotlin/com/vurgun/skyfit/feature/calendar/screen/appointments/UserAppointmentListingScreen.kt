@@ -1,18 +1,28 @@
 package com.vurgun.skyfit.feature.calendar.screen.appointments
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.ExperimentalLayoutApi
+import androidx.compose.foundation.layout.FlowRow
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.material.Divider
+import androidx.compose.material.Icon
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import cafe.adriel.voyager.core.screen.Screen
@@ -21,21 +31,30 @@ import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
 import com.vurgun.skyfit.core.navigation.SharedScreen
 import com.vurgun.skyfit.core.navigation.push
+import com.vurgun.skyfit.core.ui.components.chip.SecondaryPillChip
 import com.vurgun.skyfit.core.ui.components.dialog.ErrorDialog
 import com.vurgun.skyfit.core.ui.components.dialog.SkyFitDestructiveDialogComponent
 import com.vurgun.skyfit.core.ui.components.dialog.rememberErrorDialogState
 import com.vurgun.skyfit.core.ui.components.event.ActiveAppointmentEventItem
 import com.vurgun.skyfit.core.ui.components.event.AttendanceAppointmentEventItem
 import com.vurgun.skyfit.core.ui.components.event.BasicAppointmentEventItem
+import com.vurgun.skyfit.core.ui.components.loader.FullScreenLoaderContent
 import com.vurgun.skyfit.core.ui.components.special.SkyFitMobileScaffold
 import com.vurgun.skyfit.core.ui.components.special.SkyFitScreenHeader
-import com.vurgun.skyfit.core.ui.components.special.TextNumberBadgeTabBarComponent
+import com.vurgun.skyfit.core.ui.components.text.BodyMediumMediumText
+import com.vurgun.skyfit.core.ui.screen.ErrorScreen
+import com.vurgun.skyfit.core.ui.styling.SkyFitColor
 import com.vurgun.skyfit.core.ui.utils.CollectEffect
 import com.vurgun.skyfit.data.courses.domain.model.Appointment
+import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
 import skyfit.core.ui.generated.resources.Res
 import skyfit.core.ui.generated.resources.appointments_title
 import skyfit.core.ui.generated.resources.error_cancel_appointment_title
+import skyfit.core.ui.generated.resources.ic_filter
+import skyfit.core.ui.generated.resources.lesson_status_active
+import skyfit.core.ui.generated.resources.lesson_status_cancelled
+import skyfit.core.ui.generated.resources.lesson_status_completed
 
 class UserAppointmentListingScreen : Screen {
 
@@ -43,6 +62,9 @@ class UserAppointmentListingScreen : Screen {
     override fun Content() {
         val navigator = LocalNavigator.currentOrThrow
         val viewModel = koinScreenModel<UserAppointmentListingViewModel>()
+        val uiState by viewModel.uiState.collectAsState()
+        val activeTab = (uiState as? UserAppointmentListingUiState.Content)?.activeTab
+            ?: UserAppointmentListingTab.Active
         val cancelDialog = rememberErrorDialogState()
 
         CollectEffect(viewModel.effect) { effect ->
@@ -50,7 +72,8 @@ class UserAppointmentListingScreen : Screen {
                 UserAppointmentListingEffect.NavigateToBack ->
                     navigator.pop()
 
-                UserAppointmentListingEffect.ShowFilter -> TODO()
+                UserAppointmentListingEffect.ShowFilter ->
+                    navigator.push(UserAppointmentListingFilterScreen(viewModel))
 
                 is UserAppointmentListingEffect.NavigateToDetail ->
                     navigator.push(SharedScreen.UserAppointmentDetail(effect.lpId))
@@ -60,15 +83,39 @@ class UserAppointmentListingScreen : Screen {
             }
         }
 
-        LaunchedEffect(Unit) {
-            viewModel.refreshData()
-        }
+        SkyFitMobileScaffold(
+            topBar = {
+                Column {
+                    SkyFitScreenHeader(
+                        title = stringResource(Res.string.appointments_title),
+                        onClickBack = { viewModel.onAction(UserAppointmentListingAction.NavigateToBack) })
 
-        MobileUserAppointmentListingScreen(
-            goToBack = { navigator.pop() },
-            goToDetails = { navigator.push(SharedScreen.UserAppointmentDetail(it)) },
-            viewModel = viewModel
-        )
+                    UserAppointmentListingTabRow(
+                        selectedTab = activeTab,
+                        tabTitles = (uiState as? UserAppointmentListingUiState.Content)?.tabTitles.orEmpty(),
+                        onTabSelected = { tab ->
+                            viewModel.onAction(UserAppointmentListingAction.ChangeTab(tab))
+                        },
+                        onClickFilter = {
+                            viewModel.onAction(UserAppointmentListingAction.ShowFilter)
+                        }
+                    )
+                }
+            }
+        ) {
+            when (uiState) {
+                UserAppointmentListingUiState.Loading -> FullScreenLoaderContent()
+                is UserAppointmentListingUiState.Error -> {
+                    val message = (uiState as UserAppointmentListingUiState.Error)
+                    ErrorScreen(message = message.toString(), onConfirm = { navigator.pop() })
+                }
+
+                is UserAppointmentListingUiState.Content -> {
+                    val content = (uiState as UserAppointmentListingUiState.Content)
+                    MobileUserAppointmentListingContent(content, viewModel::onAction)
+                }
+            }
+        }
 
         cancelDialog.message?.let { message ->
             ErrorDialog(
@@ -81,87 +128,94 @@ class UserAppointmentListingScreen : Screen {
 }
 
 
+@OptIn(ExperimentalLayoutApi::class)
 @Composable
-private fun MobileUserAppointmentListingScreen(
-    goToBack: () -> Unit,
-    goToDetails: (lpId: Int) -> Unit,
-    viewModel: UserAppointmentListingViewModel
+private fun MobileUserAppointmentListingContent(
+    content: UserAppointmentListingUiState.Content,
+    onAction: (UserAppointmentListingAction) -> Unit
 ) {
-
-    val appointments by viewModel.filteredAppointments.collectAsState()
-    val activeTab by viewModel.activeTab.collectAsState()
-    val tabTitles by viewModel.tabTitles.collectAsState()
 
     var showDeleteDialog by remember { mutableStateOf(false) }
     var appointmentToDelete by remember { mutableStateOf<Appointment?>(null) }
 
+    LazyColumn(
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(16.dp),
+        verticalArrangement = Arrangement.spacedBy(16.dp)
+    ) {
 
-    SkyFitMobileScaffold(
-        topBar = {
-            Column {
-                SkyFitScreenHeader(stringResource(Res.string.appointments_title), onClickBack = goToBack)
-
-                TextNumberBadgeTabBarComponent(
-                    titles = tabTitles,
-                    selectedTabIndex = activeTab,
-                    onTabSelected = { index -> viewModel.onAction(UserAppointmentListingAction.ChangeTab(index)) },
-                    onFilter = { viewModel.onAction(UserAppointmentListingAction.ShowFilter) }
-                )
+        if (content.currentFilter.hasAny) {
+            item {
+                FlowRow(
+                    Modifier.fillMaxWidth(),
+                    verticalArrangement = Arrangement.spacedBy(16.dp),
+                    horizontalArrangement = Arrangement.spacedBy(16.dp)
+                ) {
+                    content.currentFilter.selectedTitles.forEach { filterForTitle ->
+                        SecondaryPillChip(filterForTitle, selected = false, onClick = {
+                            onAction(UserAppointmentListingAction.RemoveTitleFilter(filterForTitle))
+                        })
+                    }
+                    content.currentFilter.selectedHours.forEach { filterForTime ->
+                        SecondaryPillChip(filterForTime.toString(), selected = false, onClick = {
+                            onAction(UserAppointmentListingAction.RemoveTimeFilter(filterForTime))
+                        })
+                    }
+                    content.currentFilter.selectedDates.forEach { filterForDate ->
+                        SecondaryPillChip(filterForDate.toString(), selected = false, onClick = {
+                            onAction(UserAppointmentListingAction.RemoveDateFilter(filterForDate))
+                        })
+                    }
+                }
             }
         }
-    ) {
-        LazyColumn(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(16.dp),
-            verticalArrangement = Arrangement.spacedBy(16.dp)
-        ) {
-            items(appointments) { appointment ->
 
-                when (activeTab) {
-                    0 -> {
-                        ActiveAppointmentEventItem(
-                            title = appointment.title,
-                            iconId = appointment.iconId,
-                            date = appointment.startDate.toString(),
-                            timePeriod = "${appointment.startTime} - ${appointment.endTime}",
-                            location = appointment.facilityName,
-                            trainer = appointment.trainerFullName,
-                            note = appointment.trainerNote,
-                            onDelete = {
-                                appointmentToDelete = appointment
-                                showDeleteDialog = true
-                            },
-                            onClick = { viewModel.onAction(UserAppointmentListingAction.NavigateToDetail(appointment.lpId)) }
-                        )
-                    }
+        items(content.filteredAppointments) { appointment ->
 
-                    1 -> {
-                        BasicAppointmentEventItem(
-                            title = appointment.title,
-                            iconId = appointment.iconId,
-                            date = appointment.startDate.toString(),
-                            timePeriod = "${appointment.startTime} - ${appointment.endTime}",
-                            location = appointment.facilityName,
-                            trainer = appointment.trainerFullName,
-                            note = appointment.trainerNote,
-                            onClick = { viewModel.onAction(UserAppointmentListingAction.NavigateToDetail(appointment.lpId)) }
-                        )
-                    }
+            when (content.activeTab) {
+                UserAppointmentListingTab.Active -> {
+                    ActiveAppointmentEventItem(
+                        title = appointment.title,
+                        iconId = appointment.iconId,
+                        date = appointment.startDate.toString(),
+                        timePeriod = "${appointment.startTime} - ${appointment.endTime}",
+                        location = appointment.facilityName,
+                        trainer = appointment.trainerFullName,
+                        note = appointment.trainerNote,
+                        onDelete = {
+                            appointmentToDelete = appointment
+                            showDeleteDialog = true
+                        },
+                        onClick = { onAction(UserAppointmentListingAction.NavigateToDetail(appointment.lpId)) }
+                    )
+                }
 
-                    2 -> {
-                        AttendanceAppointmentEventItem(
-                            title = appointment.title,
-                            iconId = appointment.iconId,
-                            date = appointment.startDate.toString(),
-                            timePeriod = "${appointment.startTime} - ${appointment.endTime}",
-                            location = appointment.facilityName,
-                            trainer = appointment.trainerFullName,
-                            note = appointment.trainerNote,
-                            isCompleted = appointment.status == 2, //TODO: WTF?
-                            onClick = { viewModel.onAction(UserAppointmentListingAction.NavigateToDetail(appointment.lpId)) }
-                        )
-                    }
+                UserAppointmentListingTab.Cancelled -> {
+                    BasicAppointmentEventItem(
+                        title = appointment.title,
+                        iconId = appointment.iconId,
+                        date = appointment.startDate.toString(),
+                        timePeriod = "${appointment.startTime} - ${appointment.endTime}",
+                        location = appointment.facilityName,
+                        trainer = appointment.trainerFullName,
+                        note = appointment.trainerNote,
+                        onClick = { onAction(UserAppointmentListingAction.NavigateToDetail(appointment.lpId)) }
+                    )
+                }
+
+                UserAppointmentListingTab.Completed -> {
+                    AttendanceAppointmentEventItem(
+                        title = appointment.title,
+                        iconId = appointment.iconId,
+                        date = appointment.startDate.toString(),
+                        timePeriod = "${appointment.startTime} - ${appointment.endTime}",
+                        location = appointment.facilityName,
+                        trainer = appointment.trainerFullName,
+                        note = appointment.trainerNote,
+                        isCompleted = appointment.status == 2, // TODO: StatusType
+                        onClick = { onAction(UserAppointmentListingAction.NavigateToDetail(appointment.lpId)) }
+                    )
                 }
             }
         }
@@ -172,10 +226,69 @@ private fun MobileUserAppointmentListingScreen(
         showDialog = showDeleteDialog,
         onDismiss = { showDeleteDialog = false },
         onConfirm = {
-            appointmentToDelete?.let { viewModel.onAction(UserAppointmentListingAction.CancelAppointment(it)) }
+            appointmentToDelete?.let { onAction(UserAppointmentListingAction.CancelAppointment(it)) }
             showDeleteDialog = false
         }
     )
+}
+
+@Composable
+private fun UserAppointmentListingTabRow(
+    selectedTab: UserAppointmentListingTab,
+    tabTitles: List<String>,
+    onTabSelected: (UserAppointmentListingTab) -> Unit,
+    onClickFilter: () -> Unit
+) {
+    Box(modifier = Modifier.fillMaxWidth()) {
+        Row(
+            Modifier.fillMaxWidth(),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            AppointmentListingTabItem(
+                text = tabTitles.getOrNull(0) ?:stringResource(Res.string.lesson_status_active),
+                selected = selectedTab == UserAppointmentListingTab.Active,
+                onClick = { onTabSelected(UserAppointmentListingTab.Active) }
+            )
+            AppointmentListingTabItem(
+                text = tabTitles.getOrNull(1) ?: stringResource(Res.string.lesson_status_cancelled),
+                selected = selectedTab == UserAppointmentListingTab.Cancelled,
+                onClick = { onTabSelected(UserAppointmentListingTab.Cancelled) }
+            )
+            AppointmentListingTabItem(
+                text = tabTitles.getOrNull(2) ?: stringResource(Res.string.lesson_status_completed),
+                selected = selectedTab == UserAppointmentListingTab.Completed,
+                onClick = { onTabSelected(UserAppointmentListingTab.Completed) }
+            )
+            Spacer(Modifier.weight(1f))
+
+            Row(
+                modifier = Modifier
+                    .padding(horizontal = 16.dp)
+                    .clickable { onClickFilter() },
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                BodyMediumMediumText(
+                    text = "Filtre",
+                    modifier = Modifier,
+                    color = SkyFitColor.text.linkInverse
+                )
+                Icon(
+                    painter = painterResource(Res.drawable.ic_filter),
+                    contentDescription = null,
+                    modifier = Modifier.size(16.dp),
+                    tint = SkyFitColor.icon.linkInverse
+                )
+            }
+
+        }
+
+        Divider(
+            modifier = Modifier
+                .align(Alignment.BottomCenter)
+                .fillMaxWidth(),
+            color = SkyFitColor.border.secondaryButtonDisabled
+        )
+    }
 }
 
 
