@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
@@ -105,16 +106,18 @@ fun MobileFacilitySettingsEditProfileScreen(
         }
     ) {
         Column(
-            modifier = Modifier.fillMaxSize()
+            modifier = Modifier
+                .fillMaxSize()
                 .padding(24.dp)
-                .verticalScroll(scrollState),
+                .verticalScroll(scrollState)
+                .imePadding(),
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.spacedBy(24.dp)
         ) {
 
             AccountSettingsEditableProfileImage(
                 title = stringResource(Res.string.background_image_label),
-                url = null,
+                url = formState.backgroundImageUrl,
                 modifier = Modifier.fillMaxWidth(),
                 onClickDelete = {
                     onAction(FacilityEditProfileAction.DeleteBackgroundImage)
@@ -153,7 +156,7 @@ fun MobileFacilitySettingsEditProfileScreen(
                 onTagsSelected = { onAction(FacilityEditProfileAction.UpdateTags(it)) },
             )
 
-            Spacer(Modifier.height(124.dp))
+            Spacer(Modifier.height(128.dp))
         }
     }
 }
