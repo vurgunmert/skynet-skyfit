@@ -191,28 +191,42 @@ class UserAppointmentListingViewModel(
         val current = _uiState.value as? UserAppointmentListingUiState.Content ?: return
         val selectedTab = tab ?: current.activeTab
 
-        val filtered = current.appointments
-            .filter { it.status in selectedTab.statusTypes }
-            .filter {
-                (filter.selectedTitles.isEmpty() || it.title in filter.selectedTitles) &&
-                        (filter.selectedDates.isEmpty() || it.startDate in filter.selectedDates) &&
-                        (filter.selectedHours.isEmpty() || it.startTime in filter.selectedHours) &&
-                        (filter.selectedTrainers.isEmpty() || filter.selectedTrainers.any { t -> t.trainerId == it.trainerId })
-            }
+        val filteredAll = current.appointments.filter {
+            (filter.selectedTitles.isEmpty() || it.title in filter.selectedTitles) &&
+                    (filter.selectedDates.isEmpty() || it.startDate in filter.selectedDates) &&
+                    (filter.selectedHours.isEmpty() || it.startTime in filter.selectedHours) &&
+                    (filter.selectedTrainers.isEmpty() || filter.selectedTrainers.any { t -> t.trainerId == it.trainerId })
+        }
+
+        val tabTitlesFromFiltered = allTabs.map { eachTab ->
+            eachTab.label + " (" + filteredAll.count { it.status in eachTab.statusTypes } + ")"
+        }
+
+        val filteredForSelectedTab = filteredAll.filter { it.status in selectedTab.statusTypes }
 
         _uiState.value = current.copy(
             activeTab = selectedTab,
             currentFilter = filter,
-            filteredAppointments = filtered
+            filteredAppointments = filteredForSelectedTab,
+            tabTitles = tabTitlesFromFiltered
         )
     }
 
     fun resetFilter() {
         val current = _uiState.value as? UserAppointmentListingUiState.Content ?: return
+
+        val updatedFilter = UserAppointmentListingFilter()
+        val filtered = current.appointments
+            .filter { it.status in current.activeTab.statusTypes }
+
+        val updatedTabTitles = allTabs.map { tab ->
+            tab.label + " (" + current.appointments.count { it.status in tab.statusTypes } + ")"
+        }
+
         _uiState.value = current.copy(
-            currentFilter = UserAppointmentListingFilter(),
-            filteredAppointments = current.appointments
-                .filter { it.status in current.activeTab.statusTypes }
+            currentFilter = updatedFilter,
+            filteredAppointments = filtered,
+            tabTitles = updatedTabTitles
         )
     }
 }
