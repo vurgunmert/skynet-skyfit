@@ -173,7 +173,7 @@ private fun MobileTrainerProfileOwnerContent(
                 MobileProfileActionsRow(
                     postsSelected = content.postsVisible,
                     onClickAbout = { onAction(TrainerProfileOwnerAction.TogglePostVisibility(false)) },
-                    onClickPosts = { onAction(TrainerProfileOwnerAction.TogglePostVisibility(true)) },
+                    onClickPosts = {  }, //onAction(TrainerProfileOwnerAction.TogglePostVisibility(true))
                     onClickSettings = { onAction(TrainerProfileOwnerAction.NavigateToSettings) },
                     onClickNewPost = { onAction(TrainerProfileOwnerAction.NavigateToCreatePost) }
                 )

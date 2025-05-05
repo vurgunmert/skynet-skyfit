@@ -190,7 +190,7 @@ private object MobileUserProfileOwnerComponent {
                     MobileProfileActionsRow(
                         postsSelected = content.postsVisible,
                         onClickAbout = { onAction(UserProfileOwnerAction.TogglePostVisibility(false)) },
-                        onClickPosts = { onAction(UserProfileOwnerAction.TogglePostVisibility(true)) },
+                        onClickPosts = {  }, //onAction(UserProfileOwnerAction.TogglePostVisibility(true))
                         onClickSettings = { onAction(UserProfileOwnerAction.NavigateToSettings) },
                         onClickNewPost = { onAction(UserProfileOwnerAction.NavigateToCreatePost) }
                     )

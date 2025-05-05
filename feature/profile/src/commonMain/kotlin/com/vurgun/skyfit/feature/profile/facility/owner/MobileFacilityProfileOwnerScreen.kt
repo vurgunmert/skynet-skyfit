@@ -204,7 +204,7 @@ private fun MobileFacilityProfileOwnerContent(
                 MobileProfileActionsRow(
                     postsSelected = content.postsVisible,
                     onClickAbout = { onAction(FacilityProfileOwnerAction.TogglePostVisibility(false)) },
-                    onClickPosts = { onAction(FacilityProfileOwnerAction.TogglePostVisibility(true)) },
+                    onClickPosts = {  }, //onAction(FacilityProfileOwnerAction.TogglePostVisibility(true))
                     onClickSettings = { onAction(FacilityProfileOwnerAction.NavigateToSettings) },
                     onClickNewPost = { onAction(FacilityProfileOwnerAction.NavigateToCreatePost) },
                 )
