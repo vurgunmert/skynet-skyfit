@@ -10,7 +10,7 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.heightIn
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.systemBars
@@ -39,6 +39,7 @@ import com.vurgun.skyfit.core.ui.components.button.SecondaryIconButton
 import com.vurgun.skyfit.core.ui.components.image.SkyFitPickImageWrapper
 import com.vurgun.skyfit.core.ui.components.special.SkyFitMobileFillScaffold
 import com.vurgun.skyfit.core.ui.styling.SkyFitColor
+import com.vurgun.skyfit.data.bodyanalysis.model.PostureType
 import org.jetbrains.compose.resources.painterResource
 import skyfit.core.ui.generated.resources.Res
 import skyfit.core.ui.generated.resources.body_analysis_grid
@@ -50,9 +51,12 @@ import skyfit.core.ui.generated.resources.ic_info_circle
 import skyfit.core.ui.generated.resources.ic_posture_fill
 import skyfit.core.ui.generated.resources.ic_visibility_hide
 import skyfit.core.ui.generated.resources.ic_visibility_show
+import skyfit.core.ui.generated.resources.posture_guide_view_back
 import skyfit.core.ui.generated.resources.posture_guide_view_front
+import skyfit.core.ui.generated.resources.posture_guide_view_left
+import skyfit.core.ui.generated.resources.posture_guide_view_right
 
-class PostureAnalysisScreen: Screen {
+class PostureAnalysisScreen : Screen {
 
     @Composable
     override fun Content() {
@@ -61,46 +65,46 @@ class PostureAnalysisScreen: Screen {
 
         PostureAnalysisRootScreen(
             onExit = { navigator.pop() },
-            viewModel =viewModel
+            viewModel = viewModel
         )
     }
 }
 
-    @Composable
+@Composable
 private fun PostureAnalysisRootScreen(
     onExit: () -> Unit,
     viewModel: PostureAnalysisViewModel
-    ) {
+) {
     val uiState by viewModel.uiState.collectAsState()
     var showExitDialog by remember { mutableStateOf(false) }
     var showResultDialog by remember { mutableStateOf(false) }
 
     SkyFitMobileFillScaffold {
-        Box(Modifier.fillMaxSize()) {
 
-            when (uiState.mode) {
-                PostureAnalysisUIState.Mode.Info -> {
+        Box(Modifier.fillMaxSize()) {
+            when (uiState.activeTab) {
+                PostureAnalysisUIState.PostureAnalysisTab.Info -> {
                     PostureAnalysisInfoScreen(
                         onClickDismiss = viewModel::toggleInfo
                     )
                 }
 
-                PostureAnalysisUIState.Mode.Options -> {
+                PostureAnalysisUIState.PostureAnalysisTab.Options -> {
                     PostureAnalysisOptionsScreen(viewModel)
                 }
 
-                PostureAnalysisUIState.Mode.Camera -> {
+                PostureAnalysisUIState.PostureAnalysisTab.Camera -> {
                     PostureCameraScreen(
                         viewModel = viewModel,
                         isLoading = uiState.isCaptureLoading
                     )
                 }
 
-                PostureAnalysisUIState.Mode.Scanning -> {
+                PostureAnalysisUIState.PostureAnalysisTab.Scanning -> {
                     PostureAnalysisScanningScreen(imageBitmap = uiState.lastCapturedImage)
                 }
 
-                PostureAnalysisUIState.Mode.Result -> {
+                PostureAnalysisUIState.PostureAnalysisTab.Result -> {
                     showResultDialog = true
 //                    PostureAnalysisResultScreen(viewModel)
                 }
@@ -113,9 +117,9 @@ private fun PostureAnalysisRootScreen(
                     .fillMaxWidth(),
                 uiState = uiState,
                 onClickBack = onExit, //{ showExitDialog = true },
-                onToggleGuide = viewModel::toggleGuideOverlay,
-                onToggleGrid = viewModel::toggleGrid,
-                onClickInfo = viewModel::toggleInfo
+                onToggleGuide = { viewModel.onAction(PostureAnalysisAction.ToggleHumanGuide) },
+                onToggleGrid = { viewModel.onAction(PostureAnalysisAction.ToggleGrid) },
+                onClickInfo = { viewModel.onAction(PostureAnalysisAction.ToggleInfo) },
             )
         }
 
@@ -124,7 +128,7 @@ private fun PostureAnalysisRootScreen(
                 viewModel = viewModel,
                 onDismiss = {
                     showResultDialog = false
-                    viewModel.toggleInfo()
+                    viewModel.onAction(PostureAnalysisAction.ToggleInfo)
                 }
             )
         }
@@ -187,7 +191,7 @@ private fun PostureAnalysisTopBar(
 
         Spacer(Modifier.width(16.dp))
 
-        if (uiState.mode == PostureAnalysisUIState.Mode.Info) {
+        if (uiState.activeTab == PostureAnalysisUIState.PostureAnalysisTab.Info) {
             PrimaryIconButton(
                 painter = painterResource(Res.drawable.ic_info_circle),
                 modifier = Modifier.size(48.dp),
@@ -233,37 +237,44 @@ internal fun PostureAnalysisBottomBar(
 
 @Composable
 fun PostureAnalysisGrid() {
-    Icon(
+    Image(
         painter = painterResource(Res.drawable.body_analysis_grid),
         contentDescription = "Grid",
-        modifier = Modifier.fillMaxSize()
+        modifier = Modifier
+            .fillMaxSize()
     )
 }
 
 @Composable
-fun HumanGuideOverlay() {
+fun HumanGuideOverlay(postureType: PostureType) {
+    val res = when (postureType) {
+        PostureType.Front -> Res.drawable.posture_guide_view_front
+        PostureType.Back -> Res.drawable.posture_guide_view_back
+        PostureType.Left -> Res.drawable.posture_guide_view_right
+        PostureType.Right -> Res.drawable.posture_guide_view_left
+    }
+
     BoxWithConstraints(
         modifier = Modifier
             .fillMaxSize()
-            .padding(horizontal = 16.dp), // keep spacing from edges
+            .padding(horizontal = 32.dp),
         contentAlignment = Alignment.Center
     ) {
-        val maxWidth = maxWidth
-        val maxHeight = maxHeight
+        // Boundaries
+        val maxImageHeight = 649.dp
+        val maxImageWidth = 222.dp
+        val aspectRatio = maxImageWidth / maxImageHeight
 
-        // Assuming your human guide is about 2.9:1 (height to width)
-        val guideAspectRatio = 2.9f
-
-        // We'll take 80% of width and calculate height from aspect ratio
-        val guideWidth = maxWidth * 0.8f
-        val guideHeight = guideWidth * guideAspectRatio
+        val availableHeight = maxHeight * 0.6f
+        val scaledHeight = minOf(availableHeight, maxImageHeight)
+        val scaledWidth = scaledHeight * aspectRatio
 
         Image(
-            painter = painterResource(Res.drawable.posture_guide_view_front),
+            painter = painterResource(res),
             contentDescription = null,
             modifier = Modifier
-                .width(guideWidth)
-                .heightIn(min = guideHeight, max = maxHeight) // keep it inside the screen
+                .height(scaledHeight)
+                .width(scaledWidth)
         )
     }
 }

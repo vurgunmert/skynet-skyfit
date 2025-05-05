@@ -1,6 +1,5 @@
 package com.vurgun.skyfit.feature.bodyanalysis.screen
 
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
@@ -13,11 +12,8 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.ImageBitmap
-import androidx.compose.ui.layout.ContentScale
 import com.kashif.cameraK.controller.CameraController
 import com.kashif.cameraK.enums.CameraLens
 import com.kashif.cameraK.enums.Directory
@@ -117,7 +113,11 @@ private fun CameraContent(
         )
 
         if (uiState.showGrid) PostureAnalysisGrid()
-        if (uiState.showGuideOverlay) HumanGuideOverlay()
+        if (uiState.showGuideOverlay) {
+            uiState.currentPosture?.let {
+                HumanGuideOverlay(it)
+            }
+        }
 
         cameraController.value?.let { controller ->
             CameraScreenControlOverlay(

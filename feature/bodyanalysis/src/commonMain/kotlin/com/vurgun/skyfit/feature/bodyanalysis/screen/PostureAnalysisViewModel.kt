@@ -38,7 +38,7 @@ data class PostureState(
 }
 
 data class PostureAnalysisUIState(
-    val mode: Mode = Mode.Info,
+    val activeTab: PostureAnalysisTab = PostureAnalysisTab.Info,
     val currentPosture: PostureType? = null,
     val lastCapturedImage: ImageBitmap? = null,
     val postureStates: List<PostureState> = PostureType.entries.map { PostureState(it) },
@@ -46,13 +46,26 @@ data class PostureAnalysisUIState(
     val showGuideOverlay: Boolean = true,
     val isCaptureLoading: Boolean = false
 ) {
-    enum class Mode {
+    enum class PostureAnalysisTab {
         Info,
         Options,
         Camera,
         Scanning,
         Result
     }
+}
+
+sealed class PostureAnalysisAction {
+    data object NavigateToBack: PostureAnalysisAction()
+    data object ToggleInfo: PostureAnalysisAction()
+    data object Reset: PostureAnalysisAction()
+    data class SelectPosture(val type: PostureType): PostureAnalysisAction()
+    data object ToggleGrid: PostureAnalysisAction()
+    data object ToggleHumanGuide: PostureAnalysisAction()
+}
+
+sealed class PostureAnalysisEffect {
+    data object NavigateToBack: PostureAnalysisEffect()
 }
 
 class PostureAnalysisViewModel(
@@ -62,13 +75,24 @@ class PostureAnalysisViewModel(
     private val _uiState = MutableStateFlow(PostureAnalysisUIState())
     val uiState: StateFlow<PostureAnalysisUIState> = _uiState
 
+    fun onAction(action: PostureAnalysisAction) {
+        when(action) {
+            PostureAnalysisAction.NavigateToBack -> TODO()
+            PostureAnalysisAction.Reset -> resetAll()
+            is PostureAnalysisAction.SelectPosture -> selectPosture(action.type)
+            PostureAnalysisAction.ToggleGrid -> toggleGrid()
+            PostureAnalysisAction.ToggleHumanGuide -> toggleGuideOverlay()
+            PostureAnalysisAction.ToggleInfo -> toggleInfo()
+        }
+    }
+
     fun toggleInfo() {
         _uiState.update {
-            val infoMode = when (it.mode) {
-                PostureAnalysisUIState.Mode.Info -> PostureAnalysisUIState.Mode.Options
-                else -> PostureAnalysisUIState.Mode.Info
+            val infoPostureAnalysisTab = when (it.activeTab) {
+                PostureAnalysisUIState.PostureAnalysisTab.Info -> PostureAnalysisUIState.PostureAnalysisTab.Options
+                else -> PostureAnalysisUIState.PostureAnalysisTab.Info
             }
-            it.copy(mode = infoMode)
+            it.copy(activeTab = infoPostureAnalysisTab)
         }
     }
 
@@ -76,7 +100,7 @@ class PostureAnalysisViewModel(
         _uiState.update {
             it.copy(
                 currentPosture = type,
-                mode = PostureAnalysisUIState.Mode.Camera
+                activeTab = PostureAnalysisUIState.PostureAnalysisTab.Camera
             )
         }
     }
@@ -85,7 +109,7 @@ class PostureAnalysisViewModel(
         _uiState.update {
             it.copy(
                 postureStates = PostureType.entries.map { PostureState(it) },
-                mode = PostureAnalysisUIState.Mode.Options,
+                activeTab = PostureAnalysisUIState.PostureAnalysisTab.Options,
                 currentPosture = null
             )
         }
@@ -143,7 +167,7 @@ class PostureAnalysisViewModel(
             it.copy(
                 isCaptureLoading = false,
                 lastCapturedImage = bitmap,
-                mode = PostureAnalysisUIState.Mode.Scanning
+                activeTab = PostureAnalysisUIState.PostureAnalysisTab.Scanning
             )
         }
 
@@ -173,7 +197,7 @@ class PostureAnalysisViewModel(
                     currentState.copy(
                         postureStates = updatedStates,
                         currentPosture = next,
-                        mode = if (allCompleted) PostureAnalysisUIState.Mode.Result else PostureAnalysisUIState.Mode.Options
+                        activeTab = if (allCompleted) PostureAnalysisUIState.PostureAnalysisTab.Result else PostureAnalysisUIState.PostureAnalysisTab.Options
                     )
                 }
             } catch (e: Exception) {
@@ -183,7 +207,7 @@ class PostureAnalysisViewModel(
                     it.copy(
                         isCaptureLoading = false,
                         lastCapturedImage = null,
-                        mode = PostureAnalysisUIState.Mode.Options
+                        activeTab = PostureAnalysisUIState.PostureAnalysisTab.Options
                     )
                 }
             }
