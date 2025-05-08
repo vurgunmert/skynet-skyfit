@@ -6,6 +6,8 @@ import com.vurgun.skyfit.core.data.model.CreatePasswordRequest
 import com.vurgun.skyfit.core.data.model.ResetPasswordRequest
 import com.vurgun.skyfit.core.data.model.VerifyOTPRequest
 import com.vurgun.skyfit.core.data.model.EmptyDTO
+import com.vurgun.skyfit.core.data.model.GoalDTO
+import com.vurgun.skyfit.core.data.model.TagDTO
 import com.vurgun.skyfit.core.network.ApiClient
 import com.vurgun.skyfit.core.network.ApiResult
 import io.ktor.client.request.bearerAuth
@@ -67,6 +69,22 @@ class AuthApiService(private val apiClient: ApiClient) {
             bearerAuth(token)
             url("forgot/change/password")
             setBody(request)
+        }
+    }
+
+    suspend fun getAllGoals(token: String): ApiResult<List<GoalDTO>> {
+        return apiClient.safeApiCall<List<GoalDTO>> {
+            method = HttpMethod.Post
+            bearerAuth(token)
+            url("get/goals")
+        }
+    }
+
+    suspend fun getAllTags(token: String): ApiResult<List<TagDTO>> {
+        return apiClient.safeApiCall<List<TagDTO>> {
+            method = HttpMethod.Post
+            bearerAuth(token)
+            url("get/tags")
         }
     }
 }

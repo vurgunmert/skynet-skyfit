@@ -154,7 +154,6 @@ fun MobileForgotPasswordResetScreen(
             }
 
             Spacer(Modifier.height(24.dp))
-            Spacer(Modifier.weight(1f))
             MobileForgotPasswordResetScreenActionsComponent(
                 isLoading = isLoading,
                 isEnabled = isSubmitEnabled,

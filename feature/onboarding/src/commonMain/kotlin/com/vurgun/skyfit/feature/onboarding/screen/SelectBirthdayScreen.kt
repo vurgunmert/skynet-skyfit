@@ -93,7 +93,13 @@ internal fun MobileOnboardingBirthdaySelectionScreen(
             }
 
             Spacer(Modifier.weight(1f))
-            OnboardingActionGroupComponent(onClickContinue = goToGenderSelection)
+            OnboardingActionGroupComponent(onClickContinue = {
+                viewModel.updateMonth(selectedMonth)
+                viewModel.updateDay(selectedDay)
+                viewModel.updateYear(selectedYear)
+
+                goToGenderSelection()
+            })
 
             Spacer(Modifier.height(20.dp))
         }

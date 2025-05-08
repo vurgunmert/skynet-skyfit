@@ -15,7 +15,7 @@ import androidx.compose.ui.unit.dp
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
-import com.vurgun.skyfit.core.data.domain.model.GoalType
+import com.vurgun.skyfit.core.data.domain.model.UserGoal
 import com.vurgun.skyfit.core.ui.components.button.SkyFitSelectableTextButton
 import com.vurgun.skyfit.core.ui.components.special.SkyFitMobileScaffold
 import com.vurgun.skyfit.feature.onboarding.component.OnboardingActionGroupComponent
@@ -60,6 +60,7 @@ private fun MobileOnboardingGoalSelectionScreen(
             Spacer(Modifier.height(16.dp))
 
             MobileOnboardingGoalSelectionComponent(
+                goals = viewModel.availableGoals.value,
                 selectedGoals = selectedGoals,
                 onGoalsUpdated = viewModel::updateGoals
             )
@@ -74,19 +75,19 @@ private fun MobileOnboardingGoalSelectionScreen(
 
 @Composable
 private fun MobileOnboardingGoalSelectionComponent(
-    selectedGoals: Set<GoalType>,
-    onGoalsUpdated: (Set<GoalType>) -> Unit
+    goals: List<UserGoal>,
+    selectedGoals: Set<UserGoal>,
+    onGoalsUpdated: (Set<UserGoal>) -> Unit
 ) {
-    val goalTypes = GoalType.getAllGoals()
 
     Column(
         modifier = Modifier.fillMaxWidth().padding(horizontal = 24.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.spacedBy(24.dp)
     ) {
-        goalTypes.forEach { goal ->
+        goals.forEach { goal ->
             SkyFitSelectableTextButton(
-                text = goal.label,
+                text = goal.goalName,
                 selected = selectedGoals.contains(goal),
                 onSelect = {
                     val updatedGoals = if (selectedGoals.contains(goal)) {

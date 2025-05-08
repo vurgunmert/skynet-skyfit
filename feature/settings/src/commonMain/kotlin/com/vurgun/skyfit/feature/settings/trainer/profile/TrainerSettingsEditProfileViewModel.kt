@@ -2,8 +2,9 @@ package com.vurgun.skyfit.feature.settings.trainer.profile
 
 import cafe.adriel.voyager.core.model.ScreenModel
 import cafe.adriel.voyager.core.model.screenModelScope
-import com.vurgun.skyfit.core.data.domain.model.FitnessTagType
 import com.vurgun.skyfit.core.data.domain.model.TrainerDetail
+import com.vurgun.skyfit.core.data.domain.model.WorkoutTag
+import com.vurgun.skyfit.core.data.domain.repository.AuthRepository
 import com.vurgun.skyfit.core.data.domain.repository.ProfileRepository
 import com.vurgun.skyfit.core.data.domain.repository.UserManager
 import com.vurgun.skyfit.core.data.utility.SingleSharedFlow
@@ -30,7 +31,8 @@ data class TrainerEditProfileFormState(
     val profileImageBytes: ByteArray? = null,
     val backgroundImageUrl: String? = null,
     val backgroundImageBytes: ByteArray? = null,
-    val profileTags: List<FitnessTagType> = emptyList(),
+    val availableTags: List<WorkoutTag> = emptyList(),
+    val profileTags: List<WorkoutTag> = emptyList(),
     val isUpdated: Boolean = false
 ) {
     override fun equals(other: Any?): Boolean {
@@ -75,7 +77,7 @@ sealed class TrainerEditProfileAction {
     data class UpdateFirstName(val value: String) : TrainerEditProfileAction()
     data class UpdateLastName(val value: String) : TrainerEditProfileAction()
     data class UpdateBiography(val value: String) : TrainerEditProfileAction()
-    data class UpdateTags(val tags: List<FitnessTagType>) : TrainerEditProfileAction()
+    data class UpdateTags(val tags: List<WorkoutTag>) : TrainerEditProfileAction()
 }
 
 sealed class TrainerEditProfileEffect {
@@ -85,7 +87,8 @@ sealed class TrainerEditProfileEffect {
 
 class TrainerSettingsEditProfileViewModel(
     private val userManager: UserManager,
-    private val profileRepository: ProfileRepository
+    private val profileRepository: ProfileRepository,
+    private val authRepository: AuthRepository,
 ) : ScreenModel {
 
     private val _uiState = MutableStateFlow<TrainerEditProfileUiState>(TrainerEditProfileUiState.Loading)
@@ -102,11 +105,15 @@ class TrainerSettingsEditProfileViewModel(
 
     fun onAction(action: TrainerEditProfileAction) {
         when (action) {
-            is TrainerEditProfileAction.UpdateProfileImage -> updateForm { copy(profileImageBytes = action.value) }
+            is TrainerEditProfileAction.UpdateProfileImage ->
+                updateForm { copy(profileImageBytes = action.value) }
+
             is TrainerEditProfileAction.DeleteProfileImage ->
                 updateForm { copy(profileImageBytes = null, profileImageUrl = null) }
 
-            is TrainerEditProfileAction.UpdateBackgroundImage -> updateForm { copy(backgroundImageBytes = action.value) }
+            is TrainerEditProfileAction.UpdateBackgroundImage ->
+                updateForm { copy(backgroundImageBytes = action.value) }
+
             is TrainerEditProfileAction.DeleteBackgroundImage ->
                 updateForm { copy(backgroundImageBytes = null, backgroundImageUrl = null) }
 
@@ -131,6 +138,7 @@ class TrainerSettingsEditProfileViewModel(
                 // Load image bytes in parallel
                 val profileImageDeferred = profileImageUrl?.let { async { profileRepository.fetchImageBytes(it) } }
                 val backgroundImageDeferred = backgroundImageUrl?.let { async { profileRepository.fetchImageBytes(it) } }
+                val allTagsDeferred = async { authRepository.getTags().getOrDefault(emptyList()) }
 
                 val formState = TrainerEditProfileFormState(
                     userName = trainerProfile.username,
@@ -141,7 +149,8 @@ class TrainerSettingsEditProfileViewModel(
                     profileImageBytes = profileImageDeferred?.await(),
                     backgroundImageUrl = backgroundImageUrl,
                     backgroundImageBytes = backgroundImageDeferred?.await(),
-                    profileTags = emptyList(), //TODO: WAITING TAGS in API
+                    profileTags = emptyList(),
+                    availableTags = allTagsDeferred.await(),
                     isUpdated = false
                 )
 
@@ -176,7 +185,7 @@ class TrainerSettingsEditProfileViewModel(
                     firstName = form.firstName,
                     lastName = form.lastName,
                     bio = form.biography,
-                    profileTags = form.profileTags.map { it.id }
+                    profileTags = form.profileTags.map { it.tagId }
                 )
 
                 initialState = form.copy(isUpdated = false)

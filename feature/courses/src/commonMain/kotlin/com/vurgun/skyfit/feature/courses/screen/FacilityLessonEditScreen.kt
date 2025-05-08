@@ -65,6 +65,7 @@ import com.vurgun.skyfit.core.ui.components.button.RadioButton
 import com.vurgun.skyfit.core.ui.components.button.SecondaryMediumButton
 import com.vurgun.skyfit.core.ui.components.button.SecondaryMicroButton
 import com.vurgun.skyfit.core.ui.components.dialog.DestructiveDialog
+import com.vurgun.skyfit.core.ui.components.dialog.ErrorDialog
 import com.vurgun.skyfit.core.ui.components.icon.ActionIcon
 import com.vurgun.skyfit.core.ui.components.image.CircleNetworkImage
 import com.vurgun.skyfit.core.ui.components.special.AddRemoveMemberItem
@@ -147,11 +148,16 @@ class FacilityLessonEditScreen(private val lesson: Lesson? = null) : Screen {
     override fun Content() {
         val navigator = LocalNavigator.currentOrThrow
         val viewModel = koinScreenModel<FacilityLessonEditViewModel>()
+        var showNoTrainerError by remember { mutableStateOf(false) }
 
         CollectEffect(viewModel.effect) { effect ->
             when (effect) {
                 FacilityLessonEditEffect.NavigateToBack -> {
                     navigator.pop()
+                }
+
+                FacilityLessonEditEffect.ShowNoTrainerError -> {
+                    showNoTrainerError = true
                 }
 
                 is FacilityLessonEditEffect.NavigateToCreateComplete -> {
@@ -161,6 +167,7 @@ class FacilityLessonEditScreen(private val lesson: Lesson? = null) : Screen {
                 is FacilityLessonEditEffect.NavigateToUpdateComplete -> {
                     navigator.replace(FacilityLessonCreatedScreen(isUpdate = true, effect.lesson))
                 }
+
             }
         }
 
@@ -171,6 +178,13 @@ class FacilityLessonEditScreen(private val lesson: Lesson? = null) : Screen {
         MobileFacilityEditLessonScreen(
             viewModel = viewModel
         )
+
+        if (showNoTrainerError) {
+            ErrorDialog(
+                message = "Ders eklemek için bir eğitmen bulunamadı. Lütfen önce bir eğitmen ekleyin.",
+                onDismiss =  { navigator.pop() }
+            )
+        }
     }
 
 }

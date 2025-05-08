@@ -8,6 +8,8 @@ import com.vurgun.skyfit.core.data.domain.model.ForgotPasswordResult
 import com.vurgun.skyfit.core.data.domain.model.MissingTokenException
 import com.vurgun.skyfit.core.data.domain.model.ResetPasswordResult
 import com.vurgun.skyfit.core.data.domain.model.SendOTPResult
+import com.vurgun.skyfit.core.data.domain.model.UserGoal
+import com.vurgun.skyfit.core.data.domain.model.WorkoutTag
 import com.vurgun.skyfit.core.data.domain.repository.AuthRepository
 import com.vurgun.skyfit.core.data.model.AuthorizationRequest
 import com.vurgun.skyfit.core.data.model.CreatePasswordRequest
@@ -18,6 +20,8 @@ import com.vurgun.skyfit.core.data.storage.Storage
 import com.vurgun.skyfit.core.data.storage.TokenManager
 import com.vurgun.skyfit.core.network.ApiResult
 import com.vurgun.skyfit.core.network.DispatcherProvider
+import com.vurgun.skyfit.core.network.utils.ioResult
+import com.vurgun.skyfit.core.network.utils.mapOrThrow
 import kotlinx.coroutines.withContext
 
 class AuthRepositoryImpl(
@@ -109,7 +113,7 @@ class AuthRepositoryImpl(
 
     override suspend fun sendOTP(): SendOTPResult = withContext(dispatchers.io) {
         try {
-            val token =  tokenManager.getTokenOrThrow()
+            val token = tokenManager.getTokenOrThrow()
             val phoneNumber =
                 storage.get(AuthRepository.UserPhoneNumber) ?: return@withContext SendOTPResult.Error("Phone Number not found")
             val request = AuthorizationRequest(phoneNumber)
@@ -159,4 +163,13 @@ class AuthRepositoryImpl(
         }
     }
 
+    override suspend fun getGoals() = ioResult(dispatchers) {
+        val token = tokenManager.getTokenOrThrow()
+        apiService.getAllGoals(token).mapOrThrow { list -> list.map { UserGoal(it.goalId, it.goalName) } }
+    }
+
+    override suspend fun getTags() = ioResult(dispatchers) {
+        val token = tokenManager.getTokenOrThrow()
+        apiService.getAllTags(token).mapOrThrow { list -> list.map { WorkoutTag(it.tagId, it.tagName) } }
+    }
 }

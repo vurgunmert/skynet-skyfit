@@ -46,7 +46,7 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import com.vurgun.skyfit.core.data.domain.model.FitnessTagType
+import com.vurgun.skyfit.core.data.domain.model.WorkoutTag
 import com.vurgun.skyfit.core.ui.components.button.PrimaryLargeButton
 import com.vurgun.skyfit.core.ui.components.button.SecondaryLargeButton
 import com.vurgun.skyfit.core.ui.components.dialog.FitnessTagPickerDialog
@@ -323,8 +323,9 @@ fun AccountSettingsSelectToSetInputComponent(
 @Composable
 fun FitnessTagPickerComponent(
     modifier: Modifier = Modifier,
-    selectedTags: List<FitnessTagType>,
-    onTagsSelected: (List<FitnessTagType>) -> Unit
+    availableTags: List<WorkoutTag>,
+    selectedTags: List<WorkoutTag>,
+    onTagsSelected: (List<WorkoutTag>) -> Unit
 ) {
     var showTagPickerDialog by remember { mutableStateOf(false) }
 
@@ -381,7 +382,7 @@ fun FitnessTagPickerComponent(
             ) {
                 selectedTags.forEach {
                     SkyFitAccountSettingsProfileTagItemComponent(
-                        value = it.label,
+                        value = it.tagName,
                         onClick = { onTagsSelected(selectedTags - it) })
                 }
             }
@@ -389,6 +390,7 @@ fun FitnessTagPickerComponent(
 
         if (showTagPickerDialog) {
             FitnessTagPickerDialog(
+                availableTags = availableTags,
                 initialTags = selectedTags,
                 onDismiss = { showTagPickerDialog = false },
                 onTagsSelected = onTagsSelected

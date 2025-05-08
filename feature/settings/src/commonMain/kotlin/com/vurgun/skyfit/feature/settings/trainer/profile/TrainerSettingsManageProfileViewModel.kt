@@ -2,8 +2,8 @@ package com.vurgun.skyfit.feature.settings.trainer.profile
 
 import cafe.adriel.voyager.core.model.ScreenModel
 import cafe.adriel.voyager.core.model.screenModelScope
-import com.vurgun.skyfit.core.data.domain.model.FitnessTagType
 import com.vurgun.skyfit.core.data.domain.model.TrainerDetail
+import com.vurgun.skyfit.core.data.domain.model.WorkoutTag
 import com.vurgun.skyfit.core.data.domain.repository.ProfileRepository
 import com.vurgun.skyfit.core.data.domain.repository.UserManager
 import com.vurgun.skyfit.core.data.utility.SingleSharedFlow
@@ -30,7 +30,7 @@ data class TrainerManageProfileFormState(
     val biography: String,
     val profileImageUrl: String? = null,
     val backgroundImageUrl: String? = null,
-    val profileTags: List<FitnessTagType> = emptyList()
+    val profileTags: List<WorkoutTag> = emptyList()
 )
 
 sealed class TrainerManageProfileAction {

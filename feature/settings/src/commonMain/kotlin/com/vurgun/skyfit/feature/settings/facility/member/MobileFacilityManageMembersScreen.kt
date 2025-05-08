@@ -55,6 +55,11 @@ class FacilityManageMembersScreen(private val trainerId: Int? = null) : Screen {
         val navigator = LocalNavigator.currentOrThrow
         val viewModel = koinScreenModel<FacilityManageMembersViewModel>()
 
+
+        LaunchedEffect(Unit) {
+            viewModel.refreshGymMembers()
+        }
+
         MobileFacilityManageMembersScreen(
             goToBack = { navigator.pop() },
             goToAddMember = { navigator.push(FacilityAddMemberScreen()) },
@@ -70,10 +75,6 @@ internal fun MobileFacilityManageMembersScreen(
     viewModel: FacilityManageMembersViewModel
 ) {
     val uiState by viewModel.uiState.collectAsState()
-
-    LaunchedEffect(Unit) {
-        viewModel.refreshGymMembers()
-    }
 
     SkyFitMobileScaffold(
         topBar = {

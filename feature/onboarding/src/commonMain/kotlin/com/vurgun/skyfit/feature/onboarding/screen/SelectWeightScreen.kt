@@ -66,7 +66,11 @@ internal fun MobileOnboardingWeightSelectionScreen(
 
             Spacer(Modifier.weight(1f))
 
-            OnboardingActionGroupComponent(onClickContinue = goToHeightSelection)
+            OnboardingActionGroupComponent(onClickContinue = {
+                viewModel.updateWeight(selectedWeight)
+                viewModel.updateWeightUnit(selectedWeightUnit)
+                goToHeightSelection()
+            })
 
             Spacer(Modifier.height(20.dp))
         }

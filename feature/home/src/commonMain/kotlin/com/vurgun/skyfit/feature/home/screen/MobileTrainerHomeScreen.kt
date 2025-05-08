@@ -135,7 +135,7 @@ private fun TrainerHomeCompact(
 //            MobileDashboardHomeTrainerStatisticsComponent()
 
             if (appointments.isEmpty()) {
-                EmptyUpcomingAppointments(onClickAdd = {})
+//                EmptyUpcomingAppointments(onClickAdd = {})
             } else {
                 MobileTrainerHomeUpcomingAppointmentsComponent(
                     appointments = appointments,
@@ -393,7 +393,6 @@ fun EmptyUpcomingAppointments(onClickAdd: () -> Unit) {
         modifier = Modifier
             .fillMaxWidth()
             .padding(horizontal = 20.dp, vertical = 16.dp),
-        horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center
     ) {
         Text(

@@ -2,12 +2,13 @@ package com.vurgun.skyfit.feature.onboarding.screen
 
 import cafe.adriel.voyager.core.model.ScreenModel
 import cafe.adriel.voyager.core.model.screenModelScope
-import com.vurgun.skyfit.core.data.domain.model.FitnessTagType
 import com.vurgun.skyfit.core.data.domain.model.GenderType
-import com.vurgun.skyfit.core.data.domain.model.GoalType
 import com.vurgun.skyfit.core.data.domain.model.HeightUnitType
+import com.vurgun.skyfit.core.data.domain.model.UserGoal
 import com.vurgun.skyfit.core.data.domain.model.UserRole
 import com.vurgun.skyfit.core.data.domain.model.WeightUnitType
+import com.vurgun.skyfit.core.data.domain.model.WorkoutTag
+import com.vurgun.skyfit.core.data.domain.repository.AuthRepository
 import com.vurgun.skyfit.core.data.domain.repository.UserManager
 import com.vurgun.skyfit.core.ui.viewdata.BodyTypeViewData
 import com.vurgun.skyfit.core.ui.viewdata.CharacterTypeViewData
@@ -18,6 +19,29 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
+
+@Suppress("ArrayInDataClass")
+data class UserOnboardingState(
+    val userRole: UserRole = UserRole.User,
+    val character: CharacterTypeViewData? = null,
+    val birthYear: Int? = null,
+    val birthMonth: Int? = null,
+    val birthDay: Int? = null,
+    val gender: GenderType = GenderType.MALE,
+    val weight: Int = 70,
+    val weightUnit: WeightUnitType = WeightUnitType.KG,
+    val height: Int = 170,
+    val heightUnit: HeightUnitType = HeightUnitType.CM,
+    val bodyType: BodyTypeViewData = BodyTypeViewData.MaleEctomorph,
+    val goals: Set<UserGoal> = emptySet(),
+    val firstName: String? = null,
+    val lastName: String? = null,
+    val bio: String? = null,
+    val facilityName: String? = null,
+    val backgroundImage: ByteArray? = null,
+    val address: String? = null,
+    val profileTags: List<WorkoutTag>? = null
+)
 
 internal sealed class OnboardingViewEvent {
     data object Idle : OnboardingViewEvent()
@@ -34,7 +58,8 @@ internal data class SelectableUserRole(
 
 internal class OnboardingViewModel(
     private val onboardingRepository: OnboardingRepository,
-    private val userManager: UserManager
+    private val userManager: UserManager,
+    private val authRepository: AuthRepository,
 ) : ScreenModel {
 
     private var isAccountAddition: Boolean = false
@@ -47,6 +72,12 @@ internal class OnboardingViewModel(
     )
     val availableUserRoles: StateFlow<List<SelectableUserRole>> = _availableUserRoles
 
+    private val _availableGoals: MutableStateFlow<List<UserGoal>> = MutableStateFlow(emptyList())
+    val availableGoals: StateFlow<List<UserGoal>> = _availableGoals
+
+    private val _availableTags: MutableStateFlow<List<WorkoutTag>> = MutableStateFlow(emptyList())
+    val availableTags: StateFlow<List<WorkoutTag>> = _availableTags
+
     init {
         screenModelScope.launch {
             val registeredRoles = userManager.getAccountTypes().map { UserRole.fromId(it.typeId) }
@@ -56,6 +87,11 @@ internal class OnboardingViewModel(
                     selectable.copy(enabled = false)
                 } else selectable
             }
+            updateIsAccountAddition(_availableUserRoles.value.size < 3)
+
+            _availableGoals.value = authRepository.getGoals().getOrThrow()
+
+            _availableTags.value = authRepository.getTags().getOrThrow()
         }
     }
 
@@ -111,7 +147,7 @@ internal class OnboardingViewModel(
         _uiState.value = _uiState.value.copy(bodyType = bodyType)
     }
 
-    fun updateGoals(goals: Set<GoalType>) {
+    fun updateGoals(goals: Set<UserGoal>) {
         _uiState.value = _uiState.value.copy(goals = goals)
     }
 
@@ -140,10 +176,10 @@ internal class OnboardingViewModel(
     }
 
     fun updateFacilityBiography(facilityBiography: String) {
-        _uiState.value = _uiState.value.copy(biography = facilityBiography)
+        _uiState.value = _uiState.value.copy(bio = facilityBiography)
     }
 
-    fun updateFacilityProfileTags(profileTags: List<FitnessTagType>) {
+    fun updateFacilityProfileTags(profileTags: List<WorkoutTag>) {
         _uiState.value = _uiState.value.copy(profileTags = profileTags)
     }
 
@@ -171,15 +207,15 @@ internal class OnboardingViewModel(
             weightUnit = currentState.weightUnit.id,
             height = currentState.height,
             heightUnit = currentState.heightUnit.id,
-            bodyTypeId = currentState.bodyType?.id,
+            bodyTypeId = currentState.bodyType.id,
             name = currentState.firstName,
             surname = currentState.lastName,
             gymName = currentState.facilityName,
             gymAddress = currentState.address,
             bio = currentState.bio,
             backgroundImage = currentState.backgroundImage,
-            profileTags = currentState.profileTags?.map { it.id },
-            goals = currentState.goals?.map { it.id }
+            profileTags = currentState.profileTags?.map { it.tagId },
+            goals = currentState.goals.map { it.goalId }
         )
 
         screenModelScope.launch {
@@ -195,9 +231,8 @@ internal class OnboardingViewModel(
                 }
 
                 OnboardingResult.Success -> {
-                    if (isAccountAddition) {
-                        userManager.getActiveUser(true)
-                    }
+                    userManager.updateUserType(currentState.userRole.typeId)
+                    userManager.getActiveUser(true)
                     _eventState.value = OnboardingViewEvent.Completed
                 }
             }
@@ -208,27 +243,3 @@ internal class OnboardingViewModel(
         _eventState.value = OnboardingViewEvent.Idle
     }
 }
-
-@Suppress("ArrayInDataClass")
-data class UserOnboardingState(
-    val userRole: UserRole = UserRole.User,
-    val character: CharacterTypeViewData? = null,
-    val birthYear: Int? = null,
-    val birthMonth: Int? = null,
-    val birthDay: Int? = null,
-    val gender: GenderType = GenderType.MALE,
-    val weight: Int? = null,
-    val weightUnit: WeightUnitType = WeightUnitType.KG,
-    val height: Int? = null,
-    val heightUnit: HeightUnitType = HeightUnitType.CM,
-    val bodyType: BodyTypeViewData? = null,
-    val goals: Set<GoalType>? = null,
-    val firstName: String? = null,
-    val lastName: String? = null,
-    val bio: String? = null,
-    val facilityName: String? = null,
-    val backgroundImage: ByteArray? = null,
-    val address: String? = null,
-    val biography: String? = null,
-    val profileTags: List<FitnessTagType>? = null
-)

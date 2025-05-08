@@ -124,7 +124,9 @@ fun MobileTrainerSettingsEditProfileScreen(
                     title = stringResource(Res.string.background_image_label),
                     url = account.backgroundImageUrl,
                     modifier = Modifier.weight(1f),
-                    onClickDelete = { },
+                    onClickDelete = {
+                        onAction(TrainerEditProfileAction.DeleteBackgroundImage)
+                    },
                     onImageChanged = { bytes, _ ->
                         onAction(TrainerEditProfileAction.UpdateBackgroundImage(bytes))
                     }
@@ -134,7 +136,9 @@ fun MobileTrainerSettingsEditProfileScreen(
                     title = stringResource(Res.string.profile_image_label),
                     url = account.profileImageUrl,
                     modifier = Modifier.weight(1f),
-                    onClickDelete = { },
+                    onClickDelete = {
+                        onAction(TrainerEditProfileAction.DeleteProfileImage)
+                    },
                     onImageChanged = { bytes, _ ->
                         onAction(TrainerEditProfileAction.UpdateProfileImage(bytes))
                     }
@@ -183,6 +187,7 @@ fun MobileTrainerSettingsEditProfileScreen(
             )
 
             FitnessTagPickerComponent(
+                availableTags = account.availableTags,
                 selectedTags = account.profileTags,
                 onTagsSelected = { onAction(TrainerEditProfileAction.UpdateTags(it)) }
             )

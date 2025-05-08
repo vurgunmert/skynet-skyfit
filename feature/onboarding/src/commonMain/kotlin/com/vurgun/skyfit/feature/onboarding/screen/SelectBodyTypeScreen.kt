@@ -14,6 +14,7 @@ import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -59,10 +60,14 @@ internal fun MobileOnboardingBodyTypeSelectionScreen(
     goToEnterTrainerProfile: () -> Unit,
     goToFacilityDetail: () -> Unit
 ) {
-    val gender = viewModel.uiState.collectAsState().value.gender ?: GenderType.MALE
+    val gender = viewModel.uiState.collectAsState().value.gender
     val bodyTypeItems = gender.let { BodyTypeViewData.from(it) }
 
     val selectedBodyType = viewModel.uiState.collectAsState().value.bodyType
+
+    LaunchedEffect(viewModel) {
+        viewModel.updateBodyType(bodyTypeItems.first())
+    }
 
     SkyFitMobileScaffold {
         Column(
@@ -89,6 +94,7 @@ internal fun MobileOnboardingBodyTypeSelectionScreen(
 
             OnboardingActionGroupComponent(
                 onClickContinue = {
+                    viewModel.updateBodyType(selectedBodyType)
                     when (viewModel.uiState.value.userRole) {
                         UserRole.User -> goToGoalSelection()
                         UserRole.Trainer -> goToEnterTrainerProfile()

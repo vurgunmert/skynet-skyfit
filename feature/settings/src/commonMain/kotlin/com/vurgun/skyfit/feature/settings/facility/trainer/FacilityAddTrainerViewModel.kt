@@ -2,7 +2,9 @@ package com.vurgun.skyfit.feature.settings.facility.trainer
 
 import cafe.adriel.voyager.core.model.ScreenModel
 import cafe.adriel.voyager.core.model.screenModelScope
+import com.vurgun.skyfit.core.data.domain.model.FacilityDetail
 import com.vurgun.skyfit.core.data.domain.model.MissingTokenException
+import com.vurgun.skyfit.core.data.domain.repository.UserManager
 import com.vurgun.skyfit.data.settings.domain.model.Trainer
 import com.vurgun.skyfit.data.settings.domain.repository.TrainerRepository
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -20,8 +22,13 @@ internal data class FacilityAddTrainersUiState(
 )
 
 internal class FacilityAddTrainerViewModel(
+    private val userManager: UserManager,
     private val trainerRepository: TrainerRepository
 ) : ScreenModel {
+
+    private val facilityUser: FacilityDetail
+        get() = userManager.user.value as? FacilityDetail
+            ?: error("User is not a Facility")
 
     private val _uiState = MutableStateFlow(FacilityAddTrainersUiState())
     val uiState: StateFlow<FacilityAddTrainersUiState> = _uiState.asStateFlow()
@@ -41,7 +48,7 @@ internal class FacilityAddTrainerViewModel(
         screenModelScope.launch {
             _uiState.update { it.copy(isLoading = true, error = null, unauthorized = false) }
 
-            trainerRepository.getPlatformTrainers(gymId = 10).fold(
+            trainerRepository.getPlatformTrainers(gymId = facilityUser.gymId).fold(
                 onSuccess = { trainers ->
                     cached = trainers
                     _uiState.update {
@@ -69,7 +76,7 @@ internal class FacilityAddTrainerViewModel(
         screenModelScope.launch {
             _uiState.update { it.copy(isLoading = true, error = null) }
 
-            trainerRepository.addFacilityTrainer(gymId = 10, userId = trainerId).fold(
+            trainerRepository.addFacilityTrainer(gymId = facilityUser.gymId, userId = trainerId).fold(
                 onSuccess = {
                     refreshPlatformTrainers()
                 },

@@ -10,6 +10,5 @@ data class TrainerDto(
     @SerialName(value = "profilePhoto") val profilePhotoPath: String? = null,
     val username: String,
     val name: String,
-    val surname: String,
-    val status: Int
+    val surname: String
 )

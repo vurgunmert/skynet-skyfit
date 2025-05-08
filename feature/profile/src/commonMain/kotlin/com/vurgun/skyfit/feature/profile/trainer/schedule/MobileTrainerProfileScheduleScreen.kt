@@ -215,7 +215,7 @@ private object MobileTrainerProfileScheduleComponent {
                 }
                 Spacer(Modifier.height(8.dp))
                 CardFieldIconText(
-                    text = profile.gymName,
+                    text = profile.gymName.orEmpty(),
                     iconRes = Res.drawable.ic_location_pin,
                     modifier = Modifier.fillMaxWidth()
                 )

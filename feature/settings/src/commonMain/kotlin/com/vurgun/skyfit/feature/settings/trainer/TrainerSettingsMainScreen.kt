@@ -116,13 +116,13 @@ private fun MobileTrainerSettingsHomeScreen(viewModel: SettingsHomeViewModel) {
                 onClick = { viewModel.onAction(SettingsMainAction.NavigateToPaymentHistory) }
             )
 
-            MobileSettingsMenuItemDividerComponent()
-
-            MobileSettingsMenuItemComponent(
-                text = stringResource(Res.string.members_label),
-                iconRes = Res.drawable.ic_posture,
-                onClick = { viewModel.onAction(SettingsMainAction.NavigateToManageMembers) }
-            )
+//            MobileSettingsMenuItemDividerComponent()
+//
+//            MobileSettingsMenuItemComponent(
+//                text = stringResource(Res.string.members_label),
+//                iconRes = Res.drawable.ic_posture,
+//                onClick = { viewModel.onAction(SettingsMainAction.NavigateToManageMembers) }
+//            )
 
             MobileSettingsMenuItemDividerComponent()
 

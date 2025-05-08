@@ -31,7 +31,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
-import com.vurgun.skyfit.core.data.domain.model.FitnessTagType
+import com.vurgun.skyfit.core.data.domain.model.WorkoutTag
 import com.vurgun.skyfit.core.ui.components.special.SkyFitAccountSettingsProfileTagItemComponent
 import com.vurgun.skyfit.core.ui.styling.SkyFitColor
 import com.vurgun.skyfit.core.ui.styling.SkyFitTypography
@@ -39,15 +39,15 @@ import com.vurgun.skyfit.core.ui.styling.SkyFitTypography
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
 fun FitnessTagPickerDialog(
-    initialTags: List<FitnessTagType> = listOf(),
-    availableTags: List<FitnessTagType> = FitnessTagType.getAllTags(),
+    initialTags: List<WorkoutTag>,
+    availableTags: List<WorkoutTag>,
     onDismiss: () -> Unit,
-    onTagsSelected: (List<FitnessTagType>) -> Unit
+    onTagsSelected: (List<WorkoutTag>) -> Unit
 ) {
     var selectedTags by remember { mutableStateOf(initialTags) }
     var unselectedTags by remember { mutableStateOf(availableTags - initialTags.toSet()) }
 
-    fun toggleTagSelection(tag: FitnessTagType) {
+    fun toggleTagSelection(tag: WorkoutTag) {
         if (selectedTags.contains(tag)) {
             selectedTags = selectedTags - tag
             unselectedTags = (unselectedTags + tag)
@@ -89,7 +89,7 @@ fun FitnessTagPickerDialog(
                 ) {
                     selectedTags.forEach { tag ->
                         SkyFitAccountSettingsProfileTagItemComponent(
-                            value = tag.label,
+                            value = tag.tagName,
                             enabled = true,
                             showClose = false,
                             onClick = { toggleTagSelection(tag) }
@@ -109,7 +109,7 @@ fun FitnessTagPickerDialog(
                 ) {
                     unselectedTags.forEach { tag ->
                         SkyFitAccountSettingsProfileTagItemComponent(
-                            value = tag.label,
+                            value = tag.tagName,
                             enabled = true,
                             onClick = { toggleTagSelection(tag) }
                         )

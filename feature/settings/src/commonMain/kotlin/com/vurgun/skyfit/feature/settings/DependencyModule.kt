@@ -30,14 +30,14 @@ val featureSettingsModule = module {
     factory { UserSettingsEditProfileViewModel(get(), get()) }
 
     factory { TrainerSettingsManageProfileViewModel(get(), get()) }
-    factory { TrainerSettingsEditProfileViewModel(get(), get()) }
+    factory { TrainerSettingsEditProfileViewModel(get(), get(), get()) }
 
     factory { FacilityManageProfileViewModel(get(), get()) }
-    factory { FacilityEditProfileViewModel(get(), get()) }
-    factory { FacilityManageMembersViewModel(get()) }
+    factory { FacilityEditProfileViewModel(get(), get(), get()) }
+    factory { FacilityManageMembersViewModel(get(), get()) }
     factory { FacilityAddMembersViewModel(get(), get()) }
-    factory { FacilityManageTrainersViewModel(get()) }
+    factory { FacilityManageTrainersViewModel(get(), get()) }
     factory { FacilityPaymentHistoryViewModel() }
-    factory { FacilityAddTrainerViewModel(get()) }
+    factory { FacilityAddTrainerViewModel(get(), get()) }
     factory { FacilityNotificationSettingsViewModel() }
 }

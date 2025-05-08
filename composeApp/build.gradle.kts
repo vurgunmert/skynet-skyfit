@@ -98,12 +98,12 @@ android {
         applicationId = "com.vurgun.skyfit"
         minSdk = libs.versions.android.minSdk.get().toInt()
         targetSdk = libs.versions.android.targetSdk.get().toInt()
-        versionCode = 1
-        versionName = "1.0"
+        versionCode = 2
+        versionName = "1.0.1"
     }
     packaging {
         resources {
-            excludes += "/META-INF/{AL2.0,LGPL2.1}"
+            excludes += "/M ETA-INF/{AL2.0,LGPL2.1}"
         }
     }
     buildTypes {
@@ -132,7 +132,7 @@ compose.desktop {
         nativeDistributions {
             targetFormats(TargetFormat.Dmg, TargetFormat.Msi, TargetFormat.Deb)
             packageName = "com.vurgun.skyfit"
-            packageVersion = "1.0.0"
+            packageVersion = "1.0.1"
         }
     }
 }

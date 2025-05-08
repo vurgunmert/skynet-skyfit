@@ -152,6 +152,7 @@ fun MobileFacilitySettingsEditProfileScreen(
             )
 
             FitnessTagPickerComponent(
+                availableTags = formState.allTags,
                 selectedTags = formState.profileTags,
                 onTagsSelected = { onAction(FacilityEditProfileAction.UpdateTags(it)) },
             )

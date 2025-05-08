@@ -25,7 +25,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.unit.dp
-import com.vurgun.skyfit.core.data.domain.model.FitnessTagType
+import com.vurgun.skyfit.core.data.domain.model.WorkoutTag
 import com.vurgun.skyfit.core.ui.components.button.LargePrimaryIconButton
 import com.vurgun.skyfit.core.ui.components.image.NetworkImage
 import com.vurgun.skyfit.core.ui.components.text.CardFieldIconText
@@ -179,7 +179,7 @@ fun TrainerAccountSettingsProfileCard(
     name: String,
     username: String,
     biography: String,
-    tags: List<FitnessTagType>,
+    tags: List<WorkoutTag>,
     onClick: () -> Unit
 ) {
 
@@ -215,7 +215,7 @@ fun TrainerAccountSettingsProfileCard(
                 verticalArrangement = Arrangement.spacedBy(4.dp),
             ) {
                 tags.forEach {
-                    ProfileCardChip(text = it.label)
+                    ProfileCardChip(text = it.tagName)
                 }
             }
         }
@@ -229,7 +229,7 @@ fun FacilityAccountSettingsProfileCard(
     name: String,
     address: String,
     note: String,
-    tags: List<FitnessTagType>,
+    tags: List<WorkoutTag>,
     onClick: () -> Unit
 ) {
 
@@ -267,7 +267,7 @@ fun FacilityAccountSettingsProfileCard(
                 verticalArrangement = Arrangement.spacedBy(4.dp),
             ) {
                 tags.forEach {
-                    ProfileCardChip(text = it.label)
+                    ProfileCardChip(text = it.tagName)
                 }
             }
         }

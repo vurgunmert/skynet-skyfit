@@ -73,7 +73,10 @@ internal fun MobileOnboardingGenderSelectionScreen(
                 onSelected = viewModel::updateGender
             )
             Spacer(Modifier.weight(1f))
-            OnboardingActionGroupComponent(onClickContinue = goToWeightSelection)
+            OnboardingActionGroupComponent(onClickContinue = {
+                viewModel.updateGender(selectedGender)
+                goToWeightSelection()
+            })
 
             Spacer(Modifier.height(20.dp))
         }

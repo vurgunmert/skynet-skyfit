@@ -3,7 +3,8 @@ package com.vurgun.skyfit.feature.settings.facility.profile
 import cafe.adriel.voyager.core.model.ScreenModel
 import cafe.adriel.voyager.core.model.screenModelScope
 import com.vurgun.skyfit.core.data.domain.model.FacilityDetail
-import com.vurgun.skyfit.core.data.domain.model.FitnessTagType
+import com.vurgun.skyfit.core.data.domain.model.WorkoutTag
+import com.vurgun.skyfit.core.data.domain.repository.AuthRepository
 import com.vurgun.skyfit.core.data.domain.repository.ProfileRepository
 import com.vurgun.skyfit.core.data.domain.repository.UserManager
 import com.vurgun.skyfit.core.data.utility.SingleSharedFlow
@@ -28,7 +29,7 @@ sealed class FacilityEditProfileAction {
     data object DeleteBackgroundImage : FacilityEditProfileAction()
     data class UpdateBiography(val value: String) : FacilityEditProfileAction()
     data class UpdateLocation(val value: String) : FacilityEditProfileAction()
-    data class UpdateTags(val tags: List<FitnessTagType>) : FacilityEditProfileAction()
+    data class UpdateTags(val tags: List<WorkoutTag>) : FacilityEditProfileAction()
     data object SaveChanges : FacilityEditProfileAction()
 }
 
@@ -38,7 +39,8 @@ data class FacilityEditProfileFormState(
     val backgroundImageUrl: String? = null,
     val backgroundImageBytes: ByteArray? = null,
     val location: String,
-    val profileTags: List<FitnessTagType> = emptyList(),
+    val profileTags: List<WorkoutTag> = emptyList(),
+    val allTags: List<WorkoutTag> = emptyList(),
     val isUpdated: Boolean = false
 ) {
     override fun equals(other: Any?): Boolean {
@@ -74,6 +76,7 @@ sealed class FacilityEditProfileEffect {
 class FacilityEditProfileViewModel(
     private val userManager: UserManager,
     private val profileRepository: ProfileRepository,
+    private val authRepository: AuthRepository,
 ) : ScreenModel {
 
     private val _uiState = MutableStateFlow<FacilityEditProfileUiState>(FacilityEditProfileUiState.Loading)
@@ -108,6 +111,7 @@ class FacilityEditProfileViewModel(
             try {
                 val facilityProfile = profileRepository.getFacilityProfile(facilityUser.gymId).getOrThrow()
                 val backgroundImageDeferred = facilityProfile.backgroundImageUrl?.let { async { profileRepository.fetchImageBytes(it) } }
+                val allTagsDeferred = async { authRepository.getTags().getOrDefault(emptyList()) }
 
                 val formState = FacilityEditProfileFormState(
                     name = facilityProfile.facilityName,
@@ -116,6 +120,7 @@ class FacilityEditProfileViewModel(
                     backgroundImageBytes = backgroundImageDeferred?.await(),
                     location = facilityProfile.gymAddress,
                     profileTags = emptyList(),
+                    allTags = allTagsDeferred.await(),
                     isUpdated = false
                 )
 
@@ -148,7 +153,7 @@ class FacilityEditProfileViewModel(
                     name = form.name,
                     address = form.location,
                     bio = form.biography,
-                    profileTags = form.profileTags.map { it.id }
+                    profileTags = form.profileTags.map { it.tagId }
                 )
 
                 initialState = form.copy(isUpdated = false)

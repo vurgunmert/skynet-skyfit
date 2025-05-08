@@ -39,7 +39,8 @@ class CourseApiService(private val apiClient: ApiClient) {
         const val ACTIVATE_LESSON = "activate/lesson"
         const val DEACTIVATE_LESSON = "deactivate/lesson"
         const val DELETE_LESSON = "delete/lesson"
-        const val GET_LESSONS_BY_GYM = "get/lessons/gym"
+        const val GET_ACTIVE_LESSONS_BY_GYM = "get/lessons/gym"
+        const val GET_ALL_LESSONS_BY_GYM = "get/all/lessons/gym"
         const val GET_UPCOMING_LESSONS_BY_GYM = "get/close/lessons/gym"
         const val GET_LESSONS_BY_TRAINER = "get/trainer/lessons"
         const val GET_UPCOMING_LESSONS_BY_TRAINER = "get/close/trainer/lessons"
@@ -57,7 +58,7 @@ class CourseApiService(private val apiClient: ApiClient) {
         return apiClient.safeApiCall<List<LessonDTO>> {
             method = HttpMethod.Post
             bearerAuth(token)
-            url(Endpoints.GET_LESSONS_BY_GYM)
+            url(Endpoints.GET_ACTIVE_LESSONS_BY_GYM)
             setBody(request)
         }
     }

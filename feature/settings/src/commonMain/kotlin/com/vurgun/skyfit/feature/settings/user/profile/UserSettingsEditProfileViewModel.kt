@@ -117,11 +117,13 @@ class UserSettingsEditProfileViewModel(
                 _effect.emitIn(screenModelScope, UserEditProfileEffect.NavigateToBack)
 
             UserEditProfileAction.SaveChanges -> saveChanges()
-            is UserEditProfileAction.UpdateProfileImage -> updateForm { copy(profileImageBytes = action.value) }
+            is UserEditProfileAction.UpdateProfileImage ->
+                updateForm { copy(profileImageBytes = action.value) }
             is UserEditProfileAction.DeleteProfileImage ->
                 updateForm { copy(profileImageBytes = null, profileImageUrl = null) }
 
-            is UserEditProfileAction.UpdateBackgroundImage -> updateForm { copy(backgroundImageBytes = action.value) }
+            is UserEditProfileAction.UpdateBackgroundImage ->
+                updateForm { copy(backgroundImageBytes = action.value) }
             is UserEditProfileAction.DeleteBackgroundImage ->
                 updateForm { copy(backgroundImageBytes = null, backgroundImageUrl = null) }
 

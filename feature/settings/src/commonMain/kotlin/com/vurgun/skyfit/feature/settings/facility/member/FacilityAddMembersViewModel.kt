@@ -76,7 +76,7 @@ internal class FacilityAddMembersViewModel(
         screenModelScope.launch {
             _uiState.update { it.copy(isLoading = true, error = null) }
 
-            memberRepository.addMemberToFacility(gymId = 10, userId = memberId).fold(
+            memberRepository.addMemberToFacility(gymId = facilityUser.gymId, userId = memberId).fold(
                 onSuccess = {
                     refreshPlatformMembers()
                 },

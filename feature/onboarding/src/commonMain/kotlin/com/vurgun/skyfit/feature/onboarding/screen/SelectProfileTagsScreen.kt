@@ -15,12 +15,12 @@ import androidx.compose.ui.unit.dp
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
-import com.vurgun.skyfit.core.data.domain.model.FitnessTagType
+import com.vurgun.skyfit.core.data.domain.model.WorkoutTag
 import com.vurgun.skyfit.core.navigation.SharedScreen
 import com.vurgun.skyfit.core.navigation.findRootNavigator
 import com.vurgun.skyfit.core.navigation.replaceAll
 import com.vurgun.skyfit.core.ui.components.dialog.ErrorDialog
-import com.vurgun.skyfit.core.ui.components.loader.CircularLoader
+import com.vurgun.skyfit.core.ui.components.loader.FullScreenLoaderContent
 import com.vurgun.skyfit.core.ui.components.special.FitnessTagPickerComponent
 import com.vurgun.skyfit.core.ui.components.special.SkyFitMobileScaffold
 import com.vurgun.skyfit.feature.onboarding.component.OnboardingActionGroupComponent
@@ -54,12 +54,14 @@ internal fun MobileOnboardingFacilityProfileTagsScreen(
     goToLogin: () -> Unit
 ) {
     val selectedTags = viewModel.uiState.collectAsState().value.profileTags.orEmpty()
+    val availableTags by viewModel.availableTags.collectAsState()
     val eventState: OnboardingViewEvent by viewModel.eventState.collectAsState()
 
     SkyFitMobileScaffold {
         when (val event = eventState) {
             OnboardingViewEvent.Idle -> {
                 ProfileTagsContent(
+                    allTags = availableTags,
                     selectedTags = selectedTags,
                     onTagsUpdated = viewModel::updateFacilityProfileTags,
                     onNext = viewModel::submitRequest
@@ -75,7 +77,7 @@ internal fun MobileOnboardingFacilityProfileTagsScreen(
             }
 
             OnboardingViewEvent.InProgress -> {
-                CircularLoader()
+                FullScreenLoaderContent()
             }
 
             OnboardingViewEvent.NavigateToLogin -> {
@@ -87,8 +89,9 @@ internal fun MobileOnboardingFacilityProfileTagsScreen(
 
 @Composable
 private fun ProfileTagsContent(
-    selectedTags: List<FitnessTagType>,
-    onTagsUpdated: (List<FitnessTagType>) -> Unit,
+    allTags: List<WorkoutTag>,
+    selectedTags: List<WorkoutTag>,
+    onTagsUpdated: (List<WorkoutTag>) -> Unit,
     onNext: () -> Unit
 ) {
     Column(
@@ -107,6 +110,7 @@ private fun ProfileTagsContent(
         Spacer(Modifier.height(24.dp))
         FitnessTagPickerComponent(
             modifier = Modifier.padding(horizontal = 22.dp).fillMaxWidth(),
+            availableTags = allTags,
             selectedTags = selectedTags,
             onTagsSelected = onTagsUpdated
         )

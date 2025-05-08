@@ -68,10 +68,6 @@ class FacilityProfileOwnerViewModel(
         get() = userManager.user.value as? FacilityDetail
             ?: error("User is not a Facility")
 
-    init {
-        loadProfile(facilityId = facilityUser.gymId)
-    }
-
     fun onAction(action: FacilityProfileOwnerAction) {
         when (action) {
             is FacilityProfileOwnerAction.TogglePostVisibility -> togglePostVisibility(action.visible)
@@ -84,13 +80,13 @@ class FacilityProfileOwnerViewModel(
         }
     }
 
-    fun loadProfile(facilityId: Int) {
+    fun loadProfile() {
         screenModelScope.launch {
             _uiState.value = FacilityProfileOwnerUiState.Loading
 
-            val profileDeferred = async { profileRepository.getFacilityProfile(facilityId).getOrThrow() }
-            val lessonsDeferred = async { fetchLessons(facilityId) }
-            val trainersDeferred = async { fetchTrainers(facilityId) }
+            val profileDeferred = async { profileRepository.getFacilityProfile(facilityUser.gymId).getOrThrow() }
+            val lessonsDeferred = async { fetchLessons(facilityUser.gymId) }
+            val trainersDeferred = async { fetchTrainers(facilityUser.gymId) }
 
             try {
                 _uiState.value = FacilityProfileOwnerUiState.Content(

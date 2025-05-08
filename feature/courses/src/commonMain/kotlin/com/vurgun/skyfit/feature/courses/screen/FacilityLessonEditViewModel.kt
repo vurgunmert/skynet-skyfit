@@ -68,6 +68,7 @@ sealed class FacilityLessonEditAction {
 
 sealed class FacilityLessonEditEffect {
     data object NavigateToBack : FacilityLessonEditEffect()
+    data object ShowNoTrainerError : FacilityLessonEditEffect()
     data class NavigateToCreateComplete(
         val lesson: AppointmentCardViewData
     ) : FacilityLessonEditEffect()
@@ -110,10 +111,15 @@ class FacilityLessonEditViewModel(
 
         screenModelScope.launch {
             val facilityTrainers = trainerRepository.getFacilityTrainers(gymId)
-                .getOrThrow()
+                .getOrDefault(emptyList()) //TODO: FAIL TO USER
                 .map {
                     SelectableTrainerMenuItemModel(it.trainerId, it.fullName, it.profileImageUrl)
                 }
+
+            if (facilityTrainers.isEmpty()) {
+                _effect.emitIn(this, FacilityLessonEditEffect.ShowNoTrainerError)
+                return@launch
+            }
 
             if (lesson != null) {
                 val cancelPeriod = getLastCancelDurationHours(lesson.startDateTime, lesson.lastCancelableAt)

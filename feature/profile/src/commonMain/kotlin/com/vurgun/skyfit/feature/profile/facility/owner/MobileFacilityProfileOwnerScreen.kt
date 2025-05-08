@@ -121,6 +121,10 @@ class FacilityProfileOwnerScreen : Screen {
             }
         }
 
+        LaunchedEffect(Unit) {
+            viewModel.loadProfile()
+        }
+
         MobileFacilityProfileOwnerScreen(viewModel = viewModel)
     }
 }

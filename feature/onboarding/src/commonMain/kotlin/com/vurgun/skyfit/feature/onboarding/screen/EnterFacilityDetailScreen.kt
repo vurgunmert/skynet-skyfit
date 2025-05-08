@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
@@ -82,21 +83,21 @@ internal fun MobileOnboardingFacilityDetailsScreen(
 ) {
     val name = viewModel.uiState.collectAsState().value.facilityName
     val address = viewModel.uiState.collectAsState().value.address
-    val biography = viewModel.uiState.collectAsState().value.biography
+    val biography = viewModel.uiState.collectAsState().value.bio
     var selectedImage by remember { mutableStateOf<ImageBitmap?>(null) }
 
     val isContinueEnabled by remember(name, address, biography) {
         mutableStateOf(!name.isNullOrEmpty() && !address.isNullOrEmpty() && !biography.isNullOrEmpty())
     }
 
-    val keyboardState by keyboardAsState()
-    val scrollState = rememberScrollState()
-
-    LaunchedEffect(keyboardState) {
-        if (keyboardState is KeyboardState.Opened) {
-            scrollState.animateScrollTo(keyboardState.heightPx)
-        }
-    }
+//    val keyboardState by keyboardAsState()
+//    val scrollState = rememberScrollState()
+//
+//    LaunchedEffect(keyboardState) {
+//        if (keyboardState is KeyboardState.Opened) {
+//            scrollState.animateScrollTo(keyboardState.heightPx)
+//        }
+//    }
 
     val nameFocusRequester = remember { FocusRequester() }
     val addressFocusRequester = remember { FocusRequester() }
@@ -106,7 +107,8 @@ internal fun MobileOnboardingFacilityDetailsScreen(
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .verticalScroll(scrollState),
+                .verticalScroll(rememberScrollState())
+                .imePadding(),
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {
             OnboardingStepProgressComponent(totalSteps = 2, currentStep = 1)
@@ -146,8 +148,9 @@ internal fun MobileOnboardingFacilityDetailsScreen(
 
                     Spacer(Modifier.width(16.dp))
 
-                    SkyFitPickImageWrapper(onImagesSelected = { _, bitmap ->
+                    SkyFitPickImageWrapper(onImagesSelected = { bytes, bitmap ->
                         selectedImage = bitmap
+                        viewModel.updateBackgroundImage(bytes)
                     }) {
                         DumbButtonComponent(
                             text = stringResource(Res.string.onboarding_edit_background_action),

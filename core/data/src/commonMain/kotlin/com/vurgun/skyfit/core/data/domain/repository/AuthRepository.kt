@@ -7,6 +7,8 @@ import com.vurgun.skyfit.core.data.domain.model.ForgotPasswordOTPResult
 import com.vurgun.skyfit.core.data.domain.model.ForgotPasswordResult
 import com.vurgun.skyfit.core.data.domain.model.ResetPasswordResult
 import com.vurgun.skyfit.core.data.domain.model.SendOTPResult
+import com.vurgun.skyfit.core.data.domain.model.UserGoal
+import com.vurgun.skyfit.core.data.domain.model.WorkoutTag
 import com.vurgun.skyfit.core.data.storage.Storage
 
 interface AuthRepository {
@@ -20,4 +22,7 @@ interface AuthRepository {
 
 
     data object UserPhoneNumber : Storage.Key.StringKey("user_phone_number", null)
+
+    suspend fun getTags(): Result<List<WorkoutTag>>
+    suspend fun getGoals(): Result<List<UserGoal>>
 }
