@@ -1,12 +1,10 @@
 package com.vurgun.skyfit.data.bodyanalysis.repository
 
-import com.vurgun.skyfit.data.bodyanalysis.model.BackPostureResponse
-import com.vurgun.skyfit.data.bodyanalysis.model.FrontPostureResponse
-import com.vurgun.skyfit.data.bodyanalysis.model.LeftPostureResponse
 import com.vurgun.skyfit.data.bodyanalysis.model.PostureAnalysisRequest
 import com.vurgun.skyfit.data.bodyanalysis.model.PostureType
-import com.vurgun.skyfit.data.bodyanalysis.model.RightPostureResponse
 import com.vurgun.skyfit.core.network.commonHttpClient
+import com.vurgun.skyfit.data.bodyanalysis.model.PostureFinding
+import com.vurgun.skyfit.data.bodyanalysis.model.toPostureFindingList
 import io.ktor.client.call.body
 import io.ktor.client.request.post
 import io.ktor.client.request.setBody
@@ -40,23 +38,8 @@ class PostureAnalysisRepository {
         return Json.parseToJsonElement(rawJson).jsonObject
     }
 
-    suspend fun analyzeFront(byteArray: ByteArray): FrontPostureResponse {
-        val json = requestAnalysis(byteArray, PostureType.Front.orientation)
-        return FrontPostureResponse.fromJsonObject(json)
-    }
-
-    suspend fun analyzeBack(byteArray: ByteArray): BackPostureResponse {
-        val json = requestAnalysis(byteArray, PostureType.Back.orientation)
-        return BackPostureResponse.fromJsonObject(json)
-    }
-
-    suspend fun analyzeLeft(byteArray: ByteArray): LeftPostureResponse {
-        val json = requestAnalysis(byteArray, PostureType.Left.orientation)
-        return LeftPostureResponse.fromJsonObject(json)
-    }
-
-    suspend fun analyzeRight(byteArray: ByteArray): RightPostureResponse {
-        val json = requestAnalysis(byteArray, PostureType.Right.orientation)
-        return RightPostureResponse.fromJsonObject(json)
+    suspend fun getPostureFindingList(imageBytes: ByteArray, postureType: PostureType): List<PostureFinding> {
+        val json = requestAnalysis(imageBytes, postureType.orientation)
+        return json.toPostureFindingList()
     }
 }

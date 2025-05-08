@@ -247,7 +247,10 @@
     <string name="error_save_profile_title">Profil Kaydedilemedi</string>
     <string name="error_save_profile_message">Profilinizi kaydederken bir hata oluştu. Lütfen internet bağlantınızı kontrol edip tekrar deneyin.</string>
 
-
+    <string name="posture_view_front">Ön Görünüm</string>
+    <string name="posture_view_back">Arka Görünüm</string>
+    <string name="posture_view_right">Sağ Görünüm</string>
+    <string name="posture_view_left">Sol Görünüm</string>
 </resources>
 
 <!--    Use snake_case + purpose-based suffixes:-->

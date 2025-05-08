@@ -6,135 +6,299 @@ import cafe.adriel.voyager.core.model.screenModelScope
 import com.kashif.cameraK.controller.CameraController
 import com.kashif.cameraK.result.ImageCaptureResult
 import com.kashif.imagesaverplugin.ImageSaverPlugin
-import com.vurgun.skyfit.data.bodyanalysis.model.BackPostureResponse
-import com.vurgun.skyfit.data.bodyanalysis.model.FrontPostureResponse
-import com.vurgun.skyfit.data.bodyanalysis.model.LeftPostureResponse
+import com.vurgun.skyfit.core.data.utility.SingleSharedFlow
+import com.vurgun.skyfit.core.data.utility.emitIn
+import com.vurgun.skyfit.data.bodyanalysis.model.PostureFinding
 import com.vurgun.skyfit.data.bodyanalysis.model.PostureType
-import com.vurgun.skyfit.data.bodyanalysis.model.RightPostureResponse
 import com.vurgun.skyfit.data.bodyanalysis.repository.PostureAnalysisRepository
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import org.jetbrains.compose.resources.ExperimentalResourceApi
 import org.jetbrains.compose.resources.decodeToImageBitmap
 import kotlin.uuid.ExperimentalUuidApi
 import kotlin.uuid.Uuid
 
-sealed class PostureAnalysisResult {
-    data class Front(val data: FrontPostureResponse) : PostureAnalysisResult()
-    data class Back(val data: BackPostureResponse) : PostureAnalysisResult()
-    data class Left(val data: LeftPostureResponse) : PostureAnalysisResult()
-    data class Right(val data: RightPostureResponse) : PostureAnalysisResult()
-}
-
-data class PostureState(
+data class PostureOptionState(
     val type: PostureType,
     val byteArray: ByteArray? = null,
     val bitmap: ImageBitmap? = null,
-    val result: PostureAnalysisResult? = null
+    val findings: List<PostureFinding>? = null,
+    val error: String? = null
 ) {
-    val completed get() = result != null
+    val isCaptured get() = bitmap != null
+    val isReported get() = findings != null
+    val isFailed get() = isCaptured && error != null
+    val isCompleted get() = isCaptured && findings != null
+    val isPending get() = isCaptured && findings == null && error == null
 }
 
-data class PostureAnalysisUIState(
-    val activeTab: PostureAnalysisTab = PostureAnalysisTab.Info,
-    val currentPosture: PostureType? = null,
-    val lastCapturedImage: ImageBitmap? = null,
-    val postureStates: List<PostureState> = PostureType.entries.map { PostureState(it) },
-    val showGrid: Boolean = true,
-    val showGuideOverlay: Boolean = true,
-    val isCaptureLoading: Boolean = false
-) {
-    enum class PostureAnalysisTab {
-        Info,
-        Options,
-        Camera,
-        Scanning,
-        Result
-    }
+data class PostureAnalysisHeaderState(
+    val gridGuideEnabled: Boolean = true,
+    val bodyGuideEnabled: Boolean = true,
+    val infoEnabled: Boolean = true
+)
+
+sealed class PostureAnalysisContentState {
+    data object Instructions : PostureAnalysisContentState()
+    data class PostureOptions(
+        val states: List<PostureOptionState>
+    ) : PostureAnalysisContentState()
+
+    data class CameraPreview(
+        val postureType: PostureType,
+        val isExist: Boolean
+    ) : PostureAnalysisContentState()
+
+    data class ImageScanner(
+        val image: ImageBitmap
+    ) : PostureAnalysisContentState()
+
+    data class Report(
+        val optionStates: List<PostureOptionState>
+    ) : PostureAnalysisContentState()
 }
 
 sealed class PostureAnalysisAction {
-    data object NavigateToBack: PostureAnalysisAction()
-    data object ToggleInfo: PostureAnalysisAction()
-    data object Reset: PostureAnalysisAction()
-    data class SelectPosture(val type: PostureType): PostureAnalysisAction()
-    data object ToggleGrid: PostureAnalysisAction()
-    data object ToggleHumanGuide: PostureAnalysisAction()
+    data object NavigateToBack : PostureAnalysisAction()
+
+    data object DismissReport : PostureAnalysisAction()
+    data object ToggleInfo : PostureAnalysisAction()
+    data object ToggleGrid : PostureAnalysisAction()
+    data object ToggleBodyGuide : PostureAnalysisAction()
+
+    data object Reset : PostureAnalysisAction()
+    data object RetakeOption : PostureAnalysisAction()
+
+    data class SelectOption(val type: PostureType) : PostureAnalysisAction()
+    data class CaptureFromGallery(
+        val byteArray: ByteArray,
+        val bitmap: ImageBitmap
+    ) : PostureAnalysisAction()
+
+    data class CaptureFromCamera(
+        val cameraController: CameraController,
+        val imageSaverPlugin: ImageSaverPlugin
+    ) : PostureAnalysisAction()
 }
 
 sealed class PostureAnalysisEffect {
-    data object NavigateToBack: PostureAnalysisEffect()
+    data object Exit : PostureAnalysisEffect()
+    data object ShowExitDialog : PostureAnalysisEffect()
 }
 
 class PostureAnalysisViewModel(
     private val postureAnalysisRepository: PostureAnalysisRepository
 ) : ScreenModel {
 
-    private val _uiState = MutableStateFlow(PostureAnalysisUIState())
-    val uiState: StateFlow<PostureAnalysisUIState> = _uiState
+    private val _effect = SingleSharedFlow<PostureAnalysisEffect>()
+    val effect: SharedFlow<PostureAnalysisEffect> = _effect
+
+    private val _headerState = MutableStateFlow(PostureAnalysisHeaderState())
+    val headerState: StateFlow<PostureAnalysisHeaderState> = _headerState
+
+    private val _contentState = MutableStateFlow<PostureAnalysisContentState>(PostureAnalysisContentState.Instructions)
+    val contentState: StateFlow<PostureAnalysisContentState> = _contentState
+
+    private val _postureStates = MutableStateFlow<Map<PostureType, PostureOptionState>>(
+        mapOf(
+            PostureType.Front to PostureOptionState(PostureType.Front),
+            PostureType.Back to PostureOptionState(PostureType.Back),
+            PostureType.Right to PostureOptionState(PostureType.Right),
+            PostureType.Left to PostureOptionState(PostureType.Left)
+        )
+    )
+    val postureStates: StateFlow<Map<PostureType, PostureOptionState>> = _postureStates
 
     fun onAction(action: PostureAnalysisAction) {
-        when(action) {
-            PostureAnalysisAction.NavigateToBack -> TODO()
+        when (action) {
+            PostureAnalysisAction.NavigateToBack -> handleBack()
+            PostureAnalysisAction.ToggleGrid -> toggleGridGuide()
+            PostureAnalysisAction.ToggleBodyGuide -> toggleBodyGuide()
+            PostureAnalysisAction.ToggleInfo -> toggleInstructions()
+            PostureAnalysisAction.RetakeOption -> resetCurrent()
             PostureAnalysisAction.Reset -> resetAll()
-            is PostureAnalysisAction.SelectPosture -> selectPosture(action.type)
-            PostureAnalysisAction.ToggleGrid -> toggleGrid()
-            PostureAnalysisAction.ToggleHumanGuide -> toggleGuideOverlay()
-            PostureAnalysisAction.ToggleInfo -> toggleInfo()
+            is PostureAnalysisAction.SelectOption -> selectPostureOption(action.type)
+            is PostureAnalysisAction.CaptureFromCamera -> captureCameraPhoto(action.cameraController, action.imageSaverPlugin)
+            is PostureAnalysisAction.CaptureFromGallery -> captureGalleryPhoto(action.byteArray, action.bitmap)
+            PostureAnalysisAction.DismissReport -> handleBack()
         }
     }
 
-    fun toggleInfo() {
-        _uiState.update {
-            val infoPostureAnalysisTab = when (it.activeTab) {
-                PostureAnalysisUIState.PostureAnalysisTab.Info -> PostureAnalysisUIState.PostureAnalysisTab.Options
-                else -> PostureAnalysisUIState.PostureAnalysisTab.Info
+    private fun handleBack() {
+        when (_contentState.value) {
+            is PostureAnalysisContentState.PostureOptions -> {
+                if (postureStates.value.values.any { it.isCaptured }) {
+                    _effect.emitIn(screenModelScope, PostureAnalysisEffect.ShowExitDialog)
+                } else {
+                    _effect.emitIn(screenModelScope, PostureAnalysisEffect.Exit)
+                }
             }
-            it.copy(activeTab = infoPostureAnalysisTab)
+
+            is PostureAnalysisContentState.CameraPreview -> {
+                showPostureOptions()
+            }
+
+            is PostureAnalysisContentState.Report -> {
+                showPostureOptions()
+            }
+
+            else -> {
+                _effect.emitIn(screenModelScope, PostureAnalysisEffect.Exit)
+            }
         }
     }
 
-    fun selectPosture(type: PostureType) {
-        _uiState.update {
-            it.copy(
-                currentPosture = type,
-                activeTab = PostureAnalysisUIState.PostureAnalysisTab.Camera
+    // UNUSED
+    private fun resetCurrent() {
+    }
+
+    // UNUSED
+    private fun resetAll() {
+        _postureStates.value = mapOf(
+            PostureType.Front to PostureOptionState(PostureType.Front),
+            PostureType.Back to PostureOptionState(PostureType.Back),
+            PostureType.Right to PostureOptionState(PostureType.Right),
+            PostureType.Left to PostureOptionState(PostureType.Left),
+        )
+    }
+
+    private fun toggleGridGuide() {
+        _headerState.value = _headerState.value.copy(
+            gridGuideEnabled = !_headerState.value.gridGuideEnabled
+        )
+    }
+
+    private fun toggleBodyGuide() {
+        _headerState.value = _headerState.value.copy(
+            bodyGuideEnabled = !_headerState.value.bodyGuideEnabled
+        )
+    }
+
+    private fun toggleInstructions() {
+        val infoEnabled = !_headerState.value.infoEnabled
+        _headerState.value = _headerState.value.copy(infoEnabled = infoEnabled)
+
+        if (infoEnabled) {
+            _contentState.value = PostureAnalysisContentState.Instructions
+        } else {
+            showPostureOptions()
+        }
+    }
+
+    private fun showScanner() {
+        val lastCapturedImage = _postureStates.value.values
+            .lastOrNull { it.bitmap != null }
+            ?.bitmap ?: return
+
+        _contentState.value = PostureAnalysisContentState.ImageScanner(lastCapturedImage)
+    }
+
+    private fun showPostureOptions() {
+        _contentState.value = PostureAnalysisContentState.PostureOptions(
+            _postureStates.value.values.toList()
+        )
+    }
+
+    private fun selectPostureOption(type: PostureType) {
+        val currentState = _postureStates.value[type]
+        val isCompleted = currentState?.isCompleted == true
+
+        _contentState.value = PostureAnalysisContentState.CameraPreview(
+            postureType = type,
+            isExist = isCompleted
+        )
+    }
+
+    private fun moveToNextPostureIfAny() {
+        val nextType = _postureStates.value.entries
+            .firstOrNull { !it.value.isCaptured }
+            ?.key
+
+        if (nextType != null) {
+            selectPostureOption(nextType)
+        } else {
+            showScanner()
+        }
+    }
+
+    private fun moveToReportIfReady() {
+        val currentStates = _postureStates.value
+
+        if (currentStates.values.all { it.isReported }) {
+            _contentState.value = PostureAnalysisContentState.Report(currentStates.values.toList())
+        }
+    }
+
+    private fun updatePostureState(type: PostureType, updated: PostureOptionState) {
+        _postureStates.value = _postureStates.value.toMutableMap().apply {
+            this[type] = updated
+        }
+    }
+
+    private fun analyzeImage(postureType: PostureType) {
+        val currentPosture = _postureStates.value[postureType] ?: return
+        val bytes = currentPosture.byteArray ?: return
+
+        screenModelScope.launch {
+            try {
+                val findings = postureAnalysisRepository.getPostureFindingList(bytes, postureType)
+                updatePostureState(postureType, currentPosture.copy(findings = findings))
+
+                moveToReportIfReady()
+            } catch (e: Exception) {
+                updatePostureState(postureType, currentPosture.copy(error = e.message))
+
+                showPostureOptions()
+            }
+        }
+    }
+
+    private fun captureGalleryPhoto(
+        byteArray: ByteArray,
+        bitmap: ImageBitmap,
+    ) {
+        val postureType = (_contentState.value as? PostureAnalysisContentState.CameraPreview)?.postureType ?: return
+
+        updatePostureState(
+            postureType,
+            PostureOptionState(
+                type = postureType,
+                byteArray = byteArray,
+                bitmap = bitmap
             )
-        }
+        )
+
+        analyzeImage(postureType)
+
+        moveToNextPostureIfAny()
     }
-
-    fun resetAll() {
-        _uiState.update {
-            it.copy(
-                postureStates = PostureType.entries.map { PostureState(it) },
-                activeTab = PostureAnalysisUIState.PostureAnalysisTab.Options,
-                currentPosture = null
-            )
-        }
-    }
-
-    fun toggleGrid() = _uiState.update { it.copy(showGrid = !it.showGrid) }
-
-    fun toggleGuideOverlay() = _uiState.update { it.copy(showGuideOverlay = !it.showGuideOverlay) }
 
     @OptIn(ExperimentalResourceApi::class, ExperimentalUuidApi::class)
-    fun handleImageCapture(
+    private fun captureCameraPhoto(
         cameraController: CameraController,
         imageSaverPlugin: ImageSaverPlugin
     ) {
-        screenModelScope.launch {
-            val postureType = uiState.value.currentPosture ?: return@launch
+        val postureType = (_contentState.value as? PostureAnalysisContentState.CameraPreview)?.postureType ?: return
 
-            _uiState.update { it.copy(isCaptureLoading = true) }
+        screenModelScope.launch {
 
             when (val result = cameraController.takePicture()) {
                 is ImageCaptureResult.Success -> {
                     val byteArray = result.byteArray
                     val bitmap = byteArray.decodeToImageBitmap()
 
-                    proceedWithCapturedImage(byteArray, bitmap, postureType)
+                    updatePostureState(
+                        postureType,
+                        PostureOptionState(
+                            type = postureType,
+                            byteArray = byteArray,
+                            bitmap = bitmap
+                        )
+                    )
+
+                    analyzeImage(postureType)
 
                     if (!imageSaverPlugin.config.isAutoSave) {
                         val customName = "posture_${Uuid.random().toHexString()}"
@@ -143,74 +307,19 @@ class PostureAnalysisViewModel(
                 }
 
                 is ImageCaptureResult.Error -> {
-                    println("Image Capture Error: ${result.exception.message}")
-                    _uiState.update { it.copy(isCaptureLoading = false) }
+                    updatePostureState(
+                        postureType,
+                        PostureOptionState(
+                            type = postureType,
+                            error = result.exception.message
+                        )
+                    )
+
                 }
             }
+
+            moveToNextPostureIfAny()
         }
     }
 
-    fun handleImagePicked(
-        byteArray: ByteArray,
-        bitmap: ImageBitmap
-    ) {
-        val postureType = uiState.value.currentPosture ?: return
-        proceedWithCapturedImage(byteArray, bitmap, postureType)
-    }
-
-    private fun proceedWithCapturedImage(
-        byteArray: ByteArray,
-        bitmap: ImageBitmap,
-        postureType: PostureType
-    ) {
-        _uiState.update {
-            it.copy(
-                isCaptureLoading = false,
-                lastCapturedImage = bitmap,
-                activeTab = PostureAnalysisUIState.PostureAnalysisTab.Scanning
-            )
-        }
-
-        analyzeImage(bitmap, byteArray, postureType)
-    }
-
-    private fun analyzeImage(bitmap: ImageBitmap, byteArray: ByteArray, type: PostureType) {
-        screenModelScope.launch {
-            try {
-                //TODO: HERE WE NEED TO STORE RESULTS SOMWHERE UNTIL ALL ARE READY
-                val result: PostureAnalysisResult = when (type) {
-                    PostureType.Front -> PostureAnalysisResult.Front(postureAnalysisRepository.analyzeFront(byteArray))
-                    PostureType.Back -> PostureAnalysisResult.Back(postureAnalysisRepository.analyzeBack(byteArray))
-                    PostureType.Left -> PostureAnalysisResult.Left(postureAnalysisRepository.analyzeLeft(byteArray))
-                    PostureType.Right -> PostureAnalysisResult.Right(postureAnalysisRepository.analyzeRight(byteArray))
-                }
-
-                _uiState.update { currentState ->
-                    val updatedStates = currentState.postureStates.map {
-                        if (it.type == type) it.copy(byteArray = byteArray, bitmap = bitmap, result = result)
-                        else it
-                    }
-
-                    val allCompleted = updatedStates.all { it.completed }
-                    val next = updatedStates.firstOrNull { !it.completed }?.type
-
-                    currentState.copy(
-                        postureStates = updatedStates,
-                        currentPosture = next,
-                        activeTab = if (allCompleted) PostureAnalysisUIState.PostureAnalysisTab.Result else PostureAnalysisUIState.PostureAnalysisTab.Options
-                    )
-                }
-            } catch (e: Exception) {
-                e.printStackTrace()
-
-                _uiState.update {
-                    it.copy(
-                        isCaptureLoading = false,
-                        lastCapturedImage = null,
-                        activeTab = PostureAnalysisUIState.PostureAnalysisTab.Options
-                    )
-                }
-            }
-        }
-    }
 }

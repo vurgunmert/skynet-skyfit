@@ -1,4 +1,4 @@
-package com.vurgun.skyfit.feature.bodyanalysis.screen
+package com.vurgun.skyfit.feature.bodyanalysis.screen.internal
 
 import androidx.compose.animation.core.LinearEasing
 import androidx.compose.animation.core.RepeatMode
@@ -23,6 +23,23 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.dp
+
+@Composable
+fun PostureScannerContent(bitmap: ImageBitmap) {
+
+    Box(
+        Modifier.fillMaxSize(),
+        contentAlignment = Alignment.Center
+    ) {
+        Image(
+            bitmap = bitmap,
+            contentDescription = "Captured Image",
+            modifier = Modifier.fillMaxSize(),
+            contentScale = ContentScale.Fit
+        )
+        HoloScanningEffect()
+    }
+}
 
 @Composable
 fun PostureAnalysisScanningScreen(imageBitmap: ImageBitmap?) {

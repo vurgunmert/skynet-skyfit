@@ -1,4 +1,4 @@
-package com.vurgun.skyfit.feature.bodyanalysis.screen
+package com.vurgun.skyfit.feature.bodyanalysis.screen.internal
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -24,10 +24,68 @@ import com.vurgun.skyfit.core.ui.components.text.BodySmallRegularText
 import com.vurgun.skyfit.core.ui.components.text.BodySmallSemiboldText
 import com.vurgun.skyfit.core.ui.styling.LocalPadding
 import com.vurgun.skyfit.core.ui.styling.SkyFitColor
+import com.vurgun.skyfit.feature.bodyanalysis.screen.PostureAnalysisAction
 import org.jetbrains.compose.resources.painterResource
 import skyfit.core.ui.generated.resources.Res
 import skyfit.core.ui.generated.resources.ic_close_circle
 import skyfit.core.ui.generated.resources.ic_info_circle
+
+@Composable
+internal fun PostureInstructionContent(
+    onAction: (PostureAnalysisAction) -> Unit,
+    modifier: Modifier
+) {
+
+    Column(
+        modifier = modifier
+            .widthIn(max = 406.dp)
+            .padding(horizontal = 24.dp, vertical = 16.dp),
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.Center
+    ) {
+        Box(
+            modifier = Modifier.fillMaxWidth(),
+            contentAlignment = Alignment.CenterEnd
+        ) {
+            ActionIcon(
+                res = Res.drawable.ic_close_circle,
+                onClick = { onAction(PostureAnalysisAction.ToggleInfo) })
+        }
+
+        Spacer(modifier = Modifier.height(8.dp))
+
+        PostureCaptureInfoCard(
+            title = "Pozisyon ve Duruş",
+            content = listOf(
+                "Ekran, tüm vücudu kapsayacak şekilde ayarlanmalıdır.",
+                "Bacaklar omuz genişliğinde açık, eller yanda doğal pozisyonda olmalı.",
+                "Kafa, düz bir şekilde ekrana bakmalı ve nefes tutulmamalıdır."
+            )
+        )
+
+        Spacer(modifier = Modifier.height(24.dp))
+
+        PostureCaptureInfoCard(
+            title = "Giyim ve Arka Plan",
+            content = listOf(
+                "Vücudu saran giysiler tercih edilmeli; bol ve geniş giysilerden kaçınılmalıdır.",
+                "Omuz başları, dizler ve ayak bileği eklemleri görünür olmalıdır.",
+                "Tek renk bir zemin önünde durulmalıdır."
+            )
+        )
+
+        Spacer(modifier = Modifier.height(24.dp))
+
+        PostureCaptureInfoCard(
+            title = "Kamera ve Postür Tipi",
+            content = listOf(
+                "Kamera bel hizasında ve tam karşıdan tutulmalıdır.",
+                "Lateral Postür: Vücut yan konumda, baş yukarıda ve karşıya bakmalıdır.",
+                "Posterior Postür: Sırt tamamen dönük, skapula kemikleri görünecek şekilde durulmalıdır."
+            )
+        )
+    }
+}
 
 @Composable
 internal fun BoxScope.PostureAnalysisInfoScreen(
@@ -88,6 +146,58 @@ internal fun BoxScope.PostureAnalysisInfoScreen(
 }
 
 @Composable
+private fun InfoContent(onClickDismiss: () -> Unit) {
+
+    Column(
+        modifier = Modifier
+            .widthIn(max = 406.dp)
+            .padding(horizontal = 24.dp, vertical = 16.dp),
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.Center
+    ) {
+        Box(
+            modifier = Modifier.fillMaxWidth(),
+            contentAlignment = Alignment.CenterEnd
+        ) {
+            ActionIcon(Res.drawable.ic_close_circle, onClick = onClickDismiss)
+        }
+
+        Spacer(modifier = Modifier.height(8.dp))
+
+        PostureCaptureInfoCard(
+            title = "Pozisyon ve Duruş",
+            content = listOf(
+                "Ekran, tüm vücudu kapsayacak şekilde ayarlanmalıdır.",
+                "Bacaklar omuz genişliğinde açık, eller yanda doğal pozisyonda olmalı.",
+                "Kafa, düz bir şekilde ekrana bakmalı ve nefes tutulmamalıdır."
+            )
+        )
+
+        Spacer(modifier = Modifier.height(24.dp))
+
+        PostureCaptureInfoCard(
+            title = "Giyim ve Arka Plan",
+            content = listOf(
+                "Vücudu saran giysiler tercih edilmeli; bol ve geniş giysilerden kaçınılmalıdır.",
+                "Omuz başları, dizler ve ayak bileği eklemleri görünür olmalıdır.",
+                "Tek renk bir zemin önünde durulmalıdır."
+            )
+        )
+
+        Spacer(modifier = Modifier.height(24.dp))
+
+        PostureCaptureInfoCard(
+            title = "Kamera ve Postür Tipi",
+            content = listOf(
+                "Kamera bel hizasında ve tam karşıdan tutulmalıdır.",
+                "Lateral Postür: Vücut yan konumda, baş yukarıda ve karşıya bakmalıdır.",
+                "Posterior Postür: Sırt tamamen dönük, skapula kemikleri görünecek şekilde durulmalıdır."
+            )
+        )
+    }
+}
+
+@Composable
 private fun PostureCaptureInfoCard(
     title: String,
     content: List<String>
@@ -116,7 +226,7 @@ private fun PostureCaptureInfoCard(
         }
         Spacer(Modifier.height(localPadding.xSmall))
         content.forEach {
-            BodySmallRegularText(text = "• $it", modifier = Modifier.fillMaxWidth())
+            BodySmallRegularText(text = "• $it", modifier = Modifier.padding(vertical = 2.dp).fillMaxWidth())
         }
     }
 }

@@ -11,6 +11,7 @@ import androidx.compose.material.Icon
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.graphics.drawscope.Stroke
@@ -51,8 +52,9 @@ fun SkyFitPrimaryCircularBackButton(
 ) {
     Box(
         modifier
-            .background(SkyFitColor.specialty.buttonBgRest, shape = CircleShape)
-            .clickable(onClick = onClick),
+            .clip(CircleShape)
+            .clickable(onClick = onClick)
+            .background(SkyFitColor.specialty.buttonBgRest),
         contentAlignment = Alignment.Center
     ) {
         Icon(
@@ -72,8 +74,9 @@ fun PrimaryIconButton(
 ) {
     Box(
         modifier
-            .background(SkyFitColor.specialty.buttonBgRest, shape = CircleShape)
-            .clickable(onClick = onClick),
+            .clip(CircleShape)
+            .clickable(onClick = onClick)
+            .background(SkyFitColor.specialty.buttonBgRest),
         contentAlignment = Alignment.Center
     ) {
         Icon(

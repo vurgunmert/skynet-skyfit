@@ -247,7 +247,7 @@ private fun MobileFacilityEditLessonScreen(
             // endregion
 
             LessonEditActionRow(
-                isNewLesson = true, //TODO: new-edit?
+                isNewLesson = !uiState.isEditing,
                 isEnabled = uiState.isSaveButtonEnabled,
                 isLoading = false, //TODO: loading
                 onClick = viewModel::submitLesson
