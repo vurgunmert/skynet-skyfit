@@ -1,6 +1,9 @@
 package com.vurgun.skyfit.feature.dashboard.screen
 
+import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.unit.dp
 import cafe.adriel.voyager.core.registry.rememberScreen
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.CurrentScreen
@@ -26,6 +29,7 @@ class DashboardMainScreen : Screen {
             SkyFitScaffold(
                 bottomBar = {
                     BottomNavigationBar(
+                        modifier = Modifier.padding(bottom = 12.dp),
                         currentScreen = dashboardNavigator.lastItem,
                         onClickHome = { dashboardNavigator.replace(homeScreen) },
                         onClickProfile = { dashboardNavigator.replace(profileScreen) },

@@ -103,6 +103,7 @@ object ProfileMapper {
     fun LessonParticipantDTO.toDomainLessonParticipant(): LessonParticipant {
         return LessonParticipant(
             lpId = lpId,
+            userId = userId,
             lessonId = lessonId,
             firstName = name,
             lastName = surname,

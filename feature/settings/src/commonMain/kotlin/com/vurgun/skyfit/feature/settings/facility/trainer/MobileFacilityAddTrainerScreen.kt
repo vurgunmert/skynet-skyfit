@@ -18,7 +18,7 @@ import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.koin.koinScreenModel
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
-import com.vurgun.skyfit.core.ui.components.button.SecondaryMicroButton
+import com.vurgun.skyfit.core.ui.components.button.LegacySecondaryMicroButton
 import com.vurgun.skyfit.core.ui.components.special.SkyFitMobileScaffold
 import com.vurgun.skyfit.core.ui.components.special.SkyFitScreenHeader
 import com.vurgun.skyfit.core.ui.components.special.SkyFitSearchTextInputComponent
@@ -82,7 +82,7 @@ private fun MobileFacilityAddTrainerScreen(
                     item = it,
                     onClick = {},
                     actionContent = {
-                        SecondaryMicroButton(
+                        LegacySecondaryMicroButton(
                             text = stringResource(Res.string.add_action),
                             modifier = Modifier.wrapContentWidth(),
                             onClick = { viewModel.addTrainer(it.userId) },

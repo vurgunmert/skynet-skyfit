@@ -121,7 +121,7 @@ fun SecondaryLargeButton(
 
 
 @Composable
-fun SecondaryMicroButton(
+fun LegacySecondaryMicroButton(
     text: String,
     modifier: Modifier = Modifier.wrapContentWidth(),
     leftIconPainter: Painter? = null,
@@ -141,6 +141,40 @@ fun SecondaryMicroButton(
         leftIconPainter = leftIconPainter,
         rightIconPainter = rightIconPainter
     )
+
+}
+
+
+@Composable
+fun SecondaryMicroButton(
+    text: String,
+    modifier: Modifier = Modifier.wrapContentWidth(),
+    rightIconRes: DrawableResource? = null,
+    onClick: () -> Unit
+) {
+    Row(
+        modifier = Modifier
+            .clip(CircleShape)
+            .clickable { onClick() }
+            .background(SkyFitColor.specialty.secondaryButtonRest)
+            .border(1.dp, SkyFitColor.border.secondaryButton, CircleShape)
+            .padding(horizontal = 16.dp, vertical = 6.dp),
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        Text(
+            text = text,
+            style = SkyFitTypography.bodyMediumMedium
+        )
+        rightIconRes?.let {
+            Spacer(Modifier.width(4.dp))
+            Icon(
+                painter = painterResource(it),
+                contentDescription = null,
+                modifier = Modifier.size(12.dp),
+                tint = SkyFitColor.icon.default
+            )
+        }
+    }
 }
 
 @Composable

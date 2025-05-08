@@ -146,6 +146,20 @@ fun LocalDate.formatToServerDate(): String {
     return "$year-$month-$day 00:00:00"
 }
 
+fun LocalDate.toServerFormatStartOfDate(): String {
+    val year = this.year.toString().padStart(4, '0')
+    val month = this.monthNumber.toString().padStart(2, '0')
+    val day = this.dayOfMonth.toString().padStart(2, '0')
+    return "$year-$month-${day}T00:00:00.000Z"
+}
+
+fun LocalDate.toServerFormatEndOfDate(): String {
+    val year = this.year.toString().padStart(4, '0')
+    val month = this.monthNumber.toString().padStart(2, '0')
+    val day = this.dayOfMonth.toString().padStart(2, '0')
+    return "$year-$month-${day}T23:59:59.000Z"
+}
+
 fun LocalDateTime.formatToServerTime(): String {
     val hour = this.hour.toString().padStart(2, '0')
     val minute = this.minute.toString().padStart(2, '0')

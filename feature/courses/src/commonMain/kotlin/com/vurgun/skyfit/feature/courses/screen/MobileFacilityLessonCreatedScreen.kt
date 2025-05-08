@@ -37,18 +37,22 @@ import skyfit.core.ui.generated.resources.go_to_home_action
 import skyfit.core.ui.generated.resources.img_check_mark_blue_box
 import skyfit.core.ui.generated.resources.lesson_create_action
 import skyfit.core.ui.generated.resources.lesson_created_message
+import skyfit.core.ui.generated.resources.lesson_updated_message
 
-class FacilityLessonCreatedScreen : Screen {
+class FacilityLessonCreatedScreen(
+    private val isUpdate: Boolean,
+    private val lesson: AppointmentCardViewData
+) : Screen {
     @Composable
     override fun Content() {
         val navigator = LocalNavigator.currentOrThrow
-        val viewModel = koinScreenModel<FacilityLessonEditViewModel>() //TODO: try passing viewdata instead
 
         MobileFacilityLessonCreatedScreen(
-            goToListing = { navigator.popUntil(SharedScreen.FacilityManageLessons) },
+            goToListing = { navigator.pop() },
             goToNewLesson = { navigator.replace(FacilityLessonEditScreen()) },
             goToDashboard = { navigator.popUntil(SharedScreen.Dashboard) },
-            viewModel = viewModel
+            isUpdate,
+            lesson
         )
     }
 
@@ -59,22 +63,9 @@ private fun MobileFacilityLessonCreatedScreen(
     goToListing: () -> Unit,
     goToNewLesson: () -> Unit,
     goToDashboard: () -> Unit,
-    viewModel: FacilityLessonEditViewModel
+    isUpdate: Boolean,
+    lesson: AppointmentCardViewData
 ) {
-
-    val item = AppointmentCardViewData(
-        iconId = 1,
-        title = "Shoulders and Abs",
-        date = "30/11/2024",
-        hours = "08:00 - 09:00",
-        category = "Group Fitness",
-        location = "@ironstudio",
-        trainer = "Micheal Blake",
-        capacity = "2/5",
-        cost = "100",
-        note = "Try to arrive 5-10 minutes early to warm up and settle in before the class starts.",
-        isFull = null
-    )
 
     SkyFitMobileScaffold {
         Column(
@@ -87,7 +78,7 @@ private fun MobileFacilityLessonCreatedScreen(
         ) {
             Spacer(Modifier.height(48.dp))
 
-            MobileFacilityClassEditCompletedContentGroup(item = item)
+            MobileFacilityClassEditCompletedContentGroup(isUpdate, lesson)
 
             Spacer(Modifier.height(24.dp))
 
@@ -101,7 +92,10 @@ private fun MobileFacilityLessonCreatedScreen(
 }
 
 @Composable
-private fun MobileFacilityClassEditCompletedContentGroup(item: AppointmentCardViewData) {
+private fun MobileFacilityClassEditCompletedContentGroup(
+    isUpdate: Boolean,
+    lesson: AppointmentCardViewData
+) {
 
     Column(
         Modifier.fillMaxWidth(),
@@ -115,21 +109,21 @@ private fun MobileFacilityClassEditCompletedContentGroup(item: AppointmentCardVi
         )
 
         Text(
-            stringResource(Res.string.lesson_created_message),
+            text = stringResource(if (isUpdate) Res.string.lesson_updated_message else Res.string.lesson_created_message),
             style = SkyFitTypography.heading4,
             textAlign = TextAlign.Center
         )
 
         DetailedLessonEventItem(
-            title = item.title,
-            iconId = item.iconId,
-            date = item.date,
-            timePeriod = item.hours,
-            category = item.category,
-            location = item.location,
-            trainer = item.trainer,
-            capacity = item.capacity.toString(),
-            cost = item.cost.toString()
+            title = lesson.title,
+            iconId = lesson.iconId,
+            date = lesson.date,
+            timePeriod = lesson.hours,
+            category = lesson.category,
+            location = lesson.location,
+            trainer = lesson.trainer,
+            capacity = lesson.capacity.toString(),
+            cost = lesson.cost.toString()
         )
     }
 }

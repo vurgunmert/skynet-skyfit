@@ -7,6 +7,8 @@ import com.vurgun.skyfit.core.data.domain.repository.UserManager
 import com.vurgun.skyfit.core.data.utility.SingleSharedFlow
 import com.vurgun.skyfit.core.data.utility.emitIn
 import com.vurgun.skyfit.core.data.utility.emitOrNull
+import com.vurgun.skyfit.core.data.utility.toServerFormatEndOfDate
+import com.vurgun.skyfit.core.data.utility.toServerFormatStartOfDate
 import com.vurgun.skyfit.data.courses.domain.model.Lesson
 import com.vurgun.skyfit.data.courses.domain.repository.CourseRepository
 import com.vurgun.skyfit.data.courses.mapper.LessonSessionItemViewDataMapper
@@ -69,8 +71,10 @@ class FacilityLessonListingViewModel(
         when (action) {
             FacilityLessonListingAction.NavigateToBack ->
                 _effect.emitIn(screenModelScope, FacilityLessonListingEffect.NavigateToBack)
+
             is FacilityLessonListingAction.NavigateToEditLesson ->
                 navigateToEdit(action.lessonId)
+
             FacilityLessonListingAction.NavigateToNewLesson ->
                 _effect.emitIn(screenModelScope, FacilityLessonListingEffect.NavigateToNewLesson)
 
@@ -86,7 +90,7 @@ class FacilityLessonListingViewModel(
         screenModelScope.launch {
             _uiState.update { it.copy(isLoading = true, errorMessage = null) }
 
-            val result = courseRepository.getLessonsByFacility(gymId, date.toString(), date.toString())
+            val result = courseRepository.getLessonsByFacility(gymId, date.toServerFormatStartOfDate(), date.toServerFormatEndOfDate())
             result.fold(
                 onSuccess = { lessons ->
                     this@FacilityLessonListingViewModel.lessons = lessons

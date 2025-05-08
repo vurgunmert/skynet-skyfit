@@ -48,20 +48,31 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
+import androidx.compose.ui.window.DialogProperties
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.koin.koinScreenModel
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
 import com.vurgun.skyfit.core.data.domain.model.CalendarRecurrence
 import com.vurgun.skyfit.core.data.domain.model.CalendarRecurrenceType
+import com.vurgun.skyfit.core.data.utility.isAfter
+import com.vurgun.skyfit.core.data.utility.isBefore
+import com.vurgun.skyfit.core.data.utility.now
 import com.vurgun.skyfit.core.ui.components.button.PrimaryLargeButton
+import com.vurgun.skyfit.core.ui.components.button.PrimaryMediumButton
+import com.vurgun.skyfit.core.ui.components.button.PrimaryMicroButton
 import com.vurgun.skyfit.core.ui.components.button.RadioButton
+import com.vurgun.skyfit.core.ui.components.button.SecondaryMediumButton
+import com.vurgun.skyfit.core.ui.components.button.SecondaryMicroButton
 import com.vurgun.skyfit.core.ui.components.dialog.DestructiveDialog
 import com.vurgun.skyfit.core.ui.components.icon.ActionIcon
 import com.vurgun.skyfit.core.ui.components.image.CircleNetworkImage
+import com.vurgun.skyfit.core.ui.components.special.AddRemoveMemberItem
 import com.vurgun.skyfit.core.ui.components.special.SkyFitCheckBoxComponent
 import com.vurgun.skyfit.core.ui.components.special.SkyFitMobileScaffold
 import com.vurgun.skyfit.core.ui.components.special.SkyFitScreenHeader
+import com.vurgun.skyfit.core.ui.components.special.SkyFitSearchTextInputComponent
+import com.vurgun.skyfit.core.ui.components.text.BodyLargeMediumText
 import com.vurgun.skyfit.core.ui.components.text.BodyMediumRegularText
 import com.vurgun.skyfit.core.ui.components.text.BodyMediumSemiboldText
 import com.vurgun.skyfit.core.ui.components.text.MultiLineInputText
@@ -71,6 +82,7 @@ import com.vurgun.skyfit.core.ui.styling.LocalPadding
 import com.vurgun.skyfit.core.ui.styling.SkyFitAsset
 import com.vurgun.skyfit.core.ui.styling.SkyFitColor
 import com.vurgun.skyfit.core.ui.styling.SkyFitTypography
+import com.vurgun.skyfit.core.ui.utils.CollectEffect
 import com.vurgun.skyfit.data.courses.domain.model.Lesson
 import com.vurgun.skyfit.feature.calendar.component.dialog.SingleDatePickerDialog
 import com.vurgun.skyfit.feature.courses.component.LessonSelectCancelDurationPopupMenu
@@ -83,7 +95,10 @@ import kotlinx.datetime.LocalDate
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
 import skyfit.core.ui.generated.resources.Res
+import skyfit.core.ui.generated.resources.add_action
 import skyfit.core.ui.generated.resources.apply_action
+import skyfit.core.ui.generated.resources.cancel_action
+import skyfit.core.ui.generated.resources.confirm_action
 import skyfit.core.ui.generated.resources.day_friday_label
 import skyfit.core.ui.generated.resources.day_monday_label
 import skyfit.core.ui.generated.resources.day_saturday_label
@@ -91,9 +106,11 @@ import skyfit.core.ui.generated.resources.day_sunday_label
 import skyfit.core.ui.generated.resources.day_thursday_label
 import skyfit.core.ui.generated.resources.day_tuesday_label
 import skyfit.core.ui.generated.resources.day_wednesday_label
+import skyfit.core.ui.generated.resources.delete_action
 import skyfit.core.ui.generated.resources.ic_calendar_dots
 import skyfit.core.ui.generated.resources.ic_check
 import skyfit.core.ui.generated.resources.ic_chevron_down
+import skyfit.core.ui.generated.resources.ic_close
 import skyfit.core.ui.generated.resources.icon_label
 import skyfit.core.ui.generated.resources.lesson_capacity_label
 import skyfit.core.ui.generated.resources.lesson_cost_label
@@ -119,6 +136,7 @@ import skyfit.core.ui.generated.resources.recurrence_last_cancel_duration_label
 import skyfit.core.ui.generated.resources.recurrence_none_label
 import skyfit.core.ui.generated.resources.recurrence_weekly_label
 import skyfit.core.ui.generated.resources.save_action
+import skyfit.core.ui.generated.resources.search_action
 import skyfit.core.ui.generated.resources.trainer_note_hint_add
 import skyfit.core.ui.generated.resources.trainer_note_label
 import skyfit.core.ui.generated.resources.yes_action
@@ -130,13 +148,27 @@ class FacilityLessonEditScreen(private val lesson: Lesson? = null) : Screen {
         val navigator = LocalNavigator.currentOrThrow
         val viewModel = koinScreenModel<FacilityLessonEditViewModel>()
 
+        CollectEffect(viewModel.effect) { effect ->
+            when (effect) {
+                FacilityLessonEditEffect.NavigateToBack -> {
+                    navigator.pop()
+                }
+
+                is FacilityLessonEditEffect.NavigateToCreateComplete -> {
+                    navigator.replace(FacilityLessonCreatedScreen(isUpdate = false, effect.lesson))
+                }
+
+                is FacilityLessonEditEffect.NavigateToUpdateComplete -> {
+                    navigator.replace(FacilityLessonCreatedScreen(isUpdate = true, effect.lesson))
+                }
+            }
+        }
+
         LaunchedEffect(Unit) {
             viewModel.loadLesson(lesson)
         }
 
         MobileFacilityEditLessonScreen(
-            goToBack = { navigator.pop() },
-            goToLessonCreated = { navigator.replace(FacilityLessonCreatedScreen()) },
             viewModel = viewModel
         )
     }
@@ -145,12 +177,9 @@ class FacilityLessonEditScreen(private val lesson: Lesson? = null) : Screen {
 
 @Composable
 private fun MobileFacilityEditLessonScreen(
-    goToBack: () -> Unit,
-    goToLessonCreated: () -> Unit,
     viewModel: FacilityLessonEditViewModel
 ) {
     val uiState by viewModel.uiState.collectAsState()
-    val trainers by viewModel.trainers.collectAsState()
 
     val scrollState = rememberScrollState()
 
@@ -160,7 +189,7 @@ private fun MobileFacilityEditLessonScreen(
                 if (uiState.isSaveButtonEnabled) {
                     viewModel.updateShowCancelDialog(true)
                 } else {
-                    goToBack()
+                    viewModel.onAction(FacilityLessonEditAction.NavigateToBack)
                 }
             })
         }
@@ -179,13 +208,15 @@ private fun MobileFacilityEditLessonScreen(
                 selectedIcon = uiState.iconId,
                 title = uiState.title,
                 onIconSelected = viewModel::updateIcon,
-                onTitleChanged = viewModel::updateTitle
+                onTitleChanged = viewModel::updateTitle,
+                isEditing = uiState.isEditing
             )
             // endregion
 
             // region: Trainer Selection + Trainer Note
             EditLessonTrainerRow(
-                trainers = trainers,
+                trainers = uiState.trainers,
+                selectedTrainer = uiState.trainer,
                 onSelectionChanged = viewModel::updateSelectedTrainer
             )
 
@@ -214,14 +245,18 @@ private fun MobileFacilityEditLessonScreen(
             // region: Recurrence
             LessonEditRecurrenceRow(
                 selectedRecurrence = uiState.recurrence,
-                onSelectionChanged = viewModel::updateRecurrence
+                onSelectionChanged = viewModel::updateRecurrence,
+                isEditing = uiState.isEditing
             )
             // endregion
 
             // region: Capacity
             LessonEditCapacityRow(
                 selectedCapacity = uiState.capacity,
-                onSelectionChanged = viewModel::updateCapacity
+                onSelectionChanged = viewModel::updateCapacity,
+                participants = uiState.participantMembers,
+                onParticipantsChanged = viewModel::updateParticipants,
+                isEditing = uiState.isEditing
             )
             // endregion
 
@@ -250,7 +285,7 @@ private fun MobileFacilityEditLessonScreen(
                 isNewLesson = !uiState.isEditing,
                 isEnabled = uiState.isSaveButtonEnabled,
                 isLoading = false, //TODO: loading
-                onClick = viewModel::submitLesson
+                onClick = { viewModel.onAction(FacilityLessonEditAction.Save) }
             )
 
             Spacer(Modifier.height(24.dp))
@@ -260,7 +295,7 @@ private fun MobileFacilityEditLessonScreen(
             DestructiveDialog(
                 showDialog = uiState.showCancelDialog,
                 message = stringResource(Res.string.lesson_edit_cancel_message),
-                onClickConfirm = goToBack,
+                onClickConfirm = { viewModel.onAction(FacilityLessonEditAction.NavigateToBack) },
                 onClickDismiss = { viewModel.updateShowCancelDialog(false) }
             )
         }
@@ -271,6 +306,7 @@ private fun MobileFacilityEditLessonScreen(
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
 private fun EditLessonSubjectItem(
+    isEditing: Boolean,
     selectedIcon: Int?,
     title: String?,
     onIconSelected: (Int) -> Unit,
@@ -318,7 +354,8 @@ private fun EditLessonSubjectItem(
                 title = stringResource(Res.string.lesson_exercise_title),
                 hint = stringResource(Res.string.lesson_exercise_title_hint),
                 value = title,
-                onValueChange = onTitleChanged
+                onValueChange = onTitleChanged,
+                enabled = !isEditing
             )
         }
 
@@ -382,10 +419,10 @@ private fun LessonEditNoteRow(
 @Composable
 private fun EditLessonTrainerRow(
     trainers: List<SelectableTrainerMenuItemModel>,
+    selectedTrainer: SelectableTrainerMenuItemModel?,
     onSelectionChanged: (SelectableTrainerMenuItemModel) -> Unit
 ) {
     var isDialogOpen by remember { mutableStateOf(false) }
-    val selectedTrainer = trainers.firstOrNull { it.selected }
 
     Column(modifier = Modifier.fillMaxWidth()) {
         // Title
@@ -436,8 +473,8 @@ private fun EditLessonTrainerRow(
 @Composable
 private fun EditLessonDatesRow(
     modifier: Modifier = Modifier,
-    startDate: LocalDate? = null,
-    endDate: LocalDate? = null,
+    startDate: LocalDate,
+    endDate: LocalDate,
     onStartDateSelected: (LocalDate) -> Unit = {},
     onEndDateSelected: (LocalDate) -> Unit = {}
 ) {
@@ -455,7 +492,7 @@ private fun EditLessonDatesRow(
             modifier = Modifier.weight(1f).clickable { isStartDatePickerOpen = true },
             title = stringResource(Res.string.lesson_start_date_label),
             hint = stringResource(Res.string.lesson_date_hint),
-            value = mutableStartDate?.classDateFormatToDisplay(),
+            value = mutableStartDate.classDateFormatToDisplay(),
             rightIconRes = Res.drawable.ic_calendar_dots
         )
 
@@ -463,7 +500,7 @@ private fun EditLessonDatesRow(
             modifier = Modifier.weight(1f).clickable { isEndDatePickerOpen = true },
             title = stringResource(Res.string.lesson_end_date_label),
             hint = stringResource(Res.string.lesson_date_hint),
-            value = mutableEndDate?.classDateFormatToDisplay(),
+            value = mutableEndDate.classDateFormatToDisplay(),
             rightIconRes = Res.drawable.ic_calendar_dots
         )
     }
@@ -471,9 +508,19 @@ private fun EditLessonDatesRow(
     if (isStartDatePickerOpen) {
         SingleDatePickerDialog(
             isOpen = isStartDatePickerOpen,
-            onConfirm = {
-                mutableStartDate = it
-                onStartDateSelected(it)
+            onConfirm = { newStartDate ->
+                val selectableStartDate: LocalDate = when {
+                    newStartDate.isBefore(LocalDate.now()) -> LocalDate.now()
+                    else -> newStartDate
+                }
+                mutableStartDate = selectableStartDate
+                onStartDateSelected(selectableStartDate)
+
+                if (selectableStartDate.isAfter(endDate)) {
+                    mutableEndDate = selectableStartDate
+                    onEndDateSelected(selectableStartDate)
+                }
+
                 isStartDatePickerOpen = false
             },
             onDismiss = { isStartDatePickerOpen = false }
@@ -483,9 +530,14 @@ private fun EditLessonDatesRow(
     if (isEndDatePickerOpen) {
         SingleDatePickerDialog(
             isOpen = isEndDatePickerOpen,
-            onConfirm = {
-                mutableEndDate = it
-                onEndDateSelected(it)
+            onConfirm = { newEndDate ->
+                val selectableEndDate: LocalDate = when {
+                    newEndDate.isBefore(startDate) -> startDate
+                    else -> newEndDate
+                }
+                mutableEndDate = selectableEndDate
+                onEndDateSelected(selectableEndDate)
+
                 isEndDatePickerOpen = false
             },
             onDismiss = { isEndDatePickerOpen = false }
@@ -577,8 +629,11 @@ private fun generateHourSlots(startHour: Int, endHour: Int, intervalMinutes: Int
 @Composable
 fun LessonEditRecurrenceRow(
     selectedRecurrence: CalendarRecurrence,
-    onSelectionChanged: (CalendarRecurrence) -> Unit
+    onSelectionChanged: (CalendarRecurrence) -> Unit,
+    isEditing: Boolean = false
 ) {
+    if (isEditing) return
+
     val dayOfWeekLabels = mapOf(
         DayOfWeek.MONDAY to stringResource(Res.string.day_monday_label),
         DayOfWeek.TUESDAY to stringResource(Res.string.day_tuesday_label),
@@ -689,19 +744,30 @@ fun LessonEditRecurrenceRow(
 @Composable
 private fun LessonEditCapacityRow(
     selectedCapacity: Int,
-    onSelectionChanged: (Int) -> Unit
+    onSelectionChanged: (Int) -> Unit,
+    participants: List<ParticipatedMember>,
+    onParticipantsChanged: (List<ParticipatedMember>) -> Unit,
+    isEditing: Boolean
 ) {
     var isCapacityPopupOpened by remember { mutableStateOf(false) }
+    var isEditMembersDialogOpened by remember { mutableStateOf(false) }
 
     Column {
-        TitledMediumRegularText(
-            modifier = Modifier
-                .fillMaxWidth()
-                .clickable { isCapacityPopupOpened = true },
-            title = stringResource(Res.string.lesson_capacity_label),
-            value = selectedCapacity.toString(),
-            rightIconRes = Res.drawable.ic_chevron_down
-        )
+        Row(Modifier.fillMaxWidth(), verticalAlignment = Alignment.Bottom) {
+            TitledMediumRegularText(
+                modifier = Modifier
+                    .weight(1f)
+                    .clickable { isCapacityPopupOpened = true },
+                title = stringResource(Res.string.lesson_capacity_label),
+                value = selectedCapacity.toString(),
+                rightIconRes = Res.drawable.ic_chevron_down
+            )
+
+            if (isEditing) {
+                Spacer(Modifier.width(16.dp))
+                PrimaryLargeButton("Üye Ekle/Sil", onClick = { isEditMembersDialogOpened = true })
+            }
+        }
 
         if (isCapacityPopupOpened) {
             LessonSelectCapacityPopupMenu(
@@ -710,6 +776,14 @@ private fun LessonEditCapacityRow(
                 onDismiss = { isCapacityPopupOpened = false },
                 selectedCapacity = selectedCapacity,
                 onSelectionChanged = onSelectionChanged
+            )
+        }
+
+        if (isEditMembersDialogOpened) {
+            EditParticipantsDialog(
+                participants,
+                onUpdateParticipants = onParticipantsChanged,
+                onClickDismiss = { isEditMembersDialogOpened = false }
             )
         }
     }
@@ -1017,6 +1091,106 @@ private fun TimePickerDialog(
                         }
                     }
                 }
+            }
+        }
+    }
+}
+
+@Composable
+private fun EditParticipantsDialog(
+    currentParticipatedMembers: List<ParticipatedMember>,
+    onUpdateParticipants: (List<ParticipatedMember>) -> Unit,
+    onClickDismiss: () -> Unit
+) {
+    var searchQuery by remember { mutableStateOf("") }
+    var participatedMembers by remember { mutableStateOf(currentParticipatedMembers) }
+
+    Dialog(
+        onDismissRequest = onClickDismiss,
+        properties = DialogProperties(usePlatformDefaultWidth = false)
+    ) {
+        Column(
+            modifier = Modifier
+                .fillMaxWidth(0.9f)
+                .clip(RoundedCornerShape(16.dp))
+                .background(SkyFitColor.background.surfaceSecondary)
+        ) {
+            Row(
+                Modifier.fillMaxWidth().background(SkyFitColor.background.default).padding(16.dp),
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                BodyLargeMediumText("Üye Ekle/Sil")
+                Spacer(Modifier.weight(1f))
+                ActionIcon(Res.drawable.ic_close, onClick = onClickDismiss)
+            }
+
+            Spacer(Modifier.height(16.dp))
+
+            SkyFitSearchTextInputComponent(
+                hint = stringResource(Res.string.search_action),
+                value = searchQuery,
+                onValueChange = { searchQuery = it },
+                modifier = Modifier.padding(horizontal = 12.dp)
+            )
+
+            LazyColumn(
+                modifier = Modifier.padding(12.dp),
+                verticalArrangement = Arrangement.spacedBy(8.dp)
+            ) {
+                items(participatedMembers) { participant ->
+                    AddRemoveMemberItem(
+                        imageUrl = participant.member.profileImageUrl,
+                        username = participant.member.username,
+                        fullName = "${participant.member.name} ${participant.member.surname}",
+                        actionContent = {
+
+                            if (participant.added) {
+                                PrimaryMediumButton(
+                                    text = stringResource(Res.string.delete_action),
+                                    onClick = {
+                                        participatedMembers = participatedMembers.map {
+                                            if (it.member.userId == participant.member.userId) {
+                                                it.copy(added = false)
+                                            } else it
+                                        }
+                                    }
+                                )
+                            } else {
+                                SecondaryMediumButton(
+                                    text = stringResource(Res.string.add_action),
+                                    onClick = {
+                                        participatedMembers = participatedMembers.map {
+                                            if (it.member.userId == participant.member.userId) {
+                                                it.copy(added = true)
+                                            } else it
+                                        }
+                                    }
+                                )
+                            }
+                        }
+                    )
+                }
+            }
+
+            Spacer(modifier = Modifier.height(16.dp))
+
+            // Buttons Row
+            Row(
+                modifier = Modifier.fillMaxWidth().padding(16.dp),
+                horizontalArrangement = Arrangement.End
+            ) {
+                SecondaryMicroButton(
+                    text = stringResource(Res.string.cancel_action),
+                    onClick = onClickDismiss
+                )
+                Spacer(Modifier.width(16.dp))
+                PrimaryMicroButton(
+                    text = stringResource(Res.string.confirm_action),
+                    onClick = {
+                        onUpdateParticipants(participatedMembers)
+                        onClickDismiss()
+                    }
+                )
             }
         }
     }

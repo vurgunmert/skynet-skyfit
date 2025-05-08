@@ -105,6 +105,7 @@
     <string name="lesson_status_missing">Eksik</string>
     <string name="lesson_create_action">Yeni Ders Oluştur</string>
     <string name="lesson_created_message">Ders Oluşturuldu</string>
+    <string name="lesson_updated_message">Ders Güncellendi</string>
     <string name="lesson_edit_action">Dersi Düzenle</string>
 
     <!-- 🔷 Descriptions / Notes -->

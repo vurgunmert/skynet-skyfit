@@ -5,6 +5,7 @@ import kotlinx.serialization.Serializable
 @Serializable
 data class LessonParticipantDTO(
     val lpId: Int,
+    val userId: Int,
     val lessonId: Int,
     val name: String,
     val surname: String,

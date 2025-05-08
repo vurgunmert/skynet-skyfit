@@ -40,7 +40,7 @@ internal fun BottomNavigationBar(
     onClickAppAction: () -> Unit
 ) {
     Box(
-        Modifier.fillMaxWidth(),
+        modifier.fillMaxWidth(),
         contentAlignment = Alignment.Center
     ) {
 //        Box(

@@ -41,7 +41,8 @@ fun SingleLineInputText(
     onValueChange: ((String) -> Unit)? = null,
     focusRequester: FocusRequester = FocusRequester(),
     nextFocusRequester: FocusRequester? = null,
-    rightIconRes: DrawableResource? = null
+    rightIconRes: DrawableResource? = null,
+    enabled: Boolean = true,
 ) {
     val keyboardController = LocalSoftwareKeyboardController.current
     val backgroundColor = error?.let { SkyFitColor.background.surfaceCriticalActive }
@@ -64,7 +65,7 @@ fun SingleLineInputText(
                 modifier = Modifier
                     .weight(1f)
                     .focusRequester(focusRequester),
-                enabled = true,
+                enabled = enabled,
                 value = value.orEmpty(),
                 onValueChange = { onValueChange?.invoke(it) },
                 textStyle = SkyFitTypography.bodyMediumRegular.copy(

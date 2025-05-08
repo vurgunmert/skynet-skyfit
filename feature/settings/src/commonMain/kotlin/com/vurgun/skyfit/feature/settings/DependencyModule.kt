@@ -35,7 +35,7 @@ val featureSettingsModule = module {
     factory { FacilityManageProfileViewModel(get(), get()) }
     factory { FacilityEditProfileViewModel(get(), get()) }
     factory { FacilityManageMembersViewModel(get()) }
-    factory { FacilityAddMembersViewModel(get()) }
+    factory { FacilityAddMembersViewModel(get(), get()) }
     factory { FacilityManageTrainersViewModel(get()) }
     factory { FacilityPaymentHistoryViewModel() }
     factory { FacilityAddTrainerViewModel(get()) }

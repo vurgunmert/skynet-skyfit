@@ -2,6 +2,7 @@ package com.vurgun.skyfit.core.data.domain.model
 
 data class LessonParticipant(
     val lpId: Int,
+    val userId: Int,
     val lessonId: Int,
     val firstName: String,
     val lastName: String,

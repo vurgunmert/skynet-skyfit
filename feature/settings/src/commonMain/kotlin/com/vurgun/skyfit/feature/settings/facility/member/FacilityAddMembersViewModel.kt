@@ -2,7 +2,9 @@ package com.vurgun.skyfit.feature.settings.facility.member
 
 import cafe.adriel.voyager.core.model.ScreenModel
 import cafe.adriel.voyager.core.model.screenModelScope
+import com.vurgun.skyfit.core.data.domain.model.FacilityDetail
 import com.vurgun.skyfit.core.data.domain.model.MissingTokenException
+import com.vurgun.skyfit.core.data.domain.repository.UserManager
 import com.vurgun.skyfit.data.settings.domain.model.Member
 import com.vurgun.skyfit.data.settings.domain.repository.MemberRepository
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -20,8 +22,13 @@ internal data class FacilityAddMembersUiState(
 )
 
 internal class FacilityAddMembersViewModel(
+    private val userManager: UserManager,
     private val memberRepository: MemberRepository
 ) : ScreenModel {
+
+    private val facilityUser: FacilityDetail
+        get() = userManager.user.value as? FacilityDetail
+            ?: error("User is not a Facility!")
 
     private val _uiState = MutableStateFlow(FacilityAddMembersUiState())
     val uiState: StateFlow<FacilityAddMembersUiState> = _uiState.asStateFlow()
@@ -41,7 +48,7 @@ internal class FacilityAddMembersViewModel(
         screenModelScope.launch {
             _uiState.update { it.copy(isLoading = true, error = null, unauthorized = false) }
 
-            memberRepository.getPlatformMembers(gymId = 10).fold(
+            memberRepository.getPlatformMembers(gymId = facilityUser.gymId).fold(
                 onSuccess = { members ->
                     cached = members
                     _uiState.update {

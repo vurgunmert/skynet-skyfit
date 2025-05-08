@@ -9,7 +9,7 @@ data class AddGymMemberRequest(val gymId: Int, val userId: Int)
 data class GetGymMembersRequest(val gymId: Int)
 
 @Serializable
-data class GetPlatformMembersRequest(val gymId: Int) //TODO: NO GYM ID?
+data class GetPlatformMembersRequest(val gymId: Int)
 
 @Serializable
 data class DeleteGymMemberRequest(val gymId: Int, val userId: Int)
