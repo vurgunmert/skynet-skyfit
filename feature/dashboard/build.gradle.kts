@@ -33,13 +33,9 @@ kotlin {
             implementation(projects.core.ui)
             implementation(projects.core.data)
             implementation(projects.core.navigation)
+            implementation(projects.core.utils)
 
-            implementation(projects.feature.home)
-            implementation(projects.feature.explore)
-            implementation(projects.feature.social)
-            implementation(projects.feature.profile)
-
-            implementation(projects.feature.calendar) //TODO: why Need?
+            implementation(projects.feature.persona)
 
             implementation(libs.bundles.feature.core)
         }

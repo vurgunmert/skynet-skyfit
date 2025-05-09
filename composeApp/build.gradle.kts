@@ -48,23 +48,15 @@ kotlin {
             implementation(projects.core.ui)
             implementation(projects.core.navigation)
 
-            implementation(projects.feature.splash)
-            implementation(projects.feature.auth)
-            implementation(projects.feature.onboarding)
-            implementation(projects.feature.dashboard)
-            implementation(projects.feature.settings)
-            implementation(projects.feature.calendar)
-            implementation(projects.feature.courses)
-            implementation(projects.feature.profile)
-            implementation(projects.feature.home)
-            implementation(projects.feature.appointments)
-            implementation(projects.feature.home)
-            implementation(projects.feature.bodyanalysis)
-            implementation(projects.feature.notification)
-            implementation(projects.feature.messaging)
-
             implementation(libs.koin.core)
             implementation(libs.koin.compose)
+
+            implementation(projects.feature.access)
+            implementation(projects.feature.dashboard)
+            implementation(projects.feature.schedule)
+            implementation(projects.feature.persona)
+            implementation(projects.feature.wellbeing)
+            implementation(projects.feature.connect)
         }
 
         androidMain.dependencies {

@@ -67,6 +67,7 @@
     <string name="add_trainer_action">Antrenör Ekle</string>
     <string name="reset_action">Sıfırla</string>
     <string name="filter_action">Filtrele</string>
+    <string name="save_changes_action">Değişiklikleri Kaydet</string>
 
     <!-- 🔷 Gender Options -->
     <string name="gender_female">Kadın</string>
@@ -97,6 +98,9 @@
     <string name="event_name_label">Etkinlik Adı</string>
     <string name="time_label">Saat</string>
     <string name="date_label">Tarih</string>
+    <string name="profile_tags_label">Profil Etiketleri</string>
+    <string name="select_profile_tags_hint">Etiketlerini Sec örn: Pilates, Kondisyon</string>
+    <string name="select_profile_limit_message">Profilinizde en fazla 5 etiket bulundurabilirsiniz.</string>
 
     <!-- 🔷 Lesson Related -->
     <string name="lesson_status_completed">Tamamlandı</string>

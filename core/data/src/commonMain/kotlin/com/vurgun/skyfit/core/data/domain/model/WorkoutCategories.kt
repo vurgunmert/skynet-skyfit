@@ -50,7 +50,4 @@ object WorkoutCategories {
             displayName = mapOf("en" to "Recovery", "tr" to "İyileşme")
         )
     )
-
-    val byId = ALL.associateBy { it.id }
-    val byKey = ALL.associateBy { it.key }
 }

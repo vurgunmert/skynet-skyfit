@@ -5,7 +5,7 @@ plugins {
     alias(libs.plugins.androidLibrary)
     alias(libs.plugins.composeMultiplatform)
     alias(libs.plugins.composeCompiler)
-    alias(libs.plugins.kotlinCocoapods)
+//    alias(libs.plugins.kotlinCocoapods)
 }
 
 kotlin {
@@ -25,24 +25,24 @@ kotlin {
             isStatic = true
         }
     }
-
-    cocoapods {
-        summary = "Core UI Module for SkyFit App"
-        homepage = "https://your-link-to-CoreUi-homepage.com"
-        version = "1.0"
-        ios.deploymentTarget = "17.0" // ✅ Match your project setup!
-        podfile = rootProject.file("iosApp/Podfile") // ✅ Correct, not relative path!
-
-        framework {
-            baseName = "CoreUi" // ✅ NOT ComposeApp anymore, it's CoreUi!
-            isStatic = false
-        }
-
-        pod("RiveRuntime") {
-            version = libs.versions.pods.rive.runtime.get()
-            extraOpts += listOf("-compiler-option", "-fmodules")
-        }
-    }
+//
+//    cocoapods {
+//        summary = "Core UI - iOS Pod"
+//        homepage = "https://vurguns.com"
+//        version = "1.0"
+//        ios.deploymentTarget = "16.6"
+//        podfile = rootProject.file("iosApp/Podfile")
+//
+//        framework {
+//            baseName = "CoreUi"
+//            isStatic = false
+//        }
+//
+//        pod("RiveRuntime") {
+//            version = libs.versions.pods.rive.runtime.get()
+//            extraOpts += listOf("-compiler-option", "-fmodules")
+//        }
+//    }
 
 
     jvm("desktop")
@@ -55,7 +55,6 @@ kotlin {
             implementation(libs.calf.permissions)
 
             implementation(projects.core.data)
-            implementation(projects.data.courses)
 
             api(compose.runtime)
             api(compose.foundation)

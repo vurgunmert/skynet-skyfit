@@ -1,8 +1,5 @@
 package com.vurgun.skyfit.core.ui.components.special
 
-//import com.preat.peekaboo.image.picker.SelectionMode
-//import com.preat.peekaboo.image.picker.rememberImagePickerLauncher
-//import com.preat.peekaboo.image.picker.toImageBitmap
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -64,6 +61,10 @@ import skyfit.core.ui.generated.resources.ic_delete
 import skyfit.core.ui.generated.resources.ic_pencil
 import skyfit.core.ui.generated.resources.ic_warning
 import skyfit.core.ui.generated.resources.logo_skyfit
+import skyfit.core.ui.generated.resources.profile_tags_label
+import skyfit.core.ui.generated.resources.save_changes_action
+import skyfit.core.ui.generated.resources.select_profile_limit_message
+import skyfit.core.ui.generated.resources.select_profile_tags_hint
 import skyfit.core.ui.generated.resources.settings_delete_account_dialog_message
 import skyfit.core.ui.generated.resources.settings_delete_account_dialog_title
 
@@ -138,7 +139,7 @@ fun MobileUserSettingsScreenPhotoEditComponent(
 @Composable
 fun MobileUserSettingsScreenSaveActionComponent(onClick: () -> Unit) {
     SkyFitButtonComponent(
-        modifier = Modifier.fillMaxWidth(), text = "Değişiklikleri Kaydet",
+        modifier = Modifier.fillMaxWidth(), text = stringResource(Res.string.save_changes_action),
         onClick = onClick,
         variant = ButtonVariant.Primary,
         size = ButtonSize.Large,
@@ -309,7 +310,7 @@ fun AccountSettingsSelectToSetInputComponent(
             rightIconRes?.let { iconRes ->
                 Icon(
                     painter = painterResource(iconRes),
-                    contentDescription = "Right Icon",
+                    contentDescription = null,
                     modifier = Modifier.size(16.dp),
                     tint = SkyFitColor.icon.default
                 )
@@ -333,8 +334,8 @@ fun FitnessTagPickerComponent(
         Column(modifier.fillMaxWidth()) {
             AccountSettingsSelectToSetInputComponent(
                 modifier = Modifier.clickable { showTagPickerDialog = true },
-                title = "Profil Etiketleri",
-                hint = "Etiketlerini Sec örn: Pilates, Kondisyon",
+                title = stringResource(Res.string.profile_tags_label),
+                hint = stringResource(Res.string.select_profile_tags_hint),
                 value = null,
                 rightIconRes = Res.drawable.ic_pencil
             )
@@ -349,7 +350,7 @@ fun FitnessTagPickerComponent(
                     Row(verticalAlignment = Alignment.CenterVertically) {
                         Icon(
                             painter = painterResource(Res.drawable.ic_warning),
-                            contentDescription = "Notification Icon",
+                            contentDescription = null,
                             modifier = Modifier.size(16.dp),
                             tint = SkyFitColor.icon.caution
                         )
@@ -364,7 +365,7 @@ fun FitnessTagPickerComponent(
                         )
                     }
                     Text(
-                        text = "Profilinizde en fazla 5 etiket bulundurabilirsiniz.",
+                        text = stringResource(Res.string.select_profile_limit_message),
                         modifier = Modifier
                             .padding(top = 8.dp)
                             .fillMaxWidth()
