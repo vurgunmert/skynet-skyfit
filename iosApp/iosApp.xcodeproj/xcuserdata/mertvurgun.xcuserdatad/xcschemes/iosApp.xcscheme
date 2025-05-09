@@ -62,6 +62,7 @@
    </AnalyzeAction>
    <ArchiveAction
       buildConfiguration = "Release"
+      customArchiveName = "skyfit-release"
       revealArchiveInOrganizer = "YES">
    </ArchiveAction>
 </Scheme>
