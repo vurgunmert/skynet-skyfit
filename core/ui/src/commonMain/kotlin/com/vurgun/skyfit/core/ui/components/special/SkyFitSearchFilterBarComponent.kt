@@ -107,7 +107,7 @@ fun SkyFitSearchTextInputComponent(
 
 @Composable
 fun SkyFitSearchFilterBarComponent(onEnableSearch: (Boolean) -> Unit) {
-    var filterItems = listOf("Kardiyo", "Pilates", "Kondisyon", "Beslenme", "CrossFit", "Yoga")
+    val filterItems = listOf("Kardiyo", "Pilates", "Kondisyon", "Beslenme", "CrossFit", "Yoga")
     var selectedItems by remember { mutableStateOf(setOf<String>()) }
     var isSearchVisible by remember { mutableStateOf(false) }
 

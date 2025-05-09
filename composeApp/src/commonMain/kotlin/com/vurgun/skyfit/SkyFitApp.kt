@@ -11,17 +11,12 @@ import com.vurgun.skyfit.core.navigation.SharedScreen
 import com.vurgun.skyfit.core.ui.styling.SkyFitTheme
 import com.vurgun.skyfit.core.ui.utils.LocalWindowSize
 import com.vurgun.skyfit.core.ui.utils.WindowSizeHelper
-import com.vurgun.skyfit.feature.auth.authScreenModule
-import com.vurgun.skyfit.feature.bodyanalysis.bodyAnalysisScreenModule
-import com.vurgun.skyfit.feature.calendar.calendarScreenModule
-import com.vurgun.skyfit.feature.courses.coursesScreenModule
+import com.vurgun.skyfit.feature.access.accessScreenModule
+import com.vurgun.skyfit.feature.connect.connectScreenModule
 import com.vurgun.skyfit.feature.dashboard.dashboardScreenModule
-import com.vurgun.skyfit.feature.messaging.messagingScreenModule
-import com.vurgun.skyfit.feature.notification.notificationsScreenModule
-import com.vurgun.skyfit.feature.onboarding.onboardingScreenModule
-import com.vurgun.skyfit.feature.profile.profileScreenModule
-import com.vurgun.skyfit.feature.settings.settingsScreenModule
-import com.vurgun.skyfit.feature.splash.splashScreenModule
+import com.vurgun.skyfit.feature.persona.personaScreenModule
+import com.vurgun.skyfit.feature.schedule.scheduleScreenModule
+import com.vurgun.skyfit.feature.wellbeign.wellbeingScreenModule
 import org.koin.compose.KoinApplication
 import org.koin.core.module.Module
 
@@ -51,17 +46,12 @@ fun SkyFitApp(
 private fun AppScreen() {
     SkyFitTheme {
         ScreenRegistry {
-            splashScreenModule()
-            authScreenModule()
-            onboardingScreenModule()
-            calendarScreenModule()
-            bodyAnalysisScreenModule()
+            accessScreenModule()
+            connectScreenModule()
             dashboardScreenModule()
-            settingsScreenModule()
-            profileScreenModule()
-            notificationsScreenModule()
-            messagingScreenModule()
-            coursesScreenModule()
+            personaScreenModule()
+            scheduleScreenModule()
+            wellbeingScreenModule()
         }
 
         val splashScreen = rememberScreen(SharedScreen.Splash)

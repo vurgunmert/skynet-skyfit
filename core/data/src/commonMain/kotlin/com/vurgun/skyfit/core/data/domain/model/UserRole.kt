@@ -23,6 +23,6 @@ sealed class UserRole(val typeId: Int) {
 
         fun listOfAllowedRoles() = listOf(User, Trainer, Facility)
 
-        fun setOfAllowedRoles() = setOf(UserRole.User, UserRole.Trainer, UserRole.Facility)
+        fun setOfAllowedRoles() = setOf(User, Trainer, Facility)
     }
 }

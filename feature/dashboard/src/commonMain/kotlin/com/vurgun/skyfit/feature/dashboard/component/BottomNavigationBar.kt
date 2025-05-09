@@ -21,8 +21,8 @@ import androidx.compose.ui.unit.dp
 import cafe.adriel.voyager.core.screen.Screen
 import com.vurgun.skyfit.core.ui.components.special.ChatBotButtonComponent
 import com.vurgun.skyfit.core.ui.styling.SkyFitColor
-import com.vurgun.skyfit.feature.home.screen.HomeScreen
-import com.vurgun.skyfit.feature.profile.ProfileScreen
+import com.vurgun.skyfit.feature.dashboard.home.HomeScreen
+import com.vurgun.skyfit.feature.persona.profile.ProfileScreen
 import org.jetbrains.compose.resources.DrawableResource
 import org.jetbrains.compose.resources.painterResource
 import skyfit.core.ui.generated.resources.Res

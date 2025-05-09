@@ -18,7 +18,7 @@ fun serverImageFromPath(path: String?): String =
 
 object UserDetailMapper {
 
-    fun UserDetailDTO.toUserDetail(): UserDetail {
+    private fun UserDetailDTO.toUserDetail(): UserDetail {
         return UserDetail(
             userId = userId,
             normalUserId = normalUserId ?: -1,
@@ -39,7 +39,7 @@ object UserDetailMapper {
         )
     }
 
-    fun UserDetailDTO.toTrainerDetail(): TrainerDetail {
+    private fun UserDetailDTO.toTrainerDetail(): TrainerDetail {
         return TrainerDetail(
             userId = userId,
             trainerId = trainerId ?: -1,
@@ -60,7 +60,7 @@ object UserDetailMapper {
         )
     }
 
-    fun UserDetailDTO.toFacilityDetail(): FacilityDetail {
+    private fun UserDetailDTO.toFacilityDetail(): FacilityDetail {
         return FacilityDetail(
             userId = userId,
             gymId = gymId ?: -1,

@@ -1,7 +1,6 @@
 package com.vurgun.skyfit
 
 import android.app.Application
-import android.util.Log
 
 class AndroidApplication : Application() {
 
