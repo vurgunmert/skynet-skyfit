@@ -65,15 +65,13 @@ class LoginOTPVerificationViewModel(
                     AuthorizationOTPResult.RegistrationRequired -> LoginOTPVerificationEffect.GoToRegister
                     AuthorizationOTPResult.OnboardingRequired -> LoginOTPVerificationEffect.GoToOnboarding
                     AuthorizationOTPResult.LoginSuccess -> {
-                        try {
-                            userManager.getActiveUser(true).getOrThrow()
-                            LoginOTPVerificationEffect.GoToDashboard
-                        } catch (e: Exception) {
-                            LoginOTPVerificationEffect.ShowError(e.message)
-                        }
+                        userManager.getActiveUser(true).getOrThrow()
+                        LoginOTPVerificationEffect.GoToDashboard
                     }
                 }
                 _effect.emitOrNull(effect)
+            }catch (e: Exception) {
+                LoginOTPVerificationEffect.ShowError(e.message)
             } finally {
                 _isLoading.value = false
             }

@@ -14,6 +14,9 @@ import com.vurgun.skyfit.core.data.model.FacilityTrainerProfileDTO
 import com.vurgun.skyfit.core.data.model.LessonParticipantDTO
 import com.vurgun.skyfit.core.data.model.TrainerProfileDTO
 import com.vurgun.skyfit.core.data.model.UserProfileDTO
+import com.vurgun.skyfit.core.data.utility.now
+import kotlinx.datetime.LocalDate
+import kotlinx.datetime.daysUntil
 
 object ProfileMapper {
 
@@ -33,7 +36,8 @@ object ProfileMapper {
             lastName = surname,
             username = username,
             memberGymId = gymId,
-            memberGymJoinedAt = gymJoinDate?.parseServerToDateOnly()
+            memberGymJoinedAt = gymJoinDate?.parseServerToDateOnly(),
+            memberDurationDays = gymJoinDate?.parseServerToDateOnly()?.daysUntil(LocalDate.now())
         )
     }
 

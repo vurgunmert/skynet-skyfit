@@ -41,6 +41,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.vurgun.skyfit.core.data.domain.model.CharacterType
 import com.vurgun.skyfit.core.data.schedule.model.LessonSessionItemViewData
+import com.vurgun.skyfit.core.ui.components.button.SkyButton
 import com.vurgun.skyfit.core.ui.components.button.SkyFitCircularProgressIconButton
 import com.vurgun.skyfit.core.ui.components.event.FacilityHomeLessonEventItem
 import com.vurgun.skyfit.core.ui.components.event.TrainerHomeLessonEventItem
@@ -54,6 +55,8 @@ import com.vurgun.skyfit.core.ui.components.special.ButtonVariant
 import com.vurgun.skyfit.core.ui.components.special.SkyFitButtonComponent
 import com.vurgun.skyfit.core.ui.components.special.SkyFitListItemCardComponent
 import com.vurgun.skyfit.core.ui.components.special.SkyFitMonthPickerDropdownComponent
+import com.vurgun.skyfit.core.ui.components.text.SkyText
+import com.vurgun.skyfit.core.ui.components.text.TextStyleType
 import com.vurgun.skyfit.core.ui.styling.LocalPadding
 import com.vurgun.skyfit.core.ui.styling.SkyFitAsset
 import com.vurgun.skyfit.core.ui.styling.SkyFitColor
@@ -74,33 +77,6 @@ import skyfit.core.ui.generated.resources.ic_tool_illustration
 import skyfit.core.ui.generated.resources.ic_water
 import skyfit.core.ui.generated.resources.show_all_action
 import skyfit.core.ui.generated.resources.upcoming_appointments_label
-
-@Composable
-fun MobileDashboardHomeToolbarComponent(
-    onClickNotifications: () -> Unit = {},
-    onClickMessages: () -> Unit = {}
-) {
-    Row(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(horizontal = 24.dp, vertical = 8.dp),
-        horizontalArrangement = Arrangement.End
-    ) {
-//        Icon(
-//            painter = painterResource(Res.drawable.ic_bell),
-//            contentDescription = null,
-//            tint = SkyFitColor.text.default,
-//            modifier = Modifier.size(20.dp).clickable(onClick = onClickNotifications)
-//        )
-//        Spacer(Modifier.width(10.dp))
-//        Icon(
-//            painter = painterResource(Res.drawable.ic_chat),
-//            contentDescription = null,
-//            tint = SkyFitColor.text.default,
-//            modifier = Modifier.size(20.dp).clickable(onClick = onClickMessages)
-//        )
-    }
-}
 
 @Composable
 fun MobileDashboardHomeCharacterProgressComponent(
@@ -382,14 +358,14 @@ fun MobileUserHomeUpcomingAppointmentsComponent(
             horizontalArrangement = Arrangement.SpaceBetween,
             verticalAlignment = Alignment.CenterVertically
         ) {
-            Text(
+            SkyText(
                 text = stringResource(Res.string.upcoming_appointments_label),
-                style = SkyFitTypography.bodyLargeSemibold
+                styleType = TextStyleType.BodyLargeSemibold
             )
 
-            Text(
+            SkyText(
                 text = stringResource(Res.string.show_all_action),
-                style = SkyFitTypography.bodyXSmall,
+                styleType = TextStyleType.BodyXSmall,
                 color = SkyFitColor.border.secondaryButton,
                 modifier = Modifier.clickable(onClick = onClickShowAll)
             )
@@ -441,51 +417,6 @@ fun MobileDashboardHomeUpcomingAppointmentsComponent(
                 date = appointment.date.toString(),
                 timePeriod = appointment.hours.toString(),
                 trainer = appointment.trainer.toString(),
-                onClick = onClickShowAll
-            )
-        }
-    }
-}
-
-@Composable
-fun MobileTrainerHomeUpcomingAppointmentsComponent(
-    appointments: List<LessonSessionItemViewData>,
-    onClickShowAll: () -> Unit = {}
-) {
-
-    Column(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(LocalPadding.current.medium)
-    ) {
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(horizontal = LocalPadding.current.xSmall),
-            horizontalArrangement = Arrangement.SpaceBetween,
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            Text(
-                text = stringResource(Res.string.upcoming_appointments_label),
-                style = SkyFitTypography.bodyLargeSemibold
-            )
-
-            Text(
-                text = stringResource(Res.string.show_all_action),
-                style = SkyFitTypography.bodyXSmall,
-                color = SkyFitColor.border.secondaryButton,
-                modifier = Modifier.clickable(onClick = onClickShowAll)
-            )
-        }
-
-        appointments.forEach { appointment ->
-            Spacer(modifier = Modifier.height(8.dp))
-            TrainerHomeLessonEventItem(
-                title = appointment.title,
-                iconId = appointment.iconId,
-                date = appointment.date.toString(),
-                timePeriod = appointment.hours.toString(),
-                facility = appointment.facility.toString(),
                 onClick = onClickShowAll
             )
         }

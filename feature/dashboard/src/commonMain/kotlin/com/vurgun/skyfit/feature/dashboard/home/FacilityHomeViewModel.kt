@@ -3,21 +3,32 @@ package com.vurgun.skyfit.feature.dashboard.home
 import cafe.adriel.voyager.core.model.ScreenModel
 import cafe.adriel.voyager.core.model.screenModelScope
 import com.vurgun.skyfit.core.data.domain.model.FacilityDetail
+import com.vurgun.skyfit.core.data.domain.model.FacilityProfile
+import com.vurgun.skyfit.core.data.domain.repository.ProfileRepository
 import com.vurgun.skyfit.core.data.domain.repository.UserManager
-import com.vurgun.skyfit.core.data.utility.SingleSharedFlow
-import com.vurgun.skyfit.core.data.utility.emitOrNull
 import com.vurgun.skyfit.core.data.schedule.domain.repository.CourseRepository
 import com.vurgun.skyfit.core.data.schedule.mapper.LessonSessionItemViewDataMapper
 import com.vurgun.skyfit.core.data.schedule.model.LessonSessionItemViewData
-import kotlinx.coroutines.flow.MutableStateFlow
+import com.vurgun.skyfit.core.data.utility.SingleSharedFlow
+import com.vurgun.skyfit.core.data.utility.UiStateDelegate
+import com.vurgun.skyfit.core.data.utility.emitOrNull
 import kotlinx.coroutines.flow.SharedFlow
-import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 
+sealed interface FacilityHomeUiState {
+    data object Loading : FacilityHomeUiState
+    data class Error(val message: String?) : FacilityHomeUiState
+    data class Content(
+        val facility: FacilityDetail,
+        val profile: FacilityProfile,
+        val appointments: List<LessonSessionItemViewData> = emptyList()
+    ) : FacilityHomeUiState
+}
+
 sealed interface FacilityHomeAction {
-    data object NavigateToNotifications : FacilityHomeAction
-    data object NavigateToConversations : FacilityHomeAction
-    data object NavigateToManageLessons : FacilityHomeAction
+    data object OnClickNotifications : FacilityHomeAction
+    data object OnClickConversations : FacilityHomeAction
+    data object OnClickLessons : FacilityHomeAction
 }
 
 sealed interface FacilityHomeEffect {
@@ -29,45 +40,47 @@ sealed interface FacilityHomeEffect {
 class FacilityHomeViewModel(
     private val userManager: UserManager,
     private val courseRepository: CourseRepository,
+    private val profileRepository: ProfileRepository,
     private val mapper: LessonSessionItemViewDataMapper
 ) : ScreenModel {
+
+    private val _uiState = UiStateDelegate<FacilityHomeUiState>(FacilityHomeUiState.Loading)
+    val uiState = _uiState.asStateFlow()
 
     private val _effect = SingleSharedFlow<FacilityHomeEffect>()
     val effect: SharedFlow<FacilityHomeEffect> = _effect
 
-    private val facilityUser: FacilityDetail
-        get() = userManager.user.value as? FacilityDetail
-            ?: error("User is not a Facility")
-
-    private val _appointments = MutableStateFlow<List<LessonSessionItemViewData>>(emptyList())
-    val appointments = _appointments.asStateFlow()
-
-    init {
-        loadData()
-    }
-
     fun onAction(action: FacilityHomeAction) {
         when (action) {
-            FacilityHomeAction.NavigateToConversations -> {
+            FacilityHomeAction.OnClickConversations -> {
                 emitEffect(FacilityHomeEffect.NavigateToConversations)
             }
 
-            FacilityHomeAction.NavigateToManageLessons -> {
+            FacilityHomeAction.OnClickLessons -> {
                 emitEffect(FacilityHomeEffect.NavigateToManageLessons)
             }
 
-            FacilityHomeAction.NavigateToNotifications -> {
+            FacilityHomeAction.OnClickNotifications -> {
                 emitEffect(FacilityHomeEffect.NavigateToNotifications)
             }
         }
     }
 
-    private fun loadData() {
+    fun loadData() {
         screenModelScope.launch {
-            _appointments.value = courseRepository.getUpcomingLessonsByFacility(facilityUser.gymId)
-                .getOrNull()?.let { list ->
-                    list.map { mapper.map(it) }
-                }.orEmpty()
+            runCatching {
+                val facility = userManager.user.value as FacilityDetail
+                val facilityProfile = profileRepository.getFacilityProfile(facility.gymId).getOrThrow()
+
+                val appointments = courseRepository.getUpcomingLessonsByFacility(facility.gymId, limit = 5)
+                    .getOrNull()?.let { list ->
+                        list.map { mapper.map(it) }
+                    }.orEmpty()
+
+                _uiState.update(FacilityHomeUiState.Content(facility, facilityProfile, appointments))
+            }.onFailure {
+                _uiState.update(FacilityHomeUiState.Error(it.message))
+            }
         }
     }
 

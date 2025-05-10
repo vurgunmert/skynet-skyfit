@@ -2,29 +2,22 @@ package com.vurgun.skyfit.core.ui.components.special
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.*
 import androidx.compose.material.DropdownMenu
 import androidx.compose.material.DropdownMenuItem
 import androidx.compose.material.Icon
 import androidx.compose.material.Text
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowDropDown
-import androidx.compose.material.icons.filled.DateRange
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.PopupProperties
 import com.vurgun.skyfit.core.ui.styling.SkyFitColor
 import com.vurgun.skyfit.core.ui.styling.SkyFitTypography
+import org.jetbrains.compose.resources.painterResource
+import skyfit.core.ui.generated.resources.Res
+import skyfit.core.ui.generated.resources.ic_calendar_dots
+import skyfit.core.ui.generated.resources.ic_chevron_down
 
 @Composable
 fun SkyFitMonthPickerDropdownComponent(
@@ -43,7 +36,7 @@ fun SkyFitMonthPickerDropdownComponent(
         verticalAlignment = Alignment.CenterVertically
     ) {
         Icon(
-            imageVector = Icons.Default.DateRange,
+            painter = painterResource(Res.drawable.ic_calendar_dots),
             contentDescription = "Calendar",
             tint = SkyFitColor.icon.default,
             modifier = Modifier.size(16.dp)
@@ -55,7 +48,7 @@ fun SkyFitMonthPickerDropdownComponent(
         )
 
         Icon(
-            imageVector = Icons.Default.ArrowDropDown,
+            painter = painterResource(Res.drawable.ic_chevron_down),
             contentDescription = "Arrow",
             tint = SkyFitColor.icon.default,
             modifier = Modifier.size(16.dp)

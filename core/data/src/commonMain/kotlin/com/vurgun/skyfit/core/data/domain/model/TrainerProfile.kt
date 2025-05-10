@@ -19,6 +19,7 @@ data class TrainerProfile(
     val point: Float = 0f
 ) {
     val fullName = "$firstName $lastName"
+    val isFacilityAssigned = gymId != null
 }
 
 data class FacilityTrainerProfile(

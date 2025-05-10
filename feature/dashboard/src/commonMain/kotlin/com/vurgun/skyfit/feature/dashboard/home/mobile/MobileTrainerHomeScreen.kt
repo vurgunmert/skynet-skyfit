@@ -1,38 +1,10 @@
-package com.vurgun.skyfit.feature.dashboard.home
+package com.vurgun.skyfit.feature.dashboard.home.mobile
 
-import androidx.compose.foundation.Canvas
-import androidx.compose.foundation.background
-import androidx.compose.foundation.border
-import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.*
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.Checkbox
-import androidx.compose.material.CheckboxDefaults
-import androidx.compose.material.Icon
-import androidx.compose.material.Text
-import androidx.compose.material.TextField
-import androidx.compose.material.TextFieldDefaults
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Menu
-import androidx.compose.material.icons.filled.Search
-import androidx.compose.material.icons.outlined.DateRange
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
+import androidx.compose.material.*
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -41,7 +13,6 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Path
 import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.graphics.drawscope.Stroke
-import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.drawText
@@ -50,28 +21,36 @@ import androidx.compose.ui.text.rememberTextMeasurer
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.compose.runtime.collectAsState
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.koin.koinScreenModel
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
+import com.vurgun.skyfit.core.data.schedule.model.LessonSessionItemViewData
 import com.vurgun.skyfit.core.navigation.SharedScreen
 import com.vurgun.skyfit.core.navigation.findRootNavigator
 import com.vurgun.skyfit.core.navigation.push
-import com.vurgun.skyfit.core.ui.components.button.PrimaryMediumButton
+import com.vurgun.skyfit.core.ui.components.button.SkyButton
+import com.vurgun.skyfit.core.ui.components.event.TrainerHomeLessonEventItem
+import com.vurgun.skyfit.core.ui.components.loader.FullScreenLoaderContent
 import com.vurgun.skyfit.core.ui.components.special.CharacterImage
 import com.vurgun.skyfit.core.ui.components.special.SkyFitMobileScaffold
+import com.vurgun.skyfit.core.ui.components.text.SkyText
+import com.vurgun.skyfit.core.ui.components.text.TextStyleType
+import com.vurgun.skyfit.core.ui.screen.ErrorScreen
 import com.vurgun.skyfit.core.ui.styling.SkyFitColor
 import com.vurgun.skyfit.core.ui.styling.SkyFitTypography
 import com.vurgun.skyfit.core.ui.utils.CollectEffect
 import com.vurgun.skyfit.core.ui.utils.LocalWindowSize
-import com.vurgun.skyfit.core.ui.utils.WindowSize
-import com.vurgun.skyfit.feature.dashboard.component.MobileDashboardHomeToolbarComponent
-import com.vurgun.skyfit.feature.dashboard.component.MobileTrainerHomeUpcomingAppointmentsComponent
+import com.vurgun.skyfit.feature.dashboard.component.EmptyFacilityAppointmentContent
+import com.vurgun.skyfit.feature.dashboard.component.UpcomingAppointmentsTitle
+import com.vurgun.skyfit.feature.dashboard.home.TrainerHomeAction
+import com.vurgun.skyfit.feature.dashboard.home.TrainerHomeEffect
+import com.vurgun.skyfit.feature.dashboard.home.TrainerHomeUiState
+import com.vurgun.skyfit.feature.dashboard.home.TrainerHomeViewModel
+import org.jetbrains.compose.resources.DrawableResource
+import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
-import skyfit.core.ui.generated.resources.Res
-import skyfit.core.ui.generated.resources.lesson_add_action
-import skyfit.core.ui.generated.resources.upcoming_appointments_label
+import skyfit.core.ui.generated.resources.*
 import kotlin.math.sign
 
 class TrainerHomeScreen : Screen {
@@ -81,40 +60,60 @@ class TrainerHomeScreen : Screen {
         val windowSize = LocalWindowSize.current
         val appNavigator = LocalNavigator.currentOrThrow.findRootNavigator()
         val viewModel = koinScreenModel<TrainerHomeViewModel>()
+        val uiState by viewModel.uiState.collectAsState()
 
         CollectEffect(viewModel.effect) { effect ->
             when (effect) {
                 TrainerHomeEffect.NavigateToAppointments -> {
                     appNavigator.push(SharedScreen.TrainerAppointmentListing)
                 }
+
                 TrainerHomeEffect.NavigateToConversations -> {
                     appNavigator.push(SharedScreen.Conversations)
                 }
+
                 TrainerHomeEffect.NavigateToNotifications -> {
                     appNavigator.push(SharedScreen.Notifications)
                 }
             }
         }
 
-        if (windowSize == WindowSize.EXPANDED) {
-            TrainerHomeCompact(viewModel) //TODO: Expanded
-        } else {
-            TrainerHomeCompact(viewModel)
+        LaunchedEffect(Unit) {
+            viewModel.loadData()
+        }
+
+        when (uiState) {
+            is TrainerHomeUiState.Loading -> FullScreenLoaderContent()
+            is TrainerHomeUiState.Error -> {
+                val message = (uiState as TrainerHomeUiState.Error).message
+                ErrorScreen(
+                    message = message,
+                    confirmText = stringResource(Res.string.refresh_action),
+                    onConfirm = { viewModel.loadData() }
+                )
+            }
+
+            is TrainerHomeUiState.Content -> {
+                val content = (uiState as TrainerHomeUiState.Content)
+                TrainerHomeCompact(content, viewModel::onAction)
+            }
         }
     }
 }
 
 @Composable
 private fun TrainerHomeCompact(
-    viewModel: TrainerHomeViewModel
+    content: TrainerHomeUiState.Content,
+    onAction: (TrainerHomeAction) -> Unit
 ) {
-    val appointments by viewModel.appointments.collectAsState()
 
     SkyFitMobileScaffold(
         topBar = {
-            MobileDashboardHomeToolbarComponent(
-                onClickNotifications = { viewModel.onAction(TrainerHomeAction.NavigateToNotifications) },
-                onClickMessages = { viewModel.onAction(TrainerHomeAction.NavigateToConversations) }
+            MobileHomeTopBar(
+                notificationsEnabled = false,
+                onClickNotifications = { onAction(TrainerHomeAction.OnClickNotifications) },
+                conversationsEnabled = false,
+                onClickConversations = { onAction(TrainerHomeAction.OnClickConversations) }
             )
         }
     ) {
@@ -124,24 +123,19 @@ private fun TrainerHomeCompact(
                 .verticalScroll(rememberScrollState()),
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {
-
             CharacterImage(
-                characterType = viewModel.characterType,
+                characterType = content.trainer.characterType,
                 modifier = Modifier
             )
 
             Spacer(Modifier.height(24.dp))
 
-//            MobileDashboardHomeTrainerStatisticsComponent()
-
-            if (appointments.isEmpty()) {
-//                EmptyUpcomingAppointments(onClickAdd = {})
-            } else {
-                MobileTrainerHomeUpcomingAppointmentsComponent(
-                    appointments = appointments,
-                    onClickShowAll = { viewModel.onAction(TrainerHomeAction.NavigateToAppointments) }
-                )
-            }
+            TrainerUpcomingAppointments(
+                content.profile.gymId,
+                appointments = content.appointments,
+                onClickShowAll = { onAction(TrainerHomeAction.OnClickAppointments) },
+                onClickAddLesson = {}
+            )
 
             Spacer(Modifier.height(128.dp))
         }
@@ -245,7 +239,11 @@ private fun MobileDashboardHomeStatCard(stat: HomeTrainerStat, modifier: Modifie
                 Box(
                     modifier = Modifier
                         .clip(RoundedCornerShape(6.dp))
-                        .background(if (stat.isPositive == true) Color.Green.copy(alpha = 0.2f) else Color.Red.copy(alpha = 0.2f))
+                        .background(
+                            if (stat.isPositive == true) Color.Green.copy(alpha = 0.2f) else Color.Red.copy(
+                                alpha = 0.2f
+                            )
+                        )
                         .padding(horizontal = 6.dp, vertical = 2.dp)
                 ) {
                     Text(text = it, fontSize = 12.sp, color = if (stat.isPositive == true) Color.Green else Color.Red)
@@ -385,52 +383,58 @@ fun MemberChangeLineChart(dataPoints: List<Int>, labels: List<String>) {
     }
 }
 
-
 @Composable
-fun EmptyUpcomingAppointments(onClickAdd: () -> Unit) {
+private fun TrainerUpcomingAppointments(
+    assignedFacilityId: Int?,
+    appointments: List<LessonSessionItemViewData>,
+    onClickShowAll: () -> Unit = {},
+    onClickAddLesson: (facilityId: Int) -> Unit = {},
+) {
 
-    Column(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(horizontal = 20.dp, vertical = 16.dp),
-        verticalArrangement = Arrangement.Center
-    ) {
-        Text(
-            text = stringResource(Res.string.upcoming_appointments_label),
-            style = SkyFitTypography.bodyLargeSemibold
-        )
-
-        Spacer(modifier = Modifier.height(8.dp))
-
-        Box(
-            Modifier
+    if (appointments.isNotEmpty()) {
+        Column(
+            modifier = Modifier
                 .fillMaxWidth()
-                .height(105.dp)
-                .background(SkyFitColor.background.surfaceSecondary, RoundedCornerShape(16.dp)),
-            contentAlignment = Alignment.Center
+                .padding(vertical = 16.dp)
         ) {
-            PrimaryMediumButton(
-                text = stringResource(Res.string.lesson_add_action),
-                onClick = onClickAdd,
-            )
+            UpcomingAppointmentsTitle(onClickShowAll)
+
+            appointments.forEach { appointment ->
+                Spacer(modifier = Modifier.height(8.dp))
+                TrainerHomeLessonEventItem(
+                    title = appointment.title,
+                    iconId = appointment.iconId,
+                    date = appointment.date.toString(),
+                    timePeriod = appointment.hours.toString(),
+                    facility = appointment.facility.toString(),
+                    onClick = onClickShowAll
+                )
+            }
         }
+    } else {
+        EmptyFacilityAppointmentContent(
+            assignedFacilityId = assignedFacilityId,
+            onClickAdd = onClickAddLesson
+        )
     }
 }
+
+
 
 
 //TODO: REMOVE
 @Composable
 fun MobileDashboardHomeTrainerClassScheduleComponent() {
     val classList = listOf(
-        HomeTrainerClass("Kişisel Kuvvet Antrenmanı", Icons.Outlined.DateRange, "07:00-08:00", "22 Kasım"),
-        HomeTrainerClass("Pilates", Icons.Outlined.DateRange, "07:00-08:00", "22 Kasım"),
-        HomeTrainerClass("Core", Icons.Outlined.DateRange, "07:00-08:00", "22 Kasım"),
-        HomeTrainerClass("Kişisel Kuvvet Antrenmanı", Icons.Outlined.DateRange, "07:00-08:00", "22 Kasım"),
-        HomeTrainerClass("Skipping Rope", Icons.Outlined.DateRange, "07:00-08:00", "22 Kasım"),
-        HomeTrainerClass("Push-Ups", Icons.Outlined.DateRange, "07:00-08:00", "22 Kasım"),
-        HomeTrainerClass("Kişisel Kuvvet Antrenmanı", Icons.Outlined.DateRange, "07:00-08:00", "22 Kasım"),
-        HomeTrainerClass("Skipping Rope", Icons.Outlined.DateRange, "07:00-08:00", "22 Kasım"),
-        HomeTrainerClass("Push-Ups", Icons.Outlined.DateRange, "07:00-08:00", "22 Kasım")
+        HomeTrainerClass("Kişisel Kuvvet Antrenmanı", Res.drawable.ic_dots_vertical, "07:00-08:00", "22 Kasım"),
+        HomeTrainerClass("Pilates", Res.drawable.ic_dots_vertical, "07:00-08:00", "22 Kasım"),
+        HomeTrainerClass("Core", Res.drawable.ic_dots_vertical, "07:00-08:00", "22 Kasım"),
+        HomeTrainerClass("Kişisel Kuvvet Antrenmanı", Res.drawable.ic_dots_vertical, "07:00-08:00", "22 Kasım"),
+        HomeTrainerClass("Skipping Rope", Res.drawable.ic_dots_vertical, "07:00-08:00", "22 Kasım"),
+        HomeTrainerClass("Push-Ups", Res.drawable.ic_dots_vertical, "07:00-08:00", "22 Kasım"),
+        HomeTrainerClass("Kişisel Kuvvet Antrenmanı", Res.drawable.ic_dots_vertical, "07:00-08:00", "22 Kasım"),
+        HomeTrainerClass("Skipping Rope", Res.drawable.ic_dots_vertical, "07:00-08:00", "22 Kasım"),
+        HomeTrainerClass("Push-Ups", Res.drawable.ic_dots_vertical, "07:00-08:00", "22 Kasım")
     )
 
     Column(
@@ -488,14 +492,14 @@ private fun SearchAndFilterBar() {
                     .padding(4.dp)
             ) {
                 Icon(
-                    imageVector = Icons.Default.Search,
+                    painter = painterResource(Res.drawable.ic_search),
                     contentDescription = "Search",
                     tint = SkyFitColor.icon.inverseSecondary,
                     modifier = Modifier.size(16.dp)
                 )
 
                 Icon(
-                    imageVector = Icons.Default.Menu,
+                    painter = painterResource(Res.drawable.ic_dots_vertical),
                     contentDescription = "Filter",
                     tint = SkyFitColor.icon.inverseSecondary,
                     modifier = Modifier.size(16.dp)
@@ -576,7 +580,7 @@ private fun HomeClassScheduleRow(trainerClass: HomeTrainerClass) {
             verticalAlignment = Alignment.CenterVertically
         ) {
             Icon(
-                imageVector = trainerClass.icon,
+                painter = painterResource(trainerClass.icon),
                 contentDescription = trainerClass.name,
                 tint = Color.White,
                 modifier = Modifier.size(20.dp)
@@ -606,4 +610,9 @@ private fun HomeClassScheduleRow(trainerClass: HomeTrainerClass) {
     }
 }
 
-private data class HomeTrainerClass(val name: String, val icon: ImageVector, val time: String, val date: String)
+private data class HomeTrainerClass(
+    val name: String,
+    val icon: DrawableResource,
+    val time: String,
+    val date: String
+)

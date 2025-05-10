@@ -27,10 +27,21 @@
 		<key>NSAllowsArbitraryLoads</key>
 		<true/>
 	</dict>
+	<key>NSBluetoothAlwaysUsageDescription</key>
+	<string>Bluetooth erişimi, yakındaki cihazlarla bağlantı kurarak daha iyi bir deneyim sunabilmemiz için gereklidir.
+</string>
 	<key>NSCameraUsageDescription</key>
-	<string>Camera permission is required to take pictures</string>
+	<string>Kameraya erişim, fotoğraf çekebilmeniz ve anlık görüntüler paylaşabilmeniz için gereklidir.
+</string>
+	<key>NSContactsUsageDescription</key>
+	<string>Kişi listenize erişim, arkadaşlarınızı bulabilmeniz ve bağlantılar kurabilmeniz için gereklidir.
+</string>
+	<key>NSLocationWhenInUseUsageDescription</key>
+	<string>Konum bilginiz, size en yakın hizmetleri ve içerikleri gösterebilmemiz için gereklidir.
+</string>
 	<key>NSPhotoLibraryUsageDescription</key>
-	<string>Gallery permission is required to pick images</string>
+	<string>Fotoğraflarınıza erişim, profil fotoğrafınızı seçebilmeniz veya içerik paylaşabilmeniz için gereklidir.
+</string>
 	<key>UIApplicationSceneManifest</key>
 	<dict>
 		<key>UIApplicationSupportsMultipleScenes</key>

@@ -10,6 +10,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.vurgun.skyfit.core.ui.components.special.SkyFitLogoComponent
+import com.vurgun.skyfit.core.ui.components.text.SkyText
+import com.vurgun.skyfit.core.ui.components.text.TextStyleType
 import com.vurgun.skyfit.core.ui.styling.SkyFitTypography
 import org.jetbrains.compose.resources.stringResource
 import skyfit.core.ui.generated.resources.Res
@@ -22,10 +24,12 @@ fun LoginWelcomeGroup() {
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         SkyFitLogoComponent()
+
         Spacer(Modifier.height(24.dp))
-        Text(
+
+        SkyText(
             text = stringResource(Res.string.auth_welcome_message),
-            style = SkyFitTypography.heading3
+            styleType = TextStyleType.Heading3
         )
     }
 }

@@ -18,8 +18,6 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Icon
 import androidx.compose.material.Text
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Star
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -40,6 +38,9 @@ import com.vurgun.skyfit.core.ui.components.special.SkyFitButtonComponent
 import com.vurgun.skyfit.core.ui.components.special.SkyFitScaffold
 import com.vurgun.skyfit.core.ui.components.special.SkyFitScreenHeader
 import com.vurgun.skyfit.core.ui.styling.SkyFitColor
+import org.jetbrains.compose.resources.painterResource
+import skyfit.core.ui.generated.resources.Res
+import skyfit.core.ui.generated.resources.ic_star_filled
 
 @Composable
 fun MobileExploreChallengeDetailScreen(
@@ -188,7 +189,10 @@ private fun LeaderboardRow(entry: LeaderboardEntry) {
         // Crowns for top ranks
         Row {
             repeat(entry.crowns) {
-                Icon(imageVector = Icons.Default.Star, contentDescription = "Crown", tint = Color.Cyan)
+                Icon(
+                    painter = painterResource(Res.drawable.ic_star_filled),
+                    contentDescription = "Crown",
+                    tint = Color.Cyan)
             }
         }
 

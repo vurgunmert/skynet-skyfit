@@ -20,8 +20,6 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Icon
 import androidx.compose.material.Text
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Face
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -193,7 +191,10 @@ private fun CommunityCard(community: Community) {
             )
             Spacer(modifier = Modifier.height(4.dp))
             Row(verticalAlignment = Alignment.CenterVertically) {
-                Icon(imageVector = Icons.Default.Face, contentDescription = "Members", tint = Color.Gray)
+                Icon(
+                    painterResource(Res.drawable.ic_posture_fill),
+                    contentDescription = "Members",
+                    tint = Color.Gray)
                 Spacer(modifier = Modifier.width(4.dp))
                 Text(text = community.members, fontSize = 14.sp, color = Color.Gray)
             }

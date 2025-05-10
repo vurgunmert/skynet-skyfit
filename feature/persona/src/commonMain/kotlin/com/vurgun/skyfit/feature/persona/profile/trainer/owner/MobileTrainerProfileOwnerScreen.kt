@@ -25,9 +25,6 @@ import androidx.compose.material.Icon
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Add
-import androidx.compose.material.icons.filled.Edit
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -67,6 +64,7 @@ import com.vurgun.skyfit.feature.persona.components.MobileProfileBackgroundImage
 import com.vurgun.skyfit.feature.persona.components.TrainerProfileCardPreferenceRow
 import org.jetbrains.compose.resources.painterResource
 import skyfit.core.ui.generated.resources.Res
+import skyfit.core.ui.generated.resources.ic_plus
 import skyfit.core.ui.generated.resources.logo_skyfit
 
 class TrainerProfileOwnerScreen : Screen {
@@ -346,7 +344,7 @@ private fun TrainerClassMenuPopup(
                                     style = SkyFitTypography.bodyMediumRegular
                                 )
                                 Icon(
-                                    imageVector = Icons.Default.Add,
+                                    painter = painterResource(Res.drawable.ic_plus),
                                     contentDescription = "Add Event",
                                     tint = SkyFitColor.icon.default,
                                     modifier = Modifier.size(16.dp)
@@ -376,7 +374,7 @@ private fun TrainerClassMenuPopup(
                                     style = SkyFitTypography.bodyMediumRegular
                                 )
                                 Icon(
-                                    imageVector = Icons.Default.Edit,
+                                    painter = painterResource(Res.drawable.ic_plus),
                                     contentDescription = "Edit",
                                     tint = SkyFitColor.icon.default,
                                     modifier = Modifier.size(16.dp)

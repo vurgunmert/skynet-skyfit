@@ -2,32 +2,13 @@ package com.vurgun.skyfit.feature.persona.profile.user.owner
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.BoxWithConstraints
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.heightIn
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Icon
 import androidx.compose.material.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
@@ -39,9 +20,8 @@ import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.koin.koinScreenModel
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
-import com.vurgun.skyfit.core.data.domain.model.FacilityProfile
 import com.vurgun.skyfit.core.data.domain.model.UserProfile
-import com.vurgun.skyfit.core.data.utility.now
+import com.vurgun.skyfit.core.data.schedule.model.LessonSessionItemViewData
 import com.vurgun.skyfit.core.navigation.SharedScreen
 import com.vurgun.skyfit.core.navigation.findRootNavigator
 import com.vurgun.skyfit.core.navigation.push
@@ -49,27 +29,17 @@ import com.vurgun.skyfit.core.ui.components.event.AvailableActivityCalendarEvent
 import com.vurgun.skyfit.core.ui.components.image.NetworkImage
 import com.vurgun.skyfit.core.ui.components.loader.FullScreenLoaderContent
 import com.vurgun.skyfit.core.ui.components.special.SkyFitMobileScaffold
-import com.vurgun.skyfit.core.ui.components.text.BodyLargeMediumText
-import com.vurgun.skyfit.core.ui.components.text.BodyMediumRegularText
-import com.vurgun.skyfit.core.ui.components.text.CardFieldIconText
 import com.vurgun.skyfit.core.ui.screen.ErrorScreen
 import com.vurgun.skyfit.core.ui.styling.SkyFitAsset
 import com.vurgun.skyfit.core.ui.styling.SkyFitColor
 import com.vurgun.skyfit.core.ui.styling.SkyFitTypography
 import com.vurgun.skyfit.core.ui.utils.CollectEffect
-import com.vurgun.skyfit.core.data.schedule.model.LessonSessionItemViewData
 import com.vurgun.skyfit.feature.persona.components.MobileProfileActionsRow
 import com.vurgun.skyfit.feature.persona.components.MobileProfileBackgroundImage
 import com.vurgun.skyfit.feature.persona.components.UserProfileCardPreferenceRow
-import kotlinx.datetime.LocalDate
-import kotlinx.datetime.daysUntil
 import org.jetbrains.compose.resources.stringResource
 import skyfit.core.ui.generated.resources.Res
 import skyfit.core.ui.generated.resources.appointments_title
-import skyfit.core.ui.generated.resources.ic_clock
-import skyfit.core.ui.generated.resources.member_since_day_zero
-import skyfit.core.ui.generated.resources.member_since_days_few
-import skyfit.core.ui.generated.resources.member_since_days_many
 import skyfit.core.ui.generated.resources.show_all_action
 
 class UserProfileOwnerScreen : Screen {
@@ -190,7 +160,7 @@ private object MobileUserProfileOwnerComponent {
                     MobileProfileActionsRow(
                         postsSelected = content.postsVisible,
                         onClickAbout = { onAction(UserProfileOwnerAction.TogglePostVisibility(false)) },
-                        onClickPosts = {  }, //onAction(UserProfileOwnerAction.TogglePostVisibility(true))
+                        onClickPosts = { }, //onAction(UserProfileOwnerAction.TogglePostVisibility(true))
                         onClickSettings = { onAction(UserProfileOwnerAction.NavigateToSettings) },
                         onClickNewPost = { onAction(UserProfileOwnerAction.NavigateToCreatePost) }
                     )
@@ -198,16 +168,6 @@ private object MobileUserProfileOwnerComponent {
                     if (content.postsVisible) {
                         // TODO: Posts
                     } else {
-                        content.memberFacilityProfile?.let { facility ->
-                            content.profile.memberGymJoinedAt?.let { joinedDate ->
-                                MemberFacilityCard(
-                                    profile = facility,
-                                    memberDays = joinedDate.daysUntil(LocalDate.now()),
-                                    onClick = { onAction(UserProfileOwnerAction.NavigateToVisitFacility(facility.gymId)) }
-                                )
-                            }
-                        }
-
                         MobileUserProfileOwner_UpcomingAppointments(
                             appointments = content.appointments,
                             onClickItem = { onAction(UserProfileOwnerAction.NavigateToAppointments) },
@@ -343,60 +303,6 @@ private object MobileUserProfileOwnerComponent {
                         note = item.note
                     )
                 }
-            }
-        }
-    }
-
-
-    @Composable
-    fun MemberFacilityCard(
-        profile: FacilityProfile,
-        memberDays: Int,
-        onClick: () -> Unit
-    ) {
-        Row(
-            Modifier
-                .clip(RoundedCornerShape(16.dp))
-                .clickable(onClick = onClick)
-                .background(SkyFitColor.background.surfaceSecondary)
-                .fillMaxWidth()
-                .padding(16.dp),
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            NetworkImage(
-                imageUrl = profile.backgroundImageUrl,
-                modifier = Modifier
-                    .size(60.dp)
-                    .clip(CircleShape)
-            )
-            Spacer(Modifier.width(16.dp))
-
-            Column(Modifier.weight(1f)) {
-                Row(
-                    modifier = Modifier.fillMaxWidth(),
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-                    BodyLargeMediumText(
-                        text = profile.facilityName
-                    )
-                    BodyMediumRegularText(
-                        text = " @${profile.username}",
-                        color = SkyFitColor.text.secondary
-                    )
-                }
-                Spacer(Modifier.height(8.dp))
-
-                val memberText = when {
-                    memberDays == 0 -> stringResource(Res.string.member_since_day_zero)
-                    memberDays in 1..10 -> stringResource(Res.string.member_since_days_few, memberDays)
-                    else -> stringResource(Res.string.member_since_days_many, memberDays)
-                }
-
-                CardFieldIconText(
-                    text = memberText,
-                    iconRes = Res.drawable.ic_clock,
-                    modifier = Modifier.fillMaxWidth()
-                )
             }
         }
     }

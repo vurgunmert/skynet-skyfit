@@ -2,22 +2,34 @@ package com.vurgun.skyfit.feature.dashboard.home
 
 import cafe.adriel.voyager.core.model.ScreenModel
 import cafe.adriel.voyager.core.model.screenModelScope
+import com.vurgun.skyfit.core.data.domain.model.FacilityProfile
 import com.vurgun.skyfit.core.data.domain.model.TrainerDetail
+import com.vurgun.skyfit.core.data.domain.model.TrainerProfile
+import com.vurgun.skyfit.core.data.domain.repository.ProfileRepository
 import com.vurgun.skyfit.core.data.domain.repository.UserManager
-import com.vurgun.skyfit.core.data.utility.SingleSharedFlow
-import com.vurgun.skyfit.core.data.utility.emitOrNull
 import com.vurgun.skyfit.core.data.schedule.domain.repository.CourseRepository
 import com.vurgun.skyfit.core.data.schedule.mapper.LessonSessionItemViewDataMapper
 import com.vurgun.skyfit.core.data.schedule.model.LessonSessionItemViewData
-import kotlinx.coroutines.flow.MutableStateFlow
+import com.vurgun.skyfit.core.data.utility.SingleSharedFlow
+import com.vurgun.skyfit.core.data.utility.UiStateDelegate
+import com.vurgun.skyfit.core.data.utility.emitOrNull
 import kotlinx.coroutines.flow.SharedFlow
-import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 
+sealed interface TrainerHomeUiState {
+    data object Loading : TrainerHomeUiState
+    data class Error(val message: String?) : TrainerHomeUiState
+    data class Content(
+        val trainer: TrainerDetail,
+        val profile: TrainerProfile,
+        val appointments: List<LessonSessionItemViewData> = emptyList()
+    ) : TrainerHomeUiState
+}
+
 sealed interface TrainerHomeAction {
-    data object NavigateToNotifications : TrainerHomeAction
-    data object NavigateToConversations : TrainerHomeAction
-    data object NavigateToAppointments : TrainerHomeAction
+    data object OnClickNotifications : TrainerHomeAction
+    data object OnClickConversations : TrainerHomeAction
+    data object OnClickAppointments : TrainerHomeAction
 }
 
 sealed interface TrainerHomeEffect {
@@ -29,44 +41,44 @@ sealed interface TrainerHomeEffect {
 class TrainerHomeViewModel(
     private val userManager: UserManager,
     private val courseRepository: CourseRepository,
+    private val profileRepository: ProfileRepository,
     private val mapper: LessonSessionItemViewDataMapper
 ) : ScreenModel {
+
+    private val _uiState = UiStateDelegate<TrainerHomeUiState>(TrainerHomeUiState.Loading)
+    val uiState = _uiState.asStateFlow()
 
     private val _effect = SingleSharedFlow<TrainerHomeEffect>()
     val effect: SharedFlow<TrainerHomeEffect> = _effect
 
-    private val trainerUser: TrainerDetail
-        get() = userManager.user.value as? TrainerDetail
-            ?: error("❌ User is not a Trainer")
-
-    val characterType = trainerUser.characterType
-
-    private val _appointments = MutableStateFlow<List<LessonSessionItemViewData>>(emptyList())
-    val appointments = _appointments.asStateFlow()
-
-    init {
-        loadData()
-    }
-
     fun onAction(action: TrainerHomeAction) {
         when (action) {
-            TrainerHomeAction.NavigateToAppointments ->
+            TrainerHomeAction.OnClickAppointments ->
                 emitEffect(TrainerHomeEffect.NavigateToAppointments)
 
-            TrainerHomeAction.NavigateToConversations ->
+            TrainerHomeAction.OnClickConversations ->
                 emitEffect(TrainerHomeEffect.NavigateToConversations)
 
-            TrainerHomeAction.NavigateToNotifications ->
+            TrainerHomeAction.OnClickNotifications ->
                 emitEffect(TrainerHomeEffect.NavigateToNotifications)
         }
     }
 
-    private fun loadData() {
+    fun loadData() {
         screenModelScope.launch {
-            _appointments.value = courseRepository.getUpcomingLessonsByTrainer(trainerUser.trainerId)
-                .getOrNull()?.let { list ->
-                    list.map { mapper.map(it) }
-                }.orEmpty()
+            runCatching {
+                val trainerDetail = userManager.user.value as TrainerDetail
+                val trainerProfile = profileRepository.getTrainerProfile(trainerDetail.trainerId).getOrThrow()
+
+                val appointments = courseRepository.getUpcomingLessonsByTrainer(trainerDetail.trainerId)
+                    .getOrNull()?.let { list ->
+                        list.map { mapper.map(it) }
+                    }.orEmpty()
+
+                _uiState.update(TrainerHomeUiState.Content(trainerDetail, trainerProfile, appointments))
+            }.onFailure {
+                _uiState.update(TrainerHomeUiState.Error(it.message))
+            }
         }
     }
 

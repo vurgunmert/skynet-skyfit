@@ -1,22 +1,13 @@
-package com.vurgun.skyfit.feature.dashboard.home
+package com.vurgun.skyfit.feature.dashboard.home.mobile
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
@@ -33,12 +24,20 @@ import cafe.adriel.voyager.navigator.currentOrThrow
 import com.vurgun.skyfit.core.navigation.SharedScreen
 import com.vurgun.skyfit.core.navigation.findRootNavigator
 import com.vurgun.skyfit.core.navigation.push
+import com.vurgun.skyfit.core.ui.components.loader.FullScreenLoaderContent
 import com.vurgun.skyfit.core.ui.components.special.SkyFitMobileScaffold
+import com.vurgun.skyfit.core.ui.screen.ErrorScreen
 import com.vurgun.skyfit.core.ui.utils.CollectEffect
 import com.vurgun.skyfit.core.ui.utils.LocalWindowSize
-import com.vurgun.skyfit.core.ui.utils.WindowSize
-import com.vurgun.skyfit.feature.dashboard.component.MobileDashboardHomeToolbarComponent
+import com.vurgun.skyfit.feature.dashboard.component.EmptyFacilityAppointmentContent
 import com.vurgun.skyfit.feature.dashboard.component.MobileDashboardHomeUpcomingAppointmentsComponent
+import com.vurgun.skyfit.feature.dashboard.home.FacilityHomeAction
+import com.vurgun.skyfit.feature.dashboard.home.FacilityHomeEffect
+import com.vurgun.skyfit.feature.dashboard.home.FacilityHomeUiState
+import com.vurgun.skyfit.feature.dashboard.home.FacilityHomeViewModel
+import org.jetbrains.compose.resources.stringResource
+import skyfit.core.ui.generated.resources.Res
+import skyfit.core.ui.generated.resources.refresh_action
 
 class FacilityHomeScreen : Screen {
 
@@ -46,8 +45,8 @@ class FacilityHomeScreen : Screen {
     override fun Content() {
         val windowSize = LocalWindowSize.current
         val appNavigator = LocalNavigator.currentOrThrow.findRootNavigator()
-
         val viewModel = koinScreenModel<FacilityHomeViewModel>()
+        val uiState by viewModel.uiState.collectAsState()
 
         CollectEffect(viewModel.effect) { effect ->
             when (effect) {
@@ -65,25 +64,42 @@ class FacilityHomeScreen : Screen {
             }
         }
 
-        if (windowSize == WindowSize.EXPANDED) {
-            FacilityHomeCompact(viewModel) //TODO: Expanded
-        } else {
-            FacilityHomeCompact(viewModel)
+        LaunchedEffect(Unit) {
+            viewModel.loadData()
+        }
+
+        when (uiState) {
+            FacilityHomeUiState.Loading -> FullScreenLoaderContent()
+            is FacilityHomeUiState.Error -> {
+                val message = (uiState as FacilityHomeUiState.Error).message
+                ErrorScreen(
+                    message = message,
+                    confirmText = stringResource(Res.string.refresh_action),
+                    onConfirm = { viewModel.loadData() }
+                )
+            }
+
+            is FacilityHomeUiState.Content -> {
+                val content = uiState as FacilityHomeUiState.Content
+                FacilityHomeCompact(content, viewModel::onAction)
+            }
         }
     }
 }
 
 @Composable
 private fun FacilityHomeCompact(
-    viewModel: FacilityHomeViewModel
+    content: FacilityHomeUiState.Content,
+    onAction: (FacilityHomeAction) -> Unit
 ) {
-    val appointments by viewModel.appointments.collectAsState()
 
     SkyFitMobileScaffold(
         topBar = {
-            MobileDashboardHomeToolbarComponent(
-                onClickNotifications = { viewModel.onAction(FacilityHomeAction.NavigateToNotifications) },
-                onClickMessages = { viewModel.onAction(FacilityHomeAction.NavigateToConversations) }
+            MobileHomeTopBar(
+                notificationsEnabled = false,
+                onClickNotifications = { onAction(FacilityHomeAction.OnClickNotifications) },
+                conversationsEnabled = false,
+                onClickConversations = { onAction(FacilityHomeAction.OnClickConversations) }
             )
         }
     ) {
@@ -92,14 +108,15 @@ private fun FacilityHomeCompact(
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {
 
-            if (appointments.isEmpty()) {
-                MobileDashboardHomeFacilityNoClassComponent(
-                    onClick = { viewModel.onAction(FacilityHomeAction.NavigateToManageLessons) }
+            if (content.appointments.isEmpty()) {
+                EmptyFacilityAppointmentContent(
+                    assignedFacilityId = content.facility.gymId,
+                    onClickAdd = { onAction(FacilityHomeAction.OnClickLessons) }
                 )
             } else {
                 MobileDashboardHomeUpcomingAppointmentsComponent(
-                    appointments = appointments,
-                    onClickShowAll = { viewModel.onAction(FacilityHomeAction.NavigateToManageLessons) }
+                    appointments = content.appointments,
+                    onClickShowAll = { onAction(FacilityHomeAction.OnClickLessons) }
                 )
             }
 
@@ -107,12 +124,6 @@ private fun FacilityHomeCompact(
         }
     }
 }
-
-@Composable
-fun MobileDashboardHomeFacilityNoClassComponent(onClick: () -> Unit) {
-    EmptyUpcomingAppointments(onClickAdd = onClick)
-}
-
 
 @Composable
 fun MobileDashboardHomeFacilityStatisticsComponent() {
@@ -172,7 +183,11 @@ private fun MobileDashboardHomeFacilityStatCard(stat: HomeFacilityStat) {
                 Box(
                     modifier = Modifier
                         .clip(RoundedCornerShape(6.dp))
-                        .background(if (stat.isPositive == true) Color.Green.copy(alpha = 0.2f) else Color.Red.copy(alpha = 0.2f))
+                        .background(
+                            if (stat.isPositive == true) Color.Green.copy(alpha = 0.2f) else Color.Red.copy(
+                                alpha = 0.2f
+                            )
+                        )
                         .padding(horizontal = 6.dp, vertical = 2.dp)
                 ) {
                     Text(text = it, fontSize = 12.sp, color = if (stat.isPositive == true) Color.Green else Color.Red)
@@ -200,4 +215,9 @@ private fun MobileDashboardHomeFacilityGraph() {
     }
 }
 
-private data class HomeFacilityStat(val title: String, val value: String, val percentage: String?, val isPositive: Boolean?)
+private data class HomeFacilityStat(
+    val title: String,
+    val value: String,
+    val percentage: String?,
+    val isPositive: Boolean?
+)

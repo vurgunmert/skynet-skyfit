@@ -68,6 +68,7 @@
     <string name="reset_action">Sıfırla</string>
     <string name="filter_action">Filtrele</string>
     <string name="save_changes_action">Değişiklikleri Kaydet</string>
+    <string name="refresh_action">Yenile</string>
 
     <!-- 🔷 Gender Options -->
     <string name="gender_female">Kadın</string>
@@ -235,9 +236,9 @@
     <string name="our_trainers_label">Antrenörlerimiz</string>
     <string name="our_coaches_label">Eğitmenlerimiz</string>
 
-    <string name="member_since_day_zero">Aramıza yeni katıldınız! 💥</string>
-    <string name="member_since_days_few">%d gündür bizimlesiniz! 🚀</string>
-    <string name="member_since_days_many">%d gündür bizimlesiniz! 🔥</string>
+    <string name="member_since_day_zero">Aramıza yeni katıldınız!</string>
+    <string name="member_since_days">%1$d gündür bizimlesiniz!</string>
+    <string name="error_trainer_no_facility">Ders ekleyebilmek için önce bir tesisle bağlantı kurmalısınız.</string>
 
 
     <string name="error_generic_title">Bir Hata Oluştu</string>

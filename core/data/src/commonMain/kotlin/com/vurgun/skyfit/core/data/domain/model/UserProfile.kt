@@ -17,7 +17,8 @@ data class UserProfile(
     val lastName: String,
     val username: String,
     val memberGymId: Int?,
-    val memberGymJoinedAt: LocalDate?
+    val memberGymJoinedAt: LocalDate?,
+    val memberDurationDays: Int?
 ) {
     val fullName = "$firstName $lastName"
 }

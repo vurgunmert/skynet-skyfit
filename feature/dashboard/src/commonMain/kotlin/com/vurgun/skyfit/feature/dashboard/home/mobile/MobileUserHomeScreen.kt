@@ -1,4 +1,4 @@
-package com.vurgun.skyfit.feature.dashboard.home
+package com.vurgun.skyfit.feature.dashboard.home.mobile
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -20,13 +20,21 @@ import cafe.adriel.voyager.navigator.currentOrThrow
 import com.vurgun.skyfit.core.navigation.SharedScreen
 import com.vurgun.skyfit.core.navigation.findRootNavigator
 import com.vurgun.skyfit.core.navigation.push
+import com.vurgun.skyfit.core.ui.components.loader.FullScreenLoaderContent
 import com.vurgun.skyfit.core.ui.components.special.CharacterImage
+import com.vurgun.skyfit.core.ui.components.special.FeatureVisible
 import com.vurgun.skyfit.core.ui.components.special.SkyFitMobileScaffold
+import com.vurgun.skyfit.core.ui.screen.ErrorScreen
 import com.vurgun.skyfit.core.ui.utils.CollectEffect
 import com.vurgun.skyfit.core.ui.utils.LocalWindowSize
-import com.vurgun.skyfit.core.ui.utils.WindowSize
-import com.vurgun.skyfit.feature.dashboard.component.MobileDashboardHomeToolbarComponent
 import com.vurgun.skyfit.feature.dashboard.component.MobileUserHomeUpcomingAppointmentsComponent
+import com.vurgun.skyfit.feature.dashboard.home.UserHomeAction
+import com.vurgun.skyfit.feature.dashboard.home.UserHomeEffect
+import com.vurgun.skyfit.feature.dashboard.home.UserHomeUiState
+import com.vurgun.skyfit.feature.dashboard.home.UserHomeViewModel
+import org.jetbrains.compose.resources.stringResource
+import skyfit.core.ui.generated.resources.Res
+import skyfit.core.ui.generated.resources.refresh_action
 
 class UserHomeScreen : Screen {
 
@@ -35,9 +43,14 @@ class UserHomeScreen : Screen {
         val windowSize = LocalWindowSize.current
         val appNavigator = LocalNavigator.currentOrThrow.findRootNavigator()
         val viewModel = koinScreenModel<UserHomeViewModel>()
+        val uiState by viewModel.uiState.collectAsState()
 
         CollectEffect(viewModel.effect) { effect ->
             when (effect) {
+                is UserHomeEffect.NavigateToVisitFacility -> {
+                    appNavigator.push(SharedScreen.FacilityProfileVisitor(effect.facilityId))
+                }
+
                 UserHomeEffect.NavigateToConversations -> {
                     appNavigator.push(SharedScreen.Conversations)
                 }
@@ -52,30 +65,45 @@ class UserHomeScreen : Screen {
             }
         }
 
-        if (windowSize == WindowSize.EXPANDED) {
-            UserHomeCompact(viewModel) //TODO: Expanded
-        } else {
-            UserHomeCompact(viewModel)
+        LaunchedEffect(viewModel) {
+            viewModel.loadData()
+        }
+
+        when (uiState) {
+            UserHomeUiState.Loading -> FullScreenLoaderContent()
+            is UserHomeUiState.Error -> {
+                val message = (uiState as UserHomeUiState.Error).message
+                ErrorScreen(
+                    message = message,
+                    confirmText = stringResource(Res.string.refresh_action),
+                    onConfirm = { viewModel.loadData() }
+                )
+            }
+
+            is UserHomeUiState.Content -> {
+                val content = uiState as UserHomeUiState.Content
+                UserHomeCompact(content, viewModel::onAction)
+            }
         }
     }
-
 }
 
 @Composable
 private fun UserHomeCompact(
-    viewModel: UserHomeViewModel
+    content: UserHomeUiState.Content,
+    onAction: (UserHomeAction) -> Unit
 ) {
-    val appointments by viewModel.appointments.collectAsState()
-
-    LaunchedEffect(Unit) {
-        viewModel.loadData()
-    }
 
     SkyFitMobileScaffold(
         topBar = {
-            MobileDashboardHomeToolbarComponent(
-                onClickNotifications = { viewModel.onAction(UserHomeAction.NavigateToNotifications) },
-                onClickMessages = { viewModel.onAction(UserHomeAction.NavigateToConversations) }
+            MobileUserHomeTopBar(
+                profile = content.profile,
+                memberFacility = content.memberFacility,
+                onClickFacility = { onAction(UserHomeAction.OnClickFacility(it)) },
+                notificationsEnabled = false,
+                onClickNotifications = { onAction(UserHomeAction.OnClickNotifications) },
+                conversationsEnabled = false,
+                onClickConversations = { onAction(UserHomeAction.OnClickConversations) }
             )
         }
     ) {
@@ -87,14 +115,14 @@ private fun UserHomeCompact(
         ) {
 
             CharacterImage(
-                characterType = viewModel.characterType,
+                characterType = content.characterType,
                 modifier = Modifier
             )
 
-            if (appointments.isNotEmpty()) {
+            FeatureVisible(content.appointments.isNotEmpty()) {
                 MobileUserHomeUpcomingAppointmentsComponent(
-                    appointments = appointments,
-                    onClickShowAll = { viewModel.onAction(UserHomeAction.NavigateToAppointments) }
+                    appointments = content.appointments,
+                    onClickShowAll = { onAction(UserHomeAction.OnClickAppointments) }
                 )
             }
 

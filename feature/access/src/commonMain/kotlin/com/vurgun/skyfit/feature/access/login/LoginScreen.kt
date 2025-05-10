@@ -2,27 +2,11 @@ package com.vurgun.skyfit.feature.access.login
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.imePadding
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.widthIn
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
@@ -35,18 +19,19 @@ import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.Navigator
 import cafe.adriel.voyager.navigator.currentOrThrow
 import cafe.adriel.voyager.transitions.SlideTransition
-import com.vurgun.skyfit.core.navigation.SharedScreen
-import com.vurgun.skyfit.core.navigation.findRootNavigator
-import com.vurgun.skyfit.core.navigation.push
-import com.vurgun.skyfit.core.navigation.replace
-import com.vurgun.skyfit.core.navigation.replaceAll
-import com.vurgun.skyfit.core.ui.components.button.PrimaryLargeButton
+import com.vurgun.skyfit.core.navigation.*
+import com.vurgun.skyfit.core.ui.components.button.SkyButton
+import com.vurgun.skyfit.core.ui.components.button.SkyButtonSize
+import com.vurgun.skyfit.core.ui.components.button.SkyButtonState
+import com.vurgun.skyfit.core.ui.components.button.SkyButtonVariant
 import com.vurgun.skyfit.core.ui.components.special.SideBySideLayout
 import com.vurgun.skyfit.core.ui.components.special.SkyFitMobileScaffold
 import com.vurgun.skyfit.core.ui.components.text.PasswordTextInput
 import com.vurgun.skyfit.core.ui.components.text.PhoneNumberTextInput
 import com.vurgun.skyfit.core.ui.components.text.SecondaryMediumText
 import com.vurgun.skyfit.core.ui.components.text.SecondaryMediumUnderlinedText
+import com.vurgun.skyfit.core.ui.components.text.SkyText
+import com.vurgun.skyfit.core.ui.components.text.TextStyleType
 import com.vurgun.skyfit.core.ui.styling.LocalDimensions
 import com.vurgun.skyfit.core.ui.styling.LocalPadding
 import com.vurgun.skyfit.core.ui.styling.SkyFitColor
@@ -60,12 +45,7 @@ import com.vurgun.skyfit.feature.access.authScreenFlowModule
 import com.vurgun.skyfit.feature.access.component.LoginWelcomeGroup
 import kotlinx.coroutines.flow.collectLatest
 import org.jetbrains.compose.resources.stringResource
-import skyfit.core.ui.generated.resources.Res
-import skyfit.core.ui.generated.resources.auth_forgot_password_action
-import skyfit.core.ui.generated.resources.auth_login_action
-import skyfit.core.ui.generated.resources.auth_login_password_action
-import skyfit.core.ui.generated.resources.auth_password_input_hint
-import skyfit.core.ui.generated.resources.user_phone_number_label
+import skyfit.core.ui.generated.resources.*
 
 class AuthFlowScreen : Screen {
 
@@ -137,12 +117,14 @@ private fun MobileLoginWithPhoneContentGroup(
 
     Column(modifier = Modifier.fillMaxWidth()) {
 
-        Text(
+        SkyText(
             text = stringResource(Res.string.user_phone_number_label),
             modifier = Modifier.fillMaxWidth().padding(start = 8.dp),
-            style = SkyFitTypography.bodySmallSemibold
+            styleType = TextStyleType.BodySmallSemibold
         )
+
         Spacer(Modifier.height(4.dp))
+
         PhoneNumberTextInput(
             value = phoneNumber,
             onValueChange = onPhoneNumberChanged,
@@ -223,12 +205,14 @@ private fun MobileLoginActionGroup(
     isLoading: Boolean,
     onClickLogin: () -> Unit
 ) {
-    PrimaryLargeButton(
-        modifier = Modifier.fillMaxWidth(),
-        text = stringResource(Res.string.auth_login_action),
+    SkyButton(
+        label = stringResource(Res.string.auth_login_action),
         onClick = { if (isLoginEnabled) onClickLogin.invoke() },
-        isLoading = isLoading,
-        isEnabled = isLoginEnabled && !isLoading
+        modifier = Modifier.fillMaxWidth(),
+        variant = SkyButtonVariant.Primary,
+        size = SkyButtonSize.Large,
+        state = if (isLoading) SkyButtonState.Loading else SkyButtonState.Rest,
+        enabled = isLoginEnabled && !isLoading
     )
 }
 
