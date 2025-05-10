@@ -1,4 +1,4 @@
-package com.vurgun.skyfit.core.data.mappers
+package com.vurgun.skyfit.core.data.mapper
 
 import com.vurgun.skyfit.core.data.domain.model.BodyType
 import com.vurgun.skyfit.core.data.domain.model.HeightUnitType
@@ -18,7 +18,7 @@ import com.vurgun.skyfit.core.data.utility.now
 import kotlinx.datetime.LocalDate
 import kotlinx.datetime.daysUntil
 
-object ProfileMapper {
+internal object ProfileMapper {
 
     fun UserProfileDTO.toDomainUserProfile(): UserProfile {
         return UserProfile(

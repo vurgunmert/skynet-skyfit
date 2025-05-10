@@ -1,4 +1,4 @@
-package com.vurgun.skyfit.core.data.mappers
+package com.vurgun.skyfit.core.data.mapper
 
 import com.vurgun.skyfit.core.data.domain.model.BaseUserDetail
 import com.vurgun.skyfit.core.data.domain.model.BodyType

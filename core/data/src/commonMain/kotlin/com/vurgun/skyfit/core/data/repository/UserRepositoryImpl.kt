@@ -6,7 +6,7 @@ import com.vurgun.skyfit.core.data.domain.model.MissingUserTypeException
 import com.vurgun.skyfit.core.data.domain.model.UnknownServerException
 import com.vurgun.skyfit.core.data.domain.model.UserAccountType
 import com.vurgun.skyfit.core.data.domain.repository.UserRepository
-import com.vurgun.skyfit.core.data.mappers.UserDetailMapper.toDomain
+import com.vurgun.skyfit.core.data.mapper.UserDetailMapper.toDomain
 import com.vurgun.skyfit.core.data.model.SelectUserTypeResponse
 import com.vurgun.skyfit.core.data.service.UserApiService
 import com.vurgun.skyfit.core.data.storage.Storage

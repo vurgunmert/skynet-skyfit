@@ -1,6 +1,5 @@
 package com.vurgun.skyfit.core.data.mapper
 
-import com.vurgun.skyfit.core.data.mappers.serverImageFromPath
 import com.vurgun.skyfit.core.data.domain.model.Member
 import com.vurgun.skyfit.core.data.domain.model.Trainer
 import com.vurgun.skyfit.core.data.model.MemberDto

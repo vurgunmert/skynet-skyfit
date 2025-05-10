@@ -1,21 +1,15 @@
-package com.vurgun.skyfit.core.data.domain.model
+package com.vurgun.skyfit.core.data.model
 
 import kotlinx.serialization.Serializable
 
-data class ActivityCalendarEvent(
-    val calendarId: Int,
-    val userId: Int,
-    val name: String,
-    val activityId: Int
-)
-
 @Serializable
-data class ActivityCalendarEventDTO(
-    val calendarId: Int,
+data class CalendarEventDTO(
+    val calendarEventId: Int,
     val userId: Int,
     val eventName: String,
     val eventId: Int? = null,
     val startDate: String,
+    val endDate: String,
     val lessonId: Int? = null,
     val lessonIcon: Int? = null,
     val trainerNote: String? = null,

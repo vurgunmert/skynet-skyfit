@@ -113,9 +113,6 @@ android {
         unitTests.isIncludeAndroidResources = true
     }
 }
-dependencies {
-    debugImplementation(libs.androidx.ui.tooling)
-}
 //endregion Project: Android
 
 compose.desktop {

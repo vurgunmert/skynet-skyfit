@@ -6,6 +6,7 @@ import com.vurgun.skyfit.core.data.domain.repository.ChatbotApiUseCase
 import com.vurgun.skyfit.core.data.domain.repository.MemberRepository
 import com.vurgun.skyfit.core.data.domain.repository.ProfileRepository
 import com.vurgun.skyfit.core.data.domain.repository.TrainerRepository
+import com.vurgun.skyfit.core.data.domain.repository.UserCalendarRepository
 import com.vurgun.skyfit.core.data.domain.repository.UserManager
 import com.vurgun.skyfit.core.data.domain.repository.UserRepository
 import com.vurgun.skyfit.core.data.onboarding.OnboardingApiService
@@ -18,6 +19,7 @@ import com.vurgun.skyfit.core.data.repository.PostureAnalysisRepository
 import com.vurgun.skyfit.core.data.repository.ProfileRepositoryImpl
 import com.vurgun.skyfit.core.data.repository.SettingsApiService
 import com.vurgun.skyfit.core.data.repository.SettingsRepositoryImpl
+import com.vurgun.skyfit.core.data.repository.UserCalendarRepositoryImpl
 import com.vurgun.skyfit.core.data.repository.UserManagerImpl
 import com.vurgun.skyfit.core.data.repository.UserRepositoryImpl
 import com.vurgun.skyfit.core.data.schedule.CourseApiService
@@ -106,6 +108,7 @@ val dataCoreModule = module {
     single<CourseApiService> { CourseApiService(get()) }
     single<LessonSessionItemViewDataMapper> { LessonSessionItemViewDataMapper() }
     single<CourseRepository> { CourseRepositoryImpl(get(), get(), get()) }
+    single<UserCalendarRepository> { UserCalendarRepositoryImpl(get(), get(), get()) }
 }
 
 internal expect val platformModule: Module

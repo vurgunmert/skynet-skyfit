@@ -1,7 +1,7 @@
 package com.vurgun.skyfit.core.data.schedule.repository
 
 import com.vurgun.skyfit.core.data.domain.model.LessonParticipant
-import com.vurgun.skyfit.core.data.mappers.ProfileMapper.toDomainLessonParticipants
+import com.vurgun.skyfit.core.data.mapper.ProfileMapper.toDomainLessonParticipants
 import com.vurgun.skyfit.core.data.storage.TokenManager
 import com.vurgun.skyfit.core.data.utility.formatToServerDate
 import com.vurgun.skyfit.core.network.ApiResult

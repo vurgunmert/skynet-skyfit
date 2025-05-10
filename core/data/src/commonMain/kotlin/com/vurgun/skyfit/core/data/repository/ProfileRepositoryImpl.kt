@@ -5,10 +5,10 @@ import com.vurgun.skyfit.core.data.domain.model.FacilityTrainerProfile
 import com.vurgun.skyfit.core.data.domain.model.TrainerProfile
 import com.vurgun.skyfit.core.data.domain.model.UserProfile
 import com.vurgun.skyfit.core.data.domain.repository.ProfileRepository
-import com.vurgun.skyfit.core.data.mappers.ProfileMapper.toDomainFacilityProfile
-import com.vurgun.skyfit.core.data.mappers.ProfileMapper.toDomainTrainerProfile
-import com.vurgun.skyfit.core.data.mappers.ProfileMapper.toDomainUserProfile
-import com.vurgun.skyfit.core.data.mappers.ProfileMapper.toFacilityTrainerProfiles
+import com.vurgun.skyfit.core.data.mapper.ProfileMapper.toDomainFacilityProfile
+import com.vurgun.skyfit.core.data.mapper.ProfileMapper.toDomainTrainerProfile
+import com.vurgun.skyfit.core.data.mapper.ProfileMapper.toDomainUserProfile
+import com.vurgun.skyfit.core.data.mapper.ProfileMapper.toFacilityTrainerProfiles
 import com.vurgun.skyfit.core.data.model.GetFacilityProfileRequest
 import com.vurgun.skyfit.core.data.model.GetFacilityTrainerProfilesRequest
 import com.vurgun.skyfit.core.data.model.GetTrainerProfileRequest
