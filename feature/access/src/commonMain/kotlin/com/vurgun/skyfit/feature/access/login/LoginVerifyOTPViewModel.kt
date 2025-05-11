@@ -59,7 +59,8 @@ class LoginOTPVerificationViewModel(
 
         screenModelScope.launch {
             _isLoading.value = true
-            try {
+
+            runCatching {
                 val effect =  when (val result = authRepository.verifyLoginOTP(_enteredOtp.value)) {
                     is AuthorizationOTPResult.Error -> LoginOTPVerificationEffect.ShowError(result.message)
                     AuthorizationOTPResult.RegistrationRequired -> LoginOTPVerificationEffect.GoToRegister
@@ -70,10 +71,8 @@ class LoginOTPVerificationViewModel(
                     }
                 }
                 _effect.emitOrNull(effect)
-            }catch (e: Exception) {
-                LoginOTPVerificationEffect.ShowError(e.message)
-            } finally {
-                _isLoading.value = false
+            }.onFailure { error ->
+                LoginOTPVerificationEffect.ShowError(error.message)
             }
         }
     }

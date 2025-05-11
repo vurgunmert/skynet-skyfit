@@ -7,14 +7,7 @@ import com.vurgun.skyfit.core.data.domain.repository.AuthRepository
 import com.vurgun.skyfit.core.data.domain.repository.UserManager
 import com.vurgun.skyfit.core.data.utility.SingleSharedFlow
 import com.vurgun.skyfit.core.data.utility.emitOrNull
-import kotlinx.coroutines.flow.MutableSharedFlow
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.SharedFlow
-import kotlinx.coroutines.flow.SharingStarted
-import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.asSharedFlow
-import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.flow.stateIn
+import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 
 sealed class LoginEffect {
@@ -65,7 +58,7 @@ class LoginViewModel(
 
         screenModelScope.launch {
             _isLoading.value = true
-            try {
+            runCatching {
                 val event = when (val result = authRepository.login(_phoneNumber.value, _password.value)) {
                     is AuthLoginResult.Success -> {
                         try {
@@ -81,8 +74,8 @@ class LoginViewModel(
                     is AuthLoginResult.Error -> LoginEffect.ShowError(result.message)
                 }
                 _effect.emitOrNull(event)
-            } finally {
-                _isLoading.value = false
+            }.onFailure { error ->
+                _effect.emitOrNull(LoginEffect.ShowError(error.message))
             }
         }
     }
