@@ -7,6 +7,7 @@ import com.vurgun.skyfit.feature.access.forgotpassword.ForgotPasswordViewModel
 import com.vurgun.skyfit.feature.access.forgotpassword.PasswordResetViewModel
 import com.vurgun.skyfit.feature.access.login.LoginOTPVerificationViewModel
 import com.vurgun.skyfit.feature.access.login.LoginViewModel
+import com.vurgun.skyfit.feature.access.onboarding.OnboardingViewModel
 import com.vurgun.skyfit.feature.access.register.PasswordCreateViewModel
 import com.vurgun.skyfit.feature.access.splash.SplashViewModel
 import org.koin.dsl.module
@@ -20,6 +21,7 @@ val featureAccessModule = module {
     factory { PasswordResetViewModel(get()) }
     factory { LoginOTPVerificationViewModel(get(), get(), get()) }
     factory { ForgotPasswordVerifyOTPViewModel(get(), get()) }
+    factory { OnboardingViewModel(get(), get(), get()) }
 
     factory { SplashUseCase(get(), get()) }
     factory { SplashViewModel(get()) }
