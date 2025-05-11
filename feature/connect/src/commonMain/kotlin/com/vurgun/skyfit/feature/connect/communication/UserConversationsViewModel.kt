@@ -1,4 +1,4 @@
-package com.vurgun.skyfit.feature.messaging.communication
+package com.vurgun.skyfit.feature.connect.communication
 
 class UserConversationsViewModel {
 

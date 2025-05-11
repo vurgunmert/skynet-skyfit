@@ -257,6 +257,14 @@
     <string name="posture_view_back">Arka Görünüm</string>
     <string name="posture_view_right">Sağ Görünüm</string>
     <string name="posture_view_left">Sol Görünüm</string>
+
+    <string name="dialog_permission_title">Galeri İzni Gerekli</string>
+    <string name="dialog_permission_text">Bu uygulamanın galeriye erişim iznine ihtiyacı var.</string>
+    <string name="allow_action">İzin Ver</string>
+    <string name="dialog_image_too_large_title">Resim Çok Büyük</string>
+    <string name="dialog_image_too_large_text">Lütfen 10MB'tan küçük bir resim seçin.</string>
+
+
 </resources>
 
 <!--    Use snake_case + purpose-based suffixes:-->

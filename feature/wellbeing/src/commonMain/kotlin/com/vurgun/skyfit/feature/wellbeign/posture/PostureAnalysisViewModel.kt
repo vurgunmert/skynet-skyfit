@@ -8,9 +8,9 @@ import com.kashif.cameraK.result.ImageCaptureResult
 import com.kashif.imagesaverplugin.ImageSaverPlugin
 import com.vurgun.skyfit.core.data.utility.SingleSharedFlow
 import com.vurgun.skyfit.core.data.utility.emitIn
-import com.vurgun.skyfit.core.data.model.PostureFinding
-import com.vurgun.skyfit.core.data.model.PostureType
-import com.vurgun.skyfit.core.data.repository.PostureAnalysisRepository
+import com.vurgun.skyfit.core.data.wellbeing.data.model.PostureType
+import com.vurgun.skyfit.core.data.wellbeing.domain.model.PostureFinding
+import com.vurgun.skyfit.core.data.wellbeing.domain.repository.PostureAnalysisRepository
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.StateFlow

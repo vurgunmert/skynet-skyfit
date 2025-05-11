@@ -6,7 +6,7 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.material.Divider
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import com.vurgun.skyfit.core.data.domain.model.CalendarRecurrenceType
+import com.vurgun.skyfit.core.data.schedule.domain.model.CalendarRecurrenceType
 import com.vurgun.skyfit.core.ui.components.popup.SelectablePopupMenuItem
 import com.vurgun.skyfit.core.ui.components.popup.BasicPopupMenu
 import com.vurgun.skyfit.core.ui.components.text.BodyMediumRegularText

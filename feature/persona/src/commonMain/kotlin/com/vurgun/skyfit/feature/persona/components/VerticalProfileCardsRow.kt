@@ -9,7 +9,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
-import com.vurgun.skyfit.core.data.domain.model.FacilityTrainerProfile
+import com.vurgun.skyfit.core.data.persona.domain.model.FacilityTrainerProfile
 import com.vurgun.skyfit.feature.persona.components.viewdata.FacilityProfileCardItemViewData
 
 @Composable

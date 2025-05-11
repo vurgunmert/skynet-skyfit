@@ -2,12 +2,12 @@ package com.vurgun.skyfit.feature.persona.profile.trainer.schedule
 
 import cafe.adriel.voyager.core.model.ScreenModel
 import cafe.adriel.voyager.core.model.screenModelScope
-import com.vurgun.skyfit.core.data.domain.model.TrainerProfile
-import com.vurgun.skyfit.core.data.domain.repository.ProfileRepository
+import com.vurgun.skyfit.core.data.persona.domain.model.TrainerProfile
+import com.vurgun.skyfit.core.data.persona.domain.repository.ProfileRepository
 import com.vurgun.skyfit.core.data.utility.now
 import com.vurgun.skyfit.core.data.schedule.domain.repository.CourseRepository
-import com.vurgun.skyfit.core.data.schedule.mapper.LessonSessionItemViewDataMapper
-import com.vurgun.skyfit.core.data.schedule.model.LessonSessionItemViewData
+import com.vurgun.skyfit.core.data.schedule.data.mapper.LessonSessionItemViewDataMapper
+import com.vurgun.skyfit.core.data.schedule.data.model.LessonSessionItemViewData
 import kotlinx.coroutines.async
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow

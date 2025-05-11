@@ -64,8 +64,6 @@ kotlin {
             api(compose.components.uiToolingPreview)
             implementation(compose.components.resources)
 
-            api(libs.kotlinx.datetime) //TODO: probably goes to data:core
-
             //Navigation
             api(libs.bundles.voyager)
 
@@ -78,7 +76,11 @@ kotlin {
             api(libs.androidx.activity.compose)
 
             implementation("app.rive:rive-android:9.6.5")
-            implementation("androidx.startup:startup-runtime:1.2.0")
+        }
+
+        iosMain.dependencies {
+            implementation("org.jetbrains.compose.foundation:foundation:1.8.0")
+            implementation("org.jetbrains.compose.ui:ui:1.8.0")
         }
 
         desktopMain.dependencies {

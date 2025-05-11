@@ -2,10 +2,10 @@ package com.vurgun.skyfit.feature.notification.notification
 
 import cafe.adriel.voyager.core.model.ScreenModel
 import cafe.adriel.voyager.core.model.screenModelScope
-import com.vurgun.skyfit.core.data.model.NotificationCategory
-import com.vurgun.skyfit.core.data.model.NotificationPriority
-import com.vurgun.skyfit.core.data.model.NotificationType
-import com.vurgun.skyfit.core.data.model.SkyFitNotification
+import com.vurgun.skyfit.core.data.connect.data.model.NotificationCategory
+import com.vurgun.skyfit.core.data.connect.data.model.NotificationPriority
+import com.vurgun.skyfit.core.data.connect.data.model.NotificationType
+import com.vurgun.skyfit.core.data.connect.data.model.SkyFitNotification
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.map

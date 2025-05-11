@@ -37,7 +37,7 @@ import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.koin.koinScreenModel
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
-import com.vurgun.skyfit.core.data.domain.model.UserProfile
+import com.vurgun.skyfit.core.data.persona.domain.model.UserProfile
 import com.vurgun.skyfit.core.ui.components.event.AvailableActivityCalendarEventItem
 import com.vurgun.skyfit.core.ui.components.image.NetworkImage
 import com.vurgun.skyfit.core.ui.components.loader.FullScreenLoaderContent
@@ -46,7 +46,7 @@ import com.vurgun.skyfit.core.ui.screen.ErrorScreen
 import com.vurgun.skyfit.core.ui.styling.SkyFitAsset
 import com.vurgun.skyfit.core.ui.styling.SkyFitColor
 import com.vurgun.skyfit.core.ui.styling.SkyFitTypography
-import com.vurgun.skyfit.core.data.schedule.model.LessonSessionItemViewData
+import com.vurgun.skyfit.core.data.schedule.data.model.LessonSessionItemViewData
 import com.vurgun.skyfit.feature.persona.components.MobileProfileBackgroundImage
 import com.vurgun.skyfit.feature.persona.components.UserProfileCardPreferenceRow
 import org.jetbrains.compose.resources.stringResource

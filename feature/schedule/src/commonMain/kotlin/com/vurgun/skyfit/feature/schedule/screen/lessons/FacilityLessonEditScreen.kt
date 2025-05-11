@@ -53,8 +53,8 @@ import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.koin.koinScreenModel
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
-import com.vurgun.skyfit.core.data.domain.model.CalendarRecurrence
-import com.vurgun.skyfit.core.data.domain.model.CalendarRecurrenceType
+import com.vurgun.skyfit.core.data.schedule.domain.model.CalendarRecurrence
+import com.vurgun.skyfit.core.data.schedule.domain.model.CalendarRecurrenceType
 import com.vurgun.skyfit.core.data.utility.isAfter
 import com.vurgun.skyfit.core.data.utility.isBefore
 import com.vurgun.skyfit.core.data.utility.now

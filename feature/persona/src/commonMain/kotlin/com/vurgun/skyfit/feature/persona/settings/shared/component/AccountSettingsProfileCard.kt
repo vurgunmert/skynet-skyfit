@@ -25,7 +25,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.unit.dp
-import com.vurgun.skyfit.core.data.domain.model.WorkoutTag
+import com.vurgun.skyfit.core.data.schedule.domain.model.WorkoutTag
 import com.vurgun.skyfit.core.ui.components.button.LargePrimaryIconButton
 import com.vurgun.skyfit.core.ui.components.image.NetworkImage
 import com.vurgun.skyfit.core.ui.components.text.CardFieldIconText

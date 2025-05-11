@@ -12,6 +12,7 @@ import com.vurgun.skyfit.feature.access.login.AuthFlowScreen
 import com.vurgun.skyfit.feature.access.login.LoginScreen
 import com.vurgun.skyfit.feature.access.login.LoginVerifyOTPScreen
 import com.vurgun.skyfit.feature.access.maintenance.MaintenanceScreen
+import com.vurgun.skyfit.feature.access.onboarding.OnboardingScreen
 import com.vurgun.skyfit.feature.access.splash.SplashScreen
 import kotlinx.serialization.Serializable
 
@@ -19,6 +20,7 @@ val accessScreenModule = screenModule {
     register<SharedScreen.Splash> { SplashScreen() }
     register<SharedScreen.Maintenance> { MaintenanceScreen() }
     register<SharedScreen.Authorization> { AuthFlowScreen() }
+    register<SharedScreen.Onboarding> { OnboardingScreen() }
 }
 
 internal val authScreenFlowModule = screenModule {

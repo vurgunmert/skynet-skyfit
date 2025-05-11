@@ -19,7 +19,7 @@ import androidx.compose.ui.unit.dp
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
-import com.vurgun.skyfit.core.data.domain.model.GenderType
+import com.vurgun.skyfit.core.data.persona.domain.model.GenderType
 import com.vurgun.skyfit.core.ui.components.special.SelectableCardComponent
 import com.vurgun.skyfit.core.ui.components.special.SkyFitMobileScaffold
 import com.vurgun.skyfit.core.ui.styling.SkyFitTypography

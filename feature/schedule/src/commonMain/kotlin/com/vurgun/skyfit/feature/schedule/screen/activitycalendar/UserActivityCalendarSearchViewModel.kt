@@ -2,9 +2,9 @@ package com.vurgun.skyfit.feature.schedule.screen.activitycalendar
 
 import cafe.adriel.voyager.core.model.ScreenModel
 import cafe.adriel.voyager.core.model.screenModelScope
-import com.vurgun.skyfit.core.data.domain.model.WorkoutCategories
-import com.vurgun.skyfit.core.data.domain.model.WorkoutType
-import com.vurgun.skyfit.core.data.domain.model.workoutTypes
+import com.vurgun.skyfit.core.data.schedule.domain.model.WorkoutCategories
+import com.vurgun.skyfit.core.data.schedule.domain.model.WorkoutType
+import com.vurgun.skyfit.core.data.schedule.domain.model.workoutTypes
 import com.vurgun.skyfit.core.data.utility.SingleSharedFlow
 import com.vurgun.skyfit.core.data.utility.emitIn
 import kotlinx.coroutines.flow.MutableStateFlow

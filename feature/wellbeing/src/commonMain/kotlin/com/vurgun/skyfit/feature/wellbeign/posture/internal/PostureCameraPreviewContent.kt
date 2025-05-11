@@ -43,13 +43,13 @@ import com.kashif.cameraK.ui.CameraPreview
 import com.kashif.imagesaverplugin.ImageSaverConfig
 import com.kashif.imagesaverplugin.ImageSaverPlugin
 import com.kashif.imagesaverplugin.rememberImageSaverPlugin
+import com.vurgun.skyfit.core.data.wellbeing.data.model.PostureType
 import com.vurgun.skyfit.core.ui.components.button.PrimaryIconButton
 import com.vurgun.skyfit.core.ui.components.button.SecondaryFlatIconButton
 import com.vurgun.skyfit.core.ui.components.button.SecondaryIconButton
 import com.vurgun.skyfit.core.ui.components.chip.RectangleChip
 import com.vurgun.skyfit.core.ui.components.image.SkyFitPickImageWrapper
 import com.vurgun.skyfit.core.ui.styling.SkyFitColor
-import com.vurgun.skyfit.core.data.model.PostureType
 import com.vurgun.skyfit.feature.wellbeign.posture.PostureAnalysisAction
 import com.vurgun.skyfit.feature.wellbeign.posture.PostureAnalysisContentState
 import com.vurgun.skyfit.feature.wellbeign.posture.PostureAnalysisViewModel

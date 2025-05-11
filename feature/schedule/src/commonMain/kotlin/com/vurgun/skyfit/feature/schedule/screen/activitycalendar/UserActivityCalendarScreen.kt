@@ -14,7 +14,7 @@ import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.koin.koinScreenModel
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
-import com.vurgun.skyfit.core.data.domain.model.CalendarEvent
+import com.vurgun.skyfit.core.data.schedule.domain.model.CalendarEvent
 import com.vurgun.skyfit.core.data.utility.toTurkishLongDate
 import com.vurgun.skyfit.core.navigation.SharedScreen
 import com.vurgun.skyfit.core.navigation.popUntil

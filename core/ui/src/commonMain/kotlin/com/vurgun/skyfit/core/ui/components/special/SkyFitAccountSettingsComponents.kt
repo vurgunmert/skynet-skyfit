@@ -1,6 +1,5 @@
 package com.vurgun.skyfit.core.ui.components.special
 
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -16,7 +15,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentHeight
-import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicTextField
@@ -31,24 +29,18 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
-import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.graphics.SolidColor
-import androidx.compose.ui.graphics.painter.BitmapPainter
-import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import com.vurgun.skyfit.core.data.domain.model.WorkoutTag
+import com.vurgun.skyfit.core.data.schedule.domain.model.WorkoutTag
 import com.vurgun.skyfit.core.ui.components.button.PrimaryLargeButton
 import com.vurgun.skyfit.core.ui.components.button.SecondaryLargeButton
 import com.vurgun.skyfit.core.ui.components.dialog.FitnessTagPickerDialog
-import com.vurgun.skyfit.core.ui.components.image.NetworkImage
-import com.vurgun.skyfit.core.ui.components.image.SkyFitPickImageWrapper
 import com.vurgun.skyfit.core.ui.styling.SkyFitColor
 import com.vurgun.skyfit.core.ui.styling.SkyFitTypography
 import org.jetbrains.compose.resources.DrawableResource
@@ -60,93 +52,11 @@ import skyfit.core.ui.generated.resources.delete_account_action
 import skyfit.core.ui.generated.resources.ic_delete
 import skyfit.core.ui.generated.resources.ic_pencil
 import skyfit.core.ui.generated.resources.ic_warning
-import skyfit.core.ui.generated.resources.logo_skyfit
 import skyfit.core.ui.generated.resources.profile_tags_label
-import skyfit.core.ui.generated.resources.save_changes_action
 import skyfit.core.ui.generated.resources.select_profile_limit_message
 import skyfit.core.ui.generated.resources.select_profile_tags_hint
 import skyfit.core.ui.generated.resources.settings_delete_account_dialog_message
 import skyfit.core.ui.generated.resources.settings_delete_account_dialog_title
-
-//TODO: REMOVE
-@Composable
-fun MobileUserSettingsScreenPhotoEditComponent(
-    urlString: String?,
-    label: String,
-    onImagePicked: (ByteArray) -> Unit
-) {
-    var selectedImage by remember { mutableStateOf<ImageBitmap?>(null) }
-
-    Row(
-        Modifier
-            .fillMaxWidth()
-            .height(64.dp),
-        verticalAlignment = Alignment.CenterVertically
-    ) {
-
-        if (selectedImage != null) {
-            SkyFitPickImageWrapper(
-                onImagesSelected = { _, bitmap ->
-                    selectedImage = bitmap
-                }
-            ) {
-                Image(
-                    painter = BitmapPainter(image = selectedImage!!),
-                    contentDescription = "Image",
-                    contentScale = ContentScale.Crop,
-                    modifier = Modifier
-                        .size(64.dp)
-                        .background(SkyFitColor.background.surfaceSecondary)
-                        .clip(RoundedCornerShape(20.dp))
-                )
-            }
-        } else {
-            SkyFitPickImageWrapper(
-                onImagesSelected = {_, bitmap ->
-                    selectedImage = bitmap
-                }
-            ) {
-                NetworkImage(
-                    imageUrl = urlString,
-                    modifier = Modifier
-                        .size(64.dp)
-                        .clip(RoundedCornerShape(20.dp))
-                        .background(SkyFitColor.background.surfaceSecondary)
-                )
-            }
-        }
-
-        Spacer(Modifier.width(16.dp))
-
-        SkyFitPickImageWrapper(
-            onImagesSelected = {_, bitmap ->
-                selectedImage = bitmap
-            }
-        ) {
-            SkyFitButtonComponent(
-                modifier = Modifier.wrapContentWidth(),
-                text = label,
-                onClick = { },
-                variant = ButtonVariant.Secondary,
-                size = ButtonSize.Medium,
-                state = ButtonState.Rest,
-                rightIconPainter = painterResource(Res.drawable.ic_pencil)
-            )
-        }
-    }
-}
-
-@Composable
-fun MobileUserSettingsScreenSaveActionComponent(onClick: () -> Unit) {
-    SkyFitButtonComponent(
-        modifier = Modifier.fillMaxWidth(), text = stringResource(Res.string.save_changes_action),
-        onClick = onClick,
-        variant = ButtonVariant.Primary,
-        size = ButtonSize.Large,
-        state = ButtonState.Rest,
-        leftIconPainter = painterResource(Res.drawable.logo_skyfit)
-    )
-}
 
 @Composable
 fun MobileSettingsDeleteAccountBottomSheet(
@@ -156,7 +66,10 @@ fun MobileSettingsDeleteAccountBottomSheet(
     Column(
         modifier = Modifier
             .fillMaxWidth()
-            .background(SkyFitColor.background.surfaceSecondary, shape = RoundedCornerShape(topStart = 20.dp, topEnd = 20.dp))
+            .background(
+                SkyFitColor.background.surfaceSecondary,
+                shape = RoundedCornerShape(topStart = 20.dp, topEnd = 20.dp)
+            )
             .padding(24.dp)
     ) {
         Text(
@@ -343,7 +256,10 @@ fun FitnessTagPickerComponent(
             Box(
                 Modifier
                     .fillMaxWidth()
-                    .background(SkyFitColor.background.surfaceCautionActive, RoundedCornerShape(12.dp))
+                    .background(
+                        SkyFitColor.background.surfaceCautionActive,
+                        RoundedCornerShape(12.dp)
+                    )
                     .padding(12.dp)
             ) {
                 Column {
@@ -423,7 +339,10 @@ fun SkyFitSelectToEnterMultilineInputComponent(
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .background(SkyFitColor.background.surfaceSecondary, shape = RoundedCornerShape(20.dp))
+                .background(
+                    SkyFitColor.background.surfaceSecondary,
+                    shape = RoundedCornerShape(20.dp)
+                )
                 .clickable { focusRequester.requestFocus() }
                 .padding(16.dp)
         ) {

@@ -1,6 +1,6 @@
 package com.vurgun.skyfit.core.ui.viewdata
 
-import com.vurgun.skyfit.core.data.domain.model.GenderType
+import com.vurgun.skyfit.core.data.persona.domain.model.GenderType
 import com.vurgun.skyfit.core.ui.styling.SkyFitAsset
 
 sealed class BodyTypeViewData(val id: Int, val name: String, val icon: SkyFitAsset.BodyTypeIcon) {

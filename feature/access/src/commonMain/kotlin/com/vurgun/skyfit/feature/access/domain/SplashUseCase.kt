@@ -1,7 +1,7 @@
 package com.vurgun.skyfit.feature.access.domain
 
-import com.vurgun.skyfit.core.data.domain.repository.AppConfigRepository
-import com.vurgun.skyfit.core.data.domain.repository.UserManager
+import com.vurgun.skyfit.core.data.access.domain.repository.AppConfigRepository
+import com.vurgun.skyfit.core.data.persona.domain.repository.UserManager
 
 class SplashUseCase(
     private val appConfigRepository: AppConfigRepository,

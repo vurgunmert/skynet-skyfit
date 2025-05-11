@@ -6,8 +6,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import com.vurgun.skyfit.core.data.domain.model.FacilityProfile
-import com.vurgun.skyfit.core.data.domain.model.UserProfile
+import com.vurgun.skyfit.core.data.persona.domain.model.FacilityProfile
+import com.vurgun.skyfit.core.data.persona.domain.model.UserProfile
 import com.vurgun.skyfit.core.ui.components.icon.SkyIcon
 import com.vurgun.skyfit.core.ui.components.icon.SkyIconSize
 import com.vurgun.skyfit.core.ui.components.image.SkyImage

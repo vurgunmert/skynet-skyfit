@@ -31,7 +31,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
-import com.vurgun.skyfit.core.data.domain.model.WorkoutTag
+import com.vurgun.skyfit.core.data.schedule.domain.model.WorkoutTag
 import com.vurgun.skyfit.core.ui.components.special.SkyFitAccountSettingsProfileTagItemComponent
 import com.vurgun.skyfit.core.ui.styling.SkyFitColor
 import com.vurgun.skyfit.core.ui.styling.SkyFitTypography

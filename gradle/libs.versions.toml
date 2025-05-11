@@ -2,8 +2,8 @@
 # Kotlin
 kotlin = "2.1.10"
 kotlinxSerialization = "1.8.1"
-kotlinxDatetime = "0.6.1"
-kotlinxCoroutines = "1.10.1"
+kotlinxDatetime = "0.6.2"
+kotlinxCoroutines = "1.10.2"
 # Compose
 compose = "1.7.3"
 composeHotReload = "1.0.0-alpha09"
@@ -14,7 +14,6 @@ android-compileSdk = "35"
 android-minSdk = "24"
 android-targetSdk = "35"
 androidx-activityCompose = "1.10.1"
-androidx-lifecycle = "2.8.4"
 
 # Dependency Injection
 koin = "4.1.0-Beta4"
@@ -23,17 +22,16 @@ koin = "4.1.0-Beta4"
 voyager = "1.1.0-beta03"
 
 # Settings
-datastore = "1.1.4"
+datastore = "1.1.6"
 
 ktor = "3.1.3"
 coil = "3.1.0"
-peekaboo = "0.5.2"
 calf = "0.7.1"
-skiko = "0.9.3"
+skiko = "0.9.4"
 
-pods-google-maps = "9.1.1"
-pods-google-ios-maps-utils = "6.0.0"
-pods-rive-runtime = "6.8.1"
+#pods-google-maps = "9.1.1"
+#pods-google-ios-maps-utils = "6.0.0"
+#pods-rive-runtime = "6.8.1"
 
 [libraries]
 # Kotlin & Serialization
@@ -70,12 +68,12 @@ ktor-client-logging = { group = "io.ktor", name = "ktor-client-logging", version
 ktor-client-okhttp = { group = "io.ktor", name = "ktor-client-okhttp", version.ref = "ktor" }
 ktor-client-darwin = { group = "io.ktor", name = "ktor-client-darwin", version.ref = "ktor" }
 ktor-client-cio = { group = "io.ktor", name = "ktor-client-cio", version.ref = "ktor" }
-ktor-client-js = { group = "io.ktor", name = "ktor-client-js", version.ref = "ktor" }
+#ktor-client-js = { group = "io.ktor", name = "ktor-client-js", version.ref = "ktor" }
 ktor-client-content-negotiation = { group = "io.ktor", name = "ktor-client-content-negotiation", version.ref = "ktor" }
 ktor-serialization-json = { group = "io.ktor", name = "ktor-serialization-kotlinx-json", version.ref = "ktor" }
 
-skiko = { module = "org.jetbrains.skiko:skiko", version.ref = "skiko" }
-skiko-js = { module = "org.jetbrains.skiko:skiko-js-wasm-runtime", version.ref = "skiko" }
+#skiko = { module = "org.jetbrains.skiko:skiko", version.ref = "skiko" }
+#skiko-js = { module = "org.jetbrains.skiko:skiko-js-wasm-runtime", version.ref = "skiko" }
 
 # Settings
 datastore-preferences-core = { group = "androidx.datastore", name = "datastore-preferences-core", version.ref = "datastore" }

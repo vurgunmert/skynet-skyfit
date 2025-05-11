@@ -36,14 +36,14 @@ import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.dp
+import com.vurgun.skyfit.core.data.wellbeing.data.model.PostureType
+import com.vurgun.skyfit.core.data.wellbeing.domain.model.PostureFinding
 import com.vurgun.skyfit.core.ui.components.button.PrimaryIconButton
 import com.vurgun.skyfit.core.ui.components.button.SecondaryIconButton
 import com.vurgun.skyfit.core.ui.components.chip.SecondaryPillChip
 import com.vurgun.skyfit.core.ui.components.icon.CloseIconRow
 import com.vurgun.skyfit.core.ui.styling.SkyFitColor
 import com.vurgun.skyfit.core.ui.styling.SkyFitTypography
-import com.vurgun.skyfit.core.data.model.PostureFinding
-import com.vurgun.skyfit.core.data.model.PostureType
 import com.vurgun.skyfit.feature.wellbeign.posture.PostureAnalysisAction
 import com.vurgun.skyfit.feature.wellbeign.posture.PostureAnalysisContentState
 import com.vurgun.skyfit.feature.wellbeign.posture.PostureOptionState

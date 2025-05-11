@@ -12,7 +12,7 @@ import androidx.compose.ui.viewinterop.AndroidView
 import app.rive.runtime.kotlin.RiveAnimationView
 import app.rive.runtime.kotlin.core.Fit
 import com.vurgun.skyfit.core.ui.R
-import com.vurgun.skyfit.core.data.domain.model.CharacterType
+import com.vurgun.skyfit.core.data.persona.domain.model.CharacterType
 
 @Composable
 fun AndroidRiveAnimatedCharacterComponent(modifier: Modifier = Modifier, characterType: CharacterType) {

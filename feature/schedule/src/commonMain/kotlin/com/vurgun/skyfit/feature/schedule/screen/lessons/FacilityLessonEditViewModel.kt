@@ -2,10 +2,10 @@ package com.vurgun.skyfit.feature.schedule.screen.lessons
 
 import cafe.adriel.voyager.core.model.ScreenModel
 import cafe.adriel.voyager.core.model.screenModelScope
-import com.vurgun.skyfit.core.data.domain.model.CalendarRecurrence
-import com.vurgun.skyfit.core.data.domain.model.CalendarRecurrenceType
-import com.vurgun.skyfit.core.data.domain.model.FacilityDetail
-import com.vurgun.skyfit.core.data.domain.repository.UserManager
+import com.vurgun.skyfit.core.data.schedule.domain.model.CalendarRecurrence
+import com.vurgun.skyfit.core.data.schedule.domain.model.CalendarRecurrenceType
+import com.vurgun.skyfit.core.data.persona.domain.model.FacilityDetail
+import com.vurgun.skyfit.core.data.persona.domain.repository.UserManager
 import com.vurgun.skyfit.core.data.utility.SingleSharedFlow
 import com.vurgun.skyfit.core.data.utility.emitIn
 import com.vurgun.skyfit.core.data.utility.formatToSlashedDate
@@ -15,9 +15,9 @@ import com.vurgun.skyfit.core.data.schedule.domain.model.Lesson
 import com.vurgun.skyfit.core.data.schedule.domain.model.LessonCreationInfo
 import com.vurgun.skyfit.core.data.schedule.domain.model.LessonUpdateInfo
 import com.vurgun.skyfit.core.data.schedule.domain.repository.CourseRepository
-import com.vurgun.skyfit.core.data.domain.model.Member
-import com.vurgun.skyfit.core.data.domain.repository.MemberRepository
-import com.vurgun.skyfit.core.data.domain.repository.TrainerRepository
+import com.vurgun.skyfit.core.data.persona.domain.model.Member
+import com.vurgun.skyfit.core.data.persona.domain.repository.MemberRepository
+import com.vurgun.skyfit.core.data.persona.domain.repository.TrainerRepository
 import com.vurgun.skyfit.core.ui.components.schedule.SelectableTrainerMenuItemModel
 import kotlinx.coroutines.async
 import kotlinx.coroutines.flow.MutableStateFlow

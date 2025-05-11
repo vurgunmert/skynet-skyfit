@@ -2,8 +2,8 @@ package com.vurgun.skyfit.feature.persona.settings.shared.account
 
 import cafe.adriel.voyager.core.model.ScreenModel
 import cafe.adriel.voyager.core.model.screenModelScope
-import com.vurgun.skyfit.core.data.domain.model.UserAccountType
-import com.vurgun.skyfit.core.data.domain.repository.UserManager
+import com.vurgun.skyfit.core.data.persona.domain.model.UserAccountType
+import com.vurgun.skyfit.core.data.persona.domain.repository.UserManager
 import com.vurgun.skyfit.core.data.utility.SingleSharedFlow
 import com.vurgun.skyfit.core.data.utility.emitOrNull
 import kotlinx.coroutines.flow.SharedFlow

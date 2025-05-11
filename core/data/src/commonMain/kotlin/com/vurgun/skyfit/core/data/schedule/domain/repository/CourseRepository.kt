@@ -1,6 +1,6 @@
 package com.vurgun.skyfit.core.data.schedule.domain.repository
 
-import com.vurgun.skyfit.core.data.domain.model.LessonParticipant
+import com.vurgun.skyfit.core.data.schedule.domain.model.LessonParticipant
 import com.vurgun.skyfit.core.data.schedule.domain.model.Appointment
 import com.vurgun.skyfit.core.data.schedule.domain.model.AppointmentDetail
 import com.vurgun.skyfit.core.data.schedule.domain.model.CreateAppointmentResponse

@@ -1,4 +1,4 @@
-package com.vurgun.skyfit.feature.messaging.chatbot
+package com.vurgun.skyfit.feature.connect.chatbot
 
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf

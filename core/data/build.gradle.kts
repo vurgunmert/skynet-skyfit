@@ -30,9 +30,9 @@ kotlin {
         commonMain.dependencies {
             implementation(projects.core.network)
 
+            api(libs.kotlinx.datetime)
             implementation(libs.koin.core)
             implementation(libs.kotlinx.serialization)
-            implementation(libs.kotlinx.datetime)
             implementation(libs.datastore.preferences.core)
         }
     }

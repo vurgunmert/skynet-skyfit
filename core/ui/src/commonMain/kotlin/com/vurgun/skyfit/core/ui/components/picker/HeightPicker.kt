@@ -20,7 +20,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
-import com.vurgun.skyfit.core.data.domain.model.HeightUnitType
+import com.vurgun.skyfit.core.data.shared.domain.model.HeightUnitType
 import com.vurgun.skyfit.core.ui.components.button.PrimaryDialogButton
 import com.vurgun.skyfit.core.ui.components.button.SecondaryDialogButton
 import com.vurgun.skyfit.core.ui.components.special.SkyFitWheelPickerComponent

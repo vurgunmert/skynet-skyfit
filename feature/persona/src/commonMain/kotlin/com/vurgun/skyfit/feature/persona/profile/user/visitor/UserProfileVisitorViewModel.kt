@@ -2,12 +2,12 @@ package com.vurgun.skyfit.feature.persona.profile.user.visitor
 
 import cafe.adriel.voyager.core.model.ScreenModel
 import cafe.adriel.voyager.core.model.screenModelScope
-import com.vurgun.skyfit.core.data.domain.model.UserProfile
-import com.vurgun.skyfit.core.data.domain.repository.ProfileRepository
+import com.vurgun.skyfit.core.data.persona.domain.model.UserProfile
+import com.vurgun.skyfit.core.data.persona.domain.repository.ProfileRepository
 import com.vurgun.skyfit.core.data.utility.emitOrNull
 import com.vurgun.skyfit.core.data.schedule.domain.repository.CourseRepository
-import com.vurgun.skyfit.core.data.schedule.mapper.LessonSessionItemViewDataMapper
-import com.vurgun.skyfit.core.data.schedule.model.LessonSessionItemViewData
+import com.vurgun.skyfit.core.data.schedule.data.mapper.LessonSessionItemViewDataMapper
+import com.vurgun.skyfit.core.data.schedule.data.model.LessonSessionItemViewData
 import com.vurgun.skyfit.feature.persona.components.viewdata.LifestyleActionItemViewData
 import com.vurgun.skyfit.feature.persona.social.SocialPostItemViewData
 import com.vurgun.skyfit.feature.persona.social.fakePosts

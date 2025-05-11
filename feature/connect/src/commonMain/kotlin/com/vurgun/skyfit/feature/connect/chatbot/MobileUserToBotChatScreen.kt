@@ -1,4 +1,4 @@
-package com.vurgun.skyfit.feature.messaging.chatbot
+package com.vurgun.skyfit.feature.connect.chatbot
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -22,7 +22,6 @@ import com.vurgun.skyfit.feature.messaging.component.SkyFitChatMessageInputCompo
 import com.vurgun.skyfit.core.ui.components.special.SkyFitScaffold
 import com.vurgun.skyfit.core.ui.components.special.SkyFitScreenHeader
 import com.vurgun.skyfit.core.ui.styling.SkyFitColor
-import com.vurgun.skyfit.feature.connect.chatbot.ChatbotViewModel
 import org.koin.compose.koinInject
 
 @Composable

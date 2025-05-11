@@ -2,13 +2,18 @@ package com.vurgun.skyfit.feature.schedule.screen.activitycalendar
 
 import cafe.adriel.voyager.core.model.ScreenModel
 import cafe.adriel.voyager.core.model.screenModelScope
-import com.vurgun.skyfit.core.data.domain.model.CalendarEvent
-import com.vurgun.skyfit.core.data.domain.repository.UserCalendarRepository
+import com.vurgun.skyfit.core.data.schedule.domain.model.CalendarEvent
+import com.vurgun.skyfit.core.data.schedule.domain.repository.UserCalendarRepository
 import com.vurgun.skyfit.core.data.utility.SingleSharedFlow
 import com.vurgun.skyfit.core.data.utility.UiStateDelegate
 import com.vurgun.skyfit.core.data.utility.emitOrNull
 import com.vurgun.skyfit.core.data.utility.now
-import kotlinx.coroutines.flow.*
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharedFlow
+import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import kotlinx.datetime.LocalDate
 

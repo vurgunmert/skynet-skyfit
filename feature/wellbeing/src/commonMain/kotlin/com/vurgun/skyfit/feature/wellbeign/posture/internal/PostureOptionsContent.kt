@@ -23,12 +23,12 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import com.vurgun.skyfit.core.data.wellbeing.data.model.PostureType
 import com.vurgun.skyfit.core.ui.components.box.rememberAnimatedBorderBrush
 import com.vurgun.skyfit.core.ui.components.text.BodyMediumSemiboldText
 import com.vurgun.skyfit.core.ui.styling.LocalPadding
 import com.vurgun.skyfit.core.ui.styling.SkyFitColor
 import com.vurgun.skyfit.core.ui.styling.SkyFitTypography
-import com.vurgun.skyfit.core.data.model.PostureType
 import com.vurgun.skyfit.feature.wellbeign.posture.PostureAnalysisAction
 import com.vurgun.skyfit.feature.wellbeign.posture.PostureAnalysisViewModel
 import kotlinx.coroutines.flow.map

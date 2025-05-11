@@ -39,12 +39,10 @@ import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.vurgun.skyfit.core.data.domain.model.CharacterType
-import com.vurgun.skyfit.core.data.schedule.model.LessonSessionItemViewData
-import com.vurgun.skyfit.core.ui.components.button.SkyButton
+import com.vurgun.skyfit.core.data.persona.domain.model.CharacterType
+import com.vurgun.skyfit.core.data.schedule.data.model.LessonSessionItemViewData
 import com.vurgun.skyfit.core.ui.components.button.SkyFitCircularProgressIconButton
 import com.vurgun.skyfit.core.ui.components.event.FacilityHomeLessonEventItem
-import com.vurgun.skyfit.core.ui.components.event.TrainerHomeLessonEventItem
 import com.vurgun.skyfit.core.ui.components.image.NetworkImage
 import com.vurgun.skyfit.core.ui.components.schedule.MobileUserActivityHourlyCalendarComponent
 import com.vurgun.skyfit.core.ui.components.schedule.SkyFitColoredCalendarComponent

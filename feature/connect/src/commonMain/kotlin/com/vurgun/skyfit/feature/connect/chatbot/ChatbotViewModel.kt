@@ -2,7 +2,7 @@ package com.vurgun.skyfit.feature.connect.chatbot
 
 import cafe.adriel.voyager.core.model.ScreenModel
 import cafe.adriel.voyager.core.model.screenModelScope
-import com.vurgun.skyfit.core.data.domain.repository.ChatbotApiUseCase
+import com.vurgun.skyfit.core.data.connect.domain.repository.ChatbotApiUseCase
 import com.vurgun.skyfit.core.data.utility.now
 import com.vurgun.skyfit.feature.messaging.component.ChatMessageItem
 import kotlinx.coroutines.flow.MutableStateFlow

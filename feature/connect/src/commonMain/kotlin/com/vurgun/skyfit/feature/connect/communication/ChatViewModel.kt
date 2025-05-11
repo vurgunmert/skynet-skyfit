@@ -1,4 +1,4 @@
-package com.vurgun.skyfit.feature.messaging.communication
+package com.vurgun.skyfit.feature.connect.communication
 
 import cafe.adriel.voyager.core.model.ScreenModel
 import cafe.adriel.voyager.core.model.screenModelScope

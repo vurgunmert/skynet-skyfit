@@ -21,7 +21,6 @@ val featureScheduleModule = module {
     factory { UserActivityCalendarSearchViewModel() }
     factory { UserActivityCalendarViewModel(get()) }
 
-
     factory { FacilityLessonListingViewModel(get(), get(), get()) }
     factory { FacilityLessonEditViewModel(get(), get(), get(), get()) }
 }

@@ -2,10 +2,10 @@ package com.vurgun.skyfit.feature.persona.settings.facility.profile
 
 import cafe.adriel.voyager.core.model.ScreenModel
 import cafe.adriel.voyager.core.model.screenModelScope
-import com.vurgun.skyfit.core.data.domain.model.FacilityDetail
-import com.vurgun.skyfit.core.data.domain.model.WorkoutTag
-import com.vurgun.skyfit.core.data.domain.repository.ProfileRepository
-import com.vurgun.skyfit.core.data.domain.repository.UserManager
+import com.vurgun.skyfit.core.data.persona.domain.model.FacilityDetail
+import com.vurgun.skyfit.core.data.schedule.domain.model.WorkoutTag
+import com.vurgun.skyfit.core.data.persona.domain.repository.ProfileRepository
+import com.vurgun.skyfit.core.data.persona.domain.repository.UserManager
 import com.vurgun.skyfit.core.data.utility.SingleSharedFlow
 import com.vurgun.skyfit.core.data.utility.emitIn
 import kotlinx.coroutines.flow.MutableStateFlow

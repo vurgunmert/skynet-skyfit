@@ -2,7 +2,7 @@ package com.vurgun.skyfit.feature.schedule.screen.appointments
 
 import cafe.adriel.voyager.core.model.ScreenModel
 import cafe.adriel.voyager.core.model.screenModelScope
-import com.vurgun.skyfit.core.data.domain.model.LessonParticipant
+import com.vurgun.skyfit.core.data.schedule.domain.model.LessonParticipant
 import com.vurgun.skyfit.core.data.utility.emitIn
 import com.vurgun.skyfit.core.data.schedule.domain.model.ScheduledLessonDetail
 import com.vurgun.skyfit.core.data.schedule.domain.repository.CourseRepository

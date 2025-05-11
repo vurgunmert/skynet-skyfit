@@ -30,8 +30,8 @@ import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.dp
-import com.vurgun.skyfit.core.data.model.NotificationType
-import com.vurgun.skyfit.core.data.model.SkyFitNotification
+import com.vurgun.skyfit.core.data.connect.data.model.NotificationType
+import com.vurgun.skyfit.core.data.connect.data.model.SkyFitNotification
 import com.vurgun.skyfit.core.ui.components.image.CircleNetworkImage
 import com.vurgun.skyfit.core.ui.styling.SkyFitColor
 import com.vurgun.skyfit.core.ui.styling.SkyFitTypography

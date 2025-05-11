@@ -2,12 +2,12 @@ package com.vurgun.skyfit.feature.persona.settings.user.profile
 
 import cafe.adriel.voyager.core.model.ScreenModel
 import cafe.adriel.voyager.core.model.screenModelScope
-import com.vurgun.skyfit.core.data.domain.model.BodyType
-import com.vurgun.skyfit.core.data.domain.model.HeightUnitType
-import com.vurgun.skyfit.core.data.domain.model.UserDetail
-import com.vurgun.skyfit.core.data.domain.model.WeightUnitType
-import com.vurgun.skyfit.core.data.domain.repository.ProfileRepository
-import com.vurgun.skyfit.core.data.domain.repository.UserManager
+import com.vurgun.skyfit.core.data.persona.domain.model.BodyType
+import com.vurgun.skyfit.core.data.shared.domain.model.HeightUnitType
+import com.vurgun.skyfit.core.data.persona.domain.model.UserDetail
+import com.vurgun.skyfit.core.data.shared.domain.model.WeightUnitType
+import com.vurgun.skyfit.core.data.persona.domain.repository.ProfileRepository
+import com.vurgun.skyfit.core.data.persona.domain.repository.UserManager
 import com.vurgun.skyfit.core.data.utility.SingleSharedFlow
 import com.vurgun.skyfit.core.data.utility.emitIn
 import kotlinx.coroutines.flow.MutableStateFlow

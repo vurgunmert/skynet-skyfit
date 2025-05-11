@@ -61,6 +61,7 @@ kotlin {
         }
 
         androidMain.dependencies {
+            implementation("androidx.startup:startup-runtime:1.2.0")
         }
 
         iosMain.dependencies {

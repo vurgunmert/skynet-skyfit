@@ -2,9 +2,9 @@ package com.vurgun.skyfit.feature.access.login
 
 import cafe.adriel.voyager.core.model.ScreenModel
 import cafe.adriel.voyager.core.model.screenModelScope
-import com.vurgun.skyfit.core.data.domain.model.AuthLoginResult
-import com.vurgun.skyfit.core.data.domain.repository.AuthRepository
-import com.vurgun.skyfit.core.data.domain.repository.UserManager
+import com.vurgun.skyfit.core.data.access.domain.model.AuthLoginResult
+import com.vurgun.skyfit.core.data.access.domain.repository.AuthRepository
+import com.vurgun.skyfit.core.data.persona.domain.repository.UserManager
 import com.vurgun.skyfit.core.data.utility.SingleSharedFlow
 import com.vurgun.skyfit.core.data.utility.emitOrNull
 import kotlinx.coroutines.flow.*

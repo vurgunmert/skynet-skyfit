@@ -6,7 +6,7 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.material.Divider
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import com.vurgun.skyfit.core.data.domain.model.BodyType
+import com.vurgun.skyfit.core.data.persona.domain.model.BodyType
 import com.vurgun.skyfit.core.ui.components.popup.BasicPopupMenu
 import com.vurgun.skyfit.core.ui.components.popup.SelectablePopupMenuItem
 import com.vurgun.skyfit.core.ui.components.text.BodyMediumRegularText

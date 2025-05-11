@@ -2,7 +2,7 @@ package com.vurgun.skyfit.feature.persona.profile
 
 import androidx.compose.runtime.Composable
 import cafe.adriel.voyager.core.screen.Screen
-import com.vurgun.skyfit.core.data.domain.model.UserRole
+import com.vurgun.skyfit.core.data.persona.domain.model.UserRole
 import com.vurgun.skyfit.core.ui.screen.UnauthorizedAccessScreen
 import com.vurgun.skyfit.core.utils.rememberUserRole
 import com.vurgun.skyfit.feature.persona.profile.facility.owner.FacilityProfileOwnerScreen

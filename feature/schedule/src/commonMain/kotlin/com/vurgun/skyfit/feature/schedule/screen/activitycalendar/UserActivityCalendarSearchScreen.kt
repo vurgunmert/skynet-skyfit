@@ -28,7 +28,7 @@ import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.koin.koinScreenModel
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
-import com.vurgun.skyfit.core.data.domain.model.WorkoutType
+import com.vurgun.skyfit.core.data.schedule.domain.model.WorkoutType
 import com.vurgun.skyfit.core.ui.components.button.PrimaryMicroButton
 import com.vurgun.skyfit.core.ui.components.chip.SecondaryPillChip
 import com.vurgun.skyfit.core.ui.components.special.SkyFitMobileScaffold

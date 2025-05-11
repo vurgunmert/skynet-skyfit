@@ -2,14 +2,13 @@ package com.vurgun.skyfit.feature.dashboard.home
 
 import cafe.adriel.voyager.core.model.ScreenModel
 import cafe.adriel.voyager.core.model.screenModelScope
-import com.vurgun.skyfit.core.data.domain.model.FacilityProfile
-import com.vurgun.skyfit.core.data.domain.model.TrainerDetail
-import com.vurgun.skyfit.core.data.domain.model.TrainerProfile
-import com.vurgun.skyfit.core.data.domain.repository.ProfileRepository
-import com.vurgun.skyfit.core.data.domain.repository.UserManager
+import com.vurgun.skyfit.core.data.persona.domain.model.TrainerDetail
+import com.vurgun.skyfit.core.data.persona.domain.model.TrainerProfile
+import com.vurgun.skyfit.core.data.persona.domain.repository.ProfileRepository
+import com.vurgun.skyfit.core.data.persona.domain.repository.UserManager
 import com.vurgun.skyfit.core.data.schedule.domain.repository.CourseRepository
-import com.vurgun.skyfit.core.data.schedule.mapper.LessonSessionItemViewDataMapper
-import com.vurgun.skyfit.core.data.schedule.model.LessonSessionItemViewData
+import com.vurgun.skyfit.core.data.schedule.data.mapper.LessonSessionItemViewDataMapper
+import com.vurgun.skyfit.core.data.schedule.data.model.LessonSessionItemViewData
 import com.vurgun.skyfit.core.data.utility.SingleSharedFlow
 import com.vurgun.skyfit.core.data.utility.UiStateDelegate
 import com.vurgun.skyfit.core.data.utility.emitOrNull
