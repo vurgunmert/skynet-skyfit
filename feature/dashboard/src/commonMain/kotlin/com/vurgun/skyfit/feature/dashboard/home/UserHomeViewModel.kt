@@ -7,15 +7,20 @@ import com.vurgun.skyfit.core.data.domain.model.FacilityProfile
 import com.vurgun.skyfit.core.data.domain.model.UserDetail
 import com.vurgun.skyfit.core.data.domain.model.UserProfile
 import com.vurgun.skyfit.core.data.domain.repository.ProfileRepository
+import com.vurgun.skyfit.core.data.domain.repository.UserCalendarRepository
 import com.vurgun.skyfit.core.data.domain.repository.UserManager
 import com.vurgun.skyfit.core.data.schedule.domain.repository.CourseRepository
 import com.vurgun.skyfit.core.data.utility.SingleSharedFlow
 import com.vurgun.skyfit.core.data.utility.UiStateDelegate
 import com.vurgun.skyfit.core.data.utility.emitOrNull
+import com.vurgun.skyfit.core.data.utility.now
 import com.vurgun.skyfit.feature.dashboard.component.HomeAppointmentItemViewData
 import com.vurgun.skyfit.feature.dashboard.home.UserHomeEffect.*
+import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharedFlow
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
+import kotlinx.datetime.LocalDate
 
 sealed interface UserHomeUiState {
     data object Loading : UserHomeUiState
@@ -24,7 +29,8 @@ sealed interface UserHomeUiState {
         val profile: UserProfile,
         val memberFacility: FacilityProfile? = null,
         val characterType: CharacterType,
-        val appointments: List<HomeAppointmentItemViewData> = emptyList()
+        val appointments: List<HomeAppointmentItemViewData> = emptyList(),
+        val activeCalendarDates: Set<LocalDate> = emptySet(),
     ) : UserHomeUiState
 }
 
@@ -33,6 +39,8 @@ sealed class UserHomeAction {
     data object OnClickNotifications : UserHomeAction()
     data object OnClickConversations : UserHomeAction()
     data object OnClickAppointments : UserHomeAction()
+    data object OnClickShowCalendar : UserHomeAction()
+    data class OnChangeSelectedDate(val date: LocalDate) : UserHomeAction()
 }
 
 sealed class UserHomeEffect {
@@ -40,12 +48,14 @@ sealed class UserHomeEffect {
     data object NavigateToNotifications : UserHomeEffect()
     data object NavigateToConversations : UserHomeEffect()
     data object NavigateToAppointments : UserHomeEffect()
+    data class NavigateToActivityCalendar(val date: LocalDate) : UserHomeEffect()
 }
 
 class UserHomeViewModel(
     private val userManager: UserManager,
     private val courseRepository: CourseRepository,
     private val profileRepository: ProfileRepository,
+    private val calendarRepository: UserCalendarRepository
 ) : ScreenModel {
 
     private val _uiState = UiStateDelegate<UserHomeUiState>(UserHomeUiState.Loading)
@@ -53,6 +63,9 @@ class UserHomeViewModel(
 
     private val _effect = SingleSharedFlow<UserHomeEffect>()
     val effect: SharedFlow<UserHomeEffect> = _effect
+
+    private val _selectedDate = MutableStateFlow<LocalDate>(LocalDate.now())
+    val selectedDate: StateFlow<LocalDate> = _selectedDate
 
     fun onAction(action: UserHomeAction) {
         when (action) {
@@ -67,6 +80,13 @@ class UserHomeViewModel(
 
             UserHomeAction.OnClickNotifications ->
                 emitEffect(NavigateToNotifications)
+
+            UserHomeAction.OnClickShowCalendar ->
+                emitEffect(NavigateToActivityCalendar(_selectedDate.value))
+
+            is UserHomeAction.OnChangeSelectedDate -> {
+                _selectedDate.value = action.date
+            }
         }
     }
 
@@ -93,12 +113,16 @@ class UserHomeViewModel(
                         )
                     }
 
+                val calendarEvents = calendarRepository.getCalendarEvents().getOrDefault(emptyList())
+                val activeCalendarDates = calendarEvents.map { it.startDate }.toSet()
+
                 _uiState.update(
                     UserHomeUiState.Content(
                         profile = userProfile,
                         memberFacility = facilityProfile,
                         characterType = userDetail.characterType,
-                        appointments = appointments
+                        appointments = appointments,
+                        activeCalendarDates = activeCalendarDates
                     )
                 )
             }.onFailure {

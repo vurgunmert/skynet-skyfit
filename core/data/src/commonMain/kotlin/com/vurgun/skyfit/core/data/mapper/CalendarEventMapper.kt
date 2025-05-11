@@ -4,18 +4,24 @@ import com.vurgun.skyfit.core.data.domain.model.CalendarEvent
 import com.vurgun.skyfit.core.data.domain.model.WorkoutEvent
 import com.vurgun.skyfit.core.data.model.CalendarEventDTO
 import com.vurgun.skyfit.core.data.model.WorkoutEventDTO
+import kotlinx.datetime.Instant
 import kotlinx.datetime.LocalDateTime
+import kotlinx.datetime.TimeZone
+import kotlinx.datetime.toLocalDateTime
 
 internal object CalendarEventMapper {
 
     fun CalendarEventDTO.toDomainCalendarEvent(): CalendarEvent {
+        val startDateTime = Instant.parse(this.startDate).toLocalDateTime(TimeZone.currentSystemDefault())
+        val endDateTime = Instant.parse(this.endDate).toLocalDateTime(TimeZone.currentSystemDefault())
+
         return CalendarEvent(
             calendarEventId = this.calendarEventId,
             userId = this.userId,
             name = this.eventName,
             workoutEventId = this.eventId,
-            startDate = LocalDateTime.parse(this.startDate),
-            endDate = LocalDateTime.parse(this.endDate),
+            startDateTime = startDateTime,
+            endDateTime = endDateTime,
             lessonId = this.lessonId,
             lessonIcon = this.lessonIcon,
             trainerNote = this.trainerNote,

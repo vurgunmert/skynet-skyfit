@@ -69,6 +69,15 @@ fun LocalDate.Companion.now(): LocalDate {
     return Clock.System.now().toLocalDateTime(TimeZone.currentSystemDefault()).date
 }
 
+fun LocalDateTime.Companion.now(): LocalDateTime =
+    Clock.System.now().toLocalDateTime(TimeZone.currentSystemDefault())
+
+fun LocalDateTime.isBeforeNow(): Boolean =
+    this < LocalDateTime.now()
+
+fun LocalDateTime.isAfterNow(): Boolean =
+    this > LocalDateTime.now()
+
 fun LocalDate.withDayOfMonth(day: Int): LocalDate {
     return this.minus(dayOfMonth - day, DateTimeUnit.DAY)
 }
@@ -180,3 +189,19 @@ fun String.parseServerToDateOnly(): LocalDate {
 fun String.parseServerToHHMMTime(): LocalTime {
     return LocalTime.parse(this.substring(0, 5))
 }
+
+fun LocalDate.toTurkishLongDate(): String {
+    val monthName = turkishMonths[monthNumber] ?: ""
+    val dayName = turkishDays[dayOfWeek.isoDayNumber] ?: ""
+    return "$dayOfMonth $monthName $dayName"
+}
+
+private val turkishMonths = mapOf(
+    1 to "Ocak", 2 to "Şubat", 3 to "Mart", 4 to "Nisan", 5 to "Mayıs", 6 to "Haziran",
+    7 to "Temmuz", 8 to "Ağustos", 9 to "Eylül", 10 to "Ekim", 11 to "Kasım", 12 to "Aralık"
+)
+
+private val turkishDays = mapOf(
+    1 to "Pazartesi", 2 to "Salı", 3 to "Çarşamba", 4 to "Perşembe",
+    5 to "Cuma", 6 to "Cumartesi", 7 to "Pazar"
+)

@@ -7,11 +7,7 @@ import com.vurgun.skyfit.core.data.utility.generateDaysInMonth
 import com.vurgun.skyfit.core.data.utility.now
 import com.vurgun.skyfit.core.data.utility.withDayOfMonth
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.SharingStarted
-import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.combine
-import kotlinx.coroutines.flow.stateIn
+import kotlinx.coroutines.flow.*
 import kotlinx.datetime.DateTimeUnit
 import kotlinx.datetime.LocalDate
 import kotlinx.datetime.minus
@@ -21,7 +17,7 @@ data class DateRangeSelectorState(
     val selectedStartDate: LocalDate?,
     val selectedEndDate: LocalDate?,
     val visibleMonth: LocalDate,
-    val days: List<CalendarMonthDaySelectorItemModel>
+    val days: List<DatePickerCalendar.CalendarMonthDaySelectorItemModel>
 )
 
 enum class CalendarSelectionMode {
@@ -92,7 +88,7 @@ fun generateMonthDays(
     month: LocalDate,
     start: LocalDate?,
     end: LocalDate?
-): List<CalendarMonthDaySelectorItemModel> {
+): List<DatePickerCalendar.CalendarMonthDaySelectorItemModel> {
     val allDays = generateDaysInMonth(month) // Includes full 6x7 grid
 
     return allDays.map { date ->
@@ -101,13 +97,13 @@ fun generateMonthDays(
         val isOutOfMonth = date.monthNumber != month.monthNumber
 
         val state = when {
-            isSelected -> CalendarMonthDayItemState.Filter.Selected
-            isInRange -> CalendarMonthDayItemState.Filter.Selected
-            isOutOfMonth -> CalendarMonthDayItemState.Filter.OutMonth
-            else -> CalendarMonthDayItemState.Filter.InMonth
+            isSelected -> DatePickerCalendar.CalendarMonthDayItemState.Filter.Selected
+            isInRange -> DatePickerCalendar.CalendarMonthDayItemState.Filter.Selected
+            isOutOfMonth -> DatePickerCalendar.CalendarMonthDayItemState.Filter.OutMonth
+            else -> DatePickerCalendar.CalendarMonthDayItemState.Filter.InMonth
         }
 
-        CalendarMonthDaySelectorItemModel(
+        DatePickerCalendar.CalendarMonthDaySelectorItemModel(
             label = date.dayOfMonth.toString(),
             date = date,
             state = state
@@ -146,6 +142,103 @@ fun rememberEmptySelectCalendarSelectorController(
             initialVisibleMonth = LocalDate.now().withDayOfMonth(1),
             selectionMode = selectionMode,
             coroutineScope = scope
+        )
+    }
+}
+
+data class EventCalendarState(
+    val selectedDate: LocalDate?,
+    val visibleMonth: LocalDate,
+    val days: List<EventCalendar.EventCalendarMonthDaySelectorItemModel>
+)
+
+class EventCalendarController(
+    initialSelectedDate: LocalDate? = null,
+    initialVisibleMonth: LocalDate,
+    private val coroutineScope: CoroutineScope,
+    private val activatedDatesProvider: suspend () -> Set<LocalDate>,
+    private val completedDatesProvider: suspend () -> Set<LocalDate>
+) {
+    private val _selectedDate = MutableStateFlow<LocalDate?>(initialSelectedDate ?: LocalDate.now())
+    private val _visibleMonth = MutableStateFlow(initialVisibleMonth)
+    private val _activatedDates = MutableStateFlow(emptySet<LocalDate>())
+    private val _completedDates = MutableStateFlow(emptySet<LocalDate>())
+
+    val state: StateFlow<EventCalendarState> = combine(
+        _visibleMonth, _activatedDates, _completedDates, _selectedDate
+    ) { month, activated, completed, selected ->
+        val days = generateEventCalendarDays(month, activated, completed, selected)
+        EventCalendarState(selected, month, days)
+    }.stateIn(
+        coroutineScope,
+        SharingStarted.Eagerly,
+        EventCalendarState(null, initialVisibleMonth, emptyList())
+    )
+
+    suspend fun refreshEvents() {
+        _activatedDates.value = activatedDatesProvider()
+        _completedDates.value = completedDatesProvider()
+    }
+
+    fun onDateClick(date: LocalDate) {
+        _selectedDate.value = date
+    }
+
+    fun loadPreviousMonth() {
+        _visibleMonth.value = _visibleMonth.value.minus(1, DateTimeUnit.MONTH)
+    }
+
+    fun loadNextMonth() {
+        _visibleMonth.value = _visibleMonth.value.plus(1, DateTimeUnit.MONTH)
+    }
+}
+
+fun generateEventCalendarDays(
+    month: LocalDate,
+    activatedDates: Set<LocalDate>,
+    completedDates: Set<LocalDate>,
+    selectedDate: LocalDate?
+): List<EventCalendar.EventCalendarMonthDaySelectorItemModel> {
+    val allDays = generateDaysInMonth(month)
+
+    return allDays.map { date ->
+        val state = when {
+            date == selectedDate -> EventCalendar.EventCalendarMonthDayItemState.Filter.Selected
+            date in activatedDates -> EventCalendar.EventCalendarMonthDayItemState.Filter.Activated
+            date in completedDates -> EventCalendar.EventCalendarMonthDayItemState.Filter.Completed
+            date.monthNumber != month.monthNumber -> EventCalendar.EventCalendarMonthDayItemState.Filter.OutMonth
+            else -> EventCalendar.EventCalendarMonthDayItemState.Filter.InMonth
+        }
+
+
+        EventCalendar.EventCalendarMonthDaySelectorItemModel(
+            label = date.dayOfMonth.toString(),
+            date = date,
+            state = state
+        )
+    }
+}
+
+@Composable
+fun rememberEventCalendarController(
+    activatedDatesProvider: suspend () -> Set<LocalDate>,
+    completedDatesProvider: suspend () -> Set<LocalDate>,
+    initialSelectedDate: LocalDate = LocalDate.now(),
+    initialMonth: LocalDate = LocalDate.now().withDayOfMonth(1)
+): EventCalendarController {
+    val scope = rememberCoroutineScope()
+    return remember(
+        activatedDatesProvider,
+        completedDatesProvider,
+        initialSelectedDate,
+        initialMonth
+    ) {
+        EventCalendarController(
+            initialSelectedDate = initialSelectedDate,
+            initialVisibleMonth = initialMonth,
+            coroutineScope = scope,
+            activatedDatesProvider = activatedDatesProvider,
+            completedDatesProvider = completedDatesProvider
         )
     }
 }

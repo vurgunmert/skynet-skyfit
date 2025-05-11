@@ -1,6 +1,7 @@
 package com.vurgun.skyfit.core.navigation
 
 import cafe.adriel.voyager.core.registry.ScreenProvider
+import kotlinx.datetime.LocalDate
 import kotlinx.serialization.Serializable
 
 @Serializable
@@ -29,7 +30,7 @@ sealed class SharedScreen : ScreenProvider {
     data object CommunityDetail: SharedScreen()
 
     // Calendar
-    data object UserActivityCalendar: SharedScreen()
+    data class UserActivityCalendar(val selectedDate: LocalDate? = null): SharedScreen()
     data object UserActivityCalendarSearch: SharedScreen()
 
     // Appointments
