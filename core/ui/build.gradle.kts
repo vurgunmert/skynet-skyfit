@@ -79,8 +79,6 @@ kotlin {
         }
 
         iosMain.dependencies {
-            implementation("org.jetbrains.compose.foundation:foundation:1.8.0")
-            implementation("org.jetbrains.compose.ui:ui:1.8.0")
         }
 
         desktopMain.dependencies {

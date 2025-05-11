@@ -3,13 +3,7 @@ package com.vurgun.skyfit.core.ui.components.image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.material.AlertDialog
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.runtime.setValue
+import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.ImageBitmap
 import com.mohamedrejeb.calf.core.LocalPlatformContext
@@ -21,19 +15,12 @@ import com.mohamedrejeb.calf.picker.rememberFilePickerLauncher
 import com.mohamedrejeb.calf.picker.toImageBitmap
 import com.vurgun.skyfit.core.ui.components.button.SkyButton
 import com.vurgun.skyfit.core.ui.components.button.SkyButtonSize
-import com.vurgun.skyfit.core.ui.components.button.SkyButtonVariant
 import com.vurgun.skyfit.core.ui.components.text.SkyText
 import com.vurgun.skyfit.core.ui.components.text.TextStyleType
-import com.vurgun.skyfit.core.ui.utils.AppPermission
-import com.vurgun.skyfit.core.ui.utils.PlatformPermissionManager
 import org.jetbrains.compose.resources.stringResource
 import skyfit.core.ui.generated.resources.Res
-import skyfit.core.ui.generated.resources.allow_action
-import skyfit.core.ui.generated.resources.cancel_action
 import skyfit.core.ui.generated.resources.dialog_image_too_large_text
 import skyfit.core.ui.generated.resources.dialog_image_too_large_title
-import skyfit.core.ui.generated.resources.dialog_permission_text
-import skyfit.core.ui.generated.resources.dialog_permission_title
 import skyfit.core.ui.generated.resources.ok_action
 
 sealed class ImagePickerType(val mode: FilePickerSelectionMode) {
@@ -116,7 +103,6 @@ sealed class ImagePickerType(val mode: FilePickerSelectionMode) {
 //    }
 //}
 
-
 @Composable
 fun SkyFitPickImageWrapper(
     selectionType: ImagePickerType = ImagePickerType.Single,
@@ -124,25 +110,10 @@ fun SkyFitPickImageWrapper(
     content: @Composable () -> Unit
 ) {
     val context = LocalPlatformContext.current
-    val scope = rememberCoroutineScope()
-
     var selectedFile by remember { mutableStateOf<KmpFile?>(null) }
     var showImageTooLargeDialog by remember { mutableStateOf(false) }
 
-    val initialPermGrant = PlatformPermissionManager.isGranted(AppPermission.Gallery)
-    val initialPermRationale = PlatformPermissionManager.shouldShowRationale(AppPermission.Gallery)
-
-    var isPermissionGranted by remember { mutableStateOf(initialPermGrant) }
-    var showRationaleDialog by remember { mutableStateOf(initialPermRationale) }
-    var triggerPermissionRequest by remember { mutableStateOf(false) }
-
-    if (triggerPermissionRequest) {
-        PlatformPermissionManager.requestPermission(AppPermission.Gallery) { granted ->
-            isPermissionGranted = granted
-            if (!granted) showRationaleDialog = true
-        }
-        triggerPermissionRequest = false
-    }
+    // Maybe Android 26 permissions
 
     val pickerLauncher = rememberFilePickerLauncher(
         type = FilePickerFileType.Image,
@@ -152,25 +123,16 @@ fun SkyFitPickImageWrapper(
         }
     )
 
-    val onClick = {
-        when {
-            isPermissionGranted -> pickerLauncher.launch()
-            showRationaleDialog -> showRationaleDialog = true
-            else -> triggerPermissionRequest = true
-        }
-    }
-
-    Box(modifier = Modifier.clickable(onClick = onClick)) {
+    Box(modifier = Modifier.clickable(onClick = pickerLauncher::launch)) {
         content()
     }
 
-    // Process selected file
+    // Process selected image
     LaunchedEffect(selectedFile) {
         selectedFile?.let { file ->
             try {
                 val bytes = file.readByteArray(context)
 
-                // Check file size: 10MB limit (10 * 1024 * 1024)
                 if (bytes.size > 10 * 1024 * 1024) {
                     showImageTooLargeDialog = true
                     return@let
@@ -184,45 +146,6 @@ fun SkyFitPickImageWrapper(
                 selectedFile = null
             }
         }
-    }
-
-    // Dialog: Permission
-    if (showRationaleDialog) {
-        AlertDialog(
-            onDismissRequest = { showRationaleDialog = false },
-            title = {
-                SkyText(
-                    text = stringResource(Res.string.dialog_permission_title),
-                    styleType = TextStyleType.BodyLargeSemibold
-                )
-            },
-            text = {
-                SkyText(
-                    text = stringResource(Res.string.dialog_permission_text),
-                    styleType = TextStyleType.BodyMediumRegular
-                )
-            },
-            confirmButton = {
-                SkyButton(
-                    label = stringResource(Res.string.allow_action),
-                    size = SkyButtonSize.Medium,
-                    onClick = {
-                        showRationaleDialog = false
-                        triggerPermissionRequest = true
-                    }
-                )
-            },
-            dismissButton = {
-                SkyButton(
-                    label = stringResource(Res.string.cancel_action),
-                    variant = SkyButtonVariant.Secondary,
-                    size = SkyButtonSize.Medium,
-                    onClick = {
-                        showRationaleDialog = false
-                    }
-                )
-            }
-        )
     }
 
     // Dialog: Image too large

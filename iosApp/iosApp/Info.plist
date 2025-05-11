@@ -39,6 +39,9 @@
 	<key>NSLocationWhenInUseUsageDescription</key>
 	<string>Konum bilginiz, size en yakın hizmetleri ve içerikleri gösterebilmemiz için gereklidir.
 </string>
+	<key>NSPhotoLibraryAddUsageDescription</key>
+	<string>Fotoğraflarınıza erişim, profil fotoğrafınızı seçebilmeniz veya içerik paylaşabilmeniz için gereklidir.
+</string>
 	<key>NSPhotoLibraryUsageDescription</key>
 	<string>Fotoğraflarınıza erişim, profil fotoğrafınızı seçebilmeniz veya içerik paylaşabilmeniz için gereklidir.
 </string>

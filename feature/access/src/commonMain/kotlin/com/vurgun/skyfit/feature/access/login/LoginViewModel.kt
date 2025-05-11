@@ -74,8 +74,10 @@ class LoginViewModel(
                     is AuthLoginResult.Error -> LoginEffect.ShowError(result.message)
                 }
                 _effect.emitOrNull(event)
+                _isLoading.value = false
             }.onFailure { error ->
                 _effect.emitOrNull(LoginEffect.ShowError(error.message))
+                _isLoading.value = false
             }
         }
     }

@@ -71,8 +71,10 @@ class LoginOTPVerificationViewModel(
                     }
                 }
                 _effect.emitOrNull(effect)
+                _isLoading.value = false
             }.onFailure { error ->
                 LoginOTPVerificationEffect.ShowError(error.message)
+                _isLoading.value = false
             }
         }
     }
