@@ -19,19 +19,18 @@ sealed class SharedScreen : ScreenProvider {
     data object Dashboard : SharedScreen()
 
     // Explore
-    data object ExploreTrainers: SharedScreen()
-    data object ExploreFacilities: SharedScreen()
-    data object ExploreExercises: SharedScreen()
-    data object ExploreBlogs: SharedScreen()
-    data object ExploreChallenges: SharedScreen()
-    data object ExploreCommunities: SharedScreen()
-    data object BlogDetail: SharedScreen()
-    data object ChallengeDetail: SharedScreen()
-    data object CommunityDetail: SharedScreen()
+    data object ExploreTrainers : SharedScreen()
+    data object ExploreFacilities : SharedScreen()
+    data object ExploreExercises : SharedScreen()
+    data object ExploreBlogs : SharedScreen()
+    data object ExploreChallenges : SharedScreen()
+    data object ExploreCommunities : SharedScreen()
+    data object BlogDetail : SharedScreen()
+    data object ChallengeDetail : SharedScreen()
+    data object CommunityDetail : SharedScreen()
 
     // Calendar
-    data class UserActivityCalendar(val selectedDate: LocalDate? = null): SharedScreen()
-    data object UserActivityCalendarSearch: SharedScreen()
+    data class UserActivityCalendar(val selectedDate: LocalDate? = null) : SharedScreen()
 
     // Appointments
     data object UserAppointmentListing : SharedScreen()
@@ -56,6 +55,7 @@ sealed class SharedScreen : ScreenProvider {
     data class UserProfileVisitor(val id: Int) : SharedScreen()
     data class FacilityProfileVisitor(val id: Int) : SharedScreen()
     data class TrainerProfileVisitor(val id: Int) : SharedScreen()
+
     // Profile - Schedule
     data class FacilitySchedule(val id: Int) : SharedScreen()
     data class TrainerSchedule(val id: Int) : SharedScreen()

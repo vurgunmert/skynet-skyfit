@@ -48,8 +48,8 @@ class UserActivityCalendarScreen(private val selectedDate: LocalDate? = null) : 
         CollectEffect(viewModel.effect) { effect ->
             when (effect) {
                 UserActivityCalendarEffect.NavigateToBack -> navigator.pop()
-                UserActivityCalendarEffect.NavigateToCalendarSearch -> {
-                    navigator.push(UserActivityCalendarSearchScreen())
+                is UserActivityCalendarEffect.NavigateToCalendarSearch -> {
+                    navigator.push(UserActivityCalendarSearchScreen(effect.date))
                 }
             }
         }
@@ -134,7 +134,7 @@ private fun MobileUserActivityCalendarScreen(
                     label = stringResource(Res.string.add_action),
                     leftIcon = painterResource(Res.drawable.ic_plus),
                     size = SkyButtonSize.Micro,
-                    onClick = {}
+                    onClick = { onAction(UserActivityCalendarAction.OnClickAdd) }
                 )
             }
 

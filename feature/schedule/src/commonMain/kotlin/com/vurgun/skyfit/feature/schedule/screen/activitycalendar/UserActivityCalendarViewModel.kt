@@ -28,7 +28,7 @@ sealed class UserActivityCalendarAction {
 
 sealed class UserActivityCalendarEffect {
     data object NavigateToBack : UserActivityCalendarEffect()
-    data object NavigateToCalendarSearch : UserActivityCalendarEffect()
+    data class NavigateToCalendarSearch(val date: LocalDate) : UserActivityCalendarEffect()
 }
 
 class UserActivityCalendarViewModel(
@@ -72,7 +72,9 @@ class UserActivityCalendarViewModel(
             }
 
             UserActivityCalendarAction.OnChangeCalendarMonth -> TODO()
-            UserActivityCalendarAction.OnClickAdd -> TODO()
+            UserActivityCalendarAction.OnClickAdd ->
+                emitEffect(UserActivityCalendarEffect.NavigateToCalendarSearch(_selectedDate.value))
+
             UserActivityCalendarAction.OnClickEvent -> TODO()
         }
     }
