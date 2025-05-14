@@ -1,21 +1,32 @@
+@file:OptIn(FlowPreview::class)
+
 package com.vurgun.skyfit.feature.schedule.screen.activitycalendar
 
 import cafe.adriel.voyager.core.model.ScreenModel
 import cafe.adriel.voyager.core.model.screenModelScope
 import com.vurgun.skyfit.core.data.schedule.domain.model.WorkoutCategories
+import com.vurgun.skyfit.core.data.schedule.domain.model.WorkoutCategory
 import com.vurgun.skyfit.core.data.schedule.domain.model.WorkoutType
-import com.vurgun.skyfit.core.data.schedule.domain.model.workoutTypes
+import com.vurgun.skyfit.core.data.schedule.domain.repository.UserCalendarRepository
 import com.vurgun.skyfit.core.data.utility.SingleSharedFlow
+import com.vurgun.skyfit.core.data.utility.UiStateDelegate
 import com.vurgun.skyfit.core.data.utility.emitIn
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.SharedFlow
-import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.FlowPreview
+import kotlinx.coroutines.flow.*
+import kotlinx.coroutines.launch
 
-data class UserActivityCalendarSearchState(
-    val searchQuery: String = "",
-    val selectedCategoryId: Int? = null
-)
+sealed class UserActivityCalendarSearchUiState {
+    object Loading : UserActivityCalendarSearchUiState()
+    data class Error(val message: String?) : UserActivityCalendarSearchUiState()
+    data class Content(
+        val searchQuery: String? = null,
+        val categories: List<WorkoutCategory> = emptyList(),
+        val selectedCategoryId: Int? = null,
+        val allWorkoutTypes: List<WorkoutType> = emptyList(),
+        val filteredWorkoutTypes: List<WorkoutType> = emptyList(),
+    ) : UserActivityCalendarSearchUiState()
+
+}
 
 sealed class UserActivityCalendarSearchAction {
     data object NavigateToBack : UserActivityCalendarSearchAction()
@@ -29,21 +40,30 @@ sealed class UserActivityCalendarSearchEffect {
     data object NavigateToNew : UserActivityCalendarSearchEffect()
 }
 
-class UserActivityCalendarSearchViewModel : ScreenModel {
+class UserActivityCalendarSearchViewModel(
+    private val calendarRepository: UserCalendarRepository
+) : ScreenModel {
 
-    private val _state = MutableStateFlow(UserActivityCalendarSearchState())
-    val state: StateFlow<UserActivityCalendarSearchState> = _state
+    private val _uiState = UiStateDelegate<UserActivityCalendarSearchUiState>(UserActivityCalendarSearchUiState.Loading)
+    val uiState = _uiState.asStateFlow()
 
     private val _effect = SingleSharedFlow<UserActivityCalendarSearchEffect>()
     val effect: SharedFlow<UserActivityCalendarSearchEffect> = _effect
 
-    private val workoutCategories = WorkoutCategories.ALL
-
-    private val _filteredWorkouts = MutableStateFlow<List<Pair<String, List<WorkoutType>>>>(emptyList())
-    val filteredWorkouts: StateFlow<List<Pair<String, List<WorkoutType>>>> = _filteredWorkouts
+    private val searchQueryFlow = MutableStateFlow<String?>(null)
+    val searchQuery = searchQueryFlow.asStateFlow()
 
     init {
-        updateWorkoutList()
+        loadData()
+
+        screenModelScope.launch {
+            searchQueryFlow
+                .debounce(300)
+                .distinctUntilChanged()
+                .collect { query ->
+                    updateWorkoutList(query)
+                }
+        }
     }
 
     fun onAction(action: UserActivityCalendarSearchAction) {
@@ -55,55 +75,56 @@ class UserActivityCalendarSearchViewModel : ScreenModel {
                 _effect.emitIn(screenModelScope, UserActivityCalendarSearchEffect.NavigateToNew)
 
             is UserActivityCalendarSearchAction.Search -> {
-                _state.update { it.copy(searchQuery = action.query.orEmpty()) }
-                updateWorkoutList()
+                searchQueryFlow.value = action.query
             }
 
-            is UserActivityCalendarSearchAction.SelectCategory -> {
-                _state.update { it.copy(selectedCategoryId = action.categoryId) }
-                updateWorkoutList()
-            }
+            is UserActivityCalendarSearchAction.SelectCategory -> selectCategory(action.categoryId)
         }
     }
 
-    private fun updateWorkoutList(locale: String = "tr") {
-        val current = _state.value
-        val query = current.searchQuery.trim()
-        val selected = current.selectedCategoryId
-        val effectiveCategoryId = if (query.isNotBlank()) null else selected
+    private fun loadData() {
+        screenModelScope.launch {
+            val workoutTypes = calendarRepository.getWorkoutEvents()
+                .getOrDefault(emptyList())
+                .map { WorkoutType(it.id, it.name) }
 
-        val filtered = workoutTypes.filter { workout ->
-            val matchesQuery = query.isBlank() ||
-                    workout.name[locale]?.contains(query, ignoreCase = true) == true ||
-                    workout.name["en"]?.contains(query, ignoreCase = true) == true
+            _uiState.update(
+                UserActivityCalendarSearchUiState.Content(
+                    categories = WorkoutCategories.ALL,
+                    allWorkoutTypes = workoutTypes
+                )
+            )
 
-            val matchesCategory = effectiveCategoryId == null || workout.categoryId == effectiveCategoryId
 
-            matchesQuery && matchesCategory
+            updateWorkoutList()
         }
+    }
 
-        val addedIds = mutableSetOf<Int>()
+    private fun updateWorkoutList(query: String? = null) {
+        val content = uiState.value as? UserActivityCalendarSearchUiState.Content ?: return
+        val searchQuery = query?.trim()
 
-        fun addOnce(list: List<WorkoutType>): List<WorkoutType> {
-            return list.filter { addedIds.add(it.id) } // only add if not already added
-        }
+        val filtered = content.allWorkoutTypes
+            .asSequence()
+            .filter { content.selectedCategoryId == null || it.categoryId == content.selectedCategoryId }
+            .filter { searchQuery.isNullOrEmpty() || it.name.contains(searchQuery, ignoreCase = true) }
+            .toList()
 
-        val newList = addOnce(filtered.filter { it.isNew })
-        val popularList = addOnce(filtered.filter { it.isPopular })
-        val others = addOnce(filtered) // remaining ones not in previous groups
-
-        val grouped = listOfNotNull(
-            if (newList.isNotEmpty()) "En yeni" to newList else null,
-            if (popularList.isNotEmpty()) "En popüler" to popularList else null,
-            if (others.isNotEmpty()) "Tümü" to others else null
+        _uiState.update(
+            content.copy(
+                filteredWorkoutTypes = filtered
+            )
         )
-
-        _filteredWorkouts.value = grouped
     }
 
-    fun getCategoryChips(locale: String = "tr"): List<Pair<Int?, String>> {
-        return listOf(null to "Tümü") + workoutCategories.map {
-            it.id to (it.displayName[locale] ?: it.displayName["en"] ?: "Kategori")
+    private fun selectCategory(categoryId: Int?) {
+        (uiState.value as? UserActivityCalendarSearchUiState.Content)?.let { content ->
+            if (content.selectedCategoryId == categoryId) {
+                _uiState.update(content.copy(selectedCategoryId = null))
+            } else {
+                _uiState.update(content.copy(selectedCategoryId = categoryId))
+            }
+            updateWorkoutList()
         }
     }
 }

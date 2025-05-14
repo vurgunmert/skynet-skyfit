@@ -1,16 +1,7 @@
 package com.vurgun.skyfit.feature.schedule.screen.activitycalendar
 
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
@@ -20,7 +11,6 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
@@ -31,9 +21,11 @@ import cafe.adriel.voyager.navigator.currentOrThrow
 import com.vurgun.skyfit.core.data.schedule.domain.model.WorkoutType
 import com.vurgun.skyfit.core.ui.components.button.PrimaryMicroButton
 import com.vurgun.skyfit.core.ui.components.chip.SecondaryPillChip
+import com.vurgun.skyfit.core.ui.components.loader.FullScreenLoaderContent
 import com.vurgun.skyfit.core.ui.components.special.SkyFitMobileScaffold
 import com.vurgun.skyfit.core.ui.components.special.SkyFitSearchTextInputComponent
 import com.vurgun.skyfit.core.ui.components.text.BodyMediumSemiboldText
+import com.vurgun.skyfit.core.ui.screen.ErrorScreen
 import com.vurgun.skyfit.core.ui.styling.SkyFitColor
 import com.vurgun.skyfit.core.ui.styling.SkyFitTypography
 import com.vurgun.skyfit.core.ui.utils.CollectEffect
@@ -49,6 +41,7 @@ class UserActivityCalendarSearchScreen(private val initialDate: LocalDate? = nul
     override fun Content() {
         val navigator = LocalNavigator.currentOrThrow
         val viewModel = koinScreenModel<UserActivityCalendarSearchViewModel>()
+        val uiState = viewModel.uiState.collectAsState()
 
         CollectEffect(viewModel.effect) { effect ->
             when (effect) {
@@ -60,33 +53,42 @@ class UserActivityCalendarSearchScreen(private val initialDate: LocalDate? = nul
             }
         }
 
-        MobileUserActivityCalendarSearchScreen(
-            goToBack = { navigator.pop() },
-            goToAddActivity = { },
-            viewModel = viewModel
-        )
+        when (uiState.value) {
+            is UserActivityCalendarSearchUiState.Content -> {
+                val content = (uiState.value as UserActivityCalendarSearchUiState.Content)
+                UserActivityCalendarSearchScreen_Compact(viewModel, content, viewModel::onAction)
+            }
+
+            is UserActivityCalendarSearchUiState.Error -> {
+                val message = (uiState.value as UserActivityCalendarSearchUiState.Error).message
+                ErrorScreen(message = message, onConfirm = { navigator.pop() })
+            }
+
+            UserActivityCalendarSearchUiState.Loading -> FullScreenLoaderContent()
+        }
+
+
     }
 
 }
 
 @Composable
-private fun MobileUserActivityCalendarSearchScreen(
-    goToBack: () -> Unit,
-    goToAddActivity: () -> Unit,
-    viewModel: UserActivityCalendarSearchViewModel
+private fun UserActivityCalendarSearchScreen_Compact(
+    viewModel: UserActivityCalendarSearchViewModel,
+    content: UserActivityCalendarSearchUiState.Content,
+    onAction: (UserActivityCalendarSearchAction) -> Unit,
 ) {
-    val groupedWorkouts by viewModel.filteredWorkouts.collectAsState()
 
     SkyFitMobileScaffold(
         topBar = {
             Column {
-                MobileUserActivityCalendarSearchScreenToolbarComponent(viewModel)
-                MobileUserActivityCalendarSearchScreenSearchComponent(viewModel)
-                ActivityCalendarSearchScreenFilterChips(viewModel)
+                MobileUserActivityCalendarSearchScreenToolbarComponent(onAction)
+                MobileUserActivityCalendarSearchScreenSearchComponent(viewModel, onAction)
+                ActivityCalendarSearchScreenFilterChips(content, onAction)
             }
         }
     ) {
-        if (groupedWorkouts.isEmpty()) {
+        if (content.filteredWorkoutTypes.isEmpty()) {
             Box(
                 modifier = Modifier.fillMaxSize(),
                 contentAlignment = Alignment.Center
@@ -102,13 +104,8 @@ private fun MobileUserActivityCalendarSearchScreen(
                     .fillMaxSize()
                     .padding(horizontal = 16.dp)
             ) {
-                groupedWorkouts.forEach { (title, items) ->
-                    item {
-                        CalendarActivityWorkoutsGroupTitle(title)
-                    }
-                    items(items) { workout ->
-                        CalendarActivityWorkoutItem(workout)
-                    }
+                items(content.filteredWorkoutTypes) { workout ->
+                    CalendarActivityWorkoutItem(workout)
                 }
             }
         }
@@ -117,7 +114,7 @@ private fun MobileUserActivityCalendarSearchScreen(
 
 
 @Composable
-private fun MobileUserActivityCalendarSearchScreenToolbarComponent(viewModel: UserActivityCalendarSearchViewModel) {
+private fun MobileUserActivityCalendarSearchScreenToolbarComponent(onAction: (UserActivityCalendarSearchAction) -> Unit) {
     Row(
         modifier = Modifier
             .fillMaxWidth()
@@ -128,7 +125,7 @@ private fun MobileUserActivityCalendarSearchScreenToolbarComponent(viewModel: Us
             painter = painterResource(Res.drawable.ic_chevron_left),
             contentDescription = null,
             modifier = Modifier.size(16.dp)
-                .clickable { viewModel.onAction(UserActivityCalendarSearchAction.NavigateToBack) }
+                .clickable { onAction(UserActivityCalendarSearchAction.NavigateToBack) }
         )
 
         Spacer(Modifier.weight(1f))
@@ -136,17 +133,17 @@ private fun MobileUserActivityCalendarSearchScreenToolbarComponent(viewModel: Us
         PrimaryMicroButton(
             text = "Yeni",
             rightIconRes = Res.drawable.ic_plus,
-            onClick = { viewModel.onAction(UserActivityCalendarSearchAction.NavigateToNew) }
+            onClick = { onAction(UserActivityCalendarSearchAction.NavigateToNew) }
         )
     }
 }
 
 @Composable
 private fun MobileUserActivityCalendarSearchScreenSearchComponent(
-    viewModel: UserActivityCalendarSearchViewModel
+    viewModel: UserActivityCalendarSearchViewModel,
+    onAction: (UserActivityCalendarSearchAction) -> Unit
 ) {
-    val state by viewModel.state.collectAsState()
-
+    val currentQuery by viewModel.searchQuery.collectAsState()
     Box(
         modifier = Modifier
             .fillMaxWidth()
@@ -156,12 +153,12 @@ private fun MobileUserActivityCalendarSearchScreenSearchComponent(
         SkyFitSearchTextInputComponent(
             modifier = Modifier.fillMaxWidth(),
             hint = "Antrenman, antrenör ya da spor salonu ara",
-            value = state.searchQuery,
+            value = currentQuery,
             onValueChange = { query ->
-                viewModel.onAction(UserActivityCalendarSearchAction.Search(query))
+                onAction(UserActivityCalendarSearchAction.Search(query))
             },
             onSearch = {
-                viewModel.onAction(UserActivityCalendarSearchAction.Search(state.searchQuery))
+                onAction(UserActivityCalendarSearchAction.Search(currentQuery))
             }
         )
     }
@@ -169,22 +166,18 @@ private fun MobileUserActivityCalendarSearchScreenSearchComponent(
 
 @Composable
 private fun ActivityCalendarSearchScreenFilterChips(
-    viewModel: UserActivityCalendarSearchViewModel
+    content: UserActivityCalendarSearchUiState.Content,
+    onAction: (UserActivityCalendarSearchAction) -> Unit
 ) {
-    val state by viewModel.state.collectAsState()
-    val categoryChips = remember { viewModel.getCategoryChips(locale = "tr") }
-
     LazyRow(
         modifier = Modifier.padding(horizontal = 12.dp, vertical = 8.dp),
         horizontalArrangement = Arrangement.spacedBy(8.dp)
     ) {
-        items(categoryChips) { (id, label) ->
-            val selected = state.searchQuery.isBlank() && state.selectedCategoryId == id
-
+        items(content.categories) { category ->
             SecondaryPillChip(
-                text = label,
-                selected = selected,
-                onClick = { viewModel.onAction(UserActivityCalendarSearchAction.SelectCategory(id)) }
+                text = category.displayName.getValue("tr"),
+                selected = category.id == content.selectedCategoryId,
+                onClick = { onAction(UserActivityCalendarSearchAction.SelectCategory(category.id)) }
             )
         }
     }
@@ -216,7 +209,7 @@ private fun CalendarActivityWorkoutItem(workoutType: WorkoutType) {
             )
             Spacer(Modifier.width(8.dp))
             BodyMediumSemiboldText(
-                text = workoutType.name["tr"].orEmpty(),
+                text = workoutType.name,
                 modifier = Modifier.weight(1f)
             )
             Spacer(Modifier.width(8.dp))
