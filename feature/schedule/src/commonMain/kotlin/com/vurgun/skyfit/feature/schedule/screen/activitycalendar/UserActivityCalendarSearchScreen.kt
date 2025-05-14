@@ -9,6 +9,7 @@ import androidx.compose.material.Divider
 import androidx.compose.material.Icon
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
@@ -48,9 +49,17 @@ class UserActivityCalendarSearchScreen(private val initialDate: LocalDate? = nul
                 UserActivityCalendarSearchEffect.NavigateToBack ->
                     navigator.pop()
 
-                UserActivityCalendarSearchEffect.NavigateToNew ->
-                    navigator.push(UserActivityCalendarAddActivityScreen())
+                is UserActivityCalendarSearchEffect.NavigateToNew ->
+                    navigator.push(EditWorkoutScreen(
+                        effect.date,
+                        effect.workoutType,
+                        effect.category
+                    ))
             }
+        }
+
+        LaunchedEffect(initialDate) {
+            viewModel.loadData(initialDate)
         }
 
         when (uiState.value) {
@@ -105,7 +114,9 @@ private fun UserActivityCalendarSearchScreen_Compact(
                     .padding(horizontal = 16.dp)
             ) {
                 items(content.filteredWorkoutTypes) { workout ->
-                    CalendarActivityWorkoutItem(workout)
+                    CalendarActivityWorkoutItem(workout, onClick = {
+                        onAction(UserActivityCalendarSearchAction.OnSelectWorkout(workout))
+                    })
                 }
             }
         }
@@ -133,7 +144,7 @@ private fun MobileUserActivityCalendarSearchScreenToolbarComponent(onAction: (Us
         PrimaryMicroButton(
             text = "Yeni",
             rightIconRes = Res.drawable.ic_plus,
-            onClick = { onAction(UserActivityCalendarSearchAction.NavigateToNew) }
+            onClick = { onAction(UserActivityCalendarSearchAction.OnSelectWorkout()) }
         )
     }
 }
@@ -194,11 +205,11 @@ private fun CalendarActivityWorkoutsGroupTitle(text: String) {
 }
 
 @Composable
-private fun CalendarActivityWorkoutItem(workoutType: WorkoutType) {
+private fun CalendarActivityWorkoutItem(workoutType: WorkoutType, onClick: (WorkoutType) -> Unit) {
     Box {
         Row(
             modifier = Modifier
-                .clickable { }
+                .clickable { onClick(workoutType) }
                 .fillMaxWidth()
                 .padding(horizontal = 16.dp, vertical = 8.dp),
             verticalAlignment = Alignment.CenterVertically

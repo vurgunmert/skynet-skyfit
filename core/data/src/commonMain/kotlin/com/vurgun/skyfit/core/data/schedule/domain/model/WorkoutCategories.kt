@@ -50,4 +50,8 @@ object WorkoutCategories {
             displayName = mapOf("en" to "Recovery", "tr" to "İyileşme")
         )
     )
+
+    fun find(id: Int): WorkoutCategory {
+        return ALL.first { it.id == id }
+    }
 }

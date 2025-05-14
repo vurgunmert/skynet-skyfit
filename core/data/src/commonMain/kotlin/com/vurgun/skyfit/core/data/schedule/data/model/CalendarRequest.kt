@@ -11,7 +11,7 @@ data class GetCalendarEventsRequest(
 
 @Serializable
 data class AddCalendarEventRequest(
-    val eventId: Int,
+    @SerialName(value = "eventId" )val workoutId: Int? = null,
     val eventName: String,
     @SerialName(value = "startDate") val startDateTime: String,
     @SerialName(value = "endDate") val endDateTime: String

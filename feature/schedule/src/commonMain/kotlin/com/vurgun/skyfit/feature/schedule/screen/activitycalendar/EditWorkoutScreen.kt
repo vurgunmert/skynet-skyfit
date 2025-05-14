@@ -1,47 +1,40 @@
 package com.vurgun.skyfit.feature.schedule.screen.activitycalendar
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.material.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.unit.dp
 import cafe.adriel.voyager.core.screen.Screen
+import cafe.adriel.voyager.koin.koinScreenModel
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
-import com.vurgun.skyfit.core.ui.components.special.ButtonSize
-import com.vurgun.skyfit.core.ui.components.special.ButtonState
-import com.vurgun.skyfit.core.ui.components.special.ButtonVariant
-import com.vurgun.skyfit.core.ui.components.special.SkyFitButtonComponent
-import com.vurgun.skyfit.core.ui.components.special.SkyFitMobileScaffold
-import com.vurgun.skyfit.core.ui.components.special.SkyFitScreenHeader
-import com.vurgun.skyfit.core.ui.components.special.SkyFitWheelPickerComponent
-import com.vurgun.skyfit.core.ui.styling.SkyFitColor
-import com.vurgun.skyfit.core.ui.styling.SkyFitTypography
+import com.vurgun.skyfit.core.data.schedule.domain.model.WorkoutCategory
+import com.vurgun.skyfit.core.data.schedule.domain.model.WorkoutType
+import com.vurgun.skyfit.core.ui.components.icon.ActionIcon
+import com.vurgun.skyfit.core.ui.components.loader.FullScreenLoaderContent
 import com.vurgun.skyfit.core.ui.components.schedule.SkyFitDailyActivityCanvas
 import com.vurgun.skyfit.core.ui.components.schedule.SkyFitDailyActivityItem
 import com.vurgun.skyfit.core.ui.components.schedule.SkyFitFourDigitClockComponent
+import com.vurgun.skyfit.core.ui.components.schedule.monthly.CalendarDateSelector
+import com.vurgun.skyfit.core.ui.components.schedule.monthly.rememberEmptySelectCalendarSelectorController
+import com.vurgun.skyfit.core.ui.components.special.*
+import com.vurgun.skyfit.core.ui.components.text.BodyMediumSemiboldText
+import com.vurgun.skyfit.core.ui.screen.ErrorScreen
+import com.vurgun.skyfit.core.ui.styling.SkyFitColor
+import com.vurgun.skyfit.core.ui.styling.SkyFitTypography
+import com.vurgun.skyfit.core.ui.utils.CollectEffect
+import com.vurgun.skyfit.feature.schedule.screen.lessons.LessonEditHoursRow
+import kotlinx.datetime.LocalDate
 import org.jetbrains.compose.resources.painterResource
-import skyfit.core.ui.generated.resources.Res
-import skyfit.core.ui.generated.resources.ic_clock
-import skyfit.core.ui.generated.resources.logo_skyfit
+import org.jetbrains.compose.resources.stringResource
+import skyfit.core.ui.generated.resources.*
 
 private enum class MobileUserActivityCalendarAddStep {
     ADDING,
@@ -49,29 +42,58 @@ private enum class MobileUserActivityCalendarAddStep {
     CONFIRM
 }
 
-class UserActivityCalendarAddActivityScreen : Screen {
+class EditWorkoutScreen(
+    val date: LocalDate,
+    val workoutType: WorkoutType? = null,
+    val workoutCategory: WorkoutCategory? = null
+) : Screen {
 
     @Composable
     override fun Content() {
         val navigator = LocalNavigator.currentOrThrow
+        val viewModel = koinScreenModel<EditWorkoutViewModel>()
+        val uiState by viewModel.uiState.collectAsState()
 
-        MobileUserActivityCalendarAddActivityScreen(
-            goToBack = { navigator.pop() }
-        )
+        CollectEffect(viewModel.effect) { effect ->
+            when (effect) {
+                EditWorkoutEffect.NavigateToBack -> navigator::pop
+            }
+        }
+
+        LaunchedEffect(Unit) {
+            viewModel.loadData(date, workoutType, workoutCategory)
+        }
+
+        when (uiState) {
+            is EditWorkoutUiState.Content -> {
+               val content = (uiState as EditWorkoutUiState.Content)
+                EditWorkoutScreen_Compact(content, viewModel::onAction)
+            }
+            is EditWorkoutUiState.Error -> {
+                val message = (uiState as EditWorkoutUiState.Error).message
+                ErrorScreen(message = message, onConfirm = { navigator.pop() })
+            }
+            EditWorkoutUiState.Loading -> FullScreenLoaderContent()
+        }
+
+
     }
 }
 
 @Composable
-private fun MobileUserActivityCalendarAddActivityScreen(
-    goToBack: () -> Unit
+private fun EditWorkoutScreen_Compact(
+    content: EditWorkoutUiState.Content,
+    onAction: (EditWorkoutAction) -> Unit,
 ) {
 
     val step = MobileUserActivityCalendarAddStep.ADDING
-    var activityName by remember { mutableStateOf("Yuruyus") }
+    var activityName by remember { mutableStateOf(content.workoutName.orEmpty()) }
+    val isDateSectionExpanded = remember { mutableStateOf(false) }
+    val dateController = rememberEmptySelectCalendarSelectorController(initialStartDate = content.initialDate)
 
     SkyFitMobileScaffold(
         topBar = {
-            SkyFitScreenHeader("Yeni Aktivite", onClickBack = goToBack)
+            SkyFitScreenHeader("Yeni Aktivite", onClickBack = { onAction(EditWorkoutAction.OnClickBack) })
         },
         bottomBar = {
             when (step) {
@@ -89,6 +111,39 @@ private fun MobileUserActivityCalendarAddActivityScreen(
             modifier = Modifier.fillMaxSize(),
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {
+
+            // Date Section
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .clickable { isDateSectionExpanded.value = !isDateSectionExpanded.value },
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                BodyMediumSemiboldText(
+                    text = stringResource(Res.string.date_label),
+                    color = SkyFitColor.text.secondary,
+                    modifier = Modifier.weight(1f)
+                )
+                val icon = if (isDateSectionExpanded.value) Res.drawable.ic_minus else Res.drawable.ic_plus
+                ActionIcon(
+                    res = icon,
+                    onClick = { isDateSectionExpanded.value = !isDateSectionExpanded.value }
+                )
+            }
+
+            if (isDateSectionExpanded.value) {
+                Spacer(Modifier.height(16.dp))
+                CalendarDateSelector(dateController) { selectedDate, _ ->
+                   onAction(EditWorkoutAction.OnSelectDate(selectedDate))
+                }
+            }
+
+            LessonEditHoursRow(
+                selectedStartTime = content.startTime.toString(),
+                selectedEndTime = content.endTime.toString(),
+                onStartTimeSelected = { onAction(EditWorkoutAction.OnUpdateStartTime(it)) },
+                onEndTimeSelected = { onAction(EditWorkoutAction.OnUpdateEndTime(it)) }
+            )
 
             when (step) {
                 MobileUserActivityCalendarAddStep.ADDING -> {

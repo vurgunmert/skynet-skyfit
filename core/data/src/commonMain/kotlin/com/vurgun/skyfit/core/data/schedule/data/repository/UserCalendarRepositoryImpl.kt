@@ -20,12 +20,12 @@ class UserCalendarRepositoryImpl(
 ) : UserCalendarRepository {
 
     override suspend fun addCalendarEvents(
-        eventId: Int,
+        workoutId: Int?,
         eventName: String,
         startDate: String,
         endDate: String
     ): Result<Unit> = ioResult(dispatchers) {
-        val calendarRequest = AddCalendarEventRequest(eventId, eventName, startDate, endDate)
+        val calendarRequest = AddCalendarEventRequest(workoutId, eventName, startDate, endDate)
         val token = tokenManager.getTokenOrThrow()
         apiService.addCalendarEvents(calendarRequest, token).mapOrThrow { Unit }
     }

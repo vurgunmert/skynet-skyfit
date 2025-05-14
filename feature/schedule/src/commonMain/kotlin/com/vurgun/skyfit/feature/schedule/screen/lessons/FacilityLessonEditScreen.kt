@@ -561,7 +561,7 @@ private fun EditLessonDatesRow(
 
 
 @Composable
-private fun LessonEditHoursRow(
+fun LessonEditHoursRow(
     selectedStartTime: String,
     selectedEndTime: String,
     onStartTimeSelected: (String) -> Unit,

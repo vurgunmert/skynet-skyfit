@@ -1,15 +1,8 @@
 package com.vurgun.skyfit.core.data.utility
 
-import kotlinx.datetime.Clock
-import kotlinx.datetime.DateTimeUnit
-import kotlinx.datetime.LocalDate
-import kotlinx.datetime.LocalDateTime
-import kotlinx.datetime.LocalTime
-import kotlinx.datetime.TimeZone
-import kotlinx.datetime.isoDayNumber
-import kotlinx.datetime.minus
-import kotlinx.datetime.plus
-import kotlinx.datetime.toLocalDateTime
+import kotlinx.datetime.*
+import kotlin.time.Duration
+import kotlin.time.Duration.Companion.hours
 
 // Helpers for LocalDate
 fun generateDaysInMonth(month: LocalDate): List<LocalDate> {
@@ -71,6 +64,42 @@ fun LocalDate.Companion.now(): LocalDate {
 
 fun LocalDateTime.Companion.now(): LocalDateTime =
     Clock.System.now().toLocalDateTime(TimeZone.currentSystemDefault())
+
+fun LocalDateTime.plusDuration(
+    duration: Duration,
+    timeZone: TimeZone = TimeZone.currentSystemDefault()
+): LocalDateTime {
+    val instant = this.toInstant(timeZone)
+    val newInstant = instant + duration
+    return newInstant.toLocalDateTime(timeZone)
+}
+
+fun LocalDateTime.roundUpToNextSlot(timeZone: TimeZone = TimeZone.currentSystemDefault()): LocalDateTime {
+    return if (this.minute <= 30) {
+        LocalDateTime(
+            year = this.year,
+            month = this.month,
+            dayOfMonth = this.dayOfMonth,
+            hour = this.hour,
+            minute = 30,
+            second = 0,
+            nanosecond = 0
+        )
+    } else {
+        val nextHour = this.toInstant(timeZone)
+            .plus(1.hours)
+            .toLocalDateTime(timeZone)
+        LocalDateTime(
+            year = nextHour.year,
+            month = nextHour.month,
+            dayOfMonth = nextHour.dayOfMonth,
+            hour = nextHour.hour,
+            minute = 0,
+            second = 0,
+            nanosecond = 0
+        )
+    }
+}
 
 fun LocalDateTime.isBeforeNow(): Boolean =
     this < LocalDateTime.now()
@@ -169,6 +198,13 @@ fun LocalDate.toServerFormatEndOfDate(): String {
     return "$year-$month-${day}T23:59:59.000Z"
 }
 
+fun LocalDateTime.formatToHHMMTime(): String {
+    val hour = this.hour.toString().padStart(2, '0')
+    val minute = this.minute.toString().padStart(2, '0')
+    return "$hour:$minute"
+}
+
+
 fun LocalDateTime.formatToServerTime(): String {
     val hour = this.hour.toString().padStart(2, '0')
     val minute = this.minute.toString().padStart(2, '0')
@@ -186,6 +222,7 @@ fun LocalDate.formatToSlashedDate(): String {
 fun String.parseServerToDateOnly(): LocalDate {
     return LocalDate.parse(this.substringBefore("T"))
 }
+
 fun String.parseServerToHHMMTime(): LocalTime {
     return LocalTime.parse(this.substring(0, 5))
 }
