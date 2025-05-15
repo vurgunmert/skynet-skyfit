@@ -92,7 +92,12 @@ class EditWorkoutViewModel(
         val workoutName = content.workoutName ?: return
 
 
+        content.initialDate
+        content.startTime
+        content.endTime
+
         screenModelScope.launch {
+            // TODO:
 
             calendarRepository.addCalendarEvents(
                 workoutId = content.workoutId,

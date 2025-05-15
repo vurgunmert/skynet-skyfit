@@ -4,11 +4,14 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicTextField
+import androidx.compose.material.Icon
 import androidx.compose.material.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.unit.dp
 import cafe.adriel.voyager.core.screen.Screen
@@ -66,17 +69,17 @@ class EditWorkoutScreen(
 
         when (uiState) {
             is EditWorkoutUiState.Content -> {
-               val content = (uiState as EditWorkoutUiState.Content)
+                val content = (uiState as EditWorkoutUiState.Content)
                 EditWorkoutScreen_Compact(content, viewModel::onAction)
             }
+
             is EditWorkoutUiState.Error -> {
                 val message = (uiState as EditWorkoutUiState.Error).message
                 ErrorScreen(message = message, onConfirm = { navigator.pop() })
             }
+
             EditWorkoutUiState.Loading -> FullScreenLoaderContent()
         }
-
-
     }
 }
 
@@ -93,14 +96,16 @@ private fun EditWorkoutScreen_Compact(
 
     SkyFitMobileScaffold(
         topBar = {
-            SkyFitScreenHeader("Yeni Aktivite", onClickBack = { onAction(EditWorkoutAction.OnClickBack) })
+            SkyFitScreenHeader(
+                title = stringResource(Res.string.new_activity_label),
+                onClickBack = { onAction(EditWorkoutAction.OnClickBack) })
         },
         bottomBar = {
             when (step) {
                 MobileUserActivityCalendarAddStep.ADDING -> Unit
                 MobileUserActivityCalendarAddStep.TIMING -> Unit
                 MobileUserActivityCalendarAddStep.CONFIRM -> {
-                    MobileUserActivityCalendarAddActivityScreenConfirmActionComponent(onClick = {
+                    EditWorkoutSubmitAction(onClick = {
 
                     })
                 }
@@ -108,7 +113,7 @@ private fun EditWorkoutScreen_Compact(
         }
     ) {
         Column(
-            modifier = Modifier.fillMaxSize(),
+            modifier = Modifier.fillMaxSize().padding(16.dp),
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {
 
@@ -134,10 +139,11 @@ private fun EditWorkoutScreen_Compact(
             if (isDateSectionExpanded.value) {
                 Spacer(Modifier.height(16.dp))
                 CalendarDateSelector(dateController) { selectedDate, _ ->
-                   onAction(EditWorkoutAction.OnSelectDate(selectedDate))
+                    onAction(EditWorkoutAction.OnSelectDate(selectedDate))
                 }
             }
 
+            Spacer(Modifier.height(16.dp))
             LessonEditHoursRow(
                 selectedStartTime = content.startTime.toString(),
                 selectedEndTime = content.endTime.toString(),
@@ -145,6 +151,7 @@ private fun EditWorkoutScreen_Compact(
                 onEndTimeSelected = { onAction(EditWorkoutAction.OnUpdateEndTime(it)) }
             )
 
+            Spacer(Modifier.height(16.dp))
             when (step) {
                 MobileUserActivityCalendarAddStep.ADDING -> {
                     MobileUserActivityCalendarAddActivityScreenInputComponent(
@@ -190,7 +197,7 @@ private fun MobileUserActivityCalendarAddActivityScreenInputComponent(
 
         Column(Modifier.fillMaxWidth()) {
             Text(
-                text = "Aktivite başlığı",
+                text = stringResource(Res.string.activity_title),
                 style = SkyFitTypography.bodySmallMedium
             )
             Spacer(Modifier.height(8.dp))
@@ -356,7 +363,7 @@ private fun MobileUserActivityCalendarAddActivityScreenTextHolderComponent(activ
 }
 
 @Composable
-private fun MobileUserActivityCalendarAddActivityScreenConfirmActionComponent(onClick: () -> Unit) {
+private fun EditWorkoutSubmitAction(onClick: () -> Unit) {
     Box(Modifier.fillMaxWidth().background(SkyFitColor.background.default).padding(16.dp), contentAlignment = Alignment.Center) {
         SkyFitButtonComponent(
             modifier = Modifier.fillMaxWidth(), text = "Aktiviteyi ekle",
@@ -405,4 +412,62 @@ private fun HourPicker(
         visibleItemCount = 5,
         modifier = Modifier.width(32.dp)
     )
+}
+
+@Composable
+fun TimeDurationWorkoutCard(
+    duration: String,
+    label: String,
+    modifier: Modifier = Modifier
+) {
+    Column(
+        modifier = modifier
+            .clip(RoundedCornerShape(16.dp))
+            .background(SkyFitColor.background.surfaceSecondary)
+            .padding(16.dp)
+    ) {
+        Row(
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.spacedBy(4.dp)
+        ) {
+            Icon(
+                painter = painterResource(Res.drawable.ic_clock),
+                contentDescription = null,
+                modifier = Modifier.size(16.dp),
+                tint = SkyFitColor.icon.default
+            )
+            Text(
+                text = duration,
+                style = SkyFitTypography.bodyXSmall
+            )
+        }
+        Spacer(Modifier.height(24.dp))
+        Text(
+            text = label,
+            style = SkyFitTypography.bodySmall.copy(color = SkyFitColor.text.secondary)
+        )
+    }
+}
+
+
+@OptIn(ExperimentalLayoutApi::class)
+@Composable
+fun WorkoutCardsList(cards: List<Pair<String, String>>) {
+    FlowRow(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(16.dp),
+        verticalArrangement = Arrangement.spacedBy(16.dp),
+        horizontalArrangement = Arrangement.spacedBy(16.dp)
+    ) {
+        cards.forEach { (duration, label) ->
+            TimeDurationWorkoutCard(
+                duration = duration,
+                label = label,
+                modifier = Modifier
+                    .weight(1f, fill = true)
+                    .aspectRatio(1f) // Optional: square look
+            )
+        }
+    }
 }

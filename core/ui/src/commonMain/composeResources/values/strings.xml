@@ -264,7 +264,8 @@
     <string name="dialog_image_too_large_title">Resim Çok Büyük</string>
     <string name="dialog_image_too_large_text">Lütfen 10MB'tan küçük bir resim seçin.</string>
 
-
+    <string name="new_activity_label">Yeni Aktivite</string>
+    <string name="activity_title">Aktivite başlığı</string>
 </resources>
 
 <!--    Use snake_case + purpose-based suffixes:-->

@@ -29,6 +29,8 @@ coil = "3.1.0"
 calf = "0.7.1"
 skiko = "0.9.4"
 
+khealth = "1.1.0"
+
 #pods-google-maps = "9.1.1"
 #pods-google-ios-maps-utils = "6.0.0"
 #pods-rive-runtime = "6.8.1"
@@ -77,6 +79,8 @@ ktor-serialization-json = { group = "io.ktor", name = "ktor-serialization-kotlin
 
 # Settings
 datastore-preferences-core = { group = "androidx.datastore", name = "datastore-preferences-core", version.ref = "datastore" }
+
+khealth = { module = "io.github.shubhamsinghshubham777:khealth", version.ref = "khealth" }
 
 [bundles]
 kotlin = ["kotlinx-datetime", "kotlinx-coroutines-core", "kotlinx-serialization"]

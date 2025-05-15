@@ -34,6 +34,7 @@ kotlin {
             implementation(libs.koin.core)
             implementation(libs.kotlinx.serialization)
             implementation(libs.datastore.preferences.core)
+            implementation(libs.khealth)
         }
     }
 }
