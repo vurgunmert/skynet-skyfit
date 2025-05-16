@@ -242,3 +242,4 @@ private val turkishDays = mapOf(
     1 to "Pazartesi", 2 to "Salı", 3 to "Çarşamba", 4 to "Perşembe",
     5 to "Cuma", 6 to "Cumartesi", 7 to "Pazar"
 )
+

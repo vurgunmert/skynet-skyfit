@@ -1,12 +1,12 @@
 [versions]
 # Kotlin
-kotlin = "2.1.10"
+kotlin = "2.1.20"
 kotlinxSerialization = "1.8.1"
 kotlinxDatetime = "0.6.2"
 kotlinxCoroutines = "1.10.2"
 # Compose
-compose = "1.7.3"
-composeHotReload = "1.0.0-alpha09"
+compose = "1.8.0"
+composeHotReload = "1.0.0-alpha10"
 
 # Android
 agp = "8.9.1"

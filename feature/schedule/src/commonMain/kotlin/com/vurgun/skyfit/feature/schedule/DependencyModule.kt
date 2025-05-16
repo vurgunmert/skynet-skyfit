@@ -1,6 +1,7 @@
 package com.vurgun.skyfit.feature.schedule
 
 import com.vurgun.skyfit.core.data.dataCoreModule
+import com.vurgun.skyfit.feature.schedule.screen.activitycalendar.EditWorkoutTimeViewModel
 import com.vurgun.skyfit.feature.schedule.screen.activitycalendar.EditWorkoutViewModel
 import com.vurgun.skyfit.feature.schedule.screen.lessons.FacilityLessonEditViewModel
 import com.vurgun.skyfit.feature.schedule.screen.lessons.FacilityLessonListingViewModel
@@ -22,6 +23,7 @@ val featureScheduleModule = module {
     factory { UserActivityCalendarSearchViewModel(get()) }
     factory { UserActivityCalendarViewModel(get()) }
     factory { EditWorkoutViewModel(get()) }
+    factory { EditWorkoutTimeViewModel(get()) }
 
     factory { FacilityLessonListingViewModel(get(), get(), get()) }
     factory { FacilityLessonEditViewModel(get(), get(), get(), get()) }

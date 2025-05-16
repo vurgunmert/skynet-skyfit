@@ -36,7 +36,7 @@ import com.vurgun.skyfit.core.ui.styling.SkyFitTypography
 import kotlin.math.roundToInt
 
 data class SkyFitDailyActivityItem(
-    val emoji: String,        // Aktivite simgesi (ör: 🍣, 🔥)
+    val emoji: String? = null,
     val name: String,         // Aktivite adı (ör: Öğün Hazırlığı)
     val startHourMinutes: Int, // Başlangıç saati ve dakikası (ör: 600 = 6:00)
     val startBlock: Int       // Dikey griddeki başlangıç bloğu (ör: 0, 1, 2...)

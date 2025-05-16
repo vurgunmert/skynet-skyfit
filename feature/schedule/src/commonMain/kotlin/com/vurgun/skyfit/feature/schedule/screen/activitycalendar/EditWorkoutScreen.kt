@@ -2,13 +2,33 @@ package com.vurgun.skyfit.feature.schedule.screen.activitycalendar
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.ExperimentalLayoutApi
+import androidx.compose.foundation.layout.FlowRow
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.aspectRatio
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.material.Icon
 import androidx.compose.material.Text
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
+import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -20,26 +40,41 @@ import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
 import com.vurgun.skyfit.core.data.schedule.domain.model.WorkoutCategory
 import com.vurgun.skyfit.core.data.schedule.domain.model.WorkoutType
-import com.vurgun.skyfit.core.ui.components.icon.ActionIcon
+import com.vurgun.skyfit.core.ui.components.icon.SkyIcon
+import com.vurgun.skyfit.core.ui.components.icon.SkyIconSize
 import com.vurgun.skyfit.core.ui.components.loader.FullScreenLoaderContent
+import com.vurgun.skyfit.core.ui.components.picker.DurationWheelPicker
+import com.vurgun.skyfit.core.ui.components.picker.TimeWheelPicker
+import com.vurgun.skyfit.core.ui.components.picker.rememberPickerState
+import com.vurgun.skyfit.core.ui.components.schedule.LessonSelectTimePopupMenu
 import com.vurgun.skyfit.core.ui.components.schedule.SkyFitDailyActivityCanvas
 import com.vurgun.skyfit.core.ui.components.schedule.SkyFitDailyActivityItem
 import com.vurgun.skyfit.core.ui.components.schedule.SkyFitFourDigitClockComponent
-import com.vurgun.skyfit.core.ui.components.schedule.monthly.CalendarDateSelector
-import com.vurgun.skyfit.core.ui.components.schedule.monthly.rememberEmptySelectCalendarSelectorController
-import com.vurgun.skyfit.core.ui.components.special.*
-import com.vurgun.skyfit.core.ui.components.text.BodyMediumSemiboldText
+import com.vurgun.skyfit.core.ui.components.special.ButtonSize
+import com.vurgun.skyfit.core.ui.components.special.ButtonState
+import com.vurgun.skyfit.core.ui.components.special.ButtonVariant
+import com.vurgun.skyfit.core.ui.components.special.SkyFitButtonComponent
+import com.vurgun.skyfit.core.ui.components.special.SkyFitMobileScaffold
+import com.vurgun.skyfit.core.ui.components.special.SkyFitScreenHeader
+import com.vurgun.skyfit.core.ui.components.special.SkyFitWheelPickerComponent
+import com.vurgun.skyfit.core.ui.components.text.SkyText
+import com.vurgun.skyfit.core.ui.components.text.TextStyleType
 import com.vurgun.skyfit.core.ui.screen.ErrorScreen
 import com.vurgun.skyfit.core.ui.styling.SkyFitColor
 import com.vurgun.skyfit.core.ui.styling.SkyFitTypography
 import com.vurgun.skyfit.core.ui.utils.CollectEffect
-import com.vurgun.skyfit.feature.schedule.screen.lessons.LessonEditHoursRow
+import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.datetime.LocalDate
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
-import skyfit.core.ui.generated.resources.*
+import skyfit.core.ui.generated.resources.Res
+import skyfit.core.ui.generated.resources.activity_title
+import skyfit.core.ui.generated.resources.ic_chevron_down
+import skyfit.core.ui.generated.resources.ic_clock
+import skyfit.core.ui.generated.resources.logo_skyfit
+import skyfit.core.ui.generated.resources.new_activity_label
 
-private enum class MobileUserActivityCalendarAddStep {
+private enum class EditWorkoutStep {
     ADDING,
     TIMING,
     CONFIRM
@@ -59,7 +94,12 @@ class EditWorkoutScreen(
 
         CollectEffect(viewModel.effect) { effect ->
             when (effect) {
-                EditWorkoutEffect.NavigateToBack -> navigator::pop
+                EditWorkoutEffect.NavigateToBack -> {
+                    navigator.pop()
+                }
+                is EditWorkoutEffect.NavigateToEditTime -> {
+                    navigator.push(EditWorkoutTimeScreen(effect.name, effect.date, effect.workoutId))
+                }
             }
         }
 
@@ -89,10 +129,8 @@ private fun EditWorkoutScreen_Compact(
     onAction: (EditWorkoutAction) -> Unit,
 ) {
 
-    val step = MobileUserActivityCalendarAddStep.ADDING
+    var step by remember { mutableStateOf<EditWorkoutStep>(EditWorkoutStep.ADDING) }
     var activityName by remember { mutableStateOf(content.workoutName.orEmpty()) }
-    val isDateSectionExpanded = remember { mutableStateOf(false) }
-    val dateController = rememberEmptySelectCalendarSelectorController(initialStartDate = content.initialDate)
 
     SkyFitMobileScaffold(
         topBar = {
@@ -102,9 +140,9 @@ private fun EditWorkoutScreen_Compact(
         },
         bottomBar = {
             when (step) {
-                MobileUserActivityCalendarAddStep.ADDING -> Unit
-                MobileUserActivityCalendarAddStep.TIMING -> Unit
-                MobileUserActivityCalendarAddStep.CONFIRM -> {
+                EditWorkoutStep.ADDING -> Unit
+                EditWorkoutStep.TIMING -> Unit
+                EditWorkoutStep.CONFIRM -> {
                     EditWorkoutSubmitAction(onClick = {
 
                     })
@@ -116,57 +154,24 @@ private fun EditWorkoutScreen_Compact(
             modifier = Modifier.fillMaxSize().padding(16.dp),
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {
-
-            // Date Section
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .clickable { isDateSectionExpanded.value = !isDateSectionExpanded.value },
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                BodyMediumSemiboldText(
-                    text = stringResource(Res.string.date_label),
-                    color = SkyFitColor.text.secondary,
-                    modifier = Modifier.weight(1f)
-                )
-                val icon = if (isDateSectionExpanded.value) Res.drawable.ic_minus else Res.drawable.ic_plus
-                ActionIcon(
-                    res = icon,
-                    onClick = { isDateSectionExpanded.value = !isDateSectionExpanded.value }
-                )
-            }
-
-            if (isDateSectionExpanded.value) {
-                Spacer(Modifier.height(16.dp))
-                CalendarDateSelector(dateController) { selectedDate, _ ->
-                    onAction(EditWorkoutAction.OnSelectDate(selectedDate))
-                }
-            }
-
-            Spacer(Modifier.height(16.dp))
-            LessonEditHoursRow(
-                selectedStartTime = content.startTime.toString(),
-                selectedEndTime = content.endTime.toString(),
-                onStartTimeSelected = { onAction(EditWorkoutAction.OnUpdateStartTime(it)) },
-                onEndTimeSelected = { onAction(EditWorkoutAction.OnUpdateEndTime(it)) }
-            )
-
-            Spacer(Modifier.height(16.dp))
             when (step) {
-                MobileUserActivityCalendarAddStep.ADDING -> {
+                EditWorkoutStep.ADDING -> {
                     MobileUserActivityCalendarAddActivityScreenInputComponent(
                         activityName = activityName,
                         editable = true,
                         onNameChanged = { activityName = it }
                     )
                     MobileUserActivityCalendarAddActivityScreenAddTimeActionComponent(onClick = {
-
+                        onAction(EditWorkoutAction.OnClickEditTime)
                     })
+                    EditWorkoutTimeRow(content)
                     MobileUserActivityCalendarHourlyComponent()
                 }
 
-                MobileUserActivityCalendarAddStep.TIMING -> {
-                    MobileUserActivityCalendarAddActivityScreenTimerComponent()
+                EditWorkoutStep.TIMING -> {
+                    MobileUserActivityCalendarAddActivityScreenTimerComponent({
+
+                    })
                     MobileUserActivityCalendarAddActivityScreenSavedTimePeriodsComponent()
                     Spacer(Modifier.weight(1f))
                     MobileUserActivityCalendarAddActivityScreenContinueActionsComponent(
@@ -175,15 +180,53 @@ private fun EditWorkoutScreen_Compact(
                     )
                 }
 
-                MobileUserActivityCalendarAddStep.CONFIRM -> {
-                    MobileUserActivityCalendarAddActivityScreenTimeHolderComponent(1, 30)
-                    MobileUserActivityCalendarAddActivityScreenTextHolderComponent(activityName)
-                    MobileUserActivityCalendarHourlyComponent()
+                EditWorkoutStep.CONFIRM -> {
+//                    MobileUserActivityCalendarAddActivityScreenTimeHolderComponent(1, 30)
+//                    MobileUserActivityCalendarAddActivityScreenTextHolderComponent(activityName)
+//                    MobileUserActivityCalendarHourlyComponent()
 
                 }
             }
         }
     }
+}
+
+@Composable
+private fun EditWorkoutTimeRow(
+    content: EditWorkoutUiState.Content
+) {
+    var isHoursMenuVisible by remember { mutableStateOf(false) }
+    var selectedTime by remember { mutableStateOf(content.startTime ?: "09:00") }
+
+    Row(modifier = Modifier.fillMaxWidth()) {
+
+        SkyText(
+            text = content.startDate.orEmpty(),
+            styleType = TextStyleType.BodyMediumSemibold
+        )
+
+        Spacer(Modifier.weight(1f))
+        Row(
+            modifier = Modifier.clickable { isHoursMenuVisible = true },
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            SkyText(
+                text = selectedTime,
+                styleType = TextStyleType.BodySmallSemibold
+            )
+            Spacer(Modifier.width(4.dp))
+            SkyIcon(Res.drawable.ic_chevron_down,
+                size = SkyIconSize.Small)
+        }
+    }
+
+    LessonSelectTimePopupMenu(
+        isOpen = isHoursMenuVisible,
+        onDismiss = { isHoursMenuVisible = false },
+        selectedTime = selectedTime,
+        onSelectionChanged = { selectedTime = it },
+        modifier = Modifier.width(124.dp)
+    )
 }
 
 @Composable
@@ -224,7 +267,10 @@ private fun MobileUserActivityCalendarAddActivityScreenInputComponent(
 
 @Composable
 private fun MobileUserActivityCalendarAddActivityScreenAddTimeActionComponent(onClick: () -> Unit) {
-    Box(Modifier.fillMaxWidth().background(SkyFitColor.background.default).padding(16.dp), contentAlignment = Alignment.Center) {
+    Box(
+        Modifier.fillMaxWidth().background(SkyFitColor.background.default).padding(16.dp),
+        contentAlignment = Alignment.Center
+    ) {
         SkyFitButtonComponent(
             modifier = Modifier.fillMaxWidth(), text = "Sure ekle",
             onClick = onClick,
@@ -237,61 +283,54 @@ private fun MobileUserActivityCalendarAddActivityScreenAddTimeActionComponent(on
 }
 
 @Composable
-private fun MobileUserActivityCalendarHourlyComponent() {
+fun MobileUserActivityCalendarHourlyComponent(modifier: Modifier = Modifier) {
     var activities by remember {
         mutableStateOf(
             listOf(
-                SkyFitDailyActivityItem(emoji = "🔥", name = "Yürüyüş", startHourMinutes = 900, startBlock = 2)
+                SkyFitDailyActivityItem(
+                    emoji = "🔥",
+                    name = "Yürüyüş",
+                    startHourMinutes = 900,
+                    startBlock = 2
+                )
             )
         )
     }
     var selectedBlock by remember { mutableStateOf(2) }
 
-    SkyFitDailyActivityCanvas(
-        activities = activities,
-        selectedBlock = selectedBlock,
-        onActivityUpdate = { updatedActivity ->
-            activities = activities.map {
-                if (it.name == updatedActivity.name) updatedActivity else it
+    Box(modifier.fillMaxSize()) {
+        SkyFitDailyActivityCanvas(
+            activities = activities,
+            selectedBlock = selectedBlock,
+            onActivityUpdate = { updatedActivity ->
+                activities = activities.map {
+                    if (it.name == updatedActivity.name) updatedActivity else it
+                }
+                selectedBlock = updatedActivity.startBlock
             }
-            selectedBlock = updatedActivity.startBlock
-        }
-    )
+        )
+    }
 }
 
 @Composable
-private fun MobileUserActivityCalendarAddActivityScreenTimerComponent() {
-    var selectedHour by remember { mutableStateOf(0) }
-    var selectedMinute by remember { mutableStateOf(1) }
-
-    Box(Modifier.fillMaxWidth().height(204.dp).padding(16.dp), contentAlignment = Alignment.Center) {
-
-        Row(
-            Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.Center,
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            HourPicker(
-                selected = selectedHour,
-                onSelected = { selectedHour = it }
-            )
-            Text("saat")
-            MinutePicker(
-                selected = selectedMinute,
-                onSelected = { selectedMinute = it }
-            )
-            Text("dakika")
-        }
-    }
+private fun MobileUserActivityCalendarAddActivityScreenTimerComponent(
+    onAction: (EditWorkoutAction) -> Unit
+) {
 
 }
+
 
 @Composable
 private fun MobileUserActivityCalendarAddActivityScreenSavedTimePeriodsComponent() {
     var activities by remember {
         mutableStateOf(
             listOf(
-                SkyFitDailyActivityItem(emoji = "🔥", name = "Yürüyüş", startHourMinutes = 900, startBlock = 2)
+                SkyFitDailyActivityItem(
+                    emoji = "🔥",
+                    name = "Yürüyüş",
+                    startHourMinutes = 900,
+                    startBlock = 2
+                )
             )
         )
     }
@@ -339,7 +378,7 @@ private fun MobileUserActivityCalendarAddActivityScreenContinueActionsComponent(
 }
 
 @Composable
-private fun MobileUserActivityCalendarAddActivityScreenTimeHolderComponent(hour: Int, minute: Int) {
+fun MobileUserActivityCalendarAddActivityScreenTimeHolderComponent(hour: Int, minute: Int) {
     var hour by remember { mutableStateOf(hour) }
     var minute by remember { mutableStateOf(minute) }
 
@@ -355,7 +394,7 @@ private fun MobileUserActivityCalendarAddActivityScreenTimeHolderComponent(hour:
 }
 
 @Composable
-private fun MobileUserActivityCalendarAddActivityScreenTextHolderComponent(activityName: String) {
+fun MobileUserActivityCalendarAddActivityScreenTextHolderComponent(activityName: String) {
     MobileUserActivityCalendarAddActivityScreenInputComponent(
         activityName = activityName,
         editable = false
@@ -364,7 +403,10 @@ private fun MobileUserActivityCalendarAddActivityScreenTextHolderComponent(activ
 
 @Composable
 private fun EditWorkoutSubmitAction(onClick: () -> Unit) {
-    Box(Modifier.fillMaxWidth().background(SkyFitColor.background.default).padding(16.dp), contentAlignment = Alignment.Center) {
+    Box(
+        Modifier.fillMaxWidth().background(SkyFitColor.background.default).padding(16.dp),
+        contentAlignment = Alignment.Center
+    ) {
         SkyFitButtonComponent(
             modifier = Modifier.fillMaxWidth(), text = "Aktiviteyi ekle",
             onClick = onClick,
@@ -412,62 +454,4 @@ private fun HourPicker(
         visibleItemCount = 5,
         modifier = Modifier.width(32.dp)
     )
-}
-
-@Composable
-fun TimeDurationWorkoutCard(
-    duration: String,
-    label: String,
-    modifier: Modifier = Modifier
-) {
-    Column(
-        modifier = modifier
-            .clip(RoundedCornerShape(16.dp))
-            .background(SkyFitColor.background.surfaceSecondary)
-            .padding(16.dp)
-    ) {
-        Row(
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.spacedBy(4.dp)
-        ) {
-            Icon(
-                painter = painterResource(Res.drawable.ic_clock),
-                contentDescription = null,
-                modifier = Modifier.size(16.dp),
-                tint = SkyFitColor.icon.default
-            )
-            Text(
-                text = duration,
-                style = SkyFitTypography.bodyXSmall
-            )
-        }
-        Spacer(Modifier.height(24.dp))
-        Text(
-            text = label,
-            style = SkyFitTypography.bodySmall.copy(color = SkyFitColor.text.secondary)
-        )
-    }
-}
-
-
-@OptIn(ExperimentalLayoutApi::class)
-@Composable
-fun WorkoutCardsList(cards: List<Pair<String, String>>) {
-    FlowRow(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(16.dp),
-        verticalArrangement = Arrangement.spacedBy(16.dp),
-        horizontalArrangement = Arrangement.spacedBy(16.dp)
-    ) {
-        cards.forEach { (duration, label) ->
-            TimeDurationWorkoutCard(
-                duration = duration,
-                label = label,
-                modifier = Modifier
-                    .weight(1f, fill = true)
-                    .aspectRatio(1f) // Optional: square look
-            )
-        }
-    }
 }

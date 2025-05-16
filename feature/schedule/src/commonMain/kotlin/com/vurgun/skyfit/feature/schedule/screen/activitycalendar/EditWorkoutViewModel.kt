@@ -16,7 +16,7 @@ sealed class EditWorkoutUiState {
     data class Error(val message: String?) : EditWorkoutUiState()
     data class Content(
         val workoutId: Int? = null,
-        val workoutName: String? = null,
+        val workoutName: String = "Workout",
         val initialDate: LocalDate? = null,
         val startDate: String? = null,
         val startTime: String? = null,
@@ -25,15 +25,20 @@ sealed class EditWorkoutUiState {
 }
 
 sealed class EditWorkoutAction {
-    object OnClickBack : EditWorkoutAction()
-    object AddWorkout : EditWorkoutAction()
-    data class OnUpdateStartTime(val time: String) : EditWorkoutAction()
-    data class OnUpdateEndTime(val time: String) : EditWorkoutAction()
+    data object OnClickBack : EditWorkoutAction()
+    data object OnClickSubmit : EditWorkoutAction()
+    data object OnClickEditTime : EditWorkoutAction()
+    data class TimeChanged(val hour: Int, val minute: Int) : EditWorkoutAction()
     data class OnSelectDate(val date: LocalDate? = null) : EditWorkoutAction()
 }
 
 sealed class EditWorkoutEffect {
     object NavigateToBack : EditWorkoutEffect()
+    data class NavigateToEditTime(
+        val date: LocalDate,
+        val workoutId: Int?,
+        val name: String
+    ): EditWorkoutEffect()
 }
 
 class EditWorkoutViewModel(
@@ -48,7 +53,7 @@ class EditWorkoutViewModel(
 
     fun onAction(action: EditWorkoutAction) {
         when (action) {
-            EditWorkoutAction.AddWorkout -> submitWorkout()
+            EditWorkoutAction.OnClickSubmit -> submitWorkout()
             EditWorkoutAction.OnClickBack ->
                 _effect.emitIn(screenModelScope, EditWorkoutEffect.NavigateToBack)
 
@@ -56,38 +61,42 @@ class EditWorkoutViewModel(
 
             }
 
-            is EditWorkoutAction.OnUpdateEndTime -> updateEndTime(action.time)
-            is EditWorkoutAction.OnUpdateStartTime -> updateStartTime(action.time)
+            is EditWorkoutAction.TimeChanged -> {
+
+            }
+
+            is EditWorkoutAction.OnClickEditTime -> navigateToEditTime()
         }
     }
 
+    fun navigateToEditTime() {
+        val content = (uiState.value as? EditWorkoutUiState.Content) ?: return
+        val date = content.initialDate ?: LocalDate.now()
+
+        _effect.emitIn(screenModelScope, EditWorkoutEffect.NavigateToEditTime(
+            date = date,
+            workoutId = content.workoutId,
+            name = content.workoutName
+        ))
+    }
+
     fun loadData(initialDate: LocalDate, workoutType: WorkoutType?, category: WorkoutCategory?) {
-        val startTime = LocalDateTime.now()
+        val startTime = LocalDateTime.now().roundUpToNextSlot()
         val endTime = startTime.roundUpToNextSlot()
 
         _uiState.update(
             EditWorkoutUiState.Content(
                 initialDate = initialDate,
                 workoutId = workoutType?.id,
-                workoutName = workoutType?.name,
-                startDate = initialDate.formatToServerDate(),
+                workoutName = workoutType?.let { "${workoutType.emojiId} ${workoutType.name}" } ?: "WORKOUT",
+                startDate = initialDate.toTurkishLongDate(),
                 startTime = startTime.formatToHHMMTime(),
                 endTime = endTime.formatToHHMMTime(),
             )
         )
     }
 
-    private fun updateStartTime(time: String) {
-        val content = (uiState.value as? EditWorkoutUiState.Content) ?: return
-        _uiState.update(content.copy(startTime = time))
-    }
-
-    private fun updateEndTime(time: String) {
-        val content = (uiState.value as? EditWorkoutUiState.Content) ?: return
-        _uiState.update(content.copy(endTime = time))
-    }
-
-    private fun submitWorkout() {
+    fun submitWorkout() {
         val content = (uiState.value as? EditWorkoutUiState.Content) ?: return
         val workoutName = content.workoutName ?: return
 
