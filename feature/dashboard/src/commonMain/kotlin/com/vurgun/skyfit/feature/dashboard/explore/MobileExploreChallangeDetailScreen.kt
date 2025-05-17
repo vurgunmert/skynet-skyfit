@@ -1,6 +1,7 @@
 package com.vurgun.skyfit.feature.dashboard.explore
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -202,20 +203,37 @@ private fun LeaderboardRow(entry: LeaderboardEntry) {
 }
 
 @Composable
-private fun TimeFilterSelector() {
-    Row(horizontalArrangement = Arrangement.spacedBy(4.dp)) {
-        listOf("1A", "1H", "1G").forEach { label ->
+fun TimeFilterSelector(
+    options: List<String> = listOf("Y", "6A", "3A", "1A", "H"),
+    selected: String = "H",
+    onSelect: (String) -> Unit = {}
+) {
+    Row(
+        horizontalArrangement = Arrangement.spacedBy(8.dp),
+        verticalAlignment = Alignment.CenterVertically,
+        modifier = Modifier.padding(horizontal = 8.dp)
+    ) {
+        options.forEach { label ->
+            val isSelected = label == selected
             Box(
                 modifier = Modifier
-                    .clip(RoundedCornerShape(8.dp))
-                    .background(if (label == "1A") Color.Cyan else Color.DarkGray)
-                    .padding(horizontal = 8.dp, vertical = 4.dp)
+                    .clip(CircleShape)
+                    .background(
+                        if (isSelected) Color(0xFF1D2C36) else Color.Transparent
+                    )
+                    .clickable { onSelect(label) }
+                    .padding(horizontal = 10.dp, vertical = 6.dp)
             ) {
-                Text(text = label, fontSize = 12.sp, color = Color.White)
+                Text(
+                    text = label,
+                    fontSize = 14.sp,
+                    color = if (isSelected) Color.White else Color.Gray
+                )
             }
         }
     }
 }
+
 
 private data class LeaderboardEntry(val rank: Int, val name: String, val crowns: Int, val steps: String)
 

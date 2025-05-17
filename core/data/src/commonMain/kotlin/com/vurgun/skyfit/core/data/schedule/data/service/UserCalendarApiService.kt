@@ -4,6 +4,7 @@ import com.vurgun.skyfit.core.data.schedule.data.model.AddCalendarEventRequest
 import com.vurgun.skyfit.core.data.schedule.data.model.CalendarEventDTO
 import com.vurgun.skyfit.core.data.schedule.data.model.GetCalendarEventsRequest
 import com.vurgun.skyfit.core.data.schedule.data.model.WorkoutEventDTO
+import com.vurgun.skyfit.core.data.shared.data.model.EmptyDTO
 import com.vurgun.skyfit.core.network.ApiClient
 import com.vurgun.skyfit.core.network.ApiResult
 import io.ktor.client.request.*
@@ -17,8 +18,8 @@ class UserCalendarApiService(private val apiClient: ApiClient) {
         const val GET_WORKOUT_EVENTS = "get/events"
     }
 
-    suspend fun addCalendarEvents(request: AddCalendarEventRequest, token: String): ApiResult<List<WorkoutEventDTO>> {
-        return apiClient.safeApiCall<List<WorkoutEventDTO>> {
+    suspend fun addCalendarEvents(request: AddCalendarEventRequest, token: String): ApiResult<EmptyDTO> {
+        return apiClient.safeApiCall<EmptyDTO> {
             method = HttpMethod.Post
             bearerAuth(token)
             url(Endpoint.ADD_WORKOUT_EVENTS)

@@ -54,8 +54,8 @@ class UserActivityCalendarScreen(private val selectedDate: LocalDate? = null) : 
             }
         }
 
-        LaunchedEffect(Unit) {
-            viewModel.loadData(initialDate = selectedDate)
+        LaunchedEffect(selectedDate) {
+            viewModel.loadData(selectedDate)
         }
 
         when (uiState) {
@@ -139,6 +139,8 @@ private fun MobileUserActivityCalendarScreen(
             }
 
             MobileUserActivityEventList(events)
+
+            Spacer(Modifier.height(124.dp))
         }
     }
 }

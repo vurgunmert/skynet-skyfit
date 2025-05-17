@@ -13,6 +13,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Path
 import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.graphics.drawscope.Stroke
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.drawText
@@ -274,7 +275,7 @@ private fun MobileDashboardHomeTrainerGraph() {
             TimeFilterSelector(selectedPeriod) { selectedPeriod = it }
         }
         Spacer(modifier = Modifier.height(8.dp))
-        MemberChangeLineChart(
+        ChangeLineChart(
             dataPoints = dataPoints,
             labels = listOf("Pzts", "Sal", "Çar", "Per", "Cum", "Cmrts", "Paz")
         )
@@ -295,90 +296,95 @@ private fun TimeFilterSelector(selectedPeriod: String, onPeriodChange: (String) 
         }
     }
 }
-
 @Composable
-fun MemberChangeLineChart(dataPoints: List<Int>, labels: List<String>) {
+fun ChangeLineChart(
+    dataPoints: List<Int>,
+    labels: List<String>,
+    modifier: Modifier = Modifier
+) {
     val textMeasurer = rememberTextMeasurer()
 
-    Canvas(modifier = Modifier.fillMaxWidth().height(150.dp)) {
-        val maxValue = dataPoints.maxOrNull() ?: 1
-        val stepX = size.width / (dataPoints.size - 1)
-        val stepY = size.height / maxValue.toFloat()
-        val horizontalSteps = 3 // Number of horizontal lines
+    // Chart padding
+    val chartPadding = 32.dp
+    val chartPaddingPx = with(LocalDensity.current) { chartPadding.toPx() }
 
-        // Draw horizontal grid lines with text labels
-        for (i in 0..horizontalSteps) {
-            val y = size.height - (i * size.height / horizontalSteps)
+    Column(modifier = modifier) {
+        Canvas(
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(180.dp)
+        ) {
+            val maxValue = dataPoints.maxOrNull()?.takeIf { it > 0 } ?: 1
+            val points = dataPoints.mapIndexed { i, value ->
+                val x = chartPaddingPx + (size.width - 2 * chartPaddingPx) / (dataPoints.size - 1) * i
+                val y = size.height - chartPaddingPx - (value / maxValue.toFloat()) * (size.height - 2 * chartPaddingPx)
+                Offset(x, y)
+            }
 
-            drawLine(
-                color = Color.Gray.copy(alpha = 0.4f),
-                start = Offset(0f, y),
-                end = Offset(size.width, y),
-                strokeWidth = 1.dp.toPx()
-            )
+            // Draw horizontal grid lines
+            val lineCount = 4
+            repeat(lineCount + 1) { i ->
+                val ratio = i / lineCount.toFloat()
+                val y = chartPaddingPx + (size.height - 2 * chartPaddingPx) * (1f - ratio)
 
-            // Draw text using `TextMeasurer`
-            val textLayoutResult = textMeasurer.measure(
-                text = AnnotatedString("${(i * maxValue / horizontalSteps)}"),
-                style = TextStyle(color = Color.White, fontSize = 12.sp)
-            )
+                drawLine(
+                    color = Color.Gray.copy(alpha = 0.4f),
+                    start = Offset(chartPaddingPx, y),
+                    end = Offset(size.width - chartPaddingPx, y),
+                    strokeWidth = 1.dp.toPx()
+                )
 
-            drawText(
-                textLayoutResult,
-                topLeft = Offset(10f, y - textLayoutResult.size.height / 2) // Center align with grid line
-            )
-        }
+                val valueLabel = (ratio * maxValue).toInt().toString()
 
-        // Smooth path for the chart using cubic Bézier curves only at turning points
-        val path = Path().apply {
-            moveTo(0f, size.height - (dataPoints[0] * stepY))
+                val textLayoutResult = textMeasurer.measure(
+                    text = AnnotatedString(valueLabel),
+                    style = TextStyle(color = Color.Gray, fontSize = 12.sp)
+                )
 
-            for (i in 1 until dataPoints.size) {
-                val x1 = (i - 1) * stepX
-                val y1 = size.height - (dataPoints[i - 1] * stepY)
-                val x2 = i * stepX
-                val y2 = size.height - (dataPoints[i] * stepY)
+                drawText(
+                    textLayoutResult,
+                    topLeft = Offset(4.dp.toPx(), y - textLayoutResult.size.height / 2)
+                )
+            }
 
-                if (i > 1 && i < dataPoints.size - 1) {
-                    // Detect turning points (peaks/valleys)
-                    val prevDiff = dataPoints[i - 1] - dataPoints[i - 2]
-                    val nextDiff = dataPoints[i] - dataPoints[i - 1]
+            // Smooth path
+            val path = Path().apply {
+                moveTo(points.first().x, points.first().y)
 
-                    if (prevDiff.sign != nextDiff.sign) {
-                        // Smooth arc at turning points
-                        cubicTo(
-                            x1 + stepX / 2, y1,
-                            x2 - stepX / 2, y2,
-                            x2, y2
-                        )
-                        continue
+                for (i in 1 until points.size) {
+                    val prev = points[i - 1]
+                    val curr = points[i]
+                    val mid = Offset((prev.x + curr.x) / 2, (prev.y + curr.y) / 2)
+
+                    quadraticBezierTo(prev.x, prev.y, mid.x, mid.y)
+
+                    if (i == points.lastIndex) {
+                        lineTo(curr.x, curr.y)
                     }
                 }
-
-                // Default: Straight line for normal segments
-                lineTo(x2, y2)
             }
+
+            drawPath(
+                path = path,
+                color = Color.Cyan,
+                style = Stroke(width = 3.dp.toPx(), cap = StrokeCap.Round)
+            )
         }
 
-        drawPath(
-            path,
-            color = Color.Cyan,
-            style = Stroke(width = 3.dp.toPx(), cap = StrokeCap.Round)
-        )
-    }
-
-    // Labels under the graph
-    Row(
-        modifier = Modifier
-            .padding(top = 8.dp)
-            .fillMaxWidth(),
-        horizontalArrangement = Arrangement.SpaceBetween
-    ) {
-        labels.forEach { label ->
-            Text(text = label, fontSize = 12.sp, color = Color.Gray)
+        // Labels under the chart
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = chartPadding),
+            horizontalArrangement = Arrangement.SpaceBetween
+        ) {
+            labels.forEach { label ->
+                Text(text = label, fontSize = 12.sp, color = Color.Gray)
+            }
         }
     }
 }
+
 
 @Composable
 private fun TrainerUpcomingAppointments(

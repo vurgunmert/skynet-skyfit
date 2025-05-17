@@ -12,9 +12,9 @@ internal object CalendarEventMapper {
 
     fun CalendarEventDTO.toDomainCalendarEvent(): CalendarEvent {
         val startDateTime =
-            Instant.parse(this.startDate).toLocalDateTime(TimeZone.currentSystemDefault())
+            Instant.parse(this.startDate).toLocalDateTime(TimeZone.UTC)
         val endDateTime =
-            Instant.parse(this.endDate).toLocalDateTime(TimeZone.currentSystemDefault())
+            Instant.parse(this.endDate).toLocalDateTime(TimeZone.UTC)
 
         return CalendarEvent(
             calendarEventId = this.calendarEventId,

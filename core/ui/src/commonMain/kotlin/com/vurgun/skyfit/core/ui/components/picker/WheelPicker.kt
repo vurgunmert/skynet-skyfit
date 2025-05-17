@@ -1,36 +1,33 @@
 package com.vurgun.skyfit.core.ui.components.picker
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.gestures.snapping.rememberSnapFlingBehavior
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.layout.onSizeChanged
-import androidx.compose.ui.platform.LocalDensity
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.vurgun.skyfit.core.ui.components.text.SkyText
@@ -188,7 +185,7 @@ fun TimeWheelPicker(
 
 
 @Composable
-fun DurationWheelPicker(
+fun MVDurationWheelPicker(
     hourState: PickerState,
     minuteState: PickerState,
     modifier: Modifier = Modifier,
@@ -200,32 +197,38 @@ fun DurationWheelPicker(
     Row(
         modifier = modifier
             .height(height)
-            .width(172.dp)
+            .width(IntrinsicSize.Min)
             .padding(horizontal = 16.dp),
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.Center
     ) {
-        // Hour Picker
-        LabeledWheelPicker(
+        MVNumberWheelPicker(
             items = (0..23).map { it.toString().padStart(2, '0') },
-            label = "saat",
             state = hourState,
             itemHeight = itemHeight,
             visibleItemCount = visibleItemCount
         )
 
-        Spacer(modifier = Modifier.width(16.dp))
-
-        // Minute Picker
-        LabeledWheelPicker(
+        Spacer(Modifier.width(16.dp))
+        SkyText(
+            text = "saat",
+            styleType = TextStyleType.BodySmall
+        )
+        Spacer(Modifier.width(16.dp))
+        MVNumberWheelPicker(
             items = (0..59).map { it.toString().padStart(2, '0') },
-            label = "dakika",
             state = minuteState,
             itemHeight = itemHeight,
             visibleItemCount = visibleItemCount
         )
+        Spacer(Modifier.width(16.dp))
+        SkyText(
+            text = "dakika",
+            styleType = TextStyleType.BodySmall
+        )
     }
 }
+
 
 @Composable
 fun rememberPickerState(initialItem: String = ""): PickerState {
@@ -237,77 +240,64 @@ class PickerState(initialItem: String) {
 }
 
 @Composable
-fun LabeledWheelPicker(
+fun MVNumberWheelPicker(
     items: List<String>,
-    label: String,
     state: PickerState = rememberPickerState(),
     itemHeight: Dp,
     visibleItemCount: Int
 ) {
+    val initialIndexInItems = items.indexOf(state.selectedItem).coerceAtLeast(0)
+
     val listScrollCount = Int.MAX_VALUE
     val middleOffset = visibleItemCount / 2
     val listScrollMiddle = listScrollCount / 2
-    val startIndex = listScrollMiddle - (listScrollMiddle % items.size)
+    val startIndex = listScrollMiddle - (listScrollMiddle % items.size) + initialIndexInItems
+    val listState = rememberLazyListState(initialFirstVisibleItemIndex = startIndex)
 
     fun getItem(index: Int) = items[index % items.size]
-
-    val listState = rememberLazyListState(initialFirstVisibleItemIndex = startIndex)
     val flingBehavior = rememberSnapFlingBehavior(lazyListState = listState)
 
-    val itemHeightPx = remember { mutableIntStateOf(0) }
-    val itemHeightDp = with(LocalDensity.current) { itemHeightPx.value.toDp() }
+    val selectedIndex = remember { derivedStateOf { listState.firstVisibleItemIndex } }
 
-    LaunchedEffect(listState) {
-        snapshotFlow { listState.firstVisibleItemIndex }
-            .map { index -> getItem(index + middleOffset) }
-            .distinctUntilChanged()
-            .collect { state.selectedItem = it }
+    LaunchedEffect(state.selectedItem) {
+        val selectedIndexInItems = items.indexOf(state.selectedItem)
+        if (selectedIndexInItems != -1) {
+            val targetIndex = listScrollMiddle - (listScrollMiddle % items.size) + selectedIndexInItems
+            listState.animateScrollToItem(targetIndex)
+        }
     }
 
-    Box(modifier = Modifier.wrapContentWidth()) {
+    Box(modifier = Modifier.width(34.dp)) {
         LazyColumn(
             state = listState,
             flingBehavior = flingBehavior,
             modifier = Modifier
                 .height(itemHeight * visibleItemCount)
-                .width(60.dp),
+                .fillMaxWidth(),
             contentPadding = PaddingValues(vertical = itemHeight * middleOffset),
             verticalArrangement = Arrangement.spacedBy(0.dp),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             items(listScrollCount) { index ->
-                SkyText(
-                    text = getItem(index),
+                val isSelected = index == selectedIndex.value
+                Box(
                     modifier = Modifier
                         .height(itemHeight)
-                        .onSizeChanged { itemHeightPx.value = it.height },
-                    styleType = TextStyleType.BodyMediumSemibold,
-                    color = SkyFitColor.text.secondary
-                )
-            }
-        }
-
-        // Selected item + label in center row
-        Box(
-            modifier = Modifier
-                .align(Alignment.Center)
-                .fillMaxWidth()
-                .height(itemHeight),
-            contentAlignment = Alignment.Center
-        ) {
-            Row(
-                verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.Center
-            ) {
-                SkyText(
-                    text = state.selectedItem,
-                    styleType = TextStyleType.BodyMediumSemibold
-                )
-                Spacer(modifier = Modifier.width(4.dp))
-                SkyText(
-                    text = label,
-                    styleType = TextStyleType.BodySmallSemibold
-                )
+                        .fillMaxWidth(),
+                    contentAlignment = Alignment.Center
+                ) {
+                    SkyText(
+                        text = getItem(index),
+                        styleType = if (isSelected)
+                            TextStyleType.Heading4
+                        else
+                            TextStyleType.BodyLarge,
+                        color = if (isSelected)
+                            SkyFitColor.text.default
+                        else
+                            SkyFitColor.text.secondary
+                    )
+                }
             }
         }
     }

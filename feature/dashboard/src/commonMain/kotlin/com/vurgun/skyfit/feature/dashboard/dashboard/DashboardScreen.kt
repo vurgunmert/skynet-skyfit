@@ -14,14 +14,26 @@ import com.vurgun.skyfit.core.navigation.SharedScreen
 import com.vurgun.skyfit.core.navigation.findRootNavigator
 import com.vurgun.skyfit.core.navigation.push
 import com.vurgun.skyfit.core.ui.components.special.SkyFitScaffold
+import com.vurgun.skyfit.core.ui.utils.LocalWindowSize
+import com.vurgun.skyfit.core.ui.utils.WindowSize
 import com.vurgun.skyfit.feature.dashboard.DashboardScreen
 import com.vurgun.skyfit.feature.dashboard.component.BottomNavigationBar
 
 class DashboardMainScreen : Screen {
     @Composable
     override fun Content() {
-        val appNavigator = LocalNavigator.currentOrThrow.findRootNavigator()
+        val windowSize = LocalWindowSize.current
 
+        if (windowSize == WindowSize.EXPANDED) {
+            Expanded()
+        } else {
+            Compact()
+        }
+    }
+
+    @Composable
+    private fun Compact() {
+        val appNavigator = LocalNavigator.currentOrThrow
         val homeScreen = rememberScreen(DashboardScreen.Home)
         val profileScreen = rememberScreen(DashboardScreen.Profile)
 
@@ -39,6 +51,17 @@ class DashboardMainScreen : Screen {
             ) {
                 CurrentScreen()
             }
+        }
+    }
+
+    @Composable
+    private fun Expanded() {
+        val appNavigator = LocalNavigator.currentOrThrow
+        val homeScreen = rememberScreen(DashboardScreen.Home)
+        val profileScreen = rememberScreen(DashboardScreen.Profile)
+
+        Navigator(homeScreen) { dashboardNavigator ->
+            CurrentScreen()
         }
     }
 }

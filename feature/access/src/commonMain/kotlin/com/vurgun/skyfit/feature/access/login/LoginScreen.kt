@@ -183,9 +183,10 @@ private fun MobileLoginWithPhoneContentGroup(
     }
 }
 
+@OptIn(ExperimentalLayoutApi::class)
 @Composable
 private fun LegalActionGroup(onClickPrivacyPolicy: () -> Unit, onClickTermsAndConditions: () -> Unit) {
-    Row(Modifier.fillMaxWidth().padding(horizontal = 8.dp)) {
+    FlowRow (Modifier.fillMaxWidth().padding(horizontal = 8.dp)) {
         SecondaryMediumUnderlinedText(
             text = "Gizlilik Politikasına",
             modifier = Modifier.clickable(onClick = onClickPrivacyPolicy)

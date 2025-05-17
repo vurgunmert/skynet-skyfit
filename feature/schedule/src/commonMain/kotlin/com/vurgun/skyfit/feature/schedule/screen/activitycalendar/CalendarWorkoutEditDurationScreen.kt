@@ -2,27 +2,11 @@ package com.vurgun.skyfit.feature.schedule.screen.activitycalendar
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.FlowRow
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.aspectRatio
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Icon
 import androidx.compose.material.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -35,15 +19,16 @@ import com.vurgun.skyfit.core.ui.components.button.SkyButton
 import com.vurgun.skyfit.core.ui.components.button.SkyButtonSize
 import com.vurgun.skyfit.core.ui.components.button.SkyButtonVariant
 import com.vurgun.skyfit.core.ui.components.loader.FullScreenLoaderContent
+import com.vurgun.skyfit.core.ui.components.picker.MVDurationWheelPicker
+import com.vurgun.skyfit.core.ui.components.picker.rememberPickerState
 import com.vurgun.skyfit.core.ui.components.special.SkyFitMobileScaffold
 import com.vurgun.skyfit.core.ui.components.special.SkyFitScreenHeader
 import com.vurgun.skyfit.core.ui.screen.ErrorScreen
 import com.vurgun.skyfit.core.ui.styling.SkyFitColor
 import com.vurgun.skyfit.core.ui.styling.SkyFitTypography
 import com.vurgun.skyfit.core.ui.utils.CollectEffect
-import com.vurgun.skyfit.feature.schedule.screen.lessons.LessonEditHoursRow
-import kotlinx.coroutines.flow.map
-import kotlinx.datetime.LocalDate
+import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.datetime.LocalDateTime
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
 import skyfit.core.ui.generated.resources.Res
@@ -51,16 +36,16 @@ import skyfit.core.ui.generated.resources.cancel_action
 import skyfit.core.ui.generated.resources.continue_action
 import skyfit.core.ui.generated.resources.ic_clock
 
-class EditWorkoutTimeScreen(
+class CalendarWorkoutEditDurationScreen(
     val name: String,
-    val date: LocalDate,
+    val startDateTime: LocalDateTime,
     val workoutEventId: Int?,
 ) : Screen {
 
     @Composable
     override fun Content() {
         val navigator = LocalNavigator.currentOrThrow
-        val viewModel = koinScreenModel<EditWorkoutTimeViewModel>()
+        val viewModel = koinScreenModel<CalendarWorkoutEditDurationViewModel>()
         val uiState by viewModel.uiState.collectAsState()
 
         CollectEffect(viewModel.effect) { effect ->
@@ -68,24 +53,33 @@ class EditWorkoutTimeScreen(
                 EditWorkoutTimeEffect.NavigateToBack -> {
                     navigator.pop()
                 }
-                EditWorkoutTimeEffect.NavigateToEditWorkoutConfirm -> {
-                    navigator.push(EditWorkoutConfirmScreen(viewModel))
+
+                is EditWorkoutTimeEffect.NavigateToEditWorkoutConfirm -> {
+                    navigator.push(
+                        CalendarWorkoutEditConfirmScreen(
+                            startDateTime = effect.startDateTime,
+                            endDateTime = effect.endDateTime,
+                            workoutName = effect.workoutName,
+                            workoutId = effect.workoutId
+                        )
+                    )
                 }
             }
         }
 
         LaunchedEffect(viewModel) {
-            viewModel.loadData(name, date, workoutEventId)
+            viewModel.loadData(name, startDateTime, workoutEventId)
         }
 
-        when(uiState) {
-            EditWorkoutTimeUiState.Loading -> FullScreenLoaderContent()
-            is EditWorkoutTimeUiState.Error -> {
-               val message = (uiState as EditWorkoutTimeUiState.Error).message
-               ErrorScreen(message = message, onConfirm = { navigator.pop() })
+        when (uiState) {
+            EditWorkoutDurationUiState.Loading -> FullScreenLoaderContent()
+            is EditWorkoutDurationUiState.Error -> {
+                val message = (uiState as EditWorkoutDurationUiState.Error).message
+                ErrorScreen(message = message, onConfirm = { navigator.pop() })
             }
-            is EditWorkoutTimeUiState.Content -> {
-                val content = uiState as EditWorkoutTimeUiState.Content
+
+            is EditWorkoutDurationUiState.Content -> {
+                val content = uiState as EditWorkoutDurationUiState.Content
 
                 WorkoutTimeContent(
                     content = content,
@@ -99,9 +93,25 @@ class EditWorkoutTimeScreen(
 
 @Composable
 private fun WorkoutTimeContent(
-    content: EditWorkoutTimeUiState.Content,
+    content: EditWorkoutDurationUiState.Content,
     onAction: (EditWorkoutTimeAction) -> Unit,
 ) {
+    val hourState = rememberPickerState()
+    val minuteState = rememberPickerState()
+
+    LaunchedEffect(content.durationHours, content.durationMinutes) {
+        hourState.selectedItem = content.durationHours.toString().padStart(2, '0')
+        minuteState.selectedItem = content.durationMinutes.toString().padStart(2, '0')
+    }
+
+    LaunchedEffect(hourState, minuteState) {
+        snapshotFlow { hourState.selectedItem to minuteState.selectedItem }
+            .distinctUntilChanged()
+            .collect { (hour, minute) ->
+                onAction(EditWorkoutTimeAction.OnUpdateDuration(hour, minute))
+            }
+    }
+
     SkyFitMobileScaffold(
         topBar = {
             SkyFitScreenHeader(
@@ -114,22 +124,27 @@ private fun WorkoutTimeContent(
                 .fillMaxSize()
                 .padding(16.dp)
         ) {
+            Box(
+                Modifier.fillMaxWidth().padding(16.dp),
+                contentAlignment = Alignment.Center
+            ) {
+                MVDurationWheelPicker(
+                    hourState = hourState,
+                    minuteState = minuteState,
+                    visibleItemCount = 5,
+                    itemHeight = 40.dp
+                )
+            }
 
             Spacer(Modifier.height(16.dp))
-            LessonEditHoursRow(
-                selectedStartTime = content.startTime,
-                selectedEndTime = content.endTime,
-                onStartTimeSelected = { onAction(EditWorkoutTimeAction.OnUpdateStartTime(it)) },
-                onEndTimeSelected = { onAction(EditWorkoutTimeAction.OnUpdateEndTime(it)) }
-            )
 
             WorkoutCardsList(
                 cards = listOf(
-                    Pair("00:10:00", "Yürüyüş"),
+                    Pair("01:30:00", "Yürüyüş"),
                     Pair("00:20:00", "Alt karin sporu"),
                     Pair("00:15:00", "Kosma"),
                 ),
-                onSelect = { onAction(EditWorkoutTimeAction.OnClickDuration(it)) }
+                onSelect = { onAction(EditWorkoutTimeAction.OnClickStoredDuration(it)) }
             )
 
             Spacer(Modifier.weight(1f))
@@ -164,7 +179,6 @@ fun TimeDurationWorkoutCard(
 ) {
     Column(
         modifier = modifier
-            .clip(RoundedCornerShape(16.dp))
             .background(SkyFitColor.background.surfaceSecondary)
             .padding(16.dp)
     ) {
@@ -191,6 +205,7 @@ fun TimeDurationWorkoutCard(
     }
 }
 
+@OptIn(ExperimentalLayoutApi::class)
 @Composable
 fun WorkoutCardsList(
     cards: List<Pair<String, String>>,
@@ -210,6 +225,7 @@ fun WorkoutCardsList(
                 modifier = Modifier
                     .weight(1f, fill = true)
                     .aspectRatio(1f)
+                    .clip(RoundedCornerShape(16.dp))
                     .clickable { onSelect(duration) }
             )
         }

@@ -27,7 +27,7 @@ class UserCalendarRepositoryImpl(
     ): Result<Unit> = ioResult(dispatchers) {
         val calendarRequest = AddCalendarEventRequest(workoutId, eventName, startDate, endDate)
         val token = tokenManager.getTokenOrThrow()
-        apiService.addCalendarEvents(calendarRequest, token).mapOrThrow { Unit }
+        apiService.addCalendarEvents(calendarRequest, token).mapOrThrow { }
     }
 
     override suspend fun getCalendarEvents(

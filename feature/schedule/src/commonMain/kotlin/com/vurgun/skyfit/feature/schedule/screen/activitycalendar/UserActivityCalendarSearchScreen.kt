@@ -50,10 +50,9 @@ class UserActivityCalendarSearchScreen(private val initialDate: LocalDate? = nul
                     navigator.pop()
 
                 is UserActivityCalendarSearchEffect.NavigateToNew ->
-                    navigator.push(EditWorkoutScreen(
+                    navigator.push(CalendarWorkoutEditFormScreen(
                         effect.date,
-                        effect.workoutType,
-                        effect.category
+                        effect.workoutType
                     ))
             }
         }

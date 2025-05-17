@@ -8,25 +8,11 @@ import androidx.compose.runtime.setValue
 
 @Composable
 fun MobileUserActivityHourlyCalendarComponent() {
-    var activities by remember {
-        mutableStateOf(
-            listOf(
-                SkyFitDailyActivityItem(emoji = "🔥", name = "Yürüyüş", startHourMinutes = 900, startBlock = 2),
-                SkyFitDailyActivityItem(emoji = "🔥", name = "Ogun Hazirligi", startHourMinutes = 1200, startBlock = 4),
-                SkyFitDailyActivityItem(emoji = "🔥", name = "Bacak Antrenmani", startHourMinutes = 1800, startBlock = 5)
-            )
-        )
-    }
-    var selectedBlock by remember { mutableStateOf(2) }
-
-    SkyFitDailyActivityCanvas(
-        activities = activities,
-        selectedBlock = selectedBlock,
-        onActivityUpdate = { updatedActivity ->
-            activities = activities.map {
-                if (it.name == updatedActivity.name) updatedActivity else it
-            }
-            selectedBlock = updatedActivity.startBlock
-        }
+    val activities = listOf(
+        CalendarWorkoutTimeBlockItem(name = "Yürüyüş", startTime = "15:00"),
+        CalendarWorkoutTimeBlockItem(name = "Öğün Hazırlığı", startTime = "18:00"),
+        CalendarWorkoutTimeBlockItem(name = "Bacak Antrenmanı", startTime = "21:00")
     )
+
+    CalendarWorkoutTimeBlockGrid(activities = activities)
 }

@@ -227,6 +227,11 @@ fun String.parseServerToHHMMTime(): LocalTime {
     return LocalTime.parse(this.substring(0, 5))
 }
 
+fun String.toMinutesOfDay(): Int {
+    val (hour, minute) = this.split(":").map { it.toIntOrNull() ?: 0 }
+    return hour * 60 + minute
+}
+
 fun LocalDate.toTurkishLongDate(): String {
     val monthName = turkishMonths[monthNumber] ?: ""
     val dayName = turkishDays[dayOfWeek.isoDayNumber] ?: ""
@@ -243,3 +248,21 @@ private val turkishDays = mapOf(
     5 to "Cuma", 6 to "Cumartesi", 7 to "Pazar"
 )
 
+fun durationBetween(start: LocalDateTime, end: LocalDateTime, timeZone: TimeZone = TimeZone.currentSystemDefault()): Duration {
+    val startInstant = start.toInstant(timeZone)
+    val endInstant = end.toInstant(timeZone)
+    return endInstant - startInstant
+}
+
+fun daysBetween(start: LocalDate, end: LocalDate): Int {
+    return end.toEpochDays() - start.toEpochDays()
+}
+
+data class DurationComponents(val hours: Int, val minutes: Int)
+
+fun Duration.toHourMinute(): DurationComponents {
+    val totalMinutes = this.inWholeMinutes
+    val hours = (totalMinutes / 60).toInt()
+    val minutes = (totalMinutes % 60).toInt()
+    return DurationComponents(hours, minutes)
+}

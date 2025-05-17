@@ -24,8 +24,8 @@ data class Dimensions(
     val mobileMaxWidth: Dp = 430.dp,
     val mobileMinWidth: Dp = 390.dp,
 
-    val desktopMinWidthPx: Int = 800,
-    val desktopMinHeightPx: Int = 600
+    val desktopMinWidthPx: Int = 300,
+    val desktopMinHeightPx: Int = 200
 )
 
 val LocalDimensions = compositionLocalOf { Dimensions() }

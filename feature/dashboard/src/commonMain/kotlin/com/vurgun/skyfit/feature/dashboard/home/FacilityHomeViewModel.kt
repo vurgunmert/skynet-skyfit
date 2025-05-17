@@ -12,6 +12,7 @@ import com.vurgun.skyfit.core.data.schedule.data.model.LessonSessionItemViewData
 import com.vurgun.skyfit.core.data.utility.SingleSharedFlow
 import com.vurgun.skyfit.core.data.utility.UiStateDelegate
 import com.vurgun.skyfit.core.data.utility.emitOrNull
+import com.vurgun.skyfit.feature.dashboard.home.mobile.HomeFacilityStat
 import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.launch
 
@@ -21,7 +22,13 @@ sealed interface FacilityHomeUiState {
     data class Content(
         val facility: FacilityDetail,
         val profile: FacilityProfile,
-        val appointments: List<LessonSessionItemViewData> = emptyList()
+        val appointments: List<LessonSessionItemViewData> = emptyList(),
+        val stats: List<HomeFacilityStat> = listOf(
+            HomeFacilityStat("Aktif Üye", "327", "+53%", true),
+            HomeFacilityStat("Aktif Dersler", "12", "0%", null),
+            HomeFacilityStat("SkyFit Kazancın", "₺3120", "+53%", true),
+            HomeFacilityStat("Profil Görüntülenmesi", "213", "-2%", false)
+        )
     ) : FacilityHomeUiState
 }
 

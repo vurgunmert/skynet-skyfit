@@ -29,12 +29,16 @@ import com.vurgun.skyfit.core.ui.components.special.SkyFitMobileScaffold
 import com.vurgun.skyfit.core.ui.screen.ErrorScreen
 import com.vurgun.skyfit.core.ui.utils.CollectEffect
 import com.vurgun.skyfit.core.ui.utils.LocalWindowSize
+import com.vurgun.skyfit.core.ui.utils.WindowSize
 import com.vurgun.skyfit.feature.dashboard.component.EmptyFacilityAppointmentContent
 import com.vurgun.skyfit.feature.dashboard.component.MobileDashboardHomeUpcomingAppointmentsComponent
 import com.vurgun.skyfit.feature.dashboard.home.FacilityHomeAction
 import com.vurgun.skyfit.feature.dashboard.home.FacilityHomeEffect
 import com.vurgun.skyfit.feature.dashboard.home.FacilityHomeUiState
 import com.vurgun.skyfit.feature.dashboard.home.FacilityHomeViewModel
+import com.vurgun.skyfit.feature.dashboard.home.desktop.FacilityHomeExtendedScreen
+import com.vurgun.skyfit.feature.dashboard.home.desktop.MobileDashboardHomeFacilityGraph
+import com.vurgun.skyfit.feature.dashboard.home.desktop.StatCardGrid
 import org.jetbrains.compose.resources.stringResource
 import skyfit.core.ui.generated.resources.Res
 import skyfit.core.ui.generated.resources.refresh_action
@@ -69,7 +73,9 @@ class FacilityHomeScreen : Screen {
         }
 
         when (uiState) {
-            FacilityHomeUiState.Loading -> FullScreenLoaderContent()
+            FacilityHomeUiState.Loading ->
+                FullScreenLoaderContent()
+
             is FacilityHomeUiState.Error -> {
                 val message = (uiState as FacilityHomeUiState.Error).message
                 ErrorScreen(
@@ -81,7 +87,13 @@ class FacilityHomeScreen : Screen {
 
             is FacilityHomeUiState.Content -> {
                 val content = uiState as FacilityHomeUiState.Content
-                FacilityHomeCompact(content, viewModel::onAction)
+
+                when(windowSize) {
+                    WindowSize.COMPACT,
+                    WindowSize.MEDIUM,
+                    WindowSize.EXPANDED -> FacilityHomeExtendedScreen(content, viewModel::onAction)
+                }
+
             }
         }
     }
@@ -108,39 +120,36 @@ private fun FacilityHomeCompact(
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {
 
-            if (content.appointments.isEmpty()) {
-                EmptyFacilityAppointmentContent(
-                    assignedFacilityId = content.facility.gymId,
-                    onClickAdd = { onAction(FacilityHomeAction.OnClickLessons) }
-                )
-            } else {
-                MobileDashboardHomeUpcomingAppointmentsComponent(
-                    appointments = content.appointments,
-                    onClickShowAll = { onAction(FacilityHomeAction.OnClickLessons) }
-                )
-            }
+            FacilityDashboardAppointments(content, onAction)
 
+            MobileDashboardHomeFacilityStatisticsComponent()
+
+            MobileDashboardHomeTrainerClassScheduleComponent()
             Spacer(Modifier.height(128.dp))
         }
     }
 }
 
 @Composable
-fun MobileDashboardHomeFacilityStatisticsComponent() {
-    Column(
-        modifier = Modifier
-            .size(320.dp, 544.dp)
-            .background(Color.Black, RoundedCornerShape(12.dp))
-            .padding(16.dp)
-    ) {
-        MobileDashboardHomeFacilityStatisticsOverview()
-        Spacer(modifier = Modifier.height(16.dp))
-        MobileDashboardHomeFacilityGraph()
+internal fun FacilityDashboardAppointments(
+    content: FacilityHomeUiState.Content,
+    onAction: (FacilityHomeAction) -> Unit
+) {
+    if (content.appointments.isEmpty()) {
+        EmptyFacilityAppointmentContent(
+            assignedFacilityId = content.facility.gymId,
+            onClickAdd = { onAction(FacilityHomeAction.OnClickLessons) }
+        )
+    } else {
+        MobileDashboardHomeUpcomingAppointmentsComponent(
+            appointments = content.appointments,
+            onClickShowAll = { onAction(FacilityHomeAction.OnClickLessons) }
+        )
     }
 }
 
 @Composable
-private fun MobileDashboardHomeFacilityStatisticsOverview() {
+fun MobileDashboardHomeFacilityStatisticsComponent() {
     val stats = listOf(
         HomeFacilityStat("Aktif Üye", "327", "+53%", true),
         HomeFacilityStat("Aktif Dersler", "12", "0%", null),
@@ -148,7 +157,15 @@ private fun MobileDashboardHomeFacilityStatisticsOverview() {
         HomeFacilityStat("Profil Görüntülenmesi", "213", "-2%", false)
     )
 
-    FacilityGridStatsLayout(stats)
+    Column(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(16.dp),
+    ) {
+        StatCardGrid(stats)
+
+        MobileDashboardHomeFacilityGraph()
+    }
 }
 
 @Composable
@@ -163,6 +180,7 @@ private fun FacilityGridStatsLayout(stats: List<HomeFacilityStat>) {
         }
     }
 }
+
 
 @Composable
 private fun MobileDashboardHomeFacilityStatCard(stat: HomeFacilityStat) {
@@ -197,25 +215,7 @@ private fun MobileDashboardHomeFacilityStatCard(stat: HomeFacilityStat) {
     }
 }
 
-@Composable
-private fun MobileDashboardHomeFacilityGraph() {
-    Column {
-        Row(
-            modifier = Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.SpaceBetween
-        ) {
-            Text(text = "Üye Değişimi Grafiği", fontSize = 14.sp, color = Color.White, fontWeight = FontWeight.Bold)
-//            TimeFilterSelector()
-        }
-        Spacer(modifier = Modifier.height(8.dp))
-        MemberChangeLineChart(
-            dataPoints = listOf(12, 7, 15, 20, 14, 8, 10),
-            labels = listOf("Pzts", "Sal", "Çar", "Per", "Cum", "Cmrts", "Paz")
-        )
-    }
-}
-
-private data class HomeFacilityStat(
+data class HomeFacilityStat(
     val title: String,
     val value: String,
     val percentage: String?,

@@ -31,62 +31,57 @@ import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import com.vurgun.skyfit.core.data.utility.toMinutesOfDay
 import com.vurgun.skyfit.core.ui.styling.SkyFitColor
 import com.vurgun.skyfit.core.ui.styling.SkyFitTypography
 import kotlin.math.roundToInt
 
-data class SkyFitDailyActivityItem(
-    val emoji: String? = null,
-    val name: String,         // Aktivite adı (ör: Öğün Hazırlığı)
-    val startHourMinutes: Int, // Başlangıç saati ve dakikası (ör: 600 = 6:00)
-    val startBlock: Int       // Dikey griddeki başlangıç bloğu (ör: 0, 1, 2...)
+data class CalendarWorkoutTimeBlockItem(
+    val name: String,
+    val startTime: String
 )
 
 @Composable
-fun SkyFitDailyActivityCanvas(
-    activities: List<SkyFitDailyActivityItem>,
-    selectedBlock: Int,
-    onActivityUpdate: (SkyFitDailyActivityItem) -> Unit
+fun CalendarWorkoutTimeBlockGrid(
+    activities: List<CalendarWorkoutTimeBlockItem>,
+    modifier: Modifier = Modifier,
 ) {
-    val totalBlocks = 6 // Dikey gridde 6 sütun
-    val hours = listOf("06:00", "09:00", "12:00", "15:00", "18:00", "21:00") // Saat etiketi
+    val totalBlocks = 6
+    val hours = listOf("06:00", "09:00", "12:00", "15:00", "18:00", "21:00")
+    val hourRanges = listOf(360, 540, 720, 900, 1080, 1260) // [06:00, 09:00, ...]
 
-    BoxWithConstraints(
-        modifier = Modifier
-            .fillMaxSize()
-    ) {
-        val gridWidth = this.maxWidth
-        val blockWidth = gridWidth / totalBlocks // Her bloğun genişliği
+    BoxWithConstraints(modifier = modifier.fillMaxSize()) {
+        val blockWidth = maxWidth / totalBlocks
 
         Column(modifier = Modifier.fillMaxSize()) {
-            // Block Hours
+            // Top header with hours
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(top = 8.dp),
                 horizontalArrangement = Arrangement.SpaceBetween
             ) {
-                hours.forEachIndexed { index, hour ->
+                hours.forEachIndexed { index, hourLabel ->
+                    val start = hourRanges[index]
+                    val end = start + 180 // 3-hour blocks
 
-                    val textColor = if (index == selectedBlock) {
-                        SkyFitColor.text.default
-                    } else {
-                        SkyFitColor.text.disabled
+                    val highlight = activities.any {
+                        it.startTime.toMinutesOfDay() in start until end
                     }
 
                     Text(
-                        text = hour,
+                        text = hourLabel,
                         style = SkyFitTypography.bodyXSmallSemibold,
-                        color = textColor,
+                        color = if (highlight) SkyFitColor.text.default else SkyFitColor.text.disabled,
                         modifier = Modifier.width(blockWidth),
                         textAlign = TextAlign.Center
                     )
                 }
             }
 
-            // Grid ve aktiviteler
+            // Grid background + activity items
             Box(modifier = Modifier.fillMaxSize()) {
-                // Çizim düzlemi (dikey grid çizgileri)
+                // Grid lines
                 Canvas(modifier = Modifier.fillMaxSize()) {
                     val blockWidthPx = size.width / totalBlocks
                     for (i in 0..totalBlocks) {
@@ -99,13 +94,17 @@ fun SkyFitDailyActivityCanvas(
                     }
                 }
 
-                // Aktivite kutuları
-                activities.sortedBy { it.startHourMinutes }.forEachIndexed { index, skyFitDailyActivityItem ->
-                    DraggableActivityRow(
+                // Activity rows (visually placed)
+                activities.sortedBy { it.startTime.toMinutesOfDay() }.forEachIndexed { index, activity ->
+                    val blockIndex = hourRanges.indexOfLast {
+                        activity.startTime.toMinutesOfDay() >= it
+                    }.coerceAtLeast(0)
+
+                    ActivityChipRow(
                         index = index,
-                        activity = skyFitDailyActivityItem,
+                        activity = activity,
                         blockWidth = blockWidth,
-                        onActivityUpdate = onActivityUpdate
+                        blockIndex = blockIndex
                     )
                 }
             }
@@ -113,44 +112,26 @@ fun SkyFitDailyActivityCanvas(
     }
 }
 
-
 @Composable
-fun DraggableActivityRow(
+fun ActivityChipRow(
     index: Int,
-    activity: SkyFitDailyActivityItem,
+    activity: CalendarWorkoutTimeBlockItem,
     blockWidth: Dp,
-    onActivityUpdate: (SkyFitDailyActivityItem) -> Unit
+    blockIndex: Int
 ) {
     val density = LocalDensity.current
-    val blockWidthPx = with(density) { blockWidth.toPx() } // Blok genişliği (px)
-    val blockHeightPx = 24.dp * index
+    val xPosition = with(density) { (blockWidth * blockIndex).toPx() }
+    val yOffset = 36.dp + (24.dp * index)
 
-    var xOffset by remember { mutableStateOf(0f) } // Yatay sürükleme pozisyonu
-    val initialX = activity.startBlock * blockWidthPx // Başlangıç pozisyonu (grid'e göre hizalı)
-
-    Row(
+    Box(
         modifier = Modifier
             .fillMaxWidth()
-            .offset(x = with(density) { (initialX + xOffset).toDp() }, y = 36.dp + blockHeightPx) // Yatay konum
-            .padding(vertical = 8.dp, horizontal = 16.dp)
-            .draggable(
-                orientation = Orientation.Horizontal,
-                state = rememberDraggableState { delta ->
-                    xOffset += delta // Sürükleme sırasında yatay offset güncelle
-                },
-                onDragStopped = {
-                    // En yakın grid sütununu hesapla
-                    val nearestBlock = ((initialX + xOffset) / blockWidthPx).roundToInt()
-
-                    // Yeni x pozisyonuna hizala
-                    val newStartHourMinutes = nearestBlock * 60 // Her sütun = 1 saat
-
-                    // Aktiviteyi güncelle ve hizala
-                    onActivityUpdate(activity.copy(startBlock = nearestBlock, startHourMinutes = newStartHourMinutes))
-                    xOffset = 0f // Offset'i sıfırla
-                }
-            ),
-        verticalAlignment = Alignment.CenterVertically
+            .offset(
+                x = with(density) { xPosition.toDp() },
+                y = yOffset
+            )
+            .padding(vertical = 8.dp, horizontal = 16.dp),
+        contentAlignment = Alignment.CenterStart
     ) {
         Row(
             modifier = Modifier
@@ -159,10 +140,60 @@ fun DraggableActivityRow(
             verticalAlignment = Alignment.CenterVertically
         ) {
             Text(
-                text = "${activity.emoji}  ${activity.name}",
+                text = activity.name,
                 style = SkyFitTypography.bodySmall.copy(color = SkyFitColor.text.inverse)
             )
         }
     }
 }
 
+//@Composable
+//fun DraggableActivityRow(
+//    index: Int,
+//    activity: CalendarWorkoutTimeBlockItem,
+//    blockWidth: Dp,
+//    isDraggable: Boolean = false,
+//    onActivityUpdate: (CalendarWorkoutTimeBlockItem) -> Unit
+//) {
+//    val density = LocalDensity.current
+//    val blockWidthPx = with(density) { blockWidth.toPx() }
+//    val blockHeightPx = 24.dp * index
+//
+//    var xOffset by remember { mutableStateOf(0f) }
+//    val initialX = activity.startBlock * blockWidthPx
+//
+//    val baseModifier = Modifier
+//        .fillMaxWidth()
+//        .offset(x = with(density) { (initialX + xOffset).toDp() }, y = 36.dp + blockHeightPx)
+//        .padding(vertical = 8.dp, horizontal = 16.dp)
+//
+//    val dragModifier = if (isDraggable) {
+//        baseModifier.draggable(
+//            orientation = Orientation.Horizontal,
+//            state = rememberDraggableState { delta -> xOffset += delta },
+//            onDragStopped = {
+//                val nearestBlock = ((initialX + xOffset) / blockWidthPx).roundToInt()
+//                val newStartHourMinutes = nearestBlock * 60
+//                onActivityUpdate(activity.copy(startBlock = nearestBlock, startHourMinutes = newStartHourMinutes))
+//                xOffset = 0f
+//            }
+//        )
+//    } else baseModifier
+//
+//    Row(
+//        modifier = dragModifier,
+//        verticalAlignment = Alignment.CenterVertically
+//    ) {
+//        Row(
+//            modifier = Modifier
+//                .background(SkyFitColor.specialty.buttonBgRest, shape = RoundedCornerShape(percent = 50))
+//                .padding(horizontal = 8.dp, vertical = 4.dp),
+//            verticalAlignment = Alignment.CenterVertically
+//        ) {
+//            Text(
+//                text = activity.name,
+//                style = SkyFitTypography.bodySmall.copy(color = SkyFitColor.text.inverse)
+//            )
+//        }
+//    }
+//}

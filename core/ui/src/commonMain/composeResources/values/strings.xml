@@ -266,6 +266,10 @@
 
     <string name="new_activity_label">Yeni Aktivite</string>
     <string name="activity_title">Aktivite başlığı</string>
+    <string name="add_activity_title_hint">Başlık ekleyin</string>
+    <string name="add_time_action">Süre ekle</string>
+    <string name="activity_added_label">Etkinlik Eklendi</string>
+    <string name="add_selected_activity_label">Aktiviteyi ekle</string>
 </resources>
 
 <!--    Use snake_case + purpose-based suffixes:-->
