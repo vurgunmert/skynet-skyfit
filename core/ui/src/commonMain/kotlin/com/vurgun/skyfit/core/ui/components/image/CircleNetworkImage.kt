@@ -10,6 +10,7 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import coil3.compose.AsyncImage
 
+@Deprecated("Use SkyImage")
 @Composable
 fun CircleNetworkImage(
     url: String?,
@@ -20,8 +21,8 @@ fun CircleNetworkImage(
         model = url,
         contentDescription = null,
         modifier = modifier
-            .size(size)
-            .clip(CircleShape),
+            .clip(CircleShape)
+            .size(size),
         contentScale = ContentScale.Crop
     )
 }

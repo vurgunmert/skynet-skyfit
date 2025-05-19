@@ -33,6 +33,7 @@ import org.jetbrains.compose.resources.painterResource
 import skyfit.core.ui.generated.resources.Res
 import skyfit.core.ui.generated.resources.ic_image
 
+@Deprecated("Use SkyImage")
 @Composable
 fun CircularImage(
     url: String,

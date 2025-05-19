@@ -1,18 +1,7 @@
 package com.vurgun.skyfit.feature.persona.settings.facility.member
 
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.layout.wrapContentWidth
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
@@ -21,6 +10,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -29,22 +21,20 @@ import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.koin.koinScreenModel
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
-import com.vurgun.skyfit.core.ui.components.image.NetworkImage
-import com.vurgun.skyfit.core.ui.components.special.ButtonSize
-import com.vurgun.skyfit.core.ui.components.special.ButtonState
-import com.vurgun.skyfit.core.ui.components.special.ButtonVariant
-import com.vurgun.skyfit.core.ui.components.special.SkyFitButtonComponent
-import com.vurgun.skyfit.core.ui.components.special.SkyFitMobileScaffold
-import com.vurgun.skyfit.core.ui.components.special.SkyFitScreenHeader
-import com.vurgun.skyfit.core.ui.components.special.SkyFitSearchTextInputComponent
-import com.vurgun.skyfit.core.ui.styling.SkyFitColor
-import com.vurgun.skyfit.core.ui.styling.SkyFitTypography
 import com.vurgun.skyfit.core.data.persona.domain.model.Member
 import com.vurgun.skyfit.core.data.persona.domain.model.Trainer
+import com.vurgun.skyfit.core.ui.components.image.NetworkImage
+import com.vurgun.skyfit.core.ui.components.image.SkyImage
+import com.vurgun.skyfit.core.ui.components.image.SkyImageShape
+import com.vurgun.skyfit.core.ui.components.image.SkyImageSize
+import com.vurgun.skyfit.core.ui.components.special.*
+import com.vurgun.skyfit.core.ui.components.text.SkyText
+import com.vurgun.skyfit.core.ui.components.text.TextStyleType
+import com.vurgun.skyfit.core.ui.styling.SkyFitColor
+import com.vurgun.skyfit.core.ui.styling.SkyFitTypography
 import org.jetbrains.compose.resources.stringResource
 import skyfit.core.ui.generated.resources.Res
 import skyfit.core.ui.generated.resources.add_action
-import skyfit.core.ui.generated.resources.delete_action
 import skyfit.core.ui.generated.resources.members_label
 import skyfit.core.ui.generated.resources.search_action
 
@@ -97,25 +87,19 @@ internal fun MobileFacilityManageMembersScreen(
 
         LazyColumn(
             modifier = Modifier
-                .fillMaxSize()
                 .padding(paddingValues)
-                .padding(20.dp),
-            verticalArrangement = Arrangement.spacedBy(16.dp)
+                .padding(16.dp)
+                .fillMaxSize(),
+            verticalArrangement = Arrangement.spacedBy(24.dp)
         ) {
             items(uiState.filtered) {
-                MobileFacilityMemberItemComponent(
+
+                FacilitySettingMemberItem(
                     item = it,
-                    onClick = {},
-                    actionContent = {
-                        SkyFitButtonComponent(
-                            text = stringResource(Res.string.delete_action),
-                            modifier = Modifier.wrapContentWidth(),
-                            onClick = { viewModel.deleteMember(it.userId) },
-                            variant = ButtonVariant.Primary,
-                            size = ButtonSize.Micro,
-                            state = ButtonState.Rest
-                        )
-                    }
+                    onClickEdit = {
+
+                    },
+                    onClickDelete = { viewModel.deleteMember(it.userId) }
                 )
             }
         }
@@ -153,23 +137,23 @@ fun MobileFacilityMemberItemComponent(
         Modifier.fillMaxWidth().clickable(onClick = onClick),
         verticalAlignment = Alignment.CenterVertically
     ) {
-        NetworkImage(
-            imageUrl = item.profileImageUrl,
-            modifier = Modifier
-                .size(60.dp)
-                .clip(CircleShape)
+        SkyImage(
+            url = item.profileImageUrl,
+            shape = SkyImageShape.Circle,
+            size = SkyImageSize.Size60
         )
+
         Spacer(Modifier.width(16.dp))
 
         Column(Modifier.weight(1f)) {
-            Text(
+            SkyText(
                 text = item.username,
-                style = SkyFitTypography.bodyLargeSemibold
+                styleType = TextStyleType.BodyLargeSemibold
             )
             Spacer(Modifier.height(4.dp))
-            Text(
-                text = "${item.name} ${item.surname}",
-                style = SkyFitTypography.bodyMediumRegular,
+            SkyText(
+                text = item.fullName,
+                styleType = TextStyleType.BodyMediumRegular,
                 color = SkyFitColor.text.secondary
             )
         }

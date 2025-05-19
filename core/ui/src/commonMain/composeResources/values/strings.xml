@@ -71,6 +71,8 @@
     <string name="save_changes_action">Değişiklikleri Kaydet</string>
     <string name="refresh_action">Yenile</string>
     <string name="clear_all_action">Hepsini temizle</string>
+    <string name="edit_member_package_action">Üye Paketini Düzenle</string>
+    <string name="delete_membership_action">Üyeliği Sil</string>
 
     <!-- 🔷 Gender Options -->
     <string name="gender_female">Kadın</string>
@@ -104,6 +106,8 @@
     <string name="profile_tags_label">Profil Etiketleri</string>
     <string name="select_profile_tags_hint">Etiketlerini Sec örn: Pilates, Kondisyon</string>
     <string name="select_profile_limit_message">Profilinizde en fazla 5 etiket bulundurabilirsiniz.</string>
+    <string name="package_selection_label">Paket Seçimi</string>
+    <string name="completed_lesson_count_label">Tamamlanan Ders Sayısı</string>
 
     <!-- 🔷 Lesson Related -->
     <string name="lesson_status_completed">Tamamlandı</string>

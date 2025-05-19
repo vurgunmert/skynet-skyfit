@@ -6,4 +6,6 @@ data class Member(
     val username: String,
     val name: String,
     val surname: String
-)
+) {
+    val fullName: String = "$name $surname"
+}
