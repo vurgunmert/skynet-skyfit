@@ -12,8 +12,6 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.material.Icon
-import androidx.compose.material.IconButton
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -27,7 +25,6 @@ import cafe.adriel.voyager.core.screen.uniqueScreenKey
 import cafe.adriel.voyager.koin.koinScreenModel
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
-import com.vurgun.skyfit.core.data.utility.randomUUID
 import com.vurgun.skyfit.core.ui.components.icon.SkyIcon
 import com.vurgun.skyfit.core.ui.components.icon.SkyIconSize
 import com.vurgun.skyfit.core.ui.components.special.SkyFitCircularImageComponent
@@ -36,13 +33,11 @@ import com.vurgun.skyfit.core.ui.components.special.UserCircleAvatarItem
 import com.vurgun.skyfit.core.ui.styling.SkyFitColor
 import com.vurgun.skyfit.core.ui.styling.SkyFitTypography
 import com.vurgun.skyfit.core.ui.utils.keyboardAsState
-import com.vurgun.skyfit.feature.messaging.component.SkyFitChatMessageBubble
-import com.vurgun.skyfit.feature.messaging.component.SkyFitChatMessageInputComponent
-import org.jetbrains.compose.resources.painterResource
+import com.vurgun.skyfit.feature.connect.component.SkyFitChatMessageBubble
+import com.vurgun.skyfit.feature.connect.component.SkyFitChatMessageInputComponent
 import org.koin.compose.koinInject
 import skyfit.core.ui.generated.resources.Res
 import skyfit.core.ui.generated.resources.ic_chevron_left
-import skyfit.core.ui.generated.resources.logo_skyfit
 
 class UserToUserChatScreen : Screen {
 

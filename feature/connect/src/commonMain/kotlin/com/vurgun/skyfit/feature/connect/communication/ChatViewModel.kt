@@ -2,7 +2,7 @@ package com.vurgun.skyfit.feature.connect.communication
 
 import cafe.adriel.voyager.core.model.ScreenModel
 import cafe.adriel.voyager.core.model.screenModelScope
-import com.vurgun.skyfit.feature.messaging.component.ChatMessageItem
+import com.vurgun.skyfit.feature.connect.component.ChatMessageItem
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch

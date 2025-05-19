@@ -1,4 +1,4 @@
-package com.vurgun.skyfit.feature.messaging.component
+package com.vurgun.skyfit.feature.connect.component
 
 import androidx.compose.animation.core.LinearEasing
 import androidx.compose.animation.core.RepeatMode

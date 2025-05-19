@@ -2,26 +2,64 @@ package com.vurgun.skyfit.core.data.connect.domain.repository
 
 import com.vurgun.skyfit.core.data.connect.data.model.ChatbotRequest
 import com.vurgun.skyfit.core.data.connect.data.model.ChatbotResponse
+import com.vurgun.skyfit.core.data.connect.data.model.OverrideConfig
+import com.vurgun.skyfit.core.data.utility.appSessionId
+import com.vurgun.skyfit.core.data.utility.now
 import com.vurgun.skyfit.core.network.commonHttpClient
-import io.ktor.client.call.body
-import io.ktor.client.request.header
-import io.ktor.client.request.post
-import io.ktor.client.request.setBody
-import io.ktor.http.ContentType
-import io.ktor.http.contentType
+import io.ktor.client.call.*
+import io.ktor.client.plugins.*
+import io.ktor.client.request.*
+import io.ktor.http.*
+import kotlinx.datetime.LocalDateTime
+import kotlinx.io.IOException
 
 class ChatbotRepository : ChatbotApiUseCase {
 
-    //TODO: Secure Keys
-    private val apiUrl = "https://bgmh4dsb.rpcld.net/api/v1/prediction/d50d5475-79ac-4e41-8fc5-89f5315b64fe"
-    private val apiKey = "mB6vUWOdnUp6Lg9JwpQXMrwrQh6bIfIzydf-tgeygvY"
+    private val apiUrl = "https://qqzjme1d.rpcl.host/api/v1/prediction/a978b860-b4b6-4013-b80b-e016a04a2f5c"
+    private val apiKey = "vvgrlZKNXJaBe0Y8QsSQXL6fTTur-zxtVoEBwG6IXEo"
 
-    override suspend fun queryChat(question: String): String {
-        val response: ChatbotResponse = commonHttpClient.post(apiUrl) {
-            contentType(ContentType.Application.Json)
-            header("Authorization", "Bearer $apiKey")
-            setBody(ChatbotRequest(question))
-        }.body()
-        return response.text.toString()
+    override suspend fun submitChatQuery(question: String): ChatbotResponse {
+        val requestStartTime = LocalDateTime.now()
+        val sessionId = appSessionId
+
+        val request = ChatbotRequest(
+            question = question,
+            overrideConfig = OverrideConfig(
+                sessionId = sessionId
+            )
+        )
+
+        try {
+            val response = commonHttpClient.post(apiUrl) {
+                contentType(ContentType.Application.Json)
+                header("Authorization", "Bearer $apiKey")
+                setBody(request)
+
+                timeout {
+                    requestTimeoutMillis = 30_000
+                    connectTimeoutMillis = 15_000
+                    socketTimeoutMillis = 30_000
+                }
+            }.body<ChatbotResponse>()
+
+            val requestEndTime = LocalDateTime.now()
+
+            response.copy(
+                startTime = requestStartTime,
+                endTime = requestEndTime
+            )
+            return response
+
+        } catch (e: IOException) {
+            throw ChatbotException.Network(e.message ?: "Network error")
+        } catch (e: Exception) {
+            throw ChatbotException.Unknown(e.message ?: "Unexpected error")
+        }
     }
+
+}
+
+sealed class ChatbotException(message: String) : Exception(message) {
+    class Network(message: String) : ChatbotException(message)
+    class Unknown(message: String) : ChatbotException(message)
 }

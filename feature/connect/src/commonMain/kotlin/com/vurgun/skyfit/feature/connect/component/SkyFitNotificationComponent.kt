@@ -1,4 +1,4 @@
-package com.vurgun.skyfit.feature.notification.component
+package com.vurgun.skyfit.feature.connect.component
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background

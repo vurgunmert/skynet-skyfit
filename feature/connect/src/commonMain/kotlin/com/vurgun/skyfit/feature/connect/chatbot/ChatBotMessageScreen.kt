@@ -16,25 +16,41 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import com.vurgun.skyfit.feature.messaging.component.SkyFitChatMessageBubble
-import com.vurgun.skyfit.feature.messaging.component.SkyFitChatMessageBubbleShimmer
-import com.vurgun.skyfit.feature.messaging.component.SkyFitChatMessageInputComponent
+import cafe.adriel.voyager.core.screen.Screen
+import cafe.adriel.voyager.navigator.LocalNavigator
+import cafe.adriel.voyager.navigator.currentOrThrow
+import com.vurgun.skyfit.feature.connect.component.SkyFitChatMessageBubble
+import com.vurgun.skyfit.feature.connect.component.SkyFitChatMessageBubbleShimmer
+import com.vurgun.skyfit.feature.connect.component.SkyFitChatMessageInputComponent
 import com.vurgun.skyfit.core.ui.components.special.SkyFitScaffold
 import com.vurgun.skyfit.core.ui.components.special.SkyFitScreenHeader
 import com.vurgun.skyfit.core.ui.styling.SkyFitColor
-import org.koin.compose.koinInject
+
+class ChatBotMessageScreen(
+    private val viewModel: ChatbotViewModel
+): Screen {
+
+    @Composable
+    override fun Content() {
+       val navigator = LocalNavigator.currentOrThrow
+
+        ChatBotMessageScreenContent(viewModel) {
+            navigator.pop()
+        }
+    }
+
+}
 
 @Composable
-fun MobileUserToBotChatScreen(
-    goToBack: () -> Unit,
+private fun ChatBotMessageScreenContent(
+   viewModel: ChatbotViewModel,
+   onDismiss: () -> Unit
 ) {
 
-    val viewModel: ChatbotViewModel = koinInject()
     val messages by viewModel.messages.collectAsState()
     val isLoading by viewModel.isLoading.collectAsState()
     val listState = rememberLazyListState()
 
-    // Auto-scroll to the last message when a new one arrives
     LaunchedEffect(messages.size) {
         if (messages.isNotEmpty()) {
             listState.animateScrollToItem(messages.size - 1)
@@ -42,7 +58,7 @@ fun MobileUserToBotChatScreen(
     }
 
     SkyFitScaffold(topBar = {
-        SkyFitScreenHeader("Chatbot", onClickBack = goToBack)
+        SkyFitScreenHeader("Chatbot", onClickBack = onDismiss)
     }) {
         Column(
             Modifier.fillMaxSize()
@@ -68,6 +84,7 @@ fun MobileUserToBotChatScreen(
 
             Box(Modifier.padding(24.dp).fillMaxWidth()) {
                 SkyFitChatMessageInputComponent(
+                    enabled = !isLoading,
                     onSend = { userInput -> viewModel.sendQuery(userInput) }
                 )
             }

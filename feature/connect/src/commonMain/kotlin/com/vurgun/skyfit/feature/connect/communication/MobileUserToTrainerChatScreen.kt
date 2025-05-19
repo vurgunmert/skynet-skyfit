@@ -25,8 +25,8 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import com.vurgun.skyfit.feature.messaging.component.SkyFitChatMessageBubble
-import com.vurgun.skyfit.feature.messaging.component.SkyFitChatMessageInputComponent
+import com.vurgun.skyfit.feature.connect.component.SkyFitChatMessageBubble
+import com.vurgun.skyfit.feature.connect.component.SkyFitChatMessageInputComponent
 import com.vurgun.skyfit.core.ui.components.special.SkyFitCircularImageComponent
 import com.vurgun.skyfit.core.ui.components.special.SkyFitMobileScaffold
 import com.vurgun.skyfit.core.ui.components.special.UserCircleAvatarItem

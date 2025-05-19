@@ -272,6 +272,11 @@
     <string name="add_time_action">Süre ekle</string>
     <string name="activity_added_label">Etkinlik Eklendi</string>
     <string name="add_selected_activity_label">Aktiviteyi ekle</string>
+    <string name="chatbot_label">Chatbot</string>
+    <string name="shortcuts_label">Kısayollar</string>
+    <string name="body_analysis_label">Vücut Analizi</string>
+    <string name="new_chat_label">Yeni Sohbet</string>
+    <string name="chat_bot_input_hint">Herhangi bir şey sor...</string>
 
     <string name="empty_notifications_message">Şu anda size iletilmiş bir bildirim bulunmuyor. Ders hatırlatmaları, etkinlik güncellemeleri ve özel tekliflerden haberdar olmak için ayarlarınızı kontrol edebilirsiniz.</string>
 </resources>

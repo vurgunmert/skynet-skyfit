@@ -76,7 +76,7 @@ private object CompactDashboardComponent {
                         currentScreen = dashboardNavigator.lastItem,
                         onClickHome = { dashboardNavigator.replace(homeScreen) },
                         onClickProfile = { dashboardNavigator.replace(profileScreen) },
-                        onClickAppAction = { appNavigator.push(SharedScreen.PostureAnalysis) }
+                        onClickAppAction = { appNavigator.push(SharedScreen.ChatBot) }
                     )
                 }
             ) {
@@ -128,7 +128,7 @@ private object ExpandedDashboardComponent {
                                 )
                             },
                             onClickAppAction = {
-                                overlayScreen = SharedScreen.PostureAnalysis
+                                overlayScreen = SharedScreen.ChatBot
                             }
                         )
                         Content(modifier = Modifier.weight(1f)) {

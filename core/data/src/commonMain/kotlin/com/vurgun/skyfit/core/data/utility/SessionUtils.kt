@@ -4,7 +4,7 @@ import kotlin.uuid.ExperimentalUuidApi
 import kotlin.uuid.Uuid
 
 @OptIn(ExperimentalUuidApi::class)
-var sessionKey = Uuid.random().toString()
+var appSessionId = Uuid.random().toString()
     private set
 
 

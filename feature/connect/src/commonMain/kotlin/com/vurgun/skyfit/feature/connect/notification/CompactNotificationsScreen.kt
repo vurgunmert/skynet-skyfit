@@ -25,8 +25,8 @@ import com.vurgun.skyfit.core.ui.components.special.*
 import com.vurgun.skyfit.core.ui.styling.SkyFitColor
 import com.vurgun.skyfit.core.ui.styling.SkyFitTypography
 import com.vurgun.skyfit.core.ui.utils.CollectEffect
-import com.vurgun.skyfit.feature.notification.component.NotificationItemSwipeDismissBackground
-import com.vurgun.skyfit.feature.notification.component.SkyFitNotificationItem
+import com.vurgun.skyfit.feature.connect.component.NotificationItemSwipeDismissBackground
+import com.vurgun.skyfit.feature.connect.component.SkyFitNotificationItem
 import org.jetbrains.compose.resources.stringResource
 import skyfit.core.ui.generated.resources.*
 

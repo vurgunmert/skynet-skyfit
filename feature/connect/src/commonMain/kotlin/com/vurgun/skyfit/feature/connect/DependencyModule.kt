@@ -10,7 +10,7 @@ val featureConnectModule = module {
     includes(dataCoreModule)
 
     factory { ChatViewModel() }
-    factory { ChatbotViewModel(get()) }
+    factory { ChatbotViewModel(get(), get()) }
 
     factory { UserNotificationsViewModel() }
 }
