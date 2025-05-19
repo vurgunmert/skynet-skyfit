@@ -39,10 +39,13 @@ sealed class SharedScreen : ScreenProvider {
     data class TrainerAppointmentDetail(val id: Int) : SharedScreen()
 
     // Notifications
-    data object Notifications : SharedScreen()
+    data object NotificationsCompact : SharedScreen()
+    data class NotificationsExpanded(val onDismiss: () -> Unit) : SharedScreen()
 
     // Messages
     data object Conversations : SharedScreen()
+    data class ConversationsExpanded(val onDismiss: () -> Unit) : SharedScreen()
+
     data class UserChat(val participantId: Int) : SharedScreen()
 
     // Posture Analysis

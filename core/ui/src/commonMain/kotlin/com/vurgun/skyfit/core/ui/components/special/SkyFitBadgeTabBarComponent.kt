@@ -29,8 +29,8 @@ import com.vurgun.skyfit.core.ui.styling.SkyFitTypography
 
 @Composable
 fun TextNumberBadgeTabBarComponent(
-    titles: List<String>,
-    selectedTabIndex: Int,
+    tabs: List<String>,
+    selectedIndex: Int,
     onTabSelected: (Int) -> Unit,
     onFilter: () -> Unit = {}
 ) {
@@ -40,10 +40,10 @@ fun TextNumberBadgeTabBarComponent(
             .padding(8.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
-        titles.forEachIndexed { index, title ->
+        tabs.forEachIndexed { index, title ->
             TextNumberBadgeTabItem(
                 title = title,
-                isSelected = index == selectedTabIndex,
+                isSelected = index == selectedIndex,
                 onClick = { onTabSelected(index) }
             )
         }

@@ -2,6 +2,7 @@ package com.vurgun.skyfit.feature.dashboard
 
 import com.vurgun.skyfit.core.data.dataCoreModule
 import com.vurgun.skyfit.feature.dashboard.dashboard.DashboardViewModel
+import com.vurgun.skyfit.feature.dashboard.explore.ExploreViewModel
 import com.vurgun.skyfit.feature.dashboard.home.FacilityHomeViewModel
 import com.vurgun.skyfit.feature.dashboard.home.TrainerHomeViewModel
 import com.vurgun.skyfit.feature.dashboard.home.UserHomeViewModel
@@ -13,6 +14,8 @@ val featureDashboardModule = module {
     factory { UserHomeViewModel(get(), get(), get(),get()) }
     factory { FacilityHomeViewModel(get(), get(), get(), get()) }
     factory { TrainerHomeViewModel(get(), get(), get(), get()) }
+
+    factory { ExploreViewModel() }
 
     factory { DashboardViewModel(get()) }
 }

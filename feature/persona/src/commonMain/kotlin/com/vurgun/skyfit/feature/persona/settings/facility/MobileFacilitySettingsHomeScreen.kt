@@ -49,7 +49,7 @@ import skyfit.core.ui.generated.resources.ic_question_circle
 import skyfit.core.ui.generated.resources.logout_action
 import skyfit.core.ui.generated.resources.members_label
 import skyfit.core.ui.generated.resources.settings_account_label
-import skyfit.core.ui.generated.resources.settings_notifications_label
+import skyfit.core.ui.generated.resources.notifications_label
 import skyfit.core.ui.generated.resources.settings_payment_history_label
 import skyfit.core.ui.generated.resources.settings_support_label
 import skyfit.core.ui.generated.resources.settings_title
@@ -129,7 +129,7 @@ private fun MobileFacilitySettingsHomeScreen(
             MobileSettingsMenuItemDividerComponent()
 
             MobileSettingsMenuItemComponent(
-                text = stringResource(Res.string.settings_notifications_label),
+                text = stringResource(Res.string.notifications_label),
                 iconRes = Res.drawable.ic_bell,
                 onClick = { viewModel.onAction(SettingsMainAction.NavigateToNotifications) }
             )

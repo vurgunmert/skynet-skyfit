@@ -63,7 +63,7 @@ class FacilityHomeScreen : Screen {
                 }
 
                 FacilityHomeEffect.NavigateToNotifications -> {
-                    appNavigator.push(SharedScreen.Notifications)
+                    appNavigator.push(SharedScreen.NotificationsCompact)
                 }
             }
         }
@@ -93,7 +93,6 @@ class FacilityHomeScreen : Screen {
                     WindowSize.MEDIUM,
                     WindowSize.EXPANDED -> FacilityHomeExtendedScreen(content, viewModel::onAction)
                 }
-
             }
         }
     }

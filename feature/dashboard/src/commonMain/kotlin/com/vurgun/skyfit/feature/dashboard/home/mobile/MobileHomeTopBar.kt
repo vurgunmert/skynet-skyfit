@@ -18,10 +18,7 @@ import com.vurgun.skyfit.core.ui.components.text.SkyText
 import com.vurgun.skyfit.core.ui.components.text.TextStyleType
 import com.vurgun.skyfit.core.ui.styling.SkyFitColor
 import org.jetbrains.compose.resources.stringResource
-import skyfit.core.ui.generated.resources.Res
-import skyfit.core.ui.generated.resources.ic_bell
-import skyfit.core.ui.generated.resources.member_since_day_zero
-import skyfit.core.ui.generated.resources.member_since_days
+import skyfit.core.ui.generated.resources.*
 
 @Composable
 internal fun MobileUserHomeTopBar(
@@ -77,9 +74,9 @@ internal fun MobileUserHomeTopBar(
                     )
                 }
             }
+        } else {
+            Spacer(Modifier.weight(1f))
         }
-
-        Spacer(Modifier.weight(1f))
 
         MobileHomeTopBarActionRow(
             notificationsEnabled,
@@ -137,7 +134,7 @@ private fun MobileHomeTopBarActionRow(
         FeatureVisible(conversationsEnabled) {
             Spacer(Modifier.width(16.dp))
             SkyIcon(
-                res = Res.drawable.ic_bell,
+                res = Res.drawable.ic_chat,
                 size = SkyIconSize.Normal,
                 onClick = onClickConversations
             )

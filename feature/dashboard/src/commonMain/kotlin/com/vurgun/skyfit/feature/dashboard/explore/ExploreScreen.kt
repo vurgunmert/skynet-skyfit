@@ -2,19 +2,7 @@ package com.vurgun.skyfit.feature.dashboard.explore
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.offset
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.layout.wrapContentWidth
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.rememberScrollState
@@ -24,6 +12,9 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Icon
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -34,13 +25,8 @@ import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
 import com.vurgun.skyfit.core.navigation.findRootNavigator
 import com.vurgun.skyfit.core.ui.components.image.NetworkImage
-import com.vurgun.skyfit.core.ui.components.special.ButtonSize
-import com.vurgun.skyfit.core.ui.components.special.ButtonState
-import com.vurgun.skyfit.core.ui.components.special.ButtonVariant
-import com.vurgun.skyfit.core.ui.components.special.SkyFitButtonComponent
-import com.vurgun.skyfit.core.ui.components.special.SkyFitMobileScaffold
-import com.vurgun.skyfit.core.ui.components.special.SkyFitSearchFilterBarComponent
-import com.vurgun.skyfit.core.ui.components.special.SkyFitSearchTextInputComponent
+import com.vurgun.skyfit.core.ui.components.loader.FullScreenLoaderContent
+import com.vurgun.skyfit.core.ui.components.special.*
 import com.vurgun.skyfit.core.ui.styling.SkyFitColor
 import com.vurgun.skyfit.core.ui.styling.SkyFitTypography
 import com.vurgun.skyfit.feature.persona.components.FacilityProfileCardItemBox
@@ -57,31 +43,37 @@ class ExploreScreen : Screen {
     override fun Content() {
         val appNavigator = LocalNavigator.currentOrThrow.findRootNavigator()
         val navigator = LocalNavigator.currentOrThrow
-        val viewModel = koinScreenModel<DashboardExploreScreenViewModel>()
+        val viewModel = koinScreenModel<ExploreViewModel>()
+        val uiState by viewModel.uiState.collectAsState()
 
-        MobileExploreScreen(
-            goToExercise = { TODO() },
-            goToVisitTrainer = { TODO() },
-            goToVisitFacility = { TODO() },
-            goToExploreCommunities = { TODO() },
-            goToExploreChallenges = { TODO() }
-        )
+        LaunchedEffect(Unit) {
+            viewModel.loadData()
+        }
+
+        when (uiState) {
+            is ExploreUiState.Content -> {
+                val content = (uiState as ExploreUiState.Content)
+                MobileExploreScreen(content, viewModel::onAction)
+            }
+
+            is ExploreUiState.Error -> {
+                TODO()
+            }
+
+            ExploreUiState.Loading -> FullScreenLoaderContent()
+        }
     }
 
 }
 
 @Composable
 private fun MobileExploreScreen(
-    goToExercise: () -> Unit,
-    goToVisitTrainer: () -> Unit,
-    goToVisitFacility: () -> Unit,
-    goToExploreCommunities: () -> Unit,
-    goToExploreChallenges: () -> Unit,
+    content: ExploreUiState.Content,
+    onAction: (ExploreAction) -> Unit,
 ) {
 
-    val viewModel = DashboardExploreScreenViewModel()
-    val trainers = viewModel.trainers
-    val facilities = viewModel.facilities
+    val trainers = content.trainers
+    val facilities = content.facilities
 
     SkyFitMobileScaffold(
         topBar = {
@@ -101,25 +93,25 @@ private fun MobileExploreScreen(
             verticalArrangement = Arrangement.spacedBy(24.dp)
         ) {
             MobileDashboardExploreScreenFeaturedExercisesComponent(
-                onClick = goToExercise
+                onClick = { onAction(ExploreAction.OnClickExercise) }
             )
 
             MobileDashboardExploreScreenFeaturedTrainersComponent(
                 trainers,
-                onClick = goToVisitTrainer
+                onClick = { onAction(ExploreAction.OnClickTrainer) }
             )
 
             MobileDashboardExploreScreenFeaturedFacilitiesComponent(
                 facilities,
-                onClick = goToVisitFacility
+                onClick = { onAction(ExploreAction.OnClickFacility) }
             )
 
             MobileDashboardExploreScreenFeaturedCommunitiesComponent(
-                onClick = goToExploreCommunities
+                onClick = { onAction(ExploreAction.OnClickCommunities) }
             )
 
             MobileDashboardExploreScreenFeaturedChallengesComponent(
-                onClick = goToExploreChallenges
+                onClick = { onAction(ExploreAction.OnClickChallanges) }
             )
 
             Spacer(Modifier.height(124.dp))
@@ -338,6 +330,10 @@ private fun MobileDashboardExploreScreenTitleActionComponent(title: String) {
             style = SkyFitTypography.heading4,
             modifier = Modifier.weight(1f)
         )
-        Icon(painter = painterResource(Res.drawable.ic_chevron_right), contentDescription = title, tint = SkyFitColor.icon.default)
+        Icon(
+            painter = painterResource(Res.drawable.ic_chevron_right),
+            contentDescription = title,
+            tint = SkyFitColor.icon.default
+        )
     }
 }

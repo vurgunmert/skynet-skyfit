@@ -19,8 +19,6 @@ import androidx.compose.ui.unit.dp
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
-import com.vurgun.skyfit.core.navigation.SharedScreen
-import com.vurgun.skyfit.core.navigation.push
 import com.vurgun.skyfit.core.ui.components.special.*
 import com.vurgun.skyfit.core.ui.styling.SkyFitColor
 import com.vurgun.skyfit.core.ui.styling.SkyFitTypography
@@ -37,7 +35,25 @@ class ConversationsScreen : Screen {
 
         MobileUserConversationsScreen(
             goToBack = { navigator.pop() },
-            goToChat = { navigator.push(SharedScreen.UserChat(0)) },
+            goToChat = { navigator.push(UserToUserChatScreen()) },
+            viewModel = viewModel
+        )
+    }
+}
+
+
+class ExpandedConversationsScreen(
+    private val onDismiss: () -> Unit,
+) : Screen {
+
+    @Composable
+    override fun Content() {
+        val navigator = LocalNavigator.currentOrThrow
+        val viewModel = UserConversationsViewModel()
+
+        MobileUserConversationsScreen(
+            goToBack = onDismiss,
+            goToChat = { navigator.push(UserToUserChatScreen()) },
             viewModel = viewModel
         )
     }

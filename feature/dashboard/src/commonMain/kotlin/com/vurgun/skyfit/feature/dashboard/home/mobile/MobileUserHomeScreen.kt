@@ -59,7 +59,7 @@ class UserHomeScreen : Screen {
                 }
 
                 UserHomeEffect.NavigateToNotifications -> {
-                    appNavigator.push(SharedScreen.Notifications)
+                    appNavigator.push(SharedScreen.NotificationsCompact)
                 }
 
                 is UserHomeEffect.NavigateToActivityCalendar -> {

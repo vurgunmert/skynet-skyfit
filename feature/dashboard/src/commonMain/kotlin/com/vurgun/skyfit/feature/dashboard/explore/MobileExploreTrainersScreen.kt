@@ -26,7 +26,7 @@ import com.vurgun.skyfit.feature.persona.components.viewdata.TrainerProfileCardI
 @Composable
 fun MobileExploreTrainersScreen(goToBack: () -> Unit) {
 
-    val viewModel = DashboardExploreScreenViewModel()
+    val viewModel = ExploreViewModel()
     val trainers = viewModel.trainers
     var isSearchVisible by remember { mutableStateOf(false) }
 

@@ -41,15 +41,8 @@ val personaScreenModule = screenModule {
 
 @Serializable
 internal sealed class SettingsHomeEntryPoint : ScreenProvider {
-    @Serializable
-    data object Facility : SettingsHomeEntryPoint()
-
-    @Serializable
-    data object Trainer : SettingsHomeEntryPoint()
-
-    @Serializable
-    data object User : SettingsHomeEntryPoint()
-
-    @Serializable
-    data object Unauthorized : SettingsHomeEntryPoint()
+    @Serializable data object Facility : SettingsHomeEntryPoint()
+    @Serializable data object Trainer : SettingsHomeEntryPoint()
+    @Serializable data object User : SettingsHomeEntryPoint()
+    @Serializable data object Unauthorized : SettingsHomeEntryPoint()
 }

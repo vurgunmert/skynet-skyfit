@@ -28,7 +28,7 @@ fun MobileExploreFacilitiesScreen(
     goToBack: () -> Unit
 ) {
 
-    val viewModel = DashboardExploreScreenViewModel()
+    val viewModel = ExploreViewModel()
     val facilities = viewModel.facilities
     var isSearchVisible by remember { mutableStateOf(false) }
 

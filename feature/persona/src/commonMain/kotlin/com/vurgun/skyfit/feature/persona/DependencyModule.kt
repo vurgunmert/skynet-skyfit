@@ -24,6 +24,7 @@ import com.vurgun.skyfit.feature.persona.settings.trainer.profile.TrainerSetting
 import com.vurgun.skyfit.feature.persona.settings.trainer.profile.TrainerSettingsManageProfileViewModel
 import com.vurgun.skyfit.feature.persona.settings.user.profile.UserSettingsEditProfileViewModel
 import com.vurgun.skyfit.feature.persona.settings.user.profile.UserSettingsManageProfileViewModel
+import com.vurgun.skyfit.feature.persona.social.SocialMediaViewModel
 import org.koin.dsl.module
 
 val featurePersonaModule = module {
@@ -58,4 +59,6 @@ val featurePersonaModule = module {
     factory { FacilityProfileVisitorViewModel(get(), get(), get(), get()) }
     factory { FacilityProfileScheduleViewModel(get(), get(), get()) }
     factory { TrainerNotificationSettingsViewModel() }
+
+    factory { SocialMediaViewModel() }
 }

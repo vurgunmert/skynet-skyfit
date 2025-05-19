@@ -20,7 +20,7 @@ import com.vurgun.skyfit.core.ui.components.special.SkyFitMobileScaffold
 import com.vurgun.skyfit.core.ui.components.special.SkyFitScreenHeader
 import org.jetbrains.compose.resources.stringResource
 import skyfit.core.ui.generated.resources.Res
-import skyfit.core.ui.generated.resources.settings_notifications_label
+import skyfit.core.ui.generated.resources.notifications_label
 
 class TrainerSettingsNotificationsScreen : Screen {
 
@@ -50,7 +50,7 @@ private fun MobileTrainerSettingsNotificationsScreen(
 
     SkyFitMobileScaffold(
         topBar = {
-            SkyFitScreenHeader(stringResource(Res.string.settings_notifications_label), onClickBack = goToBack)
+            SkyFitScreenHeader(stringResource(Res.string.notifications_label), onClickBack = goToBack)
         }
     ) {
         LazyColumn(

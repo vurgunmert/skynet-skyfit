@@ -49,7 +49,6 @@ import org.jetbrains.compose.resources.DrawableResource
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
 import skyfit.core.ui.generated.resources.*
-import kotlin.math.sign
 
 class TrainerHomeScreen : Screen {
 
@@ -71,7 +70,7 @@ class TrainerHomeScreen : Screen {
                 }
 
                 TrainerHomeEffect.NavigateToNotifications -> {
-                    appNavigator.push(SharedScreen.Notifications)
+                    appNavigator.push(SharedScreen.NotificationsCompact)
                 }
             }
         }

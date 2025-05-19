@@ -69,6 +69,7 @@
     <string name="filter_action">Filtrele</string>
     <string name="save_changes_action">Değişiklikleri Kaydet</string>
     <string name="refresh_action">Yenile</string>
+    <string name="clear_all_action">Hepsini temizle</string>
 
     <!-- 🔷 Gender Options -->
     <string name="gender_female">Kadın</string>
@@ -188,7 +189,8 @@
     <string name="settings_title">Ayarlar</string>
     <string name="settings_account_label">Hesap Ayarları</string>
     <string name="settings_payment_history_label">Ödeme Geçmişi</string>
-    <string name="settings_notifications_label">Bildirimler</string>
+    <string name="notifications_label">Bildirimler</string>
+    <string name="notification_settings_label">Bilidirim Ayarları</string>
     <string name="settings_support_label">Destek ve Yardım</string>
     <string name="settings_support_help_subtitle">Sık sorulan soruların yanıtlarını bulun veya doğrudan bizimle iletişime geçin</string>
 
@@ -270,19 +272,6 @@
     <string name="add_time_action">Süre ekle</string>
     <string name="activity_added_label">Etkinlik Eklendi</string>
     <string name="add_selected_activity_label">Aktiviteyi ekle</string>
+
+    <string name="empty_notifications_message">Şu anda size iletilmiş bir bildirim bulunmuyor. Ders hatırlatmaları, etkinlik güncellemeleri ve özel tekliflerden haberdar olmak için ayarlarınızı kontrol edebilirsiniz.</string>
 </resources>
-
-<!--    Use snake_case + purpose-based suffixes:-->
-
-<!--    *_action → for actions/buttons (e.g. logout_action)-->
-
-<!--    *_label → for static labels/tabs (e.g. notifications_label)-->
-
-<!--    *_title → for screen titles (e.g. settings_title)-->
-
-<!--    *_desc → for helper text/tooltips-->
-
-<!--    *_message → for messages or alerts-->
-
-<!--    *_error → for error texts-->
-

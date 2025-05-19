@@ -22,9 +22,14 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import cafe.adriel.voyager.core.screen.Screen
+import cafe.adriel.voyager.core.screen.ScreenKey
+import cafe.adriel.voyager.core.screen.uniqueScreenKey
 import cafe.adriel.voyager.koin.koinScreenModel
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
+import com.vurgun.skyfit.core.data.utility.randomUUID
+import com.vurgun.skyfit.core.ui.components.icon.SkyIcon
+import com.vurgun.skyfit.core.ui.components.icon.SkyIconSize
 import com.vurgun.skyfit.core.ui.components.special.SkyFitCircularImageComponent
 import com.vurgun.skyfit.core.ui.components.special.SkyFitMobileScaffold
 import com.vurgun.skyfit.core.ui.components.special.UserCircleAvatarItem
@@ -36,9 +41,13 @@ import com.vurgun.skyfit.feature.messaging.component.SkyFitChatMessageInputCompo
 import org.jetbrains.compose.resources.painterResource
 import org.koin.compose.koinInject
 import skyfit.core.ui.generated.resources.Res
+import skyfit.core.ui.generated.resources.ic_chevron_left
 import skyfit.core.ui.generated.resources.logo_skyfit
 
 class UserToUserChatScreen : Screen {
+
+    override val key: ScreenKey
+        get() = uniqueScreenKey
 
     @Composable
     override fun Content() {
@@ -63,7 +72,7 @@ private fun MobileUserToUserChatScreen(
 
     SkyFitMobileScaffold(
         topBar = {
-            MobileUserToUserChatScreenToolbarComponent(
+            UserChatTopBar(
                 onClickBack = goToBack,
                 participantName = "Olvia Lorael",
                 lastActive = "2 hours ago"
@@ -92,7 +101,7 @@ private fun MobileUserToUserChatScreen(
 }
 
 @Composable
-private fun MobileUserToUserChatScreenToolbarComponent(
+private fun UserChatTopBar(
     onClickBack: () -> Unit,
     participantName: String,
     lastActive: String
@@ -105,14 +114,12 @@ private fun MobileUserToUserChatScreenToolbarComponent(
         verticalAlignment = Alignment.CenterVertically
     ) {
 
-        IconButton(onClick = onClickBack) {
-            Icon(
-                painter = painterResource(Res.drawable.logo_skyfit),
-                contentDescription = "Back",
-                tint = SkyFitColor.text.default,
-                modifier = Modifier.size(16.dp)
-            )
-        }
+        SkyIcon(
+            Res.drawable.ic_chevron_left,
+            size = SkyIconSize.Normal,
+            onClick = onClickBack
+        )
+
         Spacer(Modifier.width(24.dp))
 
         SkyFitCircularImageComponent(
