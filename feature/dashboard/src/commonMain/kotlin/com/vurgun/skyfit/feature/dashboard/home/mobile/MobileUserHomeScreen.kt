@@ -22,6 +22,7 @@ import com.vurgun.skyfit.core.ui.components.schedule.monthly.HomeEventCalendarSe
 import com.vurgun.skyfit.core.ui.components.schedule.monthly.rememberEventCalendarController
 import com.vurgun.skyfit.core.ui.components.special.CharacterImage
 import com.vurgun.skyfit.core.ui.components.special.FeatureVisible
+import com.vurgun.skyfit.core.ui.components.special.MembershipRequestCard
 import com.vurgun.skyfit.core.ui.components.special.SkyFitMobileScaffold
 import com.vurgun.skyfit.core.ui.screen.ErrorScreen
 import com.vurgun.skyfit.core.ui.utils.CollectEffect
@@ -129,6 +130,16 @@ private fun UserHomeCompact(
                 characterType = content.characterType,
                 modifier = Modifier
             )
+
+            if (content.showMembershipRequests) {
+                MembershipRequestCard(
+                    facilityId = 1,
+                    facilityName = "SkyTesis",
+                    facilityImageUrl = "https://fastly.picsum.photos/id/84/300/300.jpg?hmac=6V7k9m6F8nydgjpa_pSyib_6Z_0iBePGa5sHDUS8bVs",
+                    onConfirm = { },
+                    onDecline = { }
+                )
+            }
 
             HomeEventCalendarSelector(
                 controller = eventCalendarController,

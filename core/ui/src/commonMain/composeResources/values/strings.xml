@@ -52,6 +52,7 @@
     <string name="disable_action">Devre Dışı Bırak</string>
     <string name="logout_action">Oturumu Kapat</string>
     <string name="confirm_action">Onayla</string>
+    <string name="decline_action">Reddet</string>
     <string name="yes_action">Evet</string>
     <string name="no_action">Hayır</string>
     <string name="apply_action">Uygula</string>
@@ -279,4 +280,8 @@
     <string name="chat_bot_input_hint">Herhangi bir şey sor...</string>
 
     <string name="empty_notifications_message">Şu anda size iletilmiş bir bildirim bulunmuyor. Ders hatırlatmaları, etkinlik güncellemeleri ve özel tekliflerden haberdar olmak için ayarlarınızı kontrol edebilirsiniz.</string>
+
+    <string name="new_membership_request_label">Yeni Üyelik Talebi</string>
+    <string name="membership_request_approval_message">%1$s seni spor salonu üyesi olarak ekledi. Onaylıyor musun?</string>
+
 </resources>

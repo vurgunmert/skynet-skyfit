@@ -88,8 +88,8 @@ class FacilityHomeScreen : Screen {
             is FacilityHomeUiState.Content -> {
                 val content = uiState as FacilityHomeUiState.Content
 
-                when(windowSize) {
-                    WindowSize.COMPACT,
+                when (windowSize) {
+                    WindowSize.COMPACT-> FacilityHomeCompact(content, viewModel::onAction)
                     WindowSize.MEDIUM,
                     WindowSize.EXPANDED -> FacilityHomeExtendedScreen(content, viewModel::onAction)
                 }

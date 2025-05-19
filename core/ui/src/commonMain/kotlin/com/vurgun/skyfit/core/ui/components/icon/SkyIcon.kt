@@ -25,7 +25,8 @@ enum class SkyIconTint(val color: Color) {
     Default(SkyFitColor.icon.default),
     Inverse(SkyFitColor.icon.inverse),
     Disabled(SkyFitColor.icon.disabled),
-    Critical(SkyFitColor.icon.critical)
+    Critical(SkyFitColor.icon.critical),
+    Info(SkyFitColor.icon.info),
 }
 
 

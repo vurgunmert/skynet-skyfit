@@ -35,6 +35,7 @@ sealed interface UserHomeUiState {
         val characterType: CharacterType,
         val appointments: List<HomeAppointmentItemViewData> = emptyList(),
         val activeCalendarDates: Set<LocalDate> = emptySet(),
+        val showMembershipRequests: Boolean = false // TODO: Replace with modal
     ) : UserHomeUiState
 }
 
