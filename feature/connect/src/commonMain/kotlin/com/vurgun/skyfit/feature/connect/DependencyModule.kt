@@ -1,6 +1,7 @@
 package com.vurgun.skyfit.feature.connect
 
 import com.vurgun.skyfit.core.data.dataCoreModule
+import com.vurgun.skyfit.feature.connect.chatbot.ChatWithBotViewModel
 import com.vurgun.skyfit.feature.connect.chatbot.ChatbotViewModel
 import com.vurgun.skyfit.feature.connect.communication.ChatViewModel
 import com.vurgun.skyfit.feature.connect.notification.UserNotificationsViewModel
@@ -10,7 +11,8 @@ val featureConnectModule = module {
     includes(dataCoreModule)
 
     factory { ChatViewModel() }
-    factory { ChatbotViewModel(get(), get()) }
+    factory { ChatbotViewModel(get()) }
+    factory { ChatWithBotViewModel(get()) }
 
     factory { UserNotificationsViewModel() }
 }

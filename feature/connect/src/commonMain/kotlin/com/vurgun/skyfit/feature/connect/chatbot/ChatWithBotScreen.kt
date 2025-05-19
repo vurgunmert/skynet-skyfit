@@ -1,15 +1,12 @@
 package com.vurgun.skyfit.feature.connect.chatbot
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -17,34 +14,49 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import cafe.adriel.voyager.core.screen.Screen
+import cafe.adriel.voyager.koin.koinScreenModel
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
+import com.vurgun.skyfit.core.ui.components.special.SkyFitMobileScaffold
+import com.vurgun.skyfit.core.ui.components.special.SkyFitScreenHeader
+import com.vurgun.skyfit.core.ui.styling.SkyFitColor
+import com.vurgun.skyfit.core.ui.utils.CollectEffect
 import com.vurgun.skyfit.feature.connect.component.SkyFitChatMessageBubble
 import com.vurgun.skyfit.feature.connect.component.SkyFitChatMessageBubbleShimmer
 import com.vurgun.skyfit.feature.connect.component.SkyFitChatMessageInputComponent
-import com.vurgun.skyfit.core.ui.components.special.SkyFitScaffold
-import com.vurgun.skyfit.core.ui.components.special.SkyFitScreenHeader
-import com.vurgun.skyfit.core.ui.styling.SkyFitColor
+import org.jetbrains.compose.resources.stringResource
+import skyfit.core.ui.generated.resources.Res
+import skyfit.core.ui.generated.resources.chatbot_label
 
-class ChatBotMessageScreen(
-    private val viewModel: ChatbotViewModel
-): Screen {
+class ChatWithBotScreen(
+    val chatHistoryId: String? = null,
+    val presetQuery: String? = null,
+) : Screen {
 
     @Composable
     override fun Content() {
-       val navigator = LocalNavigator.currentOrThrow
+        val navigator = LocalNavigator.currentOrThrow
+        val viewModel = koinScreenModel<ChatWithBotViewModel>()
 
-        ChatBotMessageScreenContent(viewModel) {
-            navigator.pop()
+        CollectEffect(viewModel.effect) { effect ->
+            when (effect) {
+                ChatWithBotEffect.NavigateBack -> {
+                    navigator.pop()
+                }
+            }
         }
-    }
 
+        LaunchedEffect(viewModel) {
+            viewModel.loadData(chatHistoryId, presetQuery)
+        }
+
+        ChatBotMessageScreenContent(viewModel)
+    }
 }
 
 @Composable
 private fun ChatBotMessageScreenContent(
-   viewModel: ChatbotViewModel,
-   onDismiss: () -> Unit
+    viewModel: ChatWithBotViewModel
 ) {
 
     val messages by viewModel.messages.collectAsState()
@@ -57,12 +69,20 @@ private fun ChatBotMessageScreenContent(
         }
     }
 
-    SkyFitScaffold(topBar = {
-        SkyFitScreenHeader("Chatbot", onClickBack = onDismiss)
-    }) {
+    SkyFitMobileScaffold(
+        topBar = {
+            SkyFitScreenHeader(
+                title = stringResource(Res.string.chatbot_label),
+                onClickBack = { viewModel.onAction(ChatWithBotAction.OnClickBack) }
+            )
+        }
+    ) {
         Column(
-            Modifier.fillMaxSize()
+            Modifier
+                .fillMaxSize()
                 .background(SkyFitColor.background.default)
+                .verticalScroll(rememberScrollState())
+                .imePadding()
         ) {
             LazyColumn(
                 modifier = Modifier
@@ -85,7 +105,7 @@ private fun ChatBotMessageScreenContent(
             Box(Modifier.padding(24.dp).fillMaxWidth()) {
                 SkyFitChatMessageInputComponent(
                     enabled = !isLoading,
-                    onSend = { userInput -> viewModel.sendQuery(userInput) }
+                    onSend = { viewModel.onAction(ChatWithBotAction.OnSubmitMessage(it)) }
                 )
             }
         }
