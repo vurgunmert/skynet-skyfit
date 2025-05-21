@@ -1,22 +1,18 @@
 package com.vurgun.skyfit.feature.dashboard.home.mobile
 
-import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.koin.koinScreenModel
 import cafe.adriel.voyager.navigator.LocalNavigator
@@ -36,9 +32,8 @@ import com.vurgun.skyfit.feature.dashboard.home.FacilityHomeAction
 import com.vurgun.skyfit.feature.dashboard.home.FacilityHomeEffect
 import com.vurgun.skyfit.feature.dashboard.home.FacilityHomeUiState
 import com.vurgun.skyfit.feature.dashboard.home.FacilityHomeViewModel
-import com.vurgun.skyfit.feature.dashboard.home.desktop.FacilityHomeExtendedScreen
-import com.vurgun.skyfit.feature.dashboard.home.desktop.MobileDashboardHomeFacilityGraph
-import com.vurgun.skyfit.feature.dashboard.home.desktop.StatCardGrid
+import com.vurgun.skyfit.feature.dashboard.home.desktop.FacilityHomeExpandedScreen
+import com.vurgun.skyfit.feature.dashboard.home.desktop.StatCardComponent
 import org.jetbrains.compose.resources.stringResource
 import skyfit.core.ui.generated.resources.Res
 import skyfit.core.ui.generated.resources.refresh_action
@@ -89,9 +84,9 @@ class FacilityHomeScreen : Screen {
                 val content = uiState as FacilityHomeUiState.Content
 
                 when (windowSize) {
-                    WindowSize.COMPACT-> FacilityHomeCompact(content, viewModel::onAction)
-                    WindowSize.MEDIUM,
-                    WindowSize.EXPANDED -> FacilityHomeExtendedScreen(content, viewModel::onAction)
+                    WindowSize.COMPACT,
+                    WindowSize.MEDIUM  -> FacilityHomeCompact(content, viewModel::onAction)
+                    WindowSize.EXPANDED -> FacilityHomeExpandedScreen(content, viewModel::onAction)
                 }
             }
         }
@@ -119,11 +114,12 @@ private fun FacilityHomeCompact(
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {
 
+            StatCardComponent(content)
+
             FacilityDashboardAppointments(content, onAction)
 
-            MobileDashboardHomeFacilityStatisticsComponent()
+//            ExpandedHomeFacilityLessonTable(content.appointments)
 
-            MobileDashboardHomeTrainerClassScheduleComponent()
             Spacer(Modifier.height(128.dp))
         }
     }
@@ -134,89 +130,16 @@ internal fun FacilityDashboardAppointments(
     content: FacilityHomeUiState.Content,
     onAction: (FacilityHomeAction) -> Unit
 ) {
-    if (content.appointments.isEmpty()) {
+    if (content.activeLessons.isEmpty()) {
         EmptyFacilityAppointmentContent(
             assignedFacilityId = content.facility.gymId,
             onClickAdd = { onAction(FacilityHomeAction.OnClickLessons) }
         )
     } else {
         MobileDashboardHomeUpcomingAppointmentsComponent(
-            appointments = content.appointments,
+            appointments = content.activeLessons,
             onClickShowAll = { onAction(FacilityHomeAction.OnClickLessons) }
         )
     }
 }
 
-@Composable
-fun MobileDashboardHomeFacilityStatisticsComponent() {
-    val stats = listOf(
-        HomeFacilityStat("Aktif Üye", "327", "+53%", true),
-        HomeFacilityStat("Aktif Dersler", "12", "0%", null),
-        HomeFacilityStat("SkyFit Kazancın", "₺3120", "+53%", true),
-        HomeFacilityStat("Profil Görüntülenmesi", "213", "-2%", false)
-    )
-
-    Column(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(16.dp),
-    ) {
-        StatCardGrid(stats)
-
-        MobileDashboardHomeFacilityGraph()
-    }
-}
-
-@Composable
-private fun FacilityGridStatsLayout(stats: List<HomeFacilityStat>) {
-    Column {
-        Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
-            stats.subList(0, 2).forEach { MobileDashboardHomeFacilityStatCard(it) }
-        }
-        Spacer(modifier = Modifier.height(8.dp))
-        Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
-            stats.subList(2, 4).forEach { MobileDashboardHomeFacilityStatCard(it) }
-        }
-    }
-}
-
-
-@Composable
-private fun MobileDashboardHomeFacilityStatCard(stat: HomeFacilityStat) {
-    Column(
-        modifier = Modifier
-            .width(150.dp)
-            .height(80.dp)
-            .clip(RoundedCornerShape(12.dp))
-            .background(Color.DarkGray)
-            .padding(12.dp),
-        verticalArrangement = Arrangement.SpaceBetween
-    ) {
-        Text(text = stat.title, fontSize = 14.sp, color = Color.Gray)
-        Row(verticalAlignment = Alignment.CenterVertically) {
-            Text(text = stat.value, fontSize = 20.sp, color = Color.White, fontWeight = FontWeight.Bold)
-            stat.percentage?.let {
-                Spacer(modifier = Modifier.width(8.dp))
-                Box(
-                    modifier = Modifier
-                        .clip(RoundedCornerShape(6.dp))
-                        .background(
-                            if (stat.isPositive == true) Color.Green.copy(alpha = 0.2f) else Color.Red.copy(
-                                alpha = 0.2f
-                            )
-                        )
-                        .padding(horizontal = 6.dp, vertical = 2.dp)
-                ) {
-                    Text(text = it, fontSize = 12.sp, color = if (stat.isPositive == true) Color.Green else Color.Red)
-                }
-            }
-        }
-    }
-}
-
-data class HomeFacilityStat(
-    val title: String,
-    val value: String,
-    val percentage: String?,
-    val isPositive: Boolean?
-)

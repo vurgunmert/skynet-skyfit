@@ -145,7 +145,7 @@ class FacilityProfileVisitorViewModel(
     }
 
     private suspend fun fetchLessons(facilityId: Int, date: LocalDate = LocalDate.now()): List<LessonSessionItemViewData> {
-        return courseRepository.getLessonsByFacility(facilityId, date, date)
+        return courseRepository.getActiveLessonsByFacility(facilityId, date, date)
             .map { it.map(lessonSessionItemViewDataMapper::map) }
             .getOrDefault(emptyList())
     }

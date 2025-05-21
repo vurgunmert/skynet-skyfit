@@ -59,56 +59,6 @@ fun SideBySideLayout(
     }
 }
 
-
-@Composable
-fun AutoSideBySideLayout(
-    modifier: Modifier = Modifier,
-    leftModifier: Modifier = Modifier,
-    rightModifier: Modifier = Modifier,
-    leftContent: @Composable ColumnScope.() -> Unit,
-    rightContent: @Composable ColumnScope.() -> Unit
-) {
-    val windowSize = LocalWindowSize.current
-    val isCompact = windowSize == WindowSize.COMPACT || windowSize == WindowSize.MEDIUM
-
-
-    Column(
-        modifier = modifier
-            .fillMaxSize()
-            .background(SkyFitColor.background.default)
-            .padding(16.dp)
-    ) {
-        if (isCompact) {
-            Column(modifier = Modifier.fillMaxWidth()) {
-                leftContent()
-                Spacer(modifier = Modifier.height(16.dp))
-                rightContent()
-            }
-        } else {
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.spacedBy(16.dp)
-            ) {
-                Column(
-                    modifier = leftModifier
-                        .weight(1f)
-                        .fillMaxWidth()
-                ) {
-                    leftContent()
-                }
-
-                Column(
-                    modifier = rightModifier
-                        .weight(1f)
-                        .fillMaxWidth()
-                ) {
-                    rightContent()
-                }
-            }
-        }
-    }
-}
-
 @Composable
 fun HomeScreenResponsiveLayout(
     modifier: Modifier = Modifier,
@@ -121,9 +71,10 @@ fun HomeScreenResponsiveLayout(
 
     Column(
         modifier = modifier
+            .padding(end = 16.dp, bottom = 16.dp)
             .verticalScroll(scrollState)
             .fillMaxSize()
-            .background(SkyFitColor.background.surfaceSecondary, RoundedCornerShape(16.dp))
+            .background(SkyFitColor.background.surfaceTertiary, RoundedCornerShape(16.dp))
             .padding(16.dp)
     ) {
         if (isCompact) {
@@ -134,7 +85,7 @@ fun HomeScreenResponsiveLayout(
             }
         } else {
             Row(
-                modifier = Modifier.fillMaxWidth()
+                modifier = Modifier.fillMaxSize()
             ) {
                 Column(
                     modifier = Modifier

@@ -54,7 +54,16 @@ class CourseApiService(private val apiClient: ApiClient) {
         const val EVALUATE_PARTICIPANTS = "complete/lesson"
     }
 
-    internal suspend fun getLessonsByFacility(request: GetFacilityLessonsRequest, token: String): ApiResult<List<LessonDTO>> {
+    internal suspend fun getAllLessonsByFacility(request: GetFacilityLessonsRequest, token: String): ApiResult<List<LessonDTO>> {
+        return apiClient.safeApiCall<List<LessonDTO>> {
+            method = HttpMethod.Post
+            bearerAuth(token)
+            url(Endpoints.GET_ALL_LESSONS_BY_GYM)
+            setBody(request)
+        }
+    }
+
+    internal suspend fun getActiveLessonsByFacility(request: GetFacilityLessonsRequest, token: String): ApiResult<List<LessonDTO>> {
         return apiClient.safeApiCall<List<LessonDTO>> {
             method = HttpMethod.Post
             bearerAuth(token)

@@ -385,6 +385,7 @@ fun MobileDashboardHomeUpcomingAppointmentsComponent(
     Column(
         modifier = Modifier
             .fillMaxWidth()
+            .background(SkyFitColor.background.default, shape = RoundedCornerShape(16.dp))
             .padding(LocalPadding.current.medium)
     ) {
         Row(

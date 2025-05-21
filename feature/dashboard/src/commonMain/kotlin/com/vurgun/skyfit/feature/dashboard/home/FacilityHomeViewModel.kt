@@ -6,15 +6,36 @@ import com.vurgun.skyfit.core.data.persona.domain.model.FacilityDetail
 import com.vurgun.skyfit.core.data.persona.domain.model.FacilityProfile
 import com.vurgun.skyfit.core.data.persona.domain.repository.ProfileRepository
 import com.vurgun.skyfit.core.data.persona.domain.repository.UserManager
-import com.vurgun.skyfit.core.data.schedule.domain.repository.CourseRepository
 import com.vurgun.skyfit.core.data.schedule.data.mapper.LessonSessionItemViewDataMapper
 import com.vurgun.skyfit.core.data.schedule.data.model.LessonSessionItemViewData
+import com.vurgun.skyfit.core.data.schedule.domain.repository.CourseRepository
 import com.vurgun.skyfit.core.data.utility.SingleSharedFlow
 import com.vurgun.skyfit.core.data.utility.UiStateDelegate
 import com.vurgun.skyfit.core.data.utility.emitOrNull
-import com.vurgun.skyfit.feature.dashboard.home.mobile.HomeFacilityStat
 import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.launch
+import kotlinx.datetime.LocalDate
+
+data class DashboardStatCardModel(
+    val primaryMetrics: List<DashboardStatMetric>,
+    val chartData: Any? = null,
+    val timeRange: TimeRange = TimeRange.H
+) {
+    enum class TimeRange {
+        Y, M6, M3, M1, H
+    }
+}
+
+data class DashboardStatMetric(
+    val title: String,
+    val value: String,
+    val changePercent: Int? = null,
+    val changeDirection: ChangeDirection = ChangeDirection.NEUTRAL
+) {
+    enum class ChangeDirection {
+        UP, DOWN, NEUTRAL
+    }
+}
 
 sealed interface FacilityHomeUiState {
     data object Loading : FacilityHomeUiState
@@ -22,13 +43,9 @@ sealed interface FacilityHomeUiState {
     data class Content(
         val facility: FacilityDetail,
         val profile: FacilityProfile,
-        val appointments: List<LessonSessionItemViewData> = emptyList(),
-        val stats: List<HomeFacilityStat> = listOf(
-            HomeFacilityStat("Aktif Üye", "327", "+53%", true),
-            HomeFacilityStat("Aktif Dersler", "12", "0%", null),
-            HomeFacilityStat("SkyFit Kazancın", "₺3120", "+53%", true),
-            HomeFacilityStat("Profil Görüntülenmesi", "213", "-2%", false)
-        )
+        val activeLessons: List<LessonSessionItemViewData> = emptyList(),
+        val allLessons: List<LessonSessionItemViewData> = emptyList(),
+        val statistics: DashboardStatCardModel
     ) : FacilityHomeUiState
 }
 
@@ -79,12 +96,25 @@ class FacilityHomeViewModel(
                 val facility = userManager.user.value as FacilityDetail
                 val facilityProfile = profileRepository.getFacilityProfile(facility.gymId).getOrThrow()
 
-                val appointments = courseRepository.getUpcomingLessonsByFacility(facility.gymId, limit = 5)
+                val metrics = listOf(
+                    DashboardStatMetric("Aktif Üye", "${facilityProfile.memberCount}"),
+                    DashboardStatMetric("Aktif Egitmen", "${facilityProfile.trainerCount}"),
+                    DashboardStatMetric("Puan", "${facilityProfile.point}")
+                )
+
+                val statistics = DashboardStatCardModel(primaryMetrics = metrics)
+
+                val activeLessons = courseRepository.getUpcomingLessonsByFacility(facility.gymId, limit = 5)
                     .getOrNull()?.let { list ->
                         list.map { mapper.map(it) }
                     }.orEmpty()
 
-                _uiState.update(FacilityHomeUiState.Content(facility, facilityProfile, appointments))
+                val allLessons = courseRepository.getAllLessonsByFacility(facility.gymId, startDate = LocalDate(2025,1,1), null)
+                    .getOrNull()?.let { list ->
+                        list.map { mapper.map(it) }
+                    }.orEmpty()
+
+                _uiState.update(FacilityHomeUiState.Content(facility, facilityProfile, activeLessons, allLessons, statistics))
             }.onFailure {
                 _uiState.update(FacilityHomeUiState.Error(it.message))
             }

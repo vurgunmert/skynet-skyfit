@@ -47,15 +47,31 @@ class CourseRepositoryImpl(
     private val tokenManager: TokenManager
 ) : CourseRepository {
 
-    override suspend fun getLessonsByFacility(gymId: Int, startDate: LocalDate, endDate: LocalDate?): Result<List<Lesson>> =
-        getLessonsByFacility(gymId, startDate.formatToServerDate(), endDate?.formatToServerDate())
+    override suspend fun getActiveLessonsByFacility(gymId: Int, startDate: LocalDate, endDate: LocalDate?): Result<List<Lesson>> =
+        getActiveLessonsByFacility(gymId, startDate.formatToServerDate(), endDate?.formatToServerDate())
 
-    override suspend fun getLessonsByFacility(gymId: Int, startDate: String, endDate: String?): Result<List<Lesson>> =
+    override suspend fun getActiveLessonsByFacility(gymId: Int, startDate: String, endDate: String?): Result<List<Lesson>> =
         withContext(dispatchers.io) {
             runCatching {
                 val token = tokenManager.getTokenOrThrow()
                 val request = GetFacilityLessonsRequest(gymId, startDate, endDate)
-                when (val result = apiService.getLessonsByFacility(request, token)) {
+                when (val result = apiService.getActiveLessonsByFacility(request, token)) {
+                    is ApiResult.Success -> result.data.toLessonDomainList()
+                    is ApiResult.Error -> throw IllegalStateException(result.message)
+                    is ApiResult.Exception -> throw result.exception
+                }
+            }
+        }
+
+    override suspend fun getAllLessonsByFacility(gymId: Int, startDate: LocalDate, endDate: LocalDate?): Result<List<Lesson>> =
+        getAllLessonsByFacility(gymId, startDate.formatToServerDate(), endDate?.formatToServerDate())
+
+    override suspend fun getAllLessonsByFacility(gymId: Int, startDate: String, endDate: String?): Result<List<Lesson>> =
+        withContext(dispatchers.io) {
+            runCatching {
+                val token = tokenManager.getTokenOrThrow()
+                val request = GetFacilityLessonsRequest(gymId, startDate, endDate)
+                when (val result = apiService.getAllLessonsByFacility(request, token)) {
                     is ApiResult.Success -> result.data.toLessonDomainList()
                     is ApiResult.Error -> throw IllegalStateException(result.message)
                     is ApiResult.Exception -> throw result.exception

@@ -146,7 +146,7 @@ class FacilityProfileScheduleViewModel(
         startDate: LocalDate = LocalDate.now(),
         endDate: LocalDate? = null
     ): List<LessonSessionItemViewData> {
-        return courseRepository.getLessonsByFacility(facilityId, startDate, endDate ?: startDate)
+        return courseRepository.getActiveLessonsByFacility(facilityId, startDate, endDate ?: startDate)
             .map { it.map(lessonMapper::map) }
             .getOrDefault(emptyList())
     }

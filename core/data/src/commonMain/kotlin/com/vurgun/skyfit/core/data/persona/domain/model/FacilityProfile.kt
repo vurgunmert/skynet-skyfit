@@ -11,6 +11,6 @@ data class FacilityProfile(
     val bio: String,
     val trainerCount: Int,
     val memberCount: Int,
-    val point: Float?,
+    val point: Float,
 )
 

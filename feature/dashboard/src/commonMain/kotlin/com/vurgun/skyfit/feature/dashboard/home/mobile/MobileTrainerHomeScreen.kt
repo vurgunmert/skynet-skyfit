@@ -3,7 +3,9 @@ package com.vurgun.skyfit.feature.dashboard.home.mobile
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.*
+import androidx.compose.material.Checkbox
+import androidx.compose.material.Divider
+import androidx.compose.material.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -19,7 +21,6 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.drawText
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.rememberTextMeasurer
-import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import cafe.adriel.voyager.core.screen.Screen
@@ -30,11 +31,19 @@ import com.vurgun.skyfit.core.data.schedule.data.model.LessonSessionItemViewData
 import com.vurgun.skyfit.core.navigation.SharedScreen
 import com.vurgun.skyfit.core.navigation.findRootNavigator
 import com.vurgun.skyfit.core.navigation.push
+import com.vurgun.skyfit.core.ui.components.chip.RectangleChip
 import com.vurgun.skyfit.core.ui.components.event.TrainerHomeLessonEventItem
+import com.vurgun.skyfit.core.ui.components.icon.SkyIcon
+import com.vurgun.skyfit.core.ui.components.icon.SkyIconSize
+import com.vurgun.skyfit.core.ui.components.icon.SkyIconTint
 import com.vurgun.skyfit.core.ui.components.loader.FullScreenLoaderContent
 import com.vurgun.skyfit.core.ui.components.special.CharacterImage
 import com.vurgun.skyfit.core.ui.components.special.SkyFitMobileScaffold
+import com.vurgun.skyfit.core.ui.components.text.SkyText
+import com.vurgun.skyfit.core.ui.components.text.SkyTextField
+import com.vurgun.skyfit.core.ui.components.text.TextStyleType
 import com.vurgun.skyfit.core.ui.screen.ErrorScreen
+import com.vurgun.skyfit.core.ui.styling.SkyFitAsset
 import com.vurgun.skyfit.core.ui.styling.SkyFitColor
 import com.vurgun.skyfit.core.ui.styling.SkyFitTypography
 import com.vurgun.skyfit.core.ui.utils.CollectEffect
@@ -45,8 +54,6 @@ import com.vurgun.skyfit.feature.dashboard.home.TrainerHomeAction
 import com.vurgun.skyfit.feature.dashboard.home.TrainerHomeEffect
 import com.vurgun.skyfit.feature.dashboard.home.TrainerHomeUiState
 import com.vurgun.skyfit.feature.dashboard.home.TrainerHomeViewModel
-import org.jetbrains.compose.resources.DrawableResource
-import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
 import skyfit.core.ui.generated.resources.*
 
@@ -295,6 +302,7 @@ private fun TimeFilterSelector(selectedPeriod: String, onPeriodChange: (String) 
         }
     }
 }
+
 @Composable
 fun ChangeLineChart(
     dataPoints: List<Int>,
@@ -421,200 +429,3 @@ private fun TrainerUpcomingAppointments(
     }
 }
 
-
-
-
-//TODO: REMOVE
-@Composable
-fun MobileDashboardHomeTrainerClassScheduleComponent() {
-    val classList = listOf(
-        HomeTrainerClass("Kişisel Kuvvet Antrenmanı", Res.drawable.ic_dots_vertical, "07:00-08:00", "22 Kasım"),
-        HomeTrainerClass("Pilates", Res.drawable.ic_dots_vertical, "07:00-08:00", "22 Kasım"),
-        HomeTrainerClass("Core", Res.drawable.ic_dots_vertical, "07:00-08:00", "22 Kasım"),
-        HomeTrainerClass("Kişisel Kuvvet Antrenmanı", Res.drawable.ic_dots_vertical, "07:00-08:00", "22 Kasım"),
-        HomeTrainerClass("Skipping Rope", Res.drawable.ic_dots_vertical, "07:00-08:00", "22 Kasım"),
-        HomeTrainerClass("Push-Ups", Res.drawable.ic_dots_vertical, "07:00-08:00", "22 Kasım"),
-        HomeTrainerClass("Kişisel Kuvvet Antrenmanı", Res.drawable.ic_dots_vertical, "07:00-08:00", "22 Kasım"),
-        HomeTrainerClass("Skipping Rope", Res.drawable.ic_dots_vertical, "07:00-08:00", "22 Kasım"),
-        HomeTrainerClass("Push-Ups", Res.drawable.ic_dots_vertical, "07:00-08:00", "22 Kasım")
-    )
-
-    Column(
-        modifier = Modifier
-            .padding(16.dp)
-            .fillMaxWidth()
-    ) {
-        SearchAndFilterBar()
-        Spacer(modifier = Modifier.height(8.dp))
-        HomeClassScheduleTable(classList)
-    }
-}
-
-@Composable
-private fun SearchAndFilterBar() {
-    var searchQuery by remember { mutableStateOf("") }
-
-    Column(
-        Modifier
-            .fillMaxWidth()
-            .background(
-                SkyFitColor.background.surfaceSecondaryHover,
-                RoundedCornerShape(topStart = 16.dp, topEnd = 16.dp)
-            )
-            .padding(8.dp)
-    ) {
-        Row(
-            modifier = Modifier.fillMaxWidth(),
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            TextField(
-                value = searchQuery,
-                onValueChange = { searchQuery = it },
-                placeholder = { Text("Tabloda ara", color = SkyFitColor.text.secondary) },
-                singleLine = true,
-                textStyle = SkyFitTypography.bodyMediumRegular,
-                modifier = Modifier
-                    .width(280.dp)
-                    .background(SkyFitColor.background.surfaceSecondary, RoundedCornerShape(50))
-                    .border(1.dp, SkyFitColor.border.secondaryButton, RoundedCornerShape(50))
-                    .padding(horizontal = 8.dp, vertical = 4.dp),
-                colors = TextFieldDefaults.textFieldColors(
-                    cursorColor = Color.White,
-                    backgroundColor = Color.Transparent,
-                    focusedIndicatorColor = Color.Transparent,
-                    unfocusedIndicatorColor = Color.Transparent
-                )
-            )
-
-            Spacer(Modifier.weight(1f))
-
-            Row(
-                Modifier
-                    .background(SkyFitColor.specialty.buttonBgRest, RoundedCornerShape(8.dp))
-                    .padding(4.dp)
-            ) {
-                Icon(
-                    painter = painterResource(Res.drawable.ic_search),
-                    contentDescription = "Search",
-                    tint = SkyFitColor.icon.inverseSecondary,
-                    modifier = Modifier.size(16.dp)
-                )
-
-                Icon(
-                    painter = painterResource(Res.drawable.ic_dots_vertical),
-                    contentDescription = "Filter",
-                    tint = SkyFitColor.icon.inverseSecondary,
-                    modifier = Modifier.size(16.dp)
-                )
-            }
-        }
-
-        Spacer(modifier = Modifier.height(8.dp))
-
-        Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-            HomeScheduleFilterChip("Aktif")
-            HomeScheduleFilterChip("Pilates")
-            HomeScheduleFilterChip("07:00-08:00")
-            HomeScheduleFilterChip("22/11/2024")
-        }
-    }
-}
-
-@Composable
-private fun HomeScheduleFilterChip(label: String) {
-    Box(
-        modifier = Modifier
-            .border(1.dp, SkyFitColor.border.secondaryButton, RoundedCornerShape(8.dp))
-            .padding(6.dp)
-    ) {
-        Text(text = label, style = SkyFitTypography.bodySmallSemibold)
-    }
-}
-
-@Composable
-private fun HomeClassScheduleTable(classList: List<HomeTrainerClass>) {
-    Column(modifier = Modifier.fillMaxWidth()) {
-        // Table Header
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .background(Color.DarkGray)
-                .padding(vertical = 12.dp, horizontal = 8.dp),
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            Checkbox(checked = false, onCheckedChange = {}, modifier = Modifier.size(24.dp))
-            Spacer(modifier = Modifier.width(12.dp))
-            Text("Etkinliğin Adı", fontSize = 14.sp, color = Color.Gray, modifier = Modifier.weight(1f))
-            Text("Saat", fontSize = 14.sp, color = Color.Gray, modifier = Modifier)
-            Text("Tarih", fontSize = 14.sp, color = Color.Gray, modifier = Modifier.width(80.dp))
-        }
-
-        // Show at most 9 rows
-        val limitedClassList = classList.take(9)
-
-        limitedClassList.forEach { trainerClass ->
-            HomeClassScheduleRow(trainerClass)
-        }
-    }
-}
-
-
-@Composable
-private fun HomeClassScheduleRow(trainerClass: HomeTrainerClass) {
-    Row(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(vertical = 8.dp, horizontal = 8.dp),
-        verticalAlignment = Alignment.CenterVertically
-    ) {
-        Checkbox(
-            checked = false, onCheckedChange = {},
-            modifier = Modifier.size(24.dp),
-            colors = CheckboxDefaults.colors(
-                checkmarkColor = Color.Cyan,
-                uncheckedColor = Color.Gray
-            )
-        )
-        Spacer(modifier = Modifier.width(12.dp))
-
-        Row(
-            modifier = Modifier.weight(1f),
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            Icon(
-                painter = painterResource(trainerClass.icon),
-                contentDescription = trainerClass.name,
-                tint = Color.White,
-                modifier = Modifier.size(20.dp)
-            )
-            Spacer(modifier = Modifier.width(8.dp))
-            Text(
-                text = trainerClass.name,
-                style = SkyFitTypography.bodyXSmallSemibold,
-                maxLines = 1,
-                overflow = TextOverflow.Ellipsis,
-                modifier = Modifier.weight(1f)
-            )
-        }
-
-        Spacer(modifier = Modifier.width(20.dp))
-        Text(
-            text = trainerClass.time,
-            style = SkyFitTypography.bodyXSmallSemibold,
-            maxLines = 1,
-        )
-        Spacer(modifier = Modifier.width(20.dp))
-        Text(
-            text = trainerClass.date,
-            style = SkyFitTypography.bodyXSmallSemibold,
-            maxLines = 1,
-        )
-    }
-}
-
-private data class HomeTrainerClass(
-    val name: String,
-    val icon: DrawableResource,
-    val time: String,
-    val date: String
-)

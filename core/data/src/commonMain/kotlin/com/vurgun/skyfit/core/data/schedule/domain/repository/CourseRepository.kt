@@ -13,8 +13,8 @@ import kotlinx.datetime.LocalDate
 interface CourseRepository {
 
     // region: Lessons
-    suspend fun getLessonsByFacility(gymId: Int, startDate: LocalDate, endDate: LocalDate? = null): Result<List<Lesson>>
-    suspend fun getLessonsByFacility(gymId: Int, startDate: String, endDate: String? = null): Result<List<Lesson>>
+    suspend fun getActiveLessonsByFacility(gymId: Int, startDate: LocalDate, endDate: LocalDate? = null): Result<List<Lesson>>
+    suspend fun getActiveLessonsByFacility(gymId: Int, startDate: String, endDate: String? = null): Result<List<Lesson>>
     suspend fun getLessonsByTrainer(trainerId: Int, startDate: LocalDate, endDate: LocalDate?): Result<List<Lesson>>
     suspend fun getLessonsByTrainer(trainerId: Int, startDate: String, endDate: String?): Result<List<Lesson>>
 
@@ -41,4 +41,6 @@ interface CourseRepository {
     suspend fun getAppointmentDetail(lpId: Int): Result<AppointmentDetail>
     suspend fun getLessonParticipants(lessonId: Int): Result<List<LessonParticipant>>
     suspend fun evaluateParticipants(lessonId: Int, participants: List<LessonParticipant>): Result<Unit>
+    suspend fun getAllLessonsByFacility(gymId: Int, startDate: String, endDate: String?): Result<List<Lesson>>
+    suspend fun getAllLessonsByFacility(gymId: Int, startDate: LocalDate, endDate: LocalDate?): Result<List<Lesson>>
 }

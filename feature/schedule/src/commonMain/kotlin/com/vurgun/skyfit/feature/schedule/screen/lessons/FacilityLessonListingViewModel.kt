@@ -89,7 +89,7 @@ class FacilityLessonListingViewModel(
         screenModelScope.launch {
             _uiState.update { it.copy(isLoading = true, errorMessage = null) }
 
-            val result = courseRepository.getLessonsByFacility(gymId, date.formatToServerDate(), date.formatToServerDate())
+            val result = courseRepository.getActiveLessonsByFacility(gymId, date.formatToServerDate(), date.formatToServerDate())
             result.fold(
                 onSuccess = { lessons ->
                     this@FacilityLessonListingViewModel.lessons = lessons

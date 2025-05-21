@@ -66,6 +66,7 @@ private object CompactDashboardComponent {
     fun Screen() {
         val appNavigator = LocalNavigator.currentOrThrow
         val homeScreen = rememberScreen(DashboardScreen.Home)
+        val exploreScreen = rememberScreen(DashboardScreen.Explore)
         val profileScreen = rememberScreen(DashboardScreen.Profile)
 
         Navigator(homeScreen) { dashboardNavigator ->
@@ -75,6 +76,7 @@ private object CompactDashboardComponent {
                         modifier = Modifier.padding(bottom = 12.dp),
                         currentScreen = dashboardNavigator.lastItem,
                         onClickHome = { dashboardNavigator.replace(homeScreen) },
+                        onClickExplore = { dashboardNavigator.replace(exploreScreen) },
                         onClickProfile = { dashboardNavigator.replace(profileScreen) },
                         onClickAppAction = { appNavigator.push(SharedScreen.ChatBot) }
                     )

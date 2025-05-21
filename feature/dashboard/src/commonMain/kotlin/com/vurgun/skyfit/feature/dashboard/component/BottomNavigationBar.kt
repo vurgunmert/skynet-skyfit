@@ -19,6 +19,7 @@ import com.vurgun.skyfit.core.ui.components.icon.SkyIconSize
 import com.vurgun.skyfit.core.ui.components.icon.SkyIconTint
 import com.vurgun.skyfit.core.ui.components.special.ChatBotButtonComponent
 import com.vurgun.skyfit.core.ui.styling.SkyFitColor
+import com.vurgun.skyfit.feature.dashboard.explore.ExploreScreen
 import com.vurgun.skyfit.feature.dashboard.home.HomeScreen
 import com.vurgun.skyfit.feature.persona.profile.ProfileScreen
 import org.jetbrains.compose.resources.DrawableResource
@@ -29,6 +30,7 @@ internal fun BottomNavigationBar(
     modifier: Modifier = Modifier,
     currentScreen: Screen,
     onClickHome: () -> Unit,
+    onClickExplore: () -> Unit,
     onClickProfile: () -> Unit,
     onClickAppAction: () -> Unit
 ) {
@@ -57,6 +59,13 @@ internal fun BottomNavigationBar(
                     selectedIcon = Res.drawable.ic_home_fill,
                     unselectedIcon = Res.drawable.ic_home,
                     onClick = onClickHome
+                )
+
+                BottomBarItem(
+                    selected = currentScreen is ExploreScreen,
+                    selectedIcon = Res.drawable.ic_barbell_fill,
+                    unselectedIcon = Res.drawable.ic_barbell,
+                    onClick = onClickExplore
                 )
 
                 BottomBarItem(

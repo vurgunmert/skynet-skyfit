@@ -8,6 +8,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import com.vurgun.skyfit.core.ui.styling.SkyFitAsset
 import com.vurgun.skyfit.core.ui.styling.SkyFitColor
 import org.jetbrains.compose.resources.DrawableResource
 import org.jetbrains.compose.resources.painterResource
@@ -45,6 +46,27 @@ fun SkyIcon(
 
     Icon(
         painter = painterResource(res),
+        contentDescription = contentDescription,
+        tint = tint.color,
+        modifier = iconModifier
+    )
+}
+
+@Composable
+fun SkyIcon(
+    iconId: Int,
+    modifier: Modifier = Modifier,
+    size: SkyIconSize = SkyIconSize.Normal,
+    tint: SkyIconTint = SkyIconTint.Default,
+    contentDescription: String? = null,
+    onClick: (() -> Unit)? = null
+) {
+    val iconModifier = modifier
+        .size(size.dp)
+        .then(if (onClick != null) Modifier.clickable(onClick = onClick) else Modifier)
+
+    Icon(
+        painter = SkyFitAsset.getPainter(iconId),
         contentDescription = contentDescription,
         tint = tint.color,
         modifier = iconModifier

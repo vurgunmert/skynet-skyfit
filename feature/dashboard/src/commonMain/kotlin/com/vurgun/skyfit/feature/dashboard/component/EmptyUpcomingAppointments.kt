@@ -26,6 +26,7 @@ internal fun EmptyFacilityAppointmentContent(
     Column(
         modifier = Modifier
             .fillMaxWidth()
+            .background(SkyFitColor.background.default, shape = RoundedCornerShape(16.dp))
             .padding(vertical = 16.dp, horizontal = 20.dp)
     ) {
         SkyText(

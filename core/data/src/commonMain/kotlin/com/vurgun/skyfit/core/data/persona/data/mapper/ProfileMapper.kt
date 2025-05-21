@@ -100,7 +100,7 @@ internal object ProfileMapper {
             bio = bio,
             trainerCount = gymTrainerCount,
             memberCount = gymMemberCount,
-            point = point
+            point = point ?: 0f
         )
     }
 
