@@ -1,6 +1,7 @@
 package com.vurgun.skyfit.core.data.persona.data.service
 
 import com.vurgun.skyfit.core.data.persona.data.model.DeleteProfileTagRequest
+import com.vurgun.skyfit.core.data.persona.data.model.ExploreFacilityProfileDTO
 import com.vurgun.skyfit.core.data.shared.data.model.EmptyDTO
 import com.vurgun.skyfit.core.data.persona.data.model.FacilityProfileDTO
 import com.vurgun.skyfit.core.data.persona.data.model.FacilityTrainerProfileDTO
@@ -30,6 +31,7 @@ class ProfileApiService(private val apiClient: ApiClient) {
         const val GET_USER_PROFILE = "profile/get/user"
         const val GET_TRAINER_PROFILE = "profile/get/trainer"
         const val GET_FACILITY_PROFILE = "profile/get/gym"
+        const val GET_ALL_EXPLORE_FACILITY_PROFILES = "get/all/gyms"
         const val GET_FACILITY_TRAINER_PROFILES = "profile/gym/trainers"
         const val UPDATE_FACILITY_PROFILE = "profile/update/gym"
         const val UPDATE_TRAINER_PROFILE = "profile/update/trainer"
@@ -73,6 +75,14 @@ class ProfileApiService(private val apiClient: ApiClient) {
             bearerAuth(token)
             url(Endpoint.GET_FACILITY_PROFILE)
             setBody(request)
+        }
+    }
+
+    suspend fun getAllExploreFacilityProfiles(token: String): ApiResult<List<ExploreFacilityProfileDTO>> {
+        return apiClient.safeApiCall<List<ExploreFacilityProfileDTO>> {
+            method = HttpMethod.Post
+            bearerAuth(token)
+            url(Endpoint.GET_ALL_EXPLORE_FACILITY_PROFILES)
         }
     }
 

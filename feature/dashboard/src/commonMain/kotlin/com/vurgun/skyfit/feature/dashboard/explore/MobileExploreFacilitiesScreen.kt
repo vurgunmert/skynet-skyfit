@@ -28,25 +28,25 @@ fun MobileExploreFacilitiesScreen(
     goToBack: () -> Unit
 ) {
 
-    val viewModel = ExploreViewModel()
-    val facilities = viewModel.facilities
-    var isSearchVisible by remember { mutableStateOf(false) }
-
-    SkyFitScaffold(
-        topBar = {
-            Column(Modifier.fillMaxWidth().padding(horizontal = 16.dp)) {
-                SkyFitScreenHeader("Popüler Tesisler", onClickBack = {})
-                Spacer(Modifier.height(16.dp))
-                if (isSearchVisible) {
-                    SkyFitSearchTextInputComponent()
-                    Spacer(Modifier.height(16.dp))
-                }
-                SkyFitSearchFilterBarComponent(onEnableSearch = { isSearchVisible = it })
-            }
-        }
-    ) {
-        MobileExploreFacilitiesGridComponent(facilities)
-    }
+//    val viewModel = ExploreViewModel()
+//    val facilities = viewModel.facilities
+//    var isSearchVisible by remember { mutableStateOf(false) }
+//
+//    SkyFitScaffold(
+//        topBar = {
+//            Column(Modifier.fillMaxWidth().padding(horizontal = 16.dp)) {
+//                SkyFitScreenHeader("Popüler Tesisler", onClickBack = {})
+//                Spacer(Modifier.height(16.dp))
+//                if (isSearchVisible) {
+//                    SkyFitSearchTextInputComponent()
+//                    Spacer(Modifier.height(16.dp))
+//                }
+//                SkyFitSearchFilterBarComponent(onEnableSearch = { isSearchVisible = it })
+//            }
+//        }
+//    ) {
+//        MobileExploreFacilitiesGridComponent(facilities)
+//    }
 }
 
 @Composable

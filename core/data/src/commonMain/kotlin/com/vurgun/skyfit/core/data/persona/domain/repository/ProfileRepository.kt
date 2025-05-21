@@ -1,5 +1,6 @@
 package com.vurgun.skyfit.core.data.persona.domain.repository
 
+import com.vurgun.skyfit.core.data.persona.data.model.ExploreFacilityProfileDTO
 import com.vurgun.skyfit.core.data.persona.domain.model.FacilityProfile
 import com.vurgun.skyfit.core.data.persona.domain.model.FacilityTrainerProfile
 import com.vurgun.skyfit.core.data.persona.domain.model.TrainerProfile
@@ -44,4 +45,6 @@ interface ProfileRepository {
         bio: String,
         profileTags: List<Int>
     ): Result<Unit>
+
+    suspend fun getAllExploreFacilityProfiles(): Result<List<ExploreFacilityProfileDTO>>
 }

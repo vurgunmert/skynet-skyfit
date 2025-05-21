@@ -17,3 +17,16 @@ data class FacilityProfileDTO(
     val gymMemberCount: Int,
     val point: Float?,
 )
+
+@Serializable
+data class ExploreFacilityProfileDTO(
+    val gymId: Int,
+    val profilePhoto: String?,
+    val backgroundImage: String?,
+    val gymName: String,
+    @SerialName(value = "gymAdress") val address: String,
+    val bio: String,
+    val trainerCount: Int,
+    val memberCount: Int,
+    val point: Float?,
+)

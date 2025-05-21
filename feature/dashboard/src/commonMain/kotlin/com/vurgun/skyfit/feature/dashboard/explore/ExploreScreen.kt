@@ -23,12 +23,15 @@ import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.koin.koinScreenModel
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
+import com.vurgun.skyfit.core.navigation.SharedScreen
 import com.vurgun.skyfit.core.navigation.findRootNavigator
+import com.vurgun.skyfit.core.navigation.push
 import com.vurgun.skyfit.core.ui.components.image.NetworkImage
 import com.vurgun.skyfit.core.ui.components.loader.FullScreenLoaderContent
 import com.vurgun.skyfit.core.ui.components.special.*
 import com.vurgun.skyfit.core.ui.styling.SkyFitColor
 import com.vurgun.skyfit.core.ui.styling.SkyFitTypography
+import com.vurgun.skyfit.core.ui.utils.CollectEffect
 import com.vurgun.skyfit.feature.persona.components.FacilityProfileCardItemBox
 import com.vurgun.skyfit.feature.persona.components.VerticalTrainerProfileCard
 import com.vurgun.skyfit.feature.persona.components.viewdata.FacilityProfileCardItemViewData
@@ -45,6 +48,22 @@ class ExploreScreen : Screen {
         val navigator = LocalNavigator.currentOrThrow
         val viewModel = koinScreenModel<ExploreViewModel>()
         val uiState by viewModel.uiState.collectAsState()
+
+        CollectEffect(viewModel.effect) { effect ->
+            when (effect) {
+                ExploreEffect.NavigateToBack -> {
+                    navigator.pop()
+                }
+
+                is ExploreEffect.NavigateToVisitFacility -> {
+                    appNavigator.push(SharedScreen.FacilityProfileVisitor(effect.facilityId))
+                }
+
+                is ExploreEffect.NavigateToVisitTrainer -> {
+                    appNavigator.push(SharedScreen.TrainerProfileVisitor(effect.trainerId))
+                }
+            }
+        }
 
         LaunchedEffect(Unit) {
             viewModel.loadData()
@@ -72,16 +91,13 @@ private fun MobileExploreScreen(
     onAction: (ExploreAction) -> Unit,
 ) {
 
-    val trainers = content.trainers
-    val facilities = content.facilities
-
     SkyFitMobileScaffold(
         topBar = {
             Column(Modifier.fillMaxWidth().padding(horizontal = 16.dp)) {
                 Spacer(Modifier.height(16.dp))
-                SkyFitSearchTextInputComponent()
+//                SkyFitSearchTextInputComponent()
                 Spacer(Modifier.height(16.dp))
-                SkyFitSearchFilterBarComponent(onEnableSearch = { })
+//                SkyFitSearchFilterBarComponent(onEnableSearch = { })
             }
         }
     ) {
@@ -92,27 +108,37 @@ private fun MobileExploreScreen(
                 .verticalScroll(rememberScrollState()),
             verticalArrangement = Arrangement.spacedBy(24.dp)
         ) {
-            MobileDashboardExploreScreenFeaturedExercisesComponent(
-                onClick = { onAction(ExploreAction.OnClickExercise) }
-            )
+            if (content.exercises.isNotEmpty()) {
+                MobileDashboardExploreScreenFeaturedExercisesComponent(
+                    onClick = { onAction(ExploreAction.OnClickExercise) }
+                )
+            }
 
-            MobileDashboardExploreScreenFeaturedTrainersComponent(
-                trainers,
-                onClick = { onAction(ExploreAction.OnClickTrainer) }
-            )
+            if (content.trainers.isNotEmpty()) {
+                MobileDashboardExploreScreenFeaturedTrainersComponent(
+                    trainers = content.trainers,
+                    onClick = { onAction(ExploreAction.OnClickTrainer(it)) }
+                )
+            }
 
-            MobileDashboardExploreScreenFeaturedFacilitiesComponent(
-                facilities,
-                onClick = { onAction(ExploreAction.OnClickFacility) }
-            )
+            if (content.facilities.isNotEmpty()) {
+                MobileDashboardExploreScreenFeaturedFacilitiesComponent(
+                    facilities = content.facilities,
+                    onClick = { onAction(ExploreAction.OnClickFacility(it)) }
+                )
+            }
 
-            MobileDashboardExploreScreenFeaturedCommunitiesComponent(
-                onClick = { onAction(ExploreAction.OnClickCommunities) }
-            )
+            if (content.communities.isNotEmpty()) {
+                MobileDashboardExploreScreenFeaturedCommunitiesComponent(
+                    onClick = { onAction(ExploreAction.OnClickCommunities) }
+                )
+            }
 
-            MobileDashboardExploreScreenFeaturedChallengesComponent(
-                onClick = { onAction(ExploreAction.OnClickChallanges) }
-            )
+            if (content.challenges.isNotEmpty()) {
+                MobileDashboardExploreScreenFeaturedChallengesComponent(
+                    onClick = { onAction(ExploreAction.OnClickChallenges) }
+                )
+            }
 
             Spacer(Modifier.height(124.dp))
         }
@@ -163,7 +189,7 @@ private fun MobileDashboardExploreScreenFeaturedExerciseItemComponent(onClick: (
 @Composable
 private fun MobileDashboardExploreScreenFeaturedTrainersComponent(
     trainers: List<TrainerProfileCardItemViewData>,
-    onClick: () -> Unit
+    onClick: (trainerId: Int) -> Unit
 ) {
     Column(
         modifier = Modifier.fillMaxWidth(),
@@ -183,7 +209,7 @@ private fun MobileDashboardExploreScreenFeaturedTrainersComponent(
                     lessonCount = trainer.classCount,
                     videoCount = trainer.videoCount,
                     rating = trainer.rating,
-                    onClick = onClick
+                    onClick = { onClick(trainer.trainerId) }
                 )
             }
         }
@@ -193,7 +219,7 @@ private fun MobileDashboardExploreScreenFeaturedTrainersComponent(
 @Composable
 private fun MobileDashboardExploreScreenFeaturedFacilitiesComponent(
     facilities: List<FacilityProfileCardItemViewData>,
-    onClick: () -> Unit
+    onClick: (facilityId: Int) -> Unit
 ) {
     Column(
         modifier = Modifier.fillMaxWidth(),
@@ -212,7 +238,7 @@ private fun MobileDashboardExploreScreenFeaturedFacilitiesComponent(
                     memberCount = facility.memberCount,
                     trainerCount = facility.trainerCount,
                     rating = facility.rating ?: 0f,
-                    onClick = onClick
+                    onClick = { onClick(facility.facilityId) }
                 )
             }
         }

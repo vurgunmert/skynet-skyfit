@@ -15,7 +15,7 @@ val featureDashboardModule = module {
     factory { FacilityHomeViewModel(get(), get(), get(), get()) }
     factory { TrainerHomeViewModel(get(), get(), get(), get()) }
 
-    factory { ExploreViewModel() }
+    factory { ExploreViewModel(get()) }
 
     factory { DashboardViewModel(get()) }
 }

@@ -1,6 +1,7 @@
 package com.vurgun.skyfit.feature.persona.components.viewdata
 
 data class TrainerProfileCardItemViewData(
+    val trainerId: Int,
     val imageUrl: String,
     val name: String,
     val followerCount: Int,
@@ -10,6 +11,7 @@ data class TrainerProfileCardItemViewData(
 )
 
 data class FacilityProfileCardItemViewData(
+    val facilityId: Int,
     val imageUrl: String,
     val name: String,
     val memberCount: Int,

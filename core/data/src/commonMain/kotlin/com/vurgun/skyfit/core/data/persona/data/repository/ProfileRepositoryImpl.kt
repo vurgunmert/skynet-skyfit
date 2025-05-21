@@ -9,6 +9,7 @@ import com.vurgun.skyfit.core.data.persona.data.mapper.ProfileMapper.toDomainFac
 import com.vurgun.skyfit.core.data.persona.data.mapper.ProfileMapper.toDomainTrainerProfile
 import com.vurgun.skyfit.core.data.persona.data.mapper.ProfileMapper.toDomainUserProfile
 import com.vurgun.skyfit.core.data.persona.data.mapper.ProfileMapper.toFacilityTrainerProfiles
+import com.vurgun.skyfit.core.data.persona.data.model.ExploreFacilityProfileDTO
 import com.vurgun.skyfit.core.data.persona.data.model.GetFacilityProfileRequest
 import com.vurgun.skyfit.core.data.persona.data.model.GetFacilityTrainerProfilesRequest
 import com.vurgun.skyfit.core.data.persona.data.model.GetTrainerProfileRequest
@@ -46,6 +47,12 @@ class ProfileRepositoryImpl(
         val token = tokenManager.getTokenOrThrow()
         val request = GetFacilityTrainerProfilesRequest(facilityId)
         apiService.getFacilityTrainerProfiles(request, token).mapOrThrow { it.toFacilityTrainerProfiles() }
+    }
+
+    // TODO: THIS DTO SHOULD BE UPDATED SAME AS FACILITY PROFILE OR WTF | THEN CREATE DOMAIN MODAL
+    override suspend fun getAllExploreFacilityProfiles(): Result<List<ExploreFacilityProfileDTO>> = ioResult(dispatchers) {
+        val token = tokenManager.getTokenOrThrow()
+        apiService.getAllExploreFacilityProfiles(token).mapOrThrow { it }
     }
 
     override suspend fun getFacilityProfile(facilityId: Int): Result<FacilityProfile> = ioResult(dispatchers) {
