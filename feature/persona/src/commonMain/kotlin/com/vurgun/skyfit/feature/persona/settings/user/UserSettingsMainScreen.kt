@@ -1,10 +1,6 @@
 package com.vurgun.skyfit.feature.persona.settings.user
 
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.runtime.Composable
@@ -34,17 +30,7 @@ import com.vurgun.skyfit.feature.persona.settings.user.notification.UserSettings
 import com.vurgun.skyfit.feature.persona.settings.user.payment.UserSettingsPaymentHistoryScreen
 import com.vurgun.skyfit.feature.persona.settings.user.profile.UserSettingsManageProfileScreen
 import org.jetbrains.compose.resources.stringResource
-import skyfit.core.ui.generated.resources.Res
-import skyfit.core.ui.generated.resources.ic_bell
-import skyfit.core.ui.generated.resources.ic_credit_card
-import skyfit.core.ui.generated.resources.ic_profile
-import skyfit.core.ui.generated.resources.ic_question_circle
-import skyfit.core.ui.generated.resources.logout_action
-import skyfit.core.ui.generated.resources.settings_account_label
-import skyfit.core.ui.generated.resources.notifications_label
-import skyfit.core.ui.generated.resources.settings_payment_history_label
-import skyfit.core.ui.generated.resources.settings_support_label
-import skyfit.core.ui.generated.resources.settings_title
+import skyfit.core.ui.generated.resources.*
 
 class UserSettingsMainScreen : Screen {
 
@@ -78,7 +64,7 @@ private fun MobileUserSettingsHomeScreen(viewModel: SettingsHomeViewModel) {
         topBar = {
             SkyFitScreenHeader(
                 title = stringResource(Res.string.settings_title),
-                onClickBack = { viewModel.onAction(SettingsMainAction.NavigateToBack) }
+                onClickBack = { viewModel.onAction(SettingsMainAction.OnClickBack) }
             )
         },
         bottomBar = {
@@ -101,13 +87,13 @@ private fun MobileUserSettingsHomeScreen(viewModel: SettingsHomeViewModel) {
             MobileSettingsMenuItemComponent(
                 iconRes = Res.drawable.ic_profile,
                 text = stringResource(Res.string.settings_account_label),
-                onClick = { viewModel.onAction(SettingsMainAction.NavigateToManageProfile) }
+                onClick = { viewModel.onAction(SettingsMainAction.OnClickManageProfile) }
             )
 
             MobileSettingsMenuItemComponent(
                 iconRes = Res.drawable.ic_credit_card,
                 text = stringResource(Res.string.settings_payment_history_label),
-                onClick = { viewModel.onAction(SettingsMainAction.NavigateToPaymentHistory) }
+                onClick = { viewModel.onAction(SettingsMainAction.OnClickPaymentHistory) }
             )
 
             MobileSettingsMenuItemDividerComponent()
@@ -115,7 +101,7 @@ private fun MobileUserSettingsHomeScreen(viewModel: SettingsHomeViewModel) {
             MobileSettingsMenuItemComponent(
                 iconRes = Res.drawable.ic_bell,
                 text = stringResource(Res.string.notifications_label),
-                onClick = { viewModel.onAction(SettingsMainAction.NavigateToNotifications) }
+                onClick = { viewModel.onAction(SettingsMainAction.OnClickNotifications) }
             )
 
             MobileSettingsMenuItemDividerComponent()
@@ -123,7 +109,7 @@ private fun MobileUserSettingsHomeScreen(viewModel: SettingsHomeViewModel) {
             MobileSettingsMenuItemComponent(
                 iconRes = Res.drawable.ic_question_circle,
                 text = stringResource(Res.string.settings_support_label),
-                onClick = { viewModel.onAction(SettingsMainAction.NavigateToSupport) }
+                onClick = { viewModel.onAction(SettingsMainAction.OnClickSupport) }
             )
 
             SettingsHomeAccountTypesColumn(

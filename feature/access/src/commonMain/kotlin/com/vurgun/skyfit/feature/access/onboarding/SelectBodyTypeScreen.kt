@@ -29,7 +29,7 @@ import com.vurgun.skyfit.feature.onboarding.component.OnboardingTitleGroupCompon
 import com.vurgun.skyfit.core.ui.components.special.SkyFitMobileScaffold
 import com.vurgun.skyfit.core.ui.components.special.SelectableCardComponent
 import com.vurgun.skyfit.core.ui.styling.SkyFitTypography
-import com.vurgun.skyfit.core.ui.viewdata.BodyTypeViewData
+import com.vurgun.skyfit.core.ui.model.BodyTypeViewData
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
 import skyfit.core.ui.generated.resources.Res

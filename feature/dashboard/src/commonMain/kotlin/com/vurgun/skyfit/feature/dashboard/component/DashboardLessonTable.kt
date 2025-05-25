@@ -19,7 +19,7 @@ import com.vurgun.skyfit.core.ui.components.icon.SkyIcon
 import com.vurgun.skyfit.core.ui.components.icon.SkyIconSize
 import com.vurgun.skyfit.core.ui.components.icon.SkyIconTint
 import com.vurgun.skyfit.core.ui.components.text.SkyText
-import com.vurgun.skyfit.core.ui.components.text.SkyTextField
+import com.vurgun.skyfit.core.ui.components.text.SkyInputTextField
 import com.vurgun.skyfit.core.ui.components.text.TextStyleType
 import com.vurgun.skyfit.core.ui.styling.SkyFitColor
 import skyfit.core.ui.generated.resources.*
@@ -73,7 +73,7 @@ internal object DashboardLessonTable {
                         .padding(horizontal = 8.dp, vertical = 4.dp),
                     verticalAlignment = Alignment.CenterVertically
                 ) {
-                    SkyTextField(
+                    SkyInputTextField(
                         hint = "Tabloda ara",
                         value = searchQuery,
                         onValueChange = { searchQuery = it },

@@ -73,6 +73,10 @@
     <string name="clear_all_action">Hepsini temizle</string>
     <string name="edit_member_package_action">Üye Paketini Düzenle</string>
     <string name="delete_membership_action">Üyeliği Sil</string>
+    <string name="create_package_action">Paket Oluştur</string>
+    <string name="update_package_action">Paketi Güncelle</string>
+    <string name="add_branch_action">Şube Ekle</string>
+    <string name="select_action">Seç</string>
 
     <!-- 🔷 Gender Options -->
     <string name="gender_female">Kadın</string>
@@ -108,6 +112,18 @@
     <string name="select_profile_limit_message">Profilinizde en fazla 5 etiket bulundurabilirsiniz.</string>
     <string name="package_selection_label">Paket Seçimi</string>
     <string name="completed_lesson_count_label">Tamamlanan Ders Sayısı</string>
+    <string name="packages_label">Paketler</string>
+    <string name="package_title_label">Paket Başlığı</string>
+    <string name="package_title_hint">örn: Premium</string>
+    <string name="lesson_count_label">Ders Sayisi</string>
+    <string name="lesson_count_input_hint">örn: 16</string>
+    <string name="course_contents_label">Ders İçerikleri</string>
+    <string name="course_contents_input_hint">Pilates</string>
+    <string name="package_description_title_label">Ders İçerikleri (İsteğe Bağlı)</string>
+    <string name="number_of_member_label">%1$d Üye</string>
+    <string name="number_of_month_label">%1$d Ay</string>
+    <string name="free_label">Ücretsiz</string>
+    <string name="valid_month_count_label">Geçerli Ay Sayısı</string>
 
     <!-- 🔷 Lesson Related -->
     <string name="lesson_status_completed">Tamamlandı</string>

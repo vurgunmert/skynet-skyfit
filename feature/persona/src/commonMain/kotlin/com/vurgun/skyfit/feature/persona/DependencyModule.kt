@@ -11,6 +11,8 @@ import com.vurgun.skyfit.feature.persona.profile.user.owner.UserProfileOwnerView
 import com.vurgun.skyfit.feature.persona.settings.facility.member.FacilityAddMembersViewModel
 import com.vurgun.skyfit.feature.persona.settings.facility.member.FacilityManageMembersViewModel
 import com.vurgun.skyfit.feature.persona.settings.facility.notification.FacilityNotificationSettingsViewModel
+import com.vurgun.skyfit.feature.persona.settings.facility.packages.FacilityPackageEditViewModel
+import com.vurgun.skyfit.feature.persona.settings.facility.packages.FacilityPackageListingViewModel
 import com.vurgun.skyfit.feature.persona.settings.facility.payment.FacilityPaymentHistoryViewModel
 import com.vurgun.skyfit.feature.persona.settings.facility.profile.FacilityEditProfileViewModel
 import com.vurgun.skyfit.feature.persona.settings.facility.profile.FacilityManageProfileViewModel
@@ -48,17 +50,20 @@ val featurePersonaModule = module {
     factory { FacilityPaymentHistoryViewModel() }
     factory { FacilityAddTrainerViewModel(get(), get()) }
     factory { FacilityNotificationSettingsViewModel() }
+    factory { FacilityPackageListingViewModel(get(), get()) }
+    factory { FacilityPackageEditViewModel(get(), get(), get()) }
 
     factory { UserProfileOwnerViewModel(get(), get(), get(), get()) }
 
     factory { TrainerProfileOwnerViewModel(get(), get(), get(), get()) }
     factory { TrainerProfileVisitorViewModel(get(), get(), get(), get()) }
     factory { TrainerProfileScheduleViewModel(get(), get(), get()) }
+    factory { TrainerNotificationSettingsViewModel() }
 
     factory { FacilityProfileOwnerViewModel(get(), get(), get(), get()) }
     factory { FacilityProfileVisitorViewModel(get(), get(), get(), get()) }
     factory { FacilityProfileScheduleViewModel(get(), get(), get()) }
-    factory { TrainerNotificationSettingsViewModel() }
+
 
     factory { SocialMediaViewModel() }
 }

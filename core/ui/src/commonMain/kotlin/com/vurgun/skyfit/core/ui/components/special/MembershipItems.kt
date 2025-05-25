@@ -14,6 +14,7 @@ import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
 import com.vurgun.skyfit.core.data.persona.domain.model.Member
 import com.vurgun.skyfit.core.ui.components.button.SkyButton
+import com.vurgun.skyfit.core.ui.components.button.SkyButtonSize
 import com.vurgun.skyfit.core.ui.components.button.SkyButtonVariant
 import com.vurgun.skyfit.core.ui.components.chip.RectangleChip
 import com.vurgun.skyfit.core.ui.components.icon.SkyIcon
@@ -27,15 +28,138 @@ import com.vurgun.skyfit.core.ui.components.popup.SelectablePopupMenuItem
 import com.vurgun.skyfit.core.ui.components.popup.TextPopupMenuItem
 import com.vurgun.skyfit.core.ui.components.progress.RoundedLinearProgress
 import com.vurgun.skyfit.core.ui.components.text.BodyMediumRegularText
+import com.vurgun.skyfit.core.ui.components.text.CardFieldIconText
 import com.vurgun.skyfit.core.ui.components.text.SkyText
 import com.vurgun.skyfit.core.ui.components.text.TextStyleType
+import com.vurgun.skyfit.core.ui.model.ServicePackageUiData
 import com.vurgun.skyfit.core.ui.styling.SkyFitColor
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
 import skyfit.core.ui.generated.resources.*
 
-//TODO: continue packages from here
-object MembershipPackageChip {
+object SettingsPackageComponent {
+
+    @Composable
+    fun PackageCard(
+        content: ServicePackageUiData,
+    ) {
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+                .background(
+                    color = SkyFitColor.background.fillTransparentSecondary,
+                    shape = RoundedCornerShape(size = 16.dp)
+                )
+                .padding(16.dp)
+        ) {
+            Row(verticalAlignment = Alignment.CenterVertically) {
+                SkyIcon(
+                    res = Res.drawable.ic_package,
+                    size = SkyIconSize.Large,
+                )
+                Spacer(Modifier.width(8.dp))
+                SkyText(
+                    text = content.title,
+                    styleType = TextStyleType.BodyMediumSemibold
+                )
+            }
+
+            Spacer(Modifier.height(8.dp))
+
+            Column(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .background(
+                        color = SkyFitColor.background.default,
+                        shape = RoundedCornerShape(size = 8.dp)
+                    )
+                    .padding(8.dp)
+            ) {
+                SkyText(
+                    text = stringResource(Res.string.course_contents_label),
+                    styleType = TextStyleType.BodyMediumSemibold
+                )
+                Spacer(Modifier.height(8.dp))
+                SkyText(
+                    text = content.courseList.joinToString("\n") { "- $it" },
+                    styleType = TextStyleType.BodyMediumRegular,
+                    color = SkyFitColor.text.secondary
+                )
+            }
+
+            Spacer(Modifier.height(8.dp))
+
+            Row(
+                modifier = Modifier
+                    .clip(RoundedCornerShape(8.dp))
+                    .clickable(onClick = content.onMembersClick)
+                    .fillMaxWidth()
+                    .background(SkyFitColor.background.default)
+                    .padding(4.dp),
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                SkyIcon(
+                    res = Res.drawable.ic_profile,
+                    size = SkyIconSize.Normal,
+                    tint = SkyIconTint.Secondary
+                )
+                Spacer(Modifier.width(6.dp))
+
+                SkyText(
+                    text = stringResource(Res.string.number_of_member_label, content.memberCount),
+                    styleType = TextStyleType.BodyMediumRegular,
+                    color = SkyFitColor.text.secondary,
+                    modifier = Modifier.weight(1f),
+                )
+
+                SkyIcon(
+                    res = Res.drawable.ic_chevron_right,
+                    size = SkyIconSize.Normal,
+                    tint = SkyIconTint.Secondary
+                )
+            }
+
+            Spacer(Modifier.height(8.dp))
+
+            Row {
+                CardFieldIconText(
+                    iconRes = Res.drawable.ic_clock,
+                    text = stringResource(Res.string.number_of_month_label, content.duration),
+                    modifier = Modifier.weight(1f)
+                )
+                Spacer(Modifier.width(8.dp))
+
+                CardFieldIconText(
+                    iconRes = Res.drawable.ic_lira,
+                    text = if (content.price <= 0f) stringResource(Res.string.free_label) else content.price.toString(),
+                    modifier = Modifier.weight(1f)
+                )
+            }
+
+            Spacer(Modifier.height(8.dp))
+
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(top = 12.dp),
+                horizontalArrangement = Arrangement.spacedBy(16.dp, Alignment.End)
+            ) {
+                SkyButton(
+                    label = stringResource(Res.string.delete_action),
+                    variant = SkyButtonVariant.Destructive,
+                    size = SkyButtonSize.Micro,
+                    leftIcon = painterResource(Res.drawable.ic_delete),
+                    onClick = content.onDeleteClick
+                )
+                SkyButton(
+                    label = stringResource(Res.string.edit_action),
+                    variant = SkyButtonVariant.Secondary,
+                    size = SkyButtonSize.Micro,
+                    onClick = content.onEditClick
+                )
+            }
+        }
+    }
 
     @Composable
     fun Standard() {
@@ -100,9 +224,9 @@ fun FacilitySettingMemberItem(
             )
             Spacer(Modifier.height(8.dp))
             Row {
-                MembershipPackageChip.Standard()
+                SettingsPackageComponent.Standard()
                 Spacer(Modifier.width(8.dp))
-                MembershipPackageChip.RemainingUsage()
+                SettingsPackageComponent.RemainingUsage()
             }
         }
         Spacer(Modifier.width(16.dp))

@@ -5,14 +5,19 @@ import com.vurgun.skyfit.core.network.ApiClient
 import com.vurgun.skyfit.core.network.ApiResult
 import com.vurgun.skyfit.core.data.persona.data.model.AddGymMemberRequest
 import com.vurgun.skyfit.core.data.persona.data.model.AddGymTrainerRequest
+import com.vurgun.skyfit.core.data.persona.data.model.CreateFacilityLessonPackageRequestDTO
+import com.vurgun.skyfit.core.data.persona.data.model.DeleteFacilityLessonPackagesRequestDTO
 import com.vurgun.skyfit.core.data.persona.data.model.DeleteGymMemberRequest
 import com.vurgun.skyfit.core.data.persona.data.model.DeleteGymTrainerRequest
+import com.vurgun.skyfit.core.data.persona.data.model.FacilityLessonPackageDTO
+import com.vurgun.skyfit.core.data.persona.data.model.GetFacilityLessonPackagesRequestDTO
 import com.vurgun.skyfit.core.data.persona.data.model.GetGymMembersRequest
 import com.vurgun.skyfit.core.data.persona.data.model.GetGymTrainersRequest
 import com.vurgun.skyfit.core.data.persona.data.model.GetPlatformMembersRequest
 import com.vurgun.skyfit.core.data.persona.data.model.GetPlatformTrainersRequest
 import com.vurgun.skyfit.core.data.persona.data.model.MemberDTO
 import com.vurgun.skyfit.core.data.persona.data.model.TrainerDTO
+import com.vurgun.skyfit.core.data.persona.data.model.UpdateFacilityLessonPackageRequestDTO
 import io.ktor.client.request.bearerAuth
 import io.ktor.client.request.setBody
 import io.ktor.client.request.url
@@ -30,6 +35,11 @@ class SettingsApiService(private val apiClient: ApiClient) {
         const val GET_GYM_TRAINERS = "get/gym/trainers"
         const val GET_ALL_PLATFORM_TRAINERS = "get/all/platform/trainers"
         const val DELETE_GYM_TRAINER = "delete/gym/trainer"
+
+        const val CREATE_GYM_PACKAGE = "create/gym/package"
+        const val UPDATE_GYM_PACKAGE = "update/gym/package"
+        const val GET_GYM_PACKAGE = "get/gym/packages"
+        const val DELETE_GYM_PACKAGE = "delete/gym/package"
     }
 
     suspend fun addGymMember(request: AddGymMemberRequest, token: String): ApiResult<EmptyDTO> {
@@ -100,6 +110,42 @@ class SettingsApiService(private val apiClient: ApiClient) {
             method = HttpMethod.Delete
             bearerAuth(token)
             url(Endpoints.DELETE_GYM_TRAINER)
+            setBody(request)
+        }
+    }
+
+    suspend fun createFacilityLessonPackage(request: CreateFacilityLessonPackageRequestDTO, token: String): ApiResult<EmptyDTO> {
+        return apiClient.safeApiCall<EmptyDTO> {
+            method = HttpMethod.Post
+            bearerAuth(token)
+            url(Endpoints.CREATE_GYM_PACKAGE)
+            setBody(request)
+        }
+    }
+
+    suspend fun updateFacilityLessonPackage(request: UpdateFacilityLessonPackageRequestDTO, token: String): ApiResult<EmptyDTO> {
+        return apiClient.safeApiCall<EmptyDTO> {
+            method = HttpMethod.Put
+            bearerAuth(token)
+            url(Endpoints.UPDATE_GYM_PACKAGE)
+            setBody(request)
+        }
+    }
+
+    suspend fun getFacilityLessonPackages(request: GetFacilityLessonPackagesRequestDTO, token: String): ApiResult<List<FacilityLessonPackageDTO>> {
+        return apiClient.safeApiCall<List<FacilityLessonPackageDTO>> {
+            method = HttpMethod.Post
+            bearerAuth(token)
+            url(Endpoints.GET_GYM_PACKAGE)
+            setBody(request)
+        }
+    }
+
+    suspend fun deleteFacilityLessonPackage(request: DeleteFacilityLessonPackagesRequestDTO, token: String): ApiResult<EmptyDTO> {
+        return apiClient.safeApiCall<EmptyDTO> {
+            method = HttpMethod.Delete
+            bearerAuth(token)
+            url(Endpoints.DELETE_GYM_PACKAGE)
             setBody(request)
         }
     }

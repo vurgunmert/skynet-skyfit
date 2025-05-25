@@ -6,6 +6,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import cafe.adriel.voyager.core.screen.Screen
+import com.vurgun.skyfit.core.data.utility.Platform
 import com.vurgun.skyfit.core.ui.components.special.SkyFitScaffold
 import com.vurgun.skyfit.core.ui.components.text.BodyMediumRegularText
 import com.vurgun.skyfit.core.ui.styling.SkyFitColor

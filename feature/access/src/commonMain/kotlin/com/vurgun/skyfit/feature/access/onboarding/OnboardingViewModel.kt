@@ -13,8 +13,8 @@ import com.vurgun.skyfit.core.data.persona.domain.repository.UserManager
 import com.vurgun.skyfit.core.data.onboarding.domain.repository.OnboardingRepository
 import com.vurgun.skyfit.core.data.onboarding.data.model.OnboardingRequest
 import com.vurgun.skyfit.core.data.onboarding.domain.model.OnboardingResult
-import com.vurgun.skyfit.core.ui.viewdata.BodyTypeViewData
-import com.vurgun.skyfit.core.ui.viewdata.CharacterTypeViewData
+import com.vurgun.skyfit.core.ui.model.BodyTypeViewData
+import com.vurgun.skyfit.core.ui.model.CharacterTypeViewData
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow

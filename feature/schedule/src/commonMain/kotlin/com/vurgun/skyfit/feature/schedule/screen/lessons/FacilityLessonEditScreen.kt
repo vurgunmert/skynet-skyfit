@@ -1,43 +1,15 @@
 package com.vurgun.skyfit.feature.schedule.screen.lessons
 
-import androidx.compose.foundation.background
-import androidx.compose.foundation.border
-import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.ExperimentalLayoutApi
-import androidx.compose.foundation.layout.FlowRow
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.heightIn
-import androidx.compose.foundation.layout.imePadding
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.*
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.Button
-import androidx.compose.material.ButtonDefaults
-import androidx.compose.material.Icon
-import androidx.compose.material.Text
-import androidx.compose.material.TextButton
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
+import androidx.compose.material.*
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -55,92 +27,25 @@ import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
 import com.vurgun.skyfit.core.data.schedule.domain.model.CalendarRecurrence
 import com.vurgun.skyfit.core.data.schedule.domain.model.CalendarRecurrenceType
-import com.vurgun.skyfit.core.data.utility.isAfter
-import com.vurgun.skyfit.core.data.utility.isBefore
-import com.vurgun.skyfit.core.data.utility.now
-import com.vurgun.skyfit.core.ui.components.button.PrimaryLargeButton
-import com.vurgun.skyfit.core.ui.components.button.PrimaryMediumButton
-import com.vurgun.skyfit.core.ui.components.button.PrimaryMicroButton
-import com.vurgun.skyfit.core.ui.components.button.RadioButton
-import com.vurgun.skyfit.core.ui.components.button.SecondaryMediumButton
-import com.vurgun.skyfit.core.ui.components.button.SecondaryMicroButton
+import com.vurgun.skyfit.core.data.schedule.domain.model.Lesson
+import com.vurgun.skyfit.core.ui.components.button.*
 import com.vurgun.skyfit.core.ui.components.dialog.DestructiveDialog
 import com.vurgun.skyfit.core.ui.components.dialog.ErrorDialog
 import com.vurgun.skyfit.core.ui.components.icon.ActionIcon
 import com.vurgun.skyfit.core.ui.components.image.CircleNetworkImage
-import com.vurgun.skyfit.core.ui.components.special.AddRemoveMemberItem
-import com.vurgun.skyfit.core.ui.components.special.SkyFitCheckBoxComponent
-import com.vurgun.skyfit.core.ui.components.special.SkyFitMobileScaffold
-import com.vurgun.skyfit.core.ui.components.special.SkyFitScreenHeader
-import com.vurgun.skyfit.core.ui.components.special.SkyFitSearchTextInputComponent
-import com.vurgun.skyfit.core.ui.components.text.BodyLargeMediumText
-import com.vurgun.skyfit.core.ui.components.text.BodyMediumRegularText
-import com.vurgun.skyfit.core.ui.components.text.BodyMediumSemiboldText
-import com.vurgun.skyfit.core.ui.components.text.MultiLineInputText
-import com.vurgun.skyfit.core.ui.components.text.SingleLineInputText
-import com.vurgun.skyfit.core.ui.components.text.TitledMediumRegularText
+import com.vurgun.skyfit.core.ui.components.picker.SelectStartEndDateRow
+import com.vurgun.skyfit.core.ui.components.schedule.*
+import com.vurgun.skyfit.core.ui.components.special.*
+import com.vurgun.skyfit.core.ui.components.text.*
 import com.vurgun.skyfit.core.ui.styling.LocalPadding
 import com.vurgun.skyfit.core.ui.styling.SkyFitAsset
 import com.vurgun.skyfit.core.ui.styling.SkyFitColor
 import com.vurgun.skyfit.core.ui.styling.SkyFitTypography
 import com.vurgun.skyfit.core.ui.utils.CollectEffect
-import com.vurgun.skyfit.core.data.schedule.domain.model.Lesson
-import com.vurgun.skyfit.core.ui.components.schedule.dialog.SingleDatePickerDialog
-import com.vurgun.skyfit.core.ui.components.schedule.LessonSelectCancelDurationPopupMenu
-import com.vurgun.skyfit.core.ui.components.schedule.LessonSelectCapacityPopupMenu
-import com.vurgun.skyfit.core.ui.components.schedule.LessonSelectRecurrenceTypePopupMenu
-import com.vurgun.skyfit.core.ui.components.schedule.LessonSelectTrainerPopupMenu
-import com.vurgun.skyfit.core.ui.components.schedule.SelectableTrainerMenuItemModel
 import kotlinx.datetime.DayOfWeek
-import kotlinx.datetime.LocalDate
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
-import skyfit.core.ui.generated.resources.Res
-import skyfit.core.ui.generated.resources.add_action
-import skyfit.core.ui.generated.resources.apply_action
-import skyfit.core.ui.generated.resources.cancel_action
-import skyfit.core.ui.generated.resources.confirm_action
-import skyfit.core.ui.generated.resources.day_friday_label
-import skyfit.core.ui.generated.resources.day_monday_label
-import skyfit.core.ui.generated.resources.day_saturday_label
-import skyfit.core.ui.generated.resources.day_sunday_label
-import skyfit.core.ui.generated.resources.day_thursday_label
-import skyfit.core.ui.generated.resources.day_tuesday_label
-import skyfit.core.ui.generated.resources.day_wednesday_label
-import skyfit.core.ui.generated.resources.delete_action
-import skyfit.core.ui.generated.resources.ic_calendar_dots
-import skyfit.core.ui.generated.resources.ic_check
-import skyfit.core.ui.generated.resources.ic_chevron_down
-import skyfit.core.ui.generated.resources.ic_close
-import skyfit.core.ui.generated.resources.icon_label
-import skyfit.core.ui.generated.resources.lesson_capacity_label
-import skyfit.core.ui.generated.resources.lesson_cost_label
-import skyfit.core.ui.generated.resources.lesson_create_private_action
-import skyfit.core.ui.generated.resources.lesson_date_hint
-import skyfit.core.ui.generated.resources.lesson_edit_action
-import skyfit.core.ui.generated.resources.lesson_edit_cancel_message
-import skyfit.core.ui.generated.resources.lesson_end_date_label
-import skyfit.core.ui.generated.resources.lesson_end_hour_hint
-import skyfit.core.ui.generated.resources.lesson_end_hour_label
-import skyfit.core.ui.generated.resources.lesson_exercise_title
-import skyfit.core.ui.generated.resources.lesson_exercise_title_hint
-import skyfit.core.ui.generated.resources.lesson_mandatory_appointment_booking_label
-import skyfit.core.ui.generated.resources.lesson_repeat_label
-import skyfit.core.ui.generated.resources.lesson_start_date_label
-import skyfit.core.ui.generated.resources.lesson_start_hour_hint
-import skyfit.core.ui.generated.resources.lesson_start_hour_label
-import skyfit.core.ui.generated.resources.lesson_trainer_label
-import skyfit.core.ui.generated.resources.no_action
-import skyfit.core.ui.generated.resources.open_action
-import skyfit.core.ui.generated.resources.recurrence_daily_label
-import skyfit.core.ui.generated.resources.recurrence_last_cancel_duration_label
-import skyfit.core.ui.generated.resources.recurrence_none_label
-import skyfit.core.ui.generated.resources.recurrence_weekly_label
-import skyfit.core.ui.generated.resources.save_action
-import skyfit.core.ui.generated.resources.search_action
-import skyfit.core.ui.generated.resources.trainer_note_hint_add
-import skyfit.core.ui.generated.resources.trainer_note_label
-import skyfit.core.ui.generated.resources.yes_action
+import skyfit.core.ui.generated.resources.*
 
 class FacilityLessonEditScreen(private val lesson: Lesson? = null) : Screen {
 
@@ -182,7 +87,7 @@ class FacilityLessonEditScreen(private val lesson: Lesson? = null) : Screen {
         if (showNoTrainerError) {
             ErrorDialog(
                 message = "Ders eklemek için bir eğitmen bulunamadı. Lütfen önce bir eğitmen ekleyin.",
-                onDismiss =  { navigator.pop() }
+                onDismiss = { navigator.pop() }
             )
         }
     }
@@ -200,7 +105,7 @@ private fun MobileFacilityEditLessonScreen(
     SkyFitMobileScaffold(
         topBar = {
             SkyFitScreenHeader(stringResource(Res.string.lesson_edit_action), onClickBack = {
-                if (uiState.isSaveButtonEnabled) {
+                if (uiState.isReadyToSave) {
                     viewModel.updateShowCancelDialog(true)
                 } else {
                     viewModel.onAction(FacilityLessonEditAction.NavigateToBack)
@@ -241,7 +146,7 @@ private fun MobileFacilityEditLessonScreen(
             // endregion
 
             // region: Date & Time Selection
-            EditLessonDatesRow(
+            SelectStartEndDateRow(
                 startDate = uiState.startDate,
                 endDate = uiState.endDate,
                 onStartDateSelected = viewModel::updateStartDate,
@@ -289,7 +194,7 @@ private fun MobileFacilityEditLessonScreen(
             // endregion
 
             // region: Cost
-            LessonEditCostRow(
+            EditCostRow(
                 cost = uiState.cost,
                 onChanged = viewModel::updateCost
             )
@@ -297,7 +202,7 @@ private fun MobileFacilityEditLessonScreen(
 
             LessonEditActionRow(
                 isNewLesson = !uiState.isEditing,
-                isEnabled = uiState.isSaveButtonEnabled,
+                isEnabled = uiState.isReadyToSave,
                 isLoading = false, //TODO: loading
                 onClick = { viewModel.onAction(FacilityLessonEditAction.Save) }
             )
@@ -484,80 +389,6 @@ private fun EditLessonTrainerRow(
 //endregion Trainer
 
 //region Date Time Components
-@Composable
-private fun EditLessonDatesRow(
-    modifier: Modifier = Modifier,
-    startDate: LocalDate,
-    endDate: LocalDate,
-    onStartDateSelected: (LocalDate) -> Unit = {},
-    onEndDateSelected: (LocalDate) -> Unit = {}
-) {
-    var isStartDatePickerOpen by remember { mutableStateOf(false) }
-    var isEndDatePickerOpen by remember { mutableStateOf(false) }
-    var mutableStartDate by remember { mutableStateOf(startDate) }
-    var mutableEndDate by remember { mutableStateOf(endDate) }
-
-    Row(
-        modifier = Modifier.fillMaxWidth(),
-        verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = Arrangement.spacedBy(16.dp)
-    ) {
-        TitledMediumRegularText(
-            modifier = Modifier.weight(1f).clickable { isStartDatePickerOpen = true },
-            title = stringResource(Res.string.lesson_start_date_label),
-            hint = stringResource(Res.string.lesson_date_hint),
-            value = mutableStartDate.classDateFormatToDisplay(),
-            rightIconRes = Res.drawable.ic_calendar_dots
-        )
-
-        TitledMediumRegularText(
-            modifier = Modifier.weight(1f).clickable { isEndDatePickerOpen = true },
-            title = stringResource(Res.string.lesson_end_date_label),
-            hint = stringResource(Res.string.lesson_date_hint),
-            value = mutableEndDate.classDateFormatToDisplay(),
-            rightIconRes = Res.drawable.ic_calendar_dots
-        )
-    }
-
-    if (isStartDatePickerOpen) {
-        SingleDatePickerDialog(
-            isOpen = isStartDatePickerOpen,
-            onConfirm = { newStartDate ->
-                val selectableStartDate: LocalDate = when {
-                    newStartDate.isBefore(LocalDate.now()) -> LocalDate.now()
-                    else -> newStartDate
-                }
-                mutableStartDate = selectableStartDate
-                onStartDateSelected(selectableStartDate)
-
-                if (selectableStartDate.isAfter(endDate)) {
-                    mutableEndDate = selectableStartDate
-                    onEndDateSelected(selectableStartDate)
-                }
-
-                isStartDatePickerOpen = false
-            },
-            onDismiss = { isStartDatePickerOpen = false }
-        )
-    }
-
-    if (isEndDatePickerOpen) {
-        SingleDatePickerDialog(
-            isOpen = isEndDatePickerOpen,
-            onConfirm = { newEndDate ->
-                val selectableEndDate: LocalDate = when {
-                    newEndDate.isBefore(startDate) -> startDate
-                    else -> newEndDate
-                }
-                mutableEndDate = selectableEndDate
-                onEndDateSelected(selectableEndDate)
-
-                isEndDatePickerOpen = false
-            },
-            onDismiss = { isEndDatePickerOpen = false }
-        )
-    }
-}
 
 
 @Composable
@@ -866,90 +697,6 @@ private fun LessonEditAppointmentObligationRow(
 }
 //endregion Appointment Obligation
 
-//region Cost
-@Composable
-private fun LessonEditCostRow(
-    cost: Int?,
-    onChanged: (Int) -> Unit
-) {
-    var isPaymentMandatory by remember { mutableStateOf((cost ?: 0) > 0) }
-    var inputValue by remember { mutableStateOf(cost?.toString() ?: "") }
-
-    Column(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(start = 8.dp)
-    ) {
-        Text(
-            text = stringResource(Res.string.lesson_cost_label),
-            style = SkyFitTypography.bodyMediumSemibold
-        )
-        Spacer(Modifier.height(8.dp))
-
-        Row(
-            modifier = Modifier.fillMaxWidth(),
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.spacedBy(16.dp)
-        ) {
-            SkyFitCheckBoxComponent(
-                label = stringResource(Res.string.apply_action),
-                checked = isPaymentMandatory,
-                onCheckedChange = {
-                    isPaymentMandatory = it
-                    if (!it) inputValue = ""
-                }
-            )
-
-            BasicTextField(
-                value = inputValue,
-                onValueChange = { newValue ->
-                    val cleaned = newValue.replace(',', '.').filter { it.isDigit() || it == '.' }
-                    inputValue = cleaned
-                    cleaned.toIntOrNull()?.let { onChanged(it) }
-                },
-                enabled = isPaymentMandatory,
-                textStyle = SkyFitTypography.bodyMediumRegular.copy(
-                    color = if (isPaymentMandatory) SkyFitColor.text.default else SkyFitColor.text.secondary,
-                    textAlign = TextAlign.Left
-                ),
-                keyboardOptions = KeyboardOptions(
-                    keyboardType = KeyboardType.Decimal,
-                    imeAction = ImeAction.Done
-                ),
-                modifier = Modifier
-                    .weight(1f)
-                    .clip(RoundedCornerShape(50))
-                    .background(SkyFitColor.background.surfaceSecondary)
-                    .padding(horizontal = 16.dp, vertical = 12.dp),
-                cursorBrush = SolidColor(SkyFitColor.icon.default),
-                decorationBox = { innerTextField ->
-                    Box(
-                        modifier = Modifier.fillMaxWidth(),
-                        contentAlignment = Alignment.CenterStart
-                    ) {
-                        if (inputValue.isEmpty()) {
-                            Text(
-                                "0.00",
-                                color = SkyFitColor.text.secondary,
-                                style = SkyFitTypography.bodyMediumRegular
-                            )
-                        }
-                        Row(
-                            modifier = Modifier.fillMaxWidth(),
-                            horizontalArrangement = Arrangement.SpaceBetween,
-                            verticalAlignment = Alignment.CenterVertically
-                        ) {
-                            innerTextField()
-                            Text("₺", color = SkyFitColor.text.secondary)
-                        }
-                    }
-                }
-            )
-        }
-    }
-}
-//endregion Cost
-
 //region Actions
 @Composable
 private fun LessonEditActionRow(
@@ -1208,12 +955,4 @@ private fun EditParticipantsDialog(
             }
         }
     }
-}
-
-
-private fun LocalDate.classDateFormatToDisplay(): String {
-    val day = this.dayOfMonth.toString().padStart(2, '0') // Ensures 01, 02, ...
-    val month = this.monthNumber.toString().padStart(2, '0') // Ensures 01, 02, ...
-    val year = this.year.toString()
-    return "$day / $month / $year"
 }

@@ -17,6 +17,7 @@ import com.vurgun.skyfit.core.data.persona.data.repository.UserRepositoryImpl
 import com.vurgun.skyfit.core.data.persona.data.service.ProfileApiService
 import com.vurgun.skyfit.core.data.persona.data.service.SettingsApiService
 import com.vurgun.skyfit.core.data.persona.data.service.UserApiService
+import com.vurgun.skyfit.core.data.persona.domain.repository.FacilityRepository
 import com.vurgun.skyfit.core.data.persona.domain.repository.MemberRepository
 import com.vurgun.skyfit.core.data.persona.domain.repository.ProfileRepository
 import com.vurgun.skyfit.core.data.persona.domain.repository.TrainerRepository
@@ -77,6 +78,7 @@ val dataCoreModule = module {
 
     single<MemberRepository> { get<SettingsRepositoryImpl>() }
     single<TrainerRepository> { get<SettingsRepositoryImpl>() }
+    single<FacilityRepository> { get<SettingsRepositoryImpl>() }
 
     single<CourseApiService> { CourseApiService(get()) }
     single<LessonSessionItemViewDataMapper> { LessonSessionItemViewDataMapper() }

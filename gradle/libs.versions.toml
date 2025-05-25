@@ -1,4 +1,7 @@
 [versions]
+skyFitAppVersion = "1.0.1"
+skyFitAppBuild = "14"
+
 # Kotlin
 kotlin = "2.1.20"
 kotlinxSerialization = "1.8.1"

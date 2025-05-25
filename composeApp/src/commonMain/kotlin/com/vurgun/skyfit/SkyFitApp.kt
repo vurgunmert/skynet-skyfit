@@ -8,6 +8,7 @@ import cafe.adriel.voyager.core.registry.rememberScreen
 import cafe.adriel.voyager.navigator.Navigator
 import cafe.adriel.voyager.transitions.CrossfadeTransition
 import com.vurgun.skyfit.core.navigation.SharedScreen
+import com.vurgun.skyfit.core.ui.screen.UnderDevelopmentScreen
 import com.vurgun.skyfit.core.ui.styling.SkyFitTheme
 import com.vurgun.skyfit.core.ui.utils.LocalWindowSize
 import com.vurgun.skyfit.core.ui.utils.WindowSizeHelper
@@ -46,6 +47,7 @@ fun SkyFitApp(
 private fun AppScreen() {
     SkyFitTheme {
         ScreenRegistry {
+            register<SharedScreen.UnderDevelopment> { UnderDevelopmentScreen() }
             accessScreenModule()
             connectScreenModule()
             dashboardScreenModule()

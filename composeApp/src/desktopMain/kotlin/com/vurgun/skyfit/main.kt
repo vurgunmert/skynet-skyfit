@@ -15,7 +15,7 @@ fun main() = application {
         title = "SkyFit",
     ) {
         val localDimens = LocalDimensions.current
-        window.minimumSize = Dimension(localDimens.mobileMinWidthPx, localDimens.mobileMinWidthPx)
+        window.minimumSize = Dimension(localDimens.mobileMinWidthPx, localDimens.mobileMinHeightPx)
 
         SkyFitApp(
             platformModule = module {

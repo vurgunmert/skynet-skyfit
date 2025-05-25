@@ -6,7 +6,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import com.vurgun.skyfit.core.data.persona.domain.model.CharacterType
-import com.vurgun.skyfit.core.ui.viewdata.CharacterTypeViewData
+import com.vurgun.skyfit.core.ui.model.CharacterTypeViewData
 import org.jetbrains.compose.resources.painterResource
 
 @Composable

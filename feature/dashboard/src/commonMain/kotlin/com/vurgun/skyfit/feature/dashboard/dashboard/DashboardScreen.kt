@@ -95,7 +95,7 @@ private object ExpandedDashboardComponent {
         var overlayScreen by remember { mutableStateOf<ScreenProvider?>(null) }
         val homeScreen = rememberScreen(DashboardScreen.Home)
         val exploreScreen = rememberScreen(DashboardScreen.Explore)
-        val socialMediaScreen = rememberScreen(DashboardScreen.Social)
+        val socialMediaScreen = rememberScreen(SharedScreen.UnderDevelopment) //DashboardScreen.Social
 
         val profileScreen = rememberScreen(DashboardScreen.Profile)
         val settingsScreen = rememberScreen(SharedScreen.Settings)
@@ -120,14 +120,11 @@ private object ExpandedDashboardComponent {
                     Column(modifier = Modifier.fillMaxSize()) {
                         TopBar(
                             onClickNotifications = {
-                                overlayScreen = SharedScreen.NotificationsExpanded(
-                                    onDismiss = { overlayScreen = null },
-                                )
+                                overlayScreen = SharedScreen.UnderDevelopment // SharedScreen.NotificationsExpanded { overlayScreen = null }
+
                             },
                             onClickConversations = {
-                                overlayScreen = SharedScreen.ConversationsExpanded(
-                                    onDismiss = { overlayScreen = null },
-                                )
+                                overlayScreen = SharedScreen.UnderDevelopment // SharedScreen.ConversationsExpanded { overlayScreen = null }
                             },
                             onClickAppAction = {
                                 overlayScreen = SharedScreen.ChatBot

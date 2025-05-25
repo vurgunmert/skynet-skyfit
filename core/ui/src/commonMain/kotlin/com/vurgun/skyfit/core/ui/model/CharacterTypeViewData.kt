@@ -1,4 +1,4 @@
-package com.vurgun.skyfit.core.ui.viewdata
+package com.vurgun.skyfit.core.ui.model
 
 import com.vurgun.skyfit.core.data.persona.domain.model.CharacterType
 import com.vurgun.skyfit.core.ui.styling.SkyFitAsset

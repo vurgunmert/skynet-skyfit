@@ -28,6 +28,7 @@ enum class SkyIconTint(val color: Color) {
     Disabled(SkyFitColor.icon.disabled),
     Critical(SkyFitColor.icon.critical),
     Info(SkyFitColor.icon.info),
+    Secondary(SkyFitColor.icon.secondary),
 }
 
 

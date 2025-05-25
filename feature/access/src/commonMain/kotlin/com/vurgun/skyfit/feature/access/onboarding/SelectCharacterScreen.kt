@@ -26,7 +26,7 @@ import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
 import com.vurgun.skyfit.core.ui.components.special.SelectableCardComponent
 import com.vurgun.skyfit.core.ui.components.special.SkyFitMobileScaffold
-import com.vurgun.skyfit.core.ui.viewdata.CharacterTypeViewData
+import com.vurgun.skyfit.core.ui.model.CharacterTypeViewData
 import com.vurgun.skyfit.feature.onboarding.component.OnboardingActionGroupComponent
 import com.vurgun.skyfit.feature.onboarding.component.OnboardingStepProgressComponent
 import com.vurgun.skyfit.feature.onboarding.component.OnboardingTitleGroupComponent

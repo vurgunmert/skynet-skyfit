@@ -48,7 +48,7 @@ data class FacilityEditLessonViewState(
     val capacity: Int = 5,
     val cancelDurationHour: Int = 24,
     val showCancelDialog: Boolean = false,
-    val isSaveButtonEnabled: Boolean = false,
+    val isReadyToSave: Boolean = false,
     val trainer: SelectableTrainerMenuItemModel? = null,
     val trainers: List<SelectableTrainerMenuItemModel> = emptyList(),
     val participantMembers: List<ParticipatedMember> = emptyList()
@@ -164,7 +164,7 @@ class FacilityLessonEditViewModel(
     // Compare current state with the initial state, enable Save if changed
     private fun checkIfModified() {
         _uiState.update {
-            it.copy(isSaveButtonEnabled = it != initialState) //TODO: Check mandatory fields
+            it.copy(isReadyToSave = it != initialState) //TODO: Check mandatory fields
         }
     }
 

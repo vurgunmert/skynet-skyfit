@@ -8,6 +8,7 @@ import kotlinx.serialization.Serializable
 sealed class SharedScreen : ScreenProvider {
 
     // Splash
+    data object UnderDevelopment : SharedScreen()
     data object Splash : SharedScreen()
     data object Maintenance : SharedScreen()
 

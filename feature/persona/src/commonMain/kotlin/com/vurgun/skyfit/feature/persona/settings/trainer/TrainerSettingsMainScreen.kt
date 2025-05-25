@@ -82,7 +82,7 @@ private fun MobileTrainerSettingsHomeScreen(viewModel: SettingsHomeViewModel) {
         topBar = {
             SkyFitScreenHeader(
                 title = stringResource(Res.string.settings_title),
-                onClickBack = { viewModel.onAction(SettingsMainAction.NavigateToBack) }
+                onClickBack = { viewModel.onAction(SettingsMainAction.OnClickBack) }
             )
         },
         bottomBar = {
@@ -105,13 +105,13 @@ private fun MobileTrainerSettingsHomeScreen(viewModel: SettingsHomeViewModel) {
             MobileSettingsMenuItemComponent(
                 text = stringResource(Res.string.settings_account_label),
                 iconRes = Res.drawable.ic_profile,
-                onClick = { viewModel.onAction(SettingsMainAction.NavigateToManageProfile) }
+                onClick = { viewModel.onAction(SettingsMainAction.OnClickManageProfile) }
             )
 
             MobileSettingsMenuItemComponent(
                 text = stringResource(Res.string.settings_payment_history_label),
                 iconRes = Res.drawable.ic_credit_card,
-                onClick = { viewModel.onAction(SettingsMainAction.NavigateToPaymentHistory) }
+                onClick = { viewModel.onAction(SettingsMainAction.OnClickPaymentHistory) }
             )
 
 //            MobileSettingsMenuItemDividerComponent()
@@ -127,7 +127,7 @@ private fun MobileTrainerSettingsHomeScreen(viewModel: SettingsHomeViewModel) {
             MobileSettingsMenuItemComponent(
                 text = stringResource(Res.string.notifications_label),
                 iconRes = Res.drawable.ic_bell,
-                onClick = { viewModel.onAction(SettingsMainAction.NavigateToNotifications) }
+                onClick = { viewModel.onAction(SettingsMainAction.OnClickNotifications) }
             )
 
             MobileSettingsMenuItemDividerComponent()
@@ -135,7 +135,7 @@ private fun MobileTrainerSettingsHomeScreen(viewModel: SettingsHomeViewModel) {
             MobileSettingsMenuItemComponent(
                 text = stringResource(Res.string.settings_support_label),
                 iconRes = Res.drawable.ic_question_circle,
-                onClick = { viewModel.onAction(SettingsMainAction.NavigateToSupport) }
+                onClick = { viewModel.onAction(SettingsMainAction.OnClickSupport) }
             )
 
             SettingsHomeAccountTypesColumn(

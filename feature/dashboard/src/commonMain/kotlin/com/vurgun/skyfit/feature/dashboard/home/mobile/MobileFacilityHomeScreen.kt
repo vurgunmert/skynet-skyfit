@@ -23,6 +23,7 @@ import com.vurgun.skyfit.core.navigation.push
 import com.vurgun.skyfit.core.ui.components.loader.FullScreenLoaderContent
 import com.vurgun.skyfit.core.ui.components.special.SkyFitMobileScaffold
 import com.vurgun.skyfit.core.ui.screen.ErrorScreen
+import com.vurgun.skyfit.core.ui.screen.UnderDevelopmentScreen
 import com.vurgun.skyfit.core.ui.utils.CollectEffect
 import com.vurgun.skyfit.core.ui.utils.LocalWindowSize
 import com.vurgun.skyfit.core.ui.utils.WindowSize
@@ -49,16 +50,16 @@ class FacilityHomeScreen : Screen {
 
         CollectEffect(viewModel.effect) { effect ->
             when (effect) {
-                FacilityHomeEffect.NavigateToConversations -> {
-                    appNavigator.push(SharedScreen.Conversations)
-                }
-
                 FacilityHomeEffect.NavigateToManageLessons -> {
                     appNavigator.push(SharedScreen.FacilityManageLessons)
                 }
 
                 FacilityHomeEffect.NavigateToNotifications -> {
-                    appNavigator.push(SharedScreen.NotificationsCompact)
+                    appNavigator.push(UnderDevelopmentScreen()) //SharedScreen.NotificationsCompact
+                }
+
+                FacilityHomeEffect.NavigateToConversations -> {
+                    appNavigator.push(UnderDevelopmentScreen()) //SharedScreen.Conversations
                 }
             }
         }

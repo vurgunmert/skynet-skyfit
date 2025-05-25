@@ -9,15 +9,16 @@ import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.launch
 
 sealed interface SettingsMainAction {
-    data object NavigateToBack : SettingsMainAction
-    data object NavigateToSplash : SettingsMainAction
-    data object NavigateToManageProfile : SettingsMainAction
-    data object NavigateToNotifications : SettingsMainAction
-    data object NavigateToPaymentHistory : SettingsMainAction
-    data object NavigateToManageTrainers : SettingsMainAction
-    data object NavigateToManageMembers : SettingsMainAction
-    data object NavigateToManageBranches : SettingsMainAction
-    data object NavigateToSupport : SettingsMainAction
+    data object OnClickBack : SettingsMainAction
+    data object OnClickLogout : SettingsMainAction
+    data object OnClickManageProfile : SettingsMainAction
+    data object OnClickNotifications : SettingsMainAction
+    data object OnClickPaymentHistory : SettingsMainAction
+    data object OnClickManageTrainers : SettingsMainAction
+    data object OnClickManageMembers : SettingsMainAction
+    data object OnClickManageBranches : SettingsMainAction
+    data object OnClickSupport : SettingsMainAction
+    data object OnClickPackages : SettingsMainAction
 }
 
 sealed interface SettingsMainEffect {
@@ -30,6 +31,7 @@ sealed interface SettingsMainEffect {
     data object NavigateToManageMembers : SettingsMainEffect
     data object NavigateToManageBranches : SettingsMainEffect
     data object NavigateToSupport : SettingsMainEffect
+    data object NavigateToPackages : SettingsMainEffect
 }
 
 class SettingsHomeViewModel(
@@ -52,41 +54,16 @@ class SettingsHomeViewModel(
 
     fun onAction(action: SettingsMainAction) {
         when (action) {
-            SettingsMainAction.NavigateToBack -> {
-                emitEffect(SettingsMainEffect.NavigateToBack)
-            }
-
-            SettingsMainAction.NavigateToSplash -> {
-                emitEffect(SettingsMainEffect.NavigateToSplash)
-            }
-
-            SettingsMainAction.NavigateToManageProfile -> {
-                emitEffect(SettingsMainEffect.NavigateToManageProfile)
-            }
-
-            SettingsMainAction.NavigateToNotifications -> {
-                emitEffect(SettingsMainEffect.NavigateToNotifications)
-            }
-
-            SettingsMainAction.NavigateToPaymentHistory -> {
-                emitEffect(SettingsMainEffect.NavigateToPaymentHistory)
-            }
-
-            SettingsMainAction.NavigateToManageTrainers -> {
-                emitEffect(SettingsMainEffect.NavigateToManageTrainers)
-            }
-
-            SettingsMainAction.NavigateToManageMembers -> {
-                emitEffect(SettingsMainEffect.NavigateToManageMembers)
-            }
-
-            SettingsMainAction.NavigateToManageBranches -> {
-                emitEffect(SettingsMainEffect.NavigateToManageBranches)
-            }
-
-            SettingsMainAction.NavigateToSupport -> {
-                emitEffect(SettingsMainEffect.NavigateToSupport)
-            }
+            SettingsMainAction.OnClickBack -> emitEffect(SettingsMainEffect.NavigateToBack)
+            SettingsMainAction.OnClickLogout -> emitEffect(SettingsMainEffect.NavigateToSplash)
+            SettingsMainAction.OnClickManageProfile -> emitEffect(SettingsMainEffect.NavigateToManageProfile)
+            SettingsMainAction.OnClickNotifications -> emitEffect(SettingsMainEffect.NavigateToNotifications)
+            SettingsMainAction.OnClickPaymentHistory -> emitEffect(SettingsMainEffect.NavigateToPaymentHistory)
+            SettingsMainAction.OnClickManageTrainers -> emitEffect(SettingsMainEffect.NavigateToManageTrainers)
+            SettingsMainAction.OnClickManageMembers -> emitEffect(SettingsMainEffect.NavigateToManageMembers)
+            SettingsMainAction.OnClickManageBranches -> emitEffect(SettingsMainEffect.NavigateToManageBranches)
+            SettingsMainAction.OnClickSupport -> emitEffect(SettingsMainEffect.NavigateToSupport)
+            SettingsMainAction.OnClickPackages -> emitEffect(SettingsMainEffect.NavigateToPackages)
         }
     }
 
