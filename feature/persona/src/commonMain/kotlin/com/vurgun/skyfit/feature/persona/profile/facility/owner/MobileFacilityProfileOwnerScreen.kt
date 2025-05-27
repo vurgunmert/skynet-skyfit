@@ -2,31 +2,13 @@ package com.vurgun.skyfit.feature.persona.profile.facility.owner
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.BoxWithConstraints
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.layout.wrapContentWidth
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Icon
 import androidx.compose.material.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
@@ -42,6 +24,8 @@ import com.vurgun.skyfit.core.data.schedule.data.model.LessonSessionItemViewData
 import com.vurgun.skyfit.core.navigation.SharedScreen
 import com.vurgun.skyfit.core.navigation.findRootNavigator
 import com.vurgun.skyfit.core.navigation.push
+import com.vurgun.skyfit.core.ui.components.button.SkyButton
+import com.vurgun.skyfit.core.ui.components.button.SkyButtonSize
 import com.vurgun.skyfit.core.ui.components.button.SkyFitPrimaryCircularBackButton
 import com.vurgun.skyfit.core.ui.components.button.SkyFitSecondaryIconButton
 import com.vurgun.skyfit.core.ui.components.divider.VerticalDivider
@@ -52,41 +36,19 @@ import com.vurgun.skyfit.core.ui.components.loader.FullScreenLoaderContent
 import com.vurgun.skyfit.core.ui.components.schedule.weekly.CalendarWeekDaySelector
 import com.vurgun.skyfit.core.ui.components.schedule.weekly.CalendarWeekDaySelectorController
 import com.vurgun.skyfit.core.ui.components.schedule.weekly.CalendarWeekDaySelectorState
-import com.vurgun.skyfit.core.ui.components.special.ButtonSize
-import com.vurgun.skyfit.core.ui.components.special.ButtonState
-import com.vurgun.skyfit.core.ui.components.special.ButtonVariant
-import com.vurgun.skyfit.core.ui.components.special.RatingStarComponent
-import com.vurgun.skyfit.core.ui.components.special.SkyFitButtonComponent
-import com.vurgun.skyfit.core.ui.components.special.SkyFitMobileScaffold
+import com.vurgun.skyfit.core.ui.components.special.*
+import com.vurgun.skyfit.core.ui.components.text.SkyText
+import com.vurgun.skyfit.core.ui.components.text.TextStyleType
 import com.vurgun.skyfit.core.ui.screen.ErrorScreen
 import com.vurgun.skyfit.core.ui.styling.SkyFitAsset
 import com.vurgun.skyfit.core.ui.styling.SkyFitColor
 import com.vurgun.skyfit.core.ui.styling.SkyFitTypography
 import com.vurgun.skyfit.core.ui.utils.CollectEffect
-import com.vurgun.skyfit.feature.persona.components.MobileProfileActionsRow
-import com.vurgun.skyfit.feature.persona.components.MobileProfileBackgroundImage
-import com.vurgun.skyfit.feature.persona.components.PhotoGalleryEmptyStackCard
-import com.vurgun.skyfit.feature.persona.components.PhotoGalleryStackCard
-import com.vurgun.skyfit.feature.persona.components.SocialPostCard
-import com.vurgun.skyfit.feature.persona.components.SocialQuickPostInputCard
-import com.vurgun.skyfit.feature.persona.components.VerticalProfileStatisticItem
-import com.vurgun.skyfit.feature.persona.components.VerticalTrainerProfileCardsRow
+import com.vurgun.skyfit.feature.persona.components.*
 import com.vurgun.skyfit.feature.persona.components.viewdata.PhotoGalleryStackViewData
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
-import skyfit.core.ui.generated.resources.Res
-import skyfit.core.ui.generated.resources.add_trainer_action
-import skyfit.core.ui.generated.resources.appointment_book_action
-import skyfit.core.ui.generated.resources.follow_action
-import skyfit.core.ui.generated.resources.ic_calendar_dots
-import skyfit.core.ui.generated.resources.ic_location_pin
-import skyfit.core.ui.generated.resources.ic_send
-import skyfit.core.ui.generated.resources.lessons_label
-import skyfit.core.ui.generated.resources.member_label
-import skyfit.core.ui.generated.resources.our_trainers_label
-import skyfit.core.ui.generated.resources.show_all_action
-import skyfit.core.ui.generated.resources.trainer_label
-import skyfit.core.ui.generated.resources.unfollow_action
+import skyfit.core.ui.generated.resources.*
 
 class FacilityProfileOwnerScreen : Screen {
 
@@ -208,7 +170,7 @@ private fun MobileFacilityProfileOwnerContent(
                 MobileProfileActionsRow(
                     postsSelected = content.postsVisible,
                     onClickAbout = { onAction(FacilityProfileOwnerAction.TogglePostVisibility(false)) },
-                    onClickPosts = {  }, //onAction(FacilityProfileOwnerAction.TogglePostVisibility(true))
+                    onClickPosts = { }, //onAction(FacilityProfileOwnerAction.TogglePostVisibility(true))
                     onClickSettings = { onAction(FacilityProfileOwnerAction.NavigateToSettings) },
                     onClickNewPost = { onAction(FacilityProfileOwnerAction.NavigateToCreatePost) },
                 )
@@ -483,7 +445,10 @@ internal object FacilityProfileComponent {
                     horizontalArrangement = Arrangement.SpaceAround,
                     verticalAlignment = Alignment.CenterVertically
                 ) {
-                    VerticalProfileStatisticItem(title = "${profile.memberCount}", subtitle = stringResource(Res.string.member_label))
+                    VerticalProfileStatisticItem(
+                        title = "${profile.memberCount}",
+                        subtitle = stringResource(Res.string.member_label)
+                    )
                     VerticalDivider(Modifier.height(48.dp))
                     VerticalProfileStatisticItem(
                         title = "${profile.trainerCount}",
@@ -563,7 +528,10 @@ internal object FacilityProfileComponent {
                     horizontalArrangement = Arrangement.SpaceAround,
                     verticalAlignment = Alignment.CenterVertically
                 ) {
-                    VerticalProfileStatisticItem(title = "${profile.memberCount}", subtitle = stringResource(Res.string.member_label))
+                    VerticalProfileStatisticItem(
+                        title = "${profile.memberCount}",
+                        subtitle = stringResource(Res.string.member_label)
+                    )
                     VerticalDivider(Modifier.height(48.dp))
                     VerticalProfileStatisticItem(
                         title = "${profile.trainerCount}",
@@ -632,24 +600,39 @@ internal object FacilityProfileComponent {
 
     @Composable
     private fun MobileFacilityProfileOwner_LessonsEmptyCard(onClickAdd: () -> Unit) {
-        Column(Modifier.fillMaxWidth().padding(16.dp)) {
-            Text("Ozel Dersler", style = SkyFitTypography.bodyLargeSemibold)
+        Column(Modifier.fillMaxWidth()) {
+
+            SkyText(
+                text = stringResource(Res.string.lessons_label),
+                styleType = TextStyleType.BodyLargeSemibold
+            )
             Spacer(Modifier.height(16.dp))
-            Box(
+
+            Column(
                 Modifier
-                    .padding(horizontal = 16.dp)
                     .fillMaxWidth()
                     .background(SkyFitColor.background.surfaceSecondary, RoundedCornerShape(16.dp))
-                    .padding(vertical = 34.dp),
-                contentAlignment = Alignment.Center
+                    .padding(vertical = 34.dp, horizontal = 24.dp),
+                verticalArrangement = Arrangement.Center,
+                horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                SkyFitButtonComponent(
-                    modifier = Modifier.wrapContentWidth(),
-                    text = "Ders Ekle",
+                SkyText(
+                    text = "📅 Henüz yaklaşan bir dersiniz yok.",
+                    styleType = TextStyleType.BodyLargeSemibold,
+                    color = SkyFitColor.text.default
+                )
+                Spacer(Modifier.height(8.dp))
+                SkyText(
+                    text = "Yeni bir ders oluşturmak için “Ders Ekle” butonunu kullanabilirsiniz.",
+                    styleType = TextStyleType.BodyMediumRegular,
+                    color = SkyFitColor.text.secondary,
+                    modifier = Modifier.fillMaxWidth()
+                )
+                Spacer(Modifier.height(12.dp))
+                SkyButton(
+                    label = stringResource(Res.string.add_lesson_action),
+                    size = SkyButtonSize.Medium,
                     onClick = onClickAdd,
-                    variant = ButtonVariant.Primary,
-                    size = ButtonSize.Medium,
-                    state = ButtonState.Rest
                 )
             }
         }

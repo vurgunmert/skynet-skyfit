@@ -5,6 +5,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.style.TextAlign
 import com.vurgun.skyfit.core.ui.styling.SkyFitTypography
 
 sealed class TextStyleType {
@@ -68,6 +69,7 @@ fun TextStyleType.toTextStyle(): TextStyle = when (this) {
 fun SkyText(
     text: String,
     styleType: TextStyleType,
+    alignment: TextAlign = TextAlign.Start,
     modifier: Modifier = Modifier,
     color: Color? = null
 ) {
@@ -77,6 +79,7 @@ fun SkyText(
     Text(
         text = text,
         style = resolvedStyle.copy(color = finalColor),
+        textAlign = alignment,
         modifier = modifier
     )
 }

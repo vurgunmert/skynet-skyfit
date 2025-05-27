@@ -6,7 +6,6 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.unit.dp
 import com.vurgun.skyfit.core.ui.components.button.SkyButton
 import com.vurgun.skyfit.core.ui.components.text.SkyText
@@ -34,15 +33,29 @@ internal fun EmptyFacilityAppointmentContent(
             styleType = TextStyleType.BodyLargeSemibold,
         )
         Spacer(Modifier.height(8.dp))
-        Box(
+
+        Column(
             Modifier
-                .clip(RoundedCornerShape(20.dp))
                 .fillMaxWidth()
-                .height(105.dp)
-                .background(SkyFitColor.background.surfaceBrandActive)
-                .padding(horizontal = 20.dp),
-            contentAlignment = Alignment.Center
+                .background(SkyFitColor.background.surfaceSecondary, RoundedCornerShape(16.dp))
+                .padding(vertical = 34.dp, horizontal = 24.dp),
+            verticalArrangement = Arrangement.Center,
+            horizontalAlignment = Alignment.CenterHorizontally
         ) {
+            SkyText(
+                text = "📅 Henüz yaklaşan bir dersiniz yok.",
+                styleType = TextStyleType.BodyLargeSemibold,
+                color = SkyFitColor.text.default
+            )
+            Spacer(Modifier.height(8.dp))
+            SkyText(
+                text = "Yeni bir ders oluşturmak için “Ders Ekle” butonunu kullanabilirsiniz.",
+                styleType = TextStyleType.BodyMediumRegular,
+                color = SkyFitColor.text.secondary,
+                modifier = Modifier.fillMaxWidth()
+            )
+            Spacer(Modifier.height(12.dp))
+
             if (assignedFacilityId == null) {
                 SkyText(
                     text = stringResource(Res.string.error_trainer_no_facility),

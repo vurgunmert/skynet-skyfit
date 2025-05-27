@@ -30,11 +30,12 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.SkyFitMobile"
         tools:ignore="DataExtractionRules">
+
+        <!--            android:screenOrientation="sensorPortrait"-->
         <activity
             android:name=".AndroidHostActivity"
             android:configChanges="orientation|screenSize|screenLayout|keyboardHidden|mnc|colorMode|density|fontScale|fontWeightAdjustment|keyboard|layoutDirection|locale|mcc|navigation|smallestScreenSize|touchscreen|uiMode"
             android:exported="true"
-            android:screenOrientation="sensorPortrait"
             android:theme="@style/Theme.SkyFitMobile.NoSplash"
             android:windowSoftInputMode="adjustResize"
             tools:ignore="LockedOrientationActivity">

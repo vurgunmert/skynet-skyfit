@@ -17,10 +17,15 @@ import kotlin.uuid.Uuid
 
 class OnboardingApiService(private val apiClient: ApiClient) {
 
+    private object Endpoint {
+        const val ONBOARDING_NEW = "auth/onboarding"
+        const val ONBOARDING_ADD = "new/type/onboarding"
+    }
+
     suspend fun onboardNewAccount(request: OnboardingRequest, token: String): ApiResult<OnboardingResponse> {
         return apiClient.safeApiCall<OnboardingResponse> {
             method = HttpMethod.Post
-            url("auth/onboarding")
+            url(Endpoint.ONBOARDING_NEW)
             bearerAuth(token)
             setBody(buildOnboardingFormData(request))
         }
@@ -29,7 +34,7 @@ class OnboardingApiService(private val apiClient: ApiClient) {
     suspend fun onboardingAdditionalAccount(request: OnboardingRequest, token: String): ApiResult<OnboardingResponse> {
         return apiClient.safeApiCall<OnboardingResponse> {
             method = HttpMethod.Post
-            url("new/type/onboarding")
+            url(Endpoint.ONBOARDING_ADD)
             bearerAuth(token)
             setBody(buildOnboardingFormData(request))
         }

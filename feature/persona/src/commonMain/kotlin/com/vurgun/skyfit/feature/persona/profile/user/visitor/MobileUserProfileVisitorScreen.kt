@@ -98,15 +98,15 @@ fun MobileUserProfileVisitorScreen(
 
         is UserProfileVisitorUiState.Content -> {
             val content = uiState as UserProfileVisitorUiState.Content
-            MobileUserProfileVisitorComponent.MobileUserVisitor_Content(content, viewModel::onAction)
+            UserProfileVisitor.Content(content, viewModel::onAction)
         }
     }
 }
 
-private object MobileUserProfileVisitorComponent {
+private object UserProfileVisitor {
 
     @Composable
-    fun MobileUserVisitor_Content(
+    fun Content(
         content: UserProfileVisitorUiState.Content,
         onAction: (UserProfileVisitorAction) -> Unit
     ) {
@@ -154,14 +154,14 @@ private object MobileUserProfileVisitorComponent {
                 ) {
                     Spacer(Modifier.height(contentTopPadding))
 
-                    MobileUserProfileVisitor_HeaderCard(content.profile)
+                    HeaderCard(content.profile)
 
                     //TODO: Visitor Action Row
 
                     if (content.postsVisible) {
                         // TODO: Posts
                     } else {
-                        MobileUserProfileVisitor_UpcomingAppointments(
+                        UpcomingAppointments(
                             appointments = content.appointments,
                             modifier = Modifier
                         )
@@ -174,7 +174,7 @@ private object MobileUserProfileVisitorComponent {
     }
 
     @Composable
-    fun MobileUserProfileVisitor_HeaderCard(userProfile: UserProfile) {
+    private fun HeaderCard(userProfile: UserProfile) {
         Box(modifier = Modifier.fillMaxWidth()) {
             Box(
                 modifier = Modifier
@@ -234,7 +234,7 @@ private object MobileUserProfileVisitorComponent {
     }
 
     @Composable
-    fun MobileUserProfileVisitor_UpcomingAppointments(
+    private fun UpcomingAppointments(
         appointments: List<LessonSessionItemViewData>,
         modifier: Modifier = Modifier,
     ) {
