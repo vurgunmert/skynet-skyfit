@@ -93,7 +93,7 @@ private fun CreateServicePackageScreen_Content(
             verticalArrangement = Arrangement.spacedBy(24.dp)
         ) {
 
-            SkyFormTextInputWithTitle(
+            SkyFormTextField(
                 title = stringResource(Res.string.package_title_label),
                 hint = stringResource(Res.string.package_title_hint),
                 value = formState.title,
@@ -116,7 +116,7 @@ private fun CreateServicePackageScreen_Content(
                 modifier = Modifier.fillMaxWidth(),
             )
 
-            SkyFormInputMultilineText(
+            SkyFormMultilineTextField(
                 title = stringResource(Res.string.package_description_title_label),
                 hint = stringResource(Res.string.description_hint_add),
                 value = formState.description,

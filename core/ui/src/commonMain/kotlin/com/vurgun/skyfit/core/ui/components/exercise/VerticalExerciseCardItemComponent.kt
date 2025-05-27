@@ -1,18 +1,8 @@
 package com.vurgun.skyfit.core.ui.components.exercise
 
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.offset
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Icon
@@ -20,18 +10,18 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.BlurredEdgeTreatment
-import androidx.compose.ui.draw.blur
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.dp
 import com.vurgun.skyfit.core.ui.components.image.CircularImage
+import com.vurgun.skyfit.core.ui.components.image.SkyImage
 import com.vurgun.skyfit.core.ui.components.special.RatingStarComponent
 import com.vurgun.skyfit.core.ui.styling.SkyFitColor
 import com.vurgun.skyfit.core.ui.styling.SkyFitTypography
+import dev.chrisbanes.haze.*
 import org.jetbrains.compose.resources.painterResource
+import org.jetbrains.compose.ui.tooling.preview.Preview
 import skyfit.core.ui.generated.resources.Res
+import skyfit.core.ui.generated.resources.ic_image
 import skyfit.core.ui.generated.resources.logo_skyfit
 
 @Composable
@@ -43,69 +33,67 @@ fun VerticalExerciseCardItemComponent(
     rating: Float,
     onClick: () -> Unit
 ) {
+    val hazeState = rememberHazeState()
+    val hazeStyle = HazeStyle(
+        backgroundColor = SkyFitColor.background.surfaceSecondary,
+        tints = listOf(
+            HazeTint(SkyFitColor.background.surfaceSecondary.copy(alpha = 0.3f))
+        ),
+        blurRadius = 10.dp,
+        noiseFactor = 0.0f
+    )
+
     Box(
         modifier = Modifier
             .size(186.dp, 278.dp)
+            .clip(RoundedCornerShape(16.dp))
             .clickable { onClick() }
     ) {
-        // Background Image
-        Image(
-            painter = painterResource(Res.drawable.logo_skyfit),
-            contentDescription = "Exercise Image",
+        // Background Image with hazeSource
+        SkyImage(
+            url = imageUrl,
+            placeholder = Res.drawable.ic_image,
+            error = Res.drawable.ic_image,
             modifier = Modifier
                 .fillMaxSize()
-                .clip(RoundedCornerShape(16.dp)),
-            contentScale = ContentScale.Crop
+                .hazeSource(hazeState)
         )
 
-        // Rating Star Box
+        // Rating Star Component
         RatingStarComponent(rating, Modifier.align(Alignment.TopEnd).padding(8.dp))
 
-        // Bottom Details
+        // Bottom Content with hazeEffect
         Box(
             Modifier
+                .clip(RoundedCornerShape(16.dp))
                 .align(Alignment.BottomStart)
                 .fillMaxWidth()
                 .height(96.dp)
+                .hazeEffect(hazeState, hazeStyle)
         ) {
-            // Background Blur
-            Box(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .background(Color(0xFF012E36).copy(alpha = 0.7f), RoundedCornerShape(16.dp))
-                    .blur(16.dp, edgeTreatment = BlurredEdgeTreatment.Unbounded)
-            )
-
             Column(
                 Modifier
-                    .align(Alignment.BottomCenter)
-                    .fillMaxWidth()
-                    .background(
-                        SkyFitColor.background.fillTransparentSecondaryActive,
-                        shape = RoundedCornerShape(16.dp)
-                    )
+                    .fillMaxSize()
+                    .padding(16.dp),
+                verticalArrangement = Arrangement.SpaceBetween
             ) {
                 // Exercise Name
                 Text(
                     text = name,
                     style = SkyFitTypography.bodyMediumSemibold,
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(horizontal = 16.dp, vertical = 8.dp)
+                    modifier = Modifier.fillMaxWidth()
                 )
-                Spacer(Modifier.height(8.dp))
 
-                // Avatar List with Overlap
+                // Participants Row
                 Row(
-                    modifier = Modifier.fillMaxWidth(),
                     verticalAlignment = Alignment.CenterVertically
                 ) {
-                    Spacer(Modifier.height(4.dp))
-
                     participants.take(4).forEachIndexed { index, avatarUrl ->
                         CircularImage(
                             url = avatarUrl,
-                            modifier = Modifier.size(32.dp).offset(x = (-10 * index).dp)
+                            modifier = Modifier
+                                .size(32.dp)
+                                .offset(x = (-10 * index).dp)
                         )
                     }
 
@@ -124,6 +112,7 @@ fun VerticalExerciseCardItemComponent(
                         }
                     }
 
+                    Spacer(modifier = Modifier.weight(1f))
 
                     Icon(
                         painter = painterResource(Res.drawable.logo_skyfit),
@@ -131,11 +120,28 @@ fun VerticalExerciseCardItemComponent(
                         tint = SkyFitColor.icon.default,
                         modifier = Modifier.size(24.dp)
                     )
-                    Spacer(Modifier.height(4.dp))
                 }
-
-                Spacer(Modifier.height(16.dp))
             }
         }
     }
+
+}
+
+
+@Preview
+@Composable
+private fun VerticalExerciseCardItemPreview() {
+    VerticalExerciseCardItemComponent(
+        imageUrl = "https://is1-ssl.mzstatic.com/image/thumb/Purple126/v4/89/c5/07/89c5070d-7390-3692-886f-4bd4ed9ac908/AppIcon-0-0-1x_U007emarketing-0-0-0-7-0-0-sRGB-0-0-0-GLES2_U002c0-512MB-85-220-0-0.png/256x256bb.jpg",
+        name = "Dumbell Exercise",
+        participants = listOf(
+            "https://is1-ssl.mzstatic.com/image/thumb/Purple126/v4/89/c5/07/89c5070d-7390-3692-886f-4bd4ed9ac908/AppIcon-0-0-1x_U007emarketing-0-0-0-7-0-0-sRGB-0-0-0-GLES2_U002c0-512MB-85-220-0-0.png/256x256bb.jpg",
+            "https://is1-ssl.mzstatic.com/image/thumb/Purple126/v4/89/c5/07/89c5070d-7390-3692-886f-4bd4ed9ac908/AppIcon-0-0-1x_U007emarketing-0-0-0-7-0-0-sRGB-0-0-0-GLES2_U002c0-512MB-85-220-0-0.png/256x256bb.jpg",
+            "https://is1-ssl.mzstatic.com/image/thumb/Purple126/v4/89/c5/07/89c5070d-7390-3692-886f-4bd4ed9ac908/AppIcon-0-0-1x_U007emarketing-0-0-0-7-0-0-sRGB-0-0-0-GLES2_U002c0-512MB-85-220-0-0.png/256x256bb.jpg",
+            "https://is1-ssl.mzstatic.com/image/thumb/Purple126/v4/89/c5/07/89c5070d-7390-3692-886f-4bd4ed9ac908/AppIcon-0-0-1x_U007emarketing-0-0-0-7-0-0-sRGB-0-0-0-GLES2_U002c0-512MB-85-220-0-0.png/256x256bb.jpg",
+        ),
+        extraParticipantsCount = 123,
+        rating = 4.8f,
+        onClick = { }
+    )
 }

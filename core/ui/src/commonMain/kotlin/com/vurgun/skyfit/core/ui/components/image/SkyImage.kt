@@ -14,6 +14,10 @@ import androidx.compose.ui.unit.dp
 import coil3.compose.rememberAsyncImagePainter
 import org.jetbrains.compose.resources.DrawableResource
 import org.jetbrains.compose.resources.painterResource
+import org.jetbrains.compose.ui.tooling.preview.Preview
+import skyfit.core.ui.generated.resources.Res
+import skyfit.core.ui.generated.resources.ic_image
+import skyfit.core.ui.generated.resources.im_placeholder_dark
 
 enum class SkyImageSize(val dp: Dp) {
     Size24(24.dp),
@@ -39,7 +43,7 @@ fun SkyImage(
     modifier: Modifier = Modifier,
     size: SkyImageSize = SkyImageSize.Size40,
     sizeOverride: Dp? = null,
-    shape: SkyImageShape = SkyImageShape.Circle,
+    shape: SkyImageShape = SkyImageShape.Square,
     shapeOverride: Shape? = null,
     contentScale: ContentScale = ContentScale.Crop,
     placeholder: DrawableResource? = null,
@@ -62,5 +66,18 @@ fun SkyImage(
         modifier = modifier
             .size(resolvedSize)
             .clip(resolvedShape)
+    )
+}
+
+
+@Preview
+@Composable
+private fun SkyImagePreview() {
+    SkyImage(
+        url = "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ432ju-gdS2nl6CEobTaFXEe6_gRmK5DkWuQ&s",
+        modifier = Modifier,
+        size = SkyImageSize.Size100,
+        placeholder = Res.drawable.ic_image,
+        error = Res.drawable.im_placeholder_dark
     )
 }

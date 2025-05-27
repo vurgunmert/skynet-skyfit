@@ -69,6 +69,8 @@ kotlin {
 
             implementation(libs.coil.compose)
             implementation(libs.coil.network)
+
+            implementation("dev.chrisbanes.haze:haze:1.6.2")
         }
 
         androidMain.dependencies {
