@@ -32,7 +32,7 @@ internal fun BottomNavigationBar(
     onClickHome: () -> Unit,
     onClickExplore: () -> Unit,
     onClickProfile: () -> Unit,
-    onClickAppAction: () -> Unit
+    onClickAIBot: () -> Unit
 ) {
     Box(
         modifier.fillMaxWidth(),
@@ -83,7 +83,7 @@ internal fun BottomNavigationBar(
             modifier = Modifier
                 .align(Alignment.BottomEnd)
                 .padding(bottom = 112.dp, end = 20.dp),
-            onClick = onClickAppAction
+            onClick = onClickAIBot
         )
     }
 }
