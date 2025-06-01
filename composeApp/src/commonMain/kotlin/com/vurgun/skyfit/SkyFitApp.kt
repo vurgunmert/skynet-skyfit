@@ -56,7 +56,7 @@ private fun AppScreen() {
             wellbeingScreenModule()
         }
 
-        val splashScreen = rememberScreen(SharedScreen.Onboarding)
+        val splashScreen = rememberScreen(SharedScreen.Splash)
 
         Navigator(splashScreen) { navigator ->
             CrossfadeTransition(navigator)

@@ -1,38 +1,15 @@
 package com.vurgun.skyfit.feature.dashboard.dashboard
 
-import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.animation.fadeIn
-import androidx.compose.animation.fadeOut
-import androidx.compose.animation.slideInVertically
-import androidx.compose.animation.slideOutVertically
+import androidx.compose.animation.*
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.BoxScope
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxHeight
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.layout.wrapContentHeight
-import androidx.compose.foundation.layout.wrapContentWidth
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -61,20 +38,10 @@ import com.vurgun.skyfit.feature.dashboard.home.HomeScreen
 import com.vurgun.skyfit.feature.persona.profile.ProfileScreen
 import com.vurgun.skyfit.feature.persona.settings.SettingsHostScreen
 import com.vurgun.skyfit.feature.persona.social.SocialMediaScreen
+import com.vurgun.skyfit.feature.wellbeign.nutrition.UserNutritionScreen
 import org.jetbrains.compose.resources.DrawableResource
 import org.jetbrains.compose.resources.painterResource
-import skyfit.core.ui.generated.resources.Res
-import skyfit.core.ui.generated.resources.ic_barbell
-import skyfit.core.ui.generated.resources.ic_barbell_fill
-import skyfit.core.ui.generated.resources.ic_bell
-import skyfit.core.ui.generated.resources.ic_chat
-import skyfit.core.ui.generated.resources.ic_coffee
-import skyfit.core.ui.generated.resources.ic_coffee_fill
-import skyfit.core.ui.generated.resources.ic_home
-import skyfit.core.ui.generated.resources.ic_home_fill
-import skyfit.core.ui.generated.resources.ic_search
-import skyfit.core.ui.generated.resources.ic_settings
-import skyfit.core.ui.generated.resources.logo_skyfit
+import skyfit.core.ui.generated.resources.*
 
 internal object DashboardLayoutExpanded {
 
@@ -92,12 +59,12 @@ internal object DashboardLayoutExpanded {
         var overlayScreen by remember { mutableStateOf<ScreenProvider?>(null) }
         val homeScreen = rememberScreen(DashboardScreen.Home)
         val exploreScreen = rememberScreen(DashboardScreen.Explore)
-        val socialMediaScreen = rememberScreen(SharedScreen.UnderDevelopment) //DashboardScreen.Social
+        val socialMediaScreen = rememberScreen(DashboardScreen.Social)
         val nutritionScreen = rememberScreen(SharedScreen.UnderDevelopment) //DashboardScreen.Nutrition
         val profileScreen = rememberScreen(DashboardScreen.Profile)
         val settingsScreen = rememberScreen(SharedScreen.Settings)
 
-        Navigator(homeScreen) { dashboardNavigator ->
+        Navigator(homeScreen, key = "c") { dashboardNavigator ->
             Row(
                 modifier = Modifier
                     .fillMaxSize()
@@ -120,11 +87,13 @@ internal object DashboardLayoutExpanded {
                         TopBar(
                             state = topBarState,
                             onClickNotifications = {
-                                overlayScreen = SharedScreen.UnderDevelopment // SharedScreen.NotificationsExpanded { overlayScreen = null }
+                                overlayScreen =
+                                    SharedScreen.UnderDevelopment // SharedScreen.NotificationsExpanded { overlayScreen = null }
 
                             },
                             onClickConversations = {
-                                overlayScreen = SharedScreen.UnderDevelopment // SharedScreen.ConversationsExpanded { overlayScreen = null }
+                                overlayScreen =
+                                    SharedScreen.UnderDevelopment // SharedScreen.ConversationsExpanded { overlayScreen = null }
                             },
                             onClickAppAction = {
                                 dashboardNavigator.push(SharedScreen.ChatBot)
@@ -419,7 +388,7 @@ internal object DashboardLayoutExpanded {
             )
 
             SidebarNavigationItem(
-                selected = currentScreen is SocialMediaScreen,
+                selected = currentScreen is UserNutritionScreen,
                 selectedIcon = Res.drawable.ic_coffee_fill,
                 unselectedIcon = Res.drawable.ic_coffee,
                 onClick = onClickNutrition

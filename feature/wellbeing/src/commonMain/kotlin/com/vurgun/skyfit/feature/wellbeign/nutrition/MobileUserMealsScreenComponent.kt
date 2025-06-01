@@ -39,11 +39,12 @@ import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import cafe.adriel.voyager.core.screen.Screen
 import com.vurgun.skyfit.core.data.utility.now
-import com.vurgun.skyfit.feature.wellbeign.nutrition.MobileUserMealsScreen.MobileDashboardNutritionScreenDayOfWeekComponent
-import com.vurgun.skyfit.feature.wellbeign.nutrition.MobileUserMealsScreen.MobileDashboardNutritionScreenMealEditActionComponent
-import com.vurgun.skyfit.feature.wellbeign.nutrition.MobileUserMealsScreen.MobileDashboardNutritionScreenMealsComponent
-import com.vurgun.skyfit.feature.wellbeign.nutrition.MobileUserMealsScreen.MobileDashboardNutritionScreenStatisticsComponent
+import com.vurgun.skyfit.feature.wellbeign.nutrition.MobileUserMealsScreenComponent.MobileDashboardNutritionScreenDayOfWeekComponent
+import com.vurgun.skyfit.feature.wellbeign.nutrition.MobileUserMealsScreenComponent.MobileDashboardNutritionScreenMealEditActionComponent
+import com.vurgun.skyfit.feature.wellbeign.nutrition.MobileUserMealsScreenComponent.MobileDashboardNutritionScreenMealsComponent
+import com.vurgun.skyfit.feature.wellbeign.nutrition.MobileUserMealsScreenComponent.MobileDashboardNutritionScreenStatisticsComponent
 import com.vurgun.skyfit.core.ui.components.special.ButtonSize
 import com.vurgun.skyfit.core.ui.components.special.ButtonState
 import com.vurgun.skyfit.core.ui.components.special.ButtonVariant
@@ -61,8 +62,17 @@ import skyfit.core.ui.generated.resources.ic_chevron_left
 import skyfit.core.ui.generated.resources.ic_chevron_right
 import skyfit.core.ui.generated.resources.ic_plus
 
+class UserNutritionScreen: Screen {
+
+    @Composable
+    override fun Content() {
+        UserNutritionScreenCompact()
+    }
+
+}
+
 @Composable
-fun MobileUserMealsScreen() {
+private fun UserNutritionScreenCompact() {
     var selectedDate by remember { mutableStateOf(LocalDate.now()) }
 
     fun goToPreviousWeek() {
@@ -101,7 +111,7 @@ fun MobileUserMealsScreen() {
     }
 }
 
-object MobileUserMealsScreen {
+private object MobileUserMealsScreenComponent {
     @Composable
     fun MobileDashboardNutritionScreenDayOfWeekComponent(
         selectedDate: LocalDate,  // Selected date

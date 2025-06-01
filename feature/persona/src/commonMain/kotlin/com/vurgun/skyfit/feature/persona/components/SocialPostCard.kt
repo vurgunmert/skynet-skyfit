@@ -47,7 +47,7 @@ fun SocialPostCard(
     Row(
         modifier = modifier
             .fillMaxWidth()
-            .background(SkyFitColor.background.surfaceSecondary, RoundedCornerShape(12.dp))
+            .background(SkyFitColor.background.default, RoundedCornerShape(12.dp))
             .clickable(onClick = onClick)
             .padding(16.dp)
     ) {

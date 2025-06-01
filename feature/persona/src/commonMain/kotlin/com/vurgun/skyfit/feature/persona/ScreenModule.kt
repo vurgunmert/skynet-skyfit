@@ -13,6 +13,7 @@ import com.vurgun.skyfit.feature.persona.settings.SettingsHostScreen
 import com.vurgun.skyfit.feature.persona.settings.facility.FacilitySettingsMainScreen
 import com.vurgun.skyfit.feature.persona.settings.trainer.TrainerSettingsMainScreen
 import com.vurgun.skyfit.feature.persona.settings.user.UserSettingsMainScreen
+import com.vurgun.skyfit.feature.persona.social.CreatePostScreen
 import kotlinx.serialization.Serializable
 
 val personaScreenModule = screenModule {
@@ -37,6 +38,8 @@ val personaScreenModule = screenModule {
     register<SettingsHomeEntryPoint.Trainer> { TrainerSettingsMainScreen() }
     register<SettingsHomeEntryPoint.User> { UserSettingsMainScreen() }
     register<SettingsHomeEntryPoint.Unauthorized> { UnauthorizedAccessScreen() }
+
+    register<SharedScreen.CreatePost> { CreatePostScreen() }
 }
 
 @Serializable

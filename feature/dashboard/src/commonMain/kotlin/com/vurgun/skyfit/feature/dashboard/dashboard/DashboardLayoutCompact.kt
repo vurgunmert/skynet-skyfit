@@ -22,6 +22,7 @@ internal object DashboardLayoutCompact {
         val homeScreen = rememberScreen(DashboardScreen.Home)
         val exploreScreen = rememberScreen(DashboardScreen.Explore)
         val profileScreen = rememberScreen(DashboardScreen.Profile)
+        val socialScreen = rememberScreen(DashboardScreen.Social)
 
         Navigator(homeScreen) { dashboardNavigator ->
             SkyFitScaffold(
@@ -31,6 +32,7 @@ internal object DashboardLayoutCompact {
                         currentScreen = dashboardNavigator.lastItem,
                         onClickHome = { dashboardNavigator.replace(homeScreen) },
                         onClickExplore = { dashboardNavigator.replace(exploreScreen) },
+                        onClickSocial = { dashboardNavigator.replace(socialScreen) },
                         onClickProfile = { dashboardNavigator.replace(profileScreen) },
                         onClickAIBot = { appNavigator.push(SharedScreen.ChatBot) }
                     )

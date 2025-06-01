@@ -14,7 +14,10 @@ import com.vurgun.skyfit.core.ui.components.text.SkyText
 import com.vurgun.skyfit.core.ui.components.text.TextStyleType
 import com.vurgun.skyfit.core.ui.styling.SkyFitColor
 
-class UnderDevelopmentScreen : Screen {
+class UnderDevelopmentScreen(
+    val title: String = "🚧 Özellik Geliştiriliyor",
+    val message: String = "Bu özellik şu anda geliştirme aşamasında"
+) : Screen {
 
     @Composable
     override fun Content() {
@@ -23,7 +26,7 @@ class UnderDevelopmentScreen : Screen {
         SkyFitMobileScaffold(
             topBar = {
                 SkyFitScreenHeader(
-                    title = "🚧 Özellik Geliştiriliyor",
+                    title = title,
                     onClickBack = { navigator.pop() }
                 )
             }
@@ -38,7 +41,7 @@ class UnderDevelopmentScreen : Screen {
                     modifier = Modifier.padding(24.dp)
                 ) {
                     SkyText(
-                        text = "Bu özellik şu anda geliştirme aşamasında",
+                        text = message,
                         styleType = TextStyleType.BodyLargeSemibold,
                         color = SkyFitColor.text.criticalOnBgFill
                     )

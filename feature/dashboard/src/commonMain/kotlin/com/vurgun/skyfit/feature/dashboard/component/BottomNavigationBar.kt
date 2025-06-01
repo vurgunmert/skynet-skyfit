@@ -22,6 +22,7 @@ import com.vurgun.skyfit.core.ui.styling.SkyFitColor
 import com.vurgun.skyfit.feature.dashboard.explore.ExploreScreen
 import com.vurgun.skyfit.feature.dashboard.home.HomeScreen
 import com.vurgun.skyfit.feature.persona.profile.ProfileScreen
+import com.vurgun.skyfit.feature.persona.social.SocialMediaScreen
 import org.jetbrains.compose.resources.DrawableResource
 import skyfit.core.ui.generated.resources.*
 
@@ -31,6 +32,7 @@ internal fun BottomNavigationBar(
     currentScreen: Screen,
     onClickHome: () -> Unit,
     onClickExplore: () -> Unit,
+    onClickSocial: () -> Unit,
     onClickProfile: () -> Unit,
     onClickAIBot: () -> Unit
 ) {
@@ -66,6 +68,13 @@ internal fun BottomNavigationBar(
                     selectedIcon = Res.drawable.ic_barbell_fill,
                     unselectedIcon = Res.drawable.ic_barbell,
                     onClick = onClickExplore
+                )
+
+                BottomBarItem(
+                    selected = currentScreen is SocialMediaScreen,
+                    selectedIcon = Res.drawable.ic_plus,
+                    unselectedIcon = Res.drawable.ic_search,
+                    onClick = onClickSocial
                 )
 
                 BottomBarItem(
