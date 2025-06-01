@@ -28,6 +28,7 @@ import com.vurgun.skyfit.core.data.persona.domain.model.UserRole
 import com.vurgun.skyfit.core.navigation.SharedScreen
 import com.vurgun.skyfit.core.navigation.replaceAll
 import com.vurgun.skyfit.core.ui.components.dialog.ErrorDialog
+import com.vurgun.skyfit.core.ui.components.form.SkyFormTextField
 import com.vurgun.skyfit.core.ui.components.loader.FullScreenLoaderContent
 import com.vurgun.skyfit.core.ui.components.special.ButtonSize
 import com.vurgun.skyfit.core.ui.components.special.ButtonState
@@ -44,7 +45,9 @@ import org.jetbrains.compose.resources.stringResource
 import skyfit.core.ui.generated.resources.Res
 import skyfit.core.ui.generated.resources.continue_action
 import skyfit.core.ui.generated.resources.ic_pencil
+import skyfit.core.ui.generated.resources.ic_plus
 import skyfit.core.ui.generated.resources.mandatory_biography_label
+import skyfit.core.ui.generated.resources.mandatory_workplace_name_label
 import skyfit.core.ui.generated.resources.onboarding_trainer_profile_message
 import skyfit.core.ui.generated.resources.onboarding_trainer_profile_title
 import skyfit.core.ui.generated.resources.user_biography_hint
@@ -52,6 +55,7 @@ import skyfit.core.ui.generated.resources.user_first_name_hint
 import skyfit.core.ui.generated.resources.user_first_name_mandatory_label
 import skyfit.core.ui.generated.resources.user_last_name_hint
 import skyfit.core.ui.generated.resources.user_last_name_mandatory_label
+import skyfit.core.ui.generated.resources.user_workplace_mandatory_label
 
 internal class EnterProfileScreen(private val viewModel: OnboardingViewModel) : Screen {
 
@@ -125,7 +129,7 @@ internal fun MobileOnboardingEnterProfileScreen(
                     Spacer(Modifier.height(24.dp))
 
                     Row(modifier = Modifier.padding(horizontal = 22.dp).fillMaxWidth()) {
-                        SingleLineInputText(
+                        SkyFormTextField(
                             modifier = Modifier.weight(1f),
                             title = stringResource(Res.string.user_first_name_mandatory_label),
                             hint = stringResource(Res.string.user_first_name_hint),
@@ -136,7 +140,7 @@ internal fun MobileOnboardingEnterProfileScreen(
                             nextFocusRequester = lastNameFocusRequester
                         )
                         Spacer(Modifier.width(16.dp))
-                        SingleLineInputText(
+                        SkyFormTextField(
                             modifier = Modifier.weight(1f),
                             title = stringResource(Res.string.user_last_name_mandatory_label),
                             hint = stringResource(Res.string.user_last_name_hint),

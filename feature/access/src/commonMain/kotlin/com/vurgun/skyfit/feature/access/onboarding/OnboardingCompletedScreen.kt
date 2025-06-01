@@ -1,13 +1,7 @@
 package com.vurgun.skyfit.feature.access.onboarding
 
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.aspectRatio
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
@@ -19,16 +13,13 @@ import cafe.adriel.voyager.navigator.currentOrThrow
 import com.vurgun.skyfit.core.navigation.SharedScreen
 import com.vurgun.skyfit.core.navigation.findRootNavigator
 import com.vurgun.skyfit.core.navigation.replaceAll
-import com.vurgun.skyfit.core.ui.components.button.PrimaryLargeButton
+import com.vurgun.skyfit.core.ui.components.button.SkyButton
+import com.vurgun.skyfit.core.ui.components.button.SkyButtonSize
 import com.vurgun.skyfit.core.ui.components.special.SkyFitMobileScaffold
 import com.vurgun.skyfit.feature.onboarding.component.OnboardingTitleGroupComponent
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
-import skyfit.core.ui.generated.resources.Res
-import skyfit.core.ui.generated.resources.logo_skyfit
-import skyfit.core.ui.generated.resources.onboarding_get_started_action
-import skyfit.core.ui.generated.resources.onboarding_ready_message
-import skyfit.core.ui.generated.resources.onboarding_ready_title
+import skyfit.core.ui.generated.resources.*
 
 internal class OnboardingCompletedScreen(
     private val viewModel: OnboardingViewModel
@@ -53,31 +44,40 @@ private fun MobileOnboardingCompletedScreen(
     val character = viewModel.uiState.collectAsState().value.character
 
     SkyFitMobileScaffold {
-        Box(modifier = Modifier.fillMaxSize()) {
+        Column(
+            modifier = Modifier.fillMaxSize(),
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+
+            Spacer(Modifier.weight(1f))
+
             OnboardingTitleGroupComponent(
                 title = stringResource(Res.string.onboarding_ready_title),
                 subtitle = stringResource(Res.string.onboarding_ready_message),
-                modifier = Modifier.align(Alignment.TopStart).padding(top = 110.dp)
+                modifier = Modifier.fillMaxWidth().wrapContentHeight()
             )
+
+            Spacer(modifier = Modifier.height(48.dp))
 
             Image(
                 painter = painterResource(character?.icon?.res ?: Res.drawable.logo_skyfit),
                 contentDescription = null,
-                modifier = Modifier.align(Alignment.Center)
+                modifier = Modifier
+                    .heightIn(max = 120.dp)
                     .fillMaxWidth(0.7f)
                     .aspectRatio(1f)
             )
 
-            PrimaryLargeButton(
+            Spacer(Modifier.weight(1f))
+
+            SkyButton(
+                label = stringResource(Res.string.onboarding_get_started_action),
+                onClick = goToDashboard,
                 modifier = Modifier
-                    .align(Alignment.BottomStart)
                     .padding(16.dp)
                     .fillMaxWidth(),
-                text = stringResource(Res.string.onboarding_get_started_action),
-                onClick = goToDashboard,
+                size = SkyButtonSize.Large
             )
-
-            Spacer(Modifier.height(20.dp))
         }
     }
 }

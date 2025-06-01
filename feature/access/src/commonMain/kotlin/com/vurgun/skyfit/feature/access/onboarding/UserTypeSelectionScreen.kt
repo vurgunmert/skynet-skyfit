@@ -6,6 +6,8 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -16,6 +18,7 @@ import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
 import com.vurgun.skyfit.core.data.persona.domain.model.UserRole
+import com.vurgun.skyfit.core.ui.components.button.SkyButton
 import com.vurgun.skyfit.core.ui.components.button.SkyFitTextButton
 import com.vurgun.skyfit.core.ui.components.special.SkyFitLogoComponent
 import com.vurgun.skyfit.core.ui.components.special.SkyFitMobileScaffold
@@ -53,17 +56,19 @@ internal fun OnboardingUserTypeSelectionScreen(
 
     SkyFitMobileScaffold {
         Column(
-            modifier = Modifier.fillMaxSize(),
+            modifier = Modifier
+                .fillMaxSize()
+                .verticalScroll(rememberScrollState()),
             horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.Center
         ) {
-            Spacer(Modifier.height(48.dp))
             SkyFitLogoComponent()
-            Spacer(Modifier.height(56.dp))
+            Spacer(Modifier.height(48.dp))
             OnboardingTitleGroupComponent(
                 title = stringResource(Res.string.onboarding_welcome_title),
                 subtitle = stringResource(Res.string.onboarding_welcome_message)
             )
-            Spacer(Modifier.height(64.dp))
+            Spacer(Modifier.height(48.dp))
             MobileOnboardingUserTypeSelectionComponent(
                 userRoles = availableUserRoles,
                 onSelected = { userType ->
@@ -75,6 +80,7 @@ internal fun OnboardingUserTypeSelectionScreen(
                         else -> Unit
                     }
                 })
+            Spacer(Modifier.height(64.dp))
         }
     }
 }

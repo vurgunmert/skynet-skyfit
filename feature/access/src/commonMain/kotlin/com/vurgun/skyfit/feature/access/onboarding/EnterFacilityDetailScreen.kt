@@ -2,6 +2,8 @@ package com.vurgun.skyfit.feature.access.onboarding
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.focusable
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -32,6 +34,8 @@ import androidx.compose.ui.unit.dp
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
+import com.vurgun.skyfit.core.ui.components.form.SkyFormMultilineTextField
+import com.vurgun.skyfit.core.ui.components.form.SkyFormTextField
 import com.vurgun.skyfit.core.ui.components.text.MultiLineInputText
 import com.vurgun.skyfit.core.ui.components.text.SingleLineInputText
 import com.vurgun.skyfit.feature.onboarding.component.OnboardingStepProgressComponent
@@ -50,6 +54,7 @@ import skyfit.core.ui.generated.resources.Res
 import skyfit.core.ui.generated.resources.continue_action
 import skyfit.core.ui.generated.resources.ic_image
 import skyfit.core.ui.generated.resources.ic_pencil
+import skyfit.core.ui.generated.resources.ic_plus
 import skyfit.core.ui.generated.resources.mandatory_address_label
 import skyfit.core.ui.generated.resources.mandatory_biography_label
 import skyfit.core.ui.generated.resources.mandatory_workplace_name_label
@@ -132,16 +137,23 @@ internal fun MobileOnboardingFacilityDetailsScreen(
                     Modifier.fillMaxWidth(),
                     verticalAlignment = Alignment.CenterVertically
                 ) {
-                    val painter = selectedImage?.let { BitmapPainter(image = it) } ?: painterResource(Res.drawable.ic_image)
-                    Image(
-                        painter = painter,
-                        contentDescription = "Image",
-                        contentScale = ContentScale.Crop,
-                        modifier = Modifier
-                            .clip(RoundedCornerShape(20.dp))
-                            .size(64.dp)
-                            .background(SkyFitColor.background.surfaceSecondary)
-                    )
+                    Box(Modifier
+                        .clip(RoundedCornerShape(20.dp))
+                        .size(64.dp)
+                        .background(SkyFitColor.background.surfaceSecondary)
+                    ) {
+                        selectedImage?.let { image -> BitmapPainter(image = image) }?.let { painter ->
+                            Image(
+                                painter = painter,
+                                contentDescription = "Image",
+                                contentScale = ContentScale.Crop,
+                                modifier = Modifier
+                                    .clip(RoundedCornerShape(20.dp))
+                                    .size(64.dp)
+                                    .background(SkyFitColor.background.surfaceSecondary)
+                            )
+                        }
+                    }
 
                     Spacer(Modifier.width(16.dp))
 
@@ -152,24 +164,25 @@ internal fun MobileOnboardingFacilityDetailsScreen(
                         DumbButtonComponent(
                             text = stringResource(Res.string.onboarding_edit_background_action),
                             variant = ButtonVariant.Secondary,
-                            rightIconPainter = painterResource(Res.drawable.ic_pencil)
+                            rightIconPainter = painterResource(Res.drawable.ic_plus)
                         )
                     }
                 }
                 Spacer(Modifier.height(24.dp))
 
-                SingleLineInputText(
+                SkyFormTextField(
                     title = stringResource(Res.string.user_workplace_mandatory_label),
                     hint = stringResource(Res.string.mandatory_workplace_name_label),
                     value = name,
                     onValueChange = { viewModel.updateFacilityName(it) },
-                    rightIconRes = Res.drawable.ic_pencil,
+                    rightIconRes = Res.drawable.ic_plus,
                     focusRequester = nameFocusRequester,
                     nextFocusRequester = addressFocusRequester
                 )
 
                 Spacer(Modifier.height(16.dp))
-                MultiLineInputText(
+
+                SkyFormMultilineTextField(
                     title = stringResource(Res.string.mandatory_address_label),
                     hint = stringResource(Res.string.mandatory_address_label),
                     value = address,
@@ -180,7 +193,8 @@ internal fun MobileOnboardingFacilityDetailsScreen(
                 )
 
                 Spacer(Modifier.height(16.dp))
-                MultiLineInputText(
+
+                SkyFormMultilineTextField(
                     title = stringResource(Res.string.mandatory_biography_label),
                     hint = stringResource(Res.string.user_biography_hint),
                     value = biography,

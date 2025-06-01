@@ -5,11 +5,15 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.unit.dp
+import com.vurgun.skyfit.core.ui.components.icon.SkyIcon
+import com.vurgun.skyfit.core.ui.components.icon.SkyIconSize
 import com.vurgun.skyfit.core.ui.components.text.SkyInputTextField
 import com.vurgun.skyfit.core.ui.components.text.SkyText
 import com.vurgun.skyfit.core.ui.components.text.TextStyleType
 import com.vurgun.skyfit.core.ui.styling.SkyFitColor
+import org.jetbrains.compose.resources.DrawableResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
 
 @Composable
@@ -18,6 +22,9 @@ fun SkyFormMultilineTextField(
     hint: String,
     value: String? = null,
     onValueChange: ((String) -> Unit)? = null,
+    rightIconRes: DrawableResource? = null,
+    focusRequester: FocusRequester = FocusRequester(),
+    nextFocusRequester: FocusRequester? = null,
     modifier: Modifier = Modifier
 ) {
     Column(
@@ -45,10 +52,17 @@ fun SkyFormMultilineTextField(
                 value = value,
                 singleLine = false,
                 onValueChange = onValueChange,
+                focusRequester = focusRequester,
+                nextFocusRequester = nextFocusRequester,
                 modifier = Modifier
                     .weight(1f)
                     .heightIn(min = 64.dp)
             )
+
+            if (rightIconRes != null) {
+                Spacer(Modifier.width(8.dp))
+                SkyIcon(rightIconRes, size = SkyIconSize.Small)
+            }
         }
     }
 }

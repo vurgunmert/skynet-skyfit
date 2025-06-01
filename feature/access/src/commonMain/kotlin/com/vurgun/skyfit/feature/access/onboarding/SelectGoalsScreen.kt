@@ -7,6 +7,8 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
@@ -48,11 +50,13 @@ private fun MobileOnboardingGoalSelectionScreen(
 
     SkyFitMobileScaffold {
         Column(
-            modifier = Modifier.fillMaxSize(),
+            modifier = Modifier.fillMaxSize().verticalScroll(rememberScrollState()),
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {
             OnboardingStepProgressComponent(totalSteps = 8, currentStep = 7)
-            Spacer(Modifier.height(178.dp))
+
+            Spacer(Modifier.weight(1f))
+
             OnboardingTitleGroupComponent(
                 title = stringResource(Res.string.onboarding_goal_title),
                 subtitle = stringResource(Res.string.onboarding_goal_message)

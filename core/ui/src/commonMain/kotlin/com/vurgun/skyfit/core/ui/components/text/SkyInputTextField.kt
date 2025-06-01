@@ -2,11 +2,17 @@ package com.vurgun.skyfit.core.ui.components.text
 
 import androidx.compose.foundation.focusable
 import androidx.compose.foundation.text.BasicTextField
+import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.input.pointer.pointerInput
+import androidx.compose.ui.platform.LocalSoftwareKeyboardController
+import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.text.style.TextAlign
@@ -20,8 +26,12 @@ fun SkyInputTextField(
     onValueChange: ((String) -> Unit)? = null,
     singleLine: Boolean = true,
     enabled: Boolean = true,
+    focusRequester: FocusRequester = remember { FocusRequester() },
+    nextFocusRequester: FocusRequester? = null,
     modifier: Modifier = Modifier,
 ) {
+    val keyboardController = LocalSoftwareKeyboardController.current
+
     val actualModifier = if (!enabled) {
         modifier
             .pointerInput(Unit) {} // Prevent touch
@@ -31,7 +41,8 @@ fun SkyInputTextField(
     }
 
     BasicTextField(
-        modifier = actualModifier,
+        modifier = actualModifier
+            .focusRequester(focusRequester),
         enabled = enabled,
         value = value.orEmpty(),
         onValueChange = { onValueChange?.invoke(it) },
@@ -40,7 +51,13 @@ fun SkyInputTextField(
         ),
         singleLine = singleLine,
         visualTransformation = VisualTransformation.None,
-        keyboardOptions = KeyboardOptions.Default,
+        keyboardOptions = KeyboardOptions.Default.copy(
+            imeAction = if (nextFocusRequester != null) ImeAction.Next else ImeAction.Done
+        ),
+        keyboardActions = KeyboardActions(
+            onNext = { nextFocusRequester?.requestFocus() },
+            onDone = { keyboardController?.hide() }
+        ),
         cursorBrush = SolidColor(SkyFitColor.icon.default),
         decorationBox = { innerTextField ->
             if (value.isNullOrBlank()) {

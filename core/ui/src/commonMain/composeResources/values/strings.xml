@@ -25,9 +25,7 @@
     <!-- 🔹 Hints -->
     <string name="user_first_name_hint">Adınızı girin</string>
     <string name="user_last_name_hint">Soyadınızı girin</string>
-    <string name="user_biography_hint">
-    Whether you're a beginner or looking to advance, my balanced approach will guide you every step of the way. 🏃🏽‍♂️
-</string>
+    <string name="user_biography_hint">Whether you're a beginner or looking to advance, my balanced approach will guide you every step of the way. 🏃🏽‍♂️</string>
 
     <!-- 🔹 Goals -->
     <string name="goal_lose_weight_label">Kilo Vermek</string>

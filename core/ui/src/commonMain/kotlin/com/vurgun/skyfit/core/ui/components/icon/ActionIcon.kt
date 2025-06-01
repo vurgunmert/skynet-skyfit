@@ -15,12 +15,12 @@ fun ActionIcon(
     res: DrawableResource,
     modifier: Modifier = Modifier.size(16.dp),
     contentDescription: String? = null,
-    onClick: () -> Unit
+    onClick: (() -> Unit)? = null,
 ) {
     Icon(
         painter = painterResource(res),
         contentDescription = contentDescription,
-        modifier = modifier.clickable(onClick = onClick),
+        modifier = modifier.clickable(enabled = onClick != null, onClick = { onClick?.invoke() }),
         tint = SkyFitColor.icon.default
     )
 }
