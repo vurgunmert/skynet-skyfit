@@ -34,6 +34,8 @@ import com.vurgun.skyfit.core.ui.components.text.TextStyleType
 import com.vurgun.skyfit.core.ui.styling.SkyFitColor
 import com.vurgun.skyfit.core.ui.styling.SkyFitTypography
 import com.vurgun.skyfit.core.ui.utils.CollectEffect
+import com.vurgun.skyfit.core.ui.utils.LocalWindowSize
+import com.vurgun.skyfit.core.ui.utils.WindowSize
 import org.jetbrains.compose.resources.DrawableResource
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
@@ -43,6 +45,7 @@ class ChatBotScreen : Screen {
 
     @Composable
     override fun Content() {
+        val windowSize = LocalWindowSize.current
         val navigator = LocalNavigator.currentOrThrow
         val viewModel = koinScreenModel<ChatbotViewModel>()
 
@@ -62,12 +65,17 @@ class ChatBotScreen : Screen {
             }
         }
 
-        ChatbotComponent.Screen(viewModel)
+        when (windowSize) {
+            WindowSize.COMPACT,
+            WindowSize.MEDIUM -> ChatbotComponent.Screen(viewModel)
+            WindowSize.EXPANDED -> ChatbotLayoutExpanded.Screen(viewModel)
+        }
     }
 }
 
 
-private object ChatbotComponent {
+
+internal object ChatbotComponent {
 
     @Composable
     fun Screen(viewModel: ChatbotViewModel) {
@@ -274,9 +282,10 @@ private object ChatbotComponent {
     }
 
     @Composable
-    private fun ChatHistoryItem(text: String, onClick: () -> Unit) {
+    fun ChatHistoryItem(text: String, onClick: () -> Unit) {
         Row(
             Modifier
+                .clip(RoundedCornerShape(20.dp))
                 .fillMaxWidth()
                 .background(SkyFitColor.background.fillTransparentActive, RoundedCornerShape(20.dp))
                 .clickable(onClick = onClick)

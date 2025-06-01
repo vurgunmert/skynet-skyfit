@@ -1,10 +1,6 @@
 package com.vurgun.skyfit.feature.persona.settings.trainer
 
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.runtime.Composable
@@ -20,12 +16,15 @@ import com.vurgun.skyfit.core.navigation.SharedScreen
 import com.vurgun.skyfit.core.navigation.findRootNavigator
 import com.vurgun.skyfit.core.navigation.replaceAll
 import com.vurgun.skyfit.core.ui.components.button.PrimaryLargeButton
+import com.vurgun.skyfit.core.ui.components.loader.FullScreenLoaderContent
 import com.vurgun.skyfit.core.ui.components.menu.MobileSettingsMenuItemComponent
 import com.vurgun.skyfit.core.ui.components.menu.MobileSettingsMenuItemDividerComponent
 import com.vurgun.skyfit.core.ui.components.special.SkyFitMobileScaffold
 import com.vurgun.skyfit.core.ui.components.special.SkyFitScreenHeader
+import com.vurgun.skyfit.core.ui.screen.ErrorScreen
 import com.vurgun.skyfit.core.ui.utils.CollectEffect
 import com.vurgun.skyfit.feature.persona.settings.facility.member.FacilityManageMembersScreen
+import com.vurgun.skyfit.feature.persona.settings.shared.SettingsHomeUiState
 import com.vurgun.skyfit.feature.persona.settings.shared.SettingsHomeViewModel
 import com.vurgun.skyfit.feature.persona.settings.shared.SettingsMainAction
 import com.vurgun.skyfit.feature.persona.settings.shared.SettingsMainEffect
@@ -35,17 +34,7 @@ import com.vurgun.skyfit.feature.persona.settings.trainer.notification.TrainerSe
 import com.vurgun.skyfit.feature.persona.settings.trainer.payment.TrainerSettingsPaymentHistoryScreen
 import com.vurgun.skyfit.feature.persona.settings.trainer.profile.TrainerSettingsManageProfileScreen
 import org.jetbrains.compose.resources.stringResource
-import skyfit.core.ui.generated.resources.Res
-import skyfit.core.ui.generated.resources.ic_bell
-import skyfit.core.ui.generated.resources.ic_credit_card
-import skyfit.core.ui.generated.resources.ic_profile
-import skyfit.core.ui.generated.resources.ic_question_circle
-import skyfit.core.ui.generated.resources.logout_action
-import skyfit.core.ui.generated.resources.settings_account_label
-import skyfit.core.ui.generated.resources.notifications_label
-import skyfit.core.ui.generated.resources.settings_payment_history_label
-import skyfit.core.ui.generated.resources.settings_support_label
-import skyfit.core.ui.generated.resources.settings_title
+import skyfit.core.ui.generated.resources.*
 
 class TrainerSettingsMainScreen : Screen {
 
@@ -54,14 +43,17 @@ class TrainerSettingsMainScreen : Screen {
         val appNavigator = LocalNavigator.currentOrThrow.findRootNavigator()
         val settingsNavigator = LocalNavigator.currentOrThrow
         val viewModel = koinScreenModel<SettingsHomeViewModel>()
-
+        val uiState by viewModel.uiState.collectAsState()
 
         CollectEffect(viewModel.effect) { effect ->
             when (effect) {
                 SettingsMainEffect.NavigateToBack -> appNavigator.pop()
                 SettingsMainEffect.NavigateToSplash -> appNavigator.replaceAll(SharedScreen.Splash)
                 SettingsMainEffect.NavigateToManageProfile -> settingsNavigator.push(TrainerSettingsManageProfileScreen())
-                SettingsMainEffect.NavigateToPaymentHistory -> settingsNavigator.push(TrainerSettingsPaymentHistoryScreen())
+                SettingsMainEffect.NavigateToPaymentHistory -> settingsNavigator.push(
+                    TrainerSettingsPaymentHistoryScreen()
+                )
+
                 SettingsMainEffect.NavigateToNotifications -> settingsNavigator.push(TrainerSettingsNotificationsScreen())
                 SettingsMainEffect.NavigateToManageMembers -> settingsNavigator.push(FacilityManageMembersScreen())
                 SettingsMainEffect.NavigateToSupport -> settingsNavigator.push(SettingsSupportHelpScreen())
@@ -69,7 +61,16 @@ class TrainerSettingsMainScreen : Screen {
             }
         }
 
-        MobileTrainerSettingsHomeScreen(viewModel = viewModel)
+        when (uiState) {
+            is SettingsHomeUiState.Loading -> FullScreenLoaderContent()
+            is SettingsHomeUiState.Error -> {
+                val message = (uiState as SettingsHomeUiState.Error).message
+                ErrorScreen(message = message, onConfirm = { appNavigator.pop() })
+            }
+
+            is SettingsHomeUiState.Content ->
+                MobileTrainerSettingsHomeScreen(viewModel = viewModel)
+        }
     }
 }
 

@@ -12,9 +12,7 @@ sealed class ChatBotAction {
     data object OnClickBack : ChatBotAction()
     data object OnClickStart : ChatBotAction()
     data object OnClickNew : ChatBotAction()
-    data class OnClickPreset(
-        val query: String
-    ) : ChatBotAction()
+    data class OnClickHistoryItem(val query: String) : ChatBotAction()
 
     data object OnClickPostureAnalysis : ChatBotAction()
 }
@@ -33,6 +31,12 @@ class ChatbotViewModel(
 
     private val _effect = SingleSharedFlow<ChatBotEffect>()
     val effect: SharedFlow<ChatBotEffect> get() = _effect
+
+    val historyItems = listOf<String>(
+        "Bana uygun kişisel bir antrenman planı oluştur. Hedefim \"kilo vermek.\"",
+        "Günlük beslenme alışkanlıklarımı iyileştirmek için birkaç ipucu verir misin?",
+        "Bana üst vücut kası yapmak için bir antrenman programı hazırla."
+    )
 
     val onboardingCompleted: StateFlow<Boolean>
         get() = storage.getAsFlow(ChatBotOnboardingCompleted)
@@ -54,7 +58,7 @@ class ChatbotViewModel(
             }
 
             ChatBotAction.OnClickStart -> finalizeOnboarding()
-            is ChatBotAction.OnClickPreset -> {
+            is ChatBotAction.OnClickHistoryItem -> {
                 _effect.emitIn(screenModelScope, ChatBotEffect.NavigateChat(action.query))
             }
         }

@@ -122,7 +122,7 @@ private fun YearPicker(
         onItemSelected = onYearSelected,
         itemText = { it.toString() },
         visibleItemCount = 5,
-        modifier = Modifier.width(36.dp)
+        modifier = Modifier.width(40.dp)
     )
 }
 

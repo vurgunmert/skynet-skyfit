@@ -16,11 +16,14 @@ import com.vurgun.skyfit.core.navigation.SharedScreen
 import com.vurgun.skyfit.core.navigation.findRootNavigator
 import com.vurgun.skyfit.core.navigation.replaceAll
 import com.vurgun.skyfit.core.ui.components.button.PrimaryLargeButton
+import com.vurgun.skyfit.core.ui.components.loader.FullScreenLoaderContent
 import com.vurgun.skyfit.core.ui.components.menu.MobileSettingsMenuItemComponent
 import com.vurgun.skyfit.core.ui.components.menu.MobileSettingsMenuItemDividerComponent
 import com.vurgun.skyfit.core.ui.components.special.SkyFitMobileScaffold
 import com.vurgun.skyfit.core.ui.components.special.SkyFitScreenHeader
+import com.vurgun.skyfit.core.ui.screen.ErrorScreen
 import com.vurgun.skyfit.core.ui.utils.CollectEffect
+import com.vurgun.skyfit.feature.persona.settings.shared.SettingsHomeUiState
 import com.vurgun.skyfit.feature.persona.settings.shared.SettingsHomeViewModel
 import com.vurgun.skyfit.feature.persona.settings.shared.SettingsMainAction
 import com.vurgun.skyfit.feature.persona.settings.shared.SettingsMainEffect
@@ -39,6 +42,7 @@ class UserSettingsMainScreen : Screen {
         val appNavigator = LocalNavigator.currentOrThrow.findRootNavigator()
         val settingsNavigator = LocalNavigator.currentOrThrow
         val viewModel: SettingsHomeViewModel = koinScreenModel()
+        val uiState by viewModel.uiState.collectAsState()
 
         CollectEffect(viewModel.effect) { effect ->
             when (effect) {
@@ -52,7 +56,15 @@ class UserSettingsMainScreen : Screen {
             }
         }
 
-        MobileUserSettingsHomeScreen(viewModel = viewModel)
+        when (uiState) {
+            is SettingsHomeUiState.Loading -> FullScreenLoaderContent()
+            is SettingsHomeUiState.Error -> {
+                val message = (uiState as SettingsHomeUiState.Error).message
+                ErrorScreen(message = message, onConfirm = { appNavigator.pop() })
+            }
+            is SettingsHomeUiState.Content ->
+                MobileUserSettingsHomeScreen(viewModel = viewModel)
+        }
     }
 }
 

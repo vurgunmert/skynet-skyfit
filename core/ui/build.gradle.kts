@@ -70,14 +70,12 @@ kotlin {
             implementation(libs.coil.compose)
             implementation(libs.coil.network)
 
-            implementation("dev.chrisbanes.haze:haze:1.6.2")
+            api(libs.haze.blur)
         }
 
         androidMain.dependencies {
             api(compose.preview)
             api(libs.androidx.activity.compose)
-
-            implementation("app.rive:rive-android:9.6.5")
         }
 
         iosMain.dependencies {

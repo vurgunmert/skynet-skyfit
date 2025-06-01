@@ -80,6 +80,12 @@ class UserProfileOwnerScreen : Screen {
 
 
 @Composable
+fun MobileUserProfileOwnerScreen_Expanded() {
+    
+}
+
+
+@Composable
 fun MobileUserProfileOwnerScreen(
     viewModel: UserProfileOwnerViewModel
 ) {

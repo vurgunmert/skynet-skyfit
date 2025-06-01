@@ -1,5 +1,10 @@
 package com.vurgun.skyfit.feature.dashboard.dashboard
 
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
+import androidx.compose.animation.slideInVertically
+import androidx.compose.animation.slideOutVertically
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -41,6 +46,7 @@ import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.CurrentScreen
 import cafe.adriel.voyager.navigator.Navigator
 import com.vurgun.skyfit.core.navigation.SharedScreen
+import com.vurgun.skyfit.core.navigation.push
 import com.vurgun.skyfit.core.ui.components.icon.SkyIcon
 import com.vurgun.skyfit.core.ui.components.icon.SkyIconSize
 import com.vurgun.skyfit.core.ui.components.icon.SkyIconTint
@@ -73,6 +79,7 @@ import skyfit.core.ui.generated.resources.logo_skyfit
 internal object DashboardLayoutExpanded {
 
     data class TopBarState(
+        val isVisible: Boolean = true,
         val firstName: String = "",
         val notificationHighlighted: Boolean = false,
         val conversationsHighlighted: Boolean = false,
@@ -98,12 +105,12 @@ internal object DashboardLayoutExpanded {
             ) {
                 Sidebar(
                     currentScreen = dashboardNavigator.lastItem,
-                    onClickHome = { dashboardNavigator.replace(homeScreen) },
-                    onClickExplore = { dashboardNavigator.replace(exploreScreen) },
-                    onClickSocial = { dashboardNavigator.replace(socialMediaScreen) },
-                    onClickNutrition = { dashboardNavigator.replace(nutritionScreen) },
-                    onClickProfile = { dashboardNavigator.replace(profileScreen) },
-                    onClickSettings = { dashboardNavigator.replace(settingsScreen) },
+                    onClickHome = { dashboardNavigator.replaceAll(homeScreen) },
+                    onClickExplore = { dashboardNavigator.replaceAll(exploreScreen) },
+                    onClickSocial = { dashboardNavigator.replaceAll(socialMediaScreen) },
+                    onClickNutrition = { dashboardNavigator.replaceAll(nutritionScreen) },
+                    onClickProfile = { dashboardNavigator.replaceAll(profileScreen) },
+                    onClickSettings = { dashboardNavigator.replaceAll(settingsScreen) },
                     modifier = Modifier
                 )
 
@@ -120,7 +127,7 @@ internal object DashboardLayoutExpanded {
                                 overlayScreen = SharedScreen.UnderDevelopment // SharedScreen.ConversationsExpanded { overlayScreen = null }
                             },
                             onClickAppAction = {
-                                overlayScreen = SharedScreen.ChatBot
+                                dashboardNavigator.push(SharedScreen.ChatBot)
                             }
                         )
                         Content(modifier = Modifier.weight(1f)) {
@@ -237,23 +244,34 @@ internal object DashboardLayoutExpanded {
         onClickAppAction: () -> Unit,
         modifier: Modifier = Modifier
     ) {
-        Row(
-            modifier
-                .fillMaxWidth()
-                .wrapContentHeight()
-                .padding(16.dp)
+        AnimatedVisibility(
+            visible = state.isVisible,
+            enter = slideInVertically(
+                initialOffsetY = { -it }, // from top
+            ) + fadeIn(),
+            exit = slideOutVertically(
+                targetOffsetY = { -it } // slide back up
+            ) + fadeOut()
         ) {
-            TopBarInfoGroup(state.firstName)
-            Spacer(Modifier.weight(1f))
-            TopBarNavigationGroup(
-                notificationHighlighted = state.notificationHighlighted,
-                conversationsHighlighted = state.conversationsHighlighted,
-                onClickNotifications = onClickNotifications,
-                onClickConversations = onClickConversations,
-                onClickAppAction = onClickAppAction
-            )
+            Row(
+                modifier
+                    .fillMaxWidth()
+                    .wrapContentHeight()
+                    .padding(16.dp)
+            ) {
+                TopBarInfoGroup(state.firstName)
+                Spacer(Modifier.weight(1f))
+                TopBarNavigationGroup(
+                    notificationHighlighted = state.notificationHighlighted,
+                    conversationsHighlighted = state.conversationsHighlighted,
+                    onClickNotifications = onClickNotifications,
+                    onClickConversations = onClickConversations,
+                    onClickAppAction = onClickAppAction
+                )
+            }
         }
     }
+
 
     @Composable
     private fun TopBarInfoGroup(firstName: String) {

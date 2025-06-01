@@ -2,11 +2,20 @@ package com.vurgun.skyfit.feature.persona.settings.shared
 
 import cafe.adriel.voyager.core.model.ScreenModel
 import cafe.adriel.voyager.core.model.screenModelScope
+import com.vurgun.skyfit.core.data.persona.domain.model.UserAccountType
 import com.vurgun.skyfit.core.data.persona.domain.repository.UserManager
 import com.vurgun.skyfit.core.data.utility.SingleSharedFlow
+import com.vurgun.skyfit.core.data.utility.UiStateDelegate
 import com.vurgun.skyfit.core.data.utility.emitOrNull
 import kotlinx.coroutines.flow.SharedFlow
+import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.launch
+
+sealed class SettingsHomeUiState {
+    object Loading : SettingsHomeUiState()
+    data class Error(val message: String?) : SettingsHomeUiState()
+    object Content : SettingsHomeUiState()
+}
 
 sealed interface SettingsMainAction {
     data object OnClickBack : SettingsMainAction
@@ -38,6 +47,9 @@ class SettingsHomeViewModel(
     private val userManager: UserManager
 ) : ScreenModel {
 
+    private val _uiState = UiStateDelegate<SettingsHomeUiState>(SettingsHomeUiState.Loading)
+    val uiState = _uiState.asStateFlow()
+
     private val _effect = SingleSharedFlow<SettingsMainEffect>()
     val effect: SharedFlow<SettingsMainEffect> = _effect
 
@@ -48,7 +60,12 @@ class SettingsHomeViewModel(
 
     init {
         screenModelScope.launch {
-            userManager.getAccountTypes()
+            runCatching {
+                userManager.getAccountTypes()
+                _uiState.update(SettingsHomeUiState.Content)
+            }.onFailure {
+                _uiState.update(SettingsHomeUiState.Error(it.message))
+            }
         }
     }
 
@@ -76,8 +93,15 @@ class SettingsHomeViewModel(
 
     fun selectUserType(userTypeId: Int) {
         if (selectedTypeId == userTypeId) return
+
+        _uiState.update(SettingsHomeUiState.Loading)
         screenModelScope.launch {
-            userManager.updateUserType(userTypeId)
+            runCatching {
+                userManager.updateUserType(userTypeId)
+                _uiState.update(SettingsHomeUiState.Content)
+            }.onFailure {
+                _uiState.update(SettingsHomeUiState.Error(it.message))
+            }
         }
     }
 
