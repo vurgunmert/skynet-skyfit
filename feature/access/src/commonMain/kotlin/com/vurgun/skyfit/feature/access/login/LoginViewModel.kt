@@ -2,9 +2,9 @@ package com.vurgun.skyfit.feature.access.login
 
 import cafe.adriel.voyager.core.model.ScreenModel
 import cafe.adriel.voyager.core.model.screenModelScope
-import com.vurgun.skyfit.core.data.access.domain.model.AuthLoginResult
-import com.vurgun.skyfit.core.data.access.domain.repository.AuthRepository
-import com.vurgun.skyfit.core.data.persona.domain.repository.UserManager
+import com.vurgun.skyfit.core.data.v1.domain.auth.model.AuthLoginResult
+import com.vurgun.skyfit.core.data.v1.domain.auth.repository.AuthRepository
+import com.vurgun.skyfit.core.data.v1.domain.account.manager.ActiveAccountManager
 import com.vurgun.skyfit.core.data.utility.SingleSharedFlow
 import com.vurgun.skyfit.core.data.utility.emitOrNull
 import kotlinx.coroutines.flow.*
@@ -19,7 +19,7 @@ sealed class LoginEffect {
 
 class LoginViewModel(
     private val authRepository: AuthRepository,
-    private val userManager: UserManager,
+    private val userManager: ActiveAccountManager,
 ) : ScreenModel {
 
     // State

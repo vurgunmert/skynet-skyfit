@@ -2,19 +2,7 @@ package com.vurgun.skyfit.core.ui.components.special
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.ExperimentalLayoutApi
-import androidx.compose.foundation.layout.FlowRow
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.layout.wrapContentHeight
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicTextField
@@ -22,11 +10,7 @@ import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.Icon
 import androidx.compose.material.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
@@ -37,26 +21,16 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import com.vurgun.skyfit.core.data.schedule.domain.model.WorkoutTag
+import com.vurgun.skyfit.core.data.v1.domain.global.model.ProfileTag
 import com.vurgun.skyfit.core.ui.components.button.PrimaryLargeButton
 import com.vurgun.skyfit.core.ui.components.button.SecondaryLargeButton
-import com.vurgun.skyfit.core.ui.components.dialog.FitnessTagPickerDialog
+import com.vurgun.skyfit.core.ui.components.dialog.ProfileTagPicker
 import com.vurgun.skyfit.core.ui.styling.SkyFitColor
 import com.vurgun.skyfit.core.ui.styling.SkyFitTypography
 import org.jetbrains.compose.resources.DrawableResource
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
-import skyfit.core.ui.generated.resources.Res
-import skyfit.core.ui.generated.resources.cancel_action
-import skyfit.core.ui.generated.resources.delete_account_action
-import skyfit.core.ui.generated.resources.ic_delete
-import skyfit.core.ui.generated.resources.ic_pencil
-import skyfit.core.ui.generated.resources.ic_warning
-import skyfit.core.ui.generated.resources.profile_tags_label
-import skyfit.core.ui.generated.resources.select_profile_limit_message
-import skyfit.core.ui.generated.resources.select_profile_tags_hint
-import skyfit.core.ui.generated.resources.settings_delete_account_dialog_message
-import skyfit.core.ui.generated.resources.settings_delete_account_dialog_title
+import skyfit.core.ui.generated.resources.*
 
 @Composable
 fun MobileSettingsDeleteAccountBottomSheet(
@@ -237,9 +211,9 @@ fun AccountSettingsSelectToSetInputComponent(
 @Composable
 fun FitnessTagPickerComponent(
     modifier: Modifier = Modifier,
-    availableTags: List<WorkoutTag>,
-    selectedTags: List<WorkoutTag>,
-    onTagsSelected: (List<WorkoutTag>) -> Unit
+    availableTags: List<ProfileTag>,
+    selectedTags: List<ProfileTag>,
+    onTagsSelected: (List<ProfileTag>) -> Unit
 ) {
     var showTagPickerDialog by remember { mutableStateOf(false) }
 
@@ -299,14 +273,14 @@ fun FitnessTagPickerComponent(
             ) {
                 selectedTags.forEach {
                     SkyFitAccountSettingsProfileTagItemComponent(
-                        value = it.tagName,
+                        value = it.name,
                         onClick = { onTagsSelected(selectedTags - it) })
                 }
             }
         }
 
         if (showTagPickerDialog) {
-            FitnessTagPickerDialog(
+            ProfileTagPicker(
                 availableTags = availableTags,
                 initialTags = selectedTags,
                 onDismiss = { showTagPickerDialog = false },

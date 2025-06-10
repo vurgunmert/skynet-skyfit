@@ -2,12 +2,12 @@ package com.vurgun.skyfit.feature.persona.settings.facility.profile
 
 import cafe.adriel.voyager.core.model.ScreenModel
 import cafe.adriel.voyager.core.model.screenModelScope
-import com.vurgun.skyfit.core.data.persona.domain.model.FacilityDetail
-import com.vurgun.skyfit.core.data.schedule.domain.model.WorkoutTag
-import com.vurgun.skyfit.core.data.persona.domain.repository.ProfileRepository
-import com.vurgun.skyfit.core.data.persona.domain.repository.UserManager
 import com.vurgun.skyfit.core.data.utility.SingleSharedFlow
 import com.vurgun.skyfit.core.data.utility.emitIn
+import com.vurgun.skyfit.core.data.v1.domain.account.manager.ActiveAccountManager
+import com.vurgun.skyfit.core.data.v1.domain.account.model.FacilityAccount
+import com.vurgun.skyfit.core.data.v1.domain.facility.repository.FacilityRepository
+import com.vurgun.skyfit.core.data.v1.domain.global.model.ProfileTag
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -24,7 +24,7 @@ data class FacilityManageAccountFormState(
     val biography: String,
     val backgroundImageUrl: String? = null,
     val location: String,
-    val profileTags: List<WorkoutTag> = emptyList(),
+    val profileTags: List<ProfileTag> = emptyList(),
     val isUpdated: Boolean = false
 )
 
@@ -45,8 +45,8 @@ sealed interface FacilityManageProfileEffect {
 }
 
 class FacilityManageProfileViewModel(
-    private val userManager: UserManager,
-    private val profileRepository: ProfileRepository
+    private val userManager: ActiveAccountManager,
+    private val facilityRepository: FacilityRepository
 ) : ScreenModel {
 
     private val _uiState = MutableStateFlow<FacilityManageProfileUiState>(FacilityManageProfileUiState.Loading)
@@ -55,8 +55,8 @@ class FacilityManageProfileViewModel(
     private val _effect = SingleSharedFlow<FacilityManageProfileEffect>()
     val effect: SharedFlow<FacilityManageProfileEffect> = _effect
 
-    private val facilityUser: FacilityDetail
-        get() = userManager.user.value as? FacilityDetail
+    private val facilityUser: FacilityAccount
+        get() = userManager.user.value as? FacilityAccount
             ?: error("User is not a Facility")
 
     val hasMultipleAccounts = userManager.accountTypes.value.size > 1
@@ -81,7 +81,7 @@ class FacilityManageProfileViewModel(
     fun loadData() {
         screenModelScope.launch {
             try {
-                val facilityProfile = profileRepository.getFacilityProfile(facilityId = facilityUser.gymId).getOrThrow()
+                val facilityProfile = facilityRepository.getFacilityProfile(facilityId = facilityUser.gymId).getOrThrow()
                 val form = FacilityManageAccountFormState(
                     name = facilityProfile.facilityName,
                     biography = facilityProfile.bio,

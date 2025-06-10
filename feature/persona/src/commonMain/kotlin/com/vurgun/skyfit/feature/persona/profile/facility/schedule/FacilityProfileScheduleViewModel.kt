@@ -2,13 +2,13 @@ package com.vurgun.skyfit.feature.persona.profile.facility.schedule
 
 import cafe.adriel.voyager.core.model.ScreenModel
 import cafe.adriel.voyager.core.model.screenModelScope
-import com.vurgun.skyfit.core.data.persona.domain.model.FacilityProfile
-import com.vurgun.skyfit.core.data.persona.domain.repository.ProfileRepository
 import com.vurgun.skyfit.core.data.utility.SingleSharedFlow
 import com.vurgun.skyfit.core.data.utility.now
-import com.vurgun.skyfit.core.data.schedule.domain.repository.CourseRepository
-import com.vurgun.skyfit.core.data.schedule.data.mapper.LessonSessionItemViewDataMapper
-import com.vurgun.skyfit.core.data.schedule.data.model.LessonSessionItemViewData
+import com.vurgun.skyfit.core.data.v1.data.lesson.mapper.LessonSessionItemViewDataMapper
+import com.vurgun.skyfit.core.data.v1.domain.facility.model.FacilityProfile
+import com.vurgun.skyfit.core.data.v1.domain.facility.repository.FacilityRepository
+import com.vurgun.skyfit.core.data.v1.domain.lesson.model.LessonSessionItemViewData
+import com.vurgun.skyfit.core.data.v1.domain.user.repository.UserRepository
 import kotlinx.coroutines.async
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharedFlow
@@ -36,8 +36,8 @@ sealed interface FacilityProfileScheduleEffect {
 }
 
 class FacilityProfileScheduleViewModel(
-    private val profileRepository: ProfileRepository,
-    private val courseRepository: CourseRepository,
+    private val facilityRepository: FacilityRepository,
+    private val userRepository: UserRepository, //TODO: SECURE VISITOR BY USER OR UI
     private val lessonMapper: LessonSessionItemViewDataMapper
 ) : ScreenModel {
 
@@ -76,7 +76,7 @@ class FacilityProfileScheduleViewModel(
         screenModelScope.launch {
             _uiState.value = FacilityProfileScheduleUiState.Loading
 
-            val profileDeferred = async { profileRepository.getFacilityProfile(facilityId).getOrThrow() }
+            val profileDeferred = async { facilityRepository.getFacilityProfile(facilityId).getOrThrow() }
             val lessonsDeferred = async { fetchLessons(facilityId, selectedStartDate, selectedEndDate) }
 
             try {
@@ -107,7 +107,7 @@ class FacilityProfileScheduleViewModel(
 
         screenModelScope.launch {
             try {
-                val response = courseRepository.bookAppointment(lessonId = selectedLesson.lessonId).getOrThrow()
+                val response = userRepository.bookAppointment(lessonId = selectedLesson.lessonId).getOrThrow()
 
                 _lessons.value = _lessons.value.map { it.copy(selected = false) }
                 _isBookingEnabled.value = false
@@ -146,7 +146,7 @@ class FacilityProfileScheduleViewModel(
         startDate: LocalDate = LocalDate.now(),
         endDate: LocalDate? = null
     ): List<LessonSessionItemViewData> {
-        return courseRepository.getActiveLessonsByFacility(facilityId, startDate, endDate ?: startDate)
+        return facilityRepository.getActiveLessonsByFacility(facilityId, startDate, endDate ?: startDate)
             .map { it.map(lessonMapper::map) }
             .getOrDefault(emptyList())
     }

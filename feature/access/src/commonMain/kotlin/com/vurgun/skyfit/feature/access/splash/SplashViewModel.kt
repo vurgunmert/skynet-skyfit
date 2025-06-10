@@ -4,8 +4,8 @@ import cafe.adriel.voyager.core.model.ScreenModel
 import cafe.adriel.voyager.core.model.screenModelScope
 import com.vurgun.skyfit.core.data.utility.SingleSharedFlow
 import com.vurgun.skyfit.core.data.utility.emitOrNull
-import com.vurgun.skyfit.feature.access.domain.SplashResult
-import com.vurgun.skyfit.feature.access.domain.SplashUseCase
+import com.vurgun.skyfit.core.data.v1.domain.auth.model.SplashResult
+import com.vurgun.skyfit.core.data.v1.domain.auth.usercase.SplashUseCase
 import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.launch
 

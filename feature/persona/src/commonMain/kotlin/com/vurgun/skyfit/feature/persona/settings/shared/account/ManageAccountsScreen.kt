@@ -21,7 +21,7 @@ import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.koin.koinScreenModel
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
-import com.vurgun.skyfit.core.data.persona.domain.model.UserAccountType
+import com.vurgun.skyfit.core.data.v1.domain.account.model.AccountType
 import com.vurgun.skyfit.core.navigation.SharedScreen
 import com.vurgun.skyfit.core.navigation.push
 import com.vurgun.skyfit.core.ui.components.button.SecondaryLargeButton
@@ -106,9 +106,9 @@ private fun MobileSettingsManageAccountsScreen(viewModel: ManageAccountsViewMode
 
 @Composable
 private fun SettingsManageAccountTypeItem(
-    item: UserAccountType,
+    item: AccountType,
     selected: Boolean,
-    onDelete: (type: UserAccountType) -> Unit
+    onDelete: (type: AccountType) -> Unit
 ) {
     Row(
         Modifier

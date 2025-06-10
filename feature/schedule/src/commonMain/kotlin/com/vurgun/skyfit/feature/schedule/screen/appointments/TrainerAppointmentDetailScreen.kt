@@ -30,7 +30,7 @@ import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.koin.koinScreenModel
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
-import com.vurgun.skyfit.core.data.schedule.domain.model.LessonParticipant
+import com.vurgun.skyfit.core.data.v1.domain.lesson.model.LessonParticipant
 import com.vurgun.skyfit.core.ui.components.button.PrimaryMicroButton
 import com.vurgun.skyfit.core.ui.components.button.SecondaryDestructiveMicroButton
 import com.vurgun.skyfit.core.ui.components.button.SecondaryMediumButton

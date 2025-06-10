@@ -2,15 +2,17 @@ package com.vurgun.skyfit.feature.persona.settings.facility.packages
 
 import cafe.adriel.voyager.core.model.ScreenModel
 import cafe.adriel.voyager.core.model.screenModelScope
-import com.vurgun.skyfit.core.data.access.domain.repository.AuthRepository
-import com.vurgun.skyfit.core.data.persona.data.model.FacilityLessonPackageDTO
-import com.vurgun.skyfit.core.data.persona.domain.model.FacilityDetail
-import com.vurgun.skyfit.core.data.persona.domain.repository.FacilityRepository
-import com.vurgun.skyfit.core.data.persona.domain.repository.UserManager
-import com.vurgun.skyfit.core.data.schedule.domain.model.WorkoutTag
 import com.vurgun.skyfit.core.data.utility.SingleSharedFlow
 import com.vurgun.skyfit.core.data.utility.UiStateDelegate
 import com.vurgun.skyfit.core.data.utility.emitIn
+import com.vurgun.skyfit.core.data.v1.data.facility.model.FacilityLessonPackageDTO
+import com.vurgun.skyfit.core.data.v1.domain.account.manager.ActiveAccountManager
+import com.vurgun.skyfit.core.data.v1.domain.account.model.FacilityAccount
+import com.vurgun.skyfit.core.data.v1.domain.facility.repository.FacilityRepository
+import com.vurgun.skyfit.core.data.v1.domain.global.model.WorkoutTag
+import com.vurgun.skyfit.core.data.v1.domain.global.repository.GlobalRepository
+import com.vurgun.skyfit.core.data.v1.domain.workout.model.WorkoutCategory
+import com.vurgun.skyfit.core.data.v1.domain.workout.repository.WorkoutRepository
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -21,7 +23,7 @@ sealed class FacilityPackageEditUiState {
     data object Loading : FacilityPackageEditUiState()
     data class Error(val message: String?) : FacilityPackageEditUiState()
     data class Content(
-        val tags: List<WorkoutTag>,
+        val categories: List<WorkoutCategory>,
         val branches: List<String>
     ) : FacilityPackageEditUiState()
 }
@@ -31,7 +33,7 @@ data class FacilityPackageEditFormState(
     val packageId: Int? = null,
     val title: String? = null,
     val lessonCount: String? = null,
-    val tags: List<WorkoutTag> = emptyList(),
+    val categories: List<WorkoutCategory> = emptyList(),
     val description: String? = null,
     val monthCount: String? = null,
     val branch: String? = null,
@@ -45,7 +47,7 @@ sealed class FacilityPackageEditAction {
     data object OnClickSave : FacilityPackageEditAction()
     data class OnTitleChanged(val title: String) : FacilityPackageEditAction()
     data class OnLessonCountChanged(val lessonCount: String) : FacilityPackageEditAction()
-    data class OnServicesChanged(val services: List<WorkoutTag>) : FacilityPackageEditAction()
+    data class OnServicesChanged(val services: List<WorkoutCategory>) : FacilityPackageEditAction()
     data class OnDescriptionChanged(val description: String) : FacilityPackageEditAction()
     data class OnDurationMonthChanged(val monthCount: String) : FacilityPackageEditAction()
     data class OnBranchChanged(val branch: String) : FacilityPackageEditAction()
@@ -57,13 +59,13 @@ sealed class FacilityPackageEditEffect {
 }
 
 class FacilityPackageEditViewModel(
-    private val userManager: UserManager,
-    private val authRepository: AuthRepository,
+    private val userManager: ActiveAccountManager,
+    private val workoutRepository: WorkoutRepository,
     private val facilityRepository: FacilityRepository
 ) : ScreenModel {
 
-    private val facilityUser: FacilityDetail
-        get() = userManager.user.value as? FacilityDetail
+    private val facilityUser: FacilityAccount
+        get() = userManager.user.value as? FacilityAccount
             ?: error("User is not a Facility!")
 
     private val _uiState = UiStateDelegate<FacilityPackageEditUiState>(FacilityPackageEditUiState.Loading)
@@ -97,7 +99,7 @@ class FacilityPackageEditViewModel(
             }
 
             is FacilityPackageEditAction.OnServicesChanged -> {
-                _formState.update { it.copy(tags = action.services) }
+                _formState.update { it.copy(categories = action.services) }
             }
 
             is FacilityPackageEditAction.OnDurationMonthChanged -> {
@@ -116,7 +118,8 @@ class FacilityPackageEditViewModel(
     fun loadData(lessonPackage: FacilityLessonPackageDTO? = null) {
         screenModelScope.launch {
             runCatching {
-                val tags = authRepository.getTags().getOrThrow()
+
+                val categories = workoutRepository.getCategories().getOrThrow()
                 val branches = listOf("Test Şube 1", "Test Şube 2")
 
                 if (lessonPackage != null) {
@@ -125,7 +128,7 @@ class FacilityPackageEditViewModel(
                         packageId = lessonPackage.packageId,
                         title = lessonPackage.title,
                         lessonCount = lessonPackage.lessonCount.toString(),
-                        tags = tags.filter { it.tagName in lessonPackage.packageContents },
+                        categories = categories.filter { it.name in lessonPackage.packageContents },
                         description = lessonPackage.description,
                         monthCount = lessonPackage.duration.toString(),
                         branch = "",
@@ -136,7 +139,7 @@ class FacilityPackageEditViewModel(
 
                 _uiState.update(
                     FacilityPackageEditUiState.Content(
-                        tags = tags,
+                        categories = categories,
                         branches = branches
                     )
                 )
@@ -153,7 +156,7 @@ class FacilityPackageEditViewModel(
             val isReadyToSave =
                 !state.title.isNullOrEmpty() &&
                         !state.lessonCount.isNullOrEmpty() &&
-                        state.tags.isNotEmpty() &&
+                        state.categories.isNotEmpty() &&
                         !state.monthCount.isNullOrEmpty() &&
                         !state.branch.isNullOrEmpty()
 
@@ -172,7 +175,7 @@ class FacilityPackageEditViewModel(
                         packageId = formState.packageId,
                         gymId = facilityUser.gymId,
                         title = formState.title.orEmpty(),
-                        contentIds = formState.tags.map { it.tagId },
+                        contentIds = formState.categories.map { it.id },
                         description = formState.description.orEmpty(),
                         lessonCount = formState.lessonCount?.toIntOrNull() ?: 1,
                         duration = formState.monthCount?.toIntOrNull() ?: 1,
@@ -182,7 +185,7 @@ class FacilityPackageEditViewModel(
                     facilityRepository.createLessonPackage(
                         gymId = facilityUser.gymId,
                         title = formState.title.orEmpty(),
-                        contentIds = formState.tags.map { it.tagId },
+                        contentIds = formState.categories.map { it.id },
                         description = formState.description.orEmpty(),
                         lessonCount = formState.lessonCount?.toIntOrNull() ?: 1,
                         duration = formState.monthCount?.toIntOrNull() ?: 1,

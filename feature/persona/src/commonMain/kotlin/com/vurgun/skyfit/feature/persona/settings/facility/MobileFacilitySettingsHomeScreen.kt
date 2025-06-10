@@ -12,7 +12,7 @@ import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.koin.koinScreenModel
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
-import com.vurgun.skyfit.core.data.persona.domain.model.UserAccountType
+import com.vurgun.skyfit.core.data.v1.domain.account.model.AccountType
 import com.vurgun.skyfit.core.navigation.SharedScreen
 import com.vurgun.skyfit.core.navigation.findRootNavigator
 import com.vurgun.skyfit.core.navigation.replaceAll
@@ -101,7 +101,7 @@ class FacilitySettingsMainScreen : Screen {
 @Composable
 private fun MobileFacilitySettingsHomeScreen(
     viewModel: SettingsHomeViewModel,
-    accountTypes: List<UserAccountType>,
+    accountTypes: List<AccountType>,
     onAction: (SettingsMainAction) -> Unit,
 ) {
 

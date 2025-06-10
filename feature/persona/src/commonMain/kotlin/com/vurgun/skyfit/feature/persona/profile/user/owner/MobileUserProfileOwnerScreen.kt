@@ -4,6 +4,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Icon
@@ -15,18 +16,21 @@ import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.blur
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.dp
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.koin.koinScreenModel
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
-import com.vurgun.skyfit.core.data.persona.domain.model.UserProfile
-import com.vurgun.skyfit.core.data.schedule.data.model.LessonSessionItemViewData
+import com.vurgun.skyfit.core.data.v1.domain.lesson.model.LessonSessionItemViewData
+import com.vurgun.skyfit.core.data.v1.domain.user.model.UserProfile
 import com.vurgun.skyfit.core.navigation.SharedScreen
 import com.vurgun.skyfit.core.navigation.findRootNavigator
 import com.vurgun.skyfit.core.navigation.push
+import com.vurgun.skyfit.core.ui.components.divider.VerticalDivider
 import com.vurgun.skyfit.core.ui.components.event.AvailableActivityCalendarEventItem
 import com.vurgun.skyfit.core.ui.components.image.NetworkImage
+import com.vurgun.skyfit.core.ui.components.image.SkyImage
 import com.vurgun.skyfit.core.ui.components.loader.FullScreenLoaderContent
 import com.vurgun.skyfit.core.ui.components.special.SkyFitMobileScaffold
 import com.vurgun.skyfit.core.ui.screen.ErrorScreen
@@ -37,6 +41,11 @@ import com.vurgun.skyfit.core.ui.utils.CollectEffect
 import com.vurgun.skyfit.feature.persona.components.MobileProfileActionsRow
 import com.vurgun.skyfit.feature.persona.components.MobileProfileBackgroundImage
 import com.vurgun.skyfit.feature.persona.components.UserProfileCardPreferenceRow
+import dev.chrisbanes.haze.HazeStyle
+import dev.chrisbanes.haze.HazeTint
+import dev.chrisbanes.haze.hazeEffect
+import dev.chrisbanes.haze.hazeSource
+import dev.chrisbanes.haze.rememberHazeState
 import org.jetbrains.compose.resources.stringResource
 import skyfit.core.ui.generated.resources.Res
 import skyfit.core.ui.generated.resources.appointments_title
@@ -74,14 +83,128 @@ class UserProfileOwnerScreen : Screen {
             }
         }
 
-        MobileUserProfileOwnerScreen(viewModel = viewModel)
+//        MobileUserProfileOwnerScreen(viewModel = viewModel)
+        MobileUserProfileOwnerScreen_Expanded(viewModel)
     }
 }
 
 
+private object ProfileScreenExpandedComponent {
+
+}
+
 @Composable
-fun MobileUserProfileOwnerScreen_Expanded() {
-    
+fun MobileUserProfileOwnerScreen_Expanded(viewModel: UserProfileOwnerViewModel) {
+
+    val hazeState = rememberHazeState()
+    val hazeStyle = HazeStyle(
+        backgroundColor = SkyFitColor.background.surfaceSecondary,
+        tints = listOf(
+            HazeTint(SkyFitColor.background.surfaceSecondary.copy(alpha = 0.5f))
+        ),
+        blurRadius = 20.dp,
+        noiseFactor = 0f
+    )
+
+    Column(
+        Modifier.fillMaxWidth().padding(end = 16.dp),
+    ) {
+        //Header
+        Box(
+            modifier = Modifier
+                .width(1171.dp)
+                .heightIn(min = 288.dp)
+        ) {
+            SkyImage(
+                modifier = Modifier
+                    .align(Alignment.TopCenter)
+                    .padding(horizontal = 36.dp)
+                    .fillMaxWidth()
+                    .height(235.dp)
+                    .hazeSource(state = hazeState),
+                url = "https://picsum.photos/300/300",
+                contentScale = ContentScale.Crop,
+                shapeOverride = RoundedCornerShape(20.dp)
+            )
+
+            //blurred
+            Row(
+                modifier = Modifier
+                    .align(Alignment.BottomStart)
+                    .clip(RoundedCornerShape(24.dp))
+                    .widthIn(min=1171.dp)
+                    .heightIn(min = 124.dp)
+                    .hazeEffect(hazeState, hazeStyle)
+                    .padding(horizontal = 36.dp),
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.SpaceBetween
+            ) {
+
+                Row(
+                    modifier = Modifier.height(60.dp).wrapContentWidth(),
+                    verticalAlignment = Alignment.CenterVertically,
+                ) {
+                    Box(
+                        Modifier
+                            .size(84.dp, 60.dp)
+                            .background(Color.White)
+                    )
+                    Spacer(Modifier.width(24.dp))
+                    VerticalDivider(Modifier.size(0.dp, 52.dp))
+                    Spacer(Modifier.width(24.dp))
+                    Box(
+                        Modifier
+                            .size(84.dp, 60.dp)
+                            .background(Color.White)
+                    )
+                    Spacer(Modifier.width(24.dp))
+                    VerticalDivider(Modifier.size(0.dp, 52.dp))
+                    Spacer(Modifier.width(24.dp))
+                    Box(
+                        Modifier
+                            .size(84.dp, 60.dp)
+                            .background(Color.White)
+                    )
+                }
+
+                Row(
+                    modifier = Modifier.height(48.dp).wrapContentWidth(),
+                    verticalAlignment = Alignment.CenterVertically,
+                ) {
+                    Box(
+                        Modifier
+                            .size(40.dp)
+                            .background(Color.Blue, CircleShape)
+                    )
+                    Spacer(Modifier.width(8.dp))
+                    Box(
+                        Modifier
+                            .size(40.dp)
+                            .background(Color.Blue, CircleShape)
+                    )
+                    Spacer(Modifier.width(8.dp))
+                    Box(
+                        Modifier
+                            .size(40.dp)
+                            .background(Color.Blue, CircleShape)
+                    )
+                    Spacer(Modifier.width(8.dp))
+                    Box(
+                        Modifier
+                            .size(40.dp)
+                            .background(Color.Blue, CircleShape)
+                    )
+                    Spacer(Modifier.width(8.dp))
+                    Box(
+                        Modifier
+                            .size(40.dp)
+                            .background(Color.Blue, CircleShape)
+                    )
+                    Spacer(Modifier.width(8.dp))
+                }
+            }
+        }
+    }
 }
 
 

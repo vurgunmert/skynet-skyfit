@@ -2,8 +2,8 @@ package com.vurgun.skyfit.feature.persona.settings.shared.account
 
 import cafe.adriel.voyager.core.model.ScreenModel
 import cafe.adriel.voyager.core.model.screenModelScope
-import com.vurgun.skyfit.core.data.persona.domain.model.UserAccountType
-import com.vurgun.skyfit.core.data.persona.domain.repository.UserManager
+import com.vurgun.skyfit.core.data.v1.domain.account.model.AccountType
+import com.vurgun.skyfit.core.data.v1.domain.account.manager.ActiveAccountManager
 import com.vurgun.skyfit.core.data.utility.SingleSharedFlow
 import com.vurgun.skyfit.core.data.utility.emitOrNull
 import kotlinx.coroutines.flow.SharedFlow
@@ -21,7 +21,7 @@ sealed interface ManageAccountsEffect {
 }
 
 class ManageAccountsViewModel(
-    private val userManager: UserManager
+    private val userManager: ActiveAccountManager
 ) : ScreenModel {
 
     private val _effect = SingleSharedFlow<ManageAccountsEffect>()
@@ -37,7 +37,7 @@ class ManageAccountsViewModel(
         }
     }
 
-    fun deleteAccountType(type: UserAccountType) {
+    fun deleteAccountType(type: AccountType) {
         emitEffect(ManageAccountsEffect.ShowDeleteResult(false, "Hesap silinirken bir hata oluştu."))
 
 //        screenModelScope.launch {

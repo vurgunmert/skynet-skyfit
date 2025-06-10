@@ -2,16 +2,15 @@ package com.vurgun.skyfit.feature.persona.profile.facility.visitor
 
 import cafe.adriel.voyager.core.model.ScreenModel
 import cafe.adriel.voyager.core.model.screenModelScope
-import com.vurgun.skyfit.core.data.persona.domain.model.BaseUserDetail
-import com.vurgun.skyfit.core.data.persona.domain.model.FacilityProfile
-import com.vurgun.skyfit.core.data.persona.domain.model.FacilityTrainerProfile
-import com.vurgun.skyfit.core.data.persona.domain.repository.ProfileRepository
-import com.vurgun.skyfit.core.data.persona.domain.repository.UserManager
-import com.vurgun.skyfit.core.data.schedule.domain.repository.CourseRepository
-import com.vurgun.skyfit.core.data.schedule.data.mapper.LessonSessionItemViewDataMapper
-import com.vurgun.skyfit.core.data.schedule.data.model.LessonSessionItemViewData
 import com.vurgun.skyfit.core.data.utility.SingleSharedFlow
 import com.vurgun.skyfit.core.data.utility.now
+import com.vurgun.skyfit.core.data.v1.data.lesson.mapper.LessonSessionItemViewDataMapper
+import com.vurgun.skyfit.core.data.v1.domain.account.manager.ActiveAccountManager
+import com.vurgun.skyfit.core.data.v1.domain.account.model.Account
+import com.vurgun.skyfit.core.data.v1.domain.facility.model.FacilityProfile
+import com.vurgun.skyfit.core.data.v1.domain.facility.repository.FacilityRepository
+import com.vurgun.skyfit.core.data.v1.domain.lesson.model.LessonSessionItemViewData
+import com.vurgun.skyfit.core.data.v1.domain.trainer.model.FacilityTrainerProfile
 import com.vurgun.skyfit.feature.persona.social.SocialPostItemViewData
 import kotlinx.coroutines.async
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -53,10 +52,9 @@ sealed interface FacilityProfileVisitorEffect {
 }
 
 class FacilityProfileVisitorViewModel(
-    private val userManager: UserManager,
-    private val courseRepository: CourseRepository,
+    private val userManager: ActiveAccountManager,
     private val lessonSessionItemViewDataMapper: LessonSessionItemViewDataMapper,
-    private val profileRepository: ProfileRepository
+    private val facilityRepository: FacilityRepository
 ) : ScreenModel {
 
     private val _uiState = MutableStateFlow<FacilityProfileVisitorUiState>(FacilityProfileVisitorUiState.Loading)
@@ -65,7 +63,7 @@ class FacilityProfileVisitorViewModel(
     private val _effect = SingleSharedFlow<FacilityProfileVisitorEffect>()
     val effect: SharedFlow<FacilityProfileVisitorEffect> = _effect
 
-    private val visitor: BaseUserDetail
+    private val visitor: Account
         get() = userManager.user.value ?: error("Visitor not found")
 
     private var currentFacilityId: Int? = null
@@ -75,14 +73,25 @@ class FacilityProfileVisitorViewModel(
             is FacilityProfileVisitorAction.Follow -> followFacility()
             is FacilityProfileVisitorAction.Unfollow -> unfollowFacility()
             is FacilityProfileVisitorAction.ChangeDate -> updateLessons(action.date)
-            is FacilityProfileVisitorAction.NavigateToTrainer -> emitEffect(FacilityProfileVisitorEffect.NavigateToTrainer(action.trainerId))
+            is FacilityProfileVisitorAction.NavigateToTrainer -> emitEffect(
+                FacilityProfileVisitorEffect.NavigateToTrainer(
+                    action.trainerId
+                )
+            )
+
             is FacilityProfileVisitorAction.NavigateToBack -> emitEffect(FacilityProfileVisitorEffect.NavigateToBack)
             is FacilityProfileVisitorAction.NavigateToCalendar -> emitEffect(
                 FacilityProfileVisitorEffect.NavigateToSchedule(
                     currentFacilityId!!
                 )
             )
-            is FacilityProfileVisitorAction.NavigateToChat -> emitEffect(FacilityProfileVisitorEffect.NavigateToChat(visitor.userId))
+
+            is FacilityProfileVisitorAction.NavigateToChat -> emitEffect(
+                FacilityProfileVisitorEffect.NavigateToChat(
+                    visitor.userId
+                )
+            )
+
             is FacilityProfileVisitorAction.TogglePostVisibility -> togglePostVisibility(action.visible)
         }
     }
@@ -92,7 +101,7 @@ class FacilityProfileVisitorViewModel(
         screenModelScope.launch {
             _uiState.value = FacilityProfileVisitorUiState.Loading
 
-            val profileDeferred = async { profileRepository.getFacilityProfile(facilityId).getOrThrow() }
+            val profileDeferred = async { facilityRepository.getFacilityProfile(facilityId).getOrThrow() }
             val lessonsDeferred = async { fetchLessons(facilityId) }
             val trainersDeferred = async { fetchTrainers(facilityId) }
 
@@ -141,11 +150,14 @@ class FacilityProfileVisitorViewModel(
     }
 
     private suspend fun fetchTrainers(facilityId: Int): List<FacilityTrainerProfile> {
-        return profileRepository.getFacilityTrainerProfiles(facilityId).getOrDefault(emptyList())
+        return facilityRepository.getFacilityTrainerProfiles(facilityId).getOrDefault(emptyList())
     }
 
-    private suspend fun fetchLessons(facilityId: Int, date: LocalDate = LocalDate.now()): List<LessonSessionItemViewData> {
-        return courseRepository.getActiveLessonsByFacility(facilityId, date, date)
+    private suspend fun fetchLessons(
+        facilityId: Int,
+        date: LocalDate = LocalDate.now()
+    ): List<LessonSessionItemViewData> {
+        return facilityRepository.getActiveLessonsByFacility(facilityId, date, date)
             .map { it.map(lessonSessionItemViewDataMapper::map) }
             .getOrDefault(emptyList())
     }

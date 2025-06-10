@@ -8,9 +8,9 @@ import com.kashif.cameraK.result.ImageCaptureResult
 import com.kashif.imagesaverplugin.ImageSaverPlugin
 import com.vurgun.skyfit.core.data.utility.SingleSharedFlow
 import com.vurgun.skyfit.core.data.utility.emitIn
-import com.vurgun.skyfit.core.data.wellbeing.data.model.PostureType
-import com.vurgun.skyfit.core.data.wellbeing.domain.model.PostureFinding
-import com.vurgun.skyfit.core.data.wellbeing.domain.repository.PostureAnalysisRepository
+import com.vurgun.skyfit.core.data.v1.data.posture.model.PostureTypeDTO
+import com.vurgun.skyfit.core.data.v1.domain.posture.model.PostureFinding
+import com.vurgun.skyfit.core.data.v1.domain.posture.repository.PostureAnalysisRepository
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -21,7 +21,7 @@ import kotlin.uuid.ExperimentalUuidApi
 import kotlin.uuid.Uuid
 
 data class PostureOptionState(
-    val type: PostureType,
+    val type: PostureTypeDTO,
     val byteArray: ByteArray? = null,
     val bitmap: ImageBitmap? = null,
     val findings: List<PostureFinding>? = null,
@@ -47,7 +47,7 @@ sealed class PostureAnalysisContentState {
     ) : PostureAnalysisContentState()
 
     data class CameraPreview(
-        val postureType: PostureType,
+        val postureType: PostureTypeDTO,
         val isExist: Boolean
     ) : PostureAnalysisContentState()
 
@@ -71,7 +71,7 @@ sealed class PostureAnalysisAction {
     data object Reset : PostureAnalysisAction()
     data object RetakeOption : PostureAnalysisAction()
 
-    data class SelectOption(val type: PostureType) : PostureAnalysisAction()
+    data class SelectOption(val type: PostureTypeDTO) : PostureAnalysisAction()
     data class CaptureFromGallery(
         val byteArray: ByteArray,
         val bitmap: ImageBitmap
@@ -101,15 +101,15 @@ class PostureAnalysisViewModel(
     private val _contentState = MutableStateFlow<PostureAnalysisContentState>(PostureAnalysisContentState.Instructions)
     val contentState: StateFlow<PostureAnalysisContentState> = _contentState
 
-    private val _postureStates = MutableStateFlow<Map<PostureType, PostureOptionState>>(
+    private val _postureStates = MutableStateFlow<Map<PostureTypeDTO, PostureOptionState>>(
         mapOf(
-            PostureType.Front to PostureOptionState(PostureType.Front),
-            PostureType.Back to PostureOptionState(PostureType.Back),
-            PostureType.Right to PostureOptionState(PostureType.Right),
-            PostureType.Left to PostureOptionState(PostureType.Left)
+            PostureTypeDTO.Front to PostureOptionState(PostureTypeDTO.Front),
+            PostureTypeDTO.Back to PostureOptionState(PostureTypeDTO.Back),
+            PostureTypeDTO.Right to PostureOptionState(PostureTypeDTO.Right),
+            PostureTypeDTO.Left to PostureOptionState(PostureTypeDTO.Left)
         )
     )
-    val postureStates: StateFlow<Map<PostureType, PostureOptionState>> = _postureStates
+    val postureStates: StateFlow<Map<PostureTypeDTO, PostureOptionState>> = _postureStates
 
     fun onAction(action: PostureAnalysisAction) {
         when (action) {
@@ -157,10 +157,10 @@ class PostureAnalysisViewModel(
     // UNUSED
     private fun resetAll() {
         _postureStates.value = mapOf(
-            PostureType.Front to PostureOptionState(PostureType.Front),
-            PostureType.Back to PostureOptionState(PostureType.Back),
-            PostureType.Right to PostureOptionState(PostureType.Right),
-            PostureType.Left to PostureOptionState(PostureType.Left),
+            PostureTypeDTO.Front to PostureOptionState(PostureTypeDTO.Front),
+            PostureTypeDTO.Back to PostureOptionState(PostureTypeDTO.Back),
+            PostureTypeDTO.Right to PostureOptionState(PostureTypeDTO.Right),
+            PostureTypeDTO.Left to PostureOptionState(PostureTypeDTO.Left),
         )
     }
 
@@ -201,7 +201,7 @@ class PostureAnalysisViewModel(
         )
     }
 
-    private fun selectPostureOption(type: PostureType) {
+    private fun selectPostureOption(type: PostureTypeDTO) {
         val currentState = _postureStates.value[type]
         val isCompleted = currentState?.isCompleted == true
 
@@ -231,13 +231,13 @@ class PostureAnalysisViewModel(
         }
     }
 
-    private fun updatePostureState(type: PostureType, updated: PostureOptionState) {
+    private fun updatePostureState(type: PostureTypeDTO, updated: PostureOptionState) {
         _postureStates.value = _postureStates.value.toMutableMap().apply {
             this[type] = updated
         }
     }
 
-    private fun analyzeImage(postureType: PostureType) {
+    private fun analyzeImage(postureType: PostureTypeDTO) {
         val currentPosture = _postureStates.value[postureType] ?: return
         val bytes = currentPosture.byteArray ?: return
 

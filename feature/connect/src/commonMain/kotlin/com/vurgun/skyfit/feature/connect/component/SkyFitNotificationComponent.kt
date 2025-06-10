@@ -30,8 +30,8 @@ import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.dp
-import com.vurgun.skyfit.core.data.connect.data.model.NotificationType
-import com.vurgun.skyfit.core.data.connect.data.model.SkyFitNotification
+import com.vurgun.skyfit.core.data.v1.data.notification.NotificationType
+import com.vurgun.skyfit.core.data.v1.data.notification.SkyFitNotificationDTO
 import com.vurgun.skyfit.core.ui.components.image.CircleNetworkImage
 import com.vurgun.skyfit.core.ui.styling.SkyFitColor
 import com.vurgun.skyfit.core.ui.styling.SkyFitTypography
@@ -83,7 +83,7 @@ fun NotificationItemSwipeDismissBackground(dismissState: DismissState) {
 }
 
 @Composable
-fun SkyFitNotificationItem(notification: SkyFitNotification) {
+fun SkyFitNotificationItem(notification: SkyFitNotificationDTO) {
 
     Box(
         Modifier
@@ -149,7 +149,7 @@ fun SkyFitNotificationItem(notification: SkyFitNotification) {
 }
 
 @Composable
-private fun SkyFitNotification.NotificationIcon() {
+private fun SkyFitNotificationDTO.NotificationIcon() {
 
     if (this.iconId != null) {
         Image(

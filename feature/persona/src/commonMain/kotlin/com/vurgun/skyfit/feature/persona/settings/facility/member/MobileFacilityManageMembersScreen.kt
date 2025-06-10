@@ -10,9 +10,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -21,8 +18,8 @@ import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.koin.koinScreenModel
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
-import com.vurgun.skyfit.core.data.persona.domain.model.Member
-import com.vurgun.skyfit.core.data.persona.domain.model.Trainer
+import com.vurgun.skyfit.core.data.v1.domain.global.model.Member
+import com.vurgun.skyfit.core.data.v1.domain.trainer.model.TrainerPreview
 import com.vurgun.skyfit.core.ui.components.image.NetworkImage
 import com.vurgun.skyfit.core.ui.components.image.SkyImage
 import com.vurgun.skyfit.core.ui.components.image.SkyImageShape
@@ -164,7 +161,7 @@ fun MobileFacilityMemberItemComponent(
 
 @Composable
 fun MobileFacilityTrainerItemComponent(
-    item: Trainer,
+    item: TrainerPreview,
     onClick: () -> Unit,
     actionContent: @Composable () -> Unit
 ) {

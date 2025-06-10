@@ -43,7 +43,7 @@ import com.kashif.cameraK.ui.CameraPreview
 import com.kashif.imagesaverplugin.ImageSaverConfig
 import com.kashif.imagesaverplugin.ImageSaverPlugin
 import com.kashif.imagesaverplugin.rememberImageSaverPlugin
-import com.vurgun.skyfit.core.data.wellbeing.data.model.PostureType
+import com.vurgun.skyfit.core.data.v1.data.posture.model.PostureTypeDTO
 import com.vurgun.skyfit.core.ui.components.button.PrimaryIconButton
 import com.vurgun.skyfit.core.ui.components.button.SecondaryFlatIconButton
 import com.vurgun.skyfit.core.ui.components.button.SecondaryIconButton
@@ -133,17 +133,17 @@ internal fun CameraPreviewContent(
 
 @Composable
 private fun CameraScreenControlOverlay(
-    postureType: PostureType,
+    postureType: PostureTypeDTO,
     isAlreadyCaptured: Boolean,
     onAction: (PostureAnalysisAction) -> Unit,
     cameraController: CameraController,
     imageSaverPlugin: ImageSaverPlugin,
 ) {
     val postureText = when (postureType) {
-        PostureType.Front -> stringResource(Res.string.posture_view_front)
-        PostureType.Back -> stringResource(Res.string.posture_view_back)
-        PostureType.Left -> stringResource(Res.string.posture_view_left)
-        PostureType.Right -> stringResource(Res.string.posture_view_right)
+        PostureTypeDTO.Front -> stringResource(Res.string.posture_view_front)
+        PostureTypeDTO.Back -> stringResource(Res.string.posture_view_back)
+        PostureTypeDTO.Left -> stringResource(Res.string.posture_view_left)
+        PostureTypeDTO.Right -> stringResource(Res.string.posture_view_right)
     }
 
     Column(
@@ -204,12 +204,12 @@ private fun PostureAnalysisGrid() {
 }
 
 @Composable
-private fun HumanGuideOverlay(postureType: PostureType) {
+private fun HumanGuideOverlay(postureType: PostureTypeDTO) {
     val res = when (postureType) {
-        PostureType.Front -> Res.drawable.posture_guide_view_front
-        PostureType.Back -> Res.drawable.posture_guide_view_back
-        PostureType.Left -> Res.drawable.posture_guide_view_right
-        PostureType.Right -> Res.drawable.posture_guide_view_left
+        PostureTypeDTO.Front -> Res.drawable.posture_guide_view_front
+        PostureTypeDTO.Back -> Res.drawable.posture_guide_view_back
+        PostureTypeDTO.Left -> Res.drawable.posture_guide_view_right
+        PostureTypeDTO.Right -> Res.drawable.posture_guide_view_left
     }
 
     BoxWithConstraints(

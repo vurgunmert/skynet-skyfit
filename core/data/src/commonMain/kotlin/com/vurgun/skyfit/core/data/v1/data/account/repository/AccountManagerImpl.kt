@@ -1,0 +1,74 @@
+package com.vurgun.skyfit.core.data.v1.data.account.repository
+
+import com.vurgun.skyfit.core.data.storage.Storage
+import com.vurgun.skyfit.core.data.storage.TokenManager
+import com.vurgun.skyfit.core.data.v1.domain.account.manager.ActiveAccountManager
+import com.vurgun.skyfit.core.data.v1.domain.account.model.Account
+import com.vurgun.skyfit.core.data.v1.domain.account.model.AccountType
+import com.vurgun.skyfit.core.data.v1.domain.account.repository.AccountRepository
+import com.vurgun.skyfit.core.data.v1.domain.global.model.UserRole
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.stateIn
+
+class AccountManagerImpl(
+    appScope: CoroutineScope,
+    private val storage: Storage,
+    private val repository: AccountRepository,
+    private val tokenManager: TokenManager
+) : ActiveAccountManager {
+
+    private val userFlow = MutableStateFlow<Account?>(null)
+    override val user = userFlow.asStateFlow()
+
+    // Derived role state
+    override val userRole: StateFlow<UserRole> = userFlow
+        .map { it?.userRole ?: UserRole.Guest }
+        .stateIn(appScope, SharingStarted.Companion.Eagerly, UserRole.Guest)
+
+    private val _accountTypes = MutableStateFlow<List<AccountType>>(emptyList())
+    override val accountTypes: StateFlow<List<AccountType>> = _accountTypes
+
+    override suspend fun getAccountTypes(): List<AccountType> {
+        if (_accountTypes.value.isNotEmpty()) return _accountTypes.value
+
+        return repository.getRegisteredAccountTypes()
+            .onSuccess { _accountTypes.value = it }
+            .getOrElse {
+                println("❌ Could not fetch user account types: ${it.message}")
+                emptyList()
+            }
+    }
+
+    override suspend fun getActiveUser(forceRefresh: Boolean): Result<Account> {
+        if (!forceRefresh && user.value != null) {
+            return Result.success(user.value!!)
+        }
+
+        val result = repository.getAccountDetails()
+
+        return result
+            .onSuccess { userFlow.value = it }
+            .onFailure { println("❌ Failed to get user securely: $it") }
+    }
+
+    override suspend fun updateUserType(userTypeId: Int): Result<Unit> {
+        return runCatching {
+            repository.selectActiveAccountType(userTypeId).getOrThrow()
+            val updatedUser = getActiveUser(forceRefresh = true).getOrThrow()
+            userFlow.value = updatedUser
+        }
+    }
+
+    override suspend fun logout() {
+        println("🚪 Logging out: Clearing user and accountTypes")
+        tokenManager.clear()
+        storage.clearAll()
+        userFlow.value = null
+        _accountTypes.value = emptyList()
+    }
+}

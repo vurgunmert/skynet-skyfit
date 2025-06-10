@@ -2,15 +2,14 @@ package com.vurgun.skyfit.feature.persona.profile.facility.owner
 
 import cafe.adriel.voyager.core.model.ScreenModel
 import cafe.adriel.voyager.core.model.screenModelScope
-import com.vurgun.skyfit.core.data.persona.domain.model.FacilityDetail
-import com.vurgun.skyfit.core.data.persona.domain.model.FacilityProfile
-import com.vurgun.skyfit.core.data.persona.domain.model.FacilityTrainerProfile
-import com.vurgun.skyfit.core.data.persona.domain.repository.ProfileRepository
-import com.vurgun.skyfit.core.data.persona.domain.repository.UserManager
 import com.vurgun.skyfit.core.data.utility.SingleSharedFlow
-import com.vurgun.skyfit.core.data.schedule.domain.repository.CourseRepository
-import com.vurgun.skyfit.core.data.schedule.data.mapper.LessonSessionItemViewDataMapper
-import com.vurgun.skyfit.core.data.schedule.data.model.LessonSessionItemViewData
+import com.vurgun.skyfit.core.data.v1.data.lesson.mapper.LessonSessionItemViewDataMapper
+import com.vurgun.skyfit.core.data.v1.domain.account.manager.ActiveAccountManager
+import com.vurgun.skyfit.core.data.v1.domain.account.model.FacilityAccount
+import com.vurgun.skyfit.core.data.v1.domain.facility.model.FacilityProfile
+import com.vurgun.skyfit.core.data.v1.domain.facility.repository.FacilityRepository
+import com.vurgun.skyfit.core.data.v1.domain.lesson.model.LessonSessionItemViewData
+import com.vurgun.skyfit.core.data.v1.domain.trainer.model.FacilityTrainerProfile
 import com.vurgun.skyfit.feature.persona.components.viewdata.PhotoGalleryStackViewData
 import com.vurgun.skyfit.feature.persona.social.SocialPostItemViewData
 import kotlinx.coroutines.async
@@ -52,9 +51,8 @@ sealed interface FacilityProfileOwnerEffect {
 }
 
 class FacilityProfileOwnerViewModel(
-    private val userManager: UserManager,
-    private val courseRepository: CourseRepository,
-    private val profileRepository: ProfileRepository,
+    private val userManager: ActiveAccountManager,
+    private val facilityRepository: FacilityRepository,
     private val lessonMapper: LessonSessionItemViewDataMapper
 ) : ScreenModel {
 
@@ -64,8 +62,8 @@ class FacilityProfileOwnerViewModel(
     private val _effect = SingleSharedFlow<FacilityProfileOwnerEffect>()
     val effect: SharedFlow<FacilityProfileOwnerEffect> = _effect
 
-    private val facilityUser: FacilityDetail
-        get() = userManager.user.value as? FacilityDetail
+    private val facilityUser: FacilityAccount
+        get() = userManager.user.value as? FacilityAccount
             ?: error("User is not a Facility")
 
     fun onAction(action: FacilityProfileOwnerAction) {
@@ -84,7 +82,7 @@ class FacilityProfileOwnerViewModel(
         screenModelScope.launch {
             _uiState.value = FacilityProfileOwnerUiState.Loading
 
-            val profileDeferred = async { profileRepository.getFacilityProfile(facilityUser.gymId).getOrThrow() }
+            val profileDeferred = async { facilityRepository.getFacilityProfile(facilityUser.gymId).getOrThrow() }
             val lessonsDeferred = async { fetchLessons(facilityUser.gymId) }
             val trainersDeferred = async { fetchTrainers(facilityUser.gymId) }
 
@@ -128,12 +126,12 @@ class FacilityProfileOwnerViewModel(
     }
 
     private suspend fun fetchLessons(facilityId: Int): List<LessonSessionItemViewData> {
-        return courseRepository.getUpcomingLessonsByFacility(facilityId)
+        return facilityRepository.getUpcomingLessonsByFacility(facilityId)
             .map { it.map(lessonMapper::map) }
             .getOrDefault(emptyList())
     }
 
     private suspend fun fetchTrainers(facilityId: Int): List<FacilityTrainerProfile> {
-        return profileRepository.getFacilityTrainerProfiles(facilityId).getOrDefault(emptyList())
+        return facilityRepository.getFacilityTrainerProfiles(facilityId).getOrDefault(emptyList())
     }
 }

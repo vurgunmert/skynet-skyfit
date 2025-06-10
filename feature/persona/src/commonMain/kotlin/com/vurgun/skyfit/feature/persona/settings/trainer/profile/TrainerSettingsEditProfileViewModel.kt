@@ -2,14 +2,15 @@ package com.vurgun.skyfit.feature.persona.settings.trainer.profile
 
 import cafe.adriel.voyager.core.model.ScreenModel
 import cafe.adriel.voyager.core.model.screenModelScope
-import com.vurgun.skyfit.core.data.persona.domain.model.TrainerDetail
-import com.vurgun.skyfit.core.data.schedule.domain.model.WorkoutTag
-import com.vurgun.skyfit.core.data.access.domain.repository.AuthRepository
-import com.vurgun.skyfit.core.data.persona.domain.repository.ProfileRepository
-import com.vurgun.skyfit.core.data.persona.domain.repository.UserManager
 import com.vurgun.skyfit.core.data.utility.SingleSharedFlow
 import com.vurgun.skyfit.core.data.utility.emitIn
 import com.vurgun.skyfit.core.data.utility.emitOrNull
+import com.vurgun.skyfit.core.data.v1.domain.account.manager.ActiveAccountManager
+import com.vurgun.skyfit.core.data.v1.domain.account.model.TrainerAccount
+import com.vurgun.skyfit.core.data.v1.domain.global.model.ProfileTag
+import com.vurgun.skyfit.core.data.v1.domain.global.repository.GlobalRepository
+import com.vurgun.skyfit.core.data.v1.domain.trainer.repository.TrainerRepository
+import com.vurgun.skyfit.core.network.RemoteImageDataSource
 import kotlinx.coroutines.async
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharedFlow
@@ -31,8 +32,8 @@ data class TrainerEditProfileFormState(
     val profileImageBytes: ByteArray? = null,
     val backgroundImageUrl: String? = null,
     val backgroundImageBytes: ByteArray? = null,
-    val availableTags: List<WorkoutTag> = emptyList(),
-    val profileTags: List<WorkoutTag> = emptyList(),
+    val availableTags: List<ProfileTag> = emptyList(),
+    val profileTags: List<ProfileTag> = emptyList(),
     val isUpdated: Boolean = false
 ) {
     override fun equals(other: Any?): Boolean {
@@ -77,7 +78,7 @@ sealed class TrainerEditProfileAction {
     data class UpdateFirstName(val value: String) : TrainerEditProfileAction()
     data class UpdateLastName(val value: String) : TrainerEditProfileAction()
     data class UpdateBiography(val value: String) : TrainerEditProfileAction()
-    data class UpdateTags(val tags: List<WorkoutTag>) : TrainerEditProfileAction()
+    data class UpdateTags(val tags: List<ProfileTag>) : TrainerEditProfileAction()
 }
 
 sealed class TrainerEditProfileEffect {
@@ -86,9 +87,10 @@ sealed class TrainerEditProfileEffect {
 }
 
 class TrainerSettingsEditProfileViewModel(
-    private val userManager: UserManager,
-    private val profileRepository: ProfileRepository,
-    private val authRepository: AuthRepository,
+    private val userManager: ActiveAccountManager,
+    private val trainerRepository: TrainerRepository,
+    private val globalRepository: GlobalRepository,
+    private val remoteImageDataSource: RemoteImageDataSource
 ) : ScreenModel {
 
     private val _uiState = MutableStateFlow<TrainerEditProfileUiState>(TrainerEditProfileUiState.Loading)
@@ -97,8 +99,8 @@ class TrainerSettingsEditProfileViewModel(
     private val _effect = SingleSharedFlow<TrainerEditProfileEffect>()
     val effect: SharedFlow<TrainerEditProfileEffect> = _effect
 
-    private val trainerUser: TrainerDetail
-        get() = userManager.user.value as? TrainerDetail
+    private val trainerUser: TrainerAccount
+        get() = userManager.user.value as? TrainerAccount
             ?: error("❌ User is not a Trainer")
 
     private var initialState: TrainerEditProfileFormState? = null
@@ -130,15 +132,15 @@ class TrainerSettingsEditProfileViewModel(
     fun loadData() {
         screenModelScope.launch {
             try {
-                val trainerProfile = profileRepository.getTrainerProfile(trainerUser.trainerId).getOrThrow()
+                val trainerProfile = trainerRepository.getTrainerProfile(trainerUser.trainerId).getOrThrow()
 
                 val profileImageUrl = trainerProfile.profileImageUrl
                 val backgroundImageUrl = trainerProfile.backgroundImageUrl
 
                 // Load image bytes in parallel
-                val profileImageDeferred = profileImageUrl?.let { async { profileRepository.fetchImageBytes(it) } }
-                val backgroundImageDeferred = backgroundImageUrl?.let { async { profileRepository.fetchImageBytes(it) } }
-                val allTagsDeferred = async { authRepository.getTags().getOrDefault(emptyList()) }
+                val profileImageDeferred = profileImageUrl?.let { async { remoteImageDataSource.getImageBytes(it) } }
+                val backgroundImageDeferred = backgroundImageUrl?.let { async { remoteImageDataSource.getImageBytes(it) } }
+                val allTagsDeferred = async { globalRepository.getProfileTags().getOrDefault(emptyList()) }
 
                 val formState = TrainerEditProfileFormState(
                     userName = trainerProfile.username,
@@ -177,7 +179,7 @@ class TrainerSettingsEditProfileViewModel(
             _uiState.value = TrainerEditProfileUiState.Loading
 
             try {
-                profileRepository.updateTrainerProfile(
+                trainerRepository.updateTrainerProfile(
                     trainerId = trainerUser.trainerId,
                     username = form.userName,
                     profileImageBytes = form.profileImageBytes,
@@ -185,7 +187,7 @@ class TrainerSettingsEditProfileViewModel(
                     firstName = form.firstName,
                     lastName = form.lastName,
                     bio = form.biography,
-                    profileTags = form.profileTags.map { it.tagId }
+                    profileTags = form.profileTags.map { it.id.toIntOrNull() ?: 0 }.filter { it != 0}
                 )
 
                 initialState = form.copy(isUpdated = false)

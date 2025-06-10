@@ -2,12 +2,12 @@ package com.vurgun.skyfit.feature.persona.settings.trainer.profile
 
 import cafe.adriel.voyager.core.model.ScreenModel
 import cafe.adriel.voyager.core.model.screenModelScope
-import com.vurgun.skyfit.core.data.persona.domain.model.TrainerDetail
-import com.vurgun.skyfit.core.data.schedule.domain.model.WorkoutTag
-import com.vurgun.skyfit.core.data.persona.domain.repository.ProfileRepository
-import com.vurgun.skyfit.core.data.persona.domain.repository.UserManager
 import com.vurgun.skyfit.core.data.utility.SingleSharedFlow
 import com.vurgun.skyfit.core.data.utility.emitOrNull
+import com.vurgun.skyfit.core.data.v1.domain.account.manager.ActiveAccountManager
+import com.vurgun.skyfit.core.data.v1.domain.account.model.TrainerAccount
+import com.vurgun.skyfit.core.data.v1.domain.global.model.ProfileTag
+import com.vurgun.skyfit.core.data.v1.domain.trainer.repository.TrainerRepository
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -30,7 +30,7 @@ data class TrainerManageProfileFormState(
     val biography: String,
     val profileImageUrl: String? = null,
     val backgroundImageUrl: String? = null,
-    val profileTags: List<WorkoutTag> = emptyList()
+    val profileTags: List<ProfileTag> = emptyList()
 )
 
 sealed class TrainerManageProfileAction {
@@ -50,8 +50,8 @@ sealed class TrainerManageProfileEffect {
 }
 
 class TrainerSettingsManageProfileViewModel(
-    private val userManager: UserManager,
-    private val profileRepository: ProfileRepository
+    private val userManager: ActiveAccountManager,
+    private val trainerRepository: TrainerRepository
 ) : ScreenModel {
 
     private val _uiState = MutableStateFlow<TrainerManageProfileUiState>(TrainerManageProfileUiState.Loading)
@@ -60,8 +60,8 @@ class TrainerSettingsManageProfileViewModel(
     private val _effect = SingleSharedFlow<TrainerManageProfileEffect>()
     val effect: SharedFlow<TrainerManageProfileEffect> = _effect
 
-    private val trainerUser: TrainerDetail
-        get() = userManager.user.value as? TrainerDetail
+    private val trainerUser: TrainerAccount
+        get() = userManager.user.value as? TrainerAccount
             ?: error("❌ User is not a Trainer")
 
     fun onAction(action: TrainerManageProfileAction) {
@@ -77,7 +77,7 @@ class TrainerSettingsManageProfileViewModel(
     fun loadData() {
         screenModelScope.launch {
             try {
-                val trainerProfile = profileRepository.getTrainerProfile(trainerUser.trainerId).getOrThrow()
+                val trainerProfile = trainerRepository.getTrainerProfile(trainerUser.trainerId).getOrThrow()
 
                 val formState = TrainerManageProfileFormState(
                     userName = trainerProfile.username,

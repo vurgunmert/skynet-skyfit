@@ -17,7 +17,7 @@ import androidx.compose.ui.unit.dp
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
-import com.vurgun.skyfit.core.data.persona.domain.model.UserGoal
+import com.vurgun.skyfit.core.data.v1.domain.global.model.UserGoal
 import com.vurgun.skyfit.core.ui.components.button.SkyFitSelectableTextButton
 import com.vurgun.skyfit.core.ui.components.special.SkyFitMobileScaffold
 import com.vurgun.skyfit.feature.onboarding.component.OnboardingActionGroupComponent

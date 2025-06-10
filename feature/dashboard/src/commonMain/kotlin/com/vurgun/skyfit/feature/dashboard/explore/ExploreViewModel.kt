@@ -3,10 +3,10 @@ package com.vurgun.skyfit.feature.dashboard.explore
 
 import cafe.adriel.voyager.core.model.ScreenModel
 import cafe.adriel.voyager.core.model.screenModelScope
-import com.vurgun.skyfit.core.data.persona.domain.repository.ProfileRepository
 import com.vurgun.skyfit.core.data.utility.SingleSharedFlow
 import com.vurgun.skyfit.core.data.utility.UiStateDelegate
 import com.vurgun.skyfit.core.data.utility.emitIn
+import com.vurgun.skyfit.core.data.v1.domain.explore.ExploreRepository
 import com.vurgun.skyfit.feature.persona.components.viewdata.FacilityProfileCardItemViewData
 import com.vurgun.skyfit.feature.persona.components.viewdata.TrainerProfileCardItemViewData
 import kotlinx.coroutines.flow.SharedFlow
@@ -42,7 +42,7 @@ sealed class ExploreEffect {
 }
 
 class ExploreViewModel(
-    private val profileRepository: ProfileRepository,
+    private val exploreRepository: ExploreRepository,
 ) : ScreenModel {
 
     private val _uiState = UiStateDelegate<ExploreUiState>(ExploreUiState.Loading)
@@ -72,14 +72,14 @@ class ExploreViewModel(
         screenModelScope.launch {
             _uiState.update(ExploreUiState.Loading)
 
-            val facilities = profileRepository
-                .getAllExploreFacilityProfiles()
+            val facilities = exploreRepository
+                .getAllFacilities()
                 .getOrDefault(emptyList())
                 .map {
                     FacilityProfileCardItemViewData(
                         facilityId = it.gymId,
-                        imageUrl = it.backgroundImage.toString(),
-                        name = it.gymName,
+                        imageUrl = it.backgroundImageUrl.toString(),
+                        name = it.facilityName,
                         memberCount = it.memberCount,
                         trainerCount = it.trainerCount,
                         rating = it.point
@@ -87,7 +87,7 @@ class ExploreViewModel(
                 }
 
 
-            val trainers = profileRepository.getFacilityTrainerProfiles(10) //TODO: Replace API OR ID
+            val trainers = exploreRepository.getAllTrainers()
                 .getOrDefault(emptyList())
                 .map {
                     TrainerProfileCardItemViewData(
@@ -95,7 +95,7 @@ class ExploreViewModel(
                         imageUrl = it.profileImageUrl.toString(),
                         name = it.fullName,
                         followerCount = it.followerCount,
-                        classCount = it.lessonTypeCount,
+                        classCount = it.lessonCount,
                         videoCount = it.videoCount,
                         rating = it.point
                     )

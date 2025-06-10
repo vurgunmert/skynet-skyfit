@@ -1,7 +1,7 @@
 package com.vurgun.skyfit.feature.access
 
 import com.vurgun.skyfit.core.data.dataCoreModule
-import com.vurgun.skyfit.feature.access.domain.SplashUseCase
+import com.vurgun.skyfit.core.data.v1.domain.auth.usercase.SplashUseCase
 import com.vurgun.skyfit.feature.access.forgotpassword.ForgotPasswordVerifyOTPViewModel
 import com.vurgun.skyfit.feature.access.forgotpassword.ForgotPasswordViewModel
 import com.vurgun.skyfit.feature.access.forgotpassword.PasswordResetViewModel
@@ -21,7 +21,7 @@ val featureAccessModule = module {
     factory { PasswordResetViewModel(get()) }
     factory { LoginOTPVerificationViewModel(get(), get(), get()) }
     factory { ForgotPasswordVerifyOTPViewModel(get(), get()) }
-    factory { OnboardingViewModel(get(), get(), get()) }
+    factory { OnboardingViewModel(get(), get(), get(), get()) }
 
     factory { SplashUseCase(get(), get()) }
     factory { SplashViewModel(get()) }

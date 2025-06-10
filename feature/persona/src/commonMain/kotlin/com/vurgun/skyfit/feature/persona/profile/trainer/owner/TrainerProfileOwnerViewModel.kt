@@ -2,15 +2,14 @@ package com.vurgun.skyfit.feature.persona.profile.trainer.owner
 
 import cafe.adriel.voyager.core.model.ScreenModel
 import cafe.adriel.voyager.core.model.screenModelScope
-import com.vurgun.skyfit.core.data.persona.domain.model.TrainerDetail
-import com.vurgun.skyfit.core.data.persona.domain.model.TrainerProfile
-import com.vurgun.skyfit.core.data.persona.domain.repository.ProfileRepository
-import com.vurgun.skyfit.core.data.persona.domain.repository.UserManager
-import com.vurgun.skyfit.core.data.schedule.domain.repository.CourseRepository
-import com.vurgun.skyfit.core.data.schedule.data.mapper.LessonSessionItemViewDataMapper
-import com.vurgun.skyfit.core.data.schedule.data.model.LessonSessionItemViewData
 import com.vurgun.skyfit.core.data.utility.SingleSharedFlow
 import com.vurgun.skyfit.core.data.utility.emitOrNull
+import com.vurgun.skyfit.core.data.v1.data.lesson.mapper.LessonSessionItemViewDataMapper
+import com.vurgun.skyfit.core.data.v1.domain.account.manager.ActiveAccountManager
+import com.vurgun.skyfit.core.data.v1.domain.account.model.TrainerAccount
+import com.vurgun.skyfit.core.data.v1.domain.lesson.model.LessonSessionItemViewData
+import com.vurgun.skyfit.core.data.v1.domain.trainer.model.TrainerProfile
+import com.vurgun.skyfit.core.data.v1.domain.trainer.repository.TrainerRepository
 import com.vurgun.skyfit.core.ui.styling.SkyFitAsset
 import com.vurgun.skyfit.feature.persona.components.viewdata.LifestyleActionItemViewData
 import com.vurgun.skyfit.feature.persona.components.viewdata.LifestyleActionRowViewData
@@ -49,10 +48,9 @@ sealed interface TrainerProfileOwnerEffect {
 }
 
 class TrainerProfileOwnerViewModel(
-    private val userManager: UserManager,
-    private val courseRepository: CourseRepository,
+    private val userManager: ActiveAccountManager,
     private val lessonMapper: LessonSessionItemViewDataMapper,
-    private val profileRepository: ProfileRepository
+    private val trainerRepository: TrainerRepository
 ) : ScreenModel {
 
     private val _uiState = MutableStateFlow<TrainerProfileOwnerUiState>(TrainerProfileOwnerUiState.Loading)
@@ -61,8 +59,8 @@ class TrainerProfileOwnerViewModel(
     private val _effect = SingleSharedFlow<TrainerProfileOwnerEffect>()
     val effect: SharedFlow<TrainerProfileOwnerEffect> = _effect
 
-    private val trainerUser: TrainerDetail
-        get() = userManager.user.value as? TrainerDetail
+    private val trainerUser: TrainerAccount
+        get() = userManager.user.value as? TrainerAccount
             ?: error("User is not a Trainer")
 
     fun onAction(action: TrainerProfileOwnerAction) {
@@ -78,7 +76,7 @@ class TrainerProfileOwnerViewModel(
         screenModelScope.launch {
             _uiState.value = TrainerProfileOwnerUiState.Loading
 
-            val profileDeferred = async { profileRepository.getTrainerProfile(trainerUser.trainerId).getOrThrow() }
+            val profileDeferred = async { trainerRepository.getTrainerProfile(trainerUser.trainerId).getOrThrow() }
             val lessonsDeferred = async { fetchLessons(trainerUser.trainerId) }
 
             try {
@@ -112,7 +110,7 @@ class TrainerProfileOwnerViewModel(
     }
 
     private suspend fun fetchLessons(trainerId: Int): List<LessonSessionItemViewData> {
-        return courseRepository.getUpcomingLessonsByTrainer(trainerId)
+        return trainerRepository.getUpcomingLessonsByTrainer(trainerId)
             .map { it.map(lessonMapper::map) }
             .getOrDefault(emptyList())
     }

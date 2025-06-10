@@ -2,17 +2,17 @@ package com.vurgun.skyfit.feature.persona.profile.user.owner
 
 import cafe.adriel.voyager.core.model.ScreenModel
 import cafe.adriel.voyager.core.model.screenModelScope
-import com.vurgun.skyfit.core.data.persona.domain.model.FacilityProfile
-import com.vurgun.skyfit.core.data.persona.domain.model.UserDetail
-import com.vurgun.skyfit.core.data.persona.domain.model.UserProfile
-import com.vurgun.skyfit.core.data.persona.domain.repository.ProfileRepository
-import com.vurgun.skyfit.core.data.persona.domain.repository.UserManager
 import com.vurgun.skyfit.core.data.utility.SingleSharedFlow
 import com.vurgun.skyfit.core.data.utility.emitOrNull
+import com.vurgun.skyfit.core.data.v1.data.lesson.mapper.LessonSessionItemViewDataMapper
+import com.vurgun.skyfit.core.data.v1.domain.account.manager.ActiveAccountManager
+import com.vurgun.skyfit.core.data.v1.domain.account.model.UserAccount
+import com.vurgun.skyfit.core.data.v1.domain.facility.model.FacilityProfile
+import com.vurgun.skyfit.core.data.v1.domain.facility.repository.FacilityRepository
+import com.vurgun.skyfit.core.data.v1.domain.lesson.model.LessonSessionItemViewData
+import com.vurgun.skyfit.core.data.v1.domain.user.model.UserProfile
+import com.vurgun.skyfit.core.data.v1.domain.user.repository.UserRepository
 import com.vurgun.skyfit.core.ui.styling.SkyFitAsset
-import com.vurgun.skyfit.core.data.schedule.domain.repository.CourseRepository
-import com.vurgun.skyfit.core.data.schedule.data.mapper.LessonSessionItemViewDataMapper
-import com.vurgun.skyfit.core.data.schedule.data.model.LessonSessionItemViewData
 import com.vurgun.skyfit.feature.persona.components.viewdata.LifestyleActionItemViewData
 import com.vurgun.skyfit.feature.persona.components.viewdata.LifestyleActionRowViewData
 import com.vurgun.skyfit.feature.persona.components.viewdata.PhotoGalleryStackViewData
@@ -56,9 +56,9 @@ sealed interface UserProfileOwnerEffect {
 }
 
 class UserProfileOwnerViewModel(
-    private val userManager: UserManager,
-    private val courseRepository: CourseRepository,
-    private val profileRepository: ProfileRepository,
+    private val userManager: ActiveAccountManager,
+    private val userRepository: UserRepository,
+    private val facilityRepository: FacilityRepository,
     private val lessonMapper: LessonSessionItemViewDataMapper,
 ) : ScreenModel {
 
@@ -68,8 +68,8 @@ class UserProfileOwnerViewModel(
     private val _effect = SingleSharedFlow<UserProfileOwnerEffect>()
     val effect: SharedFlow<UserProfileOwnerEffect> = _effect
 
-    private val user: UserDetail
-        get() = userManager.user.value as? UserDetail
+    private val user: UserAccount
+        get() = userManager.user.value as? UserAccount
             ?: error("❌ current account is not user")
 
     fun onAction(action: UserProfileOwnerAction) {
@@ -78,7 +78,12 @@ class UserProfileOwnerViewModel(
             UserProfileOwnerAction.NavigateToAppointments -> emitEffect(UserProfileOwnerEffect.NavigateToAppointments)
             UserProfileOwnerAction.NavigateToSettings -> emitEffect(UserProfileOwnerEffect.NavigateToSettings)
             UserProfileOwnerAction.NavigateToCreatePost -> emitEffect(UserProfileOwnerEffect.NavigateToCreatePost)
-            is UserProfileOwnerAction.NavigateToVisitFacility -> emitEffect(UserProfileOwnerEffect.NavigateToVisitFacility(action.gymId))
+            is UserProfileOwnerAction.NavigateToVisitFacility -> emitEffect(
+                UserProfileOwnerEffect.NavigateToVisitFacility(
+                    action.gymId
+                )
+            )
+
             is UserProfileOwnerAction.TogglePostVisibility -> togglePostVisibility(action.visible)
         }
     }
@@ -86,13 +91,13 @@ class UserProfileOwnerViewModel(
     fun loadProfile() {
         screenModelScope.launch {
             _uiState.value = UserProfileOwnerUiState.Loading
-            val profileDeferred = async { profileRepository.getUserProfile(user.normalUserId).getOrThrow() }
+            val profileDeferred = async { userRepository.getUserProfile(user.normalUserId).getOrThrow() }
             val appointmentsDeferred = async { fetchAppointments(user.normalUserId) }
 
             try {
                 val profile = profileDeferred.await()
                 val facilityDeferred = profile.memberGymId?.let { gymId ->
-                    async { profileRepository.getFacilityProfile(gymId).getOrNull() }
+                    async { facilityRepository.getFacilityProfile(gymId).getOrNull() }
                 }
 
                 val appointments = appointmentsDeferred.await()
@@ -160,7 +165,7 @@ class UserProfileOwnerViewModel(
     }
 
     private suspend fun fetchAppointments(normalUserId: Int): List<LessonSessionItemViewData> {
-        return courseRepository.getUpcomingAppointmentsByUser(normalUserId)
+        return userRepository.getUpcomingAppointmentsByUser(normalUserId, 3)
             .map { it.map(lessonMapper::map) }
             .getOrDefault(emptyList())
     }

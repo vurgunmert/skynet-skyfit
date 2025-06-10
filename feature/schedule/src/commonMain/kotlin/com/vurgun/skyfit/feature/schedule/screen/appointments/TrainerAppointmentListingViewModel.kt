@@ -2,13 +2,13 @@ package com.vurgun.skyfit.feature.schedule.screen.appointments
 
 import cafe.adriel.voyager.core.model.ScreenModel
 import cafe.adriel.voyager.core.model.screenModelScope
-import com.vurgun.skyfit.core.data.persona.domain.model.TrainerDetail
-import com.vurgun.skyfit.core.data.persona.domain.repository.UserManager
 import com.vurgun.skyfit.core.data.utility.SingleSharedFlow
 import com.vurgun.skyfit.core.data.utility.emitIn
-import com.vurgun.skyfit.core.data.schedule.domain.model.Lesson
-import com.vurgun.skyfit.core.data.schedule.domain.model.StatusType
-import com.vurgun.skyfit.core.data.schedule.domain.repository.CourseRepository
+import com.vurgun.skyfit.core.data.v1.domain.account.manager.ActiveAccountManager
+import com.vurgun.skyfit.core.data.v1.domain.account.model.TrainerAccount
+import com.vurgun.skyfit.core.data.v1.domain.lesson.model.Lesson
+import com.vurgun.skyfit.core.data.v1.domain.lesson.model.StatusType
+import com.vurgun.skyfit.core.data.v1.domain.trainer.repository.TrainerRepository
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -59,8 +59,8 @@ sealed class TrainerAppointmentListingTab {
 }
 
 class TrainerAppointmentListingViewModel(
-    private val userManager: UserManager,
-    private val courseRepository: CourseRepository
+    private val userManager: ActiveAccountManager,
+    private val trainerRepository: TrainerRepository
 ) : ScreenModel {
 
     private val _uiState = MutableStateFlow<TrainerAppointmentListingUiState>(TrainerAppointmentListingUiState.Loading)
@@ -69,8 +69,8 @@ class TrainerAppointmentListingViewModel(
     private val _effect = SingleSharedFlow<TrainerAppointmentListingEffect>()
     val effect: SharedFlow<TrainerAppointmentListingEffect> = _effect
 
-    private val trainer: TrainerDetail
-        get() = userManager.user.value as? TrainerDetail
+    private val trainer: TrainerAccount
+        get() = userManager.user.value as? TrainerAccount
             ?: error("❌ current account is not trainer")
 
     init {
@@ -123,7 +123,7 @@ class TrainerAppointmentListingViewModel(
     private fun refreshData() {
         screenModelScope.launch {
             try {
-                val allLessons = courseRepository
+                val allLessons = trainerRepository
                     .getLessonsByTrainer(trainerId = trainer.trainerId, "", "")
                     .getOrDefault(emptyList())
 

@@ -1,6 +1,7 @@
 package com.vurgun.skyfit.feature.persona
 
 import com.vurgun.skyfit.core.data.dataCoreModule
+import com.vurgun.skyfit.core.network.dataNetworkModule
 import com.vurgun.skyfit.feature.persona.profile.facility.owner.FacilityProfileOwnerViewModel
 import com.vurgun.skyfit.feature.persona.profile.facility.schedule.FacilityProfileScheduleViewModel
 import com.vurgun.skyfit.feature.persona.profile.facility.visitor.FacilityProfileVisitorViewModel
@@ -30,20 +31,20 @@ import com.vurgun.skyfit.feature.persona.social.SocialMediaViewModel
 import org.koin.dsl.module
 
 val featurePersonaModule = module {
-    includes(dataCoreModule)
+    includes(dataNetworkModule, dataCoreModule)
 
     factory { SettingsHomeViewModel(get()) }
     factory { ChangePasswordViewModel() }
     factory { ManageAccountsViewModel(get()) }
 
     factory { UserSettingsManageProfileViewModel(get(), get()) }
-    factory { UserSettingsEditProfileViewModel(get(), get()) }
+    factory { UserSettingsEditProfileViewModel(get(), get(), get()) }
 
     factory { TrainerSettingsManageProfileViewModel(get(), get()) }
-    factory { TrainerSettingsEditProfileViewModel(get(), get(), get()) }
+    factory { TrainerSettingsEditProfileViewModel(get(), get(), get(), get()) }
 
     factory { FacilityManageProfileViewModel(get(), get()) }
-    factory { FacilityEditProfileViewModel(get(), get(), get()) }
+    factory { FacilityEditProfileViewModel(get(), get(), get(), get()) }
     factory { FacilityManageMembersViewModel(get(), get()) }
     factory { FacilityAddMembersViewModel(get(), get()) }
     factory { FacilityManageTrainersViewModel(get(), get()) }
@@ -55,13 +56,13 @@ val featurePersonaModule = module {
 
     factory { UserProfileOwnerViewModel(get(), get(), get(), get()) }
 
-    factory { TrainerProfileOwnerViewModel(get(), get(), get(), get()) }
-    factory { TrainerProfileVisitorViewModel(get(), get(), get(), get()) }
+    factory { TrainerProfileOwnerViewModel(get(), get(), get()) }
+    factory { TrainerProfileVisitorViewModel(get(), get(), get()) }
     factory { TrainerProfileScheduleViewModel(get(), get(), get()) }
     factory { TrainerNotificationSettingsViewModel() }
 
-    factory { FacilityProfileOwnerViewModel(get(), get(), get(), get()) }
-    factory { FacilityProfileVisitorViewModel(get(), get(), get(), get()) }
+    factory { FacilityProfileOwnerViewModel(get(), get(), get()) }
+    factory { FacilityProfileVisitorViewModel(get(), get(), get()) }
     factory { FacilityProfileScheduleViewModel(get(), get(), get()) }
 
 

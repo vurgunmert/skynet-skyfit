@@ -2,13 +2,11 @@ package com.vurgun.skyfit.feature.persona.settings.shared
 
 import cafe.adriel.voyager.core.model.ScreenModel
 import cafe.adriel.voyager.core.model.screenModelScope
-import com.vurgun.skyfit.core.data.persona.domain.model.UserAccountType
-import com.vurgun.skyfit.core.data.persona.domain.repository.UserManager
+import com.vurgun.skyfit.core.data.v1.domain.account.manager.ActiveAccountManager
 import com.vurgun.skyfit.core.data.utility.SingleSharedFlow
 import com.vurgun.skyfit.core.data.utility.UiStateDelegate
 import com.vurgun.skyfit.core.data.utility.emitOrNull
 import kotlinx.coroutines.flow.SharedFlow
-import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.launch
 
 sealed class SettingsHomeUiState {
@@ -44,7 +42,7 @@ sealed interface SettingsMainEffect {
 }
 
 class SettingsHomeViewModel(
-    private val userManager: UserManager
+    private val userManager: ActiveAccountManager
 ) : ScreenModel {
 
     private val _uiState = UiStateDelegate<SettingsHomeUiState>(SettingsHomeUiState.Loading)

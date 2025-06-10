@@ -5,7 +5,7 @@ import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import com.vurgun.skyfit.core.data.persona.domain.model.CharacterType
+import com.vurgun.skyfit.core.data.v1.domain.global.model.CharacterType
 import com.vurgun.skyfit.core.ui.model.CharacterTypeViewData
 import org.jetbrains.compose.resources.painterResource
 

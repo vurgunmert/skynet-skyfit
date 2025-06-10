@@ -2,7 +2,7 @@ package com.vurgun.skyfit.feature.connect.chatbot
 
 import cafe.adriel.voyager.core.model.ScreenModel
 import cafe.adriel.voyager.core.model.screenModelScope
-import com.vurgun.skyfit.core.data.connect.domain.repository.ChatbotApiUseCase
+import com.vurgun.skyfit.core.data.v1.domain.chatbot.ChatbotApiUseCase
 import com.vurgun.skyfit.core.data.utility.SingleSharedFlow
 import com.vurgun.skyfit.core.data.utility.emitIn
 import com.vurgun.skyfit.core.data.utility.formatToHHMMTime

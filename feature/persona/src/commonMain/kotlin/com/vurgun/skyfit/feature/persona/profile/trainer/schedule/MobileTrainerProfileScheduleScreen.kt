@@ -1,32 +1,12 @@
 package com.vurgun.skyfit.feature.persona.profile.trainer.schedule
 
-import androidx.compose.foundation.background
-import androidx.compose.foundation.border
-import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.*
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Icon
 import androidx.compose.material.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -35,8 +15,8 @@ import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.koin.koinScreenModel
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
-import com.vurgun.skyfit.core.data.persona.domain.model.TrainerProfile
-import com.vurgun.skyfit.core.data.schedule.data.model.LessonSessionItemViewData
+import com.vurgun.skyfit.core.data.v1.domain.lesson.model.LessonSessionItemViewData
+import com.vurgun.skyfit.core.data.v1.domain.trainer.model.TrainerProfile
 import com.vurgun.skyfit.core.navigation.SharedScreen
 import com.vurgun.skyfit.core.navigation.push
 import com.vurgun.skyfit.core.ui.components.dialog.ErrorDialog
@@ -45,12 +25,7 @@ import com.vurgun.skyfit.core.ui.components.event.SelectableLessonEventItem
 import com.vurgun.skyfit.core.ui.components.image.NetworkImage
 import com.vurgun.skyfit.core.ui.components.loader.FullScreenLoaderContent
 import com.vurgun.skyfit.core.ui.components.schedule.monthly.CalendarRangeDateSelectorCard
-import com.vurgun.skyfit.core.ui.components.special.ButtonSize
-import com.vurgun.skyfit.core.ui.components.special.ButtonState
-import com.vurgun.skyfit.core.ui.components.special.ButtonVariant
-import com.vurgun.skyfit.core.ui.components.special.SkyFitButtonComponent
-import com.vurgun.skyfit.core.ui.components.special.SkyFitMobileScaffold
-import com.vurgun.skyfit.core.ui.components.special.SkyFitScreenHeader
+import com.vurgun.skyfit.core.ui.components.special.*
 import com.vurgun.skyfit.core.ui.components.text.BodyLargeMediumText
 import com.vurgun.skyfit.core.ui.components.text.BodyMediumRegularText
 import com.vurgun.skyfit.core.ui.components.text.CardFieldIconText
@@ -61,12 +36,7 @@ import com.vurgun.skyfit.core.ui.styling.SkyFitTypography
 import com.vurgun.skyfit.core.ui.utils.CollectEffect
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
-import skyfit.core.ui.generated.resources.Res
-import skyfit.core.ui.generated.resources.appointment_book_action
-import skyfit.core.ui.generated.resources.appointment_create_action
-import skyfit.core.ui.generated.resources.ic_check
-import skyfit.core.ui.generated.resources.ic_location_pin
-import skyfit.core.ui.generated.resources.lesson_select_label
+import skyfit.core.ui.generated.resources.*
 
 class TrainerProfileScheduleScreen(private val trainerId: Int) : Screen {
 

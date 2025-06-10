@@ -2,22 +2,17 @@ package com.vurgun.skyfit.feature.schedule.screen.lessons
 
 import cafe.adriel.voyager.core.model.ScreenModel
 import cafe.adriel.voyager.core.model.screenModelScope
-import com.vurgun.skyfit.core.data.schedule.domain.model.CalendarRecurrence
-import com.vurgun.skyfit.core.data.schedule.domain.model.CalendarRecurrenceType
-import com.vurgun.skyfit.core.data.persona.domain.model.FacilityDetail
-import com.vurgun.skyfit.core.data.persona.domain.repository.UserManager
 import com.vurgun.skyfit.core.data.utility.SingleSharedFlow
 import com.vurgun.skyfit.core.data.utility.emitIn
 import com.vurgun.skyfit.core.data.utility.formatToSlashedDate
 import com.vurgun.skyfit.core.data.utility.now
+import com.vurgun.skyfit.core.data.v1.domain.account.manager.ActiveAccountManager
+import com.vurgun.skyfit.core.data.v1.domain.account.model.FacilityAccount
+import com.vurgun.skyfit.core.data.v1.domain.facility.repository.FacilityRepository
+import com.vurgun.skyfit.core.data.v1.domain.global.model.Member
+import com.vurgun.skyfit.core.data.v1.domain.lesson.model.*
+import com.vurgun.skyfit.core.data.v1.domain.lesson.repository.LessonRepository
 import com.vurgun.skyfit.core.ui.components.event.AppointmentCardViewData
-import com.vurgun.skyfit.core.data.schedule.domain.model.Lesson
-import com.vurgun.skyfit.core.data.schedule.domain.model.LessonCreationInfo
-import com.vurgun.skyfit.core.data.schedule.domain.model.LessonUpdateInfo
-import com.vurgun.skyfit.core.data.schedule.domain.repository.CourseRepository
-import com.vurgun.skyfit.core.data.persona.domain.model.Member
-import com.vurgun.skyfit.core.data.persona.domain.repository.MemberRepository
-import com.vurgun.skyfit.core.data.persona.domain.repository.TrainerRepository
 import com.vurgun.skyfit.core.ui.components.schedule.SelectableTrainerMenuItemModel
 import kotlinx.coroutines.async
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -25,13 +20,7 @@ import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
-import kotlinx.datetime.DayOfWeek
-import kotlinx.datetime.Instant
-import kotlinx.datetime.LocalDate
-import kotlinx.datetime.LocalDateTime
-import kotlinx.datetime.LocalTime
-import kotlinx.datetime.TimeZone
-import kotlinx.datetime.toInstant
+import kotlinx.datetime.*
 
 data class FacilityEditLessonViewState(
     val lessonId: Int? = null,
@@ -79,17 +68,16 @@ sealed class FacilityLessonEditEffect {
 }
 
 class FacilityLessonEditViewModel(
-    private val userManager: UserManager,
-    private val courseRepository: CourseRepository,
-    private val trainerRepository: TrainerRepository,
-    private val memberRepository: MemberRepository
+    private val userManager: ActiveAccountManager,
+    private val facilityRepository: FacilityRepository,
+    private val lessonRepository: LessonRepository
 ) : ScreenModel {
 
     private val _effect = SingleSharedFlow<FacilityLessonEditEffect>()
     val effect: SharedFlow<FacilityLessonEditEffect> = _effect
 
-    private val facilityUser: FacilityDetail
-        get() = userManager.user.value as? FacilityDetail
+    private val facilityUser: FacilityAccount
+        get() = userManager.user.value as? FacilityAccount
             ?: error("User is not a Facility!")
 
     val gymId: Int
@@ -110,7 +98,7 @@ class FacilityLessonEditViewModel(
     fun loadLesson(lesson: Lesson? = null) {
 
         screenModelScope.launch {
-            val facilityTrainers = trainerRepository.getFacilityTrainers(gymId)
+            val facilityTrainers = facilityRepository.getFacilityTrainers(gymId)
                 .getOrDefault(emptyList()) //TODO: FAIL TO USER
                 .map {
                     SelectableTrainerMenuItemModel(it.trainerId, it.fullName, it.profileImageUrl)
@@ -153,8 +141,8 @@ class FacilityLessonEditViewModel(
     }
 
     private suspend fun getParticipantMembers(lessonId: Int): List<ParticipatedMember> {
-        val participantUserIdList = courseRepository.getLessonParticipants(lessonId = lessonId).getOrDefault(emptyList()).map { it.userId }
-        val memberList = memberRepository.getFacilityMembers(gymId = facilityUser.gymId).getOrDefault(emptyList())
+        val participantUserIdList = lessonRepository.getLessonParticipants(lessonId = lessonId).getOrDefault(emptyList()).map { it.userId }
+        val memberList = facilityRepository.getFacilityMembers(gymId = facilityUser.gymId).getOrDefault(emptyList())
 
         return memberList.map { member ->
             ParticipatedMember(added = member.userId in participantUserIdList, member)
@@ -287,7 +275,7 @@ class FacilityLessonEditViewModel(
             )
         }
 
-        courseRepository.createLesson(info = creationInfo).fold(
+        facilityRepository.createLesson(info = creationInfo).fold(
             onSuccess = {
                 val createdLesson = AppointmentCardViewData(
                     iconId = state.iconId,
@@ -334,7 +322,7 @@ class FacilityLessonEditViewModel(
             participantsIds = participantIds
         )
 
-        courseRepository.updateLesson(info = updateInfo).fold(
+        facilityRepository.updateLesson(info = updateInfo).fold(
             onSuccess = {
 
                 val updatedLesson = AppointmentCardViewData(

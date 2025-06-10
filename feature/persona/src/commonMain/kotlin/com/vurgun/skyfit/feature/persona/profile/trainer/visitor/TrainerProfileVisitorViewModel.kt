@@ -2,13 +2,12 @@ package com.vurgun.skyfit.feature.persona.profile.trainer.visitor
 
 import cafe.adriel.voyager.core.model.ScreenModel
 import cafe.adriel.voyager.core.model.screenModelScope
-import com.vurgun.skyfit.core.data.persona.domain.model.BaseUserDetail
-import com.vurgun.skyfit.core.data.persona.domain.model.TrainerProfile
-import com.vurgun.skyfit.core.data.persona.domain.repository.ProfileRepository
-import com.vurgun.skyfit.core.data.persona.domain.repository.UserManager
-import com.vurgun.skyfit.core.data.schedule.domain.repository.CourseRepository
-import com.vurgun.skyfit.core.data.schedule.data.mapper.LessonSessionItemViewDataMapper
-import com.vurgun.skyfit.core.data.schedule.data.model.LessonSessionItemViewData
+import com.vurgun.skyfit.core.data.v1.data.lesson.mapper.LessonSessionItemViewDataMapper
+import com.vurgun.skyfit.core.data.v1.domain.account.manager.ActiveAccountManager
+import com.vurgun.skyfit.core.data.v1.domain.account.model.Account
+import com.vurgun.skyfit.core.data.v1.domain.lesson.model.LessonSessionItemViewData
+import com.vurgun.skyfit.core.data.v1.domain.trainer.model.TrainerProfile
+import com.vurgun.skyfit.core.data.v1.domain.trainer.repository.TrainerRepository
 import com.vurgun.skyfit.feature.persona.social.SocialPostItemViewData
 import kotlinx.coroutines.async
 import kotlinx.coroutines.flow.MutableSharedFlow
@@ -44,10 +43,9 @@ sealed interface TrainerProfileVisitorEffect {
 }
 
 class TrainerProfileVisitorViewModel(
-    private val userManager: UserManager,
-    private val courseRepository: CourseRepository,
+    private val userManager: ActiveAccountManager,
     private val lessonMapper: LessonSessionItemViewDataMapper,
-    private val profileRepository: ProfileRepository
+    private val trainerRepository: TrainerRepository
 ) : ScreenModel {
 
     private val _uiState = MutableStateFlow<TrainerProfileVisitorUiState>(TrainerProfileVisitorUiState.Loading)
@@ -56,7 +54,7 @@ class TrainerProfileVisitorViewModel(
     private val _effect = MutableSharedFlow<TrainerProfileVisitorEffect>()
     val effect: SharedFlow<TrainerProfileVisitorEffect> = _effect
 
-    private val visitor: BaseUserDetail
+    private val visitor: Account
         get() = userManager.user.value ?: error("Visitor not found")
 
     private var currentTrainerId: Int? = null
@@ -76,7 +74,7 @@ class TrainerProfileVisitorViewModel(
         screenModelScope.launch {
             _uiState.value = TrainerProfileVisitorUiState.Loading
 
-            val profileDeferred = async { profileRepository.getTrainerProfile(trainerId).getOrThrow() }
+            val profileDeferred = async { trainerRepository.getTrainerProfile(trainerId).getOrThrow() }
             val lessonsDeferred = async { fetchLessons(trainerId) }
 
             try {
@@ -102,7 +100,7 @@ class TrainerProfileVisitorViewModel(
     }
 
     private suspend fun fetchLessons(trainerId: Int): List<LessonSessionItemViewData> {
-        return courseRepository.getUpcomingLessonsByTrainer(trainerId)
+        return trainerRepository.getUpcomingLessonsByTrainer(trainerId)
             .map { it.map(lessonMapper::map) }
             .getOrDefault(emptyList())
     }

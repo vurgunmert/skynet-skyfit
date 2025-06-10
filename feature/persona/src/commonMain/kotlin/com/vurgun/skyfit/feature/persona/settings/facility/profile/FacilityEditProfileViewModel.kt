@@ -2,14 +2,15 @@ package com.vurgun.skyfit.feature.persona.settings.facility.profile
 
 import cafe.adriel.voyager.core.model.ScreenModel
 import cafe.adriel.voyager.core.model.screenModelScope
-import com.vurgun.skyfit.core.data.persona.domain.model.FacilityDetail
-import com.vurgun.skyfit.core.data.schedule.domain.model.WorkoutTag
-import com.vurgun.skyfit.core.data.access.domain.repository.AuthRepository
-import com.vurgun.skyfit.core.data.persona.domain.repository.ProfileRepository
-import com.vurgun.skyfit.core.data.persona.domain.repository.UserManager
 import com.vurgun.skyfit.core.data.utility.SingleSharedFlow
 import com.vurgun.skyfit.core.data.utility.emitIn
 import com.vurgun.skyfit.core.data.utility.emitOrNull
+import com.vurgun.skyfit.core.data.v1.domain.account.manager.ActiveAccountManager
+import com.vurgun.skyfit.core.data.v1.domain.account.model.FacilityAccount
+import com.vurgun.skyfit.core.data.v1.domain.facility.repository.FacilityRepository
+import com.vurgun.skyfit.core.data.v1.domain.global.model.ProfileTag
+import com.vurgun.skyfit.core.data.v1.domain.global.repository.GlobalRepository
+import com.vurgun.skyfit.core.network.RemoteImageDataSource
 import kotlinx.coroutines.async
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharedFlow
@@ -29,7 +30,7 @@ sealed class FacilityEditProfileAction {
     data object DeleteBackgroundImage : FacilityEditProfileAction()
     data class UpdateBiography(val value: String) : FacilityEditProfileAction()
     data class UpdateLocation(val value: String) : FacilityEditProfileAction()
-    data class UpdateTags(val tags: List<WorkoutTag>) : FacilityEditProfileAction()
+    data class UpdateTags(val tags: List<ProfileTag>) : FacilityEditProfileAction()
     data object SaveChanges : FacilityEditProfileAction()
 }
 
@@ -39,8 +40,8 @@ data class FacilityEditProfileFormState(
     val backgroundImageUrl: String? = null,
     val backgroundImageBytes: ByteArray? = null,
     val location: String,
-    val profileTags: List<WorkoutTag> = emptyList(),
-    val allTags: List<WorkoutTag> = emptyList(),
+    val profileTags: List<ProfileTag> = emptyList(),
+    val allTags: List<ProfileTag> = emptyList(),
     val isUpdated: Boolean = false
 ) {
     override fun equals(other: Any?): Boolean {
@@ -74,9 +75,10 @@ sealed class FacilityEditProfileEffect {
 }
 
 class FacilityEditProfileViewModel(
-    private val userManager: UserManager,
-    private val profileRepository: ProfileRepository,
-    private val authRepository: AuthRepository,
+    private val userManager: ActiveAccountManager,
+    private val facilityRepository: FacilityRepository,
+    private val globalRepository: GlobalRepository,
+    private val remoteImageDataSource: RemoteImageDataSource,
 ) : ScreenModel {
 
     private val _uiState = MutableStateFlow<FacilityEditProfileUiState>(FacilityEditProfileUiState.Loading)
@@ -85,8 +87,8 @@ class FacilityEditProfileViewModel(
     private val _effect = SingleSharedFlow<FacilityEditProfileEffect>()
     val effect: SharedFlow<FacilityEditProfileEffect> = _effect
 
-    private val facilityUser: FacilityDetail
-        get() = userManager.user.value as? FacilityDetail
+    private val facilityUser: FacilityAccount
+        get() = userManager.user.value as? FacilityAccount
             ?: error("User is not a Facility")
 
     private var initialState: FacilityEditProfileFormState? = null
@@ -109,9 +111,9 @@ class FacilityEditProfileViewModel(
     fun loadData() {
         screenModelScope.launch {
             try {
-                val facilityProfile = profileRepository.getFacilityProfile(facilityUser.gymId).getOrThrow()
-                val backgroundImageDeferred = facilityProfile.backgroundImageUrl?.let { async { profileRepository.fetchImageBytes(it) } }
-                val allTagsDeferred = async { authRepository.getTags().getOrDefault(emptyList()) }
+                val facilityProfile = facilityRepository.getFacilityProfile(facilityUser.gymId).getOrThrow()
+                val backgroundImageDeferred = facilityProfile.backgroundImageUrl?.let { async { remoteImageDataSource.getImageBytes(it) } }
+                val allTagsDeferred = async { globalRepository.getProfileTags().getOrDefault(emptyList()) }
 
                 val formState = FacilityEditProfileFormState(
                     name = facilityProfile.facilityName,
@@ -147,13 +149,13 @@ class FacilityEditProfileViewModel(
             _uiState.value = FacilityEditProfileUiState.Loading
 
             try {
-                profileRepository.updateFacilityProfile(
+                facilityRepository.updateFacilityProfile(
                     gymId = facilityUser.gymId,
                     backgroundImageBytes = form.backgroundImageBytes,
                     name = form.name,
                     address = form.location,
                     bio = form.biography,
-                    profileTags = form.profileTags.map { it.tagId }
+                    profileTags = form.profileTags.mapNotNull { it.id.toIntOrNull() }
                 )
 
                 initialState = form.copy(isUpdated = false)

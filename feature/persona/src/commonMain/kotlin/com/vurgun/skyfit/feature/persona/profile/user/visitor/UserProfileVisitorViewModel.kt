@@ -2,12 +2,11 @@ package com.vurgun.skyfit.feature.persona.profile.user.visitor
 
 import cafe.adriel.voyager.core.model.ScreenModel
 import cafe.adriel.voyager.core.model.screenModelScope
-import com.vurgun.skyfit.core.data.persona.domain.model.UserProfile
-import com.vurgun.skyfit.core.data.persona.domain.repository.ProfileRepository
 import com.vurgun.skyfit.core.data.utility.emitOrNull
-import com.vurgun.skyfit.core.data.schedule.domain.repository.CourseRepository
-import com.vurgun.skyfit.core.data.schedule.data.mapper.LessonSessionItemViewDataMapper
-import com.vurgun.skyfit.core.data.schedule.data.model.LessonSessionItemViewData
+import com.vurgun.skyfit.core.data.v1.data.lesson.mapper.LessonSessionItemViewDataMapper
+import com.vurgun.skyfit.core.data.v1.domain.lesson.model.LessonSessionItemViewData
+import com.vurgun.skyfit.core.data.v1.domain.user.model.UserProfile
+import com.vurgun.skyfit.core.data.v1.domain.user.repository.UserRepository
 import com.vurgun.skyfit.feature.persona.components.viewdata.LifestyleActionItemViewData
 import com.vurgun.skyfit.feature.persona.social.SocialPostItemViewData
 import com.vurgun.skyfit.feature.persona.social.fakePosts
@@ -41,8 +40,7 @@ sealed interface UserProfileVisitorEffect {
 }
 
 class UserProfileVisitorViewModel(
-    private val courseRepository: CourseRepository,
-    private val profileRepository: ProfileRepository,
+    private val userRepository: UserRepository,
     private val lessonMapper: LessonSessionItemViewDataMapper,
 ) : ScreenModel {
 
@@ -62,7 +60,7 @@ class UserProfileVisitorViewModel(
     fun loadProfile(normalUserId: Int) {
         screenModelScope.launch {
             _uiState.value = UserProfileVisitorUiState.Loading
-            val profileDeferred = async { profileRepository.getUserProfile(normalUserId).getOrThrow() }
+            val profileDeferred = async { userRepository.getUserProfile(normalUserId).getOrThrow() }
             val appointmentsDeferred = async { fetchAppointments(normalUserId) }
 
             try {
@@ -96,7 +94,7 @@ class UserProfileVisitorViewModel(
     }
 
     private suspend fun fetchAppointments(normalUserId: Int): List<LessonSessionItemViewData> {
-        return courseRepository.getUpcomingAppointmentsByUser(normalUserId)
+        return userRepository.getUpcomingAppointmentsByUser(normalUserId, limit = 3)
             .map { it.map(lessonMapper::map) }
             .getOrDefault(emptyList())
     }

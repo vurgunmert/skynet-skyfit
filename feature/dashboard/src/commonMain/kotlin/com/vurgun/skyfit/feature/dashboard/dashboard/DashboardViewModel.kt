@@ -2,8 +2,8 @@ package com.vurgun.skyfit.feature.dashboard.dashboard
 
 import cafe.adriel.voyager.core.model.ScreenModel
 import cafe.adriel.voyager.core.model.screenModelScope
-import com.vurgun.skyfit.core.data.persona.domain.model.UserRole
-import com.vurgun.skyfit.core.data.persona.domain.repository.UserManager
+import com.vurgun.skyfit.core.data.v1.domain.global.model.UserRole
+import com.vurgun.skyfit.core.data.v1.domain.account.manager.ActiveAccountManager
 import com.vurgun.skyfit.feature.dashboard.dashboard.DashboardLayoutExpanded.TopBarState
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -11,7 +11,7 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
-internal class DashboardViewModel(userManager: UserManager) : ScreenModel {
+internal class DashboardViewModel(userManager: ActiveAccountManager) : ScreenModel {
 
     val account = userManager.user
     val userRole = userManager.userRole.map { UserRole.fromId(it.typeId) }

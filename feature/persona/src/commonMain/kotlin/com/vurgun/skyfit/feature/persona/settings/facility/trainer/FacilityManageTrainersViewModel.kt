@@ -2,11 +2,11 @@ package com.vurgun.skyfit.feature.persona.settings.facility.trainer
 
 import cafe.adriel.voyager.core.model.ScreenModel
 import cafe.adriel.voyager.core.model.screenModelScope
-import com.vurgun.skyfit.core.data.persona.domain.model.FacilityDetail
-import com.vurgun.skyfit.core.data.shared.domain.model.MissingTokenException
-import com.vurgun.skyfit.core.data.persona.domain.repository.UserManager
-import com.vurgun.skyfit.core.data.persona.domain.model.Trainer
-import com.vurgun.skyfit.core.data.persona.domain.repository.TrainerRepository
+import com.vurgun.skyfit.core.data.v1.domain.account.manager.ActiveAccountManager
+import com.vurgun.skyfit.core.data.v1.domain.account.model.FacilityAccount
+import com.vurgun.skyfit.core.data.v1.domain.facility.repository.FacilityRepository
+import com.vurgun.skyfit.core.data.v1.domain.global.model.MissingTokenException
+import com.vurgun.skyfit.core.data.v1.domain.trainer.model.TrainerPreview
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -14,7 +14,7 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
 internal data class FacilityManageTrainersUiState(
-    val filtered: List<Trainer> = emptyList(),
+    val filtered: List<TrainerPreview> = emptyList(),
     val query: String = "",
     val isLoading: Boolean = false,
     val error: String? = null,
@@ -22,18 +22,18 @@ internal data class FacilityManageTrainersUiState(
 )
 
 internal class FacilityManageTrainersViewModel(
-    private val userManager: UserManager,
-    private val trainerRepository: TrainerRepository
+    private val userManager: ActiveAccountManager,
+    private val facilityRepository: FacilityRepository
 ) : ScreenModel {
 
-    private val facilityUser: FacilityDetail
-        get() = userManager.user.value as? FacilityDetail
+    private val facilityUser: FacilityAccount
+        get() = userManager.user.value as? FacilityAccount
             ?: error("User is not a Facility")
 
     private val _uiState = MutableStateFlow(FacilityManageTrainersUiState())
     val uiState: StateFlow<FacilityManageTrainersUiState> = _uiState.asStateFlow()
 
-    private var cached: List<Trainer> = emptyList()
+    private var cached: List<TrainerPreview> = emptyList()
 
     fun updateSearchQuery(query: String) {
         _uiState.update {
@@ -48,7 +48,7 @@ internal class FacilityManageTrainersViewModel(
         screenModelScope.launch {
             _uiState.update { it.copy(isLoading = true, error = null, unauthorized = false) }
 
-            trainerRepository.getFacilityTrainers(gymId = facilityUser.gymId).fold(
+            facilityRepository.getFacilityTrainers(gymId = facilityUser.gymId).fold(
                 onSuccess = { trainers ->
                     cached = trainers
                     _uiState.update {
@@ -76,7 +76,7 @@ internal class FacilityManageTrainersViewModel(
         screenModelScope.launch {
             _uiState.update { it.copy(isLoading = true, error = null) }
 
-            trainerRepository.deleteFacilityTrainer(gymId = facilityUser.gymId, userId = trainerId).fold(
+            facilityRepository.deleteFacilityTrainer(gymId = facilityUser.gymId, userId = trainerId).fold(
                 onSuccess = {
                     refreshGymTrainers()
                 },
@@ -93,7 +93,7 @@ internal class FacilityManageTrainersViewModel(
         }
     }
 
-    private fun applyQuery(list: List<Trainer>, query: String): List<Trainer> {
+    private fun applyQuery(list: List<TrainerPreview>, query: String): List<TrainerPreview> {
         return if (query.isBlank()) list else {
             list.filter { it.fullName.contains(query, ignoreCase = true) }
         }

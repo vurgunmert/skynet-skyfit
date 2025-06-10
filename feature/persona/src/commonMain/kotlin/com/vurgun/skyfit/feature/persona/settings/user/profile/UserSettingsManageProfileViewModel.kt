@@ -2,14 +2,14 @@ package com.vurgun.skyfit.feature.persona.settings.user.profile
 
 import cafe.adriel.voyager.core.model.ScreenModel
 import cafe.adriel.voyager.core.model.screenModelScope
-import com.vurgun.skyfit.core.data.persona.domain.model.BodyType
-import com.vurgun.skyfit.core.data.shared.domain.model.HeightUnitType
-import com.vurgun.skyfit.core.data.persona.domain.model.UserDetail
-import com.vurgun.skyfit.core.data.shared.domain.model.WeightUnitType
-import com.vurgun.skyfit.core.data.persona.domain.repository.ProfileRepository
-import com.vurgun.skyfit.core.data.persona.domain.repository.UserManager
 import com.vurgun.skyfit.core.data.utility.SingleSharedFlow
 import com.vurgun.skyfit.core.data.utility.emitIn
+import com.vurgun.skyfit.core.data.v1.domain.account.manager.ActiveAccountManager
+import com.vurgun.skyfit.core.data.v1.domain.account.model.UserAccount
+import com.vurgun.skyfit.core.data.v1.domain.global.model.BodyType
+import com.vurgun.skyfit.core.data.v1.domain.global.model.HeightUnitType
+import com.vurgun.skyfit.core.data.v1.domain.global.model.WeightUnitType
+import com.vurgun.skyfit.core.data.v1.domain.user.repository.UserRepository
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -54,8 +54,8 @@ sealed class UserManageProfileEffect {
 }
 
 class UserSettingsManageProfileViewModel(
-    private val userManager: UserManager,
-    private val profileRepository: ProfileRepository
+    private val userManager: ActiveAccountManager,
+    private val userRepository: UserRepository
 ) : ScreenModel {
 
     private val _uiState = MutableStateFlow<UserManageProfileUiState>(UserManageProfileUiState.Loading)
@@ -64,8 +64,8 @@ class UserSettingsManageProfileViewModel(
     private val _effect = SingleSharedFlow<UserManageProfileEffect>()
     val effect: SharedFlow<UserManageProfileEffect> = _effect
 
-    private val user: UserDetail
-        get() = userManager.user.value as? UserDetail
+    private val user: UserAccount
+        get() = userManager.user.value as? UserAccount
             ?: error("❌ current account is not user")
 
     fun onAction(action: UserManageProfileAction) {
@@ -88,7 +88,7 @@ class UserSettingsManageProfileViewModel(
     fun loadData() {
         screenModelScope.launch {
             try {
-                val userProfile = profileRepository.getUserProfile(user.normalUserId).getOrThrow()
+                val userProfile = userRepository.getUserProfile(user.normalUserId).getOrThrow()
 
                 val formState = UserSettingsManageProfileFormState(
                     userName = userProfile.username,

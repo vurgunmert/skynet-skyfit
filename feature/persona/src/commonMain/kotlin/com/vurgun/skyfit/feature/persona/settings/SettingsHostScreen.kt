@@ -1,17 +1,13 @@
 package com.vurgun.skyfit.feature.persona.settings
 
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.remember
-import cafe.adriel.voyager.core.registry.ScreenProvider
 import cafe.adriel.voyager.core.registry.rememberScreen
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.CurrentScreen
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.Navigator
 import cafe.adriel.voyager.navigator.currentOrThrow
-import com.vurgun.skyfit.core.data.persona.domain.model.UserRole
-import com.vurgun.skyfit.core.navigation.replace
+import com.vurgun.skyfit.core.data.v1.domain.global.model.UserRole
 import com.vurgun.skyfit.core.utils.rememberUserRole
 import com.vurgun.skyfit.feature.persona.SettingsHomeEntryPoint
 

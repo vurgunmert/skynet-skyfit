@@ -5,14 +5,12 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.viewinterop.AndroidView
 import app.rive.runtime.kotlin.RiveAnimationView
 import app.rive.runtime.kotlin.core.Fit
 import com.vurgun.skyfit.core.ui.R
-import com.vurgun.skyfit.core.data.persona.domain.model.CharacterType
+import com.vurgun.skyfit.core.data.v1.domain.global.model.CharacterType
 
 @Composable
 fun AndroidRiveAnimatedCharacterComponent(modifier: Modifier = Modifier, characterType: CharacterType) {

@@ -11,7 +11,7 @@ import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.koin.koinScreenModel
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
-import com.vurgun.skyfit.core.data.schedule.domain.model.WorkoutType
+import com.vurgun.skyfit.core.data.v1.data.workout.WorkoutTypeUiData
 import com.vurgun.skyfit.core.ui.components.button.SkyButton
 import com.vurgun.skyfit.core.ui.components.button.SkyButtonSize
 import com.vurgun.skyfit.core.ui.components.icon.SkyIcon
@@ -35,7 +35,7 @@ import skyfit.core.ui.generated.resources.*
 
 class CalendarWorkoutEditFormScreen(
     val date: LocalDate,
-    val workoutType: WorkoutType? = null
+    val workoutType: WorkoutTypeUiData? = null
 ) : Screen {
 
     @Composable

@@ -2,13 +2,13 @@ package com.vurgun.skyfit.feature.schedule.screen.appointments
 
 import cafe.adriel.voyager.core.model.ScreenModel
 import cafe.adriel.voyager.core.model.screenModelScope
-import com.vurgun.skyfit.core.data.persona.domain.model.TrainerProfile
-import com.vurgun.skyfit.core.data.persona.domain.model.UserDetail
-import com.vurgun.skyfit.core.data.persona.domain.repository.UserManager
+import com.vurgun.skyfit.core.data.v1.domain.trainer.model.TrainerProfile
+import com.vurgun.skyfit.core.data.v1.domain.account.model.UserAccount
+import com.vurgun.skyfit.core.data.v1.domain.account.manager.ActiveAccountManager
 import com.vurgun.skyfit.core.data.utility.SingleSharedFlow
 import com.vurgun.skyfit.core.data.utility.emitIn
-import com.vurgun.skyfit.core.data.schedule.domain.model.Appointment
-import com.vurgun.skyfit.core.data.schedule.domain.repository.CourseRepository
+import com.vurgun.skyfit.core.data.v1.domain.user.model.Appointment
+import com.vurgun.skyfit.core.data.v1.domain.user.repository.UserRepository
 import com.vurgun.skyfit.feature.schedule.screen.appointments.UserAppointmentListingTab.Active
 import com.vurgun.skyfit.feature.schedule.screen.appointments.UserAppointmentListingTab.Cancelled
 import com.vurgun.skyfit.feature.schedule.screen.appointments.UserAppointmentListingTab.Completed
@@ -66,8 +66,8 @@ sealed class UserAppointmentListingUiState {
 }
 
 class UserAppointmentListingViewModel(
-    private val userManager: UserManager,
-    private val courseRepository: CourseRepository
+    private val userManager: ActiveAccountManager,
+    private val userRepository: UserRepository
 ) : ScreenModel {
 
     private val _uiState = MutableStateFlow<UserAppointmentListingUiState>(UserAppointmentListingUiState.Loading)
@@ -76,8 +76,8 @@ class UserAppointmentListingViewModel(
     private val _effect = SingleSharedFlow<UserAppointmentListingEffect>()
     val effect: SharedFlow<UserAppointmentListingEffect> = _effect
 
-    private val user: UserDetail
-        get() = userManager.user.value as? UserDetail
+    private val user: UserAccount
+        get() = userManager.user.value as? UserAccount
             ?: error("❌ current account is not user")
     private val allTabs: List<UserAppointmentListingTab> = listOf(Active, Cancelled, Completed)
 
@@ -142,7 +142,7 @@ class UserAppointmentListingViewModel(
     private fun refreshData() {
         screenModelScope.launch {
             try {
-                val result = courseRepository.getAppointmentsByUser(user.normalUserId).getOrThrow()
+                val result = userRepository.getAppointmentsByUser(user.normalUserId).getOrThrow()
                 val currentState = _uiState.value as? UserAppointmentListingUiState.Content
                 val currentTab = currentState?.activeTab ?: Active
                 val currentFilter = currentState?.currentFilter ?: UserAppointmentListingFilter()
@@ -176,7 +176,7 @@ class UserAppointmentListingViewModel(
     private fun cancelAppointment(appointment: Appointment) {
         screenModelScope.launch {
             try {
-                courseRepository.cancelAppointment(appointment.lessonId, appointment.lpId).getOrThrow()
+                userRepository.cancelAppointment(appointment.lessonId, appointment.lpId).getOrThrow()
                 refreshData()
             } catch (e: Exception) {
                 _effect.emitIn(screenModelScope, UserAppointmentListingEffect.ShowCancelError(e.message ?: "Randevu iptal hatası"))

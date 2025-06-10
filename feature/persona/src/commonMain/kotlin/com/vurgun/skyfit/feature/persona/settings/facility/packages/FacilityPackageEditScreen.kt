@@ -10,7 +10,7 @@ import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.koin.koinScreenModel
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
-import com.vurgun.skyfit.core.data.persona.data.model.FacilityLessonPackageDTO
+import com.vurgun.skyfit.core.data.v1.data.facility.model.FacilityLessonPackageDTO
 import com.vurgun.skyfit.core.ui.components.button.SkyButton
 import com.vurgun.skyfit.core.ui.components.button.SkyButtonSize
 import com.vurgun.skyfit.core.ui.components.button.SkyButtonVariant
@@ -107,11 +107,11 @@ private fun CreateServicePackageScreen_Content(
                 onValueChange = { onAction(FacilityPackageEditAction.OnLessonCountChanged(it)) },
             )
 
-            SkyFormSelectWorkoutTag(
+            SkyFormSelectWorkoutCategory(
                 title = stringResource(Res.string.course_contents_label),
                 hint = stringResource(Res.string.course_contents_input_hint),
-                availableTags = content.tags,
-                selectedTags = formState.tags,
+                availableTags = content.categories,
+                selectedTags = formState.categories,
                 onTagsSelected = { onAction(FacilityPackageEditAction.OnServicesChanged(it)) },
                 modifier = Modifier.fillMaxWidth(),
             )

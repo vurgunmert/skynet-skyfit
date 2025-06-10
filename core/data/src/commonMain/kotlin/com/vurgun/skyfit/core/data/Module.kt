@@ -1,39 +1,39 @@
 package com.vurgun.skyfit.core.data
 
-import com.vurgun.skyfit.core.data.access.data.repository.AppConfigRepositoryImpl
-import com.vurgun.skyfit.core.data.access.data.repository.AuthApiService
-import com.vurgun.skyfit.core.data.access.data.repository.AuthRepositoryImpl
-import com.vurgun.skyfit.core.data.access.domain.repository.AppConfigRepository
-import com.vurgun.skyfit.core.data.access.domain.repository.AuthRepository
-import com.vurgun.skyfit.core.data.connect.domain.repository.ChatbotApiUseCase
-import com.vurgun.skyfit.core.data.connect.domain.repository.ChatbotRepository
-import com.vurgun.skyfit.core.data.onboarding.data.repository.OnboardingRepositoryImpl
-import com.vurgun.skyfit.core.data.onboarding.data.service.OnboardingApiService
-import com.vurgun.skyfit.core.data.onboarding.domain.repository.OnboardingRepository
-import com.vurgun.skyfit.core.data.persona.data.repository.ProfileRepositoryImpl
-import com.vurgun.skyfit.core.data.persona.data.repository.SettingsRepositoryImpl
-import com.vurgun.skyfit.core.data.persona.data.repository.UserManagerImpl
-import com.vurgun.skyfit.core.data.persona.data.repository.UserRepositoryImpl
-import com.vurgun.skyfit.core.data.persona.data.service.ProfileApiService
-import com.vurgun.skyfit.core.data.persona.data.service.SettingsApiService
-import com.vurgun.skyfit.core.data.persona.data.service.UserApiService
-import com.vurgun.skyfit.core.data.persona.domain.repository.FacilityRepository
-import com.vurgun.skyfit.core.data.persona.domain.repository.MemberRepository
-import com.vurgun.skyfit.core.data.persona.domain.repository.ProfileRepository
-import com.vurgun.skyfit.core.data.persona.domain.repository.TrainerRepository
-import com.vurgun.skyfit.core.data.persona.domain.repository.UserManager
-import com.vurgun.skyfit.core.data.persona.domain.repository.UserRepository
-import com.vurgun.skyfit.core.data.schedule.data.mapper.LessonSessionItemViewDataMapper
-import com.vurgun.skyfit.core.data.schedule.data.repository.CourseRepositoryImpl
-import com.vurgun.skyfit.core.data.schedule.data.repository.UserCalendarRepositoryImpl
-import com.vurgun.skyfit.core.data.schedule.data.service.CourseApiService
-import com.vurgun.skyfit.core.data.schedule.data.service.UserCalendarApiService
-import com.vurgun.skyfit.core.data.schedule.domain.repository.CourseRepository
-import com.vurgun.skyfit.core.data.schedule.domain.repository.UserCalendarRepository
 import com.vurgun.skyfit.core.data.storage.DataStoreStorage
 import com.vurgun.skyfit.core.data.storage.Storage
 import com.vurgun.skyfit.core.data.storage.TokenManager
-import com.vurgun.skyfit.core.data.wellbeing.domain.repository.PostureAnalysisRepository
+import com.vurgun.skyfit.core.data.v1.data.account.repository.AccountManagerImpl
+import com.vurgun.skyfit.core.data.v1.data.account.repository.AccountRepositoryImpl
+import com.vurgun.skyfit.core.data.v1.data.account.service.AccountApiService
+import com.vurgun.skyfit.core.data.v1.data.auth.repository.AuthRepositoryImpl
+import com.vurgun.skyfit.core.data.v1.data.auth.service.AuthApiService
+import com.vurgun.skyfit.core.data.v1.data.chatbot.ChatbotRepositoryImpl
+import com.vurgun.skyfit.core.data.v1.data.config.repository.AppConfigRepositoryImpl
+import com.vurgun.skyfit.core.data.v1.data.explore.ExploreRepositoryImpl
+import com.vurgun.skyfit.core.data.v1.data.facility.repository.FacilityRepositoryImpl
+import com.vurgun.skyfit.core.data.v1.data.facility.service.FacilityApiService
+import com.vurgun.skyfit.core.data.v1.data.lesson.mapper.LessonSessionItemViewDataMapper
+import com.vurgun.skyfit.core.data.v1.data.lesson.repository.LessonRepositoryImpl
+import com.vurgun.skyfit.core.data.v1.data.lesson.service.LessonApiService
+import com.vurgun.skyfit.core.data.v1.data.trainer.TrainerApiService
+import com.vurgun.skyfit.core.data.v1.data.trainer.repository.TrainerRepositoryImpl
+import com.vurgun.skyfit.core.data.v1.data.user.repository.UserRepositoryImpl
+import com.vurgun.skyfit.core.data.v1.data.user.service.UserApiService
+import com.vurgun.skyfit.core.data.v1.data.workout.repository.WorkoutRepositoryImpl
+import com.vurgun.skyfit.core.data.v1.data.workout.service.WorkoutApiService
+import com.vurgun.skyfit.core.data.v1.domain.account.manager.ActiveAccountManager
+import com.vurgun.skyfit.core.data.v1.domain.account.repository.AccountRepository
+import com.vurgun.skyfit.core.data.v1.domain.auth.repository.AuthRepository
+import com.vurgun.skyfit.core.data.v1.domain.chatbot.ChatbotApiUseCase
+import com.vurgun.skyfit.core.data.v1.domain.config.AppConfigRepository
+import com.vurgun.skyfit.core.data.v1.domain.explore.ExploreRepository
+import com.vurgun.skyfit.core.data.v1.domain.facility.repository.FacilityRepository
+import com.vurgun.skyfit.core.data.v1.domain.lesson.repository.LessonRepository
+import com.vurgun.skyfit.core.data.v1.domain.posture.repository.PostureAnalysisRepository
+import com.vurgun.skyfit.core.data.v1.domain.trainer.repository.TrainerRepository
+import com.vurgun.skyfit.core.data.v1.domain.user.repository.UserRepository
+import com.vurgun.skyfit.core.data.v1.domain.workout.repository.WorkoutRepository
 import com.vurgun.skyfit.core.network.dataNetworkModule
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -47,44 +47,54 @@ import org.koin.dsl.module
 val dataCoreModule = module {
     includes(platformModule, dataNetworkModule)
 
+    //Core
     single(named("app-scope-coroutine")) {
         CoroutineScope(SupervisorJob() + Dispatchers.Default)
     }
-
     singleOf(::DataStoreStorage) { bind<Storage>() }
-
     single { TokenManager(get(), get(named("app-scope-coroutine"))) }
 
-    single<UserApiService> { UserApiService(get()) }
-    single<ProfileApiService> { ProfileApiService(get()) }
+    //Config
+    single<AppConfigRepository> { AppConfigRepositoryImpl() }
 
-    single<UserRepository> { UserRepositoryImpl(get(), get(), get(), get()) }
-
-    single<UserManager> { UserManagerImpl(get(named("app-scope-coroutine")), get(), get(), get()) }
-
-    single<ProfileRepository> { ProfileRepositoryImpl(get(), get(), get(), get()) }
-
+    //Auth
     single { AuthApiService(get()) }
     single<AuthRepository> { AuthRepositoryImpl(get(), get(), get(), get()) }
 
-    single<AppConfigRepository> { AppConfigRepositoryImpl() }
-    single { PostureAnalysisRepository() }
-    single<ChatbotApiUseCase> { ChatbotRepository() }
-    single { OnboardingApiService(get()) }
-    single<OnboardingRepository> { OnboardingRepositoryImpl(get(), get(), get()) }
+    //Account
+    single<AccountApiService> { AccountApiService(get()) }
+    single<AccountRepository> { AccountRepositoryImpl(get(), get(), get(), get()) }
+    single<ActiveAccountManager> { AccountManagerImpl(get(named("app-scope-coroutine")), get(), get(), get()) }
 
-    single { SettingsApiService(get()) }
-    single { SettingsRepositoryImpl(get(), get(), get()) }
+    //User
+    single { UserApiService(get()) }
+    single<UserRepository> { UserRepositoryImpl(get(), get(), get()) }
 
-    single<MemberRepository> { get<SettingsRepositoryImpl>() }
-    single<TrainerRepository> { get<SettingsRepositoryImpl>() }
-    single<FacilityRepository> { get<SettingsRepositoryImpl>() }
+    //Trainer
+    single { TrainerApiService(get()) }
+    single<TrainerRepository> { TrainerRepositoryImpl(get(), get(), get()) }
 
-    single<CourseApiService> { CourseApiService(get()) }
+    //Facility
+    single<FacilityApiService> { FacilityApiService(get()) }
+    single<FacilityRepository> { FacilityRepositoryImpl(get(), get(), get()) }
+
+    //Workout
+    single<WorkoutApiService> { WorkoutApiService(get()) }
+    single<WorkoutRepository> { WorkoutRepositoryImpl(get(), get(), get()) }
+
+    //Lesson
+    single<LessonApiService> { LessonApiService(get()) }
+    single<LessonRepository> { LessonRepositoryImpl(get(), get(), get()) }
     single<LessonSessionItemViewDataMapper> { LessonSessionItemViewDataMapper() }
-    single<CourseRepository> { CourseRepositoryImpl(get(), get(), get()) }
-    single { UserCalendarApiService(get()) }
-    single<UserCalendarRepository> { UserCalendarRepositoryImpl(get(), get(), get()) }
+
+    //Posture Analysis
+    single { PostureAnalysisRepository() }
+
+    //Chatbot
+    single<ChatbotApiUseCase> { ChatbotRepositoryImpl() }
+
+    //Explore
+    single<ExploreRepository> { ExploreRepositoryImpl(get(), get(), get()) }
 }
 
 internal expect val platformModule: Module

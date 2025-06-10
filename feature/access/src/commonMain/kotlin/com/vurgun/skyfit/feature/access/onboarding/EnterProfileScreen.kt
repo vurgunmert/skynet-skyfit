@@ -24,7 +24,7 @@ import androidx.compose.ui.unit.dp
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
-import com.vurgun.skyfit.core.data.persona.domain.model.UserRole
+import com.vurgun.skyfit.core.data.v1.domain.global.model.UserRole
 import com.vurgun.skyfit.core.navigation.SharedScreen
 import com.vurgun.skyfit.core.navigation.replaceAll
 import com.vurgun.skyfit.core.ui.components.dialog.ErrorDialog
@@ -36,7 +36,6 @@ import com.vurgun.skyfit.core.ui.components.special.ButtonVariant
 import com.vurgun.skyfit.core.ui.components.special.SkyFitButtonComponent
 import com.vurgun.skyfit.core.ui.components.special.SkyFitMobileScaffold
 import com.vurgun.skyfit.core.ui.components.text.MultiLineInputText
-import com.vurgun.skyfit.core.ui.components.text.SingleLineInputText
 import com.vurgun.skyfit.core.ui.utils.KeyboardState
 import com.vurgun.skyfit.core.ui.utils.keyboardAsState
 import com.vurgun.skyfit.feature.onboarding.component.OnboardingStepProgressComponent
@@ -45,9 +44,7 @@ import org.jetbrains.compose.resources.stringResource
 import skyfit.core.ui.generated.resources.Res
 import skyfit.core.ui.generated.resources.continue_action
 import skyfit.core.ui.generated.resources.ic_pencil
-import skyfit.core.ui.generated.resources.ic_plus
 import skyfit.core.ui.generated.resources.mandatory_biography_label
-import skyfit.core.ui.generated.resources.mandatory_workplace_name_label
 import skyfit.core.ui.generated.resources.onboarding_trainer_profile_message
 import skyfit.core.ui.generated.resources.onboarding_trainer_profile_title
 import skyfit.core.ui.generated.resources.user_biography_hint
@@ -55,7 +52,6 @@ import skyfit.core.ui.generated.resources.user_first_name_hint
 import skyfit.core.ui.generated.resources.user_first_name_mandatory_label
 import skyfit.core.ui.generated.resources.user_last_name_hint
 import skyfit.core.ui.generated.resources.user_last_name_mandatory_label
-import skyfit.core.ui.generated.resources.user_workplace_mandatory_label
 
 internal class EnterProfileScreen(private val viewModel: OnboardingViewModel) : Screen {
 

@@ -1,25 +1,11 @@
 package com.vurgun.skyfit.feature.schedule.screen.lessons
 
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.heightIn
-import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
@@ -28,26 +14,21 @@ import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.koin.koinScreenModel
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
+import com.vurgun.skyfit.core.data.v1.domain.lesson.model.LessonSessionItemViewData
 import com.vurgun.skyfit.core.ui.components.button.SecondaryMediumButton
 import com.vurgun.skyfit.core.ui.components.event.EditableLessonEventItem
 import com.vurgun.skyfit.core.ui.components.loader.FullScreenLoaderContent
+import com.vurgun.skyfit.core.ui.components.schedule.LessonEventItemPopupMenu
+import com.vurgun.skyfit.core.ui.components.schedule.weekly.CalendarWeekDaySelector
+import com.vurgun.skyfit.core.ui.components.schedule.weekly.rememberCalendarWeekDaySelectorController
+import com.vurgun.skyfit.core.ui.components.schedule.weekly.rememberWeekDaySelectorState
 import com.vurgun.skyfit.core.ui.components.special.SkyFitMobileScaffold
 import com.vurgun.skyfit.core.ui.components.special.SkyFitScreenHeader
 import com.vurgun.skyfit.core.ui.styling.SkyFitColor
 import com.vurgun.skyfit.core.ui.styling.SkyFitTypography
 import com.vurgun.skyfit.core.ui.utils.CollectEffect
-import com.vurgun.skyfit.core.data.schedule.data.model.LessonSessionItemViewData
-import com.vurgun.skyfit.core.ui.components.schedule.weekly.CalendarWeekDaySelector
-import com.vurgun.skyfit.core.ui.components.schedule.weekly.rememberCalendarWeekDaySelectorController
-import com.vurgun.skyfit.core.ui.components.schedule.weekly.rememberWeekDaySelectorState
-import com.vurgun.skyfit.core.ui.components.schedule.LessonEventItemPopupMenu
 import org.jetbrains.compose.resources.stringResource
-import skyfit.core.ui.generated.resources.Res
-import skyfit.core.ui.generated.resources.facility_no_lesson_on_selected_date_message
-import skyfit.core.ui.generated.resources.ic_plus
-import skyfit.core.ui.generated.resources.lesson_add_action
-import skyfit.core.ui.generated.resources.lessons_label
-import skyfit.core.ui.generated.resources.status_out_of_use
+import skyfit.core.ui.generated.resources.*
 
 class FacilityLessonListingScreen : Screen {
 

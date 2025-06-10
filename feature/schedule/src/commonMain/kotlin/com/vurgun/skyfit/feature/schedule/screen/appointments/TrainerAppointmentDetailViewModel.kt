@@ -2,10 +2,11 @@ package com.vurgun.skyfit.feature.schedule.screen.appointments
 
 import cafe.adriel.voyager.core.model.ScreenModel
 import cafe.adriel.voyager.core.model.screenModelScope
-import com.vurgun.skyfit.core.data.schedule.domain.model.LessonParticipant
 import com.vurgun.skyfit.core.data.utility.emitIn
-import com.vurgun.skyfit.core.data.schedule.domain.model.ScheduledLessonDetail
-import com.vurgun.skyfit.core.data.schedule.domain.repository.CourseRepository
+import com.vurgun.skyfit.core.data.v1.domain.lesson.model.LessonParticipant
+import com.vurgun.skyfit.core.data.v1.domain.lesson.model.ScheduledLessonDetail
+import com.vurgun.skyfit.core.data.v1.domain.lesson.repository.LessonRepository
+import com.vurgun.skyfit.core.data.v1.domain.trainer.repository.TrainerRepository
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharedFlow
@@ -31,7 +32,8 @@ sealed interface TrainerAppointmentDetailEffect {
 }
 
 class TrainerAppointmentDetailViewModel(
-    private val courseRepository: CourseRepository
+    private val trainerRepository: TrainerRepository,
+    private val lessonRepository: LessonRepository
 ) : ScreenModel {
 
     private val _uiState = MutableStateFlow<TrainerAppointmentDetailUiState>(TrainerAppointmentDetailUiState.Loading)
@@ -53,9 +55,9 @@ class TrainerAppointmentDetailViewModel(
     fun loadAppointment(lessonId: Int) {
         screenModelScope.launch {
             try {
-                val lesson = courseRepository.getScheduledLessonDetail(lessonId).getOrThrow()
+                val lesson = lessonRepository.getScheduledLessonDetail(lessonId).getOrThrow()
 
-                val participants = courseRepository.getLessonParticipants(lessonId).getOrDefault(emptyList())
+                val participants = lessonRepository.getLessonParticipants(lessonId).getOrDefault(emptyList())
 
                 _uiState.value = TrainerAppointmentDetailUiState.Content(lesson, participants)
             } catch (e: Exception) {
@@ -80,7 +82,7 @@ class TrainerAppointmentDetailViewModel(
 
         screenModelScope.launch {
             try {
-                courseRepository.evaluateParticipants(participant.lpId, updatedParticipants)
+                trainerRepository.evaluateParticipants(participant.lpId, updatedParticipants)
                 _uiState.value = currentState.copy(participants = updatedParticipants)
             } catch (e: Exception) {
                 e.printStackTrace()

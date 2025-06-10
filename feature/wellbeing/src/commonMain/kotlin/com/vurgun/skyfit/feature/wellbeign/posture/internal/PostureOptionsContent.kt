@@ -23,7 +23,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import com.vurgun.skyfit.core.data.wellbeing.data.model.PostureType
+import com.vurgun.skyfit.core.data.v1.data.posture.model.PostureTypeDTO
 import com.vurgun.skyfit.core.ui.components.box.rememberAnimatedBorderBrush
 import com.vurgun.skyfit.core.ui.components.text.BodyMediumSemiboldText
 import com.vurgun.skyfit.core.ui.styling.LocalPadding
@@ -78,10 +78,10 @@ fun PostureOptionsContent(
 
         postureStates.forEach { posture ->
             val (res, label) = when (posture.type) {
-                PostureType.Front -> Res.drawable.posture_option_view_front to Res.string.posture_view_front
-                PostureType.Back -> Res.drawable.posture_option_view_back to Res.string.posture_view_back
-                PostureType.Left -> Res.drawable.posture_option_view_left to Res.string.posture_view_left
-                PostureType.Right -> Res.drawable.posture_option_view_right to Res.string.posture_view_right
+                PostureTypeDTO.Front -> Res.drawable.posture_option_view_front to Res.string.posture_view_front
+                PostureTypeDTO.Back -> Res.drawable.posture_option_view_back to Res.string.posture_view_back
+                PostureTypeDTO.Left -> Res.drawable.posture_option_view_left to Res.string.posture_view_left
+                PostureTypeDTO.Right -> Res.drawable.posture_option_view_right to Res.string.posture_view_right
             }
 
             PostureOptionCard(

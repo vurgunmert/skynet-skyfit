@@ -36,8 +36,8 @@ import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.dp
-import com.vurgun.skyfit.core.data.wellbeing.data.model.PostureType
-import com.vurgun.skyfit.core.data.wellbeing.domain.model.PostureFinding
+import com.vurgun.skyfit.core.data.v1.data.posture.model.PostureTypeDTO
+import com.vurgun.skyfit.core.data.v1.domain.posture.model.PostureFinding
 import com.vurgun.skyfit.core.ui.components.button.PrimaryIconButton
 import com.vurgun.skyfit.core.ui.components.button.SecondaryIconButton
 import com.vurgun.skyfit.core.ui.components.chip.SecondaryPillChip
@@ -64,7 +64,7 @@ fun PostureReportContent(
     onAction: (PostureAnalysisAction) -> Unit
 ) {
     var isReportVisible: Boolean by remember { mutableStateOf(true) }
-    var selectedType: PostureType by remember { mutableStateOf(PostureType.Front) }
+    var selectedType: PostureTypeDTO by remember { mutableStateOf(PostureTypeDTO.Front) }
     val selectedImageBitmap by remember(content.optionStates, selectedType) {
         derivedStateOf {
             content.optionStates.firstOrNull { it.type == selectedType }?.bitmap
@@ -131,21 +131,21 @@ fun PostureReportContent(
                 ) {
                     SecondaryPillChip(
                         text = stringResource(Res.string.posture_view_front),
-                        selected = selectedType == PostureType.Front,
-                        onClick = { selectedType = PostureType.Front }
+                        selected = selectedType == PostureTypeDTO.Front,
+                        onClick = { selectedType = PostureTypeDTO.Front }
                     )
                     SecondaryPillChip(
                         text = stringResource(Res.string.posture_view_back),
-                        selected = selectedType == PostureType.Back,
-                        onClick = { selectedType = PostureType.Back })
+                        selected = selectedType == PostureTypeDTO.Back,
+                        onClick = { selectedType = PostureTypeDTO.Back })
                     SecondaryPillChip(
                         text = stringResource(Res.string.posture_view_left),
-                        selected = selectedType == PostureType.Left,
-                        onClick = { selectedType = PostureType.Left })
+                        selected = selectedType == PostureTypeDTO.Left,
+                        onClick = { selectedType = PostureTypeDTO.Left })
                     SecondaryPillChip(
                         text = stringResource(Res.string.posture_view_right),
-                        selected = selectedType == PostureType.Right,
-                        onClick = { selectedType = PostureType.Right })
+                        selected = selectedType == PostureTypeDTO.Right,
+                        onClick = { selectedType = PostureTypeDTO.Right })
                 }
 
                 PostureOptionFindings(selectedType, content.optionStates)
@@ -159,17 +159,17 @@ fun PostureReportContent(
 
 @Composable
 private fun PostureOptionFindings(
-    selectedType: PostureType,
+    selectedType: PostureTypeDTO,
     results: List<PostureOptionState>
 ) {
     val selectedPosture = results.firstOrNull { it.type == selectedType }
 
     selectedPosture?.findings?.let { findings ->
         val titleRes = when (selectedType) {
-            PostureType.Front -> Res.string.posture_view_front
-            PostureType.Back -> Res.string.posture_view_back
-            PostureType.Left -> Res.string.posture_view_left
-            PostureType.Right -> Res.string.posture_view_right
+            PostureTypeDTO.Front -> Res.string.posture_view_front
+            PostureTypeDTO.Back -> Res.string.posture_view_back
+            PostureTypeDTO.Left -> Res.string.posture_view_left
+            PostureTypeDTO.Right -> Res.string.posture_view_right
         }
 
         Column(

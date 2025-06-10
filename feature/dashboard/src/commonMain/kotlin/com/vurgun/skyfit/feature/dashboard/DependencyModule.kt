@@ -11,9 +11,9 @@ import org.koin.dsl.module
 val featureDashboardModule = module {
     includes(dataCoreModule)
 
-    factory { UserHomeViewModel(get(), get(), get(),get()) }
-    factory { FacilityHomeViewModel(get(), get(), get(), get()) }
-    factory { TrainerHomeViewModel(get(), get(), get(), get()) }
+    factory { UserHomeViewModel(get(), get(), get()) }
+    factory { FacilityHomeViewModel(get(), get(), get()) }
+    factory { TrainerHomeViewModel(get(), get(), get()) }
 
     factory { ExploreViewModel(get()) }
 

@@ -17,7 +17,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import com.vurgun.skyfit.core.data.persona.domain.model.UserAccountType
+import com.vurgun.skyfit.core.data.v1.domain.account.model.AccountType
 import com.vurgun.skyfit.core.ui.components.image.CircleNetworkImage
 import com.vurgun.skyfit.core.ui.components.menu.MobileSettingsMenuItemDividerComponent
 import com.vurgun.skyfit.core.ui.components.text.BodyMediumSemiboldText
@@ -28,7 +28,7 @@ import skyfit.core.ui.generated.resources.ic_checkbox_fill
 
 @Composable
 internal fun SettingsHomeAccountTypeItem(
-    item: UserAccountType,
+    item: AccountType,
     selected: Boolean,
     modifier: Modifier = Modifier
 ) {
@@ -60,7 +60,7 @@ internal fun SettingsHomeAccountTypeItem(
 
 @Composable
 internal fun SettingsHomeAccountTypesColumn(
-    accounts: List<UserAccountType>,
+    accounts: List<AccountType>,
     selectedTypeId: Int,
     onSelectType: (Int) -> Unit
 ) {

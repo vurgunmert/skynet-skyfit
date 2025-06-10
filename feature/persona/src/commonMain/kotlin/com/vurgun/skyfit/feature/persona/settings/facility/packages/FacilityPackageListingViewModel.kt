@@ -2,10 +2,10 @@ package com.vurgun.skyfit.feature.persona.settings.facility.packages
 
 import cafe.adriel.voyager.core.model.ScreenModel
 import cafe.adriel.voyager.core.model.screenModelScope
-import com.vurgun.skyfit.core.data.persona.data.model.FacilityLessonPackageDTO
-import com.vurgun.skyfit.core.data.persona.domain.model.FacilityDetail
-import com.vurgun.skyfit.core.data.persona.domain.repository.FacilityRepository
-import com.vurgun.skyfit.core.data.persona.domain.repository.UserManager
+import com.vurgun.skyfit.core.data.v1.data.facility.model.FacilityLessonPackageDTO
+import com.vurgun.skyfit.core.data.v1.domain.account.model.FacilityAccount
+import com.vurgun.skyfit.core.data.v1.domain.facility.repository.FacilityRepository
+import com.vurgun.skyfit.core.data.v1.domain.account.manager.ActiveAccountManager
 import com.vurgun.skyfit.core.data.utility.SingleSharedFlow
 import com.vurgun.skyfit.core.data.utility.UiStateDelegate
 import com.vurgun.skyfit.core.data.utility.emitIn
@@ -37,12 +37,12 @@ sealed class FacilityPackageListingEffect {
 }
 
 class FacilityPackageListingViewModel(
-    private val userManager: UserManager,
+    private val userManager: ActiveAccountManager,
     private val facilityRepository: FacilityRepository
 ) : ScreenModel {
 
-    private val facilityUser: FacilityDetail
-        get() = userManager.user.value as? FacilityDetail
+    private val facilityUser: FacilityAccount
+        get() = userManager.user.value as? FacilityAccount
             ?: error("User is not a Facility!")
 
 

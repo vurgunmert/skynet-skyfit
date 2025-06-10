@@ -2,12 +2,12 @@ package com.vurgun.skyfit.feature.persona.profile.trainer.schedule
 
 import cafe.adriel.voyager.core.model.ScreenModel
 import cafe.adriel.voyager.core.model.screenModelScope
-import com.vurgun.skyfit.core.data.persona.domain.model.TrainerProfile
-import com.vurgun.skyfit.core.data.persona.domain.repository.ProfileRepository
 import com.vurgun.skyfit.core.data.utility.now
-import com.vurgun.skyfit.core.data.schedule.domain.repository.CourseRepository
-import com.vurgun.skyfit.core.data.schedule.data.mapper.LessonSessionItemViewDataMapper
-import com.vurgun.skyfit.core.data.schedule.data.model.LessonSessionItemViewData
+import com.vurgun.skyfit.core.data.v1.data.lesson.mapper.LessonSessionItemViewDataMapper
+import com.vurgun.skyfit.core.data.v1.domain.lesson.model.LessonSessionItemViewData
+import com.vurgun.skyfit.core.data.v1.domain.trainer.model.TrainerProfile
+import com.vurgun.skyfit.core.data.v1.domain.trainer.repository.TrainerRepository
+import com.vurgun.skyfit.core.data.v1.domain.user.repository.UserRepository
 import kotlinx.coroutines.async
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -36,8 +36,8 @@ sealed interface TrainerProfileScheduleEffect {
 }
 
 class TrainerProfileScheduleViewModel(
-    private val profileRepository: ProfileRepository,
-    private val courseRepository: CourseRepository,
+    private val trainerRepository: TrainerRepository,
+    private val userRepository: UserRepository,
     private val lessonMapper: LessonSessionItemViewDataMapper
 ) : ScreenModel {
 
@@ -77,7 +77,7 @@ class TrainerProfileScheduleViewModel(
         screenModelScope.launch {
             _uiState.value = TrainerProfileScheduleUiState.Loading
 
-            val profileDeferred = async { profileRepository.getTrainerProfile(trainerId).getOrThrow() }
+            val profileDeferred = async { trainerRepository.getTrainerProfile(trainerId).getOrThrow() }
             val lessonsDeferred = async { fetchLessons(trainerId, selectedStartDate, selectedEndDate) }
 
             try {
@@ -108,7 +108,7 @@ class TrainerProfileScheduleViewModel(
 
         screenModelScope.launch {
             try {
-                val response = courseRepository.bookAppointment(lessonId = selectedLesson.lessonId).getOrThrow()
+                val response = userRepository.bookAppointment(lessonId = selectedLesson.lessonId).getOrThrow()
 
                 _lessons.value = _lessons.value.map { it.copy(selected = false) }
                 _isBookingEnabled.value = false
@@ -147,7 +147,7 @@ class TrainerProfileScheduleViewModel(
         startDate: LocalDate = LocalDate.now(),
         endDate: LocalDate? = null
     ): List<LessonSessionItemViewData> {
-        return courseRepository.getLessonsByTrainer(trainerId, startDate, endDate ?: startDate)
+        return trainerRepository.getLessonsByTrainer(trainerId, startDate, endDate ?: startDate)
             .map { it.map(lessonMapper::map) }
             .getOrDefault(emptyList())
     }

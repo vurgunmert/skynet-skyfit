@@ -39,7 +39,7 @@ import com.vurgun.skyfit.core.ui.components.special.SkyFitScreenHeader
 import com.vurgun.skyfit.core.ui.components.special.SkyFitSearchTextInputComponent
 import com.vurgun.skyfit.core.ui.styling.SkyFitColor
 import com.vurgun.skyfit.core.ui.styling.SkyFitTypography
-import com.vurgun.skyfit.core.data.persona.domain.model.Trainer
+import com.vurgun.skyfit.core.data.v1.domain.trainer.model.TrainerPreview
 import org.jetbrains.compose.resources.stringResource
 import skyfit.core.ui.generated.resources.Res
 import skyfit.core.ui.generated.resources.add_action
@@ -145,7 +145,7 @@ fun MobileFacilitySettingsSearchTrainerToolbarComponent(
 
 @Composable
 fun MobileFacilityTrainerItemComponent(
-    item: Trainer,
+    item: TrainerPreview,
     onClick: () -> Unit,
     actionContent: @Composable () -> Unit
 ) {

@@ -2,8 +2,8 @@ package com.vurgun.skyfit.feature.access.forgotpassword
 
 import cafe.adriel.voyager.core.model.ScreenModel
 import cafe.adriel.voyager.core.model.screenModelScope
-import com.vurgun.skyfit.core.data.access.domain.model.ResetPasswordResult
-import com.vurgun.skyfit.core.data.access.domain.repository.AuthRepository
+import com.vurgun.skyfit.core.data.v1.domain.auth.model.ResetPasswordResult
+import com.vurgun.skyfit.core.data.v1.domain.auth.repository.AuthRepository
 import com.vurgun.skyfit.core.data.utility.SingleSharedFlow
 import com.vurgun.skyfit.core.data.utility.emitOrNull
 import kotlinx.coroutines.flow.MutableStateFlow

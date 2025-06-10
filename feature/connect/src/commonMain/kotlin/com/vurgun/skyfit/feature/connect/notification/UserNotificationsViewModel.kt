@@ -2,10 +2,10 @@ package com.vurgun.skyfit.feature.connect.notification
 
 import cafe.adriel.voyager.core.model.ScreenModel
 import cafe.adriel.voyager.core.model.screenModelScope
-import com.vurgun.skyfit.core.data.connect.data.model.NotificationCategory
-import com.vurgun.skyfit.core.data.connect.data.model.NotificationPriority
-import com.vurgun.skyfit.core.data.connect.data.model.NotificationType
-import com.vurgun.skyfit.core.data.connect.data.model.SkyFitNotification
+import com.vurgun.skyfit.core.data.v1.data.notification.NotificationCategory
+import com.vurgun.skyfit.core.data.v1.data.notification.NotificationPriority
+import com.vurgun.skyfit.core.data.v1.data.notification.NotificationType
+import com.vurgun.skyfit.core.data.v1.data.notification.SkyFitNotificationDTO
 import com.vurgun.skyfit.core.data.utility.SingleSharedFlow
 import com.vurgun.skyfit.core.data.utility.UiStateDelegate
 import com.vurgun.skyfit.core.data.utility.emitIn
@@ -20,9 +20,9 @@ sealed class UserNotificationsUiState {
     object Loading : UserNotificationsUiState()
 
     data class Content(
-        val all: List<SkyFitNotification> = emptyList(),
-        val activity: List<SkyFitNotification> = emptyList(),
-        val community: List<SkyFitNotification> = emptyList(),
+        val all: List<SkyFitNotificationDTO> = emptyList(),
+        val activity: List<SkyFitNotificationDTO> = emptyList(),
+        val community: List<SkyFitNotificationDTO> = emptyList(),
         val tabTitles: List<String> = emptyList(),
         val activeTab: NotificationTab = NotificationTab.ALL
     ) : UserNotificationsUiState()
@@ -32,7 +32,7 @@ sealed class UserNotificationsUiState {
 
 sealed class UserNotificationsAction {
     data object LoadData : UserNotificationsAction()
-    data class Delete(val notification: SkyFitNotification) : UserNotificationsAction()
+    data class Delete(val notification: SkyFitNotificationDTO) : UserNotificationsAction()
     data object DeleteAll : UserNotificationsAction()
     data object ClickBack : UserNotificationsAction()
     data object ClickSettings : UserNotificationsAction()
@@ -52,7 +52,7 @@ class UserNotificationsViewModel : ScreenModel {
     private val _effect = SingleSharedFlow<UserNotificationsEffect>()
     val effect = _effect as SharedFlow<UserNotificationsEffect>
 
-    private val allNotifications = mutableListOf<SkyFitNotification>()
+    private val allNotifications = mutableListOf<SkyFitNotificationDTO>()
 
     fun onAction(action: UserNotificationsAction) {
         when (action) {
@@ -93,7 +93,7 @@ class UserNotificationsViewModel : ScreenModel {
             allNotifications.clear()
             allNotifications.addAll(
                 listOf(
-                    SkyFitNotification(
+                    SkyFitNotificationDTO(
                         id = "1",
                         title = "New Follower",
                         message = "JohnDoe started following you!",
@@ -108,7 +108,7 @@ class UserNotificationsViewModel : ScreenModel {
                         priority = NotificationPriority.MEDIUM,
                         tags = listOf("social", "followers")
                     ),
-                    SkyFitNotification(
+                    SkyFitNotificationDTO(
                         id = "2",
                         title = "Workout Reminder",
                         message = "Don’t forget your scheduled workout at 6 PM today!",
@@ -122,7 +122,7 @@ class UserNotificationsViewModel : ScreenModel {
                         tags = listOf("reminder", "fitness"),
                         fitnessEventId = "event_101"
                     ),
-                    SkyFitNotification(
+                    SkyFitNotificationDTO(
                         id = "3",
                         title = "System Alert",
                         message = "Your subscription is about to expire in 3 days. Renew now to keep your access!",
@@ -137,7 +137,7 @@ class UserNotificationsViewModel : ScreenModel {
                         tags = listOf("subscription", "renewal"),
                         metadata = mapOf("expiryDate" to "2025-01-30")
                     ),
-                    SkyFitNotification(
+                    SkyFitNotificationDTO(
                         id = "4",
                         title = "Achievement Unlocked!",
                         message = "Congratulations! You’ve completed your weekly fitness goal.",

@@ -2,16 +2,16 @@ package com.vurgun.skyfit.feature.schedule.screen.lessons
 
 import cafe.adriel.voyager.core.model.ScreenModel
 import cafe.adriel.voyager.core.model.screenModelScope
-import com.vurgun.skyfit.core.data.persona.domain.model.FacilityDetail
-import com.vurgun.skyfit.core.data.persona.domain.repository.UserManager
 import com.vurgun.skyfit.core.data.utility.SingleSharedFlow
 import com.vurgun.skyfit.core.data.utility.emitIn
 import com.vurgun.skyfit.core.data.utility.emitOrNull
 import com.vurgun.skyfit.core.data.utility.formatToServerDate
-import com.vurgun.skyfit.core.data.schedule.domain.model.Lesson
-import com.vurgun.skyfit.core.data.schedule.domain.repository.CourseRepository
-import com.vurgun.skyfit.core.data.schedule.data.mapper.LessonSessionItemViewDataMapper
-import com.vurgun.skyfit.core.data.schedule.data.model.LessonSessionItemViewData
+import com.vurgun.skyfit.core.data.v1.data.lesson.mapper.LessonSessionItemViewDataMapper
+import com.vurgun.skyfit.core.data.v1.domain.account.manager.ActiveAccountManager
+import com.vurgun.skyfit.core.data.v1.domain.account.model.FacilityAccount
+import com.vurgun.skyfit.core.data.v1.domain.facility.repository.FacilityRepository
+import com.vurgun.skyfit.core.data.v1.domain.lesson.model.Lesson
+import com.vurgun.skyfit.core.data.v1.domain.lesson.model.LessonSessionItemViewData
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -45,13 +45,13 @@ sealed class FacilityLessonListingEffect {
 }
 
 class FacilityLessonListingViewModel(
-    private val courseRepository: CourseRepository,
-    private val userManager: UserManager,
+    private val facilityRepository: FacilityRepository,
+    private val userManager: ActiveAccountManager,
     private val lessonMapper: LessonSessionItemViewDataMapper
 ) : ScreenModel {
 
-    private val facilityUser: FacilityDetail
-        get() = userManager.user.value as? FacilityDetail
+    private val facilityUser: FacilityAccount
+        get() = userManager.user.value as? FacilityAccount
             ?: error("User is not a Facility")
 
     private val gymId: Int
@@ -89,7 +89,7 @@ class FacilityLessonListingViewModel(
         screenModelScope.launch {
             _uiState.update { it.copy(isLoading = true, errorMessage = null) }
 
-            val result = courseRepository.getActiveLessonsByFacility(gymId, date.formatToServerDate(), date.formatToServerDate())
+            val result = facilityRepository.getActiveLessonsByFacility(gymId, date.formatToServerDate(), date.formatToServerDate())
             result.fold(
                 onSuccess = { lessons ->
                     this@FacilityLessonListingViewModel.lessons = lessons
@@ -127,7 +127,7 @@ class FacilityLessonListingViewModel(
 
     private fun deactivateLesson(lessonId: Int) {
         screenModelScope.launch {
-            courseRepository.deactivateLesson(lessonId).fold(
+            facilityRepository.deactivateLesson(lessonId).fold(
                 onSuccess = { refreshLessons() },
                 onFailure = { showError(it) }
             )
@@ -136,7 +136,7 @@ class FacilityLessonListingViewModel(
 
     private fun activateLesson(lessonId: Int) {
         screenModelScope.launch {
-            courseRepository.activateLesson(lessonId).fold(
+            facilityRepository.activateLesson(lessonId).fold(
                 onSuccess = { refreshLessons() },
                 onFailure = { showError(it) }
             )
@@ -145,7 +145,7 @@ class FacilityLessonListingViewModel(
 
     private fun deleteLesson(lessonId: Int) {
         screenModelScope.launch {
-            courseRepository.deleteLesson(lessonId).fold(
+            facilityRepository.deleteLesson(lessonId).fold(
                 onSuccess = { refreshLessons() },
                 onFailure = { showError(it) }
             )

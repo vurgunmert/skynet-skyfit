@@ -2,11 +2,11 @@ package com.vurgun.skyfit.feature.persona.settings.facility.member
 
 import cafe.adriel.voyager.core.model.ScreenModel
 import cafe.adriel.voyager.core.model.screenModelScope
-import com.vurgun.skyfit.core.data.persona.domain.model.FacilityDetail
-import com.vurgun.skyfit.core.data.shared.domain.model.MissingTokenException
-import com.vurgun.skyfit.core.data.persona.domain.repository.UserManager
-import com.vurgun.skyfit.core.data.persona.domain.model.Member
-import com.vurgun.skyfit.core.data.persona.domain.repository.MemberRepository
+import com.vurgun.skyfit.core.data.v1.domain.account.manager.ActiveAccountManager
+import com.vurgun.skyfit.core.data.v1.domain.account.model.FacilityAccount
+import com.vurgun.skyfit.core.data.v1.domain.facility.repository.FacilityRepository
+import com.vurgun.skyfit.core.data.v1.domain.global.model.Member
+import com.vurgun.skyfit.core.data.v1.domain.global.model.MissingTokenException
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -22,12 +22,12 @@ internal data class ManageMembersUiState(
 )
 
 internal class FacilityManageMembersViewModel(
-    private val userManager: UserManager,
-    private val memberRepository: MemberRepository
+    private val userManager: ActiveAccountManager,
+    private val facilityRepository: FacilityRepository
 ) : ScreenModel {
 
-    private val facilityUser: FacilityDetail
-        get() = userManager.user.value as? FacilityDetail
+    private val facilityUser: FacilityAccount
+        get() = userManager.user.value as? FacilityAccount
             ?: error("User is not a Facility")
 
     private val _uiState = MutableStateFlow(ManageMembersUiState())
@@ -48,7 +48,7 @@ internal class FacilityManageMembersViewModel(
         screenModelScope.launch {
             _uiState.update { it.copy(isLoading = true, error = null, unauthorized = false) }
 
-            memberRepository.getFacilityMembers(gymId = facilityUser.gymId).fold(
+            facilityRepository.getFacilityMembers(gymId = facilityUser.gymId).fold(
                 onSuccess = { members ->
                     cached = members
                     _uiState.update {
@@ -76,7 +76,7 @@ internal class FacilityManageMembersViewModel(
         screenModelScope.launch {
             _uiState.update { it.copy(isLoading = true, error = null) }
 
-            memberRepository.deleteFacilityMember(gymId = facilityUser.gymId, userId = memberId).fold(
+            facilityRepository.deleteFacilityMember(gymId = facilityUser.gymId, userId = memberId).fold(
                 onSuccess = {
                     refreshGymMembers()
                 },

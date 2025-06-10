@@ -1,11 +1,6 @@
 package com.vurgun.skyfit.feature.access.onboarding
 
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -15,7 +10,7 @@ import androidx.compose.ui.unit.dp
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
-import com.vurgun.skyfit.core.data.schedule.domain.model.WorkoutTag
+import com.vurgun.skyfit.core.data.v1.domain.global.model.ProfileTag
 import com.vurgun.skyfit.core.navigation.SharedScreen
 import com.vurgun.skyfit.core.navigation.findRootNavigator
 import com.vurgun.skyfit.core.navigation.replaceAll
@@ -89,9 +84,9 @@ internal fun MobileOnboardingFacilityProfileTagsScreen(
 
 @Composable
 private fun ProfileTagsContent(
-    allTags: List<WorkoutTag>,
-    selectedTags: List<WorkoutTag>,
-    onTagsUpdated: (List<WorkoutTag>) -> Unit,
+    allTags: List<ProfileTag>,
+    selectedTags: List<ProfileTag>,
+    onTagsUpdated: (List<ProfileTag>) -> Unit,
     onNext: () -> Unit
 ) {
     Column(

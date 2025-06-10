@@ -26,6 +26,10 @@ import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
 import com.vurgun.skyfit.core.ui.components.button.PrimaryLargeButton
 import com.vurgun.skyfit.core.ui.components.button.SecondaryLargeButton
+import com.vurgun.skyfit.core.ui.components.button.SkyButton
+import com.vurgun.skyfit.core.ui.components.button.SkyButtonSize
+import com.vurgun.skyfit.core.ui.components.button.SkyButtonState
+import com.vurgun.skyfit.core.ui.components.button.SkyButtonVariant
 import com.vurgun.skyfit.core.ui.components.special.SkyFitLogoComponent
 import com.vurgun.skyfit.core.ui.components.special.SkyFitMobileScaffold
 import com.vurgun.skyfit.core.ui.components.text.PhoneNumberTextInput
@@ -110,20 +114,28 @@ private fun MobileForgotPasswordScreen(
 
             Spacer(Modifier.height(24.dp))
 
-            PrimaryLargeButton(
-                modifier = Modifier.fillMaxWidth(),
-                text = stringResource(Res.string.continue_action),
+            SkyButton(
+                label = stringResource(Res.string.continue_action),
                 onClick = viewModel::submitForgotPassword,
-                isLoading = isLoading,
-                isEnabled = isSubmitEnabled && !isLoading
+                modifier = Modifier.fillMaxWidth(),
+                variant = SkyButtonVariant.Primary,
+                size = SkyButtonSize.Large,
+                state = when {
+                    isLoading -> SkyButtonState.Loading
+                    !isSubmitEnabled -> SkyButtonState.Disabled
+                    else -> SkyButtonState.Rest
+                },
+                enabled = isSubmitEnabled && !isLoading
             )
 
             Spacer(Modifier.height(14.dp))
-
-            SecondaryLargeButton(
+            
+            SkyButton(
+                label =  stringResource(Res.string.cancel_action),
+                onClick = goToBack,
                 modifier = Modifier.fillMaxWidth(),
-                text = stringResource(Res.string.cancel_action),
-                onClick = goToBack
+                variant = SkyButtonVariant.Secondary,
+                size = SkyButtonSize.Large
             )
         }
     }

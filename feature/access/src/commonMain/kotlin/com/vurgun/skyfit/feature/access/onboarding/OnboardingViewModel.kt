@@ -2,17 +2,13 @@ package com.vurgun.skyfit.feature.access.onboarding
 
 import cafe.adriel.voyager.core.model.ScreenModel
 import cafe.adriel.voyager.core.model.screenModelScope
-import com.vurgun.skyfit.core.data.persona.domain.model.GenderType
-import com.vurgun.skyfit.core.data.shared.domain.model.HeightUnitType
-import com.vurgun.skyfit.core.data.persona.domain.model.UserGoal
-import com.vurgun.skyfit.core.data.persona.domain.model.UserRole
-import com.vurgun.skyfit.core.data.shared.domain.model.WeightUnitType
-import com.vurgun.skyfit.core.data.schedule.domain.model.WorkoutTag
-import com.vurgun.skyfit.core.data.access.domain.repository.AuthRepository
-import com.vurgun.skyfit.core.data.persona.domain.repository.UserManager
-import com.vurgun.skyfit.core.data.onboarding.domain.repository.OnboardingRepository
-import com.vurgun.skyfit.core.data.onboarding.data.model.OnboardingRequest
-import com.vurgun.skyfit.core.data.onboarding.domain.model.OnboardingResult
+import com.vurgun.skyfit.core.data.v1.domain.account.manager.ActiveAccountManager
+import com.vurgun.skyfit.core.data.v1.domain.account.model.AccountOnboardingFormData
+import com.vurgun.skyfit.core.data.v1.domain.account.model.AccountOnboardingResult
+import com.vurgun.skyfit.core.data.v1.domain.account.repository.AccountRepository
+import com.vurgun.skyfit.core.data.v1.domain.auth.repository.AuthRepository
+import com.vurgun.skyfit.core.data.v1.domain.global.model.*
+import com.vurgun.skyfit.core.data.v1.domain.global.repository.GlobalRepository
 import com.vurgun.skyfit.core.ui.model.BodyTypeViewData
 import com.vurgun.skyfit.core.ui.model.CharacterTypeViewData
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -40,7 +36,7 @@ data class UserOnboardingState(
     val facilityName: String? = null,
     val backgroundImage: ByteArray? = null,
     val address: String? = null,
-    val profileTags: List<WorkoutTag>? = null
+    val profileTags: List<ProfileTag>? = null
 )
 
 internal sealed class OnboardingViewEvent {
@@ -57,9 +53,10 @@ internal data class SelectableUserRole(
 )
 
 internal class OnboardingViewModel(
-    private val onboardingRepository: OnboardingRepository,
-    private val userManager: UserManager,
+    private val accountRepository: AccountRepository,
+    private val userManager: ActiveAccountManager,
     private val authRepository: AuthRepository,
+    private val globalRepository: GlobalRepository
 ) : ScreenModel {
 
     private var isAccountAddition: Boolean = false
@@ -75,8 +72,8 @@ internal class OnboardingViewModel(
     private val _availableGoals: MutableStateFlow<List<UserGoal>> = MutableStateFlow(emptyList())
     val availableGoals: StateFlow<List<UserGoal>> = _availableGoals
 
-    private val _availableTags: MutableStateFlow<List<WorkoutTag>> = MutableStateFlow(emptyList())
-    val availableTags: StateFlow<List<WorkoutTag>> = _availableTags
+    private val _availableTags: MutableStateFlow<List<ProfileTag>> = MutableStateFlow(emptyList())
+    val availableTags: StateFlow<List<ProfileTag>> = _availableTags
 
     init {
         screenModelScope.launch {
@@ -89,9 +86,9 @@ internal class OnboardingViewModel(
             }
             updateIsAccountAddition(_availableUserRoles.value.size < 3)
 
-            _availableGoals.value = authRepository.getGoals().getOrThrow()
+            _availableGoals.value = globalRepository.getGoals().getOrThrow()
 
-            _availableTags.value = authRepository.getTags().getOrThrow()
+            _availableTags.value = globalRepository.getProfileTags().getOrThrow()
         }
     }
 
@@ -179,7 +176,7 @@ internal class OnboardingViewModel(
         _uiState.value = _uiState.value.copy(bio = facilityBiography)
     }
 
-    fun updateFacilityProfileTags(profileTags: List<WorkoutTag>) {
+    fun updateFacilityProfileTags(profileTags: List<ProfileTag>) {
         _uiState.value = _uiState.value.copy(profileTags = profileTags)
     }
 
@@ -198,7 +195,7 @@ internal class OnboardingViewModel(
             }
         }
 
-        val request = OnboardingRequest(
+        val request = AccountOnboardingFormData(
             userType = currentState.userRole.typeId,
             characterId = currentState.character?.id,
             birthdate = birthDay,
@@ -214,23 +211,23 @@ internal class OnboardingViewModel(
             gymAddress = currentState.address,
             bio = currentState.bio,
             backgroundImage = currentState.backgroundImage,
-            profileTags = currentState.profileTags?.map { it.tagId },
+            profileTags = (currentState.profileTags?.map { it.id.toIntOrNull() } ?: emptyList()) as List<Int>?, //TODO: Careful right there
             goals = currentState.goals.map { it.goalId }
         )
 
         screenModelScope.launch {
             _eventState.value = OnboardingViewEvent.InProgress
 
-            when (val result = onboardingRepository.submitOnboarding(request, isAccountAddition)) {
-                OnboardingResult.Unauthorized -> {
+            when (val result = accountRepository.submitOnboarding(request, isAccountAddition)) {
+                AccountOnboardingResult.Unauthorized -> {
                     _eventState.value = OnboardingViewEvent.NavigateToLogin
                 }
 
-                is OnboardingResult.Error -> {
+                is AccountOnboardingResult.Error -> {
                     _eventState.value = OnboardingViewEvent.Error(result.message)
                 }
 
-                OnboardingResult.Success -> {
+                AccountOnboardingResult.Success -> {
                     userManager.updateUserType(currentState.userRole.typeId)
                     userManager.getActiveUser(true)
                     _eventState.value = OnboardingViewEvent.Completed

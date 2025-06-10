@@ -17,7 +17,7 @@ import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.koin.koinScreenModel
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
-import com.vurgun.skyfit.core.data.connect.data.model.SkyFitNotification
+import com.vurgun.skyfit.core.data.v1.data.notification.SkyFitNotificationDTO
 import com.vurgun.skyfit.core.navigation.SharedScreen
 import com.vurgun.skyfit.core.navigation.push
 import com.vurgun.skyfit.core.ui.components.loader.FullScreenLoaderContent
@@ -192,9 +192,9 @@ private object UserNotificationsComponent {
     @OptIn(ExperimentalMaterialApi::class)
     @Composable
     private fun NotificationListing(
-        notifications: List<SkyFitNotification>,
-        onSelect: (SkyFitNotification) -> Unit,
-        onDelete: (SkyFitNotification) -> Unit,
+        notifications: List<SkyFitNotificationDTO>,
+        onSelect: (SkyFitNotificationDTO) -> Unit,
+        onDelete: (SkyFitNotificationDTO) -> Unit,
     ) {
         LazyColumn(
             modifier = Modifier

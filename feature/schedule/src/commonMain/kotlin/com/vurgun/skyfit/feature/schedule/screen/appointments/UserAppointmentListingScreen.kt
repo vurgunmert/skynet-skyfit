@@ -45,7 +45,7 @@ import com.vurgun.skyfit.core.ui.components.text.BodyMediumMediumText
 import com.vurgun.skyfit.core.ui.screen.ErrorScreen
 import com.vurgun.skyfit.core.ui.styling.SkyFitColor
 import com.vurgun.skyfit.core.ui.utils.CollectEffect
-import com.vurgun.skyfit.core.data.schedule.domain.model.Appointment
+import com.vurgun.skyfit.core.data.v1.domain.user.model.Appointment
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
 import skyfit.core.ui.generated.resources.Res

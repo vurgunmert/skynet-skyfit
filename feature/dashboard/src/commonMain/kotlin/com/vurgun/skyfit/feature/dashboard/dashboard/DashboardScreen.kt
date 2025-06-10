@@ -15,7 +15,7 @@ class DashboardMainScreen : Screen {
         if (windowSize == WindowSize.EXPANDED) {
             DashboardLayoutExpanded.Screen(viewModel)
         } else {
-            DashboardLayoutCompact.Screen()
+            DashboardLayoutCompact.Screen(viewModel)
         }
     }
 }

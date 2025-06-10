@@ -2,14 +2,15 @@ package com.vurgun.skyfit.feature.persona.settings.user.profile
 
 import cafe.adriel.voyager.core.model.ScreenModel
 import cafe.adriel.voyager.core.model.screenModelScope
-import com.vurgun.skyfit.core.data.persona.domain.model.BodyType
-import com.vurgun.skyfit.core.data.shared.domain.model.HeightUnitType
-import com.vurgun.skyfit.core.data.persona.domain.model.UserDetail
-import com.vurgun.skyfit.core.data.shared.domain.model.WeightUnitType
-import com.vurgun.skyfit.core.data.persona.domain.repository.ProfileRepository
-import com.vurgun.skyfit.core.data.persona.domain.repository.UserManager
 import com.vurgun.skyfit.core.data.utility.SingleSharedFlow
 import com.vurgun.skyfit.core.data.utility.emitIn
+import com.vurgun.skyfit.core.data.v1.domain.account.manager.ActiveAccountManager
+import com.vurgun.skyfit.core.data.v1.domain.account.model.UserAccount
+import com.vurgun.skyfit.core.data.v1.domain.global.model.BodyType
+import com.vurgun.skyfit.core.data.v1.domain.global.model.HeightUnitType
+import com.vurgun.skyfit.core.data.v1.domain.global.model.WeightUnitType
+import com.vurgun.skyfit.core.data.v1.domain.user.repository.UserRepository
+import com.vurgun.skyfit.core.network.RemoteImageDataSource
 import kotlinx.coroutines.async
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharedFlow
@@ -95,8 +96,9 @@ sealed class UserEditProfileEffect {
 }
 
 class UserSettingsEditProfileViewModel(
-    private val userManager: UserManager,
-    private val profileRepository: ProfileRepository,
+    private val userManager: ActiveAccountManager,
+    private val userRepository: UserRepository,
+    private val remoteImageDataSource: RemoteImageDataSource
 ) : ScreenModel {
 
     private val _uiState = MutableStateFlow<UserEditProfileUiState>(UserEditProfileUiState.Loading)
@@ -105,8 +107,8 @@ class UserSettingsEditProfileViewModel(
     private val _effect = SingleSharedFlow<UserEditProfileEffect>()
     val effect: SharedFlow<UserEditProfileEffect> = _effect
 
-    private val user: UserDetail
-        get() = userManager.user.value as? UserDetail
+    private val user: UserAccount
+        get() = userManager.user.value as? UserAccount
             ?: error("❌ current account is not user")
 
     private var initialState: UserEditProfileFormState? = null
@@ -139,14 +141,14 @@ class UserSettingsEditProfileViewModel(
     fun loadData() {
         screenModelScope.launch {
             try {
-                val userProfile = profileRepository.getUserProfile(user.normalUserId).getOrThrow()
+                val userProfile = userRepository.getUserProfile(user.normalUserId).getOrThrow()
 
                 val profileImageUrl = userProfile.profileImageUrl
                 val backgroundImageUrl = userProfile.backgroundImageUrl
 
                 // Load image bytes in parallel
-                val profileImageDeferred = profileImageUrl?.let { async { profileRepository.fetchImageBytes(it) } }
-                val backgroundImageDeferred = backgroundImageUrl?.let { async { profileRepository.fetchImageBytes(it) } }
+                val profileImageDeferred = profileImageUrl?.let { async { remoteImageDataSource.getImageBytes(it) } }
+                val backgroundImageDeferred = backgroundImageUrl?.let { async { remoteImageDataSource.getImageBytes(it) } }
 
                 val formState = UserEditProfileFormState(
                     userName = userProfile.username,
@@ -184,7 +186,7 @@ class UserSettingsEditProfileViewModel(
             _uiState.value = UserEditProfileUiState.Loading
 
             try {
-                profileRepository.updateUserProfile(
+                userRepository.updateUserProfile(
                     normalUserId = user.normalUserId,
                     username = form.userName,
                     profileImageBytes = form.profileImageBytes,
