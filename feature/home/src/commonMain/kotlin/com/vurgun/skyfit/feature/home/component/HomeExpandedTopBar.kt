@@ -55,20 +55,7 @@ fun ExpandedDefaultTopBar(
 }
 
 
-@Composable
-private fun HomeExpandedTopbarStartContentGroup(firstName: String) {
-    Column {
-        SkyText(
-            text = "Merhaba $firstName!",
-            styleType = TextStyleType.BodyMediumSemibold
-        )
-        SkyText(
-            text = "Bugünün meydan okumalarına hazır mısın?",
-            styleType = TextStyleType.BodySmall,
-            color = SkyFitColor.text.secondary
-        )
-    }
-}
+
 
 @Composable
 private fun HomeExpandedTopbarEndActionGroup(

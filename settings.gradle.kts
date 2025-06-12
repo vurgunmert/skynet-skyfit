@@ -39,6 +39,7 @@ include(":core:navigation")
 include(":core:utils")
 
 include(":feature:access")
+include(":feature:main")
 include(":feature:dashboard")
 include(":feature:home")
 include(":feature:connect")

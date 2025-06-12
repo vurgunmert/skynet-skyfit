@@ -10,12 +10,20 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import com.vurgun.skyfit.core.data.v1.domain.account.model.FacilityAccount
+import com.vurgun.skyfit.core.data.v1.domain.account.model.TrainerAccount
+import com.vurgun.skyfit.core.data.v1.domain.account.model.UserAccount
+import com.vurgun.skyfit.core.data.v1.domain.facility.model.FacilityProfile
+import com.vurgun.skyfit.core.data.v1.domain.global.model.CharacterType
+import com.vurgun.skyfit.core.data.v1.domain.trainer.model.TrainerProfile
 import com.vurgun.skyfit.core.ui.components.icon.BackIcon
 import com.vurgun.skyfit.core.ui.components.icon.SkyIcon
 import com.vurgun.skyfit.core.ui.components.icon.SkyIconSize
 import com.vurgun.skyfit.core.ui.components.icon.SkyIconTint
+import com.vurgun.skyfit.core.ui.components.special.CharacterImage
 import com.vurgun.skyfit.core.ui.components.special.ChatBotButtonComponent
 import com.vurgun.skyfit.core.ui.components.text.SkyText
 import com.vurgun.skyfit.core.ui.components.text.TextStyleType
@@ -27,15 +35,42 @@ import skyfit.core.ui.generated.resources.ic_chat
 
 object ExpandedTopBar {
 
+    // Page: Back + Title
     @Composable
-    fun DefaultTopBar(
-        modifier: Modifier = Modifier,
-        editorialTitle: String = "",
-        editorialSubtitle: String = "",
+    fun TopBarWithBackAndTitle(
+        title: String,
+        onClickBack: () -> Unit,
         onClickNotifications: () -> Unit,
         onClickConversations: () -> Unit,
         onClickChatBot: () -> Unit,
-        extraEndContent: @Composable (() -> Unit)? = null,
+        modifier: Modifier = Modifier,
+    ) {
+        Box(modifier = modifier) {
+            BackIcon(
+                onClick = onClickBack,
+                modifier = Modifier.align(Alignment.CenterStart)
+            )
+
+            SkyText(
+                text = title,
+                styleType = TextStyleType.BodyLargeSemibold,
+                modifier = Modifier.align(Alignment.Center)
+            )
+
+            TopbarNavigationGroup(
+                onClickNotifications = onClickNotifications,
+                onClickConversations = onClickConversations,
+                onClickChatBot = onClickChatBot,
+                modifier = Modifier.align(Alignment.CenterEnd)
+            )
+        }
+    }
+
+    // Default: Editorial + Actions
+    @Composable
+    fun TopBarWithEditorialAndNavigations(
+        name: String,
+        modifier: Modifier = Modifier,
     ) {
         Row(
             modifier = modifier
@@ -44,65 +79,159 @@ object ExpandedTopBar {
                 .padding(16.dp),
             verticalAlignment = Alignment.CenterVertically,
         ) {
-            DefaultEditorialGroup(
-                title = editorialTitle,
-                subtitle = editorialSubtitle,
+            TopBarWelcomeEditorialGroup(
+                name = name,
                 modifier = Modifier.fillMaxWidth()
             )
 
             Spacer(Modifier.weight(1f))
 
-            if (extraEndContent != null) {
-                extraEndContent()
-                Spacer(Modifier.width(8.dp))
-            }
-
-            DefaultNavigationRow(onClickNotifications, onClickConversations, onClickChatBot)
+            TopbarNavigationGroup()
         }
     }
 
+    // Default: Profile + Actions
     @Composable
-    fun PageTopBar(
-        title: String,
-        onClickBack: () -> Unit,
+    fun TopBarWithAccountAndNavigations(
+        account: UserAccount,
         modifier: Modifier = Modifier,
-        endContent: @Composable () -> Unit = {}
     ) {
-        Box {
-            Row(
-                modifier = modifier
-                    .fillMaxWidth()
-                    .height(88.dp)
-                    .padding(16.dp),
-                verticalAlignment = Alignment.CenterVertically,
-            ) {
-                BackIcon(onClick = onClickBack)
-                Spacer(Modifier.weight(1f))
-                endContent()
-            }
-
-            SkyText(
-                text = title,
-                styleType = TextStyleType.BodyLargeSemibold,
-                modifier = Modifier.align(Alignment.Center)
+        Row(
+            modifier = modifier
+                .fillMaxWidth()
+                .height(88.dp)
+                .padding(16.dp),
+            verticalAlignment = Alignment.CenterVertically,
+        ) {
+            TopBarWelcomeEditorialGroup(
+                name = account.firstName,
+                modifier = Modifier.fillMaxWidth()
             )
+
+            Spacer(Modifier.weight(1f))
+
+            TopBarTrophyGroup(
+                characterType = account.characterType,
+                modifier = Modifier.wrapContentWidth()
+            )
+
+            Spacer(Modifier.width(16.dp))
+
+            TopbarNavigationGroup()
         }
     }
 
     @Composable
-    fun DefaultEditorialGroup(
-        title: String,
-        subtitle: String,
+    fun TopBarWithAccountAndNavigations(
+        account: TrainerAccount,
         modifier: Modifier = Modifier,
-        onClick: () -> Unit = {}
+    ) {
+        Row(
+            modifier = modifier
+                .fillMaxWidth()
+                .height(88.dp)
+                .padding(16.dp),
+            verticalAlignment = Alignment.CenterVertically,
+        ) {
+            TopBarWelcomeEditorialGroup(
+                name = account.firstName,
+                modifier = Modifier.fillMaxWidth()
+            )
+
+            Spacer(Modifier.weight(1f))
+
+            TopBarTrophyGroup(
+                characterType = account.characterType,
+                modifier = Modifier.wrapContentWidth()
+            )
+
+            Spacer(Modifier.width(16.dp))
+
+            TopbarNavigationGroup()
+        }
+    }
+
+    @Composable
+    fun TopBarWithAccountAndNavigations(
+        account: FacilityAccount,
+        modifier: Modifier = Modifier,
+    ) {
+        Row(
+            modifier = modifier
+                .fillMaxWidth()
+                .height(88.dp)
+                .padding(16.dp),
+            verticalAlignment = Alignment.CenterVertically,
+        ) {
+            TopBarWelcomeEditorialGroup(
+                name = account.gymName,
+                modifier = Modifier.fillMaxWidth()
+            )
+
+            Spacer(Modifier.weight(1f))
+
+            TopbarNavigationGroup()
+        }
+    }
+
+    @Composable
+    fun TopBarWithProfileAndNavigations(
+        profile: TrainerProfile,
+        modifier: Modifier = Modifier,
+    ) {
+        Row(
+            modifier = modifier
+                .fillMaxWidth()
+                .height(88.dp)
+                .padding(16.dp),
+            verticalAlignment = Alignment.CenterVertically,
+        ) {
+            TopBarWelcomeEditorialGroup(
+                name = profile.firstName,
+                modifier = Modifier.fillMaxWidth()
+            )
+
+            Spacer(Modifier.weight(1f))
+
+            TopbarNavigationGroup()
+        }
+    }
+
+    @Composable
+    fun TopBarWithProfileAndNavigations(
+        profile: FacilityProfile,
+        modifier: Modifier = Modifier,
+    ) {
+        Row(
+            modifier = modifier
+                .fillMaxWidth()
+                .height(88.dp)
+                .padding(16.dp),
+            verticalAlignment = Alignment.CenterVertically,
+        ) {
+            TopBarWelcomeEditorialGroup(
+                name = profile.facilityName,
+                modifier = Modifier.fillMaxWidth()
+            )
+
+            Spacer(Modifier.weight(1f))
+
+            TopbarNavigationGroup()
+        }
+    }
+
+    @Composable
+    private fun TopBarWelcomeEditorialGroup(
+        name: String,
+        modifier: Modifier = Modifier
     ) {
         Column(modifier = modifier) {
             SkyText(
-                text = title,
+                text = "Merhaba $name!",
                 styleType = TextStyleType.BodyMediumSemibold
             )
             SkyText(
-                text = subtitle,
+                text = "Bugünün meydan okumalarına hazır mısın?",
                 styleType = TextStyleType.BodySmall,
                 color = SkyFitColor.text.secondary
             )
@@ -110,13 +239,31 @@ object ExpandedTopBar {
     }
 
     @Composable
-    fun DefaultNavigationRow(
+    private fun TopBarTrophyGroup(
+        characterType: CharacterType,
+        modifier: Modifier = Modifier,
+    ) {
+        Row(modifier = modifier) {
+            CharacterImage(characterType, Modifier.size(48.dp))
+            Box(Modifier.size(48.dp).background(Color.Black))
+            Spacer(Modifier.width(16.dp))
+            Box(Modifier.size(24.dp, 32.dp).background(Color.Red))
+            Spacer(Modifier.width(16.dp))
+            Box(Modifier.size(24.dp, 32.dp).background(Color.Red))
+            Spacer(Modifier.width(16.dp))
+            Box(Modifier.size(24.dp, 32.dp).background(Color.Red))
+        }
+    }
+
+    @Composable
+    private fun TopbarNavigationGroup(
         onClickNotifications: () -> Unit = {},
         onClickConversations: () -> Unit = {},
-        onClickChatBot: () -> Unit = {}
+        onClickChatBot: () -> Unit = {},
+        modifier: Modifier = Modifier,
     ) {
         Row(
-            Modifier,
+            modifier = modifier,
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.spacedBy(8.dp)
         ) {
@@ -183,5 +330,5 @@ object ExpandedTopBar {
             }
         }
     }
-
 }
+

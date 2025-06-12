@@ -1,8 +1,6 @@
 package com.vurgun.skyfit.feature.home.screen.user
 
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.material.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -75,14 +73,10 @@ internal fun UserHomeExpanded(viewModel: UserHomeViewModel) {
 
         is UserHomeUiState.Content -> {
             val content = uiState as UserHomeUiState.Content
-            Scaffold(
-                modifier = Modifier.fillMaxSize(),
-                topBar = {
-                    UserHomeExpandedComponent.TopBar(content, viewModel::onAction)
-                },
-                content = {
-                    UserHomeExpandedComponent.Content(content, viewModel::onAction)
-                }
+
+            SharedHomeComponent.ExpandedLayout(
+                topbar = { UserHomeExpandedComponent.TopBar(content, viewModel::onAction) },
+                content = { UserHomeExpandedComponent.Content(content, viewModel::onAction) }
             )
         }
     }
@@ -93,7 +87,7 @@ private object UserHomeExpandedComponent {
     @Composable
     fun TopBar(
         content: UserHomeUiState.Content,
-        onScreenAction: (ScreenProvider) -> Unit
+        onAction: (ScreenProvider) -> Unit
     ) {
         ExpandedDefaultTopBar(
             state = HomeTopBarState(),

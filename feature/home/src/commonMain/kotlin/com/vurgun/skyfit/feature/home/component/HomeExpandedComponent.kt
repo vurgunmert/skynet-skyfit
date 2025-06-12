@@ -12,7 +12,7 @@ import com.vurgun.skyfit.core.data.v1.domain.trainer.model.TrainerProfile
 import com.vurgun.skyfit.core.data.v1.domain.user.model.UserProfile
 import com.vurgun.skyfit.core.ui.styling.SkyFitColor
 
-internal object ExpandedLayout {
+internal object HomeExpandedComponent {
 
     @Composable
     fun Scaffold(

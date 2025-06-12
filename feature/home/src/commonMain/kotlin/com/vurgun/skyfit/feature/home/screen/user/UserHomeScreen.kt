@@ -8,7 +8,6 @@ import com.vurgun.skyfit.core.ui.utils.WindowSize
 import com.vurgun.skyfit.feature.home.model.UserHomeViewModel
 
 internal class UserHomeScreen : Screen {
-
     @Composable
     override fun Content() {
         val windowSize = LocalWindowSize.current
