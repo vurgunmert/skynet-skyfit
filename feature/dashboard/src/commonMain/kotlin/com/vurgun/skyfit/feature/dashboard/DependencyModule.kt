@@ -17,5 +17,5 @@ val featureDashboardModule = module {
 
     factory { ExploreViewModel(get()) }
 
-    factory { DashboardViewModel(get()) }
+    single { DashboardViewModel(get()) }
 }

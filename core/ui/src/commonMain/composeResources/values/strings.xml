@@ -123,6 +123,7 @@
     <string name="number_of_month_label">%1$d Ay</string>
     <string name="free_label">Ücretsiz</string>
     <string name="valid_month_count_label">Geçerli Ay Sayısı</string>
+    <string name="messages_label">Mesajlar</string>
 
     <!-- 🔷 Lesson Related -->
     <string name="lesson_status_completed">Tamamlandı</string>

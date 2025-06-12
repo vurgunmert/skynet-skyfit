@@ -66,7 +66,7 @@ class UserProfileOwnerScreen : Screen {
                 }
 
                 UserProfileOwnerEffect.NavigateToAppointments -> {
-                    appNavigator.push(SharedScreen.UserAppointmentListing)
+                    appNavigator.push(SharedScreen.Appointments)
                 }
 
                 UserProfileOwnerEffect.NavigateToCreatePost -> {

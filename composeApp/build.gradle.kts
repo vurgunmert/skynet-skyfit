@@ -53,6 +53,7 @@ kotlin {
             implementation(libs.koin.compose)
 
             implementation(projects.feature.access)
+            implementation(projects.feature.home)
             implementation(projects.feature.dashboard)
             implementation(projects.feature.schedule)
             implementation(projects.feature.persona)

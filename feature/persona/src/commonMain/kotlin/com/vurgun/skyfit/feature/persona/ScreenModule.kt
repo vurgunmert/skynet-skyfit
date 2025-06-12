@@ -9,7 +9,7 @@ import com.vurgun.skyfit.feature.persona.profile.facility.visitor.FacilityProfil
 import com.vurgun.skyfit.feature.persona.profile.trainer.schedule.TrainerProfileScheduleScreen
 import com.vurgun.skyfit.feature.persona.profile.trainer.visitor.TrainerProfileVisitorScreen
 import com.vurgun.skyfit.feature.persona.profile.user.visitor.UserProfileVisitorScreen
-import com.vurgun.skyfit.feature.persona.settings.SettingsHostScreen
+import com.vurgun.skyfit.feature.persona.settings.SettingsScreen
 import com.vurgun.skyfit.feature.persona.settings.facility.FacilitySettingsMainScreen
 import com.vurgun.skyfit.feature.persona.settings.trainer.TrainerSettingsMainScreen
 import com.vurgun.skyfit.feature.persona.settings.user.UserSettingsMainScreen
@@ -33,7 +33,7 @@ val personaScreenModule = screenModule {
         TrainerProfileScheduleScreen(it.id)
     }
 
-    register<SharedScreen.Settings> { SettingsHostScreen() }
+    register<SharedScreen.Settings> { SettingsScreen() }
     register<SettingsHomeEntryPoint.Facility> { FacilitySettingsMainScreen() }
     register<SettingsHomeEntryPoint.Trainer> { TrainerSettingsMainScreen() }
     register<SettingsHomeEntryPoint.User> { UserSettingsMainScreen() }

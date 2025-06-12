@@ -18,6 +18,11 @@ sealed class SharedScreen : ScreenProvider {
 
     // Dashboard-Home
     data object Dashboard : SharedScreen()
+    data object Home : SharedScreen()
+    data object Explore : SharedScreen()
+    data object Social : SharedScreen()
+    data object Profile : SharedScreen()
+    data object Nutrition : SharedScreen()
 
     // Explore
     data object ExploreTrainers : SharedScreen()
@@ -34,13 +39,13 @@ sealed class SharedScreen : ScreenProvider {
     data class UserActivityCalendar(val selectedDate: LocalDate? = null) : SharedScreen()
 
     // Appointments
-    data object UserAppointmentListing : SharedScreen()
+    data object Appointments : SharedScreen()
     data object TrainerAppointmentListing : SharedScreen()
     data class UserAppointmentDetail(val id: Int) : SharedScreen()
     data class TrainerAppointmentDetail(val id: Int) : SharedScreen()
 
     // Notifications
-    data object NotificationsCompact : SharedScreen()
+    data object Notifications : SharedScreen()
     data class NotificationsExpanded(val onDismiss: () -> Unit) : SharedScreen()
 
     // Messages

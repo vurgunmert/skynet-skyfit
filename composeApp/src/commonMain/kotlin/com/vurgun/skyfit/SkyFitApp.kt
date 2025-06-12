@@ -51,6 +51,7 @@ private fun AppScreen() {
             accessScreenModule()
             connectScreenModule()
             dashboardScreenModule()
+            homeScreenModule()
             personaScreenModule()
             scheduleScreenModule()
             wellbeingScreenModule()
