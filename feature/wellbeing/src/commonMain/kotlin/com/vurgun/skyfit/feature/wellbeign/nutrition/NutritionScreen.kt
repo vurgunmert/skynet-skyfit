@@ -1,7 +1,16 @@
 package com.vurgun.skyfit.feature.wellbeign.nutrition
 
 import androidx.compose.runtime.Composable
+import cafe.adriel.voyager.core.screen.Screen
+import cafe.adriel.voyager.core.screen.ScreenKey
 
-@Composable
-fun NutritionScreen() {
+class NutritionScreen : Screen {
+
+    override val key: ScreenKey
+        get() = "nutrition"
+
+    @Composable
+    override fun Content() {
+
+    }
 }

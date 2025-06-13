@@ -49,7 +49,7 @@ class FacilityLessonCreatedScreen(
         MobileFacilityLessonCreatedScreen(
             goToListing = { navigator.pop() },
             goToNewLesson = { navigator.replace(FacilityLessonEditScreen()) },
-            goToDashboard = { navigator.popUntil(SharedScreen.Dashboard) },
+            goToDashboard = { navigator.popUntil(SharedScreen.Main) },
             isUpdate,
             lesson
         )

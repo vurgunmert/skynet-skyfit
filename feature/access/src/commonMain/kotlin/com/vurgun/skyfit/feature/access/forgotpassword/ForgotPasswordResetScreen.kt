@@ -28,8 +28,6 @@ import cafe.adriel.voyager.navigator.currentOrThrow
 import com.vurgun.skyfit.core.navigation.SharedScreen
 import com.vurgun.skyfit.core.navigation.popUntil
 import com.vurgun.skyfit.core.navigation.replaceAll
-import com.vurgun.skyfit.core.ui.components.button.PrimaryLargeButton
-import com.vurgun.skyfit.core.ui.components.button.SecondaryLargeButton
 import com.vurgun.skyfit.core.ui.components.button.SkyButton
 import com.vurgun.skyfit.core.ui.components.button.SkyButtonSize
 import com.vurgun.skyfit.core.ui.components.button.SkyButtonState
@@ -65,7 +63,7 @@ class ForgotPasswordResetScreen : Screen {
                 appNavigator.popUntil(SharedScreen.Authorization)
             },
             goToDashboard = {
-                appNavigator.replaceAll(SharedScreen.Dashboard)
+                appNavigator.replaceAll(SharedScreen.Main)
             },
             viewModel = viewModel
         )

@@ -47,7 +47,7 @@ import skyfit.core.ui.generated.resources.delete_action
 import skyfit.core.ui.generated.resources.search_action
 import skyfit.core.ui.generated.resources.trainers_label
 
-class FacilityManageTrainersScreen : Screen {
+class FacilityTrainerSettingsScreen : Screen {
 
     @Composable
     override fun Content() {

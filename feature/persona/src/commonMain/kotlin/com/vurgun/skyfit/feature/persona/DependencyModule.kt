@@ -19,12 +19,13 @@ import com.vurgun.skyfit.feature.persona.settings.facility.profile.FacilityEditP
 import com.vurgun.skyfit.feature.persona.settings.facility.profile.FacilityManageProfileViewModel
 import com.vurgun.skyfit.feature.persona.settings.facility.trainer.FacilityAddTrainerViewModel
 import com.vurgun.skyfit.feature.persona.settings.facility.trainer.FacilityManageTrainersViewModel
-import com.vurgun.skyfit.feature.persona.settings.shared.SettingsHomeViewModel
+import com.vurgun.skyfit.feature.persona.settings.shared.SettingsViewModel
 import com.vurgun.skyfit.feature.persona.settings.shared.account.ManageAccountsViewModel
 import com.vurgun.skyfit.feature.persona.settings.shared.changepassword.ChangePasswordViewModel
 import com.vurgun.skyfit.feature.persona.settings.trainer.notification.TrainerNotificationSettingsViewModel
 import com.vurgun.skyfit.feature.persona.settings.trainer.profile.TrainerSettingsEditProfileViewModel
 import com.vurgun.skyfit.feature.persona.settings.trainer.profile.TrainerSettingsManageProfileViewModel
+import com.vurgun.skyfit.feature.persona.settings.user.notification.UserNotificationSettingsViewModel
 import com.vurgun.skyfit.feature.persona.settings.user.profile.UserSettingsEditProfileViewModel
 import com.vurgun.skyfit.feature.persona.settings.user.profile.UserSettingsManageProfileViewModel
 import com.vurgun.skyfit.feature.persona.social.SocialMediaViewModel
@@ -33,7 +34,7 @@ import org.koin.dsl.module
 val featurePersonaModule = module {
     includes(dataNetworkModule, dataCoreModule)
 
-    factory { SettingsHomeViewModel(get()) }
+    factory { SettingsViewModel(get()) }
     factory { ChangePasswordViewModel() }
     factory { ManageAccountsViewModel(get()) }
 
@@ -67,4 +68,5 @@ val featurePersonaModule = module {
 
 
     factory { SocialMediaViewModel() }
+    factory { UserNotificationSettingsViewModel() }
 }

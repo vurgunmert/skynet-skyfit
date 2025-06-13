@@ -1,22 +1,23 @@
 package com.vurgun.skyfit.feature.persona
 
-import cafe.adriel.voyager.core.registry.ScreenProvider
 import cafe.adriel.voyager.core.registry.screenModule
 import com.vurgun.skyfit.core.navigation.SharedScreen
-import com.vurgun.skyfit.core.ui.screen.UnauthorizedAccessScreen
+import com.vurgun.skyfit.feature.persona.profile.ProfileScreen
 import com.vurgun.skyfit.feature.persona.profile.facility.schedule.FacilityProfileScheduleScreen
 import com.vurgun.skyfit.feature.persona.profile.facility.visitor.FacilityProfileVisitorScreen
 import com.vurgun.skyfit.feature.persona.profile.trainer.schedule.TrainerProfileScheduleScreen
 import com.vurgun.skyfit.feature.persona.profile.trainer.visitor.TrainerProfileVisitorScreen
 import com.vurgun.skyfit.feature.persona.profile.user.visitor.UserProfileVisitorScreen
 import com.vurgun.skyfit.feature.persona.settings.SettingsScreen
-import com.vurgun.skyfit.feature.persona.settings.facility.FacilitySettingsMainScreen
-import com.vurgun.skyfit.feature.persona.settings.trainer.TrainerSettingsMainScreen
-import com.vurgun.skyfit.feature.persona.settings.user.UserSettingsMainScreen
 import com.vurgun.skyfit.feature.persona.social.CreatePostScreen
-import kotlinx.serialization.Serializable
+import com.vurgun.skyfit.feature.persona.social.SocialMediaScreen
 
 val personaScreenModule = screenModule {
+
+    register<SharedScreen.Social> { SocialMediaScreen() }
+
+    register<SharedScreen.Profile> { ProfileScreen() }
+
     register<SharedScreen.UserProfileVisitor> {
         UserProfileVisitorScreen(normalUserId = it.id)
     }
@@ -34,18 +35,6 @@ val personaScreenModule = screenModule {
     }
 
     register<SharedScreen.Settings> { SettingsScreen() }
-    register<SettingsHomeEntryPoint.Facility> { FacilitySettingsMainScreen() }
-    register<SettingsHomeEntryPoint.Trainer> { TrainerSettingsMainScreen() }
-    register<SettingsHomeEntryPoint.User> { UserSettingsMainScreen() }
-    register<SettingsHomeEntryPoint.Unauthorized> { UnauthorizedAccessScreen() }
 
     register<SharedScreen.CreatePost> { CreatePostScreen() }
-}
-
-@Serializable
-internal sealed class SettingsHomeEntryPoint : ScreenProvider {
-    @Serializable data object Facility : SettingsHomeEntryPoint()
-    @Serializable data object Trainer : SettingsHomeEntryPoint()
-    @Serializable data object User : SettingsHomeEntryPoint()
-    @Serializable data object Unauthorized : SettingsHomeEntryPoint()
 }

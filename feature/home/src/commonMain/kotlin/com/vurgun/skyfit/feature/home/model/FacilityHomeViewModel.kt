@@ -12,16 +12,19 @@ import com.vurgun.skyfit.core.data.v1.domain.account.model.FacilityAccount
 import com.vurgun.skyfit.core.data.v1.domain.facility.model.FacilityProfile
 import com.vurgun.skyfit.core.data.v1.domain.facility.repository.FacilityRepository
 import com.vurgun.skyfit.core.data.v1.domain.lesson.model.LessonSessionItemViewData
-import com.vurgun.skyfit.feature.home.component.HomeTopBarState
+import com.vurgun.skyfit.core.data.v1.domain.statistics.front.StatisticCardUiData
+import com.vurgun.skyfit.core.navigation.SharedScreen
 import com.vurgun.skyfit.feature.home.model.FacilityHomeEffect.NavigateToManageLessons
 import com.vurgun.skyfit.feature.home.model.FacilityHomeEffect.ShowOverlay
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import kotlinx.datetime.LocalDate
 
 data class DashboardStatCardModel(
-    val primaryMetrics: List<DashboardStatMetric>,
-    val chartData: Any? = null,
+    val primaryMetrics: List<StatisticCardUiData>,
+    val chartData: List<Any> = emptyList(),
     val timeRange: TimeRange = TimeRange.H
 ) {
     enum class TimeRange {
@@ -29,22 +32,10 @@ data class DashboardStatCardModel(
     }
 }
 
-data class DashboardStatMetric(
-    val title: String,
-    val value: String,
-    val changePercent: Int? = null,
-    val changeDirection: ChangeDirection = ChangeDirection.NEUTRAL
-) {
-    enum class ChangeDirection {
-        UP, DOWN, NEUTRAL
-    }
-}
-
 sealed interface FacilityHomeUiState {
     data object Loading : FacilityHomeUiState
     data class Error(val message: String?) : FacilityHomeUiState
     data class Content(
-        val topBarState: HomeTopBarState = HomeTopBarState(),
         val facility: FacilityAccount,
         val profile: FacilityProfile,
         val activeLessons: List<LessonSessionItemViewData> = emptyList(),
@@ -58,6 +49,9 @@ sealed interface FacilityHomeUiState {
 sealed interface FacilityHomeAction {
     data class OnOverlayRequest(val screen: ScreenProvider) : FacilityHomeAction
     data object OnClickLessons : FacilityHomeAction
+    data object OnClickNotifications : FacilityHomeAction
+    data object OnClickConversations : FacilityHomeAction
+    data object OnClickChatBot : FacilityHomeAction
 }
 
 sealed interface FacilityHomeEffect {
@@ -85,47 +79,51 @@ class FacilityHomeViewModel(
             FacilityHomeAction.OnClickLessons -> {
                 emitEffect(NavigateToManageLessons)
             }
+
+            FacilityHomeAction.OnClickChatBot ->
+                emitEffect(ShowOverlay(SharedScreen.ChatBot))
+
+            FacilityHomeAction.OnClickConversations ->
+                emitEffect(ShowOverlay(SharedScreen.Conversations))
+
+            FacilityHomeAction.OnClickNotifications ->
+                emitEffect(ShowOverlay(SharedScreen.Notifications))
         }
     }
 
     fun loadData() {
         screenModelScope.launch {
-            runCatching {
+            val result = runCatching {
                 val facility = userManager.user.value as FacilityAccount
-                val facilityProfile = facilityRepository.getFacilityProfile(facility.gymId).getOrThrow()
+                val profile = facilityRepository.getFacilityProfile(facility.gymId).getOrThrow()
 
-                val metrics = listOf(
-                    DashboardStatMetric("Aktif Üye", "${facilityProfile.memberCount}"),
-                    DashboardStatMetric("Aktif Egitmen", "${facilityProfile.trainerCount}"),
-                    DashboardStatMetric("Puan", "${facilityProfile.point}")
-                )
-
-                val statistics = DashboardStatCardModel(primaryMetrics = metrics)
-
-                val activeLessons = facilityRepository.getUpcomingLessonsByFacility(facility.gymId, limit = 5)
-                    .getOrNull()?.let { list ->
-                        list.map { mapper.map(it) }
-                    }.orEmpty()
-
-                val allLessons =
-                    facilityRepository.getAllLessonsByFacility(facility.gymId, startDate = LocalDate(2025, 1, 1), null)
-                        .getOrNull()?.let { list ->
-                            list.map { mapper.map(it) }
-                        }.orEmpty()
-
-                _uiState.update(
-                    newState = FacilityHomeUiState.Content(
-                        topBarState = HomeTopBarState(),
-                        facility = facility,
-                        profile = facilityProfile,
-                        activeLessons = activeLessons,
-                        allLessons = allLessons,
-                        statistics = statistics
+                val statistics = DashboardStatCardModel(
+                    primaryMetrics = listOf(
+                        StatisticCardUiData("Aktif Üye", "${profile.memberCount}"),
+                        StatisticCardUiData("Aktif Egitmen", "${profile.trainerCount}"),
+                        StatisticCardUiData("Puan", "${profile.point}")
                     )
                 )
-            }.onFailure {
-                _uiState.update(FacilityHomeUiState.Error(it.message))
+
+                val activeLessons = facilityRepository.getUpcomingLessonsByFacility(facility.gymId, 5)
+                    .getOrNull()?.map(mapper::map).orEmpty()
+
+                val allLessons = facilityRepository.getAllLessonsByFacility(facility.gymId, LocalDate(2025, 1, 1), null)
+                    .getOrNull()?.map(mapper::map).orEmpty()
+
+                FacilityHomeUiState.Content(
+                    facility = facility,
+                    profile = profile,
+                    activeLessons = activeLessons,
+                    allLessons = allLessons,
+                    statistics = statistics
+                )
             }
+
+            result.fold(
+                onSuccess = { _uiState.update(it) },
+                onFailure = { _uiState.update(FacilityHomeUiState.Error(it.message)) }
+            )
         }
     }
 

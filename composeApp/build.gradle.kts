@@ -54,7 +54,8 @@ kotlin {
 
             implementation(projects.feature.access)
             implementation(projects.feature.home)
-            implementation(projects.feature.dashboard)
+            implementation(projects.feature.explore)
+            implementation(projects.feature.main)
             implementation(projects.feature.schedule)
             implementation(projects.feature.persona)
             implementation(projects.feature.wellbeing)

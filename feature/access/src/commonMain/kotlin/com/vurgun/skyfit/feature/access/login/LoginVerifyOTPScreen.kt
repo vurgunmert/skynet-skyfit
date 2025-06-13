@@ -65,7 +65,7 @@ class LoginVerifyOTPScreen : Screen {
                     appNavigator.replace(CreatePasswordScreen())
                 },
                 goToDashboard = {
-                    appNavigator.replaceAll(SharedScreen.Dashboard)
+                    appNavigator.replaceAll(SharedScreen.Main)
                 },
                 goToOnboarding = {
                     appNavigator.replace(SharedScreen.Onboarding)
@@ -78,7 +78,7 @@ class LoginVerifyOTPScreen : Screen {
                     appNavigator.replace(CreatePasswordScreen())
                 },
                 goToDashboard = {
-                    appNavigator.replaceAll(SharedScreen.Dashboard)
+                    appNavigator.replaceAll(SharedScreen.Main)
                 },
                 goToOnboarding = {
                     appNavigator.replace(SharedScreen.Onboarding)

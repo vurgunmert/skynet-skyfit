@@ -18,7 +18,7 @@ import com.vurgun.skyfit.core.data.v1.domain.user.model.CalendarEvent
 import com.vurgun.skyfit.core.data.v1.domain.user.model.UserProfile
 import com.vurgun.skyfit.core.data.v1.data.workout.WorkoutEvent
 import com.vurgun.skyfit.core.data.v1.statistics.back.model.UserStatisticsDTO
-import com.vurgun.skyfit.core.data.v1.statistics.front.UserStatistics
+import com.vurgun.skyfit.core.data.v1.data.statistics.front.UserStatistics
 import kotlinx.datetime.Instant
 import kotlinx.datetime.LocalDate
 import kotlinx.datetime.LocalDateTime

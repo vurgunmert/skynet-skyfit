@@ -83,7 +83,7 @@ class LoginScreen : Screen {
                 navigator.replace(SharedScreen.Onboarding)
             },
             goToDashboard = {
-                appNavigator.replaceAll(SharedScreen.Dashboard)
+                appNavigator.replaceAll(SharedScreen.Main)
             },
             goToForgotPassword = {
                 navigator.push(AuthFlow.ForgotPassword)

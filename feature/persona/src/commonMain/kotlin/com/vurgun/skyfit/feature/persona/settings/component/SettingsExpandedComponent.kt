@@ -13,42 +13,26 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.unit.dp
+import cafe.adriel.voyager.core.screen.Screen
 import com.vurgun.skyfit.core.ui.components.button.SkyButton
 import com.vurgun.skyfit.core.ui.components.button.SkyButtonSize
 import com.vurgun.skyfit.core.ui.components.button.SkyButtonVariant
 import com.vurgun.skyfit.core.ui.styling.SkyFitColor
 import com.vurgun.skyfit.core.ui.styling.SkyFitTypography
-import com.vurgun.skyfit.feature.persona.settings.model.FacilitySettingsNavigationRoute
 import com.vurgun.skyfit.feature.persona.settings.model.SettingsNavigationRoute
-import com.vurgun.skyfit.feature.persona.settings.user.UserSettingViewModel
 import org.jetbrains.compose.resources.DrawableResource
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
-import skyfit.core.ui.generated.resources.Res
-import skyfit.core.ui.generated.resources.branches_label
-import skyfit.core.ui.generated.resources.ic_athletic_performance
-import skyfit.core.ui.generated.resources.ic_bell
-import skyfit.core.ui.generated.resources.ic_building
-import skyfit.core.ui.generated.resources.ic_credit_card
-import skyfit.core.ui.generated.resources.ic_package
-import skyfit.core.ui.generated.resources.ic_posture_fill
-import skyfit.core.ui.generated.resources.ic_profile
-import skyfit.core.ui.generated.resources.ic_question_circle
-import skyfit.core.ui.generated.resources.logout_action
-import skyfit.core.ui.generated.resources.members_label
-import skyfit.core.ui.generated.resources.notifications_label
-import skyfit.core.ui.generated.resources.packages_label
-import skyfit.core.ui.generated.resources.settings_account_label
-import skyfit.core.ui.generated.resources.settings_payment_history_label
-import skyfit.core.ui.generated.resources.settings_support_label
-import skyfit.core.ui.generated.resources.trainers_label
+import skyfit.core.ui.generated.resources.*
 
 internal object SettingsExpandedComponent {
 
     @Composable
     fun SideNavigationMenu(
         modifier: Modifier = Modifier,
-        menuContent: @Composable () -> Unit,
+        routes: List<SettingsNavigationRoute>,
+        activeScreen: Screen,
+        onClickRoute: (SettingsNavigationRoute) -> Unit = {},
         onClickLogout: () -> Unit = {}
     ) {
         Column(
@@ -62,7 +46,7 @@ internal object SettingsExpandedComponent {
                 )
                 .padding(16.dp)
         ) {
-            menuContent()
+            SideMenuNavigationItemColumn(activeScreen, routes, onClickRoute)
 
             Spacer(Modifier.weight(1f))
 
@@ -78,40 +62,45 @@ internal object SettingsExpandedComponent {
 
     @Composable
     fun SideMenuNavigationItemColumn(
+        activeScreen: Screen,
         items: List<SettingsNavigationRoute>,
         onClick: (SettingsNavigationRoute) -> Unit
     ) {
         items.forEach { item ->
-            when(item) {
-                FacilitySettingsNavigationRoute.Branches -> {
+            when (item) {
+                SettingsNavigationRoute.Branches -> {
                     SideMenuNavigationItem(
                         text = stringResource(Res.string.branches_label),
+                        selected = item == activeScreen,
                         iconRes = Res.drawable.ic_building,
                         onClick = { onClick(item) }
                     )
                 }
 
-                FacilitySettingsNavigationRoute.Members -> {
+                SettingsNavigationRoute.Members -> {
                     SideMenuNavigationItem(
                         text = stringResource(Res.string.members_label),
                         iconRes = Res.drawable.ic_posture_fill,
                         onClick = { onClick(item) }
                     )
                 }
-                FacilitySettingsNavigationRoute.Packages -> {
+
+                SettingsNavigationRoute.Packages -> {
                     SideMenuNavigationItem(
                         text = stringResource(Res.string.packages_label),
                         iconRes = Res.drawable.ic_package,
                         onClick = { onClick(item) }
                     )
                 }
-                FacilitySettingsNavigationRoute.Trainers -> {
+
+                SettingsNavigationRoute.Trainers -> {
                     SideMenuNavigationItem(
                         text = stringResource(Res.string.trainers_label),
                         iconRes = Res.drawable.ic_athletic_performance,
                         onClick = { onClick(item) }
                     )
                 }
+
                 SettingsNavigationRoute.Account -> {
                     SideMenuNavigationItem(
                         text = stringResource(Res.string.settings_account_label),
@@ -119,6 +108,7 @@ internal object SettingsExpandedComponent {
                         onClick = { onClick(item) }
                     )
                 }
+
                 SettingsNavigationRoute.Notifications -> {
                     SideMenuNavigationItem(
                         text = stringResource(Res.string.notifications_label),
@@ -126,6 +116,7 @@ internal object SettingsExpandedComponent {
                         onClick = { onClick(item) }
                     )
                 }
+
                 SettingsNavigationRoute.PaymentHistory -> {
                     SideMenuNavigationItem(
                         text = stringResource(Res.string.settings_payment_history_label),
@@ -133,6 +124,7 @@ internal object SettingsExpandedComponent {
                         onClick = { onClick(item) }
                     )
                 }
+
                 SettingsNavigationRoute.Support -> {
                     SideMenuNavigationItem(
                         text = stringResource(Res.string.settings_support_label),
@@ -147,6 +139,7 @@ internal object SettingsExpandedComponent {
     @Composable
     fun SideMenuNavigationItem(
         text: String,
+        selected: Boolean = false,
         iconRes: DrawableResource? = null,
         onClick: () -> Unit = {}
     ) {
@@ -154,6 +147,9 @@ internal object SettingsExpandedComponent {
             modifier = Modifier
                 .clip(RoundedCornerShape(16.dp))
                 .clickable(onClick = onClick)
+                .background(
+                    color = if (selected) SkyFitColor.background.fillTransparentSecondary else SkyFitColor.transparent,
+                )
                 .fillMaxWidth()
                 .wrapContentHeight()
                 .padding(8.dp),

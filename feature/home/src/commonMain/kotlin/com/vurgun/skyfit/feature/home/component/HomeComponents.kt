@@ -26,12 +26,15 @@ import com.vurgun.skyfit.core.data.v1.domain.global.model.CharacterType
 import com.vurgun.skyfit.core.data.v1.domain.lesson.model.LessonSessionItemViewData
 import com.vurgun.skyfit.core.ui.components.button.SkyFitCircularProgressIconButton
 import com.vurgun.skyfit.core.ui.components.event.FacilityHomeLessonEventItem
+import com.vurgun.skyfit.core.ui.components.icon.SkyIcon
+import com.vurgun.skyfit.core.ui.components.icon.SkyIconSize
 import com.vurgun.skyfit.core.ui.components.image.NetworkImage
 import com.vurgun.skyfit.core.ui.components.schedule.MobileUserActivityHourlyCalendarComponent
 import com.vurgun.skyfit.core.ui.components.schedule.SkyFitColoredCalendarComponent
 import com.vurgun.skyfit.core.ui.components.special.*
 import com.vurgun.skyfit.core.ui.components.text.SkyText
 import com.vurgun.skyfit.core.ui.components.text.TextStyleType
+import com.vurgun.skyfit.core.ui.components.topbar.CompactTopBar
 import com.vurgun.skyfit.core.ui.styling.LocalPadding
 import com.vurgun.skyfit.core.ui.styling.SkyFitAsset
 import com.vurgun.skyfit.core.ui.styling.SkyFitColor
@@ -41,6 +44,114 @@ import org.jetbrains.compose.resources.DrawableResource
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
 import skyfit.core.ui.generated.resources.*
+
+internal object HomeCompactComponent {
+
+    @Composable
+    fun LessonCards(
+        lessons: List<LessonSessionItemViewData>,
+        onClickShowAll: () -> Unit = {},
+        onClickLesson: (lesson: LessonSessionItemViewData) -> Unit = {},
+    ) {
+
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+                .background(SkyFitColor.background.default, shape = RoundedCornerShape(16.dp))
+                .padding(LocalPadding.current.medium)
+        ) {
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = LocalPadding.current.xSmall),
+                horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Text(
+                    text = stringResource(Res.string.upcoming_appointments_label),
+                    style = SkyFitTypography.bodyLargeSemibold
+                )
+
+                Text(
+                    text = stringResource(Res.string.show_all_action),
+                    style = SkyFitTypography.bodyXSmall,
+                    color = SkyFitColor.border.secondaryButton,
+                    modifier = Modifier.clickable(onClick = onClickShowAll)
+                )
+            }
+
+            lessons.forEach { lesson ->
+                Spacer(modifier = Modifier.height(8.dp))
+                FacilityHomeLessonEventItem(
+                    title = lesson.title,
+                    iconId = lesson.iconId,
+                    date = lesson.date.toString(),
+                    timePeriod = lesson.hours.toString(),
+                    trainer = lesson.trainer.toString(),
+                    onClick = { onClickLesson(lesson) }
+                )
+            }
+        }
+    }
+
+    @Composable
+    fun BasicTopBar(
+        notificationsEnabled: Boolean = true,
+        conversationsEnabled: Boolean = true,
+        onClickNotifications: () -> Unit,
+        onClickConversations: () -> Unit,
+    ) {
+        Row(
+            verticalAlignment = Alignment.CenterVertically,
+        ) {
+            FeatureVisible(notificationsEnabled) {
+                Spacer(Modifier.width(16.dp))
+                SkyIcon(
+                    res = Res.drawable.ic_bell,
+                    size = SkyIconSize.Normal,
+                    onClick = onClickNotifications
+                )
+            }
+
+            FeatureVisible(conversationsEnabled) {
+                Spacer(Modifier.width(16.dp))
+                SkyIcon(
+                    res = Res.drawable.ic_chat,
+                    size = SkyIconSize.Normal,
+                    onClick = onClickConversations
+                )
+            }
+        }
+    }
+}
+
+//@OptIn(ExperimentalLayoutApi::class)
+//@Composable
+//fun InformativeCardGrid(
+//    stats: List<DashboardStatMetric>,
+//    modifier: Modifier = Modifier
+//) {
+//    val columns = when (LocalWindowSize.current) {
+//        WindowSize.COMPACT -> 2
+//        WindowSize.MEDIUM, WindowSize.EXPANDED -> 4
+//    }
+//
+//    FlowRow(
+//        modifier = modifier.fillMaxWidth(),
+//        maxItemsInEachRow = columns,
+//        horizontalArrangement = Arrangement.spacedBy(16.dp),
+//        verticalArrangement = Arrangement.spacedBy(16.dp)
+//    ) {
+//        stats.forEach { stat ->
+//            HomeFacilityStatCard(
+//                stat = stat,
+//                modifier = Modifier
+//                    .weight(1f)
+//                    .heightIn(min = 84.dp)
+//            )
+//        }
+//    }
+//}
 
 @Composable
 fun MobileDashboardHomeCharacterProgressComponent(
@@ -60,10 +171,10 @@ fun MobileDashboardHomeCharacterProgressComponent(
             .clickable(onClick = onClick)
             .padding(horizontal = 16.dp, vertical = 24.dp)
     ) {
-        AnimatedCharacterComponent(
-            modifier = Modifier.align(Alignment.TopCenter).size(240.dp),
-            characterType = characterType
-        )
+//        AnimatedCharacterComponent(
+//            modifier = Modifier.align(Alignment.TopCenter).size(240.dp),
+//            characterType = characterType
+//        )
 
         SkyFitCircularProgressIconButton(
             painter = painterResource(Res.drawable.ic_steps),
@@ -342,6 +453,7 @@ fun MobileUserHomeUpcomingAppointmentsComponent(
     }
 }
 
+@Deprecated("UpLessons")
 @Composable
 fun MobileDashboardHomeUpcomingAppointmentsComponent(
     appointments: List<LessonSessionItemViewData>,

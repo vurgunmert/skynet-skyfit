@@ -6,5 +6,5 @@ import com.vurgun.skyfit.core.data.v1.domain.global.model.CharacterType
 
 @Composable
 actual fun AnimatedCharacterComponent(modifier: Modifier, characterType: CharacterType) {
-    AndroidRiveAnimatedCharacterComponent(modifier, characterType)
+//    AndroidRiveAnimatedCharacterComponent(modifier, characterType)
 }

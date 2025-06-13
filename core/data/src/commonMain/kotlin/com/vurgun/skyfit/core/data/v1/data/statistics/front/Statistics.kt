@@ -1,4 +1,4 @@
-package com.vurgun.skyfit.core.data.v1.statistics.front
+package com.vurgun.skyfit.core.data.v1.data.statistics.front
 
 data class Statistics(
     val spectator: SpectatorStatistics? = null,
@@ -11,7 +11,7 @@ data class SpectatorStatistics(
     val visitCount: Int
 )
 
-data class UserStatistics(
+class UserStatistics(
     val activity: ActivityStatistics? = null,
     val goal: GoalStatistics? = null,
 )

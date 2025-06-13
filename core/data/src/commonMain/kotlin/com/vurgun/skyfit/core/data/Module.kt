@@ -11,6 +11,7 @@ import com.vurgun.skyfit.core.data.v1.data.auth.service.AuthApiService
 import com.vurgun.skyfit.core.data.v1.data.chatbot.ChatbotRepositoryImpl
 import com.vurgun.skyfit.core.data.v1.data.config.repository.AppConfigRepositoryImpl
 import com.vurgun.skyfit.core.data.v1.data.explore.ExploreRepositoryImpl
+import com.vurgun.skyfit.core.data.v1.data.explore.service.ExploreApiService
 import com.vurgun.skyfit.core.data.v1.data.facility.repository.FacilityRepositoryImpl
 import com.vurgun.skyfit.core.data.v1.data.facility.service.FacilityApiService
 import com.vurgun.skyfit.core.data.v1.data.lesson.mapper.LessonSessionItemViewDataMapper
@@ -94,6 +95,7 @@ val dataCoreModule = module {
     single<ChatbotApiUseCase> { ChatbotRepositoryImpl() }
 
     //Explore
+    single<ExploreApiService> { ExploreApiService(get()) }
     single<ExploreRepository> { ExploreRepositoryImpl(get(), get(), get()) }
 }
 

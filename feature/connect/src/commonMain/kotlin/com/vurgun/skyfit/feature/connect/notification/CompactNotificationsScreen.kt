@@ -35,14 +35,14 @@ class CompactNotificationsScreen : Screen {
     @Composable
     override fun Content() {
         val navigator = LocalNavigator.currentOrThrow
-        val viewModel = koinScreenModel<UserNotificationsViewModel>()
+        val viewModel = koinScreenModel<NotificationsViewModel>()
 
         CollectEffect(viewModel.effect) { effect ->
             when (effect) {
-                UserNotificationsEffect.NavigateBack -> {
+                NotificationsEffect.NavigateBack -> {
                     navigator.pop()
                 }
-                UserNotificationsEffect.NavigateSettings -> {
+                NotificationsEffect.NavigateSettings -> {
                     navigator.push(SharedScreen.Settings)
                 }
             }
@@ -60,12 +60,12 @@ class ExpandedNotificationsScreen(
     @Composable
     override fun Content() {
         val navigator = LocalNavigator.currentOrThrow
-        val viewModel = koinScreenModel<UserNotificationsViewModel>()
+        val viewModel = koinScreenModel<NotificationsViewModel>()
 
         CollectEffect(viewModel.effect) { effect ->
             when (effect) {
-                UserNotificationsEffect.NavigateBack -> onDismiss()
-                UserNotificationsEffect.NavigateSettings -> {
+                NotificationsEffect.NavigateBack -> onDismiss()
+                NotificationsEffect.NavigateSettings -> {
                     navigator.push(SharedScreen.Settings)
                 }
             }
@@ -77,19 +77,19 @@ class ExpandedNotificationsScreen(
 
 private object UserNotificationsComponent {
     @Composable
-    fun Screen(viewModel: UserNotificationsViewModel) {
+    fun Screen(viewModel: NotificationsViewModel) {
         val uiState by viewModel.uiState.collectAsState()
 
         LaunchedEffect(Unit) {
-            viewModel.onAction(UserNotificationsAction.LoadData)
+            viewModel.onAction(NotificationsAction.LoadData)
         }
 
         when (val state = uiState) {
-            is UserNotificationsUiState.Loading -> {
+            is NotificationsUiState.Loading -> {
                 FullScreenLoaderContent()
             }
 
-            is UserNotificationsUiState.Content -> {
+            is NotificationsUiState.Content -> {
                 val content = state
 
                 SkyFitMobileScaffold(
@@ -97,14 +97,14 @@ private object UserNotificationsComponent {
                         Column {
                             SkyFitScreenHeader(
                                 title = stringResource(Res.string.notifications_label),
-                                onClickBack = { viewModel.onAction(UserNotificationsAction.ClickBack) })
+                                onClickBack = { viewModel.onAction(NotificationsAction.ClickBack) })
 
                             TextNumberBadgeTabBarComponent(
                                 tabs = content.tabTitles,
                                 selectedIndex = content.activeTab.ordinal,
                                 onTabSelected = { index ->
                                     val tab = NotificationTab.entries[index]
-                                    viewModel.onAction(UserNotificationsAction.ChangeTab(tab))
+                                    viewModel.onAction(NotificationsAction.ChangeTab(tab))
                                 }
                             )
                         }
@@ -112,11 +112,11 @@ private object UserNotificationsComponent {
                     bottomBar = {
                         if (content.all.isEmpty()) {
                             SettingsAction {
-                                viewModel.onAction(UserNotificationsAction.ClickSettings)
+                                viewModel.onAction(NotificationsAction.ClickSettings)
                             }
                         } else {
                             DeleteAllAction {
-                                viewModel.onAction(UserNotificationsAction.DeleteAll)
+                                viewModel.onAction(NotificationsAction.DeleteAll)
                             }
                         }
                     }
@@ -128,7 +128,7 @@ private object UserNotificationsComponent {
                 }
             }
 
-            is UserNotificationsUiState.Error -> {
+            is NotificationsUiState.Error -> {
                 // TODO: handle error
             }
         }
@@ -136,8 +136,8 @@ private object UserNotificationsComponent {
 
     @Composable
     private fun UserNotificationsContent(
-        content: UserNotificationsUiState.Content,
-        onAction: (UserNotificationsAction) -> Unit,
+        content: NotificationsUiState.Content,
+        onAction: (NotificationsAction) -> Unit,
     ) {
         val list = when (content.activeTab) {
             NotificationTab.ALL -> content.all
@@ -152,7 +152,7 @@ private object UserNotificationsComponent {
                 notifications = list,
                 onSelect = { /* Optional if you want to open details */ },
                 onDelete = { notification ->
-                    onAction(UserNotificationsAction.Delete(notification))
+                    onAction(NotificationsAction.Delete(notification))
                 }
             )
         }

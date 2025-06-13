@@ -5,6 +5,7 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
@@ -13,12 +14,11 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import com.vurgun.skyfit.core.data.v1.domain.account.model.Account
 import com.vurgun.skyfit.core.data.v1.domain.account.model.FacilityAccount
 import com.vurgun.skyfit.core.data.v1.domain.account.model.TrainerAccount
 import com.vurgun.skyfit.core.data.v1.domain.account.model.UserAccount
-import com.vurgun.skyfit.core.data.v1.domain.facility.model.FacilityProfile
 import com.vurgun.skyfit.core.data.v1.domain.global.model.CharacterType
-import com.vurgun.skyfit.core.data.v1.domain.trainer.model.TrainerProfile
 import com.vurgun.skyfit.core.ui.components.icon.BackIcon
 import com.vurgun.skyfit.core.ui.components.icon.SkyIcon
 import com.vurgun.skyfit.core.ui.components.icon.SkyIconSize
@@ -68,8 +68,11 @@ object ExpandedTopBar {
 
     // Default: Editorial + Actions
     @Composable
-    fun TopBarWithEditorialAndNavigations(
+    fun TopBarWithEditorialAndNavigation(
         name: String,
+        onClickNotifications: () -> Unit,
+        onClickConversations: () -> Unit,
+        onClickChatBot: () -> Unit,
         modifier: Modifier = Modifier,
     ) {
         Row(
@@ -86,14 +89,52 @@ object ExpandedTopBar {
 
             Spacer(Modifier.weight(1f))
 
-            TopbarNavigationGroup()
+            TopbarNavigationGroup(onClickNotifications, onClickConversations, onClickChatBot)
         }
     }
 
     // Default: Profile + Actions
     @Composable
-    fun TopBarWithAccountAndNavigations(
+    fun TopBarWithAccountAndNavigation(
+        account: Account,
+        onClickNotifications: () -> Unit,
+        onClickConversations: () -> Unit,
+        onClickChatBot: () -> Unit,
+        modifier: Modifier = Modifier,
+    ) {
+        when (account) {
+            is FacilityAccount -> TopBarWithAccountAndNavigation(
+                account,
+                onClickNotifications,
+                onClickConversations,
+                onClickChatBot,
+                modifier
+            )
+
+            is TrainerAccount -> TopBarWithAccountAndNavigation(
+                account,
+                onClickNotifications,
+                onClickConversations,
+                onClickChatBot,
+                modifier
+            )
+
+            is UserAccount -> TopBarWithAccountAndNavigation(
+                account,
+                onClickNotifications,
+                onClickConversations,
+                onClickChatBot,
+                modifier
+            )
+        }
+    }
+
+    @Composable
+    fun TopBarWithAccountAndNavigation(
         account: UserAccount,
+        onClickNotifications: () -> Unit,
+        onClickConversations: () -> Unit,
+        onClickChatBot: () -> Unit,
         modifier: Modifier = Modifier,
     ) {
         Row(
@@ -117,13 +158,16 @@ object ExpandedTopBar {
 
             Spacer(Modifier.width(16.dp))
 
-            TopbarNavigationGroup()
+            TopbarNavigationGroup(onClickNotifications, onClickConversations, onClickChatBot)
         }
     }
 
     @Composable
-    fun TopBarWithAccountAndNavigations(
+    fun TopBarWithAccountAndNavigation(
         account: TrainerAccount,
+        onClickNotifications: () -> Unit,
+        onClickConversations: () -> Unit,
+        onClickChatBot: () -> Unit,
         modifier: Modifier = Modifier,
     ) {
         Row(
@@ -147,13 +191,16 @@ object ExpandedTopBar {
 
             Spacer(Modifier.width(16.dp))
 
-            TopbarNavigationGroup()
+            TopbarNavigationGroup(onClickNotifications, onClickConversations, onClickChatBot)
         }
     }
 
     @Composable
-    fun TopBarWithAccountAndNavigations(
+    fun TopBarWithAccountAndNavigation(
         account: FacilityAccount,
+        onClickNotifications: () -> Unit,
+        onClickConversations: () -> Unit,
+        onClickChatBot: () -> Unit,
         modifier: Modifier = Modifier,
     ) {
         Row(
@@ -170,53 +217,7 @@ object ExpandedTopBar {
 
             Spacer(Modifier.weight(1f))
 
-            TopbarNavigationGroup()
-        }
-    }
-
-    @Composable
-    fun TopBarWithProfileAndNavigations(
-        profile: TrainerProfile,
-        modifier: Modifier = Modifier,
-    ) {
-        Row(
-            modifier = modifier
-                .fillMaxWidth()
-                .height(88.dp)
-                .padding(16.dp),
-            verticalAlignment = Alignment.CenterVertically,
-        ) {
-            TopBarWelcomeEditorialGroup(
-                name = profile.firstName,
-                modifier = Modifier.fillMaxWidth()
-            )
-
-            Spacer(Modifier.weight(1f))
-
-            TopbarNavigationGroup()
-        }
-    }
-
-    @Composable
-    fun TopBarWithProfileAndNavigations(
-        profile: FacilityProfile,
-        modifier: Modifier = Modifier,
-    ) {
-        Row(
-            modifier = modifier
-                .fillMaxWidth()
-                .height(88.dp)
-                .padding(16.dp),
-            verticalAlignment = Alignment.CenterVertically,
-        ) {
-            TopBarWelcomeEditorialGroup(
-                name = profile.facilityName,
-                modifier = Modifier.fillMaxWidth()
-            )
-
-            Spacer(Modifier.weight(1f))
-
-            TopbarNavigationGroup()
+            TopbarNavigationGroup(onClickNotifications, onClickConversations, onClickChatBot)
         }
     }
 
@@ -263,7 +264,10 @@ object ExpandedTopBar {
         modifier: Modifier = Modifier,
     ) {
         Row(
-            modifier = modifier,
+            modifier = modifier
+                .clip(RoundedCornerShape(50))
+                .wrapContentWidth()
+                .padding(4.dp),
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.spacedBy(8.dp)
         ) {

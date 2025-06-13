@@ -19,7 +19,7 @@ import com.vurgun.skyfit.core.ui.components.menu.SkyFitSettingsSwitchOptionItemC
 import com.vurgun.skyfit.core.ui.components.special.SkyFitMobileScaffold
 import com.vurgun.skyfit.core.ui.components.special.SkyFitScreenHeader
 
-class FacilitySettingsNotificationsScreen : Screen {
+class FacilityNotificationSettingsScreen : Screen {
 
     @Composable
     override fun Content() {

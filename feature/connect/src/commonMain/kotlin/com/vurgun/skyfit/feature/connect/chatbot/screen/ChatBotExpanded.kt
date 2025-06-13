@@ -55,7 +55,7 @@ internal fun ChatBotExpanded(viewModel: ChatbotViewModel) {
             Onboarding(
                 hazeState, hazeStyle,
                 modifier = Modifier.fillMaxSize(),
-                onComplete = { viewModel.onAction(ChatBotAction.OnClickStart )})
+                onComplete = { viewModel.onAction(ChatBotAction.OnClickStart) })
         }
 
         Spacer(Modifier.width(20.dp))
@@ -71,7 +71,7 @@ internal fun ChatBotExpanded(viewModel: ChatbotViewModel) {
         ) {
 
             historyItems.forEach {
-                ChatbotCompactComponent.ChatHistoryItem(it, { viewModel.onAction(ChatBotAction.OnClickHistoryItem(it)) })
+                ChatBotComponent.ChatHistoryItem(it, { viewModel.onAction(ChatBotAction.OnClickHistoryItem(it)) })
             }
 
             Spacer(Modifier.weight(1f))

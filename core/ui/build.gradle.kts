@@ -76,6 +76,7 @@ kotlin {
         androidMain.dependencies {
             api(compose.preview)
             api(libs.androidx.activity.compose)
+//            implementation(libs.rive)
         }
 
         iosMain.dependencies {

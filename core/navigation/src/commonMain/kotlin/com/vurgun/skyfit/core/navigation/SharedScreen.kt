@@ -5,7 +5,7 @@ import kotlinx.datetime.LocalDate
 import kotlinx.serialization.Serializable
 
 @Serializable
-sealed class SharedScreen : ScreenProvider {
+sealed class SharedScreen(val key: String? = null) : ScreenProvider {
 
     // Splash
     data object UnderDevelopment : SharedScreen()
@@ -13,16 +13,16 @@ sealed class SharedScreen : ScreenProvider {
     data object Maintenance : SharedScreen()
 
     // Authorization
-    data object Authorization : SharedScreen()
-    data object Onboarding : SharedScreen()
+    data object Authorization : SharedScreen("authorization")
+    data object Onboarding : SharedScreen("onboarding")
 
     // Dashboard-Home
-    data object Dashboard : SharedScreen()
-    data object Home : SharedScreen()
-    data object Explore : SharedScreen()
-    data object Social : SharedScreen()
-    data object Profile : SharedScreen()
-    data object Nutrition : SharedScreen()
+    data object Main : SharedScreen("main")
+    data object Home : SharedScreen("home")
+    data object Explore : SharedScreen("explore")
+    data object Social : SharedScreen("social")
+    data object Profile : SharedScreen("profile")
+    data object Nutrition : SharedScreen("nutrition")
 
     // Explore
     data object ExploreTrainers : SharedScreen()

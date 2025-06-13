@@ -31,14 +31,17 @@ import com.vurgun.skyfit.core.ui.components.text.TextStyleType
 import com.vurgun.skyfit.core.ui.screen.ErrorScreen
 import com.vurgun.skyfit.core.ui.styling.SkyFitColor
 import com.vurgun.skyfit.core.ui.utils.CollectEffect
-import com.vurgun.skyfit.feature.home.component.HomeCompactTopBarActionRow
+import com.vurgun.skyfit.feature.home.component.HomeCompactComponent
 import com.vurgun.skyfit.feature.home.component.MobileUserHomeUpcomingAppointmentsComponent
 import com.vurgun.skyfit.feature.home.model.UserHomeAction
 import com.vurgun.skyfit.feature.home.model.UserHomeEffect.*
 import com.vurgun.skyfit.feature.home.model.UserHomeUiState
 import com.vurgun.skyfit.feature.home.model.UserHomeViewModel
 import org.jetbrains.compose.resources.stringResource
-import skyfit.core.ui.generated.resources.*
+import skyfit.core.ui.generated.resources.Res
+import skyfit.core.ui.generated.resources.member_since_day_zero
+import skyfit.core.ui.generated.resources.member_since_days
+import skyfit.core.ui.generated.resources.refresh_action
 
 @Composable
 internal fun UserHomeCompact(viewModel: UserHomeViewModel) {
@@ -53,7 +56,7 @@ internal fun UserHomeCompact(viewModel: UserHomeViewModel) {
             NavigateToAppointments -> SharedScreen.Appointments
             NavigateToNotifications -> SharedScreen.Notifications
             NavigateToChatbot -> SharedScreen.ChatBot
-            is NavigateToActivityCalendar -> SharedScreen.UserActivityCalendar(effect.date)
+            is NavigateToActivityCalendar -> SharedScreen.UserActivityCalendar(null)
         }
         dashboardNavigator?.push(screen)
     }
@@ -91,13 +94,36 @@ internal fun UserHomeCompact(viewModel: UserHomeViewModel) {
 private object UserHomeCompactComponent {
 
     @Composable
+    fun TopBar(
+        content: UserHomeUiState.Content,
+        onAction: (UserHomeAction) -> Unit
+    ) {
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 24.dp, vertical = 8.dp),
+            verticalAlignment = Alignment.CenterVertically,
+        ) {
+
+            FacilityMembershipGroup(content, onAction)
+
+            Spacer(Modifier.weight(1f))
+
+            HomeCompactComponent.BasicTopBar(
+                onClickNotifications = { onAction(UserHomeAction.OnClickNotifications) },
+                onClickConversations = { onAction(UserHomeAction.OnClickConversations) },
+            )
+        }
+    }
+
+    @Composable
     fun Content(
         content: UserHomeUiState.Content,
         onAction: (UserHomeAction) -> Unit
     ) {
         val eventCalendarController = rememberEventCalendarController(
-            activatedDatesProvider = { content.activeCalendarDates },
-            completedDatesProvider = { emptySet() }
+            activatedDatesProvider = { content.calendarState?.activeCalendarDates.orEmpty() },
+            completedDatesProvider = { emptySet() } // TODO : Check state
         )
 
         Column(
@@ -112,7 +138,7 @@ private object UserHomeCompactComponent {
                 modifier = Modifier
             )
 
-            if (content.requestsEnabled) {
+            content.membershipState?.takeIf { it.requestReceived }?.let {
                 MembershipRequestCard(
                     facilityId = 1,
                     facilityName = "SkyTesis",
@@ -122,22 +148,22 @@ private object UserHomeCompactComponent {
                 )
             }
 
-            HomeEventCalendarSelector(
-                controller = eventCalendarController,
-                onDateSelected = { selectedDate ->
-                    onAction(UserHomeAction.OnChangeSelectedDate(selectedDate))
-                },
-                onClickShowAll = {
-                    onAction(UserHomeAction.OnClickShowCalendar)
-                },
-                modifier = Modifier.fillMaxWidth().padding(16.dp)
-            )
-
-            FeatureVisible(content.appointments.isNotEmpty()) {
-                MobileUserHomeUpcomingAppointmentsComponent(
-                    appointments = content.appointments,
-                    onClickShowAll = { onAction(UserHomeAction.OnClickAppointments) }
+            content.calendarState?.let {
+                HomeEventCalendarSelector(
+                    controller = eventCalendarController,
+                    onDateSelected = { onAction(UserHomeAction.OnClickShowCalendar) },
+                    onClickShowAll = { onAction(UserHomeAction.OnClickShowCalendar) },
+                    modifier = Modifier.fillMaxWidth().padding(16.dp)
                 )
+            }
+
+            content.appointmentsState?.appointments?.let { appointments ->
+                FeatureVisible(appointments.isNotEmpty()) {
+                    MobileUserHomeUpcomingAppointmentsComponent(
+                        appointments = appointments,
+                        onClickShowAll = { onAction(UserHomeAction.OnClickAppointments) }
+                    )
+                }
             }
 
             Spacer(Modifier.height(128.dp))
@@ -145,62 +171,47 @@ private object UserHomeCompactComponent {
     }
 
     @Composable
-    fun TopBar(
+    private fun FacilityMembershipGroup(
         content: UserHomeUiState.Content,
-        onAction: (UserHomeAction) -> Unit
+        onAction: (UserHomeAction) -> Unit,
+        modifier: Modifier = Modifier,
     ) {
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(horizontal = 24.dp, vertical = 8.dp),
-            horizontalArrangement = Arrangement.End,
-            verticalAlignment = Alignment.CenterVertically,
-        ) {
-            content.memberFacility?.let { facilityProfile ->
-                Row(
-                    modifier = Modifier
-                        .weight(1f)
-                        .clickable { onAction(UserHomeAction.OnClickFacility(facilityProfile.gymId)) },
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-                    SkyImage(
-                        url = facilityProfile.backgroundImageUrl,
-                        shape = SkyImageShape.Circle,
-                        size = SkyImageSize.Size48
+        content.membershipState?.memberFacility?.let { facilityProfile ->
+            Row(
+                modifier = modifier
+                    .clickable { onAction(UserHomeAction.OnClickFacility(facilityProfile.gymId)) },
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                SkyImage(
+                    url = facilityProfile.backgroundImageUrl,
+                    shape = SkyImageShape.Circle,
+                    size = SkyImageSize.Size48
+                )
+
+                Spacer(Modifier.width(12.dp))
+
+                Column(Modifier.weight(1f)) {
+                    SkyText(
+                        text = facilityProfile.facilityName,
+                        styleType = TextStyleType.BodyMediumSemibold
                     )
+                    Spacer(Modifier.height(4.dp))
 
-                    Spacer(Modifier.width(12.dp))
-
-                    Column(Modifier.weight(1f)) {
-                        SkyText(
-                            text = facilityProfile.facilityName,
-                            styleType = TextStyleType.BodyMediumSemibold
-                        )
-                        Spacer(Modifier.height(4.dp))
-
-                        val memberText = content.memberDurationDays?.let { days ->
-                            if (days == 0) {
-                                stringResource(Res.string.member_since_day_zero)
-                            } else {
-                                stringResource(Res.string.member_since_days, days)
-                            }
-                        } ?: facilityProfile.gymAddress
-
-                        SkyText(
-                            text = memberText,
-                            styleType = TextStyleType.BodySmall,
-                            color = SkyFitColor.text.secondary
-                        )
+                    val memberText = content.membershipState.memberDurationDays.let { days ->
+                        if (days == 0) {
+                            stringResource(Res.string.member_since_day_zero)
+                        } else {
+                            stringResource(Res.string.member_since_days, days)
+                        }
                     }
-                }
-            } ?: Spacer(Modifier.weight(1f))
 
-            HomeCompactTopBarActionRow(
-                content.notificationsEnabled,
-                { onAction(UserHomeAction.OnClickNotifications) },
-                content.conversationsEnabled,
-                { onAction(UserHomeAction.OnClickConversations) },
-            )
+                    SkyText(
+                        text = memberText,
+                        styleType = TextStyleType.BodySmall,
+                        color = SkyFitColor.text.secondary
+                    )
+                }
+            }
         }
     }
 }

@@ -21,19 +21,22 @@ import com.vurgun.skyfit.core.ui.components.special.SkyFitMobileScaffold
 import com.vurgun.skyfit.core.ui.components.special.SkyFitScreenHeader
 import com.vurgun.skyfit.core.ui.screen.ErrorScreen
 import com.vurgun.skyfit.core.ui.utils.CollectEffect
-import com.vurgun.skyfit.feature.persona.settings.shared.SettingsHomeUiState
-import com.vurgun.skyfit.feature.persona.settings.shared.SettingsMainAction
-import com.vurgun.skyfit.feature.persona.settings.shared.SettingsMainEffect
+import com.vurgun.skyfit.feature.persona.settings.facility.member.FacilityMemberSettingsScreen
+import com.vurgun.skyfit.feature.persona.settings.model.SettingsNavigationRoute
+import com.vurgun.skyfit.feature.persona.settings.shared.SettingsUiAction
+import com.vurgun.skyfit.feature.persona.settings.shared.SettingsUiEffect
+import com.vurgun.skyfit.feature.persona.settings.shared.SettingsUiState
+import com.vurgun.skyfit.feature.persona.settings.shared.SettingsViewModel
 import com.vurgun.skyfit.feature.persona.settings.shared.component.SettingsHomeAccountTypesColumn
 import com.vurgun.skyfit.feature.persona.settings.shared.helpsupport.SettingsSupportHelpScreen
-import com.vurgun.skyfit.feature.persona.settings.user.notification.UserSettingsNotificationsScreen
-import com.vurgun.skyfit.feature.persona.settings.user.payment.UserSettingsPaymentHistoryScreen
-import com.vurgun.skyfit.feature.persona.settings.user.profile.UserSettingsManageProfileScreen
+import com.vurgun.skyfit.feature.persona.settings.trainer.notification.TrainerNotificationSettingsScreen
+import com.vurgun.skyfit.feature.persona.settings.trainer.payment.TrainerPaymentHistorySettingsScreen
+import com.vurgun.skyfit.feature.persona.settings.trainer.profile.TrainerSettingsManageProfileScreen
 import org.jetbrains.compose.resources.stringResource
 import skyfit.core.ui.generated.resources.*
 
 @Composable
-internal fun UserSettingsCompact(viewModel: UserSettingViewModel) {
+internal fun UserSettingsCompact(viewModel: SettingsViewModel) {
 
     val appNavigator = LocalNavigator.currentOrThrow.findRootNavigator()
     val settingsNavigator = LocalNavigator.currentOrThrow
@@ -41,26 +44,44 @@ internal fun UserSettingsCompact(viewModel: UserSettingViewModel) {
 
     CollectEffect(viewModel.effect) { effect ->
         when (effect) {
-            SettingsMainEffect.NavigateToBack -> appNavigator.pop()
-            SettingsMainEffect.NavigateToSplash -> appNavigator.replaceAll(SharedScreen.Splash)
-            SettingsMainEffect.NavigateToManageProfile -> settingsNavigator.push(UserSettingsManageProfileScreen())
-            SettingsMainEffect.NavigateToPaymentHistory -> settingsNavigator.push(UserSettingsPaymentHistoryScreen())
-            SettingsMainEffect.NavigateToNotifications -> settingsNavigator.push(UserSettingsNotificationsScreen())
-            SettingsMainEffect.NavigateToSupport -> settingsNavigator.push(SettingsSupportHelpScreen())
-            else -> appNavigator.pop()
+            SettingsUiEffect.NavigateToBack -> appNavigator.pop()
+            SettingsUiEffect.NavigateToSplash -> appNavigator.replaceAll(SharedScreen.Splash)
+
+            is SettingsUiEffect.NavigateToRoute -> {
+                val screen = when (effect.route) {
+                    SettingsNavigationRoute.Account ->
+                        TrainerSettingsManageProfileScreen()
+
+                    SettingsNavigationRoute.PaymentHistory ->
+                        TrainerPaymentHistorySettingsScreen()
+
+                    SettingsNavigationRoute.Notifications ->
+                        TrainerNotificationSettingsScreen()
+
+                    SettingsNavigationRoute.Members ->
+                        FacilityMemberSettingsScreen() // assuming shared for both trainer/facility
+
+                    SettingsNavigationRoute.Support ->
+                        SettingsSupportHelpScreen()
+
+                    else -> null
+                }
+
+                screen?.let { settingsNavigator.push(it) } ?: appNavigator.pop()
+            }
         }
     }
 
     when (uiState) {
-        is SettingsHomeUiState.Loading -> FullScreenLoaderContent()
-        is SettingsHomeUiState.Error -> {
-            val message = (uiState as SettingsHomeUiState.Error).message
+        is SettingsUiState.Loading -> FullScreenLoaderContent()
+        is SettingsUiState.Error -> {
+            val message = (uiState as SettingsUiState.Error).message
             ErrorScreen(message = message, onConfirm = { appNavigator.pop() })
         }
 
-        is SettingsHomeUiState.Content -> {
-            val content = uiState as SettingsHomeUiState.Content
-            UserSettingsCompactComponent.Content(content: )
+        is SettingsUiState.Content -> {
+            val content = uiState as SettingsUiState.Content
+            UserSettingsCompactComponent.Content(content, viewModel::onAction)
         }
 
     }
@@ -68,26 +89,24 @@ internal fun UserSettingsCompact(viewModel: UserSettingViewModel) {
 
 private object UserSettingsCompactComponent {
 
-
     @Composable
-    private fun Content(
-        content: UserSettingsUiState.Content,
-        onAction: (UserSettingsUiAction) -> Unit = {}
+    fun Content(
+        content: SettingsUiState.Content,
+        onAction: (SettingsUiAction) -> Unit = {}
     ) {
-        val accountTypes by viewModel.accountTypes.collectAsState()
 
         SkyFitMobileScaffold(
             topBar = {
                 SkyFitScreenHeader(
                     title = stringResource(Res.string.settings_title),
-                    onClickBack = { viewModel.onAction(SettingsMainAction.OnClickBack) }
+                    onClickBack = { onAction(SettingsUiAction.OnClickBack) }
                 )
             },
             bottomBar = {
                 PrimaryLargeButton(
                     modifier = Modifier.fillMaxWidth().padding(24.dp),
                     text = stringResource(Res.string.logout_action),
-                    onClick = viewModel::onLogout
+                    onClick = { onAction(SettingsUiAction.OnClickLogout) }
                 )
             }
         ) {
@@ -103,13 +122,13 @@ private object UserSettingsCompactComponent {
                 MobileSettingsMenuItemComponent(
                     iconRes = Res.drawable.ic_profile,
                     text = stringResource(Res.string.settings_account_label),
-                    onClick = { viewModel.onAction(SettingsMainAction.OnClickManageProfile) }
+                    onClick = { onAction(SettingsUiAction.OnChangeRoute(SettingsNavigationRoute.Account)) }
                 )
 
                 MobileSettingsMenuItemComponent(
                     iconRes = Res.drawable.ic_credit_card,
                     text = stringResource(Res.string.settings_payment_history_label),
-                    onClick = { viewModel.onAction(SettingsMainAction.OnClickPaymentHistory) }
+                    onClick = { onAction(SettingsUiAction.OnChangeRoute(SettingsNavigationRoute.PaymentHistory)) }
                 )
 
                 MobileSettingsMenuItemDividerComponent()
@@ -117,7 +136,7 @@ private object UserSettingsCompactComponent {
                 MobileSettingsMenuItemComponent(
                     iconRes = Res.drawable.ic_bell,
                     text = stringResource(Res.string.notifications_label),
-                    onClick = { viewModel.onAction(SettingsMainAction.OnClickNotifications) }
+                    onClick = { onAction(SettingsUiAction.OnChangeRoute(SettingsNavigationRoute.Notifications)) }
                 )
 
                 MobileSettingsMenuItemDividerComponent()
@@ -125,13 +144,13 @@ private object UserSettingsCompactComponent {
                 MobileSettingsMenuItemComponent(
                     iconRes = Res.drawable.ic_question_circle,
                     text = stringResource(Res.string.settings_support_label),
-                    onClick = { viewModel.onAction(SettingsMainAction.OnClickSupport) }
+                    onClick = { onAction(SettingsUiAction.OnChangeRoute(SettingsNavigationRoute.Support)) }
                 )
 
                 SettingsHomeAccountTypesColumn(
-                    accounts = accountTypes,
-                    selectedTypeId = viewModel.selectedTypeId,
-                    onSelectType = viewModel::selectUserType
+                    accounts = content.accountTypes,
+                    selectedTypeId = content.selectedAccountTypeId,
+                    onSelectType = { onAction(SettingsUiAction.ChangeUserType(it)) }
                 )
             }
         }

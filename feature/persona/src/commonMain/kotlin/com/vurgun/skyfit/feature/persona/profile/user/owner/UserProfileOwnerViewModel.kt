@@ -16,6 +16,7 @@ import com.vurgun.skyfit.core.ui.styling.SkyFitAsset
 import com.vurgun.skyfit.feature.persona.components.viewdata.LifestyleActionItemViewData
 import com.vurgun.skyfit.feature.persona.components.viewdata.LifestyleActionRowViewData
 import com.vurgun.skyfit.feature.persona.components.viewdata.PhotoGalleryStackViewData
+import com.vurgun.skyfit.feature.persona.profile.user.owner.UserProfileOwnerEffect.*
 import com.vurgun.skyfit.feature.persona.social.SocialPostItemViewData
 import com.vurgun.skyfit.feature.persona.social.fakePosts
 import kotlinx.coroutines.async
@@ -39,10 +40,10 @@ sealed interface UserProfileOwnerUiState {
 }
 
 sealed interface UserProfileOwnerAction {
-    data object NavigateBack : UserProfileOwnerAction
-    data object NavigateToAppointments : UserProfileOwnerAction
-    data object NavigateToSettings : UserProfileOwnerAction
-    data object NavigateToCreatePost : UserProfileOwnerAction
+    data object ClickBack : UserProfileOwnerAction
+    data object ClickAppointments : UserProfileOwnerAction
+    data object ClickSettings : UserProfileOwnerAction
+    data object ClickCreatePost : UserProfileOwnerAction
     data class NavigateToVisitFacility(val gymId: Int) : UserProfileOwnerAction
     data class TogglePostVisibility(val visible: Boolean) : UserProfileOwnerAction
 }
@@ -74,12 +75,12 @@ class UserProfileOwnerViewModel(
 
     fun onAction(action: UserProfileOwnerAction) {
         when (action) {
-            UserProfileOwnerAction.NavigateBack -> emitEffect(UserProfileOwnerEffect.NavigateBack)
-            UserProfileOwnerAction.NavigateToAppointments -> emitEffect(UserProfileOwnerEffect.NavigateToAppointments)
-            UserProfileOwnerAction.NavigateToSettings -> emitEffect(UserProfileOwnerEffect.NavigateToSettings)
-            UserProfileOwnerAction.NavigateToCreatePost -> emitEffect(UserProfileOwnerEffect.NavigateToCreatePost)
+            UserProfileOwnerAction.ClickBack -> emitEffect(UserProfileOwnerEffect.NavigateBack)
+            UserProfileOwnerAction.ClickAppointments -> emitEffect(UserProfileOwnerEffect.NavigateToAppointments)
+            UserProfileOwnerAction.ClickSettings -> emitEffect(UserProfileOwnerEffect.NavigateToSettings)
+            UserProfileOwnerAction.ClickCreatePost -> emitEffect(UserProfileOwnerEffect.NavigateToCreatePost)
             is UserProfileOwnerAction.NavigateToVisitFacility -> emitEffect(
-                UserProfileOwnerEffect.NavigateToVisitFacility(
+                NavigateToVisitFacility(
                     action.gymId
                 )
             )

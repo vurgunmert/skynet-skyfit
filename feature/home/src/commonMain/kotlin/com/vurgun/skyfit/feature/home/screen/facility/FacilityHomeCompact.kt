@@ -1,9 +1,6 @@
 package com.vurgun.skyfit.feature.home.screen.facility
 
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Scaffold
@@ -22,7 +19,8 @@ import com.vurgun.skyfit.core.navigation.push
 import com.vurgun.skyfit.core.ui.components.loader.FullScreenLoaderContent
 import com.vurgun.skyfit.core.ui.screen.ErrorScreen
 import com.vurgun.skyfit.core.ui.utils.CollectEffect
-import com.vurgun.skyfit.feature.home.component.DefaultCompactTopBar
+import com.vurgun.skyfit.feature.home.component.HomeCompactComponent
+import com.vurgun.skyfit.feature.home.component.HomeStatisticComponents.StatCardComponent
 import com.vurgun.skyfit.feature.home.model.FacilityHomeAction
 import com.vurgun.skyfit.feature.home.model.FacilityHomeEffect
 import com.vurgun.skyfit.feature.home.model.FacilityHomeUiState
@@ -55,8 +53,7 @@ internal fun FacilityHomeCompact(viewModel: FacilityHomeViewModel) {
     }
 
     when (uiState) {
-        FacilityHomeUiState.Loading ->
-            FullScreenLoaderContent()
+        FacilityHomeUiState.Loading -> { FullScreenLoaderContent() }
 
         is FacilityHomeUiState.Error -> {
             val message = (uiState as FacilityHomeUiState.Error).message
@@ -89,10 +86,20 @@ private object FacilityHomeCompactComponent {
         content: FacilityHomeUiState.Content,
         onAction: (FacilityHomeAction) -> Unit
     ) {
-        DefaultCompactTopBar(
-            state = content.topBarState,
-            onNavigate = { onAction(FacilityHomeAction.OnOverlayRequest(it)) },
-        )
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 24.dp, vertical = 8.dp),
+            verticalAlignment = Alignment.CenterVertically,
+        ) {
+
+            Spacer(Modifier.weight(1f))
+
+            HomeCompactComponent.BasicTopBar(
+                onClickNotifications = { onAction(FacilityHomeAction.OnClickNotifications) },
+                onClickConversations = { onAction(FacilityHomeAction.OnClickConversations) },
+            )
+        }
     }
 
     @Composable
@@ -105,9 +112,9 @@ private object FacilityHomeCompactComponent {
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {
 
-            StatCardComponent(content)
+            StatCardComponent(content.statistics)
 
-            FacilityDashboardAppointments(content, onAction)
+            HomeCompactComponent.LessonCards(content.allLessons)
 
 //            ExpandedHomeFacilityLessonTable(content.appointments)
 

@@ -222,7 +222,7 @@ fun MobileUserProfileOwnerScreen(
         is UserProfileOwnerUiState.Loading -> FullScreenLoaderContent()
         is UserProfileOwnerUiState.Error -> {
             val message = (uiState as UserProfileOwnerUiState.Error).message
-            ErrorScreen(message = message, onConfirm = { viewModel.onAction(UserProfileOwnerAction.NavigateBack) })
+            ErrorScreen(message = message, onConfirm = { viewModel.onAction(UserProfileOwnerAction.ClickBack) })
         }
 
         is UserProfileOwnerUiState.Content -> {
@@ -290,8 +290,8 @@ private object MobileUserProfileOwnerComponent {
                         postsSelected = content.postsVisible,
                         onClickAbout = { onAction(UserProfileOwnerAction.TogglePostVisibility(false)) },
                         onClickPosts = { }, //onAction(UserProfileOwnerAction.TogglePostVisibility(true))
-                        onClickSettings = { onAction(UserProfileOwnerAction.NavigateToSettings) },
-                        onClickNewPost = { onAction(UserProfileOwnerAction.NavigateToCreatePost) }
+                        onClickSettings = { onAction(UserProfileOwnerAction.ClickSettings) },
+                        onClickNewPost = { onAction(UserProfileOwnerAction.ClickCreatePost) }
                     )
 
                     if (content.postsVisible) {
@@ -299,8 +299,8 @@ private object MobileUserProfileOwnerComponent {
                     } else {
                         MobileUserProfileOwner_UpcomingAppointments(
                             appointments = content.appointments,
-                            onClickItem = { onAction(UserProfileOwnerAction.NavigateToAppointments) },
-                            onClickShowAll = { onAction(UserProfileOwnerAction.NavigateToAppointments) },
+                            onClickItem = { onAction(UserProfileOwnerAction.ClickAppointments) },
+                            onClickShowAll = { onAction(UserProfileOwnerAction.ClickAppointments) },
                             modifier = Modifier
                         )
                     }

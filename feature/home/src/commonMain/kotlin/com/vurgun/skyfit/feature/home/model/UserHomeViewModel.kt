@@ -6,35 +6,66 @@ import com.vurgun.skyfit.core.data.utility.SingleSharedFlow
 import com.vurgun.skyfit.core.data.utility.UiStateDelegate
 import com.vurgun.skyfit.core.data.utility.emitOrNull
 import com.vurgun.skyfit.core.data.utility.now
+import com.vurgun.skyfit.core.data.v1.data.statistics.front.UserStatistics
 import com.vurgun.skyfit.core.data.v1.domain.account.manager.ActiveAccountManager
 import com.vurgun.skyfit.core.data.v1.domain.account.model.UserAccount
 import com.vurgun.skyfit.core.data.v1.domain.facility.model.FacilityProfile
 import com.vurgun.skyfit.core.data.v1.domain.facility.repository.FacilityRepository
-import com.vurgun.skyfit.core.data.v1.domain.global.model.CharacterType
+import com.vurgun.skyfit.core.data.v1.domain.trainer.model.TrainerProfile
 import com.vurgun.skyfit.core.data.v1.domain.user.model.UserProfile
 import com.vurgun.skyfit.core.data.v1.domain.user.repository.UserRepository
+import com.vurgun.skyfit.core.data.v1.domain.workout.model.ExerciseProfile
 import com.vurgun.skyfit.feature.home.model.UserHomeEffect.*
 import com.vurgun.skyfit.feature.home.screen.user.UserAppointmentUiData
-import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.async
 import kotlinx.coroutines.flow.SharedFlow
-import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import kotlinx.datetime.LocalDate
+import kotlinx.datetime.daysUntil
+
+data class UserHomeCalendarState(
+    val activeCalendarDates: Set<LocalDate> = emptySet()
+)
+
+data class UserHomeMembershipState(
+    val memberFacility: FacilityProfile,
+    val memberDurationDays: Int = 0,
+    val requestReceived: Boolean = false,
+    val requestSent: Boolean = false,
+)
+
+data class UserHomeStatisticsState(
+    val statistics: UserStatistics,
+)
+
+data class UserHomeDietState(
+    val statistics: UserStatistics
+)
+
+data class UserHomeFeaturedContentState(
+    val featuredTrainers: List<TrainerProfile> = emptyList(),
+    val featuredExercises: List<ExerciseProfile> = emptyList(),
+)
+
+data class UserHomeAppointmentsState(
+    val appointments: List<UserAppointmentUiData> = emptyList(),
+)
 
 internal sealed interface UserHomeUiState {
     data object Loading : UserHomeUiState
     data class Error(val message: String?) : UserHomeUiState
     data class Content(
+        val account: UserAccount,
         val profile: UserProfile,
-        val memberFacility: FacilityProfile? = null,
-        val memberDurationDays: Int? = null,
-        val characterType: CharacterType,
-        val appointments: List<UserAppointmentUiData> = emptyList(),
-        val activeCalendarDates: Set<LocalDate> = emptySet(),
-        val notificationsEnabled: Boolean = true, // TODO: Remove debug
-        val conversationsEnabled: Boolean = true, // TODO: Remove debug
-        val requestsEnabled: Boolean = false, // TODO: Remove debug
-    ) : UserHomeUiState
+        val calendarState: UserHomeCalendarState? = null,
+        val membershipState: UserHomeMembershipState? = null,
+        val statisticsState: UserHomeStatisticsState? = null,
+        val dietState: UserHomeDietState? = null,
+        val featuredContentState: UserHomeFeaturedContentState? = null,
+        val appointmentsState: UserHomeAppointmentsState? = null,
+    ) : UserHomeUiState {
+        val characterType = account.characterType
+    }
 }
 
 sealed class UserHomeAction {
@@ -44,7 +75,6 @@ sealed class UserHomeAction {
     data object OnClickChatBot : UserHomeAction()
     data object OnClickAppointments : UserHomeAction()
     data object OnClickShowCalendar : UserHomeAction()
-    data class OnChangeSelectedDate(val date: LocalDate) : UserHomeAction()
 }
 
 sealed class UserHomeEffect {
@@ -53,7 +83,7 @@ sealed class UserHomeEffect {
     data object NavigateToChatbot : UserHomeEffect()
     data object NavigateToConversations : UserHomeEffect()
     data object NavigateToAppointments : UserHomeEffect()
-    data class NavigateToActivityCalendar(val date: LocalDate) : UserHomeEffect()
+    data object NavigateToActivityCalendar : UserHomeEffect()
 }
 
 class UserHomeViewModel(
@@ -67,9 +97,6 @@ class UserHomeViewModel(
 
     private val _effect = SingleSharedFlow<UserHomeEffect>()
     val effect: SharedFlow<UserHomeEffect> = _effect
-
-    private val _selectedDate = MutableStateFlow<LocalDate>(LocalDate.now())
-    val selectedDate: StateFlow<LocalDate> = _selectedDate
 
     fun onAction(action: UserHomeAction) {
         when (action) {
@@ -89,49 +116,67 @@ class UserHomeViewModel(
                 emitEffect(NavigateToChatbot)
 
             UserHomeAction.OnClickShowCalendar ->
-                emitEffect(NavigateToActivityCalendar(_selectedDate.value))
-
-            is UserHomeAction.OnChangeSelectedDate -> {
-                _selectedDate.value = action.date
-            }
+                emitEffect(NavigateToActivityCalendar)
         }
     }
 
     fun loadData() {
         screenModelScope.launch {
             runCatching {
-                val userDetail = (userManager.user.value as UserAccount)
+                val account = userManager.user.value as? UserAccount
+                    ?: error("Invalid user state")
 
-                val userProfile = userRepository.getUserProfile(userDetail.normalUserId).getOrThrow()
-
-                val facilityProfile = userProfile.memberGymId?.let { gymId ->
-                    facilityRepository.getFacilityProfile(gymId).getOrThrow()
+                val userProfileDeferred = async { userRepository.getUserProfile(account.normalUserId).getOrThrow() }
+                val calendarEventsDeferred = async { userRepository.getCalendarEvents().getOrDefault(emptyList()) }
+                val appointmentsDeferred = async {
+                    userRepository.getUpcomingAppointmentsByUser(account.normalUserId, limit = 3)
+                        .getOrDefault(emptyList())
                 }
 
-                val appointments = userRepository.getUpcomingAppointmentsByUser(userDetail.normalUserId, limit = 3)
-                    .getOrDefault(emptyList())
-                    .map {
+                val userProfile = userProfileDeferred.await()
+                val calendarEvents = calendarEventsDeferred.await()
+                val appointments = appointmentsDeferred.await()
+
+                val calendarState = UserHomeCalendarState(
+                    activeCalendarDates = calendarEvents.map { it.startDate }.toSet()
+                )
+
+                val membershipState = userProfile.memberGymId?.let { gymId ->
+                    facilityRepository.getFacilityProfile(gymId).getOrNull()?.let { facility ->
+                        val duration = userProfile.memberGymJoinedAt?.daysUntil(LocalDate.now()) ?: 0
+                        UserHomeMembershipState(facility, duration)
+                    }
+                }
+
+                val statisticsState = UserHomeStatisticsState(statistics = UserStatistics())
+                val dietState = UserHomeDietState(statistics = UserStatistics())
+                val featuredContentState = UserHomeFeaturedContentState() // placeholder, fetch later?
+
+                val appointmentState = UserHomeAppointmentsState(
+                    appointments.map {
                         UserAppointmentUiData(
-                            it.lessonId,
-                            it.iconId,
-                            it.title,
-                            it.startTime.toString(),
-                            it.facilityName
+                            lessonId = it.lessonId,
+                            iconId = it.iconId,
+                            title = it.title,
+                            time = it.startTime.toString(),
+                            location = it.facilityName
                         )
                     }
-
-                val calendarEvents = userRepository.getCalendarEvents().getOrDefault(emptyList())
-                val activeCalendarDates = calendarEvents.map { it.startDate }.toSet()
+                )
 
                 _uiState.update(
                     UserHomeUiState.Content(
+                        account = account,
                         profile = userProfile,
-                        memberFacility = facilityProfile,
-                        characterType = userDetail.characterType,
-                        appointments = appointments,
-                        activeCalendarDates = activeCalendarDates
+                        calendarState = calendarState,
+                        membershipState = membershipState,
+                        statisticsState = statisticsState,
+                        dietState = dietState,
+                        featuredContentState = featuredContentState,
+                        appointmentsState = appointmentState
                     )
                 )
+
             }.onFailure {
                 _uiState.update(UserHomeUiState.Error(it.message))
             }

@@ -18,7 +18,7 @@ import com.vurgun.skyfit.core.ui.components.special.SkyFitMobileScaffold
 import com.vurgun.skyfit.core.ui.components.special.SkyFitScreenHeader
 import com.vurgun.skyfit.feature.persona.settings.shared.component.PaymentHistoryItemComponent
 
-class FacilitySettingsPaymentHistoryScreen : Screen {
+class FacilityPaymentHistorySettingsScreen : Screen {
 
     @Composable
     override fun Content() {

@@ -16,22 +16,18 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.dp
-import com.vurgun.skyfit.core.ui.components.special.*
+import com.vurgun.skyfit.core.ui.components.special.SkyFitCircleAvatarRowComponent
+import com.vurgun.skyfit.core.ui.components.special.SkyFitNumberBadge
+import com.vurgun.skyfit.core.ui.components.special.SkyFitSearchTextInputComponent
+import com.vurgun.skyfit.core.ui.components.special.UserCircleAvatarItem
 import com.vurgun.skyfit.core.ui.styling.SkyFitColor
 import com.vurgun.skyfit.core.ui.styling.SkyFitTypography
+import com.vurgun.skyfit.feature.connect.conversation.ConversationsAction
+import com.vurgun.skyfit.feature.connect.conversation.ConversationsUiState
+import com.vurgun.skyfit.feature.connect.conversation.UserConversationItem
 import org.jetbrains.compose.resources.painterResource
 import skyfit.core.ui.generated.resources.Res
 import skyfit.core.ui.generated.resources.logo_skyfit
-
-sealed interface ConversationsUiState {
-    object Loading : ConversationsUiState
-    data class Content(val some: Any? = null) : ConversationsUiState
-    data class Error(val message: String?) : ConversationsUiState
-}
-
-sealed interface ConversationsAction {
-    data object OnClickBack : ConversationsAction
-}
 
 internal object ConversationsComponent {
 
@@ -58,17 +54,17 @@ internal object ConversationsComponent {
     @Composable
     fun Content(
         content: ConversationsUiState.Content,
-        onAction: (ConversationsAction)
+        onAction: (ConversationsAction) -> Unit
     ) {
 
         MobileUserConversationsSearchComponent()
 
-        if (conversations.isEmpty()) {
+        if (content.previews.isEmpty()) {
             MobileUserConversationsEmptyComponent()
         } else {
             MobileUserConversationsComponent(
-                conversations,
-                onClickConversation = goToChat
+                conversations = content.previews,
+                onClickConversation = { onAction(ConversationsAction.OnClickConversation) }
             )
             Spacer(Modifier.height(48.dp))
         }
@@ -120,14 +116,6 @@ internal object ConversationsComponent {
             }
         }
     }
-
-    data class UserConversationItem(
-        val avatarUrl: String = "",
-        val title: String = "Julia Heosten",
-        val message: String = "It was amazing! Really helped me stretch out and relax. Have you tried yoga before?",
-        val time: String = "13:55",
-        val unreadCount: Int = 0
-    )
 
     @Composable
     private fun MobileUserConversationItemComponent(

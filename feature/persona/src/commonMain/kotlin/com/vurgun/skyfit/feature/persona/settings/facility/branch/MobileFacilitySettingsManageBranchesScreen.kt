@@ -7,7 +7,7 @@ import cafe.adriel.voyager.navigator.currentOrThrow
 import com.vurgun.skyfit.core.ui.components.special.SkyFitMobileScaffold
 import com.vurgun.skyfit.core.ui.components.special.SkyFitScreenHeader
 
-class FacilitySettingsManageBranchesScreen : Screen {
+class FacilityBranchSettingsScreen : Screen {
 
     @Composable
     override fun Content() {

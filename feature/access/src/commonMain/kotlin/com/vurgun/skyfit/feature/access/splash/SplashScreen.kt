@@ -39,7 +39,7 @@ internal class SplashScreen : Screen {
         CollectEffect(viewModel.effect) { effect ->
             when (effect) {
                 SplashEffect.NavigateToDashboard -> {
-                    appNavigator.replaceAll(SharedScreen.Dashboard)
+                    appNavigator.replaceAll(SharedScreen.Main)
                 }
 
                 SplashEffect.NavigateToAuth -> {

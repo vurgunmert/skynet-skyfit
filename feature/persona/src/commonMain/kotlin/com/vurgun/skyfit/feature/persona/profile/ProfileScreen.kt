@@ -2,6 +2,7 @@ package com.vurgun.skyfit.feature.persona.profile
 
 import androidx.compose.runtime.Composable
 import cafe.adriel.voyager.core.screen.Screen
+import cafe.adriel.voyager.core.screen.ScreenKey
 import com.vurgun.skyfit.core.data.v1.domain.global.model.UserRole
 import com.vurgun.skyfit.core.ui.screen.UnauthorizedAccessScreen
 import com.vurgun.skyfit.core.utils.rememberUserRole
@@ -10,6 +11,9 @@ import com.vurgun.skyfit.feature.persona.profile.trainer.owner.TrainerProfileOwn
 import com.vurgun.skyfit.feature.persona.profile.user.owner.UserProfileOwnerScreen
 
 class ProfileScreen : Screen {
+
+    override val key: ScreenKey
+        get() = "profile"
 
     @Composable
     override fun Content() {

@@ -35,7 +35,7 @@ import skyfit.core.ui.generated.resources.add_action
 import skyfit.core.ui.generated.resources.members_label
 import skyfit.core.ui.generated.resources.search_action
 
-class FacilityManageMembersScreen(private val trainerId: Int? = null) : Screen {
+class FacilityMemberSettingsScreen(private val trainerId: Int? = null) : Screen {
 
     @Composable
     override fun Content() {

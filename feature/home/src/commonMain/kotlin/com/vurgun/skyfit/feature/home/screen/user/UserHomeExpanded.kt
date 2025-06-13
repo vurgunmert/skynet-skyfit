@@ -1,24 +1,28 @@
 package com.vurgun.skyfit.feature.home.screen.user
 
-import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
-import cafe.adriel.voyager.core.registry.ScreenProvider
+import androidx.compose.ui.unit.dp
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
 import com.vurgun.skyfit.core.navigation.SharedScreen
 import com.vurgun.skyfit.core.navigation.findParentByKey
 import com.vurgun.skyfit.core.navigation.push
-import com.vurgun.skyfit.core.ui.components.box.TodoBox
+import com.vurgun.skyfit.core.ui.components.layout.ExpandedLayout
 import com.vurgun.skyfit.core.ui.components.loader.FullScreenLoaderContent
 import com.vurgun.skyfit.core.ui.screen.ErrorScreen
+import com.vurgun.skyfit.core.ui.styling.SkyFitColor
 import com.vurgun.skyfit.core.ui.utils.CollectEffect
 import com.vurgun.skyfit.core.ui.utils.LocalOverlayController
-import com.vurgun.skyfit.feature.home.component.ExpandedDefaultTopBar
-import com.vurgun.skyfit.feature.home.component.HomeTopBarState
 import com.vurgun.skyfit.feature.home.model.UserHomeAction
 import com.vurgun.skyfit.feature.home.model.UserHomeEffect.*
 import com.vurgun.skyfit.feature.home.model.UserHomeUiState
@@ -52,7 +56,7 @@ internal fun UserHomeExpanded(viewModel: UserHomeViewModel) {
                 overlayController.invoke(SharedScreen.ChatBot)
 
             is NavigateToActivityCalendar ->
-                overlayController.invoke(SharedScreen.UserActivityCalendar(effect.date))
+                overlayController.invoke(SharedScreen.UserActivityCalendar())
         }
     }
 
@@ -73,11 +77,7 @@ internal fun UserHomeExpanded(viewModel: UserHomeViewModel) {
 
         is UserHomeUiState.Content -> {
             val content = uiState as UserHomeUiState.Content
-
-            SharedHomeComponent.ExpandedLayout(
-                topbar = { UserHomeExpandedComponent.TopBar(content, viewModel::onAction) },
-                content = { UserHomeExpandedComponent.Content(content, viewModel::onAction) }
-            )
+            UserHomeExpandedComponent.Content(content, viewModel::onAction)
         }
     }
 }
@@ -85,23 +85,77 @@ internal fun UserHomeExpanded(viewModel: UserHomeViewModel) {
 private object UserHomeExpandedComponent {
 
     @Composable
-    fun TopBar(
-        content: UserHomeUiState.Content,
-        onAction: (ScreenProvider) -> Unit
-    ) {
-        ExpandedDefaultTopBar(
-            state = HomeTopBarState(),
-            onNavigate = onScreenAction,
-            modifier = Modifier.fillMaxWidth()
-        )
-    }
-
-    @Composable
     fun Content(
         content: UserHomeUiState.Content,
         onAction: (UserHomeAction) -> Unit
     ) {
-        TodoBox("UserHomeExpandedComponent-Content")
+        ExpandedLayout.LeftLargeMultiLaneScaffold(
+            leftContent = {
+                Column {
+                    CalendarContent()
+                    FeaturedContent()
+                    StatisticCardsContent()
+                    StatisticGraphContent()
+                }
+            },
+            rightContent = {
+                Box(
+                    Modifier.fillMaxSize()
+                        .background(
+                            SkyFitColor.specialty.secondaryButtonRest,
+                            RoundedCornerShape(16.dp)
+                        )
+                ) {
 
+                }
+            },
+            modifier = Modifier.fillMaxSize()
+        )
     }
+
+
+    @Composable
+    private fun CalendarContent() {
+        Box(
+            modifier = Modifier.size(761.dp, 354.dp)
+                .background(
+                    SkyFitColor.background.default,
+                    shape = RoundedCornerShape(16.dp)
+                )
+        )
+    }
+
+    @Composable
+    private fun FeaturedContent() {
+        Box(
+            modifier = Modifier.size(761.dp, 342.dp)
+                .background(
+                    SkyFitColor.background.default,
+                    shape = RoundedCornerShape(16.dp)
+                )
+        )
+    }
+
+    @Composable
+    private fun StatisticCardsContent() {
+        Box(
+            modifier = Modifier.size(761.dp, 100.dp)
+                .background(
+                    SkyFitColor.background.default,
+                    shape = RoundedCornerShape(16.dp)
+                )
+        )
+    }
+
+    @Composable
+    private fun StatisticGraphContent() {
+        Box(
+            modifier = Modifier.size(761.dp, 200.dp)
+                .background(
+                    SkyFitColor.background.default,
+                    shape = RoundedCornerShape(16.dp)
+                )
+        )
+    }
+
 }

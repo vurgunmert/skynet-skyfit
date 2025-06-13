@@ -64,7 +64,7 @@ class UserActivityCalendarScreen(private val selectedDate: LocalDate? = null) : 
                 val message = (uiState as UserActivityCalendarUiState.Error).message
                 ErrorScreen(
                     message = message,
-                    onConfirm = { navigator.popUntil(SharedScreen.Dashboard) },
+                    onConfirm = { navigator.popUntil(SharedScreen.Main) },
                     confirmText = stringResource(Res.string.go_to_home_action)
                 )
             }

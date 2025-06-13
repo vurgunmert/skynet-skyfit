@@ -31,7 +31,7 @@ internal class OnboardingCompletedScreen(
 
         MobileOnboardingCompletedScreen(
             viewModel = viewModel,
-            goToDashboard = { appNavigator.replaceAll(SharedScreen.Dashboard) }
+            goToDashboard = { appNavigator.replaceAll(SharedScreen.Main) }
         )
     }
 }

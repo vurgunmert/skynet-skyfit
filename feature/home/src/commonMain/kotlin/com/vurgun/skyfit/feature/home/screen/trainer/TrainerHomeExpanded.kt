@@ -1,6 +1,7 @@
 package com.vurgun.skyfit.feature.home.screen.trainer
 
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.material.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -12,11 +13,15 @@ import cafe.adriel.voyager.navigator.currentOrThrow
 import com.vurgun.skyfit.core.navigation.SharedScreen
 import com.vurgun.skyfit.core.navigation.findParentByKey
 import com.vurgun.skyfit.core.navigation.push
-import com.vurgun.skyfit.core.ui.components.box.TodoBox
+import com.vurgun.skyfit.core.ui.components.layout.ExpandedLayout
 import com.vurgun.skyfit.core.ui.components.loader.FullScreenLoaderContent
+import com.vurgun.skyfit.core.ui.components.topbar.ExpandedTopBar
 import com.vurgun.skyfit.core.ui.screen.ErrorScreen
 import com.vurgun.skyfit.core.ui.utils.CollectEffect
 import com.vurgun.skyfit.core.ui.utils.LocalOverlayController
+import com.vurgun.skyfit.feature.home.component.HomeCompactComponent
+import com.vurgun.skyfit.feature.home.component.HomeLessonTableComponents
+import com.vurgun.skyfit.feature.home.component.HomeStatisticComponents
 import com.vurgun.skyfit.feature.home.model.TrainerHomeAction
 import com.vurgun.skyfit.feature.home.model.TrainerHomeEffect.*
 import com.vurgun.skyfit.feature.home.model.TrainerHomeUiState
@@ -45,6 +50,9 @@ internal fun TrainerHomeExpanded(viewModel: TrainerHomeViewModel) {
 
             NavigateToNotifications ->
                 overlayController.invoke(SharedScreen.Notifications)
+
+            NavigateToChatBot ->
+                overlayController.invoke(SharedScreen.ChatBot)
         }
     }
 
@@ -84,7 +92,13 @@ private object TrainerHomeExpandedComponent {
         content: TrainerHomeUiState.Content,
         onAction: (TrainerHomeAction) -> Unit
     ) {
-        TodoBox("TrainerHomeExpandedComponent-TopBar")
+        ExpandedTopBar.TopBarWithAccountAndNavigation(
+            content.account,
+            onClickNotifications = { onAction(TrainerHomeAction.OnClickNotifications) },
+            onClickConversations = { onAction(TrainerHomeAction.OnClickConversations) },
+            onClickChatBot = { onAction(TrainerHomeAction.OnClickChatBot) },
+            modifier = Modifier.fillMaxWidth(),
+        )
     }
 
     @Composable
@@ -92,7 +106,15 @@ private object TrainerHomeExpandedComponent {
         content: TrainerHomeUiState.Content,
         onAction: (TrainerHomeAction) -> Unit
     ) {
-        TodoBox("TrainerHomeExpandedComponent-Content")
-
+        ExpandedLayout.LeftLargeMultiLaneScaffold(
+            leftContent = {
+                HomeStatisticComponents.StatCardComponent(content.statistics)
+                HomeLessonTableComponents.LessonScheduleTable(content.lessons)
+            },
+            rightContent = {
+                HomeCompactComponent.LessonCards(content.lessons)
+            },
+            modifier = Modifier.fillMaxSize()
+        )
     }
 }

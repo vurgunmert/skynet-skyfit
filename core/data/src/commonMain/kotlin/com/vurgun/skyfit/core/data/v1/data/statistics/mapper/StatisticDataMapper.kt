@@ -1,7 +1,13 @@
 package com.vurgun.skyfit.core.data.v1.statistics.mapper
 
+import com.vurgun.skyfit.core.data.v1.data.statistics.front.ActivityStatistics
+import com.vurgun.skyfit.core.data.v1.data.statistics.front.FacilityStatistics
+import com.vurgun.skyfit.core.data.v1.data.statistics.front.GoalStatistics
+import com.vurgun.skyfit.core.data.v1.data.statistics.front.SpectatorStatistics
+import com.vurgun.skyfit.core.data.v1.data.statistics.front.Statistics
+import com.vurgun.skyfit.core.data.v1.data.statistics.front.TrainerStatistics
+import com.vurgun.skyfit.core.data.v1.data.statistics.front.UserStatistics
 import com.vurgun.skyfit.core.data.v1.statistics.back.model.*
-import com.vurgun.skyfit.core.data.v1.statistics.front.*
 
 internal object StatisticDataMapper {
 
