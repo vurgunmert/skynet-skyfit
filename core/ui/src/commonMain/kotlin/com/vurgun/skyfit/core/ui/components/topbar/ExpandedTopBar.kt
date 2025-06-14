@@ -145,20 +145,23 @@ object ExpandedTopBar {
             verticalAlignment = Alignment.CenterVertically,
         ) {
             TopBarWelcomeEditorialGroup(
-                name = account.firstName,
-                modifier = Modifier.fillMaxWidth()
+                name = account.firstName
             )
 
             Spacer(Modifier.weight(1f))
 
             TopBarTrophyGroup(
-                characterType = account.characterType,
-                modifier = Modifier.wrapContentWidth()
+                characterType = account.characterType
             )
 
             Spacer(Modifier.width(16.dp))
 
-            TopbarNavigationGroup(onClickNotifications, onClickConversations, onClickChatBot)
+            TopbarNavigationGroup(
+                onClickNotifications = onClickNotifications,
+                onClickConversations = onClickConversations,
+                onClickChatBot = onClickChatBot,
+                modifier = Modifier.wrapContentWidth()
+            )
         }
     }
 
@@ -212,10 +215,8 @@ object ExpandedTopBar {
         ) {
             TopBarWelcomeEditorialGroup(
                 name = account.gymName,
-                modifier = Modifier.fillMaxWidth()
+                modifier = Modifier.wrapContentWidth()
             )
-
-            Spacer(Modifier.weight(1f))
 
             TopbarNavigationGroup(onClickNotifications, onClickConversations, onClickChatBot)
         }
@@ -244,9 +245,8 @@ object ExpandedTopBar {
         characterType: CharacterType,
         modifier: Modifier = Modifier,
     ) {
-        Row(modifier = modifier) {
+        Row(modifier = modifier, verticalAlignment = Alignment.CenterVertically) {
             CharacterImage(characterType, Modifier.size(48.dp))
-            Box(Modifier.size(48.dp).background(Color.Black))
             Spacer(Modifier.width(16.dp))
             Box(Modifier.size(24.dp, 32.dp).background(Color.Red))
             Spacer(Modifier.width(16.dp))

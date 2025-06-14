@@ -3,6 +3,8 @@ package com.vurgun.skyfit.feature.persona.profile
 import androidx.compose.runtime.Composable
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.core.screen.ScreenKey
+import cafe.adriel.voyager.navigator.Navigator
+import cafe.adriel.voyager.transitions.CrossfadeTransition
 import com.vurgun.skyfit.core.data.v1.domain.global.model.UserRole
 import com.vurgun.skyfit.core.ui.screen.UnauthorizedAccessScreen
 import com.vurgun.skyfit.core.utils.rememberUserRole
@@ -19,11 +21,15 @@ class ProfileScreen : Screen {
     override fun Content() {
         val userRole = rememberUserRole()
 
-        when (userRole) {
-            UserRole.Facility -> FacilityProfileOwnerScreen().Content()
-            UserRole.Trainer -> TrainerProfileOwnerScreen().Content()
-            UserRole.User -> UserProfileOwnerScreen().Content()
-            UserRole.Guest -> UnauthorizedAccessScreen().Content()
+        val screen = when (userRole) {
+            UserRole.Facility -> FacilityProfileOwnerScreen()
+            UserRole.Trainer -> TrainerProfileOwnerScreen()
+            UserRole.User -> UserProfileOwnerScreen()
+            UserRole.Guest -> UnauthorizedAccessScreen()
+        }
+
+        Navigator(screen) { profileNavigation ->
+            CrossfadeTransition(profileNavigation)
         }
     }
 }

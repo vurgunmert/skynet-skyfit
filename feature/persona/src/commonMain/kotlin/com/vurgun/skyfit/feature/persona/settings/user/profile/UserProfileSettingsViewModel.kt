@@ -95,7 +95,7 @@ sealed class UserEditProfileEffect {
     data class ShowSaveError(val message: String) : UserEditProfileEffect()
 }
 
-class UserSettingsEditProfileViewModel(
+class UserProfileSettingsViewModel(
     private val userManager: ActiveAccountManager,
     private val userRepository: UserRepository,
     private val remoteImageDataSource: RemoteImageDataSource

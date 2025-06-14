@@ -12,6 +12,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.min
 import com.vurgun.skyfit.core.data.v1.domain.global.model.ProfileTag
 import com.vurgun.skyfit.core.ui.components.button.LargePrimaryIconButton
 import com.vurgun.skyfit.core.ui.components.image.NetworkImage
@@ -97,7 +98,7 @@ private fun AccountSettingsProfileCard(
         ) {
 
             Box(
-                modifier = Modifier.fillMaxWidth().height(120.dp),
+                modifier = Modifier.fillMaxWidth().heightIn(min = 120.dp, max = 200.dp),
                 contentAlignment = Alignment.Center,
                 content = imageContent
             )

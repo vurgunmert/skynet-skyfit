@@ -1,4 +1,4 @@
-package com.vurgun.skyfit.feature.persona.settings.user.profile
+package com.vurgun.skyfit.feature.persona.settings.user.account
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -20,6 +21,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import cafe.adriel.voyager.core.screen.Screen
+import cafe.adriel.voyager.core.screen.ScreenKey
 import cafe.adriel.voyager.koin.koinScreenModel
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
@@ -35,6 +37,7 @@ import com.vurgun.skyfit.core.ui.utils.CollectEffect
 import com.vurgun.skyfit.feature.persona.settings.shared.account.ManageAccountsScreen
 import com.vurgun.skyfit.feature.persona.settings.shared.changepassword.ChangePasswordScreen
 import com.vurgun.skyfit.feature.persona.settings.shared.component.UserAccountSettingsProfileCard
+import com.vurgun.skyfit.feature.persona.settings.user.profile.UserProfileSettingsScreen
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
 import skyfit.core.ui.generated.resources.Res
@@ -48,12 +51,15 @@ import skyfit.core.ui.generated.resources.ic_profile
 import skyfit.core.ui.generated.resources.settings_account_label
 import skyfit.core.ui.generated.resources.settings_change_my_password_label
 
-class UserSettingsManageProfileScreen : Screen {
+class UserAccountSettingsScreen : Screen {
+
+    override val key: ScreenKey
+        get() = "settings:user:account"
 
     @Composable
     override fun Content() {
         val navigator = LocalNavigator.currentOrThrow
-        val viewModel = koinScreenModel<UserSettingsManageProfileViewModel>()
+        val viewModel = koinScreenModel<UserAccountSettingsViewModel>()
         val uiState by viewModel.uiState.collectAsState()
         val deleteProfileErrorDialogState = rememberErrorDialogState()
 
@@ -72,7 +78,7 @@ class UserSettingsManageProfileScreen : Screen {
                 }
 
                 UserManageProfileEffect.NavigateToEdit -> {
-                    navigator.push(UserSettingsEditProfileScreen())
+                    navigator.push(UserProfileSettingsScreen())
                 }
 
                 is UserManageProfileEffect.ShowDeleteProfileError -> deleteProfileErrorDialogState.show(effect.message)
@@ -93,7 +99,7 @@ class UserSettingsManageProfileScreen : Screen {
             is UserManageProfileUiState.Content -> {
                 val content = (uiState as UserManageProfileUiState.Content)
 
-                MobileUserSettingsAccountScreen(
+                UserAccountSettingsCompact(
                     content = content,
                     onAction = viewModel::onAction
                 )
@@ -103,7 +109,82 @@ class UserSettingsManageProfileScreen : Screen {
 }
 
 @Composable
-private fun MobileUserSettingsAccountScreen(
+private fun UserAccountSettingsCompact(
+    content: UserManageProfileUiState.Content,
+    onAction: (UserManageProfileAction) -> Unit
+) {
+    val account = content.form
+    var showDeleteConfirm by remember { mutableStateOf(false) }
+
+    Scaffold(
+        topBar = {
+            SkyFitScreenHeader(
+                stringResource(Res.string.settings_account_label),
+                onClickBack = { onAction(UserManageProfileAction.NavigateToBack) })
+        },
+        bottomBar = {
+            if (showDeleteConfirm) {
+                MobileSettingsDeleteAccountBottomSheet(
+                    onCancelClicked = { showDeleteConfirm = false },
+                    onDeleteClicked = { onAction(UserManageProfileAction.DeleteProfile) }
+                )
+            }
+        }
+    ) {
+        Column(
+            modifier = Modifier.fillMaxSize()
+                .padding(24.dp)
+                .verticalScroll(rememberScrollState()),
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.spacedBy(24.dp)
+        ) {
+
+            UserAccountSettingsProfileCard(
+                backgroundImageUrl = account.backgroundImageUrl,
+                foregroundImageUrl = account.profileImageUrl,
+                name = account.firstName,
+                username = account.userName,
+                height = "${account.height} ${account.heightUnit.label}",
+                weight = "${account.weight} ${account.weightUnit.shortLabel}",
+                bodyType = account.bodyType.turkishShort,
+                onClick = { onAction(UserManageProfileAction.NavigateToEdit) },
+            )
+
+            SettingsMenuItem(
+                iconRes = Res.drawable.ic_lock,
+                text = stringResource(Res.string.settings_change_my_password_label),
+                onClick = { onAction(UserManageProfileAction.NavigateToChangePassword) }
+            )
+
+            if (content.hasMultipleProfiles) {
+                SettingsMenuItem(
+                    iconRes = Res.drawable.ic_profile,
+                    text = stringResource(Res.string.accounts_title),
+                    onClick = { onAction(UserManageProfileAction.NavigateToAccounts) }
+                )
+            } else {
+                SettingsMenuItem(
+                    iconRes = Res.drawable.ic_plus,
+                    text = stringResource(Res.string.add_account_action),
+                    onClick = { onAction(UserManageProfileAction.NavigateToAccounts) }
+                )
+            }
+
+            PrimaryLargeButton(
+                text = stringResource(Res.string.delete_account_action),
+                leftIconPainter = painterResource(Res.drawable.ic_delete),
+                modifier = Modifier.fillMaxWidth(),
+                onClick = { showDeleteConfirm = true }
+            )
+
+            Spacer(Modifier.height(124.dp))
+        }
+    }
+}
+
+
+@Composable
+private fun UserAccountSettingsCompact2(
     content: UserManageProfileUiState.Content,
     onAction: (UserManageProfileAction) -> Unit
 ) {

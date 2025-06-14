@@ -5,18 +5,18 @@ import kotlinx.datetime.LocalDate
 import kotlinx.serialization.Serializable
 
 @Serializable
-sealed class SharedScreen(val key: String? = null) : ScreenProvider {
+sealed class SharedScreen(open val key: String) : ScreenProvider {
 
-    // Splash
-    data object UnderDevelopment : SharedScreen()
-    data object Splash : SharedScreen()
-    data object Maintenance : SharedScreen()
+    // Splash & Maintenance
+    data object UnderDevelopment : SharedScreen("under_development")
+    data object Splash : SharedScreen("splash")
+    data object Maintenance : SharedScreen("maintenance")
 
     // Authorization
     data object Authorization : SharedScreen("authorization")
     data object Onboarding : SharedScreen("onboarding")
 
-    // Dashboard-Home
+    // Dashboard / Main Screens
     data object Main : SharedScreen("main")
     data object Home : SharedScreen("home")
     data object Explore : SharedScreen("explore")
@@ -24,57 +24,74 @@ sealed class SharedScreen(val key: String? = null) : ScreenProvider {
     data object Profile : SharedScreen("profile")
     data object Nutrition : SharedScreen("nutrition")
 
-    // Explore
-    data object ExploreTrainers : SharedScreen()
-    data object ExploreFacilities : SharedScreen()
-    data object ExploreExercises : SharedScreen()
-    data object ExploreBlogs : SharedScreen()
-    data object ExploreChallenges : SharedScreen()
-    data object ExploreCommunities : SharedScreen()
-    data object BlogDetail : SharedScreen()
-    data object ChallengeDetail : SharedScreen()
-    data object CommunityDetail : SharedScreen()
+    // Explore Subsections
+    data object ExploreTrainers : SharedScreen("explore_trainers")
+    data object ExploreFacilities : SharedScreen("explore_facilities")
+    data object ExploreExercises : SharedScreen("explore_exercises")
+    data object ExploreBlogs : SharedScreen("explore_blogs")
+    data object ExploreChallenges : SharedScreen("explore_challenges")
+    data object ExploreCommunities : SharedScreen("explore_communities")
+
+    data object BlogDetail : SharedScreen("blog_detail")
+    data object ChallengeDetail : SharedScreen("challenge_detail")
+    data object CommunityDetail : SharedScreen("community_detail")
 
     // Calendar
-    data class UserActivityCalendar(val selectedDate: LocalDate? = null) : SharedScreen()
+    data class UserActivityCalendar(val selectedDate: LocalDate? = null) :
+        SharedScreen("calendar:user_activity:${selectedDate.toString()}")
 
     // Appointments
-    data object Appointments : SharedScreen()
-    data object TrainerAppointmentListing : SharedScreen()
-    data class UserAppointmentDetail(val id: Int) : SharedScreen()
-    data class TrainerAppointmentDetail(val id: Int) : SharedScreen()
+    data object Appointments : SharedScreen("appointments")
+    data object TrainerAppointmentListing : SharedScreen("appointments:trainer_listing")
+
+    data class UserAppointmentDetail(val id: Int) :
+        SharedScreen("appointments:user_detail:$id")
+
+    data class TrainerAppointmentDetail(val id: Int) :
+        SharedScreen("appointments:trainer_detail:$id")
 
     // Notifications
-    data object Notifications : SharedScreen()
-    data class NotificationsExpanded(val onDismiss: () -> Unit) : SharedScreen()
+    data object Notifications : SharedScreen("notifications")
+    data class NotificationsExpanded(val onDismiss: () -> Unit) :
+        SharedScreen("notifications:expanded")
 
     // Messages
-    data object Conversations : SharedScreen()
-    data class ConversationsExpanded(val onDismiss: () -> Unit) : SharedScreen()
+    data object Conversations : SharedScreen("conversations")
+    data class ConversationsExpanded(val onDismiss: () -> Unit) :
+        SharedScreen("conversations:expanded")
 
-    data class UserChat(val participantId: Int) : SharedScreen()
+    data class UserChat(val participantId: Int) :
+        SharedScreen("conversations:chat:$participantId")
 
     // Posture Analysis
-    data object PostureAnalysis : SharedScreen()
+    data object PostureAnalysis : SharedScreen("posture_analysis")
 
-    // Chatbot
-    data object ChatBot : SharedScreen()
+    // AI ChatBot
+    data object ChatBot : SharedScreen("chat_bot")
 
-    // Profile
-    data class UserProfileVisitor(val id: Int) : SharedScreen()
-    data class FacilityProfileVisitor(val id: Int) : SharedScreen()
-    data class TrainerProfileVisitor(val id: Int) : SharedScreen()
+    // Profiles
+    data class UserProfileVisitor(val id: Int) :
+        SharedScreen("profile:user:$id")
 
-    // Profile - Schedule
-    data class FacilitySchedule(val id: Int) : SharedScreen()
-    data class TrainerSchedule(val id: Int) : SharedScreen()
+    data class FacilityProfileVisitor(val id: Int) :
+        SharedScreen("profile:facility:$id")
 
-    // Courses
-    data object FacilityManageLessons : SharedScreen()
+    data class TrainerProfileVisitor(val id: Int) :
+        SharedScreen("profile:trainer:$id")
 
-    // Social
-    data object CreatePost : SharedScreen()
+    // Schedules
+    data class FacilitySchedule(val id: Int) :
+        SharedScreen("schedule:facility:$id")
+
+    data class TrainerSchedule(val id: Int) :
+        SharedScreen("schedule:trainer:$id")
+
+    // Courses / Lessons
+    data object FacilityManageLessons : SharedScreen("courses:manage_facility")
+
+    // Social / Posts
+    data object CreatePost : SharedScreen("social:create_post")
 
     // Settings
-    data object Settings : SharedScreen()
+    data object Settings : SharedScreen("settings")
 }

@@ -26,8 +26,8 @@ import com.vurgun.skyfit.feature.persona.settings.trainer.notification.TrainerNo
 import com.vurgun.skyfit.feature.persona.settings.trainer.profile.TrainerSettingsEditProfileViewModel
 import com.vurgun.skyfit.feature.persona.settings.trainer.profile.TrainerSettingsManageProfileViewModel
 import com.vurgun.skyfit.feature.persona.settings.user.notification.UserNotificationSettingsViewModel
-import com.vurgun.skyfit.feature.persona.settings.user.profile.UserSettingsEditProfileViewModel
-import com.vurgun.skyfit.feature.persona.settings.user.profile.UserSettingsManageProfileViewModel
+import com.vurgun.skyfit.feature.persona.settings.user.profile.UserProfileSettingsViewModel
+import com.vurgun.skyfit.feature.persona.settings.user.account.UserAccountSettingsViewModel
 import com.vurgun.skyfit.feature.persona.social.SocialMediaViewModel
 import org.koin.dsl.module
 
@@ -38,8 +38,8 @@ val featurePersonaModule = module {
     factory { ChangePasswordViewModel() }
     factory { ManageAccountsViewModel(get()) }
 
-    factory { UserSettingsManageProfileViewModel(get(), get()) }
-    factory { UserSettingsEditProfileViewModel(get(), get(), get()) }
+    factory { UserAccountSettingsViewModel(get(), get()) }
+    factory { UserProfileSettingsViewModel(get(), get(), get()) }
 
     factory { TrainerSettingsManageProfileViewModel(get(), get()) }
     factory { TrainerSettingsEditProfileViewModel(get(), get(), get(), get()) }

@@ -1,4 +1,4 @@
-package com.vurgun.skyfit.feature.persona.settings.user.profile
+package com.vurgun.skyfit.feature.persona.settings.user.account
 
 import cafe.adriel.voyager.core.model.ScreenModel
 import cafe.adriel.voyager.core.model.screenModelScope
@@ -53,7 +53,7 @@ sealed class UserManageProfileEffect {
     data class ShowDeleteProfileError(val message: String) : UserManageProfileEffect()
 }
 
-class UserSettingsManageProfileViewModel(
+class UserAccountSettingsViewModel(
     private val userManager: ActiveAccountManager,
     private val userRepository: UserRepository
 ) : ScreenModel {

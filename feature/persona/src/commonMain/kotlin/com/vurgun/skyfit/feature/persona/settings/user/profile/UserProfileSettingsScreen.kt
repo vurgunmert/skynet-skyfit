@@ -12,6 +12,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -32,7 +33,6 @@ import com.vurgun.skyfit.core.ui.components.dialog.rememberErrorDialogState
 import com.vurgun.skyfit.core.ui.components.loader.FullScreenLoaderContent
 import com.vurgun.skyfit.core.ui.components.picker.HeightAndUnitPickerDialog
 import com.vurgun.skyfit.core.ui.components.picker.WeightAndUnitPickerDialog
-import com.vurgun.skyfit.core.ui.components.special.SkyFitMobileScaffold
 import com.vurgun.skyfit.core.ui.components.text.SingleLineInputText
 import com.vurgun.skyfit.core.ui.components.text.TitledMediumRegularText
 import com.vurgun.skyfit.core.ui.screen.ErrorScreen
@@ -54,12 +54,12 @@ import skyfit.core.ui.generated.resources.user_first_name_mandatory_label
 import skyfit.core.ui.generated.resources.user_last_name_hint
 import skyfit.core.ui.generated.resources.user_last_name_mandatory_label
 
-class UserSettingsEditProfileScreen : Screen {
+class UserProfileSettingsScreen : Screen {
 
     @Composable
     override fun Content() {
         val navigator = LocalNavigator.currentOrThrow
-        val viewModel = koinScreenModel<UserSettingsEditProfileViewModel>()
+        val viewModel = koinScreenModel<UserProfileSettingsViewModel>()
         val uiState by viewModel.uiState.collectAsState()
         val saveError = rememberErrorDialogState()
 
@@ -106,7 +106,7 @@ class UserSettingsEditProfileScreen : Screen {
 
 @Composable
 private fun MobileUserSettingsEditProfileScreen(
-    viewModel: UserSettingsEditProfileViewModel,
+    viewModel: UserProfileSettingsViewModel,
     formState: UserEditProfileFormState
 ) {
 
@@ -118,7 +118,7 @@ private fun MobileUserSettingsEditProfileScreen(
     val firstNameFocusRequester = remember { FocusRequester() }
     val lastNameFocusRequester = remember { FocusRequester() }
 
-    SkyFitMobileScaffold(
+    Scaffold(
         topBar = {
             SettingsEditProfileHeader(
                 showSave = formState.isUpdated,

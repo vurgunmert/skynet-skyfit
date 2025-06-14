@@ -2,8 +2,6 @@ package com.vurgun.skyfit.feature.persona.settings.user
 
 import androidx.compose.foundation.layout.*
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
@@ -23,6 +21,7 @@ import com.vurgun.skyfit.feature.persona.settings.shared.SettingsViewModel
 import com.vurgun.skyfit.feature.persona.settings.shared.helpsupport.SettingsSupportHelpScreen
 import com.vurgun.skyfit.feature.persona.settings.user.notification.UserNotificationSettingsScreen
 import com.vurgun.skyfit.feature.persona.settings.user.payment.UserSettingsPaymentHistoryScreen
+import com.vurgun.skyfit.feature.persona.settings.user.account.UserAccountSettingsScreen
 
 @Composable
 fun UserSettingsExpanded(viewModel: SettingsViewModel) {

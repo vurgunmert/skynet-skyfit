@@ -75,7 +75,7 @@ fun DashboardExpanded(viewModel: DashboardViewModel) {
             ) {
                 DashboardExpandedComponents.Sidebar(
                     activeScreen = dashboardNavigator.lastItem,
-                    onAction = viewModel::onAction,
+                    onAction = viewModel::onAction
                 )
 
                 Box(Modifier.weight(1f)) {
