@@ -10,6 +10,7 @@ import com.vurgun.skyfit.core.ui.screen.UnauthorizedAccessScreen
 import com.vurgun.skyfit.core.utils.rememberUserRole
 import com.vurgun.skyfit.feature.persona.profile.facility.owner.FacilityProfileOwnerScreen
 import com.vurgun.skyfit.feature.persona.profile.trainer.owner.TrainerProfileOwnerScreen
+import com.vurgun.skyfit.feature.persona.profile.user.UserProfileScreen
 import com.vurgun.skyfit.feature.persona.profile.user.owner.UserProfileOwnerScreen
 
 class ProfileScreen : Screen {
@@ -24,7 +25,7 @@ class ProfileScreen : Screen {
         val screen = when (userRole) {
             UserRole.Facility -> FacilityProfileOwnerScreen()
             UserRole.Trainer -> TrainerProfileOwnerScreen()
-            UserRole.User -> UserProfileOwnerScreen()
+            UserRole.User -> UserProfileScreen()
             UserRole.Guest -> UnauthorizedAccessScreen()
         }
 
@@ -33,3 +34,53 @@ class ProfileScreen : Screen {
         }
     }
 }
+
+//
+//Header; -> ProfileExpandedHeader & ProfileCompactHeader,
+//Content -> ProfileExpandedContent & ProfileCompactContent;
+//
+//ProfileExpandedHeader
+//        Box
+//            Image
+//            Row
+//                Blur(base image)
+//                Row, Row, Row
+//            Image
+//
+//
+//ProfileCompactHeader
+//        Box
+//            Image
+//        Column
+//            Blur
+//            Row
+//            Text?
+//            Text?
+//
+//ProfileCompactNavigationMenu
+//        Text -> ProfileAction.OnClickActivities
+//        Text -> Profileaction.OnClickPosts
+//        Icon? -> Profileaction.OnClickSettings & Profileaction.OnClickAddPost
+//
+//ProfileCompactActivitiesComponents(
+//    FacilityMembershipPackage
+//    MyAppointments
+//    MyDiet
+//    MyMeasurements
+//    MyPosts
+//    MyLessons
+//    MyLessonsWeekly
+//    TrainerProfilePreviewCards
+//);
+//
+//TrainerScheduleCompactComponents
+//    -Header;
+//    +Calendar;
+//    +InteractiveLessons
+//    +BookAppointmentAction
+//
+//FacilityScheduleCompactComponents
+//    -Header;
+//    +Calendar;
+//    +InteractiveLessons
+//    +BookAppointmentAction

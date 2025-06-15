@@ -292,12 +292,12 @@ private object TrainerProfileVisitorComponent {
                 onClickAbout = onClickAbout,
                 onClickPosts = onClickPosts
             )
-            MobileProfileActionTabsRow(
-                modifier = Modifier.weight(1f),
-                onClickAbout = onClickAbout,
-                onClickPosts = onClickPosts,
-                postsSelected = postsSelected
-            )
+//            MobileProfileActionTabsRow(
+//                modifier = Modifier.weight(1f),
+//                onClickAbout = onClickAbout,
+//                onClickPosts = onClickPosts,
+//                postsSelected = postsSelected
+//            )
 
             if (showMessage) {
                 Box(

@@ -1,37 +1,12 @@
 package com.vurgun.skyfit.feature.persona.profile.trainer.owner
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.BoxWithConstraints
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.heightIn
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.layout.wrapContentWidth
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.Divider
-import androidx.compose.material.DropdownMenu
-import androidx.compose.material.DropdownMenuItem
-import androidx.compose.material.Icon
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Surface
-import androidx.compose.material.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
+import androidx.compose.material.*
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
@@ -59,7 +34,6 @@ import com.vurgun.skyfit.core.ui.styling.SkyFitColor
 import com.vurgun.skyfit.core.ui.styling.SkyFitTypography
 import com.vurgun.skyfit.core.ui.utils.CollectEffect
 import com.vurgun.skyfit.feature.persona.components.LifestyleActionRow
-import com.vurgun.skyfit.feature.persona.components.MobileProfileActionsRow
 import com.vurgun.skyfit.feature.persona.components.MobileProfileBackgroundImage
 import com.vurgun.skyfit.feature.persona.components.TrainerProfileCardPreferenceRow
 import org.jetbrains.compose.resources.painterResource
@@ -168,13 +142,13 @@ private fun MobileTrainerProfileOwnerContent(
 
                 TrainerProfileComponent.MobileTrainerProfileOwner_HeaderCard(content.profile)
 
-                MobileProfileActionsRow(
-                    postsSelected = content.postsVisible,
-                    onClickAbout = { onAction(TrainerProfileOwnerAction.TogglePostVisibility(false)) },
-                    onClickPosts = {  }, //onAction(TrainerProfileOwnerAction.TogglePostVisibility(true))
-                    onClickSettings = { onAction(TrainerProfileOwnerAction.NavigateToSettings) },
-                    onClickNewPost = { onAction(TrainerProfileOwnerAction.NavigateToCreatePost) }
-                )
+//                MobileProfileActionsRow(
+//                    postsSelected = content.postsVisible,
+//                    onClickAbout = { onAction(TrainerProfileOwnerAction.TogglePostVisibility(false)) },
+//                    onClickPosts = {  }, //onAction(TrainerProfileOwnerAction.TogglePostVisibility(true))
+//                    onClickSettings = { onAction(TrainerProfileOwnerAction.NavigateToSettings) },
+//                    onClickNewPost = { onAction(TrainerProfileOwnerAction.NavigateToCreatePost) }
+//                )
 
                 if (content.postsVisible) {
 

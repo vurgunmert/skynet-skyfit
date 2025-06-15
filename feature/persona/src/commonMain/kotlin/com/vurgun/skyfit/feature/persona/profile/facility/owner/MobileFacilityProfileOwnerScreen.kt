@@ -46,6 +46,7 @@ import com.vurgun.skyfit.core.ui.styling.SkyFitTypography
 import com.vurgun.skyfit.core.ui.utils.CollectEffect
 import com.vurgun.skyfit.feature.persona.components.*
 import com.vurgun.skyfit.feature.persona.components.viewdata.PhotoGalleryStackViewData
+import com.vurgun.skyfit.feature.persona.profile.component.ProfileCompactComponent
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
 import skyfit.core.ui.generated.resources.*
@@ -167,13 +168,13 @@ private fun MobileFacilityProfileOwnerContent(
                     profile = content.profile
                 )
 
-                MobileProfileActionsRow(
-                    postsSelected = content.postsVisible,
-                    onClickAbout = { onAction(FacilityProfileOwnerAction.TogglePostVisibility(false)) },
-                    onClickPosts = { }, //onAction(FacilityProfileOwnerAction.TogglePostVisibility(true))
-                    onClickSettings = { onAction(FacilityProfileOwnerAction.NavigateToSettings) },
-                    onClickNewPost = { onAction(FacilityProfileOwnerAction.NavigateToCreatePost) },
-                )
+//                ProfileCompactComponent.FacilityOwnerNavigationMenu(
+//                    postsSelected = content.postsVisible,
+//                    onClickAbout = { onAction(FacilityProfileOwnerAction.TogglePostVisibility(false)) },
+//                    onClickPosts = { }, //onAction(FacilityProfileOwnerAction.TogglePostVisibility(true))
+//                    onClickSettings = { onAction(FacilityProfileOwnerAction.NavigateToSettings) },
+//                    onClickNewPost = { onAction(FacilityProfileOwnerAction.NavigateToCreatePost) },
+//                )
 
                 if (content.postsVisible) {
                     SocialQuickPostInputCard(modifier = Modifier.padding(horizontal = 16.dp), onClickSend = {})

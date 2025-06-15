@@ -1,4 +1,4 @@
-package com.vurgun.skyfit.core.data.v1.measurement.front
+package com.vurgun.skyfit.core.data.v1.data.measurement.front
 
 /**
  * Logical grouping of measurement types.

@@ -8,7 +8,7 @@ import com.vurgun.skyfit.feature.persona.profile.facility.visitor.FacilityProfil
 import com.vurgun.skyfit.feature.persona.profile.trainer.owner.TrainerProfileOwnerViewModel
 import com.vurgun.skyfit.feature.persona.profile.trainer.schedule.TrainerProfileScheduleViewModel
 import com.vurgun.skyfit.feature.persona.profile.trainer.visitor.TrainerProfileVisitorViewModel
-import com.vurgun.skyfit.feature.persona.profile.user.owner.UserProfileOwnerViewModel
+import com.vurgun.skyfit.feature.persona.profile.user.owner.UserProfileViewModel
 import com.vurgun.skyfit.feature.persona.settings.facility.member.FacilityAddMembersViewModel
 import com.vurgun.skyfit.feature.persona.settings.facility.member.FacilityManageMembersViewModel
 import com.vurgun.skyfit.feature.persona.settings.facility.notification.FacilityNotificationSettingsViewModel
@@ -55,7 +55,7 @@ val featurePersonaModule = module {
     factory { FacilityPackageListingViewModel(get(), get()) }
     factory { FacilityPackageEditViewModel(get(), get(), get()) }
 
-    factory { UserProfileOwnerViewModel(get(), get(), get(), get()) }
+    factory { UserProfileViewModel(get(), get(), get(), get()) }
 
     factory { TrainerProfileOwnerViewModel(get(), get(), get()) }
     factory { TrainerProfileVisitorViewModel(get(), get(), get()) }

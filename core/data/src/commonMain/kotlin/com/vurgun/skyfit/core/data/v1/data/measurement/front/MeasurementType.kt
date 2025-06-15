@@ -1,5 +1,7 @@
 package com.vurgun.skyfit.core.data.v1.measurement.front;
 
+import com.vurgun.skyfit.core.data.v1.data.measurement.front.MeasurementCategory
+
 /**
  * Represents all supported measurement types in the domain.
  * Used to validate, label, and handle logic for measurement entries.

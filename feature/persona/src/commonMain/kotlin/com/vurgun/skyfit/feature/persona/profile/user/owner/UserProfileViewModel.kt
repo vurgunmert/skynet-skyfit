@@ -6,7 +6,6 @@ import com.vurgun.skyfit.core.data.utility.SingleSharedFlow
 import com.vurgun.skyfit.core.data.utility.emitOrNull
 import com.vurgun.skyfit.core.data.v1.data.lesson.mapper.LessonSessionItemViewDataMapper
 import com.vurgun.skyfit.core.data.v1.domain.account.manager.ActiveAccountManager
-import com.vurgun.skyfit.core.data.v1.domain.account.model.UserAccount
 import com.vurgun.skyfit.core.data.v1.domain.facility.model.FacilityProfile
 import com.vurgun.skyfit.core.data.v1.domain.facility.repository.FacilityRepository
 import com.vurgun.skyfit.core.data.v1.domain.lesson.model.LessonSessionItemViewData
@@ -16,84 +15,87 @@ import com.vurgun.skyfit.core.ui.styling.SkyFitAsset
 import com.vurgun.skyfit.feature.persona.components.viewdata.LifestyleActionItemViewData
 import com.vurgun.skyfit.feature.persona.components.viewdata.LifestyleActionRowViewData
 import com.vurgun.skyfit.feature.persona.components.viewdata.PhotoGalleryStackViewData
-import com.vurgun.skyfit.feature.persona.profile.user.owner.UserProfileOwnerEffect.*
+import com.vurgun.skyfit.feature.persona.profile.user.owner.UserProfileEffect.NavigateToVisitFacility
 import com.vurgun.skyfit.feature.persona.social.SocialPostItemViewData
-import com.vurgun.skyfit.feature.persona.social.fakePosts
 import kotlinx.coroutines.async
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 
-sealed interface UserProfileOwnerUiState {
-    data object Loading : UserProfileOwnerUiState
-    data class Error(val message: String) : UserProfileOwnerUiState
+sealed interface UserProfileUiState {
+    data object Loading : UserProfileUiState
+    data class Error(val message: String) : UserProfileUiState
     data class Content(
+        val isVisiting: Boolean,
         val profile: UserProfile,
         val memberFacilityProfile: FacilityProfile? = null,
         val appointments: List<LessonSessionItemViewData> = emptyList(),
         val posts: List<SocialPostItemViewData> = emptyList(),
         val exercises: List<LifestyleActionItemViewData> = emptyList(),
         val habits: List<LifestyleActionItemViewData> = emptyList(),
-        val postsVisible: Boolean = false
-    ) : UserProfileOwnerUiState
+    ) : UserProfileUiState
 }
 
-sealed interface UserProfileOwnerAction {
-    data object ClickBack : UserProfileOwnerAction
-    data object ClickAppointments : UserProfileOwnerAction
-    data object ClickSettings : UserProfileOwnerAction
-    data object ClickCreatePost : UserProfileOwnerAction
-    data class NavigateToVisitFacility(val gymId: Int) : UserProfileOwnerAction
-    data class TogglePostVisibility(val visible: Boolean) : UserProfileOwnerAction
+sealed interface UserProfileAction {
+    data object ClickBack : UserProfileAction
+    data object ClickAppointments : UserProfileAction
+    data object ClickSettings : UserProfileAction
+    data object ClickCreatePost : UserProfileAction
+    data class NavigateToVisitFacility(val gymId: Int) : UserProfileAction
+    data class TogglePostVisibility(val visible: Boolean) : UserProfileAction
 }
 
-sealed interface UserProfileOwnerEffect {
-    data object NavigateBack : UserProfileOwnerEffect
-    data object NavigateToAppointments : UserProfileOwnerEffect
-    data object NavigateToSettings : UserProfileOwnerEffect
-    data object NavigateToCreatePost : UserProfileOwnerEffect
-    data class NavigateToVisitFacility(val gymId: Int) : UserProfileOwnerEffect
+sealed interface UserProfileEffect {
+    data object NavigateBack : UserProfileEffect
+    data object NavigateToAppointments : UserProfileEffect
+    data object NavigateToSettings : UserProfileEffect
+    data object NavigateToCreatePost : UserProfileEffect
+    data class NavigateToVisitFacility(val gymId: Int) : UserProfileEffect
 }
 
-class UserProfileOwnerViewModel(
+class UserProfileViewModel(
     private val userManager: ActiveAccountManager,
     private val userRepository: UserRepository,
     private val facilityRepository: FacilityRepository,
     private val lessonMapper: LessonSessionItemViewDataMapper,
 ) : ScreenModel {
 
-    private val _uiState = MutableStateFlow<UserProfileOwnerUiState>(UserProfileOwnerUiState.Loading)
-    val uiState: StateFlow<UserProfileOwnerUiState> = _uiState
+    private val _uiState = MutableStateFlow<UserProfileUiState>(UserProfileUiState.Loading)
+    val uiState: StateFlow<UserProfileUiState> = _uiState
 
-    private val _effect = SingleSharedFlow<UserProfileOwnerEffect>()
-    val effect: SharedFlow<UserProfileOwnerEffect> = _effect
+    private val _effect = SingleSharedFlow<UserProfileEffect>()
+    val effect: SharedFlow<UserProfileEffect> = _effect
 
-    private val user: UserAccount
-        get() = userManager.user.value as? UserAccount
-            ?: error("❌ current account is not user")
-
-    fun onAction(action: UserProfileOwnerAction) {
+    fun onAction(action: UserProfileAction) {
         when (action) {
-            UserProfileOwnerAction.ClickBack -> emitEffect(UserProfileOwnerEffect.NavigateBack)
-            UserProfileOwnerAction.ClickAppointments -> emitEffect(UserProfileOwnerEffect.NavigateToAppointments)
-            UserProfileOwnerAction.ClickSettings -> emitEffect(UserProfileOwnerEffect.NavigateToSettings)
-            UserProfileOwnerAction.ClickCreatePost -> emitEffect(UserProfileOwnerEffect.NavigateToCreatePost)
-            is UserProfileOwnerAction.NavigateToVisitFacility -> emitEffect(
-                NavigateToVisitFacility(
-                    action.gymId
-                )
-            )
+            UserProfileAction.ClickBack ->
+                emitEffect(UserProfileEffect.NavigateBack)
 
-            is UserProfileOwnerAction.TogglePostVisibility -> togglePostVisibility(action.visible)
+            UserProfileAction.ClickAppointments ->
+                emitEffect(UserProfileEffect.NavigateToAppointments)
+
+            UserProfileAction.ClickSettings ->
+                emitEffect(UserProfileEffect.NavigateToSettings)
+
+            UserProfileAction.ClickCreatePost ->
+                emitEffect(UserProfileEffect.NavigateToCreatePost)
+
+            is UserProfileAction.NavigateToVisitFacility ->
+                emitEffect(NavigateToVisitFacility(action.gymId))
+
+            is UserProfileAction.TogglePostVisibility -> togglePostVisibility(action.visible)
         }
     }
 
-    fun loadProfile() {
+    fun loadData(userId: Int? = null) {
+        val isVisiting = userId != null
+        val loadedUserId = userId ?: userManager.user.value?.userId ?: return
+
         screenModelScope.launch {
-            _uiState.value = UserProfileOwnerUiState.Loading
-            val profileDeferred = async { userRepository.getUserProfile(user.normalUserId).getOrThrow() }
-            val appointmentsDeferred = async { fetchAppointments(user.normalUserId) }
+            _uiState.value = UserProfileUiState.Loading
+            val profileDeferred = async { userRepository.getUserProfile(loadedUserId).getOrThrow() }
+            val appointmentsDeferred = async { fetchAppointments(loadedUserId) }
 
             try {
                 val profile = profileDeferred.await()
@@ -104,14 +106,14 @@ class UserProfileOwnerViewModel(
                 val appointments = appointmentsDeferred.await()
                 val memberFacilityProfile = facilityDeferred?.await()
 
-                _uiState.value = UserProfileOwnerUiState.Content(
+                _uiState.value = UserProfileUiState.Content(
+                    isVisiting = isVisiting,
                     profile = profile,
                     memberFacilityProfile = memberFacilityProfile,
-                    appointments = appointments,
-                    posts = fakePosts //TODO: REMOVE!
+                    appointments = appointments
                 )
             } catch (e: Exception) {
-                _uiState.value = UserProfileOwnerUiState.Error(e.message ?: "Profil yüklenemedi.")
+                _uiState.value = UserProfileUiState.Error(e.message ?: "Profil yüklenemedi.")
             }
         }
     }
@@ -119,13 +121,13 @@ class UserProfileOwnerViewModel(
     private fun togglePostVisibility(visible: Boolean) {
         screenModelScope.launch {
             val currentState = _uiState.value
-            if (currentState is UserProfileOwnerUiState.Content) {
-                _uiState.value = currentState.copy(postsVisible = visible)
+            if (currentState is UserProfileUiState.Content) {
+                _uiState.value = currentState.copy()
             }
         }
     }
 
-    private fun emitEffect(effect: UserProfileOwnerEffect) {
+    private fun emitEffect(effect: UserProfileEffect) {
         screenModelScope.launch {
             _effect.emitOrNull(effect)
         }
