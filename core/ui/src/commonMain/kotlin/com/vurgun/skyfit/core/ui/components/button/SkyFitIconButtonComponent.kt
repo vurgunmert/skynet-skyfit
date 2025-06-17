@@ -21,11 +21,11 @@ import com.vurgun.skyfit.core.ui.styling.SkyFitColor
 import org.jetbrains.compose.resources.painterResource
 import skyfit.core.ui.generated.resources.Res
 import skyfit.core.ui.generated.resources.ic_chevron_left
-import skyfit.core.ui.generated.resources.logo_skyfit
+import skyfit.core.ui.generated.resources.ic_app_logo
 
 @Composable
 fun SkyFitIconButton(
-    painter: Painter = painterResource(Res.drawable.logo_skyfit),
+    painter: Painter = painterResource(Res.drawable.ic_app_logo),
     modifier: Modifier = Modifier,
     color: Color = SkyFitColor.background.surfaceSecondary,
     onClick: () -> Unit = {}
@@ -68,7 +68,7 @@ fun SkyFitPrimaryCircularBackButton(
 
 @Composable
 fun PrimaryIconButton(
-    painter: Painter = painterResource(Res.drawable.logo_skyfit),
+    painter: Painter = painterResource(Res.drawable.ic_app_logo),
     modifier: Modifier = Modifier.size(44.dp),
     onClick: () -> Unit = {}
 ) {
@@ -90,7 +90,7 @@ fun PrimaryIconButton(
 
 @Composable
 fun SecondaryIconButton(
-    painter: Painter = painterResource(Res.drawable.logo_skyfit),
+    painter: Painter = painterResource(Res.drawable.ic_app_logo),
     modifier: Modifier = Modifier.size(44.dp),
     onClick: (() -> Unit)? = null
 ) {
@@ -113,7 +113,7 @@ fun SecondaryIconButton(
 
 @Composable
 fun SecondaryFlatIconButton(
-    painter: Painter = painterResource(Res.drawable.logo_skyfit),
+    painter: Painter = painterResource(Res.drawable.ic_app_logo),
     modifier: Modifier = Modifier.size(44.dp)
 ) {
     Box(
@@ -133,7 +133,7 @@ fun SecondaryFlatIconButton(
 
 @Composable
 fun SkyFitSecondaryIconButton(
-    painter: Painter = painterResource(Res.drawable.logo_skyfit),
+    painter: Painter = painterResource(Res.drawable.ic_app_logo),
     modifier: Modifier = Modifier.size(44.dp),
     onClick: () -> Unit = {}
 ) {
@@ -155,7 +155,7 @@ fun SkyFitSecondaryIconButton(
 
 @Composable
 fun SkyFitCircularProgressIconButton(
-    painter: Painter = painterResource(Res.drawable.logo_skyfit),
+    painter: Painter = painterResource(Res.drawable.ic_app_logo),
     progress: Float,
     modifier: Modifier = Modifier,
     onClick: () -> Unit = {}

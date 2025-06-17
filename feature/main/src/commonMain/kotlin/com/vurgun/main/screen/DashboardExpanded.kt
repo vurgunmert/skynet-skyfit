@@ -127,7 +127,7 @@ private object DashboardExpandedComponents {
         ) {
 
             Image(
-                painterResource(Res.drawable.logo_skyfit),
+                painterResource(Res.drawable.ic_app_logo),
                 null,
                 modifier = Modifier.size(60.dp),
                 contentScale = ContentScale.Inside

@@ -10,7 +10,7 @@ import com.vurgun.skyfit.feature.schedule.screen.lessons.FacilityLessonEditViewM
 import com.vurgun.skyfit.feature.schedule.screen.lessons.FacilityLessonListingViewModel
 import org.koin.dsl.module
 
-val featureScheduleModule = module {
+val dataScheduleModule = module {
     includes(dataCoreModule)
 
     factory { UserAppointmentListingViewModel(get(), get()) }

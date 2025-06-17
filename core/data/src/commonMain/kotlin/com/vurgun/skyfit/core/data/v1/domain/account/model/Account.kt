@@ -3,11 +3,11 @@ package com.vurgun.skyfit.core.data.v1.domain.account.model
 import com.vurgun.skyfit.core.data.v1.domain.global.model.BodyType
 import com.vurgun.skyfit.core.data.v1.domain.global.model.CharacterType
 import com.vurgun.skyfit.core.data.v1.domain.global.model.GenderType
-import com.vurgun.skyfit.core.data.v1.domain.global.model.UserRole
+import com.vurgun.skyfit.core.data.v1.domain.global.model.AccountRole
 
 sealed interface Account {
     val userId: Int
-    val userRole: UserRole
+    val accountRole: AccountRole
     val username: String
     val phone: String
     val email: String?
@@ -17,7 +17,7 @@ sealed interface Account {
 data class UserAccount(
     override val userId: Int,
     val normalUserId: Int,
-    override val userRole: UserRole,
+    override val accountRole: AccountRole,
     override val username: String,
     override val phone: String,
     override val email: String?,
@@ -36,7 +36,7 @@ data class UserAccount(
 data class TrainerAccount(
     override val userId: Int,
     val trainerId: Int,
-    override val userRole: UserRole,
+    override val accountRole: AccountRole,
     override val username: String,
     override val phone: String,
     override val email: String?,
@@ -58,7 +58,7 @@ data class FacilityAccount(
     val gymName: String,
     val gymAddress: String,
     val bio: String?,
-    override val userRole: UserRole,
+    override val accountRole: AccountRole,
     override val username: String,
     override val phone: String,
     override val email: String?,

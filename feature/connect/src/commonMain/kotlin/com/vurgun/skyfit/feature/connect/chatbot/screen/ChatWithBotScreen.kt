@@ -18,7 +18,7 @@ import cafe.adriel.voyager.koin.koinScreenModel
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
 import com.vurgun.skyfit.core.ui.components.special.SkyFitMobileScaffold
-import com.vurgun.skyfit.core.ui.components.special.SkyFitScreenHeader
+import com.vurgun.skyfit.core.ui.components.special.CompactTopBar
 import com.vurgun.skyfit.core.ui.styling.SkyFitColor
 import com.vurgun.skyfit.core.ui.utils.CollectEffect
 import com.vurgun.skyfit.feature.connect.chatbot.model.ChatWithBotAction
@@ -74,7 +74,7 @@ private fun ChatBotMessageScreenContent(
 
     SkyFitMobileScaffold(
         topBar = {
-            SkyFitScreenHeader(
+            CompactTopBar(
                 title = stringResource(Res.string.chatbot_label),
                 onClickBack = { viewModel.onAction(ChatWithBotAction.OnClickBack) }
             )

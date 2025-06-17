@@ -77,7 +77,7 @@ class FacilityLessonEditViewModel(
     val effect: SharedFlow<FacilityLessonEditEffect> = _effect
 
     private val facilityUser: FacilityAccount
-        get() = userManager.user.value as? FacilityAccount
+        get() = userManager.account.value as? FacilityAccount
             ?: error("User is not a Facility!")
 
     val gymId: Int

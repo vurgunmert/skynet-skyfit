@@ -18,7 +18,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.vurgun.skyfit.core.ui.components.exercise.VerticalExerciseCardItemComponent
 import com.vurgun.skyfit.core.ui.components.special.SkyFitScaffold
-import com.vurgun.skyfit.core.ui.components.special.SkyFitScreenHeader
+import com.vurgun.skyfit.core.ui.components.special.CompactTopBar
 import com.vurgun.skyfit.core.ui.components.special.SkyFitSearchFilterBarComponent
 import com.vurgun.skyfit.core.ui.components.special.SkyFitSearchTextInputComponent
 
@@ -29,7 +29,7 @@ fun MobileExploreExercisesScreen(goToBack: () -> Unit) {
     SkyFitScaffold(
         topBar = {
             Column(Modifier.fillMaxWidth().padding(horizontal = 16.dp)) {
-                SkyFitScreenHeader("Popüler Antrenmanlar", onClickBack = {})
+                CompactTopBar("Popüler Antrenmanlar", onClickBack = {})
                 Spacer(Modifier.height(16.dp))
                 if (isSearchVisible) {
                     SkyFitSearchTextInputComponent()

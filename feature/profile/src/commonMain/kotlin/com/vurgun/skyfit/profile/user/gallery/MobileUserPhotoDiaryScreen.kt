@@ -20,13 +20,13 @@ import androidx.compose.ui.window.Dialog
 import com.vurgun.skyfit.core.ui.components.button.SkyFitIconButton
 import com.vurgun.skyfit.core.ui.components.image.NetworkImage
 import com.vurgun.skyfit.core.ui.components.special.SkyFitMobileScaffold
-import com.vurgun.skyfit.core.ui.components.special.SkyFitScreenHeader
+import com.vurgun.skyfit.core.ui.components.special.CompactTopBar
 import com.vurgun.skyfit.core.ui.styling.SkyFitColor
 import com.vurgun.skyfit.core.ui.styling.SkyFitTypography
 import org.jetbrains.compose.resources.painterResource
 import skyfit.core.ui.generated.resources.Res
 import skyfit.core.ui.generated.resources.ic_close
-import skyfit.core.ui.generated.resources.logo_skyfit
+import skyfit.core.ui.generated.resources.ic_app_logo
 
 @Composable
 fun MobileUserPhotoDiaryScreen(
@@ -39,7 +39,7 @@ fun MobileUserPhotoDiaryScreen(
 
     SkyFitMobileScaffold(
         topBar = {
-            SkyFitScreenHeader("Fotograf Gunlugum", onClickBack = goToBack)
+            CompactTopBar("Fotograf Gunlugum", onClickBack = goToBack)
         }
     ) {
         Box(Modifier.fillMaxSize()) {
@@ -89,7 +89,7 @@ private fun MobileUserPhotoDiaryScreenDietsHeaderComponent() {
             Column(Modifier.weight(1f)) {
                 Row {
                     Icon(
-                        painter = painterResource(Res.drawable.logo_skyfit),
+                        painter = painterResource(Res.drawable.ic_app_logo),
                         contentDescription = null,
                         modifier = Modifier.size(24.dp),
                         tint = SkyFitColor.icon.default
@@ -107,7 +107,7 @@ private fun MobileUserPhotoDiaryScreenDietsHeaderComponent() {
             }
 
             Icon(
-                painter = painterResource(Res.drawable.logo_skyfit),
+                painter = painterResource(Res.drawable.ic_app_logo),
                 contentDescription = null,
                 modifier = Modifier.size(16.dp),
                 tint = SkyFitColor.icon.default
@@ -218,7 +218,7 @@ private fun MobileUserPhotoDiaryScreenDietItemComponent() {
                     modifier = Modifier.weight(1f)
                 )
                 Spacer(Modifier.width(16.dp))
-                SkyFitIconButton(painter = painterResource(Res.drawable.logo_skyfit))
+                SkyFitIconButton(painter = painterResource(Res.drawable.ic_app_logo))
             }
         }
     }
@@ -232,7 +232,7 @@ private fun MobileUserPhotoDiaryScreenExercisesHeaderComponent() {
             Column(Modifier.weight(1f)) {
                 Row {
                     Icon(
-                        painter = painterResource(Res.drawable.logo_skyfit),
+                        painter = painterResource(Res.drawable.ic_app_logo),
                         contentDescription = null,
                         modifier = Modifier.size(24.dp),
                         tint = SkyFitColor.icon.default
@@ -250,7 +250,7 @@ private fun MobileUserPhotoDiaryScreenExercisesHeaderComponent() {
             }
 
             Icon(
-                painter = painterResource(Res.drawable.logo_skyfit),
+                painter = painterResource(Res.drawable.ic_app_logo),
                 contentDescription = null,
                 modifier = Modifier.size(16.dp),
                 tint = SkyFitColor.icon.default
@@ -309,7 +309,7 @@ private fun MobileUserPhotoDiaryScreenExercisesCompactComponent() {
                     modifier = Modifier.weight(1f)
                 )
                 Spacer(Modifier.width(16.dp))
-                SkyFitIconButton(painter = painterResource(Res.drawable.logo_skyfit))
+                SkyFitIconButton(painter = painterResource(Res.drawable.ic_app_logo))
             }
         }
     }

@@ -5,11 +5,10 @@ import cafe.adriel.voyager.core.model.screenModelScope
 import com.vurgun.skyfit.core.data.utility.emitOrNull
 import com.vurgun.skyfit.core.data.v1.data.lesson.mapper.LessonSessionItemViewDataMapper
 import com.vurgun.skyfit.core.data.v1.domain.lesson.model.LessonSessionItemViewData
+import com.vurgun.skyfit.core.data.v1.domain.profile.LifestyleActionItemViewData
+import com.vurgun.skyfit.core.data.v1.domain.profile.SocialPostItemViewData
 import com.vurgun.skyfit.core.data.v1.domain.user.model.UserProfile
 import com.vurgun.skyfit.core.data.v1.domain.user.repository.UserRepository
-import com.vurgun.skyfit.feature.persona.components.viewdata.LifestyleActionItemViewData
-import com.vurgun.skyfit.feature.persona.social.SocialPostItemViewData
-import com.vurgun.skyfit.feature.persona.social.fakePosts
 import kotlinx.coroutines.async
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -70,7 +69,7 @@ class UserProfileVisitorViewModel(
                 _uiState.value = UserProfileVisitorUiState.Content(
                     profile = profile,
                     appointments = appointments,
-                    posts = fakePosts
+                    posts = emptyList()
                 )
             } catch (e: Exception) {
                 _uiState.value = UserProfileVisitorUiState.Error(e.message ?: "Profil yüklenemedi.")

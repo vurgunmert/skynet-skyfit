@@ -24,7 +24,7 @@ import com.vurgun.skyfit.core.navigation.push
 import com.vurgun.skyfit.core.ui.components.button.PrimaryIconButton
 import com.vurgun.skyfit.core.ui.components.button.SkyButton
 import com.vurgun.skyfit.core.ui.components.button.SkyButtonSize
-import com.vurgun.skyfit.core.ui.components.special.SkyFitScreenHeader
+import com.vurgun.skyfit.core.ui.components.special.CompactTopBar
 import com.vurgun.skyfit.core.ui.components.text.SkyText
 import com.vurgun.skyfit.core.ui.components.text.TextStyleType
 import com.vurgun.skyfit.core.ui.styling.SkyFitColor
@@ -62,7 +62,7 @@ fun ChatbotCompact(viewModel: ChatbotViewModel) {
 
     Scaffold(
         topBar = {
-            SkyFitScreenHeader(
+            CompactTopBar(
                 title = stringResource(Res.string.chatbot_label),
                 onClickBack = { viewModel.onAction(ChatBotAction.OnClickBack) })
         },

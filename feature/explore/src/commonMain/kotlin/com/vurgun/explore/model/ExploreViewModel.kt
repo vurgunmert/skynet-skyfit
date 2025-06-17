@@ -7,8 +7,8 @@ import com.vurgun.skyfit.core.data.utility.SingleSharedFlow
 import com.vurgun.skyfit.core.data.utility.UiStateDelegate
 import com.vurgun.skyfit.core.data.utility.emitIn
 import com.vurgun.skyfit.core.data.v1.domain.explore.ExploreRepository
-import com.vurgun.skyfit.feature.persona.components.viewdata.FacilityProfileCardItemViewData
-import com.vurgun.skyfit.feature.persona.components.viewdata.TrainerProfileCardItemViewData
+import com.vurgun.skyfit.core.data.v1.domain.profile.FacilityProfileCardItemViewData
+import com.vurgun.skyfit.core.data.v1.domain.profile.TrainerProfileCardItemViewData
 import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.launch
 

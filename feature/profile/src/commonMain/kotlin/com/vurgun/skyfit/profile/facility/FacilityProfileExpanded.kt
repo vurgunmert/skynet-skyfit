@@ -7,10 +7,10 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import com.vurgun.skyfit.feature.persona.profile.facility.owner.FacilityProfileOwnerViewModel
+import com.vurgun.skyfit.profile.facility.owner.FacilityProfileViewModel
 
 @Composable
-fun FacilityProfileExpanded(viewModel: FacilityProfileOwnerViewModel) {
+fun FacilityProfileExpanded(viewModel: FacilityProfileViewModel) {
 
     Scaffold(
         topBar = {
@@ -21,7 +21,9 @@ fun FacilityProfileExpanded(viewModel: FacilityProfileOwnerViewModel) {
                 modifier = Modifier
                     .verticalScroll(rememberScrollState())
                     .fillMaxSize(),
-                content =
+                content = {
+
+                }
             )
         }
     )

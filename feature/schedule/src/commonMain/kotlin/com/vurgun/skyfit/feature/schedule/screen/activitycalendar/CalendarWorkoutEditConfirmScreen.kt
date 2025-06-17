@@ -15,11 +15,9 @@ import cafe.adriel.voyager.navigator.currentOrThrow
 import com.vurgun.skyfit.core.data.utility.toTurkishLongDate
 import com.vurgun.skyfit.core.ui.components.button.SkyButton
 import com.vurgun.skyfit.core.ui.components.button.SkyButtonSize
-import com.vurgun.skyfit.core.ui.components.icon.SkyIcon
-import com.vurgun.skyfit.core.ui.components.icon.SkyIconSize
 import com.vurgun.skyfit.core.ui.components.loader.FullScreenLoaderContent
 import com.vurgun.skyfit.core.ui.components.special.SkyFitMobileScaffold
-import com.vurgun.skyfit.core.ui.components.special.SkyFitScreenHeader
+import com.vurgun.skyfit.core.ui.components.special.CompactTopBar
 import com.vurgun.skyfit.core.ui.components.text.SkyText
 import com.vurgun.skyfit.core.ui.components.text.TextStyleType
 import com.vurgun.skyfit.core.ui.screen.ErrorScreen
@@ -28,11 +26,8 @@ import kotlinx.datetime.LocalDateTime
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
 import skyfit.core.ui.generated.resources.Res
-import skyfit.core.ui.generated.resources.activate_action
-import skyfit.core.ui.generated.resources.activity_added_label
 import skyfit.core.ui.generated.resources.add_selected_activity_label
 import skyfit.core.ui.generated.resources.ic_check
-import skyfit.core.ui.generated.resources.ic_chevron_down
 
 class CalendarWorkoutEditConfirmScreen(
     private val startDateTime: LocalDateTime,
@@ -92,7 +87,7 @@ class CalendarWorkoutEditConfirmScreen(
     ) {
         SkyFitMobileScaffold(
             topBar = {
-                SkyFitScreenHeader(
+                CompactTopBar(
                     title = content.workoutName,
                     onClickBack = { onAction(CalendarWorkoutEditConfirmAction.OnClickBack) }
                 )

@@ -42,7 +42,7 @@ import com.vurgun.skyfit.core.ui.components.chip.SecondaryPillChip
 import com.vurgun.skyfit.core.ui.components.event.BasicAppointmentEventItem
 import com.vurgun.skyfit.core.ui.components.loader.FullScreenLoaderContent
 import com.vurgun.skyfit.core.ui.components.special.SkyFitMobileScaffold
-import com.vurgun.skyfit.core.ui.components.special.SkyFitScreenHeader
+import com.vurgun.skyfit.core.ui.components.special.CompactTopBar
 import com.vurgun.skyfit.core.ui.components.text.BodyMediumMediumText
 import com.vurgun.skyfit.core.ui.screen.ErrorScreen
 import com.vurgun.skyfit.core.ui.styling.SkyFitColor
@@ -82,7 +82,7 @@ class TrainerAppointmentListingScreen : Screen {
         SkyFitMobileScaffold(
             topBar = {
                 Column {
-                    SkyFitScreenHeader(
+                    CompactTopBar(
                         title = stringResource(Res.string.appointments_title),
                         onClickBack = { viewModel.onAction(TrainerAppointmentListingAction.NavigateToBack) })
 

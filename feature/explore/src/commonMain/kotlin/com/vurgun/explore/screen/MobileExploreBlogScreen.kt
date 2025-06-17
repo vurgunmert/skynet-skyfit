@@ -18,7 +18,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.vurgun.skyfit.core.ui.components.image.NetworkImage
 import com.vurgun.skyfit.core.ui.components.special.SkyFitScaffold
-import com.vurgun.skyfit.core.ui.components.special.SkyFitScreenHeader
+import com.vurgun.skyfit.core.ui.components.special.CompactTopBar
 import com.vurgun.skyfit.core.ui.components.special.SkyFitSearchTextInputComponent
 import com.vurgun.skyfit.core.ui.styling.SkyFitColor
 import com.vurgun.skyfit.core.ui.styling.SkyFitTypography
@@ -31,7 +31,7 @@ fun MobileExploreBlogScreen(
     SkyFitScaffold(
         topBar = {
             Column {
-                SkyFitScreenHeader("Blog", onClickBack = goToBack)
+                CompactTopBar("Blog", onClickBack = goToBack)
                 SkyFitSearchTextInputComponent(hint = "Antrenman ara")
             }
         }

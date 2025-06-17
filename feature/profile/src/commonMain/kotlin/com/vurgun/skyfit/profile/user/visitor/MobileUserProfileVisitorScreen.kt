@@ -24,13 +24,12 @@ import com.vurgun.skyfit.core.data.v1.domain.user.model.UserProfile
 import com.vurgun.skyfit.core.ui.components.event.AvailableActivityCalendarEventItem
 import com.vurgun.skyfit.core.ui.components.image.NetworkImage
 import com.vurgun.skyfit.core.ui.components.loader.FullScreenLoaderContent
+import com.vurgun.skyfit.core.ui.components.profile.MobileProfileBackgroundImage
 import com.vurgun.skyfit.core.ui.components.special.SkyFitMobileScaffold
 import com.vurgun.skyfit.core.ui.screen.ErrorScreen
 import com.vurgun.skyfit.core.ui.styling.SkyFitAsset
 import com.vurgun.skyfit.core.ui.styling.SkyFitColor
 import com.vurgun.skyfit.core.ui.styling.SkyFitTypography
-import com.vurgun.skyfit.feature.persona.components.MobileProfileBackgroundImage
-import com.vurgun.skyfit.feature.persona.components.UserProfileCardPreferenceRow
 import org.jetbrains.compose.resources.stringResource
 import skyfit.core.ui.generated.resources.Res
 import skyfit.core.ui.generated.resources.appointments_title
@@ -196,12 +195,12 @@ private object UserProfileVisitor {
 
                     Spacer(modifier = Modifier.height(16.dp))
 
-                    UserProfileCardPreferenceRow(
-                        height = userProfile.height.toString(),
-                        weight = userProfile.weight.toString(),
-                        bodyType = userProfile.bodyType.turkishShort,
-                        modifier = Modifier.fillMaxWidth(),
-                    )
+//                    UserProfileCardPreferenceRow(
+//                        height = userProfile.height.toString(),
+//                        weight = userProfile.weight.toString(),
+//                        bodyType = userProfile.bodyType.turkishShort,
+//                        modifier = Modifier.fillMaxWidth(),
+//                    )
                 }
             }
 

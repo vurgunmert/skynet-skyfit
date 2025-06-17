@@ -12,7 +12,7 @@ import androidx.compose.ui.unit.min
 import org.jetbrains.compose.resources.painterResource
 import skyfit.core.ui.generated.resources.Res
 import skyfit.core.ui.generated.resources.background_chatbot
-import skyfit.core.ui.generated.resources.logo_skyfit
+import skyfit.core.ui.generated.resources.ic_app_logo
 
 @Composable
 internal fun ChatbotBackground() {
@@ -29,7 +29,7 @@ internal fun ChatbotAppLogo(modifier: Modifier = Modifier) {
     BoxWithConstraints(modifier = modifier, contentAlignment = Alignment.Center) {
         val size = min(maxWidth, maxHeight) * 0.7f
         Image(
-            painter = painterResource(Res.drawable.logo_skyfit),
+            painter = painterResource(Res.drawable.ic_app_logo),
             contentDescription = "Logo",
             modifier = Modifier.size(size)
         )

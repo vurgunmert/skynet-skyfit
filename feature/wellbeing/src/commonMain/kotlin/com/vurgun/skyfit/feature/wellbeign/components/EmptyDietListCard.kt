@@ -22,7 +22,7 @@ import com.vurgun.skyfit.core.ui.styling.SkyFitColor
 import com.vurgun.skyfit.core.ui.styling.SkyFitTypography
 import org.jetbrains.compose.resources.painterResource
 import skyfit.core.ui.generated.resources.Res
-import skyfit.core.ui.generated.resources.logo_skyfit
+import skyfit.core.ui.generated.resources.ic_app_logo
 
 @Composable
 private fun EmptyDietListCard(onClickAdd: () -> Unit) {
@@ -34,7 +34,7 @@ private fun EmptyDietListCard(onClickAdd: () -> Unit) {
 
         Row(verticalAlignment = Alignment.CenterVertically) {
             Icon(
-                painter = painterResource(Res.drawable.logo_skyfit),
+                painter = painterResource(Res.drawable.ic_app_logo),
                 modifier = Modifier.size(24.dp),
                 contentDescription = ""
             )

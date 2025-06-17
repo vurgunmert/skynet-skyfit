@@ -38,14 +38,14 @@ import com.vurgun.skyfit.core.ui.components.special.ButtonState
 import com.vurgun.skyfit.core.ui.components.special.ButtonVariant
 import com.vurgun.skyfit.core.ui.components.special.SkyFitButtonComponent
 import com.vurgun.skyfit.core.ui.components.special.SkyFitScaffold
-import com.vurgun.skyfit.core.ui.components.special.SkyFitScreenHeader
+import com.vurgun.skyfit.core.ui.components.special.CompactTopBar
 import com.vurgun.skyfit.core.ui.components.special.SkyFitSearchFilterBarComponent
 import com.vurgun.skyfit.core.ui.components.special.SkyFitSearchTextInputComponent
 import com.vurgun.skyfit.core.ui.styling.SkyFitColor
 import com.vurgun.skyfit.core.ui.styling.SkyFitTypography
 import org.jetbrains.compose.resources.painterResource
 import skyfit.core.ui.generated.resources.Res
-import skyfit.core.ui.generated.resources.logo_skyfit
+import skyfit.core.ui.generated.resources.ic_app_logo
 
 @Composable
 fun MobileExploreChallengesScreen(
@@ -58,7 +58,7 @@ fun MobileExploreChallengesScreen(
     SkyFitScaffold(
         topBar = {
             Column(Modifier.fillMaxWidth().padding(horizontal = 16.dp)) {
-                SkyFitScreenHeader("Meydan Okumalar", onClickBack = goToBack)
+                CompactTopBar("Meydan Okumalar", onClickBack = goToBack)
 
                 Spacer(Modifier.height(16.dp))
                 if (isSearchVisible) {
@@ -127,7 +127,7 @@ private fun MobileExploreUserChallengeItemComponent(onClick: () -> Unit) {
             Text("10,000 Steps a Day Challenge")
             Spacer(Modifier.width(4.dp))
             Icon(
-                painter = painterResource(Res.drawable.logo_skyfit),
+                painter = painterResource(Res.drawable.ic_app_logo),
                 contentDescription = "Medal",
                 tint = SkyFitColor.icon.default,
                 modifier = Modifier.size(16.dp)

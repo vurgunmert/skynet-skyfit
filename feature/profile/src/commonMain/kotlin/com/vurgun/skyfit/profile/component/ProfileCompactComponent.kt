@@ -16,9 +16,11 @@ import androidx.compose.ui.unit.dp
 import com.vurgun.skyfit.core.ui.components.icon.SkyIcon
 import com.vurgun.skyfit.core.ui.components.icon.SkyIconSize
 import com.vurgun.skyfit.core.ui.components.image.NetworkImage
+import com.vurgun.skyfit.core.ui.components.text.SkyText
+import com.vurgun.skyfit.core.ui.components.text.TextStyleType
 import com.vurgun.skyfit.core.ui.styling.SkyFitColor
 import com.vurgun.skyfit.core.ui.styling.SkyFitTypography
-import com.vurgun.skyfit.profile.model.ProfileNavigationRoute
+import com.vurgun.skyfit.profile.model.ProfileDestination
 import com.vurgun.skyfit.profile.user.owner.UserProfileAction
 import dev.chrisbanes.haze.*
 import org.jetbrains.compose.resources.DrawableResource
@@ -32,12 +34,10 @@ internal object ProfileCompactComponent {
     @Composable
     fun Layout(
         header: @Composable () -> Unit,
-        content: @Composable () -> Unit
+        content: @Composable () -> Unit,
+        modifier: Modifier = Modifier.fillMaxSize()
     ) {
-        Column(
-            modifier = Modifier.fillMaxSize()
-                .verticalScroll(rememberScrollState())
-        ) {
+        Column(modifier = modifier.verticalScroll(rememberScrollState())) {
             header()
             Spacer(Modifier.height(20.dp))
             content()
@@ -47,8 +47,10 @@ internal object ProfileCompactComponent {
     @Composable
     fun Header(
         backgroundImageUrl: String?,
+        backgroundImageModifier: Modifier = Modifier.fillMaxWidth(),
         profileImageUrl: String?,
         cardContents: @Composable ColumnScope.() -> Unit,
+        cardContentsModifier: Modifier = Modifier.fillMaxWidth().padding(top = 150.dp),
     ) {
 
         val hazeState = rememberHazeState()
@@ -65,16 +67,14 @@ internal object ProfileCompactComponent {
 
             NetworkImage(
                 imageUrl = backgroundImageUrl,
-                modifier = Modifier
-                    .sizeIn(maxWidth = 430.dp, maxHeight = 180.dp)
+                modifier = backgroundImageModifier
                     .hazeSource(state = hazeState),
             )
 
             Column(
-                modifier = Modifier
+                modifier = cardContentsModifier
                     .padding(horizontal = 16.dp)
                     .clip(RoundedCornerShape(24.dp))
-                    .fillMaxWidth()
                     .wrapContentHeight()
                     .hazeEffect(hazeState, hazeStyle)
                     .padding(24.dp),
@@ -92,18 +92,95 @@ internal object ProfileCompactComponent {
         }
     }
 
+
+    @Composable
+    fun HeaderNameGroup(
+        firstName: String,
+        userName: String
+    ) {
+        Row(
+            horizontalArrangement = Arrangement.Center,
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            SkyText(
+                text = firstName,
+                styleType = TextStyleType.BodyLargeSemibold
+            )
+            Spacer(modifier = Modifier.width(8.dp))
+            SkyText(
+                text = userName,
+                styleType = TextStyleType.BodySmallMedium,
+                color = SkyFitColor.text.secondary
+            )
+        }
+    }
+
+    @Composable
+    fun HeaderBodyGroup(
+        leftItem: @Composable () -> Unit = { },
+        centerItem: @Composable () -> Unit = { },
+        rightItem: @Composable () -> Unit = { },
+    ) {
+        Row(
+            Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.Center
+        ) {
+            leftItem()
+            centerItem()
+            rightItem()
+        }
+    }
+
+    @Composable
+    fun HeaderEditorialDataItem(
+        modifier: Modifier = Modifier,
+        iconRes: DrawableResource? = null,
+        title: String,
+        subtitle: String
+    ) {
+        Box(
+            modifier = modifier.wrapContentSize()
+                .padding(8.dp)
+        ) {
+            Column(
+                verticalArrangement = Arrangement.Center,
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.Center
+                ) {
+                    iconRes?.let {
+                        SkyIcon(res = iconRes, size = SkyIconSize.Medium)
+                        Spacer(Modifier.width(2.dp))
+                    }
+
+                    SkyText(text = title, styleType = TextStyleType.BodyMediumSemibold)
+                }
+                Spacer(modifier = Modifier.height(4.dp))
+                SkyText(
+                    text = subtitle,
+                    styleType = TextStyleType.BodySmall,
+                    color = SkyFitColor.text.secondary
+                )
+            }
+        }
+
+    }
+
     @Composable
     fun UserOwnerNavigationMenu(
-        onTabSelected: (ProfileNavigationRoute) -> Unit,
-        selectedTab: ProfileNavigationRoute,
+        onTabSelected: (ProfileDestination) -> Unit,
+        selectedTab: ProfileDestination,
         onAction: (UserProfileAction) -> Unit,
         modifier: Modifier = Modifier.fillMaxWidth()
     ) {
         NavigationMenuWithAction(
-            onTabSelected = onTabSelected,
-            selectedTab = selectedTab,
+            onDestinationChanged = onTabSelected,
+            destination = selectedTab,
             action = {
-                val postsSelected = selectedTab == ProfileNavigationRoute.Posts
+                val postsSelected = selectedTab == ProfileDestination.Posts
                 val action = when (postsSelected) {
                     true -> UserProfileAction.ClickCreatePost
                     false -> UserProfileAction.ClickSettings
@@ -140,16 +217,16 @@ internal object ProfileCompactComponent {
 
     @Composable
     fun UserVisitorNavigationMenu(
-        onTabSelected: (ProfileNavigationRoute) -> Unit,
-        selectedTab: ProfileNavigationRoute,
+        onTabSelected: (ProfileDestination) -> Unit,
+        selectedTab: ProfileDestination,
         onAction: (UserProfileAction) -> Unit,
         modifier: Modifier = Modifier.fillMaxWidth()
     ) {
         NavigationMenuWithAction(
-            onTabSelected = onTabSelected,
-            selectedTab = selectedTab,
+            onDestinationChanged = onTabSelected,
+            destination = selectedTab,
             action = {
-                val postsSelected = selectedTab == ProfileNavigationRoute.Posts
+                val postsSelected = selectedTab == ProfileDestination.Posts
                 val action = when (postsSelected) {
                     true -> UserProfileAction.ClickCreatePost
                     false -> UserProfileAction.ClickSettings
@@ -205,11 +282,29 @@ internal object ProfileCompactComponent {
     }
 
     @Composable
+    fun NavigationMenuAction(
+        res: DrawableResource,
+        onClick: () -> Unit,
+        modifier: Modifier = Modifier,
+    ) {
+        SkyIcon(
+            res = res,
+            modifier = modifier
+                .background(
+                    color = SkyFitColor.background.surfaceSecondary,
+                    shape = RoundedCornerShape(size = 20.dp)
+                )
+                .padding(14.dp),
+            size = SkyIconSize.Medium,
+            onClick = onClick
+        )
+    }
+
+    @Composable
     fun NavigationMenuWithAction(
-        onTabSelected: (ProfileNavigationRoute) -> Unit,
-        selectedTab: ProfileNavigationRoute,
-        actionRes: DrawableResource? = null,
-        onActionClick: (() -> Unit)? = null,
+        onDestinationChanged: (ProfileDestination) -> Unit,
+        destination: ProfileDestination,
+        action: @Composable (() -> Unit)? = null,
         modifier: Modifier = Modifier.fillMaxWidth()
     ) {
         Row(
@@ -218,14 +313,14 @@ internal object ProfileCompactComponent {
         ) {
             NavigationMenuTabGroup(
                 modifier = Modifier.weight(1f),
-                onTabSelected = onTabSelected,
-                selectedTab = selectedTab,
+                onTabSelected = onDestinationChanged,
+                selectedTab = destination,
             )
 
-            if (actionRes != null && onActionClick != null) {
+            if (action != null) {
                 Spacer(Modifier.width(16.dp))
 
-                NavigationAction(actionRes, onActionClick)
+                action()
             }
         }
     }
@@ -233,10 +328,10 @@ internal object ProfileCompactComponent {
     @Composable
     private fun NavigationMenuTabGroup(
         modifier: Modifier = Modifier.fillMaxWidth(),
-        onTabSelected: (ProfileNavigationRoute) -> Unit,
-        selectedTab: ProfileNavigationRoute
+        onTabSelected: (ProfileDestination) -> Unit,
+        selectedTab: ProfileDestination
     ) {
-        val aboutSelected = selectedTab == ProfileNavigationRoute.Activities
+        val aboutSelected = selectedTab == ProfileDestination.About
 
         Row(
             modifier
@@ -251,7 +346,7 @@ internal object ProfileCompactComponent {
                         if (aboutSelected) SkyFitColor.specialty.buttonBgRest else SkyFitColor.background.surfaceSecondary,
                         RoundedCornerShape(12.dp)
                     )
-                    .clickable { onTabSelected(ProfileNavigationRoute.Activities) }
+                    .clickable { onTabSelected(ProfileDestination.About) }
                     .padding(vertical = 8.dp),
                 contentAlignment = Alignment.Center
             ) {
@@ -269,7 +364,7 @@ internal object ProfileCompactComponent {
                         if (!aboutSelected) SkyFitColor.specialty.buttonBgRest else SkyFitColor.background.surfaceSecondary,
                         RoundedCornerShape(12.dp)
                     )
-                    .clickable(onClick = { onTabSelected(ProfileNavigationRoute.Posts) })
+                    .clickable(onClick = { onTabSelected(ProfileDestination.Posts) })
                     .padding(vertical = 8.dp),
                 contentAlignment = Alignment.Center
             ) {
@@ -280,25 +375,5 @@ internal object ProfileCompactComponent {
                 )
             }
         }
-    }
-
-
-    @Composable
-    private fun NavigationAction(
-        res: DrawableResource,
-        onClick: () -> Unit,
-        modifier: Modifier = Modifier,
-    ) {
-        SkyIcon(
-            res = res,
-            modifier = modifier
-                .background(
-                    color = SkyFitColor.background.surfaceSecondary,
-                    shape = RoundedCornerShape(size = 20.dp)
-                )
-                .padding(16.dp),
-            size = SkyIconSize.Medium,
-            onClick = onClick
-        )
     }
 }

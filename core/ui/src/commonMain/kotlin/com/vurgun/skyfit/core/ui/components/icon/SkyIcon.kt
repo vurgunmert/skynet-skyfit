@@ -43,8 +43,8 @@ fun SkyIcon(
     onClick: (() -> Unit)? = null
 ) {
     val iconModifier = modifier
-        .size(size.dp)
         .then(if (onClick != null) Modifier.clickable(onClick = onClick) else Modifier)
+        .size(size.dp)
 
     Icon(
         painter = painterResource(res),

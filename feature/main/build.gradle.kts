@@ -35,7 +35,7 @@ kotlin {
             implementation(projects.core.navigation)
             implementation(projects.core.utils)
 
-            implementation(projects.feature.persona)
+            implementation(projects.feature.profile)
             implementation(projects.feature.wellbeing)
 
             implementation(libs.bundles.feature.core)

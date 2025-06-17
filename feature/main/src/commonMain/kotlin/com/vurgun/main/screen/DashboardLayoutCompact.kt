@@ -59,7 +59,7 @@ fun DashboardCompact(viewModel: DashboardViewModel) {
                 DashboardUiEffect.NavigateToSocial -> dashboardNavigator.replace(SharedScreen.Social)
                 DashboardUiEffect.NavigateToNutrition -> dashboardNavigator.replace(SharedScreen.Nutrition)
                 DashboardUiEffect.NavigateToProfile -> dashboardNavigator.replace(SharedScreen.Profile)
-                DashboardUiEffect.ShowChatBot -> mainNavigator.push(SharedScreen.ChatBot)
+                DashboardUiEffect.ShowChatBot -> mainNavigator.push(SharedScreen.Settings) //TODO: DEBUG REMOVE !!!
                 DashboardUiEffect.ShowConversations -> mainNavigator.push(SharedScreen.Conversations)
                 DashboardUiEffect.ShowNotifications -> mainNavigator.push(SharedScreen.Notifications)
                 else -> Unit

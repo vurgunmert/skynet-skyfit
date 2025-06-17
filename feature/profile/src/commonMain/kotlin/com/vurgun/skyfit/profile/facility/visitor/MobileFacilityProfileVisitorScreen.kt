@@ -1,25 +1,12 @@
 package com.vurgun.skyfit.profile.facility.visitor
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.BoxWithConstraints
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
@@ -33,6 +20,8 @@ import com.vurgun.skyfit.core.navigation.SharedScreen
 import com.vurgun.skyfit.core.navigation.findRootNavigator
 import com.vurgun.skyfit.core.navigation.push
 import com.vurgun.skyfit.core.ui.components.loader.FullScreenLoaderContent
+import com.vurgun.skyfit.core.ui.components.profile.MobileProfileBackgroundImage
+import com.vurgun.skyfit.core.ui.components.profile.VerticalTrainerProfileCard
 import com.vurgun.skyfit.core.ui.components.schedule.weekly.rememberCalendarWeekDaySelectorController
 import com.vurgun.skyfit.core.ui.components.schedule.weekly.rememberWeekDaySelectorState
 import com.vurgun.skyfit.core.ui.components.special.SkyFitMobileScaffold
@@ -40,9 +29,7 @@ import com.vurgun.skyfit.core.ui.components.text.BodyLargeSemiboldText
 import com.vurgun.skyfit.core.ui.screen.ErrorScreen
 import com.vurgun.skyfit.core.ui.styling.SkyFitColor
 import com.vurgun.skyfit.core.ui.utils.CollectEffect
-import com.vurgun.skyfit.feature.persona.components.MobileProfileBackgroundImage
-import com.vurgun.skyfit.feature.persona.components.VerticalTrainerProfileCard
-import com.vurgun.skyfit.feature.persona.profile.facility.owner.FacilityProfileComponent
+import com.vurgun.skyfit.profile.facility.owner.FacilityProfileCompactComponent
 import org.jetbrains.compose.resources.stringResource
 import skyfit.core.ui.generated.resources.Res
 import skyfit.core.ui.generated.resources.our_coaches_label
@@ -161,7 +148,7 @@ private fun FacilityProfileVisitorContent(
             ) {
                 Spacer(Modifier.height(contentTopPadding))
 
-                FacilityProfileComponent.MobileFacilityProfileVisitor_HeaderCard(
+                FacilityProfileCompactComponent.MobileFacilityProfileVisitor_HeaderCard(
                     profile = content.profile,
                     isFollowedByVisitor = content.isFollowedByVisitor,
                     onClickFollow = { onAction(FacilityProfileVisitorAction.Follow) },
@@ -170,7 +157,7 @@ private fun FacilityProfileVisitorContent(
                     onClickMessage = { onAction(FacilityProfileVisitorAction.NavigateToChat) }
                 )
 
-                FacilityProfileComponent.MobileFacilityProfileVisitor_Lessons(
+                FacilityProfileCompactComponent.MobileFacilityProfileVisitor_Lessons(
                     calendarUiState = calendarUiState,
                     calendarViewModel = weekDaySelectorController,
                     lessons = content.lessons,
@@ -190,7 +177,7 @@ private fun FacilityProfileVisitorContent(
                 Spacer(Modifier.height(124.dp))
             }
 
-            FacilityProfileComponent.MobileFacilityProfileVisitor_TopBar(onClickBack = {
+            FacilityProfileCompactComponent.MobileFacilityProfileVisitor_TopBar(onClickBack = {
                 onAction(FacilityProfileVisitorAction.NavigateToBack)
             })
         }

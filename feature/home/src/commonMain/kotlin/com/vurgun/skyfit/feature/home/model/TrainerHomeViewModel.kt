@@ -72,7 +72,7 @@ class TrainerHomeViewModel(
     fun loadData() {
         screenModelScope.launch {
             runCatching {
-                val trainerDetail = userManager.user.value as TrainerAccount
+                val trainerDetail = userManager.account.value as TrainerAccount
                 val trainerProfile = trainerRepository.getTrainerProfile(trainerDetail.trainerId).getOrThrow()
 
                 val lessons = trainerRepository.getUpcomingLessonsByTrainer(trainerDetail.trainerId)

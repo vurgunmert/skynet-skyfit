@@ -23,20 +23,20 @@ import androidx.compose.ui.unit.dp
 import com.vurgun.skyfit.core.ui.components.button.SkyFitIconButton
 import com.vurgun.skyfit.core.ui.components.image.NetworkImage
 import com.vurgun.skyfit.core.ui.components.special.SkyFitMobileScaffold
-import com.vurgun.skyfit.core.ui.components.special.SkyFitScreenHeader
+import com.vurgun.skyfit.core.ui.components.special.CompactTopBar
 import com.vurgun.skyfit.core.ui.components.special.SkyFitSearchTextInputComponent
 import com.vurgun.skyfit.core.ui.styling.SkyFitColor
 import com.vurgun.skyfit.core.ui.styling.SkyFitTypography
 import org.jetbrains.compose.resources.painterResource
 import skyfit.core.ui.generated.resources.Res
-import skyfit.core.ui.generated.resources.logo_skyfit
+import skyfit.core.ui.generated.resources.ic_app_logo
 
 @Composable
 fun MobileUserMealDetailScreen(goToBack: () -> Unit) {
 
     SkyFitMobileScaffold(
         topBar = {
-            SkyFitScreenHeader("Kahvalti", onClickBack = goToBack)
+            CompactTopBar("Kahvalti", onClickBack = goToBack)
         }
     ) {
         MobileUserMealDetailScreenFoodRecordsComponent()
@@ -100,7 +100,7 @@ private fun MobileMealRecordItemComponent() {
         Spacer(Modifier.width(8.dp))
 
         Column(Modifier.weight(0.3f)) {
-            SkyFitIconButton(painterResource(Res.drawable.logo_skyfit), onClick = {})
+            SkyFitIconButton(painterResource(Res.drawable.ic_app_logo), onClick = {})
             Spacer(Modifier.height(8.dp))
             NetworkImage(
                 imageUrl = "https://opstudiohk.com/wp-content/uploads/2021/10/muscle-action.jpg",

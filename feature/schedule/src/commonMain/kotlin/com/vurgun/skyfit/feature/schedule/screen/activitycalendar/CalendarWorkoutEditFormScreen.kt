@@ -90,7 +90,7 @@ private fun EditWorkoutScreen_Compact(
 
     SkyFitMobileScaffold(
         topBar = {
-            SkyFitScreenHeader(
+            CompactTopBar(
                 title = stringResource(Res.string.new_activity_label),
                 onClickBack = { onAction(EditWorkoutAction.OnClickBack) })
         }
@@ -250,7 +250,7 @@ private fun EditWorkoutSubmitAction(onClick: () -> Unit) {
             variant = ButtonVariant.Primary,
             size = ButtonSize.Large,
             state = ButtonState.Rest,
-            leftIconPainter = painterResource(Res.drawable.logo_skyfit)
+            leftIconPainter = painterResource(Res.drawable.ic_app_logo)
         )
     }
 }

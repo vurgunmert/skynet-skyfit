@@ -8,13 +8,13 @@ import com.vurgun.skyfit.core.data.v1.data.lesson.mapper.LessonSessionItemViewDa
 import com.vurgun.skyfit.core.data.v1.domain.account.manager.ActiveAccountManager
 import com.vurgun.skyfit.core.data.v1.domain.account.model.TrainerAccount
 import com.vurgun.skyfit.core.data.v1.domain.lesson.model.LessonSessionItemViewData
+import com.vurgun.skyfit.core.data.v1.domain.profile.LifestyleActionItemViewData
+import com.vurgun.skyfit.core.data.v1.domain.profile.LifestyleActionRowViewData
+import com.vurgun.skyfit.core.data.v1.domain.profile.PhotoGalleryStackViewData
+import com.vurgun.skyfit.core.data.v1.domain.profile.SocialPostItemViewData
 import com.vurgun.skyfit.core.data.v1.domain.trainer.model.TrainerProfile
 import com.vurgun.skyfit.core.data.v1.domain.trainer.repository.TrainerRepository
 import com.vurgun.skyfit.core.ui.styling.SkyFitAsset
-import com.vurgun.skyfit.feature.persona.components.viewdata.LifestyleActionItemViewData
-import com.vurgun.skyfit.feature.persona.components.viewdata.LifestyleActionRowViewData
-import com.vurgun.skyfit.feature.persona.components.viewdata.PhotoGalleryStackViewData
-import com.vurgun.skyfit.feature.persona.social.SocialPostItemViewData
 import kotlinx.coroutines.async
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharedFlow
@@ -60,7 +60,7 @@ class TrainerProfileOwnerViewModel(
     val effect: SharedFlow<TrainerProfileOwnerEffect> = _effect
 
     private val trainerUser: TrainerAccount
-        get() = userManager.user.value as? TrainerAccount
+        get() = userManager.account.value as? TrainerAccount
             ?: error("User is not a Trainer")
 
     fun onAction(action: TrainerProfileOwnerAction) {

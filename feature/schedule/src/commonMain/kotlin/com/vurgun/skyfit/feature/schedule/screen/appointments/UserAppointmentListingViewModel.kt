@@ -77,7 +77,7 @@ class UserAppointmentListingViewModel(
     val effect: SharedFlow<UserAppointmentListingEffect> = _effect
 
     private val user: UserAccount
-        get() = userManager.user.value as? UserAccount
+        get() = userManager.account.value as? UserAccount
             ?: error("❌ current account is not user")
     private val allTabs: List<UserAppointmentListingTab> = listOf(Active, Cancelled, Completed)
 

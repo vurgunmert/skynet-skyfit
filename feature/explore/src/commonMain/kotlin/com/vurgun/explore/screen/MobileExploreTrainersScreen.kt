@@ -8,8 +8,8 @@ import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import com.vurgun.skyfit.feature.persona.components.VerticalTrainerProfileCard
-import com.vurgun.skyfit.feature.persona.components.viewdata.TrainerProfileCardItemViewData
+import com.vurgun.skyfit.core.ui.components.profile.VerticalTrainerProfileCard
+import com.vurgun.skyfit.core.data.v1.domain.profile.TrainerProfileCardItemViewData
 
 @Composable
 fun MobileExploreTrainersScreen(goToBack: () -> Unit) {

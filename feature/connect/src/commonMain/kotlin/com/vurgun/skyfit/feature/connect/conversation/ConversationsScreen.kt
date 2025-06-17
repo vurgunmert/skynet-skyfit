@@ -43,7 +43,7 @@ fun ConversationsExpanded(viewModel: ConversationsViewModel) {
     ConversationsLayout(
         viewModel = viewModel,
         topBar = { //TODO: LARGE TOP BAR
-            SkyFitScreenHeader(
+            CompactTopBar(
                 title = stringResource(Res.string.messages_label),
                 onClickBack =  { viewModel.onAction(ConversationsAction.OnClickBack) }
             )
@@ -57,7 +57,7 @@ fun ConversationsCompact(viewModel: ConversationsViewModel) {
     ConversationsLayout(
         viewModel = viewModel,
         topBar = {
-            SkyFitScreenHeader(
+            CompactTopBar(
                 title = stringResource(Res.string.messages_label),
                 onClickBack =  { viewModel.onAction(ConversationsAction.OnClickBack) }
             )

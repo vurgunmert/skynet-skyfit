@@ -26,7 +26,7 @@ import com.vurgun.skyfit.core.ui.components.loader.FullScreenLoaderContent
 import com.vurgun.skyfit.core.ui.components.schedule.monthly.EventCalendarSelector
 import com.vurgun.skyfit.core.ui.components.schedule.monthly.rememberEventCalendarController
 import com.vurgun.skyfit.core.ui.components.special.SkyFitMobileScaffold
-import com.vurgun.skyfit.core.ui.components.special.SkyFitScreenHeader
+import com.vurgun.skyfit.core.ui.components.special.CompactTopBar
 import com.vurgun.skyfit.core.ui.components.text.SkyText
 import com.vurgun.skyfit.core.ui.components.text.TextStyleType
 import com.vurgun.skyfit.core.ui.screen.ErrorScreen
@@ -98,7 +98,7 @@ private fun MobileUserActivityCalendarScreen(
 
     SkyFitMobileScaffold(
         topBar = {
-            SkyFitScreenHeader(
+            CompactTopBar(
                 title = stringResource(Res.string.calendar_label),
                 onClickBack = { onAction(UserActivityCalendarAction.OnClickBack) }
             )

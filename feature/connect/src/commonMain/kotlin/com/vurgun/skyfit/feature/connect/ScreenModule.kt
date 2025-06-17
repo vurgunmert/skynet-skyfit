@@ -7,11 +7,16 @@ import com.vurgun.skyfit.feature.connect.conversation.ConversationsScreen
 import com.vurgun.skyfit.feature.connect.conversation.ChatScreen
 import com.vurgun.skyfit.feature.connect.notification.CompactNotificationsScreen
 import com.vurgun.skyfit.feature.connect.notification.ExpandedNotificationsScreen
+import com.vurgun.skyfit.feature.connect.social.CreatePostScreen
+import com.vurgun.skyfit.feature.connect.social.SocialMediaScreen
 
-val connectScreenModule = screenModule {
+val screenConnectModule = screenModule {
     register<SharedScreen.Notifications> { CompactNotificationsScreen() }
     register<SharedScreen.NotificationsExpanded> { ExpandedNotificationsScreen(it.onDismiss) }
     register<SharedScreen.Conversations> { ConversationsScreen() }
     register<SharedScreen.UserChat> { ChatScreen() }
     register<SharedScreen.ChatBot> { ChatBotScreen() }
+
+    register<SharedScreen.Social> { SocialMediaScreen() }
+    register<SharedScreen.CreatePost> { CreatePostScreen() }
 }

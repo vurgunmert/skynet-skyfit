@@ -4,7 +4,7 @@ import com.vurgun.skyfit.core.data.dataCoreModule
 import com.vurgun.skyfit.feature.wellbeign.posture.PostureAnalysisViewModel
 import org.koin.dsl.module
 
-val featureWellbeingModule = module {
+val dataWellbeingModule = module {
     includes(dataCoreModule)
 
     factory { PostureAnalysisViewModel(get()) }

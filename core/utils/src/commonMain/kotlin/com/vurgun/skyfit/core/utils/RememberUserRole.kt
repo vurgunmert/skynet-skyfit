@@ -6,27 +6,27 @@ import androidx.compose.runtime.getValue
 import com.vurgun.skyfit.core.data.v1.domain.account.manager.ActiveAccountManager
 import com.vurgun.skyfit.core.data.v1.domain.account.model.Account
 import com.vurgun.skyfit.core.data.v1.domain.account.model.UserAccount
-import com.vurgun.skyfit.core.data.v1.domain.global.model.UserRole
+import com.vurgun.skyfit.core.data.v1.domain.global.model.AccountRole
 import org.koin.compose.koinInject
 
 @Composable
-fun rememberUserRole(): UserRole {
+fun rememberUserRole(): AccountRole {
     val userManager: ActiveAccountManager = koinInject()
-    val userRole: UserRole by userManager.userRole.collectAsState()
+    val accountRole: AccountRole by userManager.accountRole.collectAsState()
 
-    return userRole
+    return accountRole
 }
 
 @Composable
 fun rememberAccount(): Account? {
     val userManager: ActiveAccountManager = koinInject()
-    val state = userManager.user.collectAsState()
+    val state = userManager.account.collectAsState()
     return state.value
 }
 
 @Composable
 fun rememberUserAccount(): UserAccount? {
     val userManager: ActiveAccountManager = koinInject()
-    val state = userManager.user.collectAsState()
+    val state = userManager.account.collectAsState()
     return state.value as? UserAccount
 }

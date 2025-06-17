@@ -33,13 +33,12 @@ import com.vurgun.skyfit.core.ui.screen.ErrorScreen
 import com.vurgun.skyfit.core.ui.styling.SkyFitColor
 import com.vurgun.skyfit.core.ui.styling.SkyFitTypography
 import com.vurgun.skyfit.core.ui.utils.CollectEffect
-import com.vurgun.skyfit.feature.persona.components.LifestyleActionRow
-import com.vurgun.skyfit.feature.persona.components.MobileProfileBackgroundImage
-import com.vurgun.skyfit.feature.persona.components.TrainerProfileCardPreferenceRow
+import com.vurgun.skyfit.core.ui.components.profile.LifestyleActionRow
+import com.vurgun.skyfit.core.ui.components.profile.MobileProfileBackgroundImage
 import org.jetbrains.compose.resources.painterResource
 import skyfit.core.ui.generated.resources.Res
 import skyfit.core.ui.generated.resources.ic_plus
-import skyfit.core.ui.generated.resources.logo_skyfit
+import skyfit.core.ui.generated.resources.ic_app_logo
 
 class TrainerProfileOwnerScreen : Screen {
 
@@ -220,12 +219,12 @@ private object TrainerProfileComponent {
 
                     Spacer(modifier = Modifier.height(16.dp))
 
-                    TrainerProfileCardPreferenceRow(
-                        followerCount = trainerProfile.followerCount.toString(),
-                        lessonCount = trainerProfile.lessonCount.toString(),
-                        postCount = trainerProfile.postCount.toString(),
-                        modifier = Modifier.fillMaxWidth()
-                    )
+//                    TrainerProfileCardPreferenceRow(
+//                        followerCount = trainerProfile.followerCount.toString(),
+//                        lessonCount = trainerProfile.lessonCount.toString(),
+//                        postCount = trainerProfile.postCount.toString(),
+//                        modifier = Modifier.fillMaxWidth()
+//                    )
                 }
             }
 
@@ -253,7 +252,7 @@ private object TrainerProfileComponent {
                 onClick = onClickAdd,
                 variant = ButtonVariant.Secondary,
                 size = ButtonSize.Micro,
-                rightIconPainter = painterResource(Res.drawable.logo_skyfit)
+                rightIconPainter = painterResource(Res.drawable.ic_app_logo)
             )
         }
     }
@@ -273,7 +272,7 @@ private object TrainerProfileComponent {
                 onClick = onClickAdd,
                 variant = ButtonVariant.Secondary,
                 size = ButtonSize.Micro,
-                rightIconPainter = painterResource(Res.drawable.logo_skyfit)
+                rightIconPainter = painterResource(Res.drawable.ic_app_logo)
             )
         }
     }

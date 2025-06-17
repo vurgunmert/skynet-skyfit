@@ -9,12 +9,12 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.max
 import org.jetbrains.compose.resources.painterResource
 import skyfit.core.ui.generated.resources.Res
-import skyfit.core.ui.generated.resources.logo_skyfit
+import skyfit.core.ui.generated.resources.ic_app_logo
 
 @Composable
 fun SkyFitLogoComponent() {
     Image(
-        painterResource(Res.drawable.logo_skyfit),
+        painterResource(Res.drawable.ic_app_logo),
         null,
         modifier = Modifier.size(108.dp, 118.dp)
     )
@@ -23,7 +23,7 @@ fun SkyFitLogoComponent() {
 @Composable
 fun SkyFitAutoSizeLogo(maxWidth: Dp) {
     Image(
-        painterResource(Res.drawable.logo_skyfit),
+        painterResource(Res.drawable.ic_app_logo),
         null,
         modifier = Modifier.size(maxWidth * 0.6f)
     )

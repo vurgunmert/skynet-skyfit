@@ -95,7 +95,7 @@ private object UserNotificationsComponent {
                 SkyFitMobileScaffold(
                     topBar = {
                         Column {
-                            SkyFitScreenHeader(
+                            CompactTopBar(
                                 title = stringResource(Res.string.notifications_label),
                                 onClickBack = { viewModel.onAction(NotificationsAction.ClickBack) })
 

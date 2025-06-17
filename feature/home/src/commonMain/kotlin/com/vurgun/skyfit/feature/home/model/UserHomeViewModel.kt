@@ -123,7 +123,7 @@ class UserHomeViewModel(
     fun loadData() {
         screenModelScope.launch {
             runCatching {
-                val account = userManager.user.value as? UserAccount
+                val account = userManager.account.value as? UserAccount
                     ?: error("Invalid user state")
 
                 val userProfileDeferred = async { userRepository.getUserProfile(account.normalUserId).getOrThrow() }

@@ -1,6 +1,6 @@
 package com.vurgun.skyfit.core.data.v1.domain.global.model
 
-sealed class HeightUnitType(val id: Int, val description: String, val label: String) {
+sealed class HeightUnitType(val id: Int, val description: String, val shortLabel: String) {
     data object CM : HeightUnitType(1, "Santimetre (cm)", "cm")
     data object FT : HeightUnitType(2, "Feet (ft)", "ft")
 

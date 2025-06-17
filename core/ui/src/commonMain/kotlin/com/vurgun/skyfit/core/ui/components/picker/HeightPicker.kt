@@ -151,7 +151,7 @@ fun HeightUnitPicker(
         items = units,
         selectedItem = selectedHeightUnit,
         onItemSelected = onHeightUnitSelected,
-        itemText = { it.label },
+        itemText = { it.shortLabel },
         visibleItemCount = 3,
         modifier = Modifier.width(36.dp)
     )

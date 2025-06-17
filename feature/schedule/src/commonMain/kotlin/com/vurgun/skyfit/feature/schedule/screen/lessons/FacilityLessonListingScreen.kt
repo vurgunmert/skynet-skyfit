@@ -23,7 +23,7 @@ import com.vurgun.skyfit.core.ui.components.schedule.weekly.CalendarWeekDaySelec
 import com.vurgun.skyfit.core.ui.components.schedule.weekly.rememberCalendarWeekDaySelectorController
 import com.vurgun.skyfit.core.ui.components.schedule.weekly.rememberWeekDaySelectorState
 import com.vurgun.skyfit.core.ui.components.special.SkyFitMobileScaffold
-import com.vurgun.skyfit.core.ui.components.special.SkyFitScreenHeader
+import com.vurgun.skyfit.core.ui.components.special.CompactTopBar
 import com.vurgun.skyfit.core.ui.styling.SkyFitColor
 import com.vurgun.skyfit.core.ui.styling.SkyFitTypography
 import com.vurgun.skyfit.core.ui.utils.CollectEffect
@@ -67,7 +67,7 @@ private fun MobileFacilityLessonListScreen(viewModel: FacilityLessonListingViewM
 
     SkyFitMobileScaffold(
         topBar = {
-            SkyFitScreenHeader(
+            CompactTopBar(
                 stringResource(Res.string.lessons_label),
                 onClickBack = { viewModel.onAction(FacilityLessonListingAction.NavigateToBack) })
         }

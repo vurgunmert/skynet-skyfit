@@ -21,7 +21,7 @@ import org.jetbrains.compose.resources.painterResource
 import skyfit.core.ui.generated.resources.Res
 import skyfit.core.ui.generated.resources.ic_close
 import skyfit.core.ui.generated.resources.ic_plus
-import skyfit.core.ui.generated.resources.logo_skyfit
+import skyfit.core.ui.generated.resources.ic_app_logo
 
 @Composable
 fun MobileExploreCommunityDetailScreen(goToBack: () -> Unit) {
@@ -102,7 +102,7 @@ private fun MobileExploreCommunityDetailScreenInfoComponent(
     ) {
         Row(verticalAlignment = Alignment.CenterVertically) {
             Image(
-                painter = painterResource(Res.drawable.logo_skyfit),
+                painter = painterResource(Res.drawable.ic_app_logo),
                 contentDescription = "Community Image",
                 modifier = Modifier
                     .size(50.dp)
@@ -187,7 +187,7 @@ private fun GroupListItem(group: Group) {
         verticalAlignment = Alignment.CenterVertically
     ) {
         Image(
-            painter = painterResource(Res.drawable.logo_skyfit),
+            painter = painterResource(Res.drawable.ic_app_logo),
             contentDescription = "Group Image",
             modifier = Modifier
                 .size(40.dp)

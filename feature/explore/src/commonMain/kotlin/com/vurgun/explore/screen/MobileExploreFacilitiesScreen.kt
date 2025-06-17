@@ -8,8 +8,8 @@ import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import com.vurgun.skyfit.feature.persona.components.FacilityProfileCardItemBox
-import com.vurgun.skyfit.feature.persona.components.viewdata.FacilityProfileCardItemViewData
+import com.vurgun.skyfit.core.ui.components.profile.FacilityProfileCardItemBox
+import com.vurgun.skyfit.core.data.v1.domain.profile.FacilityProfileCardItemViewData
 
 @Composable
 fun MobileExploreFacilitiesScreen(

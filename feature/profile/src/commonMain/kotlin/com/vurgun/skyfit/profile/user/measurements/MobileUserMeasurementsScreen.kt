@@ -17,13 +17,13 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.vurgun.skyfit.core.ui.components.special.SkyFitMobileScaffold
-import com.vurgun.skyfit.core.ui.components.special.SkyFitScreenHeader
+import com.vurgun.skyfit.core.ui.components.special.CompactTopBar
 import com.vurgun.skyfit.core.ui.components.special.SkyFitSearchTextInputComponent
 import com.vurgun.skyfit.core.ui.styling.SkyFitColor
 import com.vurgun.skyfit.core.ui.styling.SkyFitTypography
 import org.jetbrains.compose.resources.painterResource
 import skyfit.core.ui.generated.resources.Res
-import skyfit.core.ui.generated.resources.logo_skyfit
+import skyfit.core.ui.generated.resources.ic_app_logo
 
 @Composable
 fun MobileUserMeasurementsScreen(
@@ -39,7 +39,7 @@ fun MobileUserMeasurementsScreen(
     SkyFitMobileScaffold(
         topBar = {
             Column {
-                SkyFitScreenHeader(
+                CompactTopBar(
                     title = "Ölçümlerim",
                     onClickBack = goToBack
                 )
@@ -84,7 +84,7 @@ private fun MeasurementItemComponent(item: String, onClick: () -> Unit) {
                 modifier = Modifier.weight(1f)
             )
             Icon(
-                painter = painterResource(Res.drawable.logo_skyfit),
+                painter = painterResource(Res.drawable.ic_app_logo),
                 contentDescription = "Enter",
                 tint = SkyFitColor.icon.default,
                 modifier = Modifier.size(16.dp)

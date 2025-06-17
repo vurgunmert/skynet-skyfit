@@ -7,8 +7,7 @@ import cafe.adriel.voyager.core.screen.Screen
 import com.vurgun.skyfit.core.data.utility.SingleSharedFlow
 import com.vurgun.skyfit.core.data.utility.emitIn
 import com.vurgun.skyfit.core.data.v1.domain.account.manager.ActiveAccountManager
-import com.vurgun.skyfit.core.data.v1.domain.global.model.UserRole
-import com.vurgun.skyfit.core.navigation.SharedScreen
+import com.vurgun.skyfit.core.data.v1.domain.global.model.AccountRole
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -61,8 +60,8 @@ class DashboardViewModel(userManager: ActiveAccountManager) : ScreenModel {
     private val _effect = SingleSharedFlow<DashboardUiEffect>()
     val effect = _effect.asSharedFlow()
 
-    val account = userManager.user
-    val userRole = userManager.userRole.map { UserRole.fromId(it.typeId) }
+    val account = userManager.account
+    val accountRole = userManager.accountRole.map { AccountRole.fromId(it.typeId) }
 
     fun onAction(action: DashboardUiAction) {
         when (action) {

@@ -41,7 +41,7 @@ import skyfit.core.ui.generated.resources.ic_check_circle
 import skyfit.core.ui.generated.resources.ic_info_circle
 import skyfit.core.ui.generated.resources.ic_warning
 import skyfit.core.ui.generated.resources.ic_warning_diamond
-import skyfit.core.ui.generated.resources.logo_skyfit
+import skyfit.core.ui.generated.resources.ic_app_logo
 
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
@@ -70,7 +70,7 @@ fun NotificationItemSwipeDismissBackground(dismissState: DismissState) {
                     .border(1.dp, SkyFitColor.border.critical, RoundedCornerShape(12.dp))
             ) {
                 Icon(
-                    painterResource(Res.drawable.logo_skyfit),
+                    painterResource(Res.drawable.ic_app_logo),
                     contentDescription = "Delete",
                     modifier = Modifier
                         .align(Alignment.Center),
@@ -153,7 +153,7 @@ private fun SkyFitNotificationDTO.NotificationIcon() {
 
     if (this.iconId != null) {
         Image(
-            painter = painterResource(Res.drawable.logo_skyfit),
+            painter = painterResource(Res.drawable.ic_app_logo),
             contentDescription = null,
             modifier = Modifier
                 .size(36.dp)

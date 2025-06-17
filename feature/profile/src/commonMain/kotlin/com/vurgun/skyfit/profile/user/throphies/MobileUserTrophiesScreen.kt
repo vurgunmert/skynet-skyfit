@@ -21,7 +21,7 @@ import androidx.compose.ui.unit.dp
 import com.vurgun.skyfit.core.ui.components.image.CircularImage
 import com.vurgun.skyfit.core.ui.components.image.NetworkImage
 import com.vurgun.skyfit.core.ui.components.special.SkyFitMobileScaffold
-import com.vurgun.skyfit.core.ui.components.special.SkyFitScreenHeader
+import com.vurgun.skyfit.core.ui.components.special.CompactTopBar
 import com.vurgun.skyfit.core.ui.styling.SkyFitTypography
 import org.jetbrains.compose.resources.painterResource
 import skyfit.core.ui.generated.resources.Res
@@ -32,7 +32,7 @@ fun MobileUserTrophiesScreen(goToBack: () -> Unit) {
 
     SkyFitMobileScaffold(
         topBar = {
-            SkyFitScreenHeader("Ödüller", onClickBack = goToBack)
+            CompactTopBar("Ödüller", onClickBack = goToBack)
         }
     ) {
         Column(

@@ -18,15 +18,17 @@ import androidx.compose.ui.unit.dp
 import com.vurgun.skyfit.core.ui.styling.SkyFitColor
 import com.vurgun.skyfit.core.ui.styling.SkyFitTypography
 import org.jetbrains.compose.resources.DrawableResource
+import org.jetbrains.compose.resources.StringResource
 import org.jetbrains.compose.resources.painterResource
+import org.jetbrains.compose.resources.stringResource
 import skyfit.core.ui.generated.resources.Res
 import skyfit.core.ui.generated.resources.ic_chevron_right
 
 
 @Composable
 fun MobileSettingsMenuItemComponent(
-    text: String,
-    iconRes: DrawableResource? = null,
+    titleRes: StringResource,
+    iconRes: DrawableResource,
     onClick: () -> Unit = {}
 ) {
     Row(
@@ -34,17 +36,15 @@ fun MobileSettingsMenuItemComponent(
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.spacedBy(16.dp)
     ) {
-        if (iconRes != null) {
-            Icon(
-                painter = painterResource(iconRes),
-                contentDescription = null,
-                modifier = Modifier.size(24.dp),
-                tint = SkyFitColor.icon.default
-            )
-        }
+        Icon(
+            painter = painterResource(iconRes),
+            contentDescription = null,
+            modifier = Modifier.size(24.dp),
+            tint = SkyFitColor.icon.default
+        )
 
         Text(
-            text = text,
+            text = stringResource(titleRes),
             modifier = Modifier.weight(1f),
             style = SkyFitTypography.bodyMediumMedium
         )

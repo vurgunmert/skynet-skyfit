@@ -22,7 +22,7 @@ import com.vurgun.skyfit.core.ui.components.loader.FullScreenLoaderContent
 import com.vurgun.skyfit.core.ui.components.picker.MVDurationWheelPicker
 import com.vurgun.skyfit.core.ui.components.picker.rememberPickerState
 import com.vurgun.skyfit.core.ui.components.special.SkyFitMobileScaffold
-import com.vurgun.skyfit.core.ui.components.special.SkyFitScreenHeader
+import com.vurgun.skyfit.core.ui.components.special.CompactTopBar
 import com.vurgun.skyfit.core.ui.screen.ErrorScreen
 import com.vurgun.skyfit.core.ui.styling.SkyFitColor
 import com.vurgun.skyfit.core.ui.styling.SkyFitTypography
@@ -114,7 +114,7 @@ private fun WorkoutTimeContent(
 
     SkyFitMobileScaffold(
         topBar = {
-            SkyFitScreenHeader(
+            CompactTopBar(
                 title = content.name,
                 onClickBack = { onAction(EditWorkoutTimeAction.OnClickBack) })
         },

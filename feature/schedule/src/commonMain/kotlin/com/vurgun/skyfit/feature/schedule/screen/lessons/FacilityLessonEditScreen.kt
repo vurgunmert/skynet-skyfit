@@ -98,7 +98,7 @@ private fun MobileFacilityEditLessonScreen(
 
     SkyFitMobileScaffold(
         topBar = {
-            SkyFitScreenHeader(stringResource(Res.string.lesson_edit_action), onClickBack = {
+            CompactTopBar(stringResource(Res.string.lesson_edit_action), onClickBack = {
                 if (uiState.isReadyToSave) {
                     viewModel.updateShowCancelDialog(true)
                 } else {

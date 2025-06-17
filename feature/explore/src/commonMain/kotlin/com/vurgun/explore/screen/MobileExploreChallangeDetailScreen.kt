@@ -37,7 +37,7 @@ import com.vurgun.skyfit.core.ui.components.special.ButtonState
 import com.vurgun.skyfit.core.ui.components.special.ButtonVariant
 import com.vurgun.skyfit.core.ui.components.special.SkyFitButtonComponent
 import com.vurgun.skyfit.core.ui.components.special.SkyFitScaffold
-import com.vurgun.skyfit.core.ui.components.special.SkyFitScreenHeader
+import com.vurgun.skyfit.core.ui.components.special.CompactTopBar
 import com.vurgun.skyfit.core.ui.styling.SkyFitColor
 import org.jetbrains.compose.resources.painterResource
 import skyfit.core.ui.generated.resources.Res
@@ -53,7 +53,7 @@ fun MobileExploreChallengeDetailScreen(
 
     SkyFitScaffold(
         topBar = {
-            SkyFitScreenHeader(challengeTitle, onClickBack = goToBack )
+            CompactTopBar(challengeTitle, onClickBack = goToBack )
         }
     ) {
         Column(

@@ -6,7 +6,7 @@ import com.vurgun.skyfit.feature.home.model.TrainerHomeViewModel
 import com.vurgun.skyfit.feature.home.model.UserHomeViewModel
 import org.koin.dsl.module
 
-val homeDependencyModule = module {
+val dataHomeModule = module {
     includes(dataCoreModule)
 
     factory { FacilityHomeViewModel(get(), get(), get()) }

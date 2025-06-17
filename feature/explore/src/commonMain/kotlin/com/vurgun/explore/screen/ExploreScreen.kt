@@ -37,10 +37,10 @@ import com.vurgun.skyfit.core.ui.components.special.*
 import com.vurgun.skyfit.core.ui.styling.SkyFitColor
 import com.vurgun.skyfit.core.ui.styling.SkyFitTypography
 import com.vurgun.skyfit.core.ui.utils.CollectEffect
-import com.vurgun.skyfit.feature.persona.components.FacilityProfileCardItemBox
-import com.vurgun.skyfit.feature.persona.components.VerticalTrainerProfileCard
-import com.vurgun.skyfit.feature.persona.components.viewdata.FacilityProfileCardItemViewData
-import com.vurgun.skyfit.feature.persona.components.viewdata.TrainerProfileCardItemViewData
+import com.vurgun.skyfit.core.ui.components.profile.FacilityProfileCardItemBox
+import com.vurgun.skyfit.core.ui.components.profile.VerticalTrainerProfileCard
+import com.vurgun.skyfit.core.data.v1.domain.profile.FacilityProfileCardItemViewData
+import com.vurgun.skyfit.core.data.v1.domain.profile.TrainerProfileCardItemViewData
 import org.jetbrains.compose.resources.painterResource
 import skyfit.core.ui.generated.resources.Res
 import skyfit.core.ui.generated.resources.ic_chevron_right

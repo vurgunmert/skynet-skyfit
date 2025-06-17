@@ -19,7 +19,7 @@ import androidx.compose.ui.unit.dp
 import com.vurgun.skyfit.core.ui.styling.SkyFitColor
 import org.jetbrains.compose.resources.painterResource
 import skyfit.core.ui.generated.resources.Res
-import skyfit.core.ui.generated.resources.logo_skyfit
+import skyfit.core.ui.generated.resources.ic_app_logo
 import kotlin.math.sqrt
 
 @Composable
@@ -72,7 +72,7 @@ fun ChatBotButtonComponent(
         Hexagon()
 
         Image(
-            painterResource(Res.drawable.logo_skyfit),
+            painterResource(Res.drawable.ic_app_logo),
             contentDescription = "ChatBot",
             modifier = Modifier
                 .padding(top = 2.dp)

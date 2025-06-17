@@ -105,7 +105,7 @@ private fun FacilityProfileScheduleScreen_Compact(
 
             SkyFitMobileScaffold(
                 topBar = {
-                    SkyFitScreenHeader(
+                    CompactTopBar(
                         title = stringResource(Res.string.appointment_book_action),
                         onClickBack = { viewModel.onAction(FacilityProfileScheduleAction.NavigateBack) })
                 },

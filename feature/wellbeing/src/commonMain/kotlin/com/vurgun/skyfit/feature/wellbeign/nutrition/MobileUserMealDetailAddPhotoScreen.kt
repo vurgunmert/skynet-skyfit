@@ -35,7 +35,7 @@ import com.vurgun.skyfit.core.ui.components.special.SkyFitScaffold
 import com.vurgun.skyfit.core.ui.styling.SkyFitColor
 import org.jetbrains.compose.resources.painterResource
 import skyfit.core.ui.generated.resources.Res
-import skyfit.core.ui.generated.resources.logo_skyfit
+import skyfit.core.ui.generated.resources.ic_app_logo
 
 @Composable
 fun MobileUserMealDetailAddPhotoScreen() {
@@ -66,7 +66,7 @@ private fun MobileMealDetailAddPhotoScreenToolbarComponent(onClick: () -> Unit) 
         contentAlignment = Alignment.CenterStart
     ) {
         SkyFitIconButton(
-            painter = painterResource(Res.drawable.logo_skyfit),
+            painter = painterResource(Res.drawable.ic_app_logo),
             modifier = Modifier.size(48.dp),
             onClick = onClick
         )
@@ -137,13 +137,13 @@ private fun MobileMealDetailAddPhotoScreenMediaActionsComponent() {
     ) {
 
         Row {
-            SkyFitIconButton(painterResource(Res.drawable.logo_skyfit))
+            SkyFitIconButton(painterResource(Res.drawable.ic_app_logo))
             Spacer(Modifier.weight(1f))
             Box {
-                SkyFitIconButton(painterResource(Res.drawable.logo_skyfit))
+                SkyFitIconButton(painterResource(Res.drawable.ic_app_logo))
             }
             Spacer(Modifier.weight(1f))
-            SkyFitIconButton(painterResource(Res.drawable.logo_skyfit))
+            SkyFitIconButton(painterResource(Res.drawable.ic_app_logo))
         }
     }
 }

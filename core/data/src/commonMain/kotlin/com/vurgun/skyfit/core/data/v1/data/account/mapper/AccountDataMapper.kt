@@ -11,7 +11,7 @@ import com.vurgun.skyfit.core.data.v1.domain.account.model.UserAccount
 import com.vurgun.skyfit.core.data.v1.domain.global.model.BodyType
 import com.vurgun.skyfit.core.data.v1.domain.global.model.CharacterType
 import com.vurgun.skyfit.core.data.v1.domain.global.model.GenderType
-import com.vurgun.skyfit.core.data.v1.domain.global.model.UserRole
+import com.vurgun.skyfit.core.data.v1.domain.global.model.AccountRole
 
 internal object AccountDataMapper {
 
@@ -19,7 +19,7 @@ internal object AccountDataMapper {
         return UserAccount(
             userId = userId,
             normalUserId = normalUserId ?: -1,
-            userRole = UserRole.fromId(userTypeId),
+            accountRole = AccountRole.fromId(userTypeId),
             username = username,
             phone = phone,
             email = email,
@@ -40,7 +40,7 @@ internal object AccountDataMapper {
         return TrainerAccount(
             userId = userId,
             trainerId = trainerId ?: -1,
-            userRole = UserRole.fromId(userTypeId),
+            accountRole = AccountRole.fromId(userTypeId),
             username = username,
             phone = phone,
             email = email,
@@ -64,7 +64,7 @@ internal object AccountDataMapper {
             gymName = gymName.orEmpty(),
             gymAddress = gymAddress.orEmpty(),
             bio = bio,
-            userRole = UserRole.fromId(userTypeId),
+            accountRole = AccountRole.fromId(userTypeId),
             username = username,
             phone = phone,
             email = email,
@@ -73,10 +73,10 @@ internal object AccountDataMapper {
     }
 
     fun AccountDTO.toDomain(): Account {
-        return when (UserRole.fromId(userTypeId)) {
-            UserRole.User -> toUserDetail()
-            UserRole.Trainer -> toTrainerDetail()
-            UserRole.Facility -> toFacilityDetail()
+        return when (AccountRole.fromId(userTypeId)) {
+            AccountRole.User -> toUserDetail()
+            AccountRole.Trainer -> toTrainerDetail()
+            AccountRole.Facility -> toFacilityDetail()
             else -> throw IllegalStateException("Unsupported user role: $userTypeId")
         }
     }

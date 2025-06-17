@@ -25,11 +25,11 @@ import com.vurgun.skyfit.core.ui.components.special.ButtonState
 import com.vurgun.skyfit.core.ui.components.special.ButtonVariant
 import com.vurgun.skyfit.core.ui.components.special.SkyFitButtonComponent
 import com.vurgun.skyfit.core.ui.components.special.SkyFitMobileScaffold
-import com.vurgun.skyfit.core.ui.components.special.SkyFitScreenHeader
+import com.vurgun.skyfit.core.ui.components.special.CompactTopBar
 import com.vurgun.skyfit.core.ui.styling.SkyFitTypography
 import org.jetbrains.compose.resources.painterResource
 import skyfit.core.ui.generated.resources.Res
-import skyfit.core.ui.generated.resources.logo_skyfit
+import skyfit.core.ui.generated.resources.ic_app_logo
 
 @Composable
 fun MobileUserMealDetailAddScreen() {
@@ -70,7 +70,7 @@ private fun MobileUserMealDetailAddInputScreen(
 
     SkyFitMobileScaffold(
         topBar = {
-            SkyFitScreenHeader("Besin Ekle", onClickBack = onClickBack)
+            CompactTopBar("Besin Ekle", onClickBack = onClickBack)
         }
     ) {
         Column(
@@ -104,8 +104,8 @@ private fun MobileMealDetailAddScreenInputComponent() {
 //        hint = "Ad Soyad *",
 //        value = name,
 //        onValueChange = { },
-//        leftIconPainter = painterResource(Res.drawable.logo_skyfit),
-//        rightIconPainter = painterResource(Res.drawable.logo_skyfit)
+//        leftIconPainter = painterResource(Res.drawable.ic_app_logo),
+//        rightIconPainter = painterResource(Res.drawable.ic_app_logo)
 //    )
 //
 //    Spacer(Modifier.height(24.dp))
@@ -115,8 +115,8 @@ private fun MobileMealDetailAddScreenInputComponent() {
 //        hint = "Ad Soyad *",
 //        value = count,
 //        onValueChange = { },
-//        leftIconPainter = painterResource(Res.drawable.logo_skyfit),
-//        rightIconPainter = painterResource(Res.drawable.logo_skyfit)
+//        leftIconPainter = painterResource(Res.drawable.ic_app_logo),
+//        rightIconPainter = painterResource(Res.drawable.ic_app_logo)
 //    )
 //
 //    Spacer(Modifier.height(24.dp))
@@ -126,8 +126,8 @@ private fun MobileMealDetailAddScreenInputComponent() {
 //        hint = "Ad Soyad *",
 //        value = timing,
 //        onValueChange = { },
-//        leftIconPainter = painterResource(Res.drawable.logo_skyfit),
-//        rightIconPainter = painterResource(Res.drawable.logo_skyfit)
+//        leftIconPainter = painterResource(Res.drawable.ic_app_logo),
+//        rightIconPainter = painterResource(Res.drawable.ic_app_logo)
 //    )
 //
 //    Spacer(Modifier.height(24.dp))
@@ -137,8 +137,8 @@ private fun MobileMealDetailAddScreenInputComponent() {
 //        hint = "Kalorie",
 //        value = calorieCount,
 //        onValueChange = { },
-//        leftIconPainter = painterResource(Res.drawable.logo_skyfit),
-//        rightIconPainter = painterResource(Res.drawable.logo_skyfit)
+//        leftIconPainter = painterResource(Res.drawable.ic_app_logo),
+//        rightIconPainter = painterResource(Res.drawable.ic_app_logo)
 //    )
 }
 
@@ -157,7 +157,7 @@ private fun MobileMealDetailAddScreenAddPhotoActionComponent(
                 variant = ButtonVariant.Secondary,
                 size = ButtonSize.Medium,
                 state = ButtonState.Rest,
-                leftIconPainter = painterResource(Res.drawable.logo_skyfit)
+                leftIconPainter = painterResource(Res.drawable.ic_app_logo)
             )
         } else {
             Row(verticalAlignment = Alignment.CenterVertically) {
@@ -175,7 +175,7 @@ private fun MobileMealDetailAddScreenAddPhotoActionComponent(
                     variant = ButtonVariant.Secondary,
                     size = ButtonSize.Medium,
                     state = ButtonState.Rest,
-                    leftIconPainter = painterResource(Res.drawable.logo_skyfit)
+                    leftIconPainter = painterResource(Res.drawable.ic_app_logo)
                 )
             }
         }
@@ -190,6 +190,6 @@ private fun MobileMealDetailAddScreenSaveActionComponent(onClick: () -> Unit) {
         variant = ButtonVariant.Primary,
         size = ButtonSize.Large,
         state = ButtonState.Rest,
-        leftIconPainter = painterResource(Res.drawable.logo_skyfit)
+        leftIconPainter = painterResource(Res.drawable.ic_app_logo)
     )
 }

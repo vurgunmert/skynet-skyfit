@@ -51,7 +51,7 @@ class FacilityLessonListingViewModel(
 ) : ScreenModel {
 
     private val facilityUser: FacilityAccount
-        get() = userManager.user.value as? FacilityAccount
+        get() = userManager.account.value as? FacilityAccount
             ?: error("User is not a Facility")
 
     private val gymId: Int

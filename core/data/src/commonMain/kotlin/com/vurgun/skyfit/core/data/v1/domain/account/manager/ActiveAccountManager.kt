@@ -1,6 +1,6 @@
 package com.vurgun.skyfit.core.data.v1.domain.account.manager
 
-import com.vurgun.skyfit.core.data.v1.domain.global.model.UserRole
+import com.vurgun.skyfit.core.data.v1.domain.global.model.AccountRole
 import com.vurgun.skyfit.core.data.v1.domain.account.model.Account
 import com.vurgun.skyfit.core.data.v1.domain.account.model.AccountType
 import kotlinx.coroutines.flow.StateFlow
@@ -12,7 +12,7 @@ interface ActiveAccountManager {
     suspend fun logout()
 
     val accountTypes: StateFlow<List<AccountType>>
-    val user: StateFlow<Account?>
-    val userRole: StateFlow<UserRole>
+    val account: StateFlow<Account?>
+    val accountRole: StateFlow<AccountRole>
     suspend fun getAccountTypes(): List<AccountType>
 }

@@ -27,7 +27,7 @@ import com.vurgun.skyfit.feature.connect.conversation.ConversationsUiState
 import com.vurgun.skyfit.feature.connect.conversation.UserConversationItem
 import org.jetbrains.compose.resources.painterResource
 import skyfit.core.ui.generated.resources.Res
-import skyfit.core.ui.generated.resources.logo_skyfit
+import skyfit.core.ui.generated.resources.ic_app_logo
 
 internal object ConversationsComponent {
 
@@ -131,7 +131,7 @@ internal object ConversationsComponent {
         ) {
 
             Image(
-                painter = painterResource(Res.drawable.logo_skyfit), // TODO: Avatar url or res
+                painter = painterResource(Res.drawable.ic_app_logo), // TODO: Avatar url or res
                 contentDescription = "Avatar",
                 modifier = Modifier
                     .size(36.dp)

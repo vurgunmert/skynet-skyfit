@@ -18,21 +18,21 @@ import androidx.compose.ui.unit.dp
 import com.vurgun.skyfit.core.ui.styling.SkyFitColor
 import com.vurgun.skyfit.core.ui.styling.SkyFitTypography
 
-data class SettingsSwitchOptionItem(
+data class NotificationSettingsOption(
     val title: String,
     val subtitle: String? = null,
     val isEnabled: Boolean = true
 )
 
 @Composable
-fun SkyFitSettingsSwitchOptionItemComponent(
-    item: SettingsSwitchOptionItem,
-    onChangeEnable: (Boolean) -> Unit
+fun NotificationSettingsItem(
+    item: NotificationSettingsOption,
+    onToggle: (Boolean) -> Unit
 ) {
     Row(
         modifier = Modifier.fillMaxWidth()
             .padding(vertical = 8.dp)
-            .clickable { onChangeEnable.invoke(!item.isEnabled) },
+            .clickable { onToggle.invoke(!item.isEnabled) },
         verticalAlignment = Alignment.CenterVertically
     ) {
         Column(Modifier.weight(1f)) {
@@ -45,7 +45,7 @@ fun SkyFitSettingsSwitchOptionItemComponent(
         Spacer(Modifier.width(16.dp))
         Switch(
             checked = item.isEnabled,
-            onCheckedChange = onChangeEnable,
+            onCheckedChange = onToggle,
             colors = SwitchDefaults.colors(
                 checkedThumbColor = SkyFitColor.icon.secondary,
                 checkedTrackColor = SkyFitColor.specialty.buttonBgDisabled,

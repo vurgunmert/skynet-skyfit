@@ -16,10 +16,8 @@ import com.vurgun.skyfit.core.data.v1.domain.statistics.front.StatisticCardUiDat
 import com.vurgun.skyfit.core.navigation.SharedScreen
 import com.vurgun.skyfit.feature.home.model.FacilityHomeEffect.NavigateToManageLessons
 import com.vurgun.skyfit.feature.home.model.FacilityHomeEffect.ShowOverlay
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 import kotlinx.datetime.LocalDate
 
 data class DashboardStatCardModel(
@@ -94,7 +92,7 @@ class FacilityHomeViewModel(
     fun loadData() {
         screenModelScope.launch {
             val result = runCatching {
-                val facility = userManager.user.value as FacilityAccount
+                val facility = userManager.account.value as FacilityAccount
                 val profile = facilityRepository.getFacilityProfile(facility.gymId).getOrThrow()
 
                 val statistics = DashboardStatCardModel(

@@ -70,7 +70,7 @@ class TrainerAppointmentListingViewModel(
     val effect: SharedFlow<TrainerAppointmentListingEffect> = _effect
 
     private val trainer: TrainerAccount
-        get() = userManager.user.value as? TrainerAccount
+        get() = userManager.account.value as? TrainerAccount
             ?: error("❌ current account is not trainer")
 
     init {

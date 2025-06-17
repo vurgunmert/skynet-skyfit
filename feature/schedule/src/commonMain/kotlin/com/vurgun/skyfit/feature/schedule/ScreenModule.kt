@@ -9,7 +9,7 @@ import com.vurgun.skyfit.feature.schedule.screen.appointments.TrainerAppointment
 import com.vurgun.skyfit.feature.schedule.screen.appointments.UserAppointmentDetailScreen
 import com.vurgun.skyfit.feature.schedule.screen.appointments.UserAppointmentListingScreen
 
-val scheduleScreenModule = screenModule {
+val screenScheduleModule = screenModule {
     register<SharedScreen.UserActivityCalendar> { UserActivityCalendarScreen(it.selectedDate) }
     register<SharedScreen.Appointments> { UserAppointmentListingScreen() }
     register<SharedScreen.UserAppointmentDetail> { UserAppointmentDetailScreen(it.id) }

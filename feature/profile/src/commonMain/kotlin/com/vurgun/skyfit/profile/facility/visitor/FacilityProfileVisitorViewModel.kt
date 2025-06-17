@@ -10,8 +10,8 @@ import com.vurgun.skyfit.core.data.v1.domain.account.model.Account
 import com.vurgun.skyfit.core.data.v1.domain.facility.model.FacilityProfile
 import com.vurgun.skyfit.core.data.v1.domain.facility.repository.FacilityRepository
 import com.vurgun.skyfit.core.data.v1.domain.lesson.model.LessonSessionItemViewData
+import com.vurgun.skyfit.core.data.v1.domain.profile.SocialPostItemViewData
 import com.vurgun.skyfit.core.data.v1.domain.trainer.model.FacilityTrainerProfile
-import com.vurgun.skyfit.feature.persona.social.SocialPostItemViewData
 import kotlinx.coroutines.async
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharedFlow
@@ -64,7 +64,7 @@ class FacilityProfileVisitorViewModel(
     val effect: SharedFlow<FacilityProfileVisitorEffect> = _effect
 
     private val visitor: Account
-        get() = userManager.user.value ?: error("Visitor not found")
+        get() = userManager.account.value ?: error("Visitor not found")
 
     private var currentFacilityId: Int? = null
 

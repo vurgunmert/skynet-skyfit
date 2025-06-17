@@ -19,6 +19,8 @@ import cafe.adriel.voyager.koin.koinScreenModel
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
 import com.vurgun.skyfit.core.data.v1.domain.lesson.model.LessonSessionItemViewData
+import com.vurgun.skyfit.core.data.v1.domain.profile.LifestyleActionItemViewData
+import com.vurgun.skyfit.core.data.v1.domain.profile.LifestyleActionRowViewData
 import com.vurgun.skyfit.core.data.v1.domain.trainer.model.TrainerProfile
 import com.vurgun.skyfit.core.navigation.SharedScreen
 import com.vurgun.skyfit.core.navigation.push
@@ -27,6 +29,10 @@ import com.vurgun.skyfit.core.ui.components.divider.VerticalDivider
 import com.vurgun.skyfit.core.ui.components.event.AvailableActivityCalendarEventItem
 import com.vurgun.skyfit.core.ui.components.image.NetworkImage
 import com.vurgun.skyfit.core.ui.components.loader.FullScreenLoaderContent
+import com.vurgun.skyfit.core.ui.components.profile.LifestyleActionRow
+import com.vurgun.skyfit.core.ui.components.profile.MobileProfileBackgroundImage
+import com.vurgun.skyfit.core.ui.components.profile.MobileVisitedProfileActionsComponent
+import com.vurgun.skyfit.core.ui.components.profile.VerticalProfileStatisticItem
 import com.vurgun.skyfit.core.ui.components.special.ButtonSize
 import com.vurgun.skyfit.core.ui.components.special.ButtonVariant
 import com.vurgun.skyfit.core.ui.components.special.SkyFitButtonComponent
@@ -35,9 +41,6 @@ import com.vurgun.skyfit.core.ui.screen.ErrorScreen
 import com.vurgun.skyfit.core.ui.styling.SkyFitAsset
 import com.vurgun.skyfit.core.ui.styling.SkyFitColor
 import com.vurgun.skyfit.core.ui.styling.SkyFitTypography
-import com.vurgun.skyfit.feature.persona.components.*
-import com.vurgun.skyfit.feature.persona.components.viewdata.LifestyleActionItemViewData
-import com.vurgun.skyfit.feature.persona.components.viewdata.LifestyleActionRowViewData
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
 import skyfit.core.ui.generated.resources.*

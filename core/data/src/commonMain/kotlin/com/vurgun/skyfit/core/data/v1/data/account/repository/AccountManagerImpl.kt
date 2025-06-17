@@ -6,7 +6,7 @@ import com.vurgun.skyfit.core.data.v1.domain.account.manager.ActiveAccountManage
 import com.vurgun.skyfit.core.data.v1.domain.account.model.Account
 import com.vurgun.skyfit.core.data.v1.domain.account.model.AccountType
 import com.vurgun.skyfit.core.data.v1.domain.account.repository.AccountRepository
-import com.vurgun.skyfit.core.data.v1.domain.global.model.UserRole
+import com.vurgun.skyfit.core.data.v1.domain.global.model.AccountRole
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
@@ -23,12 +23,12 @@ class AccountManagerImpl(
 ) : ActiveAccountManager {
 
     private val userFlow = MutableStateFlow<Account?>(null)
-    override val user = userFlow.asStateFlow()
+    override val account = userFlow.asStateFlow()
 
     // Derived role state
-    override val userRole: StateFlow<UserRole> = userFlow
-        .map { it?.userRole ?: UserRole.Guest }
-        .stateIn(appScope, SharingStarted.Companion.Eagerly, UserRole.Guest)
+    override val accountRole: StateFlow<AccountRole> = userFlow
+        .map { it?.accountRole ?: AccountRole.Guest }
+        .stateIn(appScope, SharingStarted.Companion.Eagerly, AccountRole.Guest)
 
     private val _accountTypes = MutableStateFlow<List<AccountType>>(emptyList())
     override val accountTypes: StateFlow<List<AccountType>> = _accountTypes
@@ -45,8 +45,8 @@ class AccountManagerImpl(
     }
 
     override suspend fun getActiveUser(forceRefresh: Boolean): Result<Account> {
-        if (!forceRefresh && user.value != null) {
-            return Result.success(user.value!!)
+        if (!forceRefresh && account.value != null) {
+            return Result.success(account.value!!)
         }
 
         val result = repository.getAccountDetails()
