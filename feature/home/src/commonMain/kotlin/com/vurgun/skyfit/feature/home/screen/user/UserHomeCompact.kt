@@ -23,6 +23,7 @@ import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
 import com.vurgun.skyfit.core.navigation.SharedScreen
 import com.vurgun.skyfit.core.navigation.findParentByKey
+import com.vurgun.skyfit.core.navigation.findRootNavigator
 import com.vurgun.skyfit.core.navigation.push
 import com.vurgun.skyfit.core.ui.components.image.SkyImage
 import com.vurgun.skyfit.core.ui.components.image.SkyImageShape
@@ -54,7 +55,7 @@ import skyfit.core.ui.generated.resources.*
 @Composable
 internal fun UserHomeCompact(viewModel: UserHomeViewModel) {
 
-    val dashboardNavigator = LocalNavigator.currentOrThrow.findParentByKey("dashboard")
+    val appNavigator = LocalNavigator.currentOrThrow.findRootNavigator()
     val uiState by viewModel.uiState.collectAsState()
 
     CollectEffect(viewModel.effect) { effect ->
@@ -66,7 +67,7 @@ internal fun UserHomeCompact(viewModel: UserHomeViewModel) {
             NavigateToChatbot -> SharedScreen.ChatBot
             is NavigateToActivityCalendar -> SharedScreen.UserActivityCalendar(null)
         }
-        dashboardNavigator?.push(screen)
+        appNavigator.push(screen)
     }
 
     LaunchedEffect(viewModel) {

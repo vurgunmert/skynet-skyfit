@@ -41,3 +41,31 @@ fun CompactTopBar(
         )
     }
 }
+
+
+@Composable
+fun ExpandedTopBar(
+    title: String,
+    onClickBack: () -> Unit,
+    modifier: Modifier = Modifier
+) {
+    Box(
+        modifier = modifier
+            .fillMaxWidth()
+            .wrapContentHeight()
+            .padding(horizontal = 16.dp, vertical = 32.dp)
+    ) {
+        SkyIcon(
+            res = Res.drawable.ic_chevron_left,
+            size = SkyIconSize.Small,
+            onClick = onClickBack,
+            modifier = Modifier.align(Alignment.CenterStart)
+        )
+
+        SkyText(
+            text = title,
+            styleType = TextStyleType.BodyLargeSemibold,
+            modifier = Modifier.align(Alignment.Center)
+        )
+    }
+}

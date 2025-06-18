@@ -21,7 +21,6 @@ import com.vurgun.skyfit.feature.home.component.HomeCompactComponent
 import com.vurgun.skyfit.feature.home.component.HomeLessonTableComponents
 import com.vurgun.skyfit.feature.home.component.HomeStatisticComponents
 import com.vurgun.skyfit.feature.home.component.LessonFilterData
-import com.vurgun.skyfit.feature.home.model.FacilityHomeEffect
 import com.vurgun.skyfit.feature.home.model.TrainerHomeAction
 import com.vurgun.skyfit.feature.home.model.TrainerHomeAction.ApplyLessonFilter
 import com.vurgun.skyfit.feature.home.model.TrainerHomeEffect.*
@@ -44,32 +43,32 @@ internal fun TrainerHomeExpanded(viewModel: TrainerHomeViewModel) {
                 dashboardNavigator.push(FacilityProfileVisitor(effect.facilityId))
 
             NavigateToConversations ->
-                overlayController.invoke(SharedScreen.Conversations)
+                overlayController?.invoke(SharedScreen.Conversations)
 
             NavigateToAppointments ->
-                overlayController.invoke(SharedScreen.TrainerAppointmentListing)
+                overlayController?.invoke(SharedScreen.TrainerAppointmentListing)
 
             NavigateToNotifications ->
-                overlayController.invoke(SharedScreen.Notifications)
+                overlayController?.invoke(SharedScreen.Notifications)
 
             NavigateToChatBot ->
-                overlayController.invoke(SharedScreen.ChatBot)
+                overlayController?.invoke(SharedScreen.ChatBot)
 
             is ShowLessonFilter -> {
-                overlayController.invoke(LessonFilter(effect.lessons) {
+                overlayController?.invoke(LessonFilter(effect.lessons) {
                     viewModel.onAction(ApplyLessonFilter(it as LessonFilterData))
                 })
             }
 
             is ShowOverlay -> {
-                overlayController.invoke(effect.screen)
+                overlayController?.invoke(effect.screen)
             }
 
             is NavigateToAppointment ->
-                overlayController.invoke(SharedScreen.TrainerAppointmentDetail(effect.lessonId))
+                overlayController?.invoke(SharedScreen.TrainerAppointmentDetail(effect.lessonId))
 
             DismissOverlay ->
-                overlayController.invoke(null)
+                overlayController?.invoke(null)
         }
     }
 

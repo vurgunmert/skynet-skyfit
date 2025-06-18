@@ -57,19 +57,19 @@ internal fun UserHomeExpanded(viewModel: UserHomeViewModel) {
                 dashboardNavigator?.push(SharedScreen.FacilityProfileVisitor(effect.facilityId))
 
             NavigateToConversations ->
-                overlayController.invoke(SharedScreen.Conversations)
+                overlayController?.invoke(SharedScreen.Conversations)
 
             NavigateToNotifications ->
-                overlayController.invoke(SharedScreen.Notifications)
+                overlayController?.invoke(SharedScreen.Notifications)
 
             NavigateToAppointments ->
-                overlayController.invoke(SharedScreen.UserAppointmentListing)
+                overlayController?.invoke(SharedScreen.UserAppointmentListing)
 
             NavigateToChatbot ->
-                overlayController.invoke(SharedScreen.ChatBot)
+                overlayController?.invoke(SharedScreen.ChatBot)
 
             is NavigateToActivityCalendar ->
-                overlayController.invoke(SharedScreen.UserActivityCalendar())
+                overlayController?.invoke(SharedScreen.UserActivityCalendar())
         }
     }
 
@@ -172,7 +172,7 @@ private object UserHomeExpandedComponent {
 //                TODO()
             }
             content.featuredContentState?.featuredTrainers?.takeUnless { it.isEmpty() }?.let {
-//                  TODO()
+//                TODO()
             }
         }
     }

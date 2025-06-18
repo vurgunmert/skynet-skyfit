@@ -16,10 +16,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
-import com.vurgun.skyfit.core.navigation.SharedScreen
 import com.vurgun.skyfit.core.navigation.SharedScreen.*
-import com.vurgun.skyfit.core.navigation.SharedScreen.FacilityProfileVisitor
-import com.vurgun.skyfit.core.navigation.SharedScreen.LessonFilter
+import com.vurgun.skyfit.core.navigation.findRootNavigator
 import com.vurgun.skyfit.core.navigation.push
 import com.vurgun.skyfit.core.ui.components.loader.FullScreenLoaderContent
 import com.vurgun.skyfit.core.ui.components.special.CharacterImage
@@ -40,35 +38,35 @@ import skyfit.core.ui.generated.resources.refresh_action
 @Composable
 internal fun TrainerHomeCompact(viewModel: TrainerHomeViewModel) {
 
-    val dashboardNavigator = LocalNavigator.currentOrThrow
+    val appNavigator = LocalNavigator.currentOrThrow.findRootNavigator()
     val uiState by viewModel.uiState.collectAsState()
 
     CollectEffect(viewModel.effect) { effect ->
         when (effect) {
             is NavigateToVisitFacility -> {
-                dashboardNavigator.push(FacilityProfileVisitor(effect.facilityId))
+                appNavigator.push(FacilityProfileVisitor(effect.facilityId))
             }
 
             NavigateToConversations ->
-                dashboardNavigator.push(Conversations)
+                appNavigator.push(Conversations)
 
             NavigateToAppointments ->
-                dashboardNavigator.push(TrainerAppointmentListing)
+                appNavigator.push(TrainerAppointmentListing)
 
             NavigateToNotifications ->
-                dashboardNavigator.push(Notifications)
+                appNavigator.push(Notifications)
 
             NavigateToChatBot ->
-                dashboardNavigator.push(ChatBot)
+                appNavigator.push(ChatBot)
 
             is ShowLessonFilter ->
-                dashboardNavigator.push(LessonFilter(effect.lessons, onApply = {
+                appNavigator.push(LessonFilter(effect.lessons, onApply = {
                     viewModel.onAction(
                         ApplyLessonFilter(it as LessonFilterData)
                     )
                 }))
 
-            is NavigateToAppointment -> dashboardNavigator.push(TrainerAppointmentDetail(effect.lessonId))
+            is NavigateToAppointment -> appNavigator.push(TrainerAppointmentDetail(effect.lessonId))
             is ShowOverlay -> Unit
             DismissOverlay -> Unit
         }

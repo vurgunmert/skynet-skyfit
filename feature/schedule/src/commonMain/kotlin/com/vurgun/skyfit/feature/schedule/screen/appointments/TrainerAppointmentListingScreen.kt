@@ -43,10 +43,14 @@ import com.vurgun.skyfit.core.ui.components.event.BasicAppointmentEventItem
 import com.vurgun.skyfit.core.ui.components.loader.FullScreenLoaderContent
 import com.vurgun.skyfit.core.ui.components.special.SkyFitMobileScaffold
 import com.vurgun.skyfit.core.ui.components.special.CompactTopBar
+import com.vurgun.skyfit.core.ui.components.special.ExpandedTopBar
 import com.vurgun.skyfit.core.ui.components.text.BodyMediumMediumText
 import com.vurgun.skyfit.core.ui.screen.ErrorScreen
 import com.vurgun.skyfit.core.ui.styling.SkyFitColor
 import com.vurgun.skyfit.core.ui.utils.CollectEffect
+import com.vurgun.skyfit.core.ui.utils.LocalOverlayController
+import com.vurgun.skyfit.core.ui.utils.LocalWindowSize
+import com.vurgun.skyfit.core.ui.utils.WindowSize
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
 import skyfit.core.ui.generated.resources.Res
@@ -65,11 +69,15 @@ class TrainerAppointmentListingScreen : Screen {
         val uiState by viewModel.uiState.collectAsState()
         val activeTab = (uiState as? TrainerAppointmentListingUiState.Content)?.activeTab
             ?: TrainerAppointmentListingTab.Completed
+        val windowSize = LocalWindowSize.current
+        val overlayController = LocalOverlayController.current
 
         CollectEffect(viewModel.effect) { effect ->
             when (effect) {
-                TrainerAppointmentListingEffect.NavigateToBack ->
+                TrainerAppointmentListingEffect.NavigateToBack -> {
                     navigator.pop()
+                    overlayController?.invoke(null)
+                }
 
                 is TrainerAppointmentListingEffect.NavigateToDetail ->
                     navigator.push(SharedScreen.TrainerAppointmentDetail(effect.lessonId))
@@ -82,9 +90,15 @@ class TrainerAppointmentListingScreen : Screen {
         SkyFitMobileScaffold(
             topBar = {
                 Column {
-                    CompactTopBar(
-                        title = stringResource(Res.string.appointments_title),
-                        onClickBack = { viewModel.onAction(TrainerAppointmentListingAction.NavigateToBack) })
+                    if (windowSize == WindowSize.EXPANDED) {
+                        ExpandedTopBar(
+                            title = stringResource(Res.string.appointments_title),
+                            onClickBack = { viewModel.onAction(TrainerAppointmentListingAction.NavigateToBack) })
+                    } else {
+                        CompactTopBar(
+                            title = stringResource(Res.string.appointments_title),
+                            onClickBack = { viewModel.onAction(TrainerAppointmentListingAction.NavigateToBack) })
+                    }
 
                     TrainerAppointmentListingTabRow(
                         selectedTab = activeTab,
