@@ -24,7 +24,7 @@ fun AppRootScreen(
 
     KoinApplication(application = { modules(koinModules) }) {
         BoxWithConstraints {
-            val windowSize = remember { WindowSizeHelper.fromWidth(maxWidth) }
+            val windowSize = WindowSizeHelper.fromWidth(maxWidth)
 
             CompositionLocalProvider(LocalWindowSize provides windowSize) {
                 SkyFitTheme {

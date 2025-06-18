@@ -1,4 +1,4 @@
-package com.vurgun.skyfit.profile.user.visitor
+package com.vurgun.skyfit.profile.user
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*

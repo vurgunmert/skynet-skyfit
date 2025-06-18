@@ -9,10 +9,12 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.min
+import com.vurgun.skyfit.core.ui.components.special.FiweLogoDark
 import org.jetbrains.compose.resources.painterResource
 import skyfit.core.ui.generated.resources.Res
 import skyfit.core.ui.generated.resources.background_chatbot
 import skyfit.core.ui.generated.resources.ic_app_logo
+import skyfit.core.ui.generated.resources.ic_fiwe_logo_dark
 
 @Composable
 internal fun ChatbotBackground() {
@@ -28,10 +30,6 @@ internal fun ChatbotBackground() {
 internal fun ChatbotAppLogo(modifier: Modifier = Modifier) {
     BoxWithConstraints(modifier = modifier, contentAlignment = Alignment.Center) {
         val size = min(maxWidth, maxHeight) * 0.7f
-        Image(
-            painter = painterResource(Res.drawable.ic_app_logo),
-            contentDescription = "Logo",
-            modifier = Modifier.size(size)
-        )
+        FiweLogoDark(Modifier.size(size))
     }
 }

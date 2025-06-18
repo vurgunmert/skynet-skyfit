@@ -1,5 +1,6 @@
 package com.vurgun.skyfit.feature.home.model
 
+import androidx.compose.ui.util.fastFilter
 import cafe.adriel.voyager.core.model.ScreenModel
 import cafe.adriel.voyager.core.model.screenModelScope
 import com.vurgun.skyfit.core.data.utility.SingleSharedFlow
@@ -12,8 +13,10 @@ import com.vurgun.skyfit.core.data.v1.domain.lesson.model.LessonSessionItemViewD
 import com.vurgun.skyfit.core.data.v1.domain.statistics.front.StatisticCardUiData
 import com.vurgun.skyfit.core.data.v1.domain.trainer.model.TrainerProfile
 import com.vurgun.skyfit.core.data.v1.domain.trainer.repository.TrainerRepository
+import com.vurgun.skyfit.feature.home.component.LessonFilterData
 import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.launch
+import kotlinx.datetime.LocalDate
 
 sealed interface TrainerHomeUiState {
     data object Loading : TrainerHomeUiState
@@ -22,7 +25,10 @@ sealed interface TrainerHomeUiState {
         val account: TrainerAccount,
         val profile: TrainerProfile,
         val statistics: DashboardStatCardModel? = null,
-        val lessons: List<LessonSessionItemViewData> = emptyList()
+        val allLessons: List<LessonSessionItemViewData> = emptyList(),
+        val filteredLessons: List<LessonSessionItemViewData> = emptyList(),
+        val upcomingLessons: List<LessonSessionItemViewData> = emptyList(),
+        val appliedFilter: LessonFilterData = LessonFilterData()
     ) : TrainerHomeUiState
 }
 
@@ -31,6 +37,8 @@ sealed interface TrainerHomeAction {
     data object OnClickConversations : TrainerHomeAction
     data object OnClickAppointments : TrainerHomeAction
     data object OnClickChatBot : TrainerHomeAction
+    data object OnClickFilter : TrainerHomeAction
+    data class ApplyLessonFilter(val filter: LessonFilterData) : TrainerHomeAction
 }
 
 sealed interface TrainerHomeEffect {
@@ -39,6 +47,7 @@ sealed interface TrainerHomeEffect {
     data object NavigateToConversations : TrainerHomeEffect
     data object NavigateToAppointments : TrainerHomeEffect
     data object NavigateToChatBot : TrainerHomeEffect
+    data class ShowLessonFilter(val lessons: List<LessonSessionItemViewData>) : TrainerHomeEffect
 }
 
 class TrainerHomeViewModel(
@@ -66,6 +75,11 @@ class TrainerHomeViewModel(
 
             TrainerHomeAction.OnClickChatBot ->
                 emitEffect(TrainerHomeEffect.NavigateToChatBot)
+
+            TrainerHomeAction.OnClickFilter ->
+                emitEffect(TrainerHomeEffect.ShowLessonFilter((uiState as? TrainerHomeUiState.Content)?.filteredLessons.orEmpty()))
+
+            is TrainerHomeAction.ApplyLessonFilter -> applyLessonFilter(action.filter)
         }
     }
 
@@ -75,10 +89,14 @@ class TrainerHomeViewModel(
                 val trainerDetail = userManager.account.value as TrainerAccount
                 val trainerProfile = trainerRepository.getTrainerProfile(trainerDetail.trainerId).getOrThrow()
 
-                val lessons = trainerRepository.getUpcomingLessonsByTrainer(trainerDetail.trainerId)
-                    .getOrNull()?.let { list ->
-                        list.map { mapper.map(it) }
-                    }.orEmpty()
+                val allLessons = trainerRepository.getLessonsByTrainer(
+                    trainerId = trainerDetail.trainerId,
+                    startDate = LocalDate(2025, 1, 1),
+                    endDate = null
+                ).getOrNull()?.let { list -> list.map { mapper.map(it) } }.orEmpty()
+
+                val upcomingLessons = trainerRepository.getUpcomingLessonsByTrainer(trainerDetail.trainerId)
+                    .getOrNull()?.let { list -> list.map { mapper.map(it) } }.orEmpty()
 
                 val metrics = listOf(
                     StatisticCardUiData("Video", "${trainerProfile.videoCount}"),
@@ -93,7 +111,9 @@ class TrainerHomeViewModel(
                         account = trainerDetail,
                         profile = trainerProfile,
                         statistics = statistics,
-                        lessons = lessons
+                        allLessons = allLessons,
+                        filteredLessons = allLessons,
+                        upcomingLessons = upcomingLessons
                     )
                 )
             }.onFailure {
@@ -133,6 +153,33 @@ class TrainerHomeViewModel(
                 value = "211",
                 changePercent = 12,
                 changeDirection = StatisticCardUiData.ChangeDirection.DOWN
+            )
+        )
+    }
+
+    private fun resetFilter() {
+        val content = (uiState.value as? TrainerHomeUiState.Content) ?: return
+        _uiState.update(content.copy(filteredLessons = content.allLessons, appliedFilter = LessonFilterData()))
+    }
+
+    private fun applyLessonFilter(filter: LessonFilterData) {
+        val content = (uiState.value as? TrainerHomeUiState.Content) ?: return
+
+        val filteredLessons = content.allLessons
+            .apply {
+                filter.query.takeUnless { it.isNullOrEmpty() }?.let { query ->
+                    this.fastFilter { it.title.contains(query, ignoreCase = true) }
+                }
+            }
+            .filter { it.title in filter.selectedTitles }
+            .filter { it.trainer in filter.selectedTrainers }
+            .filter { it.hours in filter.selectedHours }
+            .filter { it.statusName in filter.selectedStatuses }
+
+        _uiState.update(
+            content.copy(
+                filteredLessons = filteredLessons,
+                appliedFilter = filter
             )
         )
     }

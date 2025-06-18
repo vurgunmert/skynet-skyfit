@@ -21,6 +21,7 @@ object ExpandedLayout {
     ) {
         Row(
             modifier = modifier
+                .verticalScroll(rememberScrollState())
                 .fillMaxSize()
                 .padding(end = 16.dp)
                 .background(

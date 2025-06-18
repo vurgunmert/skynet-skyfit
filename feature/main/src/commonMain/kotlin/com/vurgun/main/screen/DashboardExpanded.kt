@@ -1,6 +1,5 @@
 package com.vurgun.main.screen
 
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -13,10 +12,8 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
-import cafe.adriel.voyager.core.registry.ScreenProvider
 import cafe.adriel.voyager.core.registry.rememberScreen
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.CurrentScreen
@@ -28,12 +25,12 @@ import com.vurgun.main.dashboard.DashboardUiEffect
 import com.vurgun.main.dashboard.DashboardViewModel
 import com.vurgun.skyfit.core.data.v1.domain.account.model.Account
 import com.vurgun.skyfit.core.navigation.SharedScreen
-import com.vurgun.skyfit.core.navigation.push
 import com.vurgun.skyfit.core.navigation.replace
 import com.vurgun.skyfit.core.ui.components.icon.SkyIcon
 import com.vurgun.skyfit.core.ui.components.icon.SkyIconSize
 import com.vurgun.skyfit.core.ui.components.icon.SkyIconTint
 import com.vurgun.skyfit.core.ui.components.image.NetworkImage
+import com.vurgun.skyfit.core.ui.components.special.FiweLogoDark
 import com.vurgun.skyfit.core.ui.components.topbar.ExpandedTopBar
 import com.vurgun.skyfit.core.ui.styling.SkyFitColor
 import com.vurgun.skyfit.core.ui.utils.CollectEffect
@@ -41,7 +38,6 @@ import com.vurgun.skyfit.core.ui.utils.LocalOverlayController
 import com.vurgun.skyfit.core.utils.rememberAccount
 import com.vurgun.skyfit.feature.main.component.ScreenOverlay
 import org.jetbrains.compose.resources.DrawableResource
-import org.jetbrains.compose.resources.painterResource
 import skyfit.core.ui.generated.resources.*
 
 @Composable
@@ -126,12 +122,7 @@ private object DashboardExpandedComponents {
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {
 
-            Image(
-                painterResource(Res.drawable.ic_app_logo),
-                null,
-                modifier = Modifier.size(60.dp),
-                contentScale = ContentScale.Inside
-            )
+            FiweLogoDark(modifier = Modifier.size(60.dp))
 
             Spacer(Modifier.height(4.dp))
 

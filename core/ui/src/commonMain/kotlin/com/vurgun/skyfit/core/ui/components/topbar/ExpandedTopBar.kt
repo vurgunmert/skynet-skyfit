@@ -1,5 +1,6 @@
 package com.vurgun.skyfit.core.ui.components.topbar
 
+import androidx.compose.foundation.LocalIndication
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
@@ -8,6 +9,7 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -25,6 +27,7 @@ import com.vurgun.skyfit.core.ui.components.icon.SkyIconSize
 import com.vurgun.skyfit.core.ui.components.icon.SkyIconTint
 import com.vurgun.skyfit.core.ui.components.special.CharacterImage
 import com.vurgun.skyfit.core.ui.components.special.ChatBotButtonComponent
+import com.vurgun.skyfit.core.ui.components.special.FeatureVisible
 import com.vurgun.skyfit.core.ui.components.text.SkyText
 import com.vurgun.skyfit.core.ui.components.text.TextStyleType
 import com.vurgun.skyfit.core.ui.styling.SkyFitColor
@@ -89,7 +92,11 @@ object ExpandedTopBar {
 
             Spacer(Modifier.weight(1f))
 
-            TopbarNavigationGroup(onClickNotifications, onClickConversations, onClickChatBot)
+            TopbarNavigationGroup(
+                onClickNotifications = onClickNotifications,
+                onClickConversations = onClickConversations,
+                onClickChatBot = onClickChatBot
+            )
         }
     }
 
@@ -194,7 +201,11 @@ object ExpandedTopBar {
 
             Spacer(Modifier.width(16.dp))
 
-            TopbarNavigationGroup(onClickNotifications, onClickConversations, onClickChatBot)
+            TopbarNavigationGroup(
+                onClickNotifications = onClickNotifications,
+                onClickConversations = onClickConversations,
+                onClickChatBot = onClickChatBot
+            )
         }
     }
 
@@ -217,8 +228,12 @@ object ExpandedTopBar {
                 name = account.gymName,
                 modifier = Modifier.wrapContentWidth()
             )
-
-            TopbarNavigationGroup(onClickNotifications, onClickConversations, onClickChatBot)
+            Spacer(Modifier.weight(1f))
+            TopbarNavigationGroup(
+                onClickNotifications = onClickNotifications,
+                onClickConversations = onClickConversations,
+                onClickChatBot = onClickChatBot
+            )
         }
     }
 
@@ -258,6 +273,9 @@ object ExpandedTopBar {
 
     @Composable
     private fun TopbarNavigationGroup(
+        notificationsEnabled: Boolean = false,
+        conversationsEnabled: Boolean = false,
+        chatbotEnabled: Boolean = true,
         onClickNotifications: () -> Unit = {},
         onClickConversations: () -> Unit = {},
         onClickChatBot: () -> Unit = {},
@@ -272,24 +290,30 @@ object ExpandedTopBar {
             horizontalArrangement = Arrangement.spacedBy(8.dp)
         ) {
 
-            TopBarNavigationItem(
-                selected = false,
-                highlighted = false,
-                icon = Res.drawable.ic_bell,
-                onClick = onClickNotifications
-            )
+            FeatureVisible(notificationsEnabled) {
+                TopBarNavigationItem(
+                    selected = false,
+                    highlighted = false,
+                    icon = Res.drawable.ic_bell,
+                    onClick = onClickNotifications
+                )
+            }
 
-            TopBarNavigationItem(
-                selected = false,
-                highlighted = false,
-                icon = Res.drawable.ic_chat,
-                onClick = onClickConversations
-            )
+            FeatureVisible(conversationsEnabled) {
+                TopBarNavigationItem(
+                    selected = false,
+                    highlighted = false,
+                    icon = Res.drawable.ic_chat,
+                    onClick = onClickConversations
+                )
+            }
 
-            ChatBotButtonComponent(
-                modifier = Modifier,
-                onClick = onClickChatBot
-            )
+            FeatureVisible(chatbotEnabled) {
+                ChatBotButtonComponent(
+                    modifier = Modifier,
+                    onClick = onClickChatBot
+                )
+            }
         }
     }
 
@@ -301,18 +325,22 @@ object ExpandedTopBar {
         size: Dp = 56.dp,
         onClick: () -> Unit
     ) {
-        val background = when {
-            selected -> Modifier.background(SkyFitColor.border.secondaryButton, CircleShape)
-            else -> Modifier.background(SkyFitColor.background.fillTransparentSecondary, CircleShape)
+        val backgroundColor = if (selected) {
+            SkyFitColor.border.secondaryButton
+        } else {
+            SkyFitColor.background.fillTransparentSecondary
         }
+        val interactionSource = remember { MutableInteractionSource() }
+        val indication = rememberUpdatedState(LocalIndication.current)
 
         Box(
             modifier = Modifier
-                .then(background)
                 .size(size)
+                .clip(CircleShape)
+                .background(backgroundColor)
                 .clickable(
-                    interactionSource = remember { MutableInteractionSource() },
-                    indication = null,
+                    interactionSource = interactionSource,
+                    indication = indication.value,
                     onClick = onClick
                 ),
             contentAlignment = Alignment.Center
@@ -322,17 +350,19 @@ object ExpandedTopBar {
                 size = SkyIconSize.Normal,
                 tint = if (selected) SkyIconTint.Inverse else SkyIconTint.Default
             )
+
             if (highlighted) {
                 Box(
-                    Modifier
+                    modifier = Modifier
                         .align(Alignment.TopEnd)
-                        .padding(19.dp)
+                        .offset(x = 4.dp, y = (-4).dp)
+                        .size(8.dp)
                         .clip(CircleShape)
-                        .size(6.dp)
                         .background(SkyFitColor.icon.critical)
                 )
             }
         }
     }
+
 }
 

@@ -1,4 +1,4 @@
-package com.vurgun.skyfit.core.data.v1.auth.back
+package com.vurgun.skyfit.core.data.v1.data.auth.model
 
 import kotlinx.serialization.Serializable
 
@@ -10,7 +10,7 @@ data class AuthRequestDTO(
 
 @Serializable
 data class AuthResponseDTO(
-    val token: String,
+    val token: String? = null,
     val isNewUser: Boolean? = null,
     val onboardingComplete: Boolean? = null
 )

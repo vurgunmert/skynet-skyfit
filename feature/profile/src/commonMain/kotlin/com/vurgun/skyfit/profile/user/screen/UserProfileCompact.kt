@@ -1,4 +1,4 @@
-package com.vurgun.skyfit.profile.user
+package com.vurgun.skyfit.profile.user.screen
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -28,10 +28,10 @@ import com.vurgun.skyfit.core.ui.styling.SkyFitTypography
 import com.vurgun.skyfit.core.ui.utils.CollectEffect
 import com.vurgun.skyfit.profile.component.ProfileCompactComponent
 import com.vurgun.skyfit.profile.model.ProfileDestination
-import com.vurgun.skyfit.profile.user.owner.UserProfileAction
-import com.vurgun.skyfit.profile.user.owner.UserProfileEffect
-import com.vurgun.skyfit.profile.user.owner.UserProfileUiState
-import com.vurgun.skyfit.profile.user.owner.UserProfileViewModel
+import com.vurgun.skyfit.profile.user.model.UserProfileAction
+import com.vurgun.skyfit.profile.user.model.UserProfileEffect
+import com.vurgun.skyfit.profile.user.model.UserProfileUiState
+import com.vurgun.skyfit.profile.user.model.UserProfileViewModel
 import org.jetbrains.compose.resources.stringResource
 import skyfit.core.ui.generated.resources.*
 
@@ -165,14 +165,14 @@ private object UserProfileCompactComponent {
     ) {
         if (content.isVisiting) {
             ProfileCompactComponent.NavigationMenuWithAction(
-                onDestinationChanged = { onAction(UserProfileAction.ChangeTab(it)) },
-                destination = content.route,
+                onDestinationChanged = { onAction(UserProfileAction.OnDestinationChanged(it)) },
+                destination = content.destination,
                 modifier = Modifier.fillMaxWidth()
             )
         } else {
             ProfileCompactComponent.NavigationMenuWithAction(
-                onDestinationChanged = { onAction(UserProfileAction.ChangeTab(it)) },
-                destination = content.route,
+                onDestinationChanged = { onAction(UserProfileAction.OnDestinationChanged(it)) },
+                destination = content.destination,
                 action = {
                     SkyIcon(Res.drawable.ic_settings)
 //                    actionRes = Res.drawable.ic_settings,
@@ -188,7 +188,7 @@ private object UserProfileCompactComponent {
         content: UserProfileUiState.Content,
         onAction: (UserProfileAction) -> Unit
     ) {
-        if (content.route == ProfileDestination.Posts) {
+        if (content.destination == ProfileDestination.Posts) {
             PostsContent(content, onAction)
         } else {
             AboutContent(content, onAction)

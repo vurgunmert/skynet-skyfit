@@ -1,4 +1,4 @@
-package com.vurgun.skyfit.profile.user.owner
+package com.vurgun.skyfit.profile.user.model
 
 import cafe.adriel.voyager.core.model.ScreenModel
 import cafe.adriel.voyager.core.model.screenModelScope
@@ -7,6 +7,7 @@ import com.vurgun.skyfit.core.data.utility.UiStateDelegate
 import com.vurgun.skyfit.core.data.utility.emitIn
 import com.vurgun.skyfit.core.data.v1.data.lesson.mapper.LessonSessionItemViewDataMapper
 import com.vurgun.skyfit.core.data.v1.domain.account.manager.ActiveAccountManager
+import com.vurgun.skyfit.core.data.v1.domain.account.model.UserAccount
 import com.vurgun.skyfit.core.data.v1.domain.facility.model.FacilityProfile
 import com.vurgun.skyfit.core.data.v1.domain.facility.repository.FacilityRepository
 import com.vurgun.skyfit.core.data.v1.domain.lesson.model.LessonSessionItemViewData
@@ -15,7 +16,7 @@ import com.vurgun.skyfit.core.data.v1.domain.profile.SocialPostItemViewData
 import com.vurgun.skyfit.core.data.v1.domain.user.model.UserProfile
 import com.vurgun.skyfit.core.data.v1.domain.user.repository.UserRepository
 import com.vurgun.skyfit.profile.model.ProfileDestination
-import com.vurgun.skyfit.profile.user.owner.UserProfileEffect.*
+import com.vurgun.skyfit.profile.user.model.UserProfileEffect.*
 import kotlinx.coroutines.async
 import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.launch
@@ -24,10 +25,10 @@ sealed class UserProfileUiState {
     data object Loading : UserProfileUiState()
     data class Error(val message: String) : UserProfileUiState()
     data class Content(
-        val route: ProfileDestination,
-        val isVisiting: Boolean,
-        val isFollowing: Boolean,
         val profile: UserProfile,
+        val destination: ProfileDestination = ProfileDestination.About,
+        val isVisiting: Boolean = false,
+        val isFollowing: Boolean = false,
         val memberFacilityProfile: FacilityProfile? = null,
         val appointments: List<LessonSessionItemViewData> = emptyList(),
         val posts: List<SocialPostItemViewData> = emptyList(),
@@ -44,7 +45,7 @@ sealed interface UserProfileAction {
     data object OnClickFollow : UserProfileAction
     data object OnClickUnfollow : UserProfileAction
     data class NavigateToVisitFacility(val gymId: Int) : UserProfileAction
-    data class ChangeTab(val route: ProfileDestination) : UserProfileAction
+    data class OnDestinationChanged(val destination: ProfileDestination) : UserProfileAction
 }
 
 sealed interface UserProfileEffect {
@@ -85,7 +86,7 @@ class UserProfileViewModel(
             is UserProfileAction.NavigateToVisitFacility ->
                 _effect.emitIn(screenModelScope, NavigateToVisitFacility(action.gymId))
 
-            is UserProfileAction.ChangeTab -> changeTab(action.route)
+            is UserProfileAction.OnDestinationChanged -> updateDestination(action.destination)
             UserProfileAction.OnClickFollow -> TODO()
             UserProfileAction.OnClickUnfollow -> TODO()
         }
@@ -93,7 +94,7 @@ class UserProfileViewModel(
 
     fun loadData(userId: Int? = null) {
         val isVisiting = userId != null
-        val loadedUserId = userId ?: userManager.account.value?.userId ?: return
+        val loadedUserId = userId ?: (userManager.account.value as? UserAccount)?.normalUserId ?: return
 
         screenModelScope.launch {
             _uiState.update(UserProfileUiState.Loading)
@@ -111,9 +112,9 @@ class UserProfileViewModel(
 
                 _uiState.update(
                     UserProfileUiState.Content(
-                        route = ProfileDestination.About,
+                        destination = ProfileDestination.About,
                         isVisiting = isVisiting,
-                        isFollowing = false, //TODO: nul
+                        isFollowing = false,
                         profile = profile,
                         memberFacilityProfile = memberFacilityProfile,
                         appointments = appointments,
@@ -125,12 +126,10 @@ class UserProfileViewModel(
         }
     }
 
-    private fun changeTab(route: ProfileDestination) {
-        uiState.value
-            .let { it as? UserProfileUiState.Content }
-            ?.let {
-                _uiState.update(it.copy(route = route))
-            }
+    private fun updateDestination(route: ProfileDestination) {
+        uiState.value.let { it as? UserProfileUiState.Content }?.let {
+            _uiState.update(it.copy(destination = route))
+        }
     }
 
     private suspend fun fetchAppointments(normalUserId: Int): List<LessonSessionItemViewData> {

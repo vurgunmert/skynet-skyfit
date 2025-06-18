@@ -1,18 +1,22 @@
-package com.vurgun.skyfit.profile.user
+package com.vurgun.skyfit.profile.user.screen
 
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.width
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.unit.dp
 import com.vurgun.skyfit.core.ui.components.box.TodoBox
 import com.vurgun.skyfit.core.ui.components.loader.FullScreenLoaderContent
 import com.vurgun.skyfit.core.ui.screen.ErrorScreen
 import com.vurgun.skyfit.profile.component.ProfileExpandedComponent
 import com.vurgun.skyfit.profile.model.ProfileDestination
-import com.vurgun.skyfit.profile.user.owner.UserProfileAction
-import com.vurgun.skyfit.profile.user.owner.UserProfileUiState
-import com.vurgun.skyfit.profile.user.owner.UserProfileViewModel
+import com.vurgun.skyfit.profile.user.model.UserProfileAction
+import com.vurgun.skyfit.profile.user.model.UserProfileUiState
+import com.vurgun.skyfit.profile.user.model.UserProfileViewModel
 
 @Composable
 fun UserProfileExpanded(
@@ -35,13 +39,13 @@ fun UserProfileExpanded(
 
             ProfileExpandedComponent.Layout(
                 header = {
-                    UserProfileExpandedComponent.Header(content, viewModel::onAction)
+                    UserProfileExpandedComponent.Header(content, viewModel::onAction, modifier = Modifier.fillMaxWidth().height(284.dp))
                 },
                 content = {
-                    if (content.route == ProfileDestination.Posts) {
-                        UserProfileExpandedComponent.PostsContent(content, viewModel::onAction)
+                    if (content.destination == ProfileDestination.Posts) {
+                        UserProfileExpandedComponent.PostsContent(content, viewModel::onAction, modifier = Modifier.fillMaxWidth().weight(1f))
                     } else {
-                        UserProfileExpandedComponent.AboutContent(content, viewModel::onAction)
+                        UserProfileExpandedComponent.AboutContent(content, viewModel::onAction, modifier = Modifier.fillMaxWidth().weight(1f))
                     }
                 },
                 modifier = modifier
@@ -58,7 +62,7 @@ private object UserProfileExpandedComponent {
         onAction: (UserProfileAction) -> Unit,
         modifier: Modifier = Modifier
     ) {
-        TodoBox("Header")
+        TodoBox("Header", modifier)
     }
 
     @Composable
@@ -67,7 +71,7 @@ private object UserProfileExpandedComponent {
         onAction: (UserProfileAction) -> Unit,
         modifier: Modifier = Modifier
     ) {
-        TodoBox("AboutContent")
+        TodoBox("AboutContent", modifier)
     }
 
     @Composable
@@ -76,6 +80,6 @@ private object UserProfileExpandedComponent {
         onAction: (UserProfileAction) -> Unit,
         modifier: Modifier = Modifier
     ) {
-        TodoBox("PostsContent")
+        TodoBox("PostsContent", modifier)
     }
 }

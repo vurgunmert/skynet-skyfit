@@ -20,6 +20,7 @@ data class LessonSessionItemViewData(
     val note: String? = null,
     val enrolledCount: String? = null,
     val capacityRatio: String? = null,
+    val statusName: String,
     val isActive: Boolean = true,
     val selected: Boolean = false,
 ) {

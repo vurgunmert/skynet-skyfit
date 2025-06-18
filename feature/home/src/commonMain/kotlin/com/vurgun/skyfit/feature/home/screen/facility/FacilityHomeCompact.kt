@@ -20,6 +20,7 @@ import com.vurgun.skyfit.core.ui.components.loader.FullScreenLoaderContent
 import com.vurgun.skyfit.core.ui.screen.ErrorScreen
 import com.vurgun.skyfit.core.ui.utils.CollectEffect
 import com.vurgun.skyfit.feature.home.component.HomeCompactComponent
+import com.vurgun.skyfit.feature.home.component.HomeNoUpcomingAppointmentCard
 import com.vurgun.skyfit.feature.home.component.HomeStatisticComponents.StatCardComponent
 import com.vurgun.skyfit.feature.home.model.FacilityHomeAction
 import com.vurgun.skyfit.feature.home.model.FacilityHomeEffect
@@ -45,6 +46,10 @@ internal fun FacilityHomeCompact(viewModel: FacilityHomeViewModel) {
             FacilityHomeEffect.NavigateToManageLessons -> {
                 appNavigator.push(SharedScreen.FacilityManageLessons)
             }
+
+            FacilityHomeEffect.DismissOverlay ->
+                appNavigator.pop()
+
         }
     }
 
@@ -114,7 +119,18 @@ private object FacilityHomeCompactComponent {
 
             StatCardComponent(content.statistics)
 
-            HomeCompactComponent.LessonCards(content.allLessons)
+            if (content.upcomingLessons.isEmpty()) {
+                HomeNoUpcomingAppointmentCard(
+                    assignedFacilityId = content.facility.gymId,
+                    onClickAdd = { onAction(FacilityHomeAction.OnClickLessons) }
+                )
+            } else {
+                HomeCompactComponent.LessonCards(
+                    lessons = content.upcomingLessons,
+                    onClickShowAll = { onAction(FacilityHomeAction.OnClickLessons) },
+                    onClickLesson = { onAction(FacilityHomeAction.OnClickLessons) }
+                )
+            }
 
 //            ExpandedHomeFacilityLessonTable(content.appointments)
 

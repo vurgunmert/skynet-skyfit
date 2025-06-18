@@ -96,8 +96,8 @@ internal object HomeCompactComponent {
 
     @Composable
     fun BasicTopBar(
-        notificationsEnabled: Boolean = true,
-        conversationsEnabled: Boolean = true,
+        notificationsEnabled: Boolean = false,
+        conversationsEnabled: Boolean = false,
         onClickNotifications: () -> Unit,
         onClickConversations: () -> Unit,
     ) {

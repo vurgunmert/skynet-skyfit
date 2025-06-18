@@ -46,7 +46,7 @@ private fun MobilePrivacyPolicyScreen(
     goToBack: () -> Unit
 ) {
     val privacyPolicySections = listOf(
-        "1. Giriş" to "Skyfit.ai olarak, gizliliğinize önem veriyoruz. Bu gizlilik politikası, uygulamamızı kullanırken kişisel verilerinizin nasıl toplandığını, kullanıldığını ve korunduğunu açıklar.",
+        "1. Giriş" to "FIWE olarak, gizliliğinize önem veriyoruz. Bu gizlilik politikası, uygulamamızı kullanırken kişisel verilerinizin nasıl toplandığını, kullanıldığını ve korunduğunu açıklar.",
         "2. Toplanan Veriler" to "Uygulamamız aşağıdaki bilgileri toplayabilir:\n- Ad, soyad, e-posta adresi, telefon numarası\n- Egzersiz verileri, vücut analizi, aktivite geçmişi\n- Cihaz bilgileri, IP adresi, çerez verileri",
         "3. Verilerin Kullanım Amaçları" to "Toplanan veriler şu amaçlarla kullanılır:\n- Kişiselleştirilmiş antrenman planları sunmak\n- Kullanıcı deneyimini geliştirmek\n- Uygulama güvenliğini sağlamak",
         "4. Verilerin Korunması" to "Verilerinizi güvende tutmak için teknik ve idari güvenlik önlemleri alıyoruz.",

@@ -19,8 +19,8 @@ enum class SkyIconSize(val dp: Dp) {
     Normal(20.dp),
     Medium(24.dp),
     Large(32.dp),
-    XLarge(40.dp),
-    XXLarge(48.dp)
+    size40(40.dp),
+    size56(56.dp)
 }
 
 enum class SkyIconTint(val color: Color) {

@@ -5,6 +5,7 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
@@ -24,13 +25,12 @@ import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.koin.koinScreenModel
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
-import com.vurgun.skyfit.core.ui.components.button.PrimaryLargeButton
-import com.vurgun.skyfit.core.ui.components.button.SecondaryLargeButton
 import com.vurgun.skyfit.core.ui.components.button.SkyButton
 import com.vurgun.skyfit.core.ui.components.button.SkyButtonSize
 import com.vurgun.skyfit.core.ui.components.button.SkyButtonState
 import com.vurgun.skyfit.core.ui.components.button.SkyButtonVariant
-import com.vurgun.skyfit.core.ui.components.special.SkyFitLogoComponent
+import com.vurgun.skyfit.core.ui.components.special.FiweLogoDark
+import com.vurgun.skyfit.core.ui.components.special.FiweLogoGroup
 import com.vurgun.skyfit.core.ui.components.special.SkyFitMobileScaffold
 import com.vurgun.skyfit.core.ui.components.text.PhoneNumberTextInput
 import com.vurgun.skyfit.core.ui.styling.LocalPadding
@@ -98,12 +98,16 @@ private fun MobileForgotPasswordScreen(
             modifier = Modifier
                 .padding(LocalPadding.current.medium)
                 .fillMaxSize()
-                .verticalScroll(rememberScrollState()),
+                .verticalScroll(rememberScrollState())
+                .imePadding(),
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {
-            SkyFitLogoComponent()
-            Spacer(Modifier.height(36.dp))
-            MobileForgotPasswordScreenTitleComponent()
+
+            FiweLogoGroup(
+                title = stringResource(Res.string.auth_forgot_password_action),
+                subtitle =  stringResource(Res.string.auth_forgot_password_prompt)
+            )
+
             Spacer(Modifier.height(48.dp))
 
             PhoneNumberTextInput(
@@ -112,7 +116,7 @@ private fun MobileForgotPasswordScreen(
                 focusRequester = focusRequester
             )
 
-            Spacer(Modifier.height(24.dp))
+            Spacer(Modifier.weight(1f))
 
             SkyButton(
                 label = stringResource(Res.string.continue_action),
@@ -137,6 +141,7 @@ private fun MobileForgotPasswordScreen(
                 variant = SkyButtonVariant.Secondary,
                 size = SkyButtonSize.Large
             )
+            Spacer(Modifier.height(48.dp))
         }
     }
 }

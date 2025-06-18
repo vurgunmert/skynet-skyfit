@@ -26,6 +26,7 @@ import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
 import skyfit.core.ui.generated.resources.Res
 import skyfit.core.ui.generated.resources.ic_app_logo
+import skyfit.core.ui.generated.resources.ic_fiwe_logo_dark
 
 internal class SplashScreen : Screen {
 
@@ -79,7 +80,7 @@ private object SplashComponent {
             contentAlignment = Alignment.Center
         ) {
             Image(
-                painter = painterResource(Res.drawable.ic_app_logo),
+                painter = painterResource(Res.drawable.ic_fiwe_logo_dark),
                 contentDescription = null
             )
         }

@@ -1,19 +1,17 @@
 package com.vurgun.skyfit.feature.home.screen.facility
 
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
 import com.vurgun.skyfit.core.navigation.SharedScreen
-import com.vurgun.skyfit.core.navigation.findParentByKey
 import com.vurgun.skyfit.core.navigation.push
 import com.vurgun.skyfit.core.ui.components.layout.ExpandedLayout
 import com.vurgun.skyfit.core.ui.components.loader.FullScreenLoaderContent
-import com.vurgun.skyfit.core.ui.components.topbar.ExpandedTopBar
 import com.vurgun.skyfit.core.ui.screen.ErrorScreen
 import com.vurgun.skyfit.core.ui.utils.CollectEffect
 import com.vurgun.skyfit.core.ui.utils.LocalOverlayController
@@ -32,9 +30,9 @@ import skyfit.core.ui.generated.resources.refresh_action
 @Composable
 fun FacilityHomeExpanded(viewModel: FacilityHomeViewModel) {
 
-    val dashboardNavigator = LocalNavigator.currentOrThrow.findParentByKey("dashboard")
+    val dashboardNavigator = LocalNavigator.currentOrThrow
     val overlayController = LocalOverlayController.current
-    val uiState = viewModel.uiState.collectAsState()
+    val uiState by viewModel.uiState.collectAsState()
 
     CollectEffect(viewModel.effect) { effect ->
         when (effect) {
@@ -43,7 +41,10 @@ fun FacilityHomeExpanded(viewModel: FacilityHomeViewModel) {
                 overlayController.invoke(effect.screen)
 
             FacilityHomeEffect.NavigateToManageLessons ->
-                dashboardNavigator?.push(SharedScreen.FacilityManageLessons)
+                dashboardNavigator.push(SharedScreen.FacilityManageLessons)
+
+            FacilityHomeEffect.DismissOverlay ->
+                overlayController.invoke(null)
         }
     }
 
@@ -51,10 +52,13 @@ fun FacilityHomeExpanded(viewModel: FacilityHomeViewModel) {
         viewModel.loadData()
     }
 
-    when (uiState.value) {
-        FacilityHomeUiState.Loading -> FullScreenLoaderContent()
+    when (uiState) {
+        FacilityHomeUiState.Loading -> {
+            FullScreenLoaderContent()
+        }
+
         is FacilityHomeUiState.Error -> {
-            val message = (uiState.value as FacilityHomeUiState.Error).message
+            val message = (uiState as FacilityHomeUiState.Error).message
             ErrorScreen(
                 message = message,
                 confirmText = stringResource(Res.string.refresh_action),
@@ -63,32 +67,13 @@ fun FacilityHomeExpanded(viewModel: FacilityHomeViewModel) {
         }
 
         is FacilityHomeUiState.Content -> {
-            val content = uiState.value as FacilityHomeUiState.Content
-
-            ExpandedLayout.PageScaffold(
-                topBar = { FacilityHomeExpandedComponent.TopBar(content, onAction = viewModel::onAction) },
-                content = { FacilityHomeExpandedComponent.Content(content, viewModel::onAction) },
-                modifier = Modifier.fillMaxSize()
-            )
+            val content = uiState as FacilityHomeUiState.Content
+            FacilityHomeExpandedComponent.Content(content, viewModel::onAction)
         }
     }
 }
 
 private object FacilityHomeExpandedComponent {
-
-    @Composable
-    fun TopBar(
-        content: FacilityHomeUiState.Content,
-        onAction: (FacilityHomeAction) -> Unit
-    ) {
-        ExpandedTopBar.TopBarWithAccountAndNavigation(
-            account = content.facility,
-            onClickNotifications = { onAction(FacilityHomeAction.OnClickNotifications) },
-            onClickConversations = { onAction(FacilityHomeAction.OnClickConversations) },
-            onClickChatBot = { onAction(FacilityHomeAction.OnClickChatBot) },
-            modifier = Modifier.fillMaxWidth()
-        )
-    }
 
     @Composable
     fun Content(
@@ -100,17 +85,25 @@ private object FacilityHomeExpandedComponent {
             modifier = Modifier.fillMaxSize(),
             leftContent = {
                 HomeStatisticComponents.StatCardComponent(content.statistics)
-                HomeLessonTableComponents.LessonScheduleTable(content.allLessons)
+                HomeLessonTableComponents.LessonScheduleGroup(
+                    activeFilterData = content.appliedFilter,
+                    sessions = content.filteredLessons,
+                    onShowFilter = {
+                        onAction(FacilityHomeAction.OnClickFilter)
+                    },
+                    onApplyFilter = {
+                        onAction(FacilityHomeAction.ApplyLessonFilter(it))
+                    })
             },
             rightContent = {
-                if (content.activeLessons.isEmpty()) {
+                if (content.upcomingLessons.isEmpty()) {
                     HomeNoUpcomingAppointmentCard(
                         assignedFacilityId = content.facility.gymId,
                         onClickAdd = { onAction(FacilityHomeAction.OnClickLessons) }
                     )
                 } else {
                     HomeCompactComponent.LessonCards(
-                        lessons = content.activeLessons,
+                        lessons = content.upcomingLessons,
                         onClickShowAll = { onAction(FacilityHomeAction.OnClickLessons) },
                         onClickLesson = { onAction(FacilityHomeAction.OnClickLessons) }
                     )

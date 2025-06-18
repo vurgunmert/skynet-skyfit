@@ -3,27 +3,15 @@ package com.vurgun.skyfit.feature.home.component
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.RowScope
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Checkbox
 import androidx.compose.material.Divider
 import androidx.compose.material.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -36,39 +24,44 @@ import com.vurgun.skyfit.core.ui.components.text.SkyInputTextField
 import com.vurgun.skyfit.core.ui.components.text.SkyText
 import com.vurgun.skyfit.core.ui.components.text.TextStyleType
 import com.vurgun.skyfit.core.ui.styling.SkyFitColor
-import skyfit.core.ui.generated.resources.Res
-import skyfit.core.ui.generated.resources.ic_chevron_down
-import skyfit.core.ui.generated.resources.ic_close
-import skyfit.core.ui.generated.resources.ic_filter
-import skyfit.core.ui.generated.resources.ic_search
+import skyfit.core.ui.generated.resources.*
 
 internal object HomeLessonTableComponents {
 
     @Composable
-    fun LessonScheduleTable(items: List<LessonSessionItemViewData>) {
-        var sessions by remember { mutableStateOf(items) }
+    fun LessonScheduleGroup(
+        sessions: List<LessonSessionItemViewData>,
+        activeFilterData: LessonFilterData = LessonFilterData(),
+        onShowFilter: () -> Unit,
+        onApplyFilter: (LessonFilterData) -> Unit
+    ) {
 
         Column(
             modifier = Modifier.Companion
                 .fillMaxWidth()
                 .background(SkyFitColor.background.default, shape = RoundedCornerShape(16.dp))
         ) {
-            LessonScheduleTableHeader()
+            LessonScheduleFilterIndicator(activeFilterData, onClick = onShowFilter, onApplyFilter)
 
-            CourseSessionStableTable(
+            LessonScheduleTable(
                 sessions = sessions,
                 onSelectionChange = { lessonId, selected ->
-                    sessions = sessions.map {
-                        if (it.lessonId == lessonId) it.copy(selected = selected) else it
-                    }
+//                    sessions = sessions.map {
+//                        if (it.lessonId == lessonId) it.copy(selected = selected) else it
+//                    }
                 }
             )
         }
     }
 
     @Composable
-    private fun LessonScheduleTableHeader() {
+    private fun LessonScheduleFilterIndicator(
+        activeFilterData: LessonFilterData = LessonFilterData(),
+        onClick: () -> Unit = {},
+        onAction: (filter: LessonFilterData) -> Unit = {}
+    ) {
         var searchQuery by remember { mutableStateOf("") }
+        var activeFilter by remember { mutableStateOf(activeFilterData) }
 
         Column(
             Modifier.Companion
@@ -99,7 +92,10 @@ internal object HomeLessonTableComponents {
                     SkyInputTextField(
                         hint = "Tabloda ara",
                         value = searchQuery,
-                        onValueChange = { searchQuery = it },
+                        onValueChange = {
+                            searchQuery = it
+                            onAction(LessonFilterData(query = searchQuery))
+                        },
                         modifier = Modifier.Companion.weight(1f)
                     )
 
@@ -115,20 +111,21 @@ internal object HomeLessonTableComponents {
                 Spacer(Modifier.Companion.width(12.dp))
 
                 Row(horizontalArrangement = Arrangement.spacedBy(12.dp)) {
-                    TableFilterChip("Aktif")
-                    TableFilterChip("Pilates")
-                    TableFilterChip("07:00-08:00")
-                    TableFilterChip("22/11/2024")
+                    activeFilter.selectedStatuses.forEach { TableFilterChip(it) }
+                    activeFilter.selectedTitles.forEach { TableFilterChip(it) }
+                    activeFilter.selectedHours.forEach { TableFilterChip(it) }
+                    activeFilter.selectedDates.forEach { TableFilterChip(it.toString()) }
+                    activeFilter.selectedTrainers.forEach { TableFilterChip(it) }
                 }
 
                 Spacer(Modifier.Companion.weight(1f))
 
                 Row(
-                    Modifier.Companion
-                        .background(
-                            SkyFitColor.specialty.buttonBgRest,
-                            androidx.compose.foundation.shape.RoundedCornerShape(8.dp)
-                        )
+                    Modifier
+                        .clip(RoundedCornerShape(8.dp))
+                        .clickable { onClick() }
+                        .background(SkyFitColor.specialty.buttonBgRest)
+                        .wrapContentSize()
                         .padding(4.dp)
                 ) {
                     SkyIcon(
@@ -187,7 +184,7 @@ internal object HomeLessonTableComponents {
     }
 
     @Composable
-    private fun CourseSessionStableTable(
+    private fun LessonScheduleTable(
         sessions: List<LessonSessionItemViewData>,
         onSelectionChange: (Int, Boolean) -> Unit
     ) {

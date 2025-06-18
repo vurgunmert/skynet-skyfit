@@ -22,6 +22,7 @@ import com.vurgun.skyfit.core.ui.utils.LocalOverlayController
 import com.vurgun.skyfit.feature.home.component.HomeCompactComponent
 import com.vurgun.skyfit.feature.home.component.HomeLessonTableComponents
 import com.vurgun.skyfit.feature.home.component.HomeStatisticComponents
+import com.vurgun.skyfit.feature.home.component.LessonFilterData
 import com.vurgun.skyfit.feature.home.model.TrainerHomeAction
 import com.vurgun.skyfit.feature.home.model.TrainerHomeEffect.*
 import com.vurgun.skyfit.feature.home.model.TrainerHomeUiState
@@ -53,6 +54,11 @@ internal fun TrainerHomeExpanded(viewModel: TrainerHomeViewModel) {
 
             NavigateToChatBot ->
                 overlayController.invoke(SharedScreen.ChatBot)
+
+            is ShowLessonFilter ->
+                overlayController.invoke(SharedScreen.LessonFilter(effect.lessons) {
+                    viewModel.onAction(TrainerHomeAction.ApplyLessonFilter(it as LessonFilterData))
+                })
         }
     }
 
@@ -109,10 +115,19 @@ private object TrainerHomeExpandedComponent {
         ExpandedLayout.LeftLargeMultiLaneScaffold(
             leftContent = {
                 HomeStatisticComponents.StatCardComponent(content.statistics)
-                HomeLessonTableComponents.LessonScheduleTable(content.lessons)
+
+                HomeLessonTableComponents.LessonScheduleGroup(
+                    sessions = content.filteredLessons,
+                    activeFilterData = content.appliedFilter,
+                    onShowFilter = {
+                        onAction(TrainerHomeAction.OnClickFilter)
+                    },
+                    onApplyFilter = {
+                        onAction(TrainerHomeAction.ApplyLessonFilter(it))
+                    })
             },
             rightContent = {
-                HomeCompactComponent.LessonCards(content.lessons)
+                HomeCompactComponent.LessonCards(content.upcomingLessons)
             },
             modifier = Modifier.fillMaxSize()
         )

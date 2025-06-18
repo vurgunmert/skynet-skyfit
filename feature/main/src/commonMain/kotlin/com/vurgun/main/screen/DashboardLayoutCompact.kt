@@ -1,4 +1,4 @@
-package com.vurgun.skyfit.feature.main.screen
+package com.vurgun.main.screen
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -6,7 +6,6 @@ import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
@@ -16,15 +15,12 @@ import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
-import cafe.adriel.voyager.core.registry.ScreenProvider
 import cafe.adriel.voyager.core.registry.rememberScreen
 import cafe.adriel.voyager.core.screen.Screen
-import cafe.adriel.voyager.navigator.CurrentScreen
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.Navigator
 import cafe.adriel.voyager.navigator.currentOrThrow
 import cafe.adriel.voyager.transitions.CrossfadeTransition
-import com.vurgun.main.dashboard.DashboardNavigationRoute
 import com.vurgun.main.dashboard.DashboardUiAction
 import com.vurgun.main.dashboard.DashboardUiEffect
 import com.vurgun.main.dashboard.DashboardViewModel
@@ -40,7 +36,7 @@ import com.vurgun.skyfit.core.ui.components.special.SkyFitMobileScaffold
 import com.vurgun.skyfit.core.ui.styling.SkyFitColor
 import com.vurgun.skyfit.core.ui.utils.CollectEffect
 import com.vurgun.skyfit.feature.main.component.ScreenOverlay
-import com.vurgun.skyfit.feature.main.screen.DashboardCompactComponent.BottomBar
+import com.vurgun.main.screen.DashboardCompactComponent.BottomBar
 import org.jetbrains.compose.resources.DrawableResource
 import skyfit.core.ui.generated.resources.*
 
@@ -59,7 +55,7 @@ fun DashboardCompact(viewModel: DashboardViewModel) {
                 DashboardUiEffect.NavigateToSocial -> dashboardNavigator.replace(SharedScreen.Social)
                 DashboardUiEffect.NavigateToNutrition -> dashboardNavigator.replace(SharedScreen.Nutrition)
                 DashboardUiEffect.NavigateToProfile -> dashboardNavigator.replace(SharedScreen.Profile)
-                DashboardUiEffect.ShowChatBot -> mainNavigator.push(SharedScreen.Settings) //TODO: DEBUG REMOVE !!!
+                DashboardUiEffect.ShowChatBot -> mainNavigator.push(SharedScreen.ChatBot)
                 DashboardUiEffect.ShowConversations -> mainNavigator.push(SharedScreen.Conversations)
                 DashboardUiEffect.ShowNotifications -> mainNavigator.push(SharedScreen.Notifications)
                 else -> Unit

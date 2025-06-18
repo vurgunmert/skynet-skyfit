@@ -1,6 +1,6 @@
 <resources>
     <!--  General -->
-    <string name="auth_welcome_message">Skyfit’e Hoşgeldin 👋🏼</string>
+    <string name="auth_welcome_message">FIWE’e Hoşgeldin 👋🏼</string>
     <string name="auth_login_action">Giriş Yap</string>
     <string name="auth_register_action">Kayıt Ol</string>
     <string name="auth_verify_action">Onayla</string>

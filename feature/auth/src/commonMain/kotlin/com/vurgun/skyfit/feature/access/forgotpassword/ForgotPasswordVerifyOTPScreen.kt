@@ -25,7 +25,7 @@ import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.koin.koinScreenModel
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
-import com.vurgun.skyfit.core.ui.components.special.SkyFitLogoComponent
+import com.vurgun.skyfit.core.ui.components.special.FiweLogoDark
 import com.vurgun.skyfit.core.ui.components.special.SkyFitMobileScaffold
 import com.vurgun.skyfit.core.ui.components.text.SecondaryMediumText
 import com.vurgun.skyfit.core.ui.styling.LocalPadding
@@ -129,7 +129,7 @@ private fun MobileForgotPasswordCodeTextGroup(phoneNumber: String) {
         modifier = Modifier.fillMaxWidth(),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        SkyFitLogoComponent()
+        FiweLogoDark()
 
         Spacer(Modifier.height(36.dp))
 

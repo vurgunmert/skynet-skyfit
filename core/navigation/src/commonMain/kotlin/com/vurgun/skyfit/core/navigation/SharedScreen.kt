@@ -87,7 +87,13 @@ sealed class SharedScreen(open val key: String) : ScreenProvider {
         SharedScreen("schedule:trainer:$id")
 
     // Courses / Lessons
-    data object FacilityManageLessons : SharedScreen("courses:manage_facility")
+    data object FacilityManageLessons : SharedScreen("facility:schedule:lessons")
+    data object TrainerManageLessons : SharedScreen("trainer:schedule:lessons")
+    data class LessonDetail(val id: Int) : SharedScreen("schedule:lesson:$id")
+    data class LessonFilter(
+        val lessons: List<Any>,
+        val onApply: (Any) -> Unit
+    ) : SharedScreen("schedule:lesson:filter")
 
     // Social / Posts
     data object CreatePost : SharedScreen("social:create_post")

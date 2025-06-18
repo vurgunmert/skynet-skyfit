@@ -2,10 +2,10 @@ package com.vurgun.skyfit.core.data.v1.data.auth.repository
 
 import com.vurgun.skyfit.core.data.storage.Storage
 import com.vurgun.skyfit.core.data.storage.TokenManager
-import com.vurgun.skyfit.core.data.v1.auth.back.AuthRequestDTO
-import com.vurgun.skyfit.core.data.v1.auth.back.CreatePasswordRequestDTO
-import com.vurgun.skyfit.core.data.v1.auth.back.ResetPasswordRequestDTO
-import com.vurgun.skyfit.core.data.v1.auth.back.VerifyAuthRequestDTO
+import com.vurgun.skyfit.core.data.v1.data.auth.model.AuthRequestDTO
+import com.vurgun.skyfit.core.data.v1.data.auth.model.CreatePasswordRequestDTO
+import com.vurgun.skyfit.core.data.v1.data.auth.model.ResetPasswordRequestDTO
+import com.vurgun.skyfit.core.data.v1.data.auth.model.VerifyAuthRequestDTO
 import com.vurgun.skyfit.core.data.v1.data.auth.service.AuthApiService
 import com.vurgun.skyfit.core.data.v1.domain.auth.model.*
 import com.vurgun.skyfit.core.data.v1.domain.auth.repository.AuthRepository

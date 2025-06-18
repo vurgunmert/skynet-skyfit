@@ -1,4 +1,31 @@
-package com.vurgun.skyfit.feature.persona.profile.trainer
+package com.vurgun.skyfit.profile.trainer
 
-class TrainerProfileScreen {
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import cafe.adriel.voyager.core.screen.Screen
+import cafe.adriel.voyager.core.screen.ScreenKey
+import cafe.adriel.voyager.koin.koinScreenModel
+import com.vurgun.skyfit.core.ui.utils.LocalWindowSize
+import com.vurgun.skyfit.core.ui.utils.WindowSize
+import com.vurgun.skyfit.profile.trainer.owner.TrainerProfileViewModel
+
+class TrainerProfileScreen(private val trainerId: Int? = null) : Screen {
+
+    override val key: ScreenKey
+        get() = "profile:user:screen:$trainerId"
+
+    @Composable
+    override fun Content() {
+        val windowSize = LocalWindowSize.current
+        val viewModel = koinScreenModel<TrainerProfileViewModel>()
+
+        LaunchedEffect(Unit) {
+            viewModel.loadData(trainerId)
+        }
+
+        when (windowSize) {
+            WindowSize.EXPANDED -> TrainerProfileExpanded(viewModel)
+            else -> TrainerProfileCompact(viewModel)
+        }
+    }
 }

@@ -1,24 +1,11 @@
 package com.vurgun.skyfit.feature.access.login
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.imePadding
-import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
@@ -27,16 +14,20 @@ import cafe.adriel.voyager.koin.koinScreenModel
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
 import com.vurgun.skyfit.core.navigation.SharedScreen
-import com.vurgun.skyfit.core.navigation.replaceAll
 import com.vurgun.skyfit.core.navigation.replace
+import com.vurgun.skyfit.core.navigation.replaceAll
 import com.vurgun.skyfit.core.ui.components.button.PrimaryLargeButton
-import com.vurgun.skyfit.core.ui.components.special.SkyFitLogoComponent
+import com.vurgun.skyfit.core.ui.components.special.FiweLogoDark
+import com.vurgun.skyfit.core.ui.components.special.FiweLogoGroup
+import com.vurgun.skyfit.core.ui.components.special.SideBySideLayout
 import com.vurgun.skyfit.core.ui.components.special.SkyFitMobileScaffold
 import com.vurgun.skyfit.core.ui.components.text.SecondaryMediumText
 import com.vurgun.skyfit.core.ui.components.text.SecondaryMediumUnderlinedText
+import com.vurgun.skyfit.core.ui.components.text.SkyText
+import com.vurgun.skyfit.core.ui.components.text.TextStyleType
+import com.vurgun.skyfit.core.ui.styling.LocalDimensions
 import com.vurgun.skyfit.core.ui.styling.LocalPadding
 import com.vurgun.skyfit.core.ui.styling.SkyFitColor
-import com.vurgun.skyfit.core.ui.styling.SkyFitTypography
 import com.vurgun.skyfit.core.ui.utils.CollectEffect
 import com.vurgun.skyfit.core.ui.utils.LocalWindowSize
 import com.vurgun.skyfit.core.ui.utils.WindowSize
@@ -44,12 +35,7 @@ import com.vurgun.skyfit.core.ui.utils.formatPhoneNumber
 import com.vurgun.skyfit.feature.access.component.OTPInputTextField
 import com.vurgun.skyfit.feature.access.register.CreatePasswordScreen
 import org.jetbrains.compose.resources.stringResource
-import skyfit.core.ui.generated.resources.Res
-import skyfit.core.ui.generated.resources.auth_code_not_received_message
-import skyfit.core.ui.generated.resources.auth_code_sent_message
-import skyfit.core.ui.generated.resources.auth_resend_code_action
-import skyfit.core.ui.generated.resources.auth_resend_timer_message
-import skyfit.core.ui.generated.resources.auth_verify_action
+import skyfit.core.ui.generated.resources.*
 
 class LoginVerifyOTPScreen : Screen {
 
@@ -114,48 +100,34 @@ private fun ExpandedLoginVerifyOTPScreen(
         }
     }
 
-    Row(
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(32.dp),
-        horizontalArrangement = Arrangement.spacedBy(32.dp),
-        verticalAlignment = Alignment.CenterVertically
-    ) {
-        // Left: Logo + welcome
-        Column(
-            modifier = Modifier.weight(1f),
-            horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.Center
-        ) {
-            SkyFitLogoComponent()
-            Spacer(Modifier.height(36.dp))
-            SecondaryMediumText(
-                text = stringResource(Res.string.auth_code_sent_message, formatPhoneNumber(phoneNumber))
+    SideBySideLayout(
+        leftModifier = Modifier.background(SkyFitColor.background.fillTransparentSecondary),
+        leftContent = {
+            FiweLogoGroup(
+                subtitle = stringResource(Res.string.auth_code_sent_message, formatPhoneNumber(phoneNumber))
             )
-        }
+        },
+        rightContent = {
+            Column(
+                modifier = Modifier
+                    .widthIn(max = LocalDimensions.current.mobileMaxWidth, min = LocalDimensions.current.mobileMinWidth)
+                    .imePadding(),
+                horizontalAlignment = Alignment.CenterHorizontally,
+                verticalArrangement = Arrangement.spacedBy(48.dp, Alignment.CenterVertically)
+            ) {
+                OTPInputTextField(onCodeReady = viewModel::onOtpChanged)
 
-        // Right: OTP inputs
-        Column(
-            modifier = Modifier
-                .weight(1f)
-                .verticalScroll(rememberScrollState())
-                .imePadding(),
-            horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.spacedBy(48.dp)
-        ) {
-            OTPInputTextField(onCodeReady = viewModel::onOtpChanged)
-
-            MobileOTPVerificationActionGroup(
-                onClickConfirm = viewModel::submitCode,
-                onClickResend = viewModel::resendOTP,
-                isConfirmEnabled = enteredOtp.length == otpLength && !isLoading,
-                isResendEnabled = isResendEnabled,
-                isLoading = isLoading,
-                countdownTime = countdownTime,
-                errorMessage = errorMessage
-            )
-        }
-    }
+                MobileOTPVerificationActionGroup(
+                    onClickConfirm = viewModel::submitCode,
+                    onClickResend = viewModel::resendOTP,
+                    isConfirmEnabled = enteredOtp.length == otpLength && !isLoading,
+                    isResendEnabled = isResendEnabled,
+                    isLoading = isLoading,
+                    countdownTime = countdownTime,
+                    errorMessage = errorMessage
+                )
+            }
+        })
 }
 
 
@@ -230,7 +202,7 @@ private fun MobileOTPVerificationTextGroup(phoneNumber: String) {
         modifier = Modifier.fillMaxWidth(),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        SkyFitLogoComponent()
+        FiweLogoDark()
 
         Spacer(Modifier.height(36.dp))
         SecondaryMediumText(text = stringResource(Res.string.auth_code_sent_message, formatPhoneNumber(phoneNumber)))
@@ -259,11 +231,12 @@ fun MobileOTPVerificationActionGroup(
             isLoading = isLoading
         )
 
-        errorMessage?.let {
+        errorMessage?.let { message ->
             Spacer(Modifier.height(16.dp))
-            Text(
-                text = it,
-                style = SkyFitTypography.bodySmall.copy(color = SkyFitColor.text.criticalOnBgFill)
+            SkyText(
+                text = message,
+                styleType = TextStyleType.BodySmall,
+                color = SkyFitColor.text.criticalOnBgFill
             )
         }
 

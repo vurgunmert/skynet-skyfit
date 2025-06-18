@@ -1,13 +1,11 @@
 package com.vurgun.skyfit.core.data.v1.data.auth.service
 
 import com.vurgun.skyfit.core.data.v1.data.global.model.EmptyDTO
-import com.vurgun.skyfit.core.data.v1.data.global.model.GoalDTO
-import com.vurgun.skyfit.core.data.v1.data.global.model.TagDTO
-import com.vurgun.skyfit.core.data.v1.auth.back.AuthRequestDTO
-import com.vurgun.skyfit.core.data.v1.auth.back.AuthResponseDTO
-import com.vurgun.skyfit.core.data.v1.auth.back.CreatePasswordRequestDTO
-import com.vurgun.skyfit.core.data.v1.auth.back.ResetPasswordRequestDTO
-import com.vurgun.skyfit.core.data.v1.auth.back.VerifyAuthRequestDTO
+import com.vurgun.skyfit.core.data.v1.data.auth.model.AuthRequestDTO
+import com.vurgun.skyfit.core.data.v1.data.auth.model.AuthResponseDTO
+import com.vurgun.skyfit.core.data.v1.data.auth.model.CreatePasswordRequestDTO
+import com.vurgun.skyfit.core.data.v1.data.auth.model.ResetPasswordRequestDTO
+import com.vurgun.skyfit.core.data.v1.data.auth.model.VerifyAuthRequestDTO
 import com.vurgun.skyfit.core.network.ApiClient
 import com.vurgun.skyfit.core.network.ApiResult
 import io.ktor.client.request.bearerAuth

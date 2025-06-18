@@ -12,12 +12,11 @@ import com.vurgun.skyfit.core.ui.components.text.SkyText
 import com.vurgun.skyfit.core.ui.components.text.TextStyleType
 
 @Composable
-fun TodoBox(text: String) {
+fun TodoBox(text: String, modifier: Modifier = Modifier.fillMaxSize()) {
     val backgroundColor = remember { randomColor() }
 
     Box(
-        modifier = Modifier
-            .fillMaxSize()
+        modifier = modifier
             .background(backgroundColor),
         contentAlignment = Alignment.Center
     ) {

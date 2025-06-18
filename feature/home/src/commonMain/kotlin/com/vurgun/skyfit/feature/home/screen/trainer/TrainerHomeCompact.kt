@@ -27,6 +27,7 @@ import com.vurgun.skyfit.core.ui.components.topbar.CompactTopBar
 import com.vurgun.skyfit.core.ui.screen.ErrorScreen
 import com.vurgun.skyfit.core.ui.utils.CollectEffect
 import com.vurgun.skyfit.feature.home.component.HomeNoUpcomingAppointmentCard
+import com.vurgun.skyfit.feature.home.component.LessonFilterData
 import com.vurgun.skyfit.feature.home.model.TrainerHomeAction
 import com.vurgun.skyfit.feature.home.model.TrainerHomeEffect.*
 import com.vurgun.skyfit.feature.home.model.TrainerHomeUiState
@@ -59,6 +60,13 @@ internal fun TrainerHomeCompact(viewModel: TrainerHomeViewModel) {
 
             NavigateToChatBot ->
                 dashboardNavigator?.push(SharedScreen.ChatBot)
+
+            is ShowLessonFilter ->
+                dashboardNavigator?.push(SharedScreen.LessonFilter(effect.lessons, onApply = {
+                    viewModel.onAction(
+                        TrainerHomeAction.ApplyLessonFilter(it as LessonFilterData)
+                    )
+                }))
         }
     }
 
@@ -135,7 +143,7 @@ private object TrainerHomeCompactComponent {
 
             TrainerUpcomingLessons(
                 content.profile.gymId,
-                lessons = content.lessons,
+                lessons = content.upcomingLessons,
                 onClickShowAll = { onAction(TrainerHomeAction.OnClickAppointments) },
                 onClickAddLesson = {}
             )

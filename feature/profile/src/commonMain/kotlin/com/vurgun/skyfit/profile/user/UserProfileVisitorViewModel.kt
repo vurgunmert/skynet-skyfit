@@ -1,4 +1,4 @@
-package com.vurgun.skyfit.profile.user.visitor
+package com.vurgun.skyfit.profile.user
 
 import cafe.adriel.voyager.core.model.ScreenModel
 import cafe.adriel.voyager.core.model.screenModelScope

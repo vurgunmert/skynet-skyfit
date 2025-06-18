@@ -17,7 +17,9 @@ internal object ProfileExpandedComponent {
         content: @Composable ColumnScope.() -> Unit,
         modifier: Modifier = Modifier.fillMaxSize()
     ) {
-        Column(modifier = modifier.verticalScroll(rememberScrollState())) {
+        Column(modifier = modifier
+            .padding(end = 16.dp)
+            .verticalScroll(rememberScrollState())) {
             header()
             Spacer(Modifier.height(12.dp))
             content()

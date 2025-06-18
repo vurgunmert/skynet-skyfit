@@ -64,7 +64,9 @@ fun ChatbotCompact(viewModel: ChatbotViewModel) {
         topBar = {
             CompactTopBar(
                 title = stringResource(Res.string.chatbot_label),
-                onClickBack = { viewModel.onAction(ChatBotAction.OnClickBack) })
+                onClickBack = { viewModel.onAction(ChatBotAction.OnClickBack) },
+                modifier = Modifier.systemBarsPadding()
+            )
         },
         bottomBar = {
 
@@ -128,6 +130,7 @@ private object ChatbotCompactComponent {
 
             Column(
                 modifier = Modifier
+                    .systemBarsPadding()
                     .fillMaxSize()
                     .padding(36.dp)
             ) {
@@ -182,7 +185,8 @@ private object ChatbotCompactComponent {
         historyItems: List<String> = emptyList(),
     ) {
         Column(
-            modifier.fillMaxWidth()
+            modifier
+                .fillMaxWidth()
                 .heightIn(min = 345.dp)
                 .background(
                     SkyFitColor.background.fillSemiTransparent.copy(0.9f),
@@ -236,6 +240,8 @@ private object ChatbotCompactComponent {
             Spacer(Modifier.height(16.dp))
 
             NewChatAction(onClick = onClickChat)
+
+            Spacer(Modifier.systemBarsPadding())
         }
     }
 

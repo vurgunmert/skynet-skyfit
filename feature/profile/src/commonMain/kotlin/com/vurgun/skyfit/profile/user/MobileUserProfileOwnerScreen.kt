@@ -1,4 +1,4 @@
-package com.vurgun.skyfit.profile.user.owner
+package com.vurgun.skyfit.profile.user
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
@@ -20,6 +20,9 @@ import com.vurgun.skyfit.core.ui.components.image.SkyImage
 import com.vurgun.skyfit.core.ui.components.loader.FullScreenLoaderContent
 import com.vurgun.skyfit.core.ui.screen.ErrorScreen
 import com.vurgun.skyfit.core.ui.styling.SkyFitColor
+import com.vurgun.skyfit.profile.user.model.UserProfileAction
+import com.vurgun.skyfit.profile.user.model.UserProfileUiState
+import com.vurgun.skyfit.profile.user.model.UserProfileViewModel
 import dev.chrisbanes.haze.*
 
 class UserProfileOwnerScreen : Screen {

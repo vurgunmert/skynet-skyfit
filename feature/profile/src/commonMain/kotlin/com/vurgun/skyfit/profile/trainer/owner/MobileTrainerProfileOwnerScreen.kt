@@ -35,6 +35,7 @@ import com.vurgun.skyfit.core.ui.styling.SkyFitTypography
 import com.vurgun.skyfit.core.ui.utils.CollectEffect
 import com.vurgun.skyfit.core.ui.components.profile.LifestyleActionRow
 import com.vurgun.skyfit.core.ui.components.profile.MobileProfileBackgroundImage
+import com.vurgun.skyfit.profile.model.ProfileDestination
 import org.jetbrains.compose.resources.painterResource
 import skyfit.core.ui.generated.resources.Res
 import skyfit.core.ui.generated.resources.ic_plus
@@ -45,26 +46,22 @@ class TrainerProfileOwnerScreen : Screen {
     @Composable
     override fun Content() {
         val appNavigator = LocalNavigator.currentOrThrow.findRootNavigator()
-        val viewModel = koinScreenModel<TrainerProfileOwnerViewModel>()
+        val viewModel = koinScreenModel<TrainerProfileViewModel>()
 
         CollectEffect(viewModel.effect) { effect ->
             when (effect) {
-                TrainerProfileOwnerEffect.NavigateToCreatePost -> {
+                TrainerProfileUiEffect.NavigateToCreatePost -> {
                     appNavigator.push(SharedScreen.CreatePost)
                 }
 
-                TrainerProfileOwnerEffect.NavigateToSettings -> {
+                TrainerProfileUiEffect.NavigateToSettings -> {
                     appNavigator.push(SharedScreen.Settings)
                 }
 
-                TrainerProfileOwnerEffect.NavigateToAppointments -> {
+                TrainerProfileUiEffect.NavigateToAppointments -> {
                     appNavigator.push(SharedScreen.TrainerAppointmentListing)
                 }
             }
-        }
-
-        LaunchedEffect(Unit) {
-            viewModel.loadProfile()
         }
 
         MobileTrainerProfileOwnerScreen(viewModel = viewModel)
@@ -74,19 +71,19 @@ class TrainerProfileOwnerScreen : Screen {
 
 @Composable
 private fun MobileTrainerProfileOwnerScreen(
-    viewModel: TrainerProfileOwnerViewModel
+    viewModel: TrainerProfileViewModel
 ) {
     val uiState by viewModel.uiState.collectAsState()
 
     when (uiState) {
-        is TrainerProfileOwnerUiState.Loading -> FullScreenLoaderContent()
-        is TrainerProfileOwnerUiState.Error -> {
-            val message = (uiState as TrainerProfileOwnerUiState.Error).message
+        is TrainerProfileUiState.Loading -> FullScreenLoaderContent()
+        is TrainerProfileUiState.Error -> {
+            val message = (uiState as TrainerProfileUiState.Error).message
             ErrorScreen(message = message, onConfirm = {  /* TODO: Where to go? */ })
         }
 
-        is TrainerProfileOwnerUiState.Content -> {
-            val content = uiState as TrainerProfileOwnerUiState.Content
+        is TrainerProfileUiState.Content -> {
+            val content = uiState as TrainerProfileUiState.Content
             MobileTrainerProfileOwnerContent(content, viewModel::onAction)
         }
     }
@@ -94,8 +91,8 @@ private fun MobileTrainerProfileOwnerScreen(
 
 @Composable
 private fun MobileTrainerProfileOwnerContent(
-    content: TrainerProfileOwnerUiState.Content,
-    onAction: (TrainerProfileOwnerAction) -> Unit
+    content: TrainerProfileUiState.Content,
+    onAction: (TrainerProfileUiAction) -> Unit
 ) {
     val scrollState = rememberScrollState()
     var backgroundAlpha by remember { mutableStateOf(1f) }
@@ -149,7 +146,7 @@ private fun MobileTrainerProfileOwnerContent(
 //                    onClickNewPost = { onAction(TrainerProfileOwnerAction.NavigateToCreatePost) }
 //                )
 
-                if (content.postsVisible) {
+                if (content.destination == ProfileDestination.Posts) {
 
                 } else {
                     if (content.specialties == null) {
@@ -163,7 +160,7 @@ private fun MobileTrainerProfileOwnerContent(
                     } else {
                         LessonSessionColumn(
                             lessons = content.lessons,
-                            onClickShowAll = { onAction(TrainerProfileOwnerAction.NavigateToAppointments) }
+                            onClickShowAll = { onAction(TrainerProfileUiAction.OnClickToAppointments) }
                         )
                     }
                 }

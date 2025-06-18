@@ -20,7 +20,8 @@ class LessonSessionItemViewDataMapper {
             note = lesson.trainerNote,
             capacityRatio = lesson.capacityRatio,
             isActive = lesson.status == 1,
-            lessonId = lesson.lessonId
+            statusName = lesson.statusName,
+            lessonId = lesson.lessonId,
         )
     }
 
@@ -37,7 +38,8 @@ class LessonSessionItemViewDataMapper {
             facility = appointment.facilityName,
             location = appointment.facilityName,
             note = appointment.trainerNote,
-            capacityRatio = appointment.quotaInfo
+            capacityRatio = appointment.quotaInfo,
+            statusName = appointment.statusName,
         )
     }
 }

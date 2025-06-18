@@ -19,7 +19,7 @@ class ChatBotOnboardingViewModel(private val onboardCompleted: () -> Unit) {
     val pages = listOf(
         ChatBotOnboardingPage(
             title = "Fitness asistanınız",
-            message = "Yapay zeka asistanı Skyfit'e hoşgeldin 👋 Fitness ve egzersiz yaşamınızı geliştirmek için tek tıkla düşüncelerinizi değiştirmeye hazır olun 🚀",
+            message = "Yapay zeka asistanı FIWE'e hoşgeldin 👋 Fitness ve egzersiz yaşamınızı geliştirmek için tek tıkla düşüncelerinizi değiştirmeye hazır olun 🚀",
             buttonLabel = "İleri"
         ),
         ChatBotOnboardingPage(
