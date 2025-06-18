@@ -29,7 +29,7 @@ import com.vurgun.skyfit.core.ui.components.text.BodyLargeSemiboldText
 import com.vurgun.skyfit.core.ui.screen.ErrorScreen
 import com.vurgun.skyfit.core.ui.styling.SkyFitColor
 import com.vurgun.skyfit.core.ui.utils.CollectEffect
-import com.vurgun.skyfit.profile.facility.owner.FacilityProfileCompactComponent
+import com.vurgun.skyfit.profile.facility.screen.FacilityProfileCompactComponent
 import org.jetbrains.compose.resources.stringResource
 import skyfit.core.ui.generated.resources.Res
 import skyfit.core.ui.generated.resources.our_coaches_label

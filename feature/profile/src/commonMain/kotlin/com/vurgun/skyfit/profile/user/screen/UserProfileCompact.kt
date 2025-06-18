@@ -16,10 +16,11 @@ import androidx.compose.ui.unit.dp
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
 import com.vurgun.skyfit.core.navigation.SharedScreen
+import com.vurgun.skyfit.core.navigation.findRootNavigator
 import com.vurgun.skyfit.core.navigation.push
+import com.vurgun.skyfit.core.ui.components.box.TodoBox
 import com.vurgun.skyfit.core.ui.components.button.SkyButton
 import com.vurgun.skyfit.core.ui.components.event.AvailableActivityCalendarEventItem
-import com.vurgun.skyfit.core.ui.components.icon.SkyIcon
 import com.vurgun.skyfit.core.ui.components.loader.FullScreenLoaderContent
 import com.vurgun.skyfit.core.ui.screen.ErrorScreen
 import com.vurgun.skyfit.core.ui.styling.SkyFitAsset
@@ -40,30 +41,30 @@ fun UserProfileCompact(
     viewModel: UserProfileViewModel,
     modifier: Modifier = Modifier.fillMaxSize()
 ) {
-    val parentNavigator = LocalNavigator.currentOrThrow.parent ?: return
-    val localNavigator = LocalNavigator.currentOrThrow
+    val appNavigator = LocalNavigator.currentOrThrow.findRootNavigator()
+    val dashboardNavigator = LocalNavigator.currentOrThrow
     val uiState by viewModel.uiState.collectAsState()
 
     CollectEffect(viewModel.effect) { effect ->
         when (effect) {
             UserProfileEffect.NavigateBack -> {
-                parentNavigator.pop()
+                appNavigator.pop()
             }
 
             UserProfileEffect.NavigateToAppointments -> {
-                localNavigator.push(SharedScreen.Appointments)
+                appNavigator.push(SharedScreen.UserAppointmentListing)
             }
 
             UserProfileEffect.NavigateToCreatePost -> {
-                localNavigator.push(SharedScreen.CreatePost)
+                appNavigator.push(SharedScreen.CreatePost)
             }
 
             UserProfileEffect.NavigateToSettings -> {
-                localNavigator.push(SharedScreen.Settings)
+                appNavigator.push(SharedScreen.Settings)
             }
 
             is UserProfileEffect.NavigateToVisitFacility -> {
-                localNavigator.push(SharedScreen.FacilityProfileVisitor(effect.gymId))
+                appNavigator.push(SharedScreen.FacilityProfileVisitor(effect.gymId))
             }
         }
     }
@@ -85,8 +86,16 @@ fun UserProfileCompact(
                     UserProfileCompactComponent.Header(content, viewModel::onAction)
                 },
                 content = {
-                    UserProfileCompactComponent.NavigationGroup(content, viewModel::onAction)
-                    UserProfileCompactComponent.Content(content, viewModel::onAction)
+                    Column(
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .padding(horizontal = 16.dp),
+                        verticalArrangement = Arrangement.spacedBy(16.dp)
+                    ) {
+                        UserProfileCompactComponent.VisitorActionGroup(content, viewModel::onAction)
+                        UserProfileCompactComponent.NavigationGroup(content, viewModel::onAction)
+                        UserProfileCompactComponent.ContentGroup(content, viewModel::onAction)
+                    }
                 }
             )
         }
@@ -102,60 +111,70 @@ private object UserProfileCompactComponent {
     ) {
         val userProfile = content.profile
 
-        Column {
-            ProfileCompactComponent.Header(
-                backgroundImageUrl = userProfile.backgroundImageUrl,
-                profileImageUrl = userProfile.profileImageUrl,
-                cardContents = {
-                    Spacer(Modifier.height(32.dp))
-                    ProfileCompactComponent.HeaderNameGroup(
-                        firstName = userProfile.firstName,
-                        userName = userProfile.username
-                    )
-                    Spacer(Modifier.height(12.dp))
-                    ProfileCompactComponent.HeaderBodyGroup(
-                        leftItem = {
-                            ProfileCompactComponent.HeaderEditorialDataItem(
-                                iconRes = Res.drawable.ic_height,
-                                title = userProfile.height.toString(),
-                                subtitle = "Boy (${userProfile.heightUnit.shortLabel})"
-                            )
-                        },
-                        centerItem = {
-                            ProfileCompactComponent.HeaderEditorialDataItem(
-                                iconRes = Res.drawable.ic_dna,
-                                title = userProfile.weight.toString(),
-                                subtitle = "Kilo (${userProfile.weightUnit.shortLabel})"
-                            )
-                        },
-                        rightItem = {
-                            ProfileCompactComponent.HeaderEditorialDataItem(
-                                iconRes = Res.drawable.ic_overweight,
-                                title = userProfile.bodyType.turkishShort,
-                                subtitle = stringResource(Res.string.body_type_label)
-                            )
-                        }
-                    )
-                }
-            )
-            Spacer(Modifier.height(21.dp))
-            if (content.isVisiting) {
-                if (content.isFollowing) {
-                    SkyButton(
-                        label = stringResource(Res.string.follow_action),
-                        modifier = Modifier.padding(horizontal = 8.dp).fillMaxWidth(),
-                        onClick = { onAction(UserProfileAction.OnClickFollow) }
-                    )
-                } else {
-                    SkyButton(
-                        label = stringResource(Res.string.unfollow_action),
-                        modifier = Modifier.padding(horizontal = 8.dp).fillMaxWidth(),
-                        onClick = { onAction(UserProfileAction.OnClickUnfollow) }
-                    )
-                }
+        ProfileCompactComponent.Header(
+            backgroundImageUrl = userProfile.backgroundImageUrl,
+            backgroundImageModifier = Modifier.fillMaxWidth().height(180.dp),
+            profileImageUrl = userProfile.profileImageUrl,
+            cardContents = {
+                Spacer(Modifier.height(32.dp))
+                ProfileCompactComponent.HeaderNameGroup(
+                    firstName = userProfile.firstName,
+                    userName = userProfile.username
+                )
+                Spacer(Modifier.height(12.dp))
+                ProfileCompactComponent.HeaderBodyGroup(
+                    leftItem = {
+                        ProfileCompactComponent.HeaderEditorialDataItem(
+                            iconRes = Res.drawable.ic_height,
+                            title = userProfile.height.toString(),
+                            subtitle = "Boy (${userProfile.heightUnit.shortLabel})",
+                            modifier = Modifier.weight(1f)
+                        )
+                    },
+                    centerItem = {
+                        ProfileCompactComponent.HeaderEditorialDataItem(
+                            iconRes = Res.drawable.ic_dna,
+                            title = userProfile.weight.toString(),
+                            subtitle = "Kilo (${userProfile.weightUnit.shortLabel})",
+                            modifier = Modifier.weight(1f)
+                        )
+                    },
+                    rightItem = {
+                        ProfileCompactComponent.HeaderEditorialDataItem(
+                            iconRes = Res.drawable.ic_overweight,
+                            title = userProfile.bodyType.turkishShort,
+                            subtitle = stringResource(Res.string.body_type_label),
+                            modifier = Modifier.weight(1f)
+                        )
+                    }
+                )
+            },
+            cardContentsModifier = Modifier.fillMaxWidth().padding(top = 118.dp),
+        )
+    }
+
+    @Composable
+    fun VisitorActionGroup(
+        content: UserProfileUiState.Content,
+        onAction: (UserProfileAction) -> Unit
+    ) {
+        if (content.isVisiting) {
+            Spacer(Modifier.height(8.dp))
+
+            if (content.isFollowing) {
+                SkyButton(
+                    label = stringResource(Res.string.follow_action),
+                    modifier = Modifier.padding(horizontal = 8.dp).fillMaxWidth(),
+                    onClick = { onAction(UserProfileAction.OnClickFollow) }
+                )
+            } else {
+                SkyButton(
+                    label = stringResource(Res.string.unfollow_action),
+                    modifier = Modifier.padding(horizontal = 8.dp).fillMaxWidth(),
+                    onClick = { onAction(UserProfileAction.OnClickUnfollow) }
+                )
             }
         }
-
     }
 
     @Composable
@@ -174,9 +193,10 @@ private object UserProfileCompactComponent {
                 onDestinationChanged = { onAction(UserProfileAction.OnDestinationChanged(it)) },
                 destination = content.destination,
                 action = {
-                    SkyIcon(Res.drawable.ic_settings)
-//                    actionRes = Res.drawable.ic_settings,
-//                    onActionClick = { onAction(UserProfileAction.ClickSettings) },
+                    ProfileCompactComponent.NavigationMenuAction(
+                        res = Res.drawable.ic_settings,
+                        onClick = { onAction(UserProfileAction.OnClickSettings) }
+                    )
                 },
                 modifier = Modifier.fillMaxWidth()
             )
@@ -184,7 +204,7 @@ private object UserProfileCompactComponent {
     }
 
     @Composable
-    fun Content(
+    fun ContentGroup(
         content: UserProfileUiState.Content,
         onAction: (UserProfileAction) -> Unit
     ) {
@@ -201,7 +221,10 @@ private object UserProfileCompactComponent {
         onAction: (UserProfileAction) -> Unit,
         modifier: Modifier = Modifier,
     ) {
-        //isVisiting
+        MyLessonPackages(content, onAction, modifier = Modifier.fillMaxWidth())
+        Appointments(content, onAction, modifier = Modifier.fillMaxWidth())
+        MyDiet(content, onAction, modifier = Modifier.fillMaxWidth())
+        MyMeasurements(content, onAction, modifier = Modifier.fillMaxWidth())
     }
 
     @Composable
@@ -210,16 +233,22 @@ private object UserProfileCompactComponent {
         onAction: (UserProfileAction) -> Unit,
         modifier: Modifier = Modifier,
     ) {
-        //isVisiting
+        TodoBox(
+            "Postlarim",
+            modifier = Modifier.fillMaxWidth().height(596.dp)
+        )
     }
 
     @Composable
-    fun LessonPackage(
+    fun MyLessonPackages(
         content: UserProfileUiState.Content,
         onAction: (UserProfileAction) -> Unit,
         modifier: Modifier = Modifier,
     ) {
-
+        TodoBox(
+            "Paketlerim",
+            modifier = Modifier.fillMaxWidth().height(196.dp)
+        )
     }
 
     @Composable
@@ -287,16 +316,27 @@ private object UserProfileCompactComponent {
     }
 
     @Composable
-    fun DietCard(
+    fun MyDiet(
         content: UserProfileUiState.Content,
         onAction: (UserProfileAction) -> Unit,
-        modifier: Modifier = Modifier,) {
-
+        modifier: Modifier = Modifier,
+    ) {
+        TodoBox(
+            "Diyet Listesi",
+            modifier = Modifier.fillMaxWidth().height(196.dp)
+        )
     }
 
     @Composable
-    fun MeasurementsCard() {
-
+    fun MyMeasurements(
+        content: UserProfileUiState.Content,
+        onAction: (UserProfileAction) -> Unit,
+        modifier: Modifier = Modifier,
+    ) {
+        TodoBox(
+            "Olcumlerim",
+            modifier = Modifier.fillMaxWidth().height(96.dp)
+        )
     }
 
     @Composable

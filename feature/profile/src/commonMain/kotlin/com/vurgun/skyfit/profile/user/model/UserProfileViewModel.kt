@@ -40,7 +40,7 @@ sealed class UserProfileUiState {
 sealed interface UserProfileAction {
     data object ClickBack : UserProfileAction
     data object ClickAppointments : UserProfileAction
-    data object ClickSettings : UserProfileAction
+    data object OnClickSettings : UserProfileAction
     data object ClickCreatePost : UserProfileAction
     data object OnClickFollow : UserProfileAction
     data object OnClickUnfollow : UserProfileAction
@@ -77,7 +77,7 @@ class UserProfileViewModel(
             UserProfileAction.ClickAppointments ->
                 _effect.emitIn(screenModelScope, NavigateToAppointments)
 
-            UserProfileAction.ClickSettings ->
+            UserProfileAction.OnClickSettings ->
                 _effect.emitIn(screenModelScope, NavigateToSettings)
 
             UserProfileAction.ClickCreatePost ->

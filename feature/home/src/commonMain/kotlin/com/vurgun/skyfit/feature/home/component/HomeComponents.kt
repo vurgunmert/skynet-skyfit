@@ -32,9 +32,6 @@ import com.vurgun.skyfit.core.ui.components.image.NetworkImage
 import com.vurgun.skyfit.core.ui.components.schedule.MobileUserActivityHourlyCalendarComponent
 import com.vurgun.skyfit.core.ui.components.schedule.SkyFitColoredCalendarComponent
 import com.vurgun.skyfit.core.ui.components.special.*
-import com.vurgun.skyfit.core.ui.components.text.SkyText
-import com.vurgun.skyfit.core.ui.components.text.TextStyleType
-import com.vurgun.skyfit.core.ui.components.topbar.CompactTopBar
 import com.vurgun.skyfit.core.ui.styling.LocalPadding
 import com.vurgun.skyfit.core.ui.styling.SkyFitAsset
 import com.vurgun.skyfit.core.ui.styling.SkyFitColor
@@ -102,7 +99,9 @@ internal object HomeCompactComponent {
         onClickConversations: () -> Unit,
     ) {
         Row(
+            modifier = Modifier.fillMaxWidth().padding(horizontal = 24.dp, vertical = 8.dp),
             verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.End
         ) {
             FeatureVisible(notificationsEnabled) {
                 Spacer(Modifier.width(16.dp))
@@ -415,44 +414,6 @@ fun MobileDashboardHomeActivityHourlyCalendarComponent(
     }
 }
 
-@Composable
-fun MobileUserHomeUpcomingAppointmentsComponent(
-    appointments: List<UserAppointmentUiData>,
-    onClickShowAll: () -> Unit = {}
-) {
-
-    Column(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(LocalPadding.current.medium)
-    ) {
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(horizontal = LocalPadding.current.xSmall),
-            horizontalArrangement = Arrangement.SpaceBetween,
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            SkyText(
-                text = stringResource(Res.string.upcoming_appointments_label),
-                styleType = TextStyleType.BodyLargeSemibold
-            )
-
-            SkyText(
-                text = stringResource(Res.string.show_all_action),
-                styleType = TextStyleType.BodyXSmall,
-                color = SkyFitColor.border.secondaryButton,
-                modifier = Modifier.clickable(onClick = onClickShowAll)
-            )
-        }
-
-        appointments.forEach { appointment ->
-            Spacer(modifier = Modifier.height(8.dp))
-            MobileDashboardHomeAppointmentCard(appointment, onClick = onClickShowAll)
-        }
-    }
-}
-
 @Deprecated("UpLessons")
 @Composable
 fun MobileDashboardHomeUpcomingAppointmentsComponent(
@@ -497,79 +458,6 @@ fun MobileDashboardHomeUpcomingAppointmentsComponent(
                 onClick = onClickShowAll
             )
         }
-    }
-}
-
-@Composable
-private fun MobileDashboardHomeAppointmentCard(
-    appointment: UserAppointmentUiData,
-    onClick: () -> Unit = {}
-) {
-    SkyFitListItemCardComponent(
-        modifier = Modifier
-            .fillMaxWidth()
-            .clip(RoundedCornerShape(16.dp))
-            .clickable(onClick = onClick)
-            .background(SkyFitColor.background.surfaceSecondary)
-            .padding(12.dp)
-    ) {
-        Box(
-            modifier = Modifier
-                .background(SkyFitColor.background.default, RoundedCornerShape(16.dp))
-                .padding(16.dp),
-            contentAlignment = Alignment.Center
-        ) {
-
-            Icon(
-                painter = SkyFitAsset.getPainter(appointment.iconId),
-                contentDescription = "Activity",
-                tint = SkyFitColor.icon.default,
-                modifier = Modifier.size(24.dp)
-            )
-        }
-
-        Spacer(modifier = Modifier.width(12.dp))
-
-        Column(Modifier.weight(1f)) {
-            Text(
-                text = appointment.title,
-                style = SkyFitTypography.bodyMediumSemibold,
-                maxLines = 2
-            )
-
-            Spacer(modifier = Modifier.height(8.dp))
-
-            Row(verticalAlignment = Alignment.CenterVertically) {
-                Icon(
-                    painter = painterResource(Res.drawable.ic_clock),
-                    contentDescription = "Time",
-                    tint = Color.Gray,
-                    modifier = Modifier.size(14.dp)
-                )
-                Spacer(modifier = Modifier.width(4.dp))
-                Text(text = appointment.time, fontSize = 14.sp, color = Color.Gray)
-
-                Spacer(modifier = Modifier.width(8.dp))
-
-                Icon(
-                    painter = painterResource(Res.drawable.ic_location_pin),
-                    contentDescription = "Location",
-                    tint = Color.Gray,
-                    modifier = Modifier.size(14.dp)
-                )
-                Spacer(modifier = Modifier.width(4.dp))
-                Text(text = appointment.location, fontSize = 14.sp, color = Color.Gray)
-            }
-        }
-
-        Spacer(modifier = Modifier.width(12.dp))
-
-        Icon(
-            painter = painterResource(Res.drawable.ic_chevron_right),
-            contentDescription = "Enter",
-            tint = SkyFitColor.icon.default,
-            modifier = Modifier.size(16.dp)
-        )
     }
 }
 

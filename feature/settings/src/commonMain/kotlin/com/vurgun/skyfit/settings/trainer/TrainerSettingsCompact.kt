@@ -12,13 +12,13 @@ import com.vurgun.skyfit.core.ui.components.loader.FullScreenLoaderContent
 import com.vurgun.skyfit.core.ui.screen.ErrorScreen
 import com.vurgun.skyfit.core.ui.utils.CollectEffect
 import com.vurgun.skyfit.feature.persona.settings.shared.helpsupport.SettingsSupportHelpScreen
-import com.vurgun.skyfit.feature.persona.settings.trainer.TrainerAccountSettingsScreen
-import com.vurgun.skyfit.feature.persona.settings.trainer.notification.TrainerNotificationSettingsScreen
-import com.vurgun.skyfit.feature.persona.settings.trainer.payment.TrainerPaymentHistorySettingsScreen
+import com.vurgun.skyfit.settings.trainer.notification.TrainerNotificationSettingsScreen
+import com.vurgun.skyfit.settings.trainer.payment.TrainerPaymentHistorySettingsScreen
 import com.vurgun.skyfit.settings.component.SettingsCompactComponent
 import com.vurgun.skyfit.settings.shared.SettingsUiEffect
 import com.vurgun.skyfit.settings.shared.SettingsUiState
 import com.vurgun.skyfit.settings.shared.SettingsViewModel
+import com.vurgun.skyfit.settings.trainer.profile.TrainerAccountSettingsScreen
 
 @Composable
 fun TrainerSettingsCompact(viewModel: SettingsViewModel) {

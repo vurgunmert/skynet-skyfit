@@ -18,12 +18,23 @@ import org.jetbrains.compose.resources.painterResource
 import skyfit.core.ui.generated.resources.Res
 import skyfit.core.ui.generated.resources.ic_app_logo
 import skyfit.core.ui.generated.resources.ic_fiwe_logo_dark
+import skyfit.core.ui.generated.resources.ic_fiwe_logo_light
 
 @Composable
 fun FiweLogoDark(modifier: Modifier = Modifier) {
     Image(
         painterResource(Res.drawable.ic_fiwe_logo_dark),
         "FIWE Logo Dark",
+        modifier = modifier
+    )
+}
+
+
+@Composable
+fun FiweLogoLight(modifier: Modifier = Modifier) {
+    Image(
+        painterResource(Res.drawable.ic_fiwe_logo_light),
+        "FIWE Logo Light",
         modifier = modifier
     )
 }

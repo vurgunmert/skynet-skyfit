@@ -11,7 +11,7 @@ import com.vurgun.skyfit.feature.schedule.screen.appointments.UserAppointmentLis
 
 val screenScheduleModule = screenModule {
     register<SharedScreen.UserActivityCalendar> { UserActivityCalendarScreen(it.selectedDate) }
-    register<SharedScreen.Appointments> { UserAppointmentListingScreen() }
+    register<SharedScreen.UserAppointmentListing> { UserAppointmentListingScreen() }
     register<SharedScreen.UserAppointmentDetail> { UserAppointmentDetailScreen(it.id) }
 
     register<SharedScreen.TrainerAppointmentListing> { TrainerAppointmentListingScreen() }

@@ -1,4 +1,4 @@
-package com.vurgun.skyfit.feature.persona.settings.trainer.profile
+package com.vurgun.skyfit.settings.trainer.profile
 
 import cafe.adriel.voyager.core.model.ScreenModel
 import cafe.adriel.voyager.core.model.screenModelScope

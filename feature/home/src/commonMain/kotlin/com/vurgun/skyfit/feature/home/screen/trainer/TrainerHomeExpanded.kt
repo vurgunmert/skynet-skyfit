@@ -1,8 +1,6 @@
 package com.vurgun.skyfit.feature.home.screen.trainer
 
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.material.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -11,11 +9,11 @@ import androidx.compose.ui.Modifier
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
 import com.vurgun.skyfit.core.navigation.SharedScreen
-import com.vurgun.skyfit.core.navigation.findParentByKey
+import com.vurgun.skyfit.core.navigation.SharedScreen.FacilityProfileVisitor
+import com.vurgun.skyfit.core.navigation.SharedScreen.LessonFilter
 import com.vurgun.skyfit.core.navigation.push
 import com.vurgun.skyfit.core.ui.components.layout.ExpandedLayout
 import com.vurgun.skyfit.core.ui.components.loader.FullScreenLoaderContent
-import com.vurgun.skyfit.core.ui.components.topbar.ExpandedTopBar
 import com.vurgun.skyfit.core.ui.screen.ErrorScreen
 import com.vurgun.skyfit.core.ui.utils.CollectEffect
 import com.vurgun.skyfit.core.ui.utils.LocalOverlayController
@@ -23,7 +21,9 @@ import com.vurgun.skyfit.feature.home.component.HomeCompactComponent
 import com.vurgun.skyfit.feature.home.component.HomeLessonTableComponents
 import com.vurgun.skyfit.feature.home.component.HomeStatisticComponents
 import com.vurgun.skyfit.feature.home.component.LessonFilterData
+import com.vurgun.skyfit.feature.home.model.FacilityHomeEffect
 import com.vurgun.skyfit.feature.home.model.TrainerHomeAction
+import com.vurgun.skyfit.feature.home.model.TrainerHomeAction.ApplyLessonFilter
 import com.vurgun.skyfit.feature.home.model.TrainerHomeEffect.*
 import com.vurgun.skyfit.feature.home.model.TrainerHomeUiState
 import com.vurgun.skyfit.feature.home.model.TrainerHomeViewModel
@@ -34,20 +34,20 @@ import skyfit.core.ui.generated.resources.refresh_action
 @Composable
 internal fun TrainerHomeExpanded(viewModel: TrainerHomeViewModel) {
 
-    val dashboardNavigator = LocalNavigator.currentOrThrow.findParentByKey("dashboard")
+    val dashboardNavigator = LocalNavigator.currentOrThrow
     val overlayController = LocalOverlayController.current
     val uiState by viewModel.uiState.collectAsState()
 
     CollectEffect(viewModel.effect) { effect ->
         when (effect) {
             is NavigateToVisitFacility ->
-                dashboardNavigator?.push(SharedScreen.FacilityProfileVisitor(effect.facilityId))
+                dashboardNavigator.push(FacilityProfileVisitor(effect.facilityId))
 
             NavigateToConversations ->
                 overlayController.invoke(SharedScreen.Conversations)
 
             NavigateToAppointments ->
-                overlayController.invoke(SharedScreen.Appointments)
+                overlayController.invoke(SharedScreen.TrainerAppointmentListing)
 
             NavigateToNotifications ->
                 overlayController.invoke(SharedScreen.Notifications)
@@ -55,10 +55,21 @@ internal fun TrainerHomeExpanded(viewModel: TrainerHomeViewModel) {
             NavigateToChatBot ->
                 overlayController.invoke(SharedScreen.ChatBot)
 
-            is ShowLessonFilter ->
-                overlayController.invoke(SharedScreen.LessonFilter(effect.lessons) {
-                    viewModel.onAction(TrainerHomeAction.ApplyLessonFilter(it as LessonFilterData))
+            is ShowLessonFilter -> {
+                overlayController.invoke(LessonFilter(effect.lessons) {
+                    viewModel.onAction(ApplyLessonFilter(it as LessonFilterData))
                 })
+            }
+
+            is ShowOverlay -> {
+                overlayController.invoke(effect.screen)
+            }
+
+            is NavigateToAppointment ->
+                overlayController.invoke(SharedScreen.TrainerAppointmentDetail(effect.lessonId))
+
+            DismissOverlay ->
+                overlayController.invoke(null)
         }
     }
 
@@ -79,33 +90,12 @@ internal fun TrainerHomeExpanded(viewModel: TrainerHomeViewModel) {
 
         is TrainerHomeUiState.Content -> {
             val content = uiState as TrainerHomeUiState.Content
-            Scaffold(
-                modifier = Modifier.fillMaxSize(),
-                topBar = {
-                    TrainerHomeExpandedComponent.TopBar(content, viewModel::onAction)
-                },
-                content = {
-                    TrainerHomeExpandedComponent.Content(content, viewModel::onAction)
-                }
-            )
+            TrainerHomeExpandedComponent.Content(content, viewModel::onAction)
         }
     }
 }
 
 private object TrainerHomeExpandedComponent {
-    @Composable
-    fun TopBar(
-        content: TrainerHomeUiState.Content,
-        onAction: (TrainerHomeAction) -> Unit
-    ) {
-        ExpandedTopBar.TopBarWithAccountAndNavigation(
-            content.account,
-            onClickNotifications = { onAction(TrainerHomeAction.OnClickNotifications) },
-            onClickConversations = { onAction(TrainerHomeAction.OnClickConversations) },
-            onClickChatBot = { onAction(TrainerHomeAction.OnClickChatBot) },
-            modifier = Modifier.fillMaxWidth(),
-        )
-    }
 
     @Composable
     fun Content(
@@ -127,7 +117,15 @@ private object TrainerHomeExpandedComponent {
                     })
             },
             rightContent = {
-                HomeCompactComponent.LessonCards(content.upcomingLessons)
+                HomeCompactComponent.LessonCards(
+                    content.upcomingLessons,
+                    onClickShowAll = {
+                        onAction(TrainerHomeAction.OnClickAppointments)
+                    },
+                    onClickLesson = {
+                        onAction(TrainerHomeAction.OnClickAppointment(it.lessonId))
+                    }
+                )
             },
             modifier = Modifier.fillMaxSize()
         )

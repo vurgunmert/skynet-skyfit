@@ -1,4 +1,4 @@
-package com.vurgun.skyfit.profile.facility
+package com.vurgun.skyfit.profile.facility.screen
 
 import androidx.compose.foundation.layout.*
 import androidx.compose.runtime.Composable
@@ -10,9 +10,6 @@ import com.vurgun.skyfit.core.ui.components.box.TodoBox
 import com.vurgun.skyfit.core.ui.components.loader.FullScreenLoaderContent
 import com.vurgun.skyfit.core.ui.screen.ErrorScreen
 import com.vurgun.skyfit.profile.component.ProfileExpandedComponent
-import com.vurgun.skyfit.profile.facility.owner.FacilityProfileAction
-import com.vurgun.skyfit.profile.facility.owner.FacilityProfileUiState
-import com.vurgun.skyfit.profile.facility.owner.FacilityProfileViewModel
 
 @Composable
 fun FacilityProfileExpanded(

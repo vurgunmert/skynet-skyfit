@@ -66,7 +66,7 @@ object LessonDataMapper {
             trainerFullName = "$trainerName $trainerSurname",
             facilityName = gymName,
             trainerNote = trainerNote,
-            participantCount = totalParticipants,
+            participantCount = totalParticipants ?: 0,
             status = status,
             statusName = statusName
         )

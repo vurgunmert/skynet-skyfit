@@ -8,7 +8,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import com.vurgun.skyfit.core.data.v1.domain.account.model.UserAccount
 import com.vurgun.skyfit.core.ui.components.button.SkyButton
 import com.vurgun.skyfit.core.ui.components.button.SkyButtonSize
 import com.vurgun.skyfit.core.ui.components.button.SkyButtonVariant
@@ -73,25 +72,6 @@ object CompactTopBar {
                 onClick = onClickAction,
                 modifier = Modifier.padding(end = 24.dp)
             )
-        }
-    }
-
-    // Default: Profile + Actions
-    @Composable
-    fun TopBarWithAccountAndNavigation(
-        actions: @Composable () -> Unit,
-        modifier: Modifier = Modifier,
-    ) {
-        Row(
-            modifier = modifier
-                .fillMaxWidth()
-                .heightIn(min = 36.dp, max = 64.dp)
-                .padding(horizontal = 24.dp, vertical = 8.dp),
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.spacedBy(16.dp)
-        ) {
-
-            actions.invoke()
         }
     }
 }

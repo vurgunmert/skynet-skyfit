@@ -37,7 +37,7 @@ internal data class ScheduledLessonDetailDTO(
     val trainerSurname: String,
     val trainerNote: String?,
     val gymName: String,
-    val totalParticipants: Int,
+    val totalParticipants: Int? = null,
 )
 
 @Serializable

@@ -3,8 +3,10 @@ package com.vurgun.skyfit.feature.home.model
 import androidx.compose.ui.util.fastFilter
 import cafe.adriel.voyager.core.model.ScreenModel
 import cafe.adriel.voyager.core.model.screenModelScope
+import cafe.adriel.voyager.core.registry.ScreenProvider
 import com.vurgun.skyfit.core.data.utility.SingleSharedFlow
 import com.vurgun.skyfit.core.data.utility.UiStateDelegate
+import com.vurgun.skyfit.core.data.utility.emitIn
 import com.vurgun.skyfit.core.data.utility.emitOrNull
 import com.vurgun.skyfit.core.data.v1.data.lesson.mapper.LessonSessionItemViewDataMapper
 import com.vurgun.skyfit.core.data.v1.domain.account.manager.ActiveAccountManager
@@ -13,7 +15,9 @@ import com.vurgun.skyfit.core.data.v1.domain.lesson.model.LessonSessionItemViewD
 import com.vurgun.skyfit.core.data.v1.domain.statistics.front.StatisticCardUiData
 import com.vurgun.skyfit.core.data.v1.domain.trainer.model.TrainerProfile
 import com.vurgun.skyfit.core.data.v1.domain.trainer.repository.TrainerRepository
+import com.vurgun.skyfit.core.navigation.SharedScreen
 import com.vurgun.skyfit.feature.home.component.LessonFilterData
+import com.vurgun.skyfit.feature.home.model.FacilityHomeEffect.ShowOverlay
 import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.launch
 import kotlinx.datetime.LocalDate
@@ -28,7 +32,9 @@ sealed interface TrainerHomeUiState {
         val allLessons: List<LessonSessionItemViewData> = emptyList(),
         val filteredLessons: List<LessonSessionItemViewData> = emptyList(),
         val upcomingLessons: List<LessonSessionItemViewData> = emptyList(),
-        val appliedFilter: LessonFilterData = LessonFilterData()
+        val appliedFilter: LessonFilterData = LessonFilterData(),
+        val notificationsEnabled: Boolean = false,
+        val conversationsEnabled: Boolean = false,
     ) : TrainerHomeUiState
 }
 
@@ -36,6 +42,7 @@ sealed interface TrainerHomeAction {
     data object OnClickNotifications : TrainerHomeAction
     data object OnClickConversations : TrainerHomeAction
     data object OnClickAppointments : TrainerHomeAction
+    data class OnClickAppointment(val lessonId: Int) : TrainerHomeAction
     data object OnClickChatBot : TrainerHomeAction
     data object OnClickFilter : TrainerHomeAction
     data class ApplyLessonFilter(val filter: LessonFilterData) : TrainerHomeAction
@@ -48,6 +55,9 @@ sealed interface TrainerHomeEffect {
     data object NavigateToAppointments : TrainerHomeEffect
     data object NavigateToChatBot : TrainerHomeEffect
     data class ShowLessonFilter(val lessons: List<LessonSessionItemViewData>) : TrainerHomeEffect
+    data class NavigateToAppointment(val lessonId: Int) : TrainerHomeEffect
+    data class ShowOverlay(val screen: ScreenProvider) : TrainerHomeEffect
+    data object DismissOverlay : TrainerHomeEffect
 }
 
 class TrainerHomeViewModel(
@@ -77,9 +87,16 @@ class TrainerHomeViewModel(
                 emitEffect(TrainerHomeEffect.NavigateToChatBot)
 
             TrainerHomeAction.OnClickFilter ->
-                emitEffect(TrainerHomeEffect.ShowLessonFilter((uiState as? TrainerHomeUiState.Content)?.filteredLessons.orEmpty()))
+                emitEffect(
+                    TrainerHomeEffect.ShowOverlay(
+                        SharedScreen.LessonFilter(
+                            lessons = (uiState.value as? TrainerHomeUiState.Content)?.allLessons ?: emptyList(),
+                            onApply = { applyLessonFilter(it as LessonFilterData) }
+                        )))
 
             is TrainerHomeAction.ApplyLessonFilter -> applyLessonFilter(action.filter)
+            is TrainerHomeAction.OnClickAppointment ->
+                emitEffect(TrainerHomeEffect.NavigateToAppointment(action.lessonId.toInt()))
         }
     }
 
@@ -166,15 +183,32 @@ class TrainerHomeViewModel(
         val content = (uiState.value as? TrainerHomeUiState.Content) ?: return
 
         val filteredLessons = content.allLessons
-            .apply {
-                filter.query.takeUnless { it.isNullOrEmpty() }?.let { query ->
-                    this.fastFilter { it.title.contains(query, ignoreCase = true) }
+            .let { lessons ->
+                var result = lessons
+
+                filter.query
+                    ?.takeIf { it.isNotBlank() }
+                    ?.let { query ->
+                        result = result.fastFilter { it.title.contains(query, ignoreCase = true) }
+                    }
+
+                if (filter.selectedTitles.isNotEmpty()) {
+                    result = result.filter { it.title in filter.selectedTitles }
                 }
+
+                if (filter.selectedTrainers.isNotEmpty()) {
+                    result = result.filter { it.trainer in filter.selectedTrainers }
+                }
+
+                if (filter.selectedHours.isNotEmpty()) {
+                    result = result.filter { it.hours in filter.selectedHours }
+                }
+
+                if (filter.selectedStatuses.isNotEmpty()) {
+                    result = result.filter { it.statusName in filter.selectedStatuses }
+                }
+                result
             }
-            .filter { it.title in filter.selectedTitles }
-            .filter { it.trainer in filter.selectedTrainers }
-            .filter { it.hours in filter.selectedHours }
-            .filter { it.statusName in filter.selectedStatuses }
 
         _uiState.update(
             content.copy(
@@ -182,5 +216,6 @@ class TrainerHomeViewModel(
                 appliedFilter = filter
             )
         )
+        _effect.emitIn(screenModelScope, TrainerHomeEffect.DismissOverlay)
     }
 }

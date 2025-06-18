@@ -8,18 +8,19 @@ import com.vurgun.skyfit.core.data.utility.SingleSharedFlow
 import com.vurgun.skyfit.core.data.utility.emitIn
 import com.vurgun.skyfit.core.data.v1.domain.account.manager.ActiveAccountManager
 import com.vurgun.skyfit.core.data.v1.domain.global.model.AccountRole
+import com.vurgun.skyfit.core.navigation.SharedScreen
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.map
 
 sealed interface DashboardNavigationRoute {
-    data object Home: DashboardNavigationRoute
-    data object Explore: DashboardNavigationRoute
-    data object Social: DashboardNavigationRoute
-    data object Nutrition: DashboardNavigationRoute
-    data object Profile: DashboardNavigationRoute
-    data object Settings: DashboardNavigationRoute
+    data object Home : DashboardNavigationRoute
+    data object Explore : DashboardNavigationRoute
+    data object Social : DashboardNavigationRoute
+    data object Nutrition : DashboardNavigationRoute
+    data object Profile : DashboardNavigationRoute
+    data object Settings : DashboardNavigationRoute
 }
 
 data class OverlayState(val screen: Screen? = null)
@@ -29,27 +30,27 @@ data class DashboardUiState(
 )
 
 sealed interface DashboardUiAction {
-    data object OnClickNotifications: DashboardUiAction
-    data object OnClickConversations: DashboardUiAction
-    data object OnClickChatBot: DashboardUiAction
-    data object OnClickHome: DashboardUiAction
-    data object OnClickExplore: DashboardUiAction
-    data object OnClickSocial: DashboardUiAction
-    data object OnClickNutrition: DashboardUiAction
-    data object OnClickProfile: DashboardUiAction
-    data object OnClickSettings: DashboardUiAction
+    data object OnClickNotifications : DashboardUiAction
+    data object OnClickConversations : DashboardUiAction
+    data object OnClickChatBot : DashboardUiAction
+    data object OnClickHome : DashboardUiAction
+    data object OnClickExplore : DashboardUiAction
+    data object OnClickSocial : DashboardUiAction
+    data object OnClickNutrition : DashboardUiAction
+    data object OnClickProfile : DashboardUiAction
+    data object OnClickSettings : DashboardUiAction
 }
 
 sealed interface DashboardUiEffect {
-    data object ShowNotifications: DashboardUiEffect
-    data object ShowConversations: DashboardUiEffect
-    data object ShowChatBot: DashboardUiEffect
-    data object NavigateToHome: DashboardUiEffect
-    data object NavigateToExplore: DashboardUiEffect
-    data object NavigateToSocial: DashboardUiEffect
-    data object NavigateToNutrition: DashboardUiEffect
-    data object NavigateToProfile: DashboardUiEffect
-    data object NavigateToSettings: DashboardUiEffect
+    data object ShowNotifications : DashboardUiEffect
+    data object ShowConversations : DashboardUiEffect
+    data object ShowChatBot : DashboardUiEffect
+    data object NavigateToHome : DashboardUiEffect
+    data object NavigateToExplore : DashboardUiEffect
+    data object NavigateToSocial : DashboardUiEffect
+    data object NavigateToNutrition : DashboardUiEffect
+    data object NavigateToProfile : DashboardUiEffect
+    data object NavigateToSettings : DashboardUiEffect
 }
 
 class DashboardViewModel(userManager: ActiveAccountManager) : ScreenModel {
@@ -65,14 +66,17 @@ class DashboardViewModel(userManager: ActiveAccountManager) : ScreenModel {
 
     fun onAction(action: DashboardUiAction) {
         when (action) {
-            DashboardUiAction.OnClickNotifications ->
+            DashboardUiAction.OnClickNotifications -> {
                 _effect.emitIn(screenModelScope, DashboardUiEffect.ShowNotifications)
+            }
 
-            DashboardUiAction.OnClickConversations ->
+            DashboardUiAction.OnClickConversations -> {
                 _effect.emitIn(screenModelScope, DashboardUiEffect.ShowConversations)
+            }
 
-            DashboardUiAction.OnClickChatBot ->
+            DashboardUiAction.OnClickChatBot -> {
                 _effect.emitIn(screenModelScope, DashboardUiEffect.ShowChatBot)
+            }
 
             DashboardUiAction.OnClickExplore ->
                 _effect.emitIn(screenModelScope, DashboardUiEffect.NavigateToExplore)
@@ -100,8 +104,5 @@ class DashboardViewModel(userManager: ActiveAccountManager) : ScreenModel {
 
     fun dismissOverlay() {
         _overlayNavigation.value = null
-    }
-
-    init {
     }
 }

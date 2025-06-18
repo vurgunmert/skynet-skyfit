@@ -1,4 +1,4 @@
-package com.vurgun.skyfit.profile.facility.owner
+package com.vurgun.skyfit.profile.facility.screen
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable

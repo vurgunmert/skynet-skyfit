@@ -11,5 +11,5 @@ val dataHomeModule = module {
 
     factory { FacilityHomeViewModel(get(), get(), get()) }
     factory { TrainerHomeViewModel(get(), get(), get()) }
-    factory { UserHomeViewModel(get(), get(), get()) }
+    factory { UserHomeViewModel(get(), get(), get(), get()) }
 }

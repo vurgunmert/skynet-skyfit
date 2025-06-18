@@ -125,7 +125,7 @@ fun HomeEventCalendarSelector(
 ) {
     val state by controller.state.collectAsState()
 
-    Column(modifier.fillMaxWidth()) {
+    Column(modifier.widthIn(max = 430.dp)) {
 
         // Month navigation header
         Row(
@@ -138,7 +138,7 @@ fun HomeEventCalendarSelector(
                 styleType = TextStyleType.BodyLargeSemibold
             )
 
-            Row (verticalAlignment = Alignment.CenterVertically){
+            Row(verticalAlignment = Alignment.CenterVertically) {
                 ActionIcon(
                     res = IconAsset.ChevronLeft.resource,
                     onClick = controller::loadPreviousMonth

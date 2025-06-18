@@ -1,4 +1,4 @@
-package com.vurgun.skyfit.feature.persona.settings.trainer.profile
+package com.vurgun.skyfit.settings.trainer.profile
 
 import cafe.adriel.voyager.core.model.ScreenModel
 import cafe.adriel.voyager.core.model.screenModelScope
@@ -49,7 +49,7 @@ sealed class TrainerManageProfileEffect {
     data class ShowDeleteError(val message: String) : TrainerManageProfileEffect()
 }
 
-class TrainerSettingsManageProfileViewModel(
+class TrainerAccountSettingsViewModel(
     private val userManager: ActiveAccountManager,
     private val trainerRepository: TrainerRepository
 ) : ScreenModel {

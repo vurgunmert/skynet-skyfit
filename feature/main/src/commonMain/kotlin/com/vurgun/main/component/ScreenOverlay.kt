@@ -1,4 +1,4 @@
-package com.vurgun.skyfit.feature.main.component
+package com.vurgun.main.component
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable

@@ -1,4 +1,4 @@
-package com.vurgun.skyfit.feature.persona.settings.trainer.notification
+package com.vurgun.skyfit.settings.trainer.notification
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.fillMaxSize

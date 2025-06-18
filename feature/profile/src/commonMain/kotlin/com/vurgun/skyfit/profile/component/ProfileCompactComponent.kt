@@ -13,6 +13,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.unit.dp
+import com.vurgun.skyfit.core.ui.components.divider.VerticalDivider
 import com.vurgun.skyfit.core.ui.components.icon.SkyIcon
 import com.vurgun.skyfit.core.ui.components.icon.SkyIconSize
 import com.vurgun.skyfit.core.ui.components.image.NetworkImage
@@ -78,7 +79,8 @@ internal object ProfileCompactComponent {
                     .wrapContentHeight()
                     .hazeEffect(hazeState, hazeStyle)
                     .padding(24.dp),
-                content = cardContents
+                content = cardContents,
+                horizontalAlignment = Alignment.CenterHorizontally,
             )
 
             NetworkImage(
@@ -87,7 +89,7 @@ internal object ProfileCompactComponent {
                     .align(Alignment.TopCenter)
                     .padding(top = 50.dp)
                     .clip(RoundedCornerShape(20.dp))
-                    .sizeIn(100.dp)
+                    .size(100.dp)
             )
         }
     }
@@ -126,7 +128,9 @@ internal object ProfileCompactComponent {
             horizontalArrangement = Arrangement.Center
         ) {
             leftItem()
+            VerticalDivider(Modifier.height(52.dp))
             centerItem()
+            VerticalDivider(Modifier.height(52.dp))
             rightItem()
         }
     }
@@ -138,35 +142,31 @@ internal object ProfileCompactComponent {
         title: String,
         subtitle: String
     ) {
-        Box(
+        Column(
             modifier = modifier.wrapContentSize()
-                .padding(8.dp)
+                .padding(8.dp),
+            verticalArrangement = Arrangement.Center,
+            horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            Column(
-                verticalArrangement = Arrangement.Center,
-                horizontalAlignment = Alignment.CenterHorizontally
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.Center
             ) {
-                Row(
-                    modifier = Modifier.fillMaxWidth(),
-                    verticalAlignment = Alignment.CenterVertically,
-                    horizontalArrangement = Arrangement.Center
-                ) {
-                    iconRes?.let {
-                        SkyIcon(res = iconRes, size = SkyIconSize.Medium)
-                        Spacer(Modifier.width(2.dp))
-                    }
-
-                    SkyText(text = title, styleType = TextStyleType.BodyMediumSemibold)
+                iconRes?.let {
+                    SkyIcon(res = iconRes, size = SkyIconSize.Medium)
+                    Spacer(Modifier.width(2.dp))
                 }
-                Spacer(modifier = Modifier.height(4.dp))
-                SkyText(
-                    text = subtitle,
-                    styleType = TextStyleType.BodySmall,
-                    color = SkyFitColor.text.secondary
-                )
-            }
-        }
 
+                SkyText(text = title, styleType = TextStyleType.BodyMediumSemibold)
+            }
+            Spacer(modifier = Modifier.height(4.dp))
+            SkyText(
+                text = subtitle,
+                styleType = TextStyleType.BodySmall,
+                color = SkyFitColor.text.secondary
+            )
+        }
     }
 
     @Composable
@@ -183,7 +183,7 @@ internal object ProfileCompactComponent {
                 val postsSelected = selectedTab == ProfileDestination.Posts
                 val action = when (postsSelected) {
                     true -> UserProfileAction.ClickCreatePost
-                    false -> UserProfileAction.ClickSettings
+                    false -> UserProfileAction.OnClickSettings
                 }
 
                 Box(
@@ -229,7 +229,7 @@ internal object ProfileCompactComponent {
                 val postsSelected = selectedTab == ProfileDestination.Posts
                 val action = when (postsSelected) {
                     true -> UserProfileAction.ClickCreatePost
-                    false -> UserProfileAction.ClickSettings
+                    false -> UserProfileAction.OnClickSettings
                 }
 
                 Box(

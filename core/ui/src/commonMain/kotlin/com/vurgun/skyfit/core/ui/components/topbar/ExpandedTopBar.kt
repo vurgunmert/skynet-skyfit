@@ -152,7 +152,8 @@ object ExpandedTopBar {
             verticalAlignment = Alignment.CenterVertically,
         ) {
             TopBarWelcomeEditorialGroup(
-                name = account.firstName
+                name = account.firstName,
+                modifier = Modifier.wrapContentWidth()
             )
 
             Spacer(Modifier.weight(1f))
@@ -189,14 +190,13 @@ object ExpandedTopBar {
         ) {
             TopBarWelcomeEditorialGroup(
                 name = account.firstName,
-                modifier = Modifier.fillMaxWidth()
+                modifier = Modifier.wrapContentWidth()
             )
 
             Spacer(Modifier.weight(1f))
 
             TopBarTrophyGroup(
-                characterType = account.characterType,
-                modifier = Modifier.wrapContentWidth()
+                characterType = account.characterType
             )
 
             Spacer(Modifier.width(16.dp))
@@ -258,16 +258,15 @@ object ExpandedTopBar {
     @Composable
     private fun TopBarTrophyGroup(
         characterType: CharacterType,
+        trophies: List<String> = emptyList(),
         modifier: Modifier = Modifier,
     ) {
         Row(modifier = modifier, verticalAlignment = Alignment.CenterVertically) {
             CharacterImage(characterType, Modifier.size(48.dp))
-            Spacer(Modifier.width(16.dp))
-            Box(Modifier.size(24.dp, 32.dp).background(Color.Red))
-            Spacer(Modifier.width(16.dp))
-            Box(Modifier.size(24.dp, 32.dp).background(Color.Red))
-            Spacer(Modifier.width(16.dp))
-            Box(Modifier.size(24.dp, 32.dp).background(Color.Red))
+            trophies.forEach {
+                Spacer(Modifier.width(16.dp))
+                Box(Modifier.size(24.dp, 32.dp).background(Color.Red))
+            }
         }
     }
 

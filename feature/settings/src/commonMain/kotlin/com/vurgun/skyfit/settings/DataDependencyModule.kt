@@ -15,9 +15,9 @@ import com.vurgun.skyfit.settings.facility.trainer.FacilityManageTrainersViewMod
 import com.vurgun.skyfit.settings.shared.SettingsViewModel
 import com.vurgun.skyfit.settings.shared.account.AccountRoleSettingsViewModel
 import com.vurgun.skyfit.settings.shared.changepassword.PasswordSettingsViewModel
-import com.vurgun.skyfit.feature.persona.settings.trainer.notification.TrainerNotificationSettingsViewModel
-import com.vurgun.skyfit.feature.persona.settings.trainer.profile.TrainerSettingsEditProfileViewModel
-import com.vurgun.skyfit.feature.persona.settings.trainer.profile.TrainerSettingsManageProfileViewModel
+import com.vurgun.skyfit.settings.trainer.notification.TrainerNotificationSettingsViewModel
+import com.vurgun.skyfit.settings.trainer.profile.TrainerSettingsEditProfileViewModel
+import com.vurgun.skyfit.settings.trainer.profile.TrainerAccountSettingsViewModel
 import com.vurgun.skyfit.settings.user.account.UserAccountSettingsViewModel
 import com.vurgun.skyfit.settings.user.notification.UserNotificationSettingsViewModel
 import com.vurgun.skyfit.settings.user.profile.UserProfileSettingsViewModel
@@ -33,7 +33,7 @@ val dataPersonaModule = module {
     factory { UserAccountSettingsViewModel(get(), get()) }
     factory { UserProfileSettingsViewModel(get(), get(), get()) }
 
-    factory { TrainerSettingsManageProfileViewModel(get(), get()) }
+    factory { TrainerAccountSettingsViewModel(get(), get()) }
     factory { TrainerSettingsEditProfileViewModel(get(), get(), get(), get()) }
 
     factory { FacilityAccountSettingsViewModel(get(), get()) }

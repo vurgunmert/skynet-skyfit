@@ -1,4 +1,4 @@
-package com.vurgun.skyfit.feature.persona.settings.trainer.profile
+package com.vurgun.skyfit.settings.trainer.profile
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -50,7 +50,7 @@ import skyfit.core.ui.generated.resources.user_first_name_mandatory_label
 import skyfit.core.ui.generated.resources.user_last_name_hint
 import skyfit.core.ui.generated.resources.user_last_name_mandatory_label
 
-class TrainerSettingsEditProfileScreen : Screen {
+class TrainerProfileSettingsScreen : Screen {
 
     @Composable
     override fun Content() {

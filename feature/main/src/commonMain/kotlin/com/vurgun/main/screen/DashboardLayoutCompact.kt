@@ -35,7 +35,7 @@ import com.vurgun.skyfit.core.ui.components.special.ChatBotButtonComponent
 import com.vurgun.skyfit.core.ui.components.special.SkyFitMobileScaffold
 import com.vurgun.skyfit.core.ui.styling.SkyFitColor
 import com.vurgun.skyfit.core.ui.utils.CollectEffect
-import com.vurgun.skyfit.feature.main.component.ScreenOverlay
+import com.vurgun.main.component.ScreenOverlay
 import com.vurgun.main.screen.DashboardCompactComponent.BottomBar
 import org.jetbrains.compose.resources.DrawableResource
 import skyfit.core.ui.generated.resources.*

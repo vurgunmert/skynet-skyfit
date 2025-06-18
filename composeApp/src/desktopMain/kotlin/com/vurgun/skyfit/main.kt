@@ -19,7 +19,7 @@ fun main() = application {
         title = stringResource(Res.string.app_name),
     ) {
         val localDimens = LocalDimensions.current
-        window.minimumSize = Dimension(localDimens.desktopMinWidthPx, localDimens.desktopMinHeightPx)
+        window.minimumSize = Dimension(localDimens.mobileMinWidthPx, localDimens.mobileMinHeightPx)
 
         AppRootScreen(
             platformModule = module {

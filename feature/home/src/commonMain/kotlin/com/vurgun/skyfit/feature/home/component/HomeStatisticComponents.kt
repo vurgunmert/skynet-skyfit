@@ -33,14 +33,15 @@ internal object HomeStatisticComponents {
 
     @Composable
     fun StatCardComponent(
-        statistics: DashboardStatCardModel?
+        statistics: DashboardStatCardModel?,
+        modifier: Modifier = Modifier
     ) {
         val metrics = statistics?.primaryMetrics.takeUnless { it.isNullOrEmpty() } ?: return
 
         var selectedStat by remember { mutableStateOf(metrics.first()) }
 
         Column(
-            modifier = Modifier
+            modifier = modifier
                 .clip(RoundedCornerShape(16.dp))
                 .background(SkyFitColor.background.default)
                 .fillMaxWidth()
@@ -61,8 +62,8 @@ internal object HomeStatisticComponents {
         modifier: Modifier = Modifier
     ) {
         val columns = when (LocalWindowSize.current) {
-            WindowSize.COMPACT -> 2
-            WindowSize.MEDIUM, WindowSize.EXPANDED -> 4
+            WindowSize.COMPACT, WindowSize.MEDIUM ->2
+            WindowSize.EXPANDED -> 4
         }
 
         FlowRow(

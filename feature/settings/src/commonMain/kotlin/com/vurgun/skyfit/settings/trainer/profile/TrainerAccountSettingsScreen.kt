@@ -1,4 +1,4 @@
-package com.vurgun.skyfit.feature.persona.settings.trainer.profile
+package com.vurgun.skyfit.settings.trainer.profile
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -47,12 +48,12 @@ import skyfit.core.ui.generated.resources.ic_profile
 import skyfit.core.ui.generated.resources.settings_account_label
 import skyfit.core.ui.generated.resources.settings_change_my_password_label
 
-class TrainerSettingsManageProfileScreen : Screen {
+class TrainerAccountSettingsScreen : Screen {
 
     @Composable
     override fun Content() {
         val navigator = LocalNavigator.currentOrThrow
-        val viewModel = koinScreenModel<TrainerSettingsManageProfileViewModel>()
+        val viewModel = koinScreenModel<TrainerAccountSettingsViewModel>()
         val uiState by viewModel.uiState.collectAsState()
 
         CollectEffect(viewModel.effect) { effect ->
@@ -70,7 +71,7 @@ class TrainerSettingsManageProfileScreen : Screen {
                 }
 
                 TrainerManageProfileEffect.NavigateToEditProfile -> {
-                    navigator.push(TrainerSettingsEditProfileScreen())
+                    navigator.push(TrainerProfileSettingsScreen())
                 }
 
                 is TrainerManageProfileEffect.ShowDeleteError -> {
@@ -108,8 +109,7 @@ private fun MobileTrainerSettingsAccountScreen(
     val account = content.form
     var showDeleteConfirm by remember { mutableStateOf(false) }
 
-
-    SkyFitMobileScaffold(
+    Scaffold(
         topBar = {
             CompactTopBar(
                 title = stringResource(Res.string.settings_account_label),

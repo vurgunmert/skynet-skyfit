@@ -1,7 +1,7 @@
 package com.vurgun.skyfit.profile
 
 import com.vurgun.skyfit.core.data.dataCoreModule
-import com.vurgun.skyfit.profile.facility.owner.FacilityProfileViewModel
+import com.vurgun.skyfit.profile.facility.screen.FacilityProfileViewModel
 import com.vurgun.skyfit.profile.facility.schedule.FacilityProfileScheduleViewModel
 import com.vurgun.skyfit.profile.facility.visitor.FacilityProfileVisitorViewModel
 import com.vurgun.skyfit.profile.trainer.owner.TrainerProfileViewModel

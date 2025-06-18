@@ -41,8 +41,8 @@ sealed class SharedScreen(open val key: String) : ScreenProvider {
         SharedScreen("calendar:user_activity:${selectedDate.toString()}")
 
     // Appointments
-    data object Appointments : SharedScreen("appointments")
-    data object TrainerAppointmentListing : SharedScreen("appointments:trainer_listing")
+    data object UserAppointmentListing : SharedScreen("user:appointment:listings")
+    data object TrainerAppointmentListing : SharedScreen("trainer:appointment:listings")
 
     data class UserAppointmentDetail(val id: Int) :
         SharedScreen("appointments:user_detail:$id")

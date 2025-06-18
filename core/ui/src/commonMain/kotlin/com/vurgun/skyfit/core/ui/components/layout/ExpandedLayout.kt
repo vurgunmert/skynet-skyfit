@@ -43,7 +43,7 @@ object ExpandedLayout {
 
             Column(
                 modifier = Modifier
-                    .width(363.dp)
+                    .widthIn(min = 363.dp, max = 430.dp)
                     .fillMaxHeight(),
                 verticalArrangement = Arrangement.spacedBy(16.dp),
                 content = rightContent

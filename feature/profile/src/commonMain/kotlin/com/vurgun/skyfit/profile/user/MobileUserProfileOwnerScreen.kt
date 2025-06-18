@@ -25,18 +25,6 @@ import com.vurgun.skyfit.profile.user.model.UserProfileUiState
 import com.vurgun.skyfit.profile.user.model.UserProfileViewModel
 import dev.chrisbanes.haze.*
 
-class UserProfileOwnerScreen : Screen {
-
-    @Composable
-    override fun Content() {
-
-    }
-}
-
-
-private object ProfileScreenExpandedComponent {
-
-}
 
 @Composable
 fun MobileUserProfileOwnerScreen_Expanded(viewModel: UserProfileViewModel) {

@@ -1,4 +1,4 @@
-package com.vurgun.skyfit.feature.persona.settings.trainer.payment
+package com.vurgun.skyfit.settings.trainer.payment
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.fillMaxSize

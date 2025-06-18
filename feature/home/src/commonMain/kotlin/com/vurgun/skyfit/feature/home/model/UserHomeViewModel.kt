@@ -9,6 +9,7 @@ import com.vurgun.skyfit.core.data.utility.now
 import com.vurgun.skyfit.core.data.v1.data.statistics.front.UserStatistics
 import com.vurgun.skyfit.core.data.v1.domain.account.manager.ActiveAccountManager
 import com.vurgun.skyfit.core.data.v1.domain.account.model.UserAccount
+import com.vurgun.skyfit.core.data.v1.domain.explore.ExploreRepository
 import com.vurgun.skyfit.core.data.v1.domain.facility.model.FacilityProfile
 import com.vurgun.skyfit.core.data.v1.domain.facility.repository.FacilityRepository
 import com.vurgun.skyfit.core.data.v1.domain.trainer.model.TrainerProfile
@@ -44,6 +45,7 @@ data class UserHomeDietState(
 
 data class UserHomeFeaturedContentState(
     val featuredTrainers: List<TrainerProfile> = emptyList(),
+    val featuredFacilities: List<FacilityProfile> = emptyList(),
     val featuredExercises: List<ExerciseProfile> = emptyList(),
 )
 
@@ -89,7 +91,8 @@ sealed class UserHomeEffect {
 class UserHomeViewModel(
     private val userManager: ActiveAccountManager,
     private val userRepository: UserRepository,
-    private val facilityRepository: FacilityRepository
+    private val facilityRepository: FacilityRepository,
+    private val exploreRepository: ExploreRepository
 ) : ScreenModel {
 
     private val _uiState = UiStateDelegate<UserHomeUiState>(UserHomeUiState.Loading)
@@ -148,9 +151,24 @@ class UserHomeViewModel(
                     }
                 }
 
+                val featuredTrainers =
+                    exploreRepository.getAllTrainers().getOrDefault(emptyList())
+                        .sortedBy { it.gymId == userProfile.memberGymId }
+
+                val featuredFacilities = if (userProfile.memberGymId == null) {
+                    emptyList()
+                } else {
+                    exploreRepository.getAllFacilities().getOrDefault(emptyList())
+                        .sortedBy { it.gymId == userProfile.memberGymId }
+                }
+
                 val statisticsState = UserHomeStatisticsState(statistics = UserStatistics())
                 val dietState = UserHomeDietState(statistics = UserStatistics())
-                val featuredContentState = UserHomeFeaturedContentState() // placeholder, fetch later?
+
+                val featuredContentState = UserHomeFeaturedContentState(
+                    featuredTrainers = featuredTrainers,
+                    featuredFacilities = featuredFacilities
+                )
 
                 val appointmentState = UserHomeAppointmentsState(
                     appointments.map {

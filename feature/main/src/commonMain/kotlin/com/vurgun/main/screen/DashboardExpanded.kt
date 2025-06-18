@@ -36,7 +36,7 @@ import com.vurgun.skyfit.core.ui.styling.SkyFitColor
 import com.vurgun.skyfit.core.ui.utils.CollectEffect
 import com.vurgun.skyfit.core.ui.utils.LocalOverlayController
 import com.vurgun.skyfit.core.utils.rememberAccount
-import com.vurgun.skyfit.feature.main.component.ScreenOverlay
+import com.vurgun.main.component.ScreenOverlay
 import org.jetbrains.compose.resources.DrawableResource
 import skyfit.core.ui.generated.resources.*
 
@@ -59,6 +59,7 @@ fun DashboardExpanded(viewModel: DashboardViewModel) {
                     DashboardUiEffect.NavigateToNutrition -> dashboardNavigator.replace(SharedScreen.Nutrition)
                     DashboardUiEffect.NavigateToProfile -> dashboardNavigator.replace(SharedScreen.Profile)
                     DashboardUiEffect.NavigateToSettings -> dashboardNavigator.replace(SharedScreen.Settings)
+                    DashboardUiEffect.ShowChatBot -> dashboardNavigator.replace(SharedScreen.ChatBot)
                     else -> {
                     }
                 }

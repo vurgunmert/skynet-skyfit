@@ -1,4 +1,4 @@
-package com.vurgun.skyfit.profile.facility
+package com.vurgun.skyfit.profile.facility.screen
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -6,8 +6,6 @@ import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.koin.koinScreenModel
 import com.vurgun.skyfit.core.ui.utils.LocalWindowSize
 import com.vurgun.skyfit.core.ui.utils.WindowSize
-import com.vurgun.skyfit.profile.facility.owner.FacilityProfileCompact
-import com.vurgun.skyfit.profile.facility.owner.FacilityProfileViewModel
 
 class FacilityProfileScreen(private val facilityId: Int? = null) : Screen {
 
