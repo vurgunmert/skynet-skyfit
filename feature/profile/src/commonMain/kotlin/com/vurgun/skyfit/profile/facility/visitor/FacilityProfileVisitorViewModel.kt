@@ -96,7 +96,7 @@ class FacilityProfileVisitorViewModel(
         }
     }
 
-    fun loadProfile(facilityId: Int) {
+    fun loadData(facilityId: Int) {
         currentFacilityId = facilityId
         screenModelScope.launch {
             _uiState.value = FacilityProfileVisitorUiState.Loading

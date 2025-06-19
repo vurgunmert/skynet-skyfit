@@ -7,6 +7,7 @@ import cafe.adriel.voyager.core.screen.ScreenKey
 import cafe.adriel.voyager.koin.koinScreenModel
 import com.vurgun.skyfit.core.ui.utils.LocalWindowSize
 import com.vurgun.skyfit.core.ui.utils.WindowSize
+import com.vurgun.skyfit.profile.trainer.owner.TrainerProfileCompact
 import com.vurgun.skyfit.profile.trainer.owner.TrainerProfileViewModel
 
 class TrainerProfileScreen(private val trainerId: Int? = null) : Screen {

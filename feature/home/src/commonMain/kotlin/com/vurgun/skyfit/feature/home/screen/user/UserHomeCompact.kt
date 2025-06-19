@@ -22,7 +22,6 @@ import androidx.compose.ui.unit.sp
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
 import com.vurgun.skyfit.core.navigation.SharedScreen
-import com.vurgun.skyfit.core.navigation.findParentByKey
 import com.vurgun.skyfit.core.navigation.findRootNavigator
 import com.vurgun.skyfit.core.navigation.push
 import com.vurgun.skyfit.core.ui.components.image.SkyImage
@@ -101,7 +100,7 @@ internal fun UserHomeCompact(viewModel: UserHomeViewModel) {
 }
 
 @Composable
-fun UserHomeCompactAppointmentsGroup(
+fun UserUpcomingAppointmentsGroup(
     appointments: List<UserAppointmentUiData>,
     onClickShowAll: () -> Unit = {}
 ) {
@@ -208,7 +207,7 @@ private object UserHomeCompactComponent {
 
             content.appointmentsState?.appointments?.let { appointments ->
                 FeatureVisible(appointments.isNotEmpty()) {
-                    UserHomeCompactAppointmentsGroup(
+                    UserUpcomingAppointmentsGroup(
                         appointments = appointments,
                         onClickShowAll = { onAction(UserHomeAction.OnClickAppointments) }
                     )

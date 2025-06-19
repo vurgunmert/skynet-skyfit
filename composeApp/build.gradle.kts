@@ -60,7 +60,7 @@ kotlin {
             implementation(projects.feature.main)
             implementation(projects.feature.schedule)
             implementation(projects.feature.settings)
-            implementation(projects.feature.wellbeing)
+            implementation(projects.feature.health)
             implementation(projects.feature.connect)
         }
 

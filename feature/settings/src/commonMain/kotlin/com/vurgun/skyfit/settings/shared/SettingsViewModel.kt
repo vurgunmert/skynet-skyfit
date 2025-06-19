@@ -155,22 +155,22 @@ class SettingsViewModel(
 
     private fun getUserMenuItems(): List<SettingsMenuItem> = listOf(
         SettingsMenuItem.Account,
-        SettingsMenuItem.Notifications,
-        SettingsMenuItem.Payment,
+//        SettingsMenuItem.Notifications,
+//        SettingsMenuItem.Payment,
         SettingsMenuItem.Support,
     )
 
     private fun getTrainerMenuItems(): List<SettingsMenuItem> = listOf(
         SettingsMenuItem.Account,
-        SettingsMenuItem.Notifications,
-        SettingsMenuItem.Payment,
+//        SettingsMenuItem.Notifications,
+//        SettingsMenuItem.Payment,
         SettingsMenuItem.Support,
     )
 
     private fun getFacilityMenuItems(): List<SettingsMenuItem> = listOf(
         SettingsMenuItem.Account,
-        SettingsMenuItem.Notifications,
-        SettingsMenuItem.Payment,
+//        SettingsMenuItem.Notifications,
+//        SettingsMenuItem.Payment,
         SettingsMenuItem.Support,
         SettingsMenuItem.Members,
         SettingsMenuItem.Trainers,

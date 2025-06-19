@@ -41,7 +41,7 @@ sealed interface UserProfileAction {
     data object ClickBack : UserProfileAction
     data object ClickAppointments : UserProfileAction
     data object OnClickSettings : UserProfileAction
-    data object ClickCreatePost : UserProfileAction
+    data object OnClickNewPost : UserProfileAction
     data object OnClickFollow : UserProfileAction
     data object OnClickUnfollow : UserProfileAction
     data class NavigateToVisitFacility(val gymId: Int) : UserProfileAction
@@ -69,6 +69,8 @@ class UserProfileViewModel(
     private val _effect = SingleSharedFlow<UserProfileEffect>()
     val effect: SharedFlow<UserProfileEffect> = _effect
 
+    private var activeUserId: Int? = null
+
     fun onAction(action: UserProfileAction) {
         when (action) {
             UserProfileAction.ClickBack ->
@@ -80,7 +82,7 @@ class UserProfileViewModel(
             UserProfileAction.OnClickSettings ->
                 _effect.emitIn(screenModelScope, NavigateToSettings)
 
-            UserProfileAction.ClickCreatePost ->
+            UserProfileAction.OnClickNewPost ->
                 _effect.emitIn(screenModelScope, NavigateToCreatePost)
 
             is UserProfileAction.NavigateToVisitFacility ->
@@ -95,6 +97,7 @@ class UserProfileViewModel(
     fun loadData(userId: Int? = null) {
         val isVisiting = userId != null
         val loadedUserId = userId ?: (userManager.account.value as? UserAccount)?.normalUserId ?: return
+        activeUserId = loadedUserId
 
         screenModelScope.launch {
             _uiState.update(UserProfileUiState.Loading)
@@ -123,6 +126,12 @@ class UserProfileViewModel(
             } catch (e: Exception) {
                 _uiState.update(UserProfileUiState.Error(e.message ?: "Profil yüklenemedi."))
             }
+        }
+    }
+
+    fun refreshData() {
+        activeUserId?.let {
+            loadData(it)
         }
     }
 

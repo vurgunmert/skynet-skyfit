@@ -9,7 +9,7 @@ import com.vurgun.skyfit.core.data.v1.domain.global.model.AccountRole
 import com.vurgun.skyfit.core.ui.screen.UnauthorizedAccessScreen
 import com.vurgun.skyfit.core.utils.rememberUserRole
 import com.vurgun.skyfit.profile.facility.screen.FacilityProfileScreen
-import com.vurgun.skyfit.profile.trainer.owner.TrainerProfileOwnerScreen
+import com.vurgun.skyfit.profile.trainer.TrainerProfileScreen
 import com.vurgun.skyfit.profile.user.screen.UserProfileScreen
 
 class ProfileScreen : Screen {
@@ -23,7 +23,7 @@ class ProfileScreen : Screen {
 
         val screen = when (userRole) {
             AccountRole.Facility -> FacilityProfileScreen()
-            AccountRole.Trainer -> TrainerProfileOwnerScreen()
+            AccountRole.Trainer -> TrainerProfileScreen()
             AccountRole.User -> UserProfileScreen()
             AccountRole.Guest -> UnauthorizedAccessScreen()
         }

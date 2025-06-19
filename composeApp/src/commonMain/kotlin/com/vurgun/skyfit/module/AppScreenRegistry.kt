@@ -9,11 +9,11 @@ import com.vurgun.skyfit.core.ui.screen.UnderDevelopmentScreen
 import com.vurgun.skyfit.feature.access.screenAuthModule
 import com.vurgun.skyfit.feature.connect.screenConnectModule
 import com.vurgun.skyfit.feature.home.screenHomeModule
-import com.vurgun.skyfit.settings.screenSettingsModule
 import com.vurgun.skyfit.feature.schedule.screenScheduleModule
-import com.vurgun.skyfit.feature.wellbeign.screenWellbeingModule
+import com.vurgun.skyfit.health.screenHealthModule
 import com.vurgun.skyfit.onboarding.screenOnboardingModule
 import com.vurgun.skyfit.profile.screenProfileModule
+import com.vurgun.skyfit.settings.screenSettingsModule
 
 @Composable
 internal fun AppScreenRegistry() {
@@ -27,7 +27,7 @@ internal fun AppScreenRegistry() {
         screenExploreModule()
         screenSettingsModule()
         screenScheduleModule()
-        screenWellbeingModule()
+        screenHealthModule()
         screenConnectModule()
     }
 }

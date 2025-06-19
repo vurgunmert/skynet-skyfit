@@ -42,13 +42,13 @@ fun UserProfileCompact(
     modifier: Modifier = Modifier.fillMaxSize()
 ) {
     val appNavigator = LocalNavigator.currentOrThrow.findRootNavigator()
-    val dashboardNavigator = LocalNavigator.currentOrThrow
+    val localNavigator = LocalNavigator.currentOrThrow
     val uiState by viewModel.uiState.collectAsState()
 
     CollectEffect(viewModel.effect) { effect ->
         when (effect) {
             UserProfileEffect.NavigateBack -> {
-                appNavigator.pop()
+                localNavigator.pop()
             }
 
             UserProfileEffect.NavigateToAppointments -> {
@@ -86,23 +86,57 @@ fun UserProfileCompact(
                     UserProfileCompactComponent.Header(content, viewModel::onAction)
                 },
                 content = {
-                    Column(
-                        modifier = Modifier
-                            .fillMaxSize()
-                            .padding(horizontal = 16.dp),
-                        verticalArrangement = Arrangement.spacedBy(16.dp)
-                    ) {
-                        UserProfileCompactComponent.VisitorActionGroup(content, viewModel::onAction)
-                        UserProfileCompactComponent.NavigationGroup(content, viewModel::onAction)
-                        UserProfileCompactComponent.ContentGroup(content, viewModel::onAction)
-                    }
+                    UserProfileCompactComponent.Content(content, viewModel::onAction)
                 }
             )
         }
     }
 }
 
-private object UserProfileCompactComponent {
+@Composable
+fun UserProfileMeasurementContent(
+    content: UserProfileUiState.Content,
+    onAction: (UserProfileAction) -> Unit,
+    modifier: Modifier
+) {
+    TodoBox(
+        "OLCUMLER",
+        modifier = modifier.widthIn(max = 680.dp)
+    )
+}
+
+internal object UserProfileCompactComponent {
+
+    @Composable
+    fun Content(
+        content: UserProfileUiState.Content,
+        onAction: (UserProfileAction) -> Unit) {
+
+        ProfileCompactComponent.Layout(
+            header = {
+                Header(content, onAction)
+            },
+            content = {
+                Column(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .padding(horizontal = 16.dp),
+                    verticalArrangement = Arrangement.spacedBy(16.dp)
+                ) {
+
+                    VisitorActionGroup(content, onAction)
+
+                    NavigationGroup(content, onAction)
+
+                    if (content.destination == ProfileDestination.Posts) {
+                        PostsContent(content, onAction)
+                    } else {
+                        AboutContent(content, onAction)
+                    }
+                }
+            }
+        )
+    }
 
     @Composable
     fun Header(
@@ -193,25 +227,21 @@ private object UserProfileCompactComponent {
                 onDestinationChanged = { onAction(UserProfileAction.OnDestinationChanged(it)) },
                 destination = content.destination,
                 action = {
-                    ProfileCompactComponent.NavigationMenuAction(
-                        res = Res.drawable.ic_settings,
-                        onClick = { onAction(UserProfileAction.OnClickSettings) }
-                    )
+                    if (content.destination == ProfileDestination.Posts) {
+                        ProfileCompactComponent.NavigationMenuAction(
+                            res = Res.drawable.ic_plus,
+                            onClick = { onAction(UserProfileAction.OnClickNewPost) }
+                        )
+                    } else {
+                        ProfileCompactComponent.NavigationMenuAction(
+                            res = Res.drawable.ic_settings,
+                            onClick = { onAction(UserProfileAction.OnClickSettings) }
+                        )
+                    }
+
                 },
                 modifier = Modifier.fillMaxWidth()
             )
-        }
-    }
-
-    @Composable
-    fun ContentGroup(
-        content: UserProfileUiState.Content,
-        onAction: (UserProfileAction) -> Unit
-    ) {
-        if (content.destination == ProfileDestination.Posts) {
-            PostsContent(content, onAction)
-        } else {
-            AboutContent(content, onAction)
         }
     }
 

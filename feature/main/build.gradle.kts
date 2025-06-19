@@ -36,7 +36,7 @@ kotlin {
             implementation(projects.core.utils)
 
             implementation(projects.feature.profile)
-            implementation(projects.feature.wellbeing)
+            implementation(projects.feature.health)
 
             implementation(libs.bundles.feature.core)
         }

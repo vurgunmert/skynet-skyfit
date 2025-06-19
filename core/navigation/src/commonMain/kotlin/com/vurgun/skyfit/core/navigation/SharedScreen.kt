@@ -63,6 +63,12 @@ sealed class SharedScreen(open val key: String) : ScreenProvider {
     data class UserChat(val participantId: Int) :
         SharedScreen("conversations:chat:$participantId")
 
+    data class ChatWithTrainer(val trainerId: Int) :
+        SharedScreen("conversations:chat:with-trainer:$trainerId")
+
+    data class ChatWithFacility(val facilityId: Int) :
+        SharedScreen("conversations:chat:with-facility:$facilityId")
+
     // Posture Analysis
     data object PostureAnalysis : SharedScreen("posture_analysis")
 

@@ -50,11 +50,31 @@ fun DashboardCompact(viewModel: DashboardViewModel) {
 
         CollectEffect(viewModel.effect) { effect ->
             when (effect) {
-                DashboardUiEffect.NavigateToHome -> dashboardNavigator.replace(SharedScreen.Home)
-                DashboardUiEffect.NavigateToExplore -> dashboardNavigator.replace(SharedScreen.Explore)
-                DashboardUiEffect.NavigateToSocial -> dashboardNavigator.replace(SharedScreen.Social)
-                DashboardUiEffect.NavigateToNutrition -> dashboardNavigator.replace(SharedScreen.Nutrition)
-                DashboardUiEffect.NavigateToProfile -> dashboardNavigator.replace(SharedScreen.Profile)
+                DashboardUiEffect.NavigateToHome -> {
+                    if (dashboardNavigator.lastItem.key != SharedScreen.Home.key) {
+                        dashboardNavigator.replace(SharedScreen.Home)
+                    }
+                }
+                DashboardUiEffect.NavigateToExplore ->{
+                    if (dashboardNavigator.lastItem.key != SharedScreen.Explore.key) {
+                        dashboardNavigator.replace(SharedScreen.Explore)
+                    }
+                }
+                DashboardUiEffect.NavigateToSocial -> {
+                    if (dashboardNavigator.lastItem.key != SharedScreen.Social.key) {
+                        dashboardNavigator.replace(SharedScreen.Social)
+                    }
+                }
+                DashboardUiEffect.NavigateToNutrition -> {
+                    if (dashboardNavigator.lastItem.key != SharedScreen.Nutrition.key) {
+                        dashboardNavigator.replace(SharedScreen.Nutrition)
+                    }
+                }
+                DashboardUiEffect.NavigateToProfile -> {
+                    if (dashboardNavigator.lastItem.key != SharedScreen.Profile.key) {
+                        dashboardNavigator.replace(SharedScreen.Profile)
+                    }
+                }
                 DashboardUiEffect.ShowChatBot -> mainNavigator.push(SharedScreen.ChatBot)
                 DashboardUiEffect.ShowConversations -> mainNavigator.push(SharedScreen.Conversations)
                 DashboardUiEffect.ShowNotifications -> mainNavigator.push(SharedScreen.Notifications)
@@ -125,28 +145,28 @@ private object DashboardCompactComponent {
                     BlockTouchSpacer(width = 16.dp)
 
                     BottomBarItem(
-                        selected = activeScreen == SharedScreen.Home,
+                        selected = activeScreen.key == SharedScreen.Home.key,
                         selectedIcon = Res.drawable.ic_home_fill,
                         unselectedIcon = Res.drawable.ic_home,
                         onClick = onClickHome
                     )
 
                     BottomBarItem(
-                        selected = activeScreen == SharedScreen.Explore,
+                        selected = activeScreen.key == SharedScreen.Explore.key,
                         selectedIcon = Res.drawable.ic_barbell_fill,
                         unselectedIcon = Res.drawable.ic_barbell,
                         onClick = onClickExplore
                     )
 
                     BottomBarItem(
-                        selected = activeScreen == SharedScreen.Social,
+                        selected = activeScreen.key == SharedScreen.Social.key,
                         selectedIcon = Res.drawable.ic_plus,
                         unselectedIcon = Res.drawable.ic_search,
                         onClick = onClickSocial
                     )
 
                     BottomBarItem(
-                        selected = activeScreen == SharedScreen.Profile,
+                        selected = activeScreen.key == SharedScreen.Profile.key,
                         selectedIcon = Res.drawable.ic_profile_fill,
                         unselectedIcon = Res.drawable.ic_profile,
                         onClick = onClickProfile

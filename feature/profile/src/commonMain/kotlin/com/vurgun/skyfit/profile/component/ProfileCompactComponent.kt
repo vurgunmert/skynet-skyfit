@@ -13,12 +13,22 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.unit.dp
+import com.vurgun.skyfit.core.data.v1.domain.lesson.model.LessonSessionItemViewData
+import com.vurgun.skyfit.core.ui.components.button.SkyButton
+import com.vurgun.skyfit.core.ui.components.button.SkyButtonSize
 import com.vurgun.skyfit.core.ui.components.divider.VerticalDivider
+import com.vurgun.skyfit.core.ui.components.event.AvailableActivityCalendarEventItem
+import com.vurgun.skyfit.core.ui.components.event.LessonSessionColumn
+import com.vurgun.skyfit.core.ui.components.event.NoLessonOnSelectedDaysEventItem
 import com.vurgun.skyfit.core.ui.components.icon.SkyIcon
 import com.vurgun.skyfit.core.ui.components.icon.SkyIconSize
 import com.vurgun.skyfit.core.ui.components.image.NetworkImage
+import com.vurgun.skyfit.core.ui.components.schedule.weekly.CalendarWeekDaySelector
+import com.vurgun.skyfit.core.ui.components.schedule.weekly.CalendarWeekDaySelectorController
+import com.vurgun.skyfit.core.ui.components.schedule.weekly.CalendarWeekDaySelectorState
 import com.vurgun.skyfit.core.ui.components.text.SkyText
 import com.vurgun.skyfit.core.ui.components.text.TextStyleType
+import com.vurgun.skyfit.core.ui.styling.SkyFitAsset
 import com.vurgun.skyfit.core.ui.styling.SkyFitColor
 import com.vurgun.skyfit.core.ui.styling.SkyFitTypography
 import com.vurgun.skyfit.profile.model.ProfileDestination
@@ -26,9 +36,8 @@ import com.vurgun.skyfit.profile.user.model.UserProfileAction
 import dev.chrisbanes.haze.*
 import org.jetbrains.compose.resources.DrawableResource
 import org.jetbrains.compose.resources.painterResource
-import skyfit.core.ui.generated.resources.Res
-import skyfit.core.ui.generated.resources.ic_plus
-import skyfit.core.ui.generated.resources.ic_settings
+import org.jetbrains.compose.resources.stringResource
+import skyfit.core.ui.generated.resources.*
 
 internal object ProfileCompactComponent {
 
@@ -182,7 +191,7 @@ internal object ProfileCompactComponent {
             action = {
                 val postsSelected = selectedTab == ProfileDestination.Posts
                 val action = when (postsSelected) {
-                    true -> UserProfileAction.ClickCreatePost
+                    true -> UserProfileAction.OnClickNewPost
                     false -> UserProfileAction.OnClickSettings
                 }
 
@@ -228,7 +237,7 @@ internal object ProfileCompactComponent {
             action = {
                 val postsSelected = selectedTab == ProfileDestination.Posts
                 val action = when (postsSelected) {
-                    true -> UserProfileAction.ClickCreatePost
+                    true -> UserProfileAction.OnClickNewPost
                     false -> UserProfileAction.OnClickSettings
                 }
 
@@ -259,26 +268,6 @@ internal object ProfileCompactComponent {
             },
             modifier = modifier
         )
-    }
-
-    @Composable
-    fun TrainerOwnerNavigationMenu() {
-
-    }
-
-    @Composable
-    fun TrainerVisitorNavigationMenu() {
-
-    }
-
-    @Composable
-    fun FacilityOwnerNavigationMenu() {
-
-    }
-
-    @Composable
-    fun FacilityVisitorNavigationMenu() {
-
     }
 
     @Composable
@@ -376,4 +365,135 @@ internal object ProfileCompactComponent {
             }
         }
     }
+
+    //region Lessons
+    @Composable
+    fun WeeklyLessonScheduleGroup(
+        calendarUiState: CalendarWeekDaySelectorState,
+        calendarViewModel: CalendarWeekDaySelectorController,
+        lessons: List<LessonSessionItemViewData>,
+        goToVisitCalendar: () -> Unit,
+        modifier: Modifier = Modifier,
+    ) {
+        Column(
+            modifier.fillMaxWidth()
+                .clip(RoundedCornerShape(20.dp))
+                .background(SkyFitColor.background.fillTransparent)
+                .padding(16.dp),
+            verticalArrangement = Arrangement.spacedBy(16.dp)
+        ) {
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.spacedBy(8.dp)
+            ) {
+                Icon(
+                    painter = SkyFitAsset.getPainter(SkyFitAsset.SkyFitIcon.EXERCISES.id),
+                    modifier = Modifier.size(24.dp),
+                    contentDescription = null,
+                    tint = SkyFitColor.icon.default
+                )
+
+                Text(
+                    text = stringResource(Res.string.lessons_label),
+                    style = SkyFitTypography.bodyLargeSemibold,
+                    modifier = Modifier.weight(1f)
+                )
+
+                Text(
+                    text = stringResource(Res.string.show_all_action),
+                    style = SkyFitTypography.bodyXSmall,
+                    color = SkyFitColor.border.secondaryButton,
+                    modifier = Modifier.clickable(onClick = goToVisitCalendar)
+                )
+            }
+
+            CalendarWeekDaySelector(
+                daysOfWeek = calendarUiState.weekDays,
+                onDaySelected = calendarViewModel::setSelectedDate,
+                onPreviousWeek = calendarViewModel::loadPreviousWeek,
+                onNextWeek = calendarViewModel::loadNextWeek,
+                modifier = Modifier.fillMaxWidth()
+            )
+
+            if (lessons.isEmpty()) {
+                NoLessonOnSelectedDaysEventItem()
+            } else {
+                Column(
+                    modifier = Modifier.fillMaxWidth(),
+                    verticalArrangement = Arrangement.spacedBy(16.dp)
+                ) {
+                    lessons.forEach { item ->
+                        AvailableActivityCalendarEventItem(
+                            title = item.title,
+                            iconId = item.iconId,
+                            date = item.date.toString(),
+                            timePeriod = item.hours.toString(),
+                            location = item.location.toString(),
+                            trainer = item.trainer.toString(),
+                            capacity = item.capacityRatio.toString(),
+                            note = item.note
+                        )
+                    }
+                }
+            }
+        }
+    }
+
+    @Composable
+    fun LessonSchedule(
+        lessons: List<LessonSessionItemViewData>,
+        goToLessons: () -> Unit,
+        modifier: Modifier = Modifier,
+    ) {
+        LessonSessionColumn(
+            lessons = lessons,
+            onClickShowAll = goToLessons,
+            onClickItem = { goToLessons() },
+            modifier = modifier
+        )
+    }
+
+    @Composable
+    fun NoScheduledLessonsCard(onClickAdd: (() -> Unit)? = null) {
+        Column(Modifier.fillMaxWidth()) {
+
+            SkyText(
+                text = stringResource(Res.string.lessons_label),
+                styleType = TextStyleType.BodyLargeSemibold
+            )
+            Spacer(Modifier.height(16.dp))
+
+            Column(
+                Modifier
+                    .fillMaxWidth()
+                    .background(SkyFitColor.background.surfaceSecondary, RoundedCornerShape(16.dp))
+                    .padding(vertical = 34.dp, horizontal = 24.dp),
+                verticalArrangement = Arrangement.Center,
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+                SkyText(
+                    text = "📅 Henüz yaklaşan bir dersiniz yok.",
+                    styleType = TextStyleType.BodyLargeSemibold,
+                    color = SkyFitColor.text.default
+                )
+
+                onClickAdd?.let { action ->
+                    Spacer(Modifier.height(8.dp))
+                    SkyText(
+                        text = "Yeni bir ders oluşturmak için “Ders Ekle” butonunu kullanabilirsiniz.",
+                        styleType = TextStyleType.BodyMediumRegular,
+                        color = SkyFitColor.text.secondary,
+                        modifier = Modifier.fillMaxWidth()
+                    )
+                    Spacer(Modifier.height(12.dp))
+                    SkyButton(
+                        label = stringResource(Res.string.add_lesson_action),
+                        size = SkyButtonSize.Medium,
+                        onClick = action,
+                    )
+                }
+            }
+        }
+    }
+    //endregion Lessons
 }

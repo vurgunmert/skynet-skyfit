@@ -29,6 +29,7 @@ import com.vurgun.skyfit.core.ui.components.text.BodyLargeSemiboldText
 import com.vurgun.skyfit.core.ui.screen.ErrorScreen
 import com.vurgun.skyfit.core.ui.styling.SkyFitColor
 import com.vurgun.skyfit.core.ui.utils.CollectEffect
+import com.vurgun.skyfit.profile.component.ProfileCompactComponent
 import com.vurgun.skyfit.profile.facility.screen.FacilityProfileCompactComponent
 import org.jetbrains.compose.resources.stringResource
 import skyfit.core.ui.generated.resources.Res
@@ -62,7 +63,7 @@ class FacilityProfileVisitorScreen(private val facilityId: Int) : Screen {
         }
 
         LaunchedEffect(facilityId) {
-            viewModel.loadProfile(facilityId)
+            viewModel.loadData(facilityId)
         }
 
         MobileFacilityProfileVisitorScreen(
@@ -157,7 +158,7 @@ private fun FacilityProfileVisitorContent(
                     onClickMessage = { onAction(FacilityProfileVisitorAction.NavigateToChat) }
                 )
 
-                FacilityProfileCompactComponent.MobileFacilityProfileVisitor_Lessons(
+                ProfileCompactComponent.WeeklyLessonScheduleGroup(
                     calendarUiState = calendarUiState,
                     calendarViewModel = weekDaySelectorController,
                     lessons = content.lessons,

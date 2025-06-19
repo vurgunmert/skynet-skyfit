@@ -37,13 +37,14 @@ import com.vurgun.skyfit.core.ui.utils.CollectEffect
 import com.vurgun.skyfit.core.ui.utils.LocalOverlayController
 import com.vurgun.skyfit.core.utils.rememberAccount
 import com.vurgun.main.component.ScreenOverlay
+import com.vurgun.skyfit.core.navigation.findRootNavigator
 import org.jetbrains.compose.resources.DrawableResource
 import skyfit.core.ui.generated.resources.*
 
 @Composable
 fun DashboardExpanded(viewModel: DashboardViewModel) {
 
-    val mainNavigator = LocalNavigator.currentOrThrow
+    val mainNavigator = LocalNavigator.currentOrThrow.findRootNavigator()
     val overlayNavigation by viewModel.overlayNavigation.collectAsState()
     val homeScreen = rememberScreen(SharedScreen.Home)
 
@@ -53,12 +54,36 @@ fun DashboardExpanded(viewModel: DashboardViewModel) {
 
             CollectEffect(viewModel.effect) { effect ->
                 when (effect) {
-                    DashboardUiEffect.NavigateToHome -> dashboardNavigator.replace(SharedScreen.Home)
-                    DashboardUiEffect.NavigateToExplore -> dashboardNavigator.replace(SharedScreen.Explore)
-                    DashboardUiEffect.NavigateToSocial -> dashboardNavigator.replace(SharedScreen.Social)
-                    DashboardUiEffect.NavigateToNutrition -> dashboardNavigator.replace(SharedScreen.Nutrition)
-                    DashboardUiEffect.NavigateToProfile -> dashboardNavigator.replace(SharedScreen.Profile)
-                    DashboardUiEffect.NavigateToSettings -> dashboardNavigator.replace(SharedScreen.Settings)
+                    DashboardUiEffect.NavigateToHome -> {
+                        if (dashboardNavigator.lastItem.key != SharedScreen.Home.key) {
+                            dashboardNavigator.replace(SharedScreen.Home)
+                        }
+                    }
+                    DashboardUiEffect.NavigateToExplore ->{
+                        if (dashboardNavigator.lastItem.key != SharedScreen.Explore.key) {
+                            dashboardNavigator.replace(SharedScreen.Explore)
+                        }
+                    }
+                    DashboardUiEffect.NavigateToSocial -> {
+                        if (dashboardNavigator.lastItem.key != SharedScreen.Social.key) {
+                            dashboardNavigator.replace(SharedScreen.Social)
+                        }
+                    }
+                    DashboardUiEffect.NavigateToNutrition -> {
+                        if (dashboardNavigator.lastItem.key != SharedScreen.Nutrition.key) {
+                            dashboardNavigator.replace(SharedScreen.Nutrition)
+                        }
+                    }
+                    DashboardUiEffect.NavigateToProfile -> {
+                        if (dashboardNavigator.lastItem.key != SharedScreen.Profile.key) {
+                            dashboardNavigator.replace(SharedScreen.Profile)
+                        }
+                    }
+                    DashboardUiEffect.NavigateToSettings -> {
+                        if (dashboardNavigator.lastItem.key != SharedScreen.Settings.key) {
+                            dashboardNavigator.replace(SharedScreen.Settings)
+                        }
+                    }
                     DashboardUiEffect.ShowChatBot -> dashboardNavigator.replace(SharedScreen.ChatBot)
                     else -> {
                     }

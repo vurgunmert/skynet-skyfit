@@ -18,10 +18,12 @@ import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.unit.dp
 import com.vurgun.skyfit.core.ui.styling.SkyFitColor
+import org.jetbrains.compose.resources.DrawableResource
 import org.jetbrains.compose.resources.painterResource
 import skyfit.core.ui.generated.resources.Res
-import skyfit.core.ui.generated.resources.ic_chevron_left
 import skyfit.core.ui.generated.resources.ic_app_logo
+import skyfit.core.ui.generated.resources.ic_chevron_left
+import skyfit.core.ui.generated.resources.ic_fiwe_logo_dark
 
 @Composable
 fun SkyFitIconButton(
@@ -89,6 +91,29 @@ fun PrimaryIconButton(
 }
 
 @Composable
+fun PrimaryIconButton(
+    res: DrawableResource = Res.drawable.ic_fiwe_logo_dark,
+    modifier: Modifier = Modifier.size(44.dp),
+    iconModifier: Modifier = Modifier.size(16.dp),
+    onClick: () -> Unit = {}
+) {
+    Box(
+        modifier
+            .clip(CircleShape)
+            .clickable(onClick = onClick)
+            .background(SkyFitColor.specialty.buttonBgRest),
+        contentAlignment = Alignment.Center
+    ) {
+        Icon(
+            painter = painterResource(res),
+            contentDescription = "Button",
+            tint = SkyFitColor.icon.inverseSecondary,
+            modifier =iconModifier
+        )
+    }
+}
+
+@Composable
 fun SecondaryIconButton(
     painter: Painter = painterResource(Res.drawable.ic_app_logo),
     modifier: Modifier = Modifier.size(44.dp),
@@ -106,6 +131,29 @@ fun SecondaryIconButton(
             contentDescription = "Button",
             tint = SkyFitColor.icon.default,
             modifier = Modifier.size(16.dp)
+        )
+    }
+}
+
+@Composable
+fun SecondaryIconButton(
+    res: DrawableResource = Res.drawable.ic_fiwe_logo_dark,
+    modifier: Modifier = Modifier.size(44.dp),
+    iconModifier: Modifier = Modifier.size(16.dp),
+    onClick: (() -> Unit)? = null
+) {
+    Box(
+        modifier
+            .background(SkyFitColor.specialty.secondaryButtonRest, shape = CircleShape)
+            .border(1.dp, SkyFitColor.specialty.buttonBgRest, CircleShape)
+            .clickable(enabled = onClick != null, onClick = { onClick?.invoke() }),
+        contentAlignment = Alignment.Center
+    ) {
+        Icon(
+            painter = painterResource(res),
+            contentDescription = "Button",
+            tint = SkyFitColor.icon.default,
+            modifier = iconModifier
         )
     }
 }

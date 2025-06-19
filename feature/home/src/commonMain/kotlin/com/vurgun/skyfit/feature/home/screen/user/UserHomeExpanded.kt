@@ -216,7 +216,7 @@ private object UserHomeExpandedComponent {
                         shape = RoundedCornerShape(16.dp)
                     )
             ) {
-                UserHomeCompactAppointmentsGroup(it, onClickShowAll = {
+                UserUpcomingAppointmentsGroup(it, onClickShowAll = {
                     onAction(UserHomeAction.OnClickAppointments)
                 })
             }

@@ -27,11 +27,14 @@ import com.vurgun.skyfit.core.ui.components.schedule.monthly.EventCalendarSelect
 import com.vurgun.skyfit.core.ui.components.schedule.monthly.rememberEventCalendarController
 import com.vurgun.skyfit.core.ui.components.special.SkyFitMobileScaffold
 import com.vurgun.skyfit.core.ui.components.special.CompactTopBar
+import com.vurgun.skyfit.core.ui.components.special.ExpandedTopBar
 import com.vurgun.skyfit.core.ui.components.text.SkyText
 import com.vurgun.skyfit.core.ui.components.text.TextStyleType
 import com.vurgun.skyfit.core.ui.screen.ErrorScreen
 import com.vurgun.skyfit.core.ui.styling.SkyFitAsset
 import com.vurgun.skyfit.core.ui.utils.CollectEffect
+import com.vurgun.skyfit.core.ui.utils.LocalWindowSize
+import com.vurgun.skyfit.core.ui.utils.WindowSize
 import kotlinx.datetime.LocalDate
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
@@ -47,7 +50,10 @@ class UserActivityCalendarScreen(private val selectedDate: LocalDate? = null) : 
 
         CollectEffect(viewModel.effect) { effect ->
             when (effect) {
-                UserActivityCalendarEffect.NavigateToBack -> navigator.pop()
+                UserActivityCalendarEffect.NavigateToBack -> {
+                    navigator.pop()
+                }
+
                 is UserActivityCalendarEffect.NavigateToCalendarSearch -> {
                     navigator.push(UserActivityCalendarSearchScreen(effect.date))
                 }
@@ -85,6 +91,7 @@ private fun MobileUserActivityCalendarScreen(
     val completedDays by viewModel.completedDays.collectAsState()
     val selectedDay by viewModel.selectedDate.collectAsState()
     val events by viewModel.filteredEvents.collectAsState()
+    val windowSize = LocalWindowSize.current
 
     val controller = rememberEventCalendarController(
         initialSelectedDate = selectedDay,
@@ -98,10 +105,17 @@ private fun MobileUserActivityCalendarScreen(
 
     SkyFitMobileScaffold(
         topBar = {
-            CompactTopBar(
-                title = stringResource(Res.string.calendar_label),
-                onClickBack = { onAction(UserActivityCalendarAction.OnClickBack) }
-            )
+            if (windowSize == WindowSize.EXPANDED) {
+                ExpandedTopBar(
+                    title = stringResource(Res.string.calendar_label),
+                    onClickBack = { onAction(UserActivityCalendarAction.OnClickBack) }
+                )
+            } else {
+                CompactTopBar(
+                    title = stringResource(Res.string.calendar_label),
+                    onClickBack = { onAction(UserActivityCalendarAction.OnClickBack) }
+                )
+            }
         }
     ) {
         Column(

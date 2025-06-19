@@ -1,51 +1,44 @@
 package com.vurgun.skyfit.profile.facility.screen
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Icon
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.unit.dp
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
 import com.vurgun.skyfit.core.data.v1.domain.facility.model.FacilityProfile
-import com.vurgun.skyfit.core.data.v1.domain.lesson.model.LessonSessionItemViewData
 import com.vurgun.skyfit.core.data.v1.domain.profile.PhotoGalleryStackViewData
 import com.vurgun.skyfit.core.data.v1.domain.trainer.model.FacilityTrainerProfile
 import com.vurgun.skyfit.core.navigation.SharedScreen
+import com.vurgun.skyfit.core.navigation.SharedScreen.*
 import com.vurgun.skyfit.core.navigation.findRootNavigator
 import com.vurgun.skyfit.core.navigation.push
-import com.vurgun.skyfit.core.ui.components.button.SkyButton
-import com.vurgun.skyfit.core.ui.components.button.SkyButtonSize
 import com.vurgun.skyfit.core.ui.components.button.SkyFitPrimaryCircularBackButton
 import com.vurgun.skyfit.core.ui.components.button.SkyFitSecondaryIconButton
 import com.vurgun.skyfit.core.ui.components.divider.VerticalDivider
-import com.vurgun.skyfit.core.ui.components.event.AvailableActivityCalendarEventItem
-import com.vurgun.skyfit.core.ui.components.event.LessonSessionColumn
-import com.vurgun.skyfit.core.ui.components.event.NoLessonOnSelectedDaysEventItem
 import com.vurgun.skyfit.core.ui.components.icon.SkyIcon
 import com.vurgun.skyfit.core.ui.components.icon.SkyIconSize
 import com.vurgun.skyfit.core.ui.components.loader.FullScreenLoaderContent
 import com.vurgun.skyfit.core.ui.components.profile.*
-import com.vurgun.skyfit.core.ui.components.schedule.weekly.CalendarWeekDaySelector
-import com.vurgun.skyfit.core.ui.components.schedule.weekly.CalendarWeekDaySelectorController
-import com.vurgun.skyfit.core.ui.components.schedule.weekly.CalendarWeekDaySelectorState
+import com.vurgun.skyfit.core.ui.components.schedule.weekly.rememberCalendarWeekDaySelectorController
+import com.vurgun.skyfit.core.ui.components.schedule.weekly.rememberWeekDaySelectorState
 import com.vurgun.skyfit.core.ui.components.special.*
 import com.vurgun.skyfit.core.ui.components.text.SkyText
 import com.vurgun.skyfit.core.ui.components.text.TextStyleType
 import com.vurgun.skyfit.core.ui.screen.ErrorScreen
-import com.vurgun.skyfit.core.ui.styling.SkyFitAsset
 import com.vurgun.skyfit.core.ui.styling.SkyFitColor
 import com.vurgun.skyfit.core.ui.styling.SkyFitTypography
 import com.vurgun.skyfit.core.ui.utils.CollectEffect
 import com.vurgun.skyfit.profile.component.ProfileCompactComponent
+import com.vurgun.skyfit.profile.model.ProfileDestination
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
 import skyfit.core.ui.generated.resources.*
@@ -55,53 +48,61 @@ internal fun FacilityProfileCompact(
     viewModel: FacilityProfileViewModel
 ) {
     val appNavigator = LocalNavigator.currentOrThrow.findRootNavigator()
-    val dashboardNavigator = LocalNavigator.currentOrThrow
+    val localNavigator = LocalNavigator.currentOrThrow
     val uiState by viewModel.uiState.collectAsState()
 
     CollectEffect(viewModel.effect) { effect ->
         when (effect) {
-            FacilityProfileOwnerEffect.NavigateBack -> {
-                dashboardNavigator.pop()
+            FacilityProfileUiEffect.NavigateBack -> {
+                localNavigator.pop()
             }
 
-            FacilityProfileOwnerEffect.NavigateToCreatePost -> {
+            FacilityProfileUiEffect.NavigateToCreatePost -> {
                 appNavigator.push(SharedScreen.CreatePost)
             }
 
-            FacilityProfileOwnerEffect.NavigateToGallery -> {}
-            FacilityProfileOwnerEffect.NavigateToLessonListing -> {
+            FacilityProfileUiEffect.NavigateToGallery -> {}
+            FacilityProfileUiEffect.NavigateToLessonListing -> {
                 appNavigator.push(SharedScreen.FacilityManageLessons)
             }
 
-            FacilityProfileOwnerEffect.NavigateToSettings -> {
+            FacilityProfileUiEffect.NavigateToSettings -> {
                 appNavigator.push(SharedScreen.Settings)
             }
 
-            FacilityProfileOwnerEffect.NavigateToTrainers -> {
+            FacilityProfileUiEffect.NavigateToTrainers -> {
                 appNavigator.push(SharedScreen.ExploreTrainers)
             }
 
-            is FacilityProfileOwnerEffect.NavigateToVisitTrainer -> {
-                appNavigator.push(SharedScreen.TrainerProfileVisitor(effect.trainerId))
+            is FacilityProfileUiEffect.NavigateToVisitTrainer -> {
+                appNavigator.push(TrainerProfileVisitor(effect.trainerId))
+            }
+
+            is FacilityProfileUiEffect.NavigateToFacilityChat -> {
+                appNavigator.push(SharedScreen.ChatWithFacility(effect.facilityId))
+            }
+
+            is FacilityProfileUiEffect.NavigateToFacilitySchedule -> {
+                appNavigator.push(SharedScreen.FacilitySchedule(effect.facilityId))
             }
         }
     }
 
     when (uiState) {
-        is FacilityProfileUiState.Loading -> FullScreenLoaderContent()
+        is FacilityProfileUiState.Loading -> {
+            FullScreenLoaderContent()
+        }
+
         is FacilityProfileUiState.Error -> {
             val message = (uiState as FacilityProfileUiState.Error).message
             ErrorScreen(
                 message = message,
-                onConfirm = { viewModel.onAction(FacilityProfileAction.NavigateBack) })
+                onConfirm = { viewModel.onAction(FacilityProfileUiAction.NavigateBack) })
         }
 
         is FacilityProfileUiState.Content -> {
             val content = (uiState as FacilityProfileUiState.Content)
-            FacilityProfileCompactComponent.Content(
-                content = content,
-                onAction = viewModel::onAction
-            )
+            FacilityProfileCompactComponent.Content(content, viewModel::onAction)
         }
     }
 }
@@ -112,7 +113,7 @@ internal object FacilityProfileCompactComponent {
     @Composable
     fun Content(
         content: FacilityProfileUiState.Content,
-        onAction: (FacilityProfileAction) -> Unit
+        onAction: (FacilityProfileUiAction) -> Unit
     ) {
 
         ProfileCompactComponent.Layout(
@@ -125,54 +126,32 @@ internal object FacilityProfileCompactComponent {
                     verticalArrangement = Arrangement.spacedBy(16.dp)
                 ) {
                     ProfileCompactComponent.NavigationMenuWithAction(
-                        onDestinationChanged = { onAction(FacilityProfileAction.OnDestinationChanged(it)) },
+                        onDestinationChanged = { onAction(FacilityProfileUiAction.OnDestinationChanged(it)) },
                         destination = content.destination,
                         action = {
-                            ProfileCompactComponent.NavigationMenuAction(
-                                res = Res.drawable.ic_settings,
-                                onClick = { onAction(FacilityProfileAction.OnClickSettings) }
-                            )
+                            if (content.destination == ProfileDestination.Posts) {
+                                if (!content.isVisiting) {
+                                    ProfileCompactComponent.NavigationMenuAction(
+                                        res = Res.drawable.ic_plus,
+                                        onClick = { onAction(FacilityProfileUiAction.OnClickNewPost) }
+                                    )
+                                }
+                            } else {
+                                if (!content.isVisiting) {
+                                    ProfileCompactComponent.NavigationMenuAction(
+                                        res = Res.drawable.ic_settings,
+                                        onClick = { onAction(FacilityProfileUiAction.OnClickSettings) }
+                                    )
+                                }
+                            }
                         },
                         modifier = Modifier.fillMaxWidth()
                     )
 
-//                ProfileCompactComponent.FacilityOwnerNavigationMenu(
-//                    postsSelected = content.postsVisible,
-//                    onClickAbout = { onAction(FacilityProfileOwnerAction.TogglePostVisibility(false)) },
-//                    onClickPosts = { }, //onAction(FacilityProfileOwnerAction.TogglePostVisibility(true))
-//                    onClickSettings = { onAction(FacilityProfileOwnerAction.NavigateToSettings) },
-//                    onClickNewPost = { onAction(FacilityProfileOwnerAction.NavigateToCreatePost) },
-//                )
-
-                    if (content.postsVisible) {
-                        SocialQuickPostInputCard(modifier = Modifier.padding(horizontal = 16.dp), onClickSend = {})
-
-                        content.posts.forEach { post ->
-                            SocialPostCard(
-                                data = post,
-                                modifier = Modifier.padding(horizontal = 16.dp),
-                                onClick = {},
-                                onClickComment = {},
-                                onClickLike = {},
-                                onClickShare = {}
-                            )
-                        }
+                    if (content.destination == ProfileDestination.Posts) {
+                        PostsContent(content, onAction)
                     } else {
-                        LessonSchedule(
-                            lessons = content.lessons,
-                            goToLessons = { onAction(FacilityProfileAction.NavigateToLessonListing) },
-                            modifier = Modifier
-                        )
-
-//                        MobileFacilityProfilePhotoGallerySection(
-//                            galleryStackViewData, viewMode,
-//                            goToPhotoGallery = goToPhotoGallery,
-//                        )
-
-                        TrainerCards(
-                            trainers = content.trainers,
-                            goToVisitTrainerProfile = { onAction(FacilityProfileAction.NavigateToTrainers) },
-                        )
+                        AboutContent(content, onAction)
                     }
 
                     Spacer(Modifier.height(124.dp))
@@ -242,101 +221,6 @@ internal object FacilityProfileCompactComponent {
     }
 //endregion Trainers
 
-    //region Lessons
-    @Composable
-    fun LessonSchedule(
-        lessons: List<LessonSessionItemViewData>,
-        goToLessons: () -> Unit,
-        modifier: Modifier = Modifier,
-    ) {
-        if (lessons.isEmpty()) {
-            MobileFacilityProfileOwner_LessonsEmptyCard(
-                onClickAdd = goToLessons
-            )
-        } else {
-            LessonSessionColumn(
-                lessons = lessons,
-                onClickShowAll = goToLessons,
-                onClickItem = { goToLessons() },
-                modifier = modifier
-            )
-        }
-    }
-
-    @Composable
-    fun MobileFacilityProfileVisitor_Lessons(
-        calendarUiState: CalendarWeekDaySelectorState,
-        calendarViewModel: CalendarWeekDaySelectorController,
-        lessons: List<LessonSessionItemViewData>,
-        goToVisitCalendar: () -> Unit,
-        modifier: Modifier = Modifier,
-    ) {
-        Column(
-            modifier.fillMaxWidth()
-                .clip(RoundedCornerShape(20.dp))
-                .background(SkyFitColor.background.fillTransparent)
-                .clickable(onClick = goToVisitCalendar)
-                .padding(16.dp),
-            verticalArrangement = Arrangement.spacedBy(16.dp)
-        ) {
-            Row(
-                verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.spacedBy(8.dp)
-            ) {
-                Icon(
-                    painter = SkyFitAsset.getPainter(SkyFitAsset.SkyFitIcon.EXERCISES.id),
-                    modifier = Modifier.size(24.dp),
-                    contentDescription = null,
-                    tint = SkyFitColor.icon.default
-                )
-
-                Text(
-                    text = stringResource(Res.string.lessons_label),
-                    style = SkyFitTypography.bodyLargeSemibold,
-                    modifier = Modifier.weight(1f)
-                )
-
-                Text(
-                    text = stringResource(Res.string.show_all_action),
-                    style = SkyFitTypography.bodyXSmall,
-                    color = SkyFitColor.border.secondaryButton,
-                    modifier = Modifier.clickable(onClick = goToVisitCalendar)
-                )
-            }
-
-            CalendarWeekDaySelector(
-                daysOfWeek = calendarUiState.weekDays,
-                onDaySelected = calendarViewModel::setSelectedDate,
-                onPreviousWeek = calendarViewModel::loadPreviousWeek,
-                onNextWeek = calendarViewModel::loadNextWeek,
-                modifier = Modifier.fillMaxWidth()
-            )
-
-            if (lessons.isEmpty()) {
-                NoLessonOnSelectedDaysEventItem()
-            } else {
-                Column(
-                    modifier = Modifier.fillMaxWidth(),
-                    verticalArrangement = Arrangement.spacedBy(16.dp)
-                ) {
-                    lessons.forEach { item ->
-                        AvailableActivityCalendarEventItem(
-                            title = item.title,
-                            iconId = item.iconId,
-                            date = item.date.toString(),
-                            timePeriod = item.hours.toString(),
-                            location = item.location.toString(),
-                            trainer = item.trainer.toString(),
-                            capacity = item.capacityRatio.toString(),
-                            note = item.note
-                        )
-                    }
-                }
-            }
-        }
-    }
-    //endregion Lessons
-
     //region PhotoGallery
     @Composable
     fun MobileFacilityProfileOwner_PhotoGallery(
@@ -380,7 +264,7 @@ internal object FacilityProfileCompactComponent {
     @Composable
     fun Header(
         content: FacilityProfileUiState.Content,
-        onAction: (FacilityProfileAction) -> Unit
+        onAction: (FacilityProfileUiAction) -> Unit
     ) {
         val profile = content.profile
 
@@ -449,6 +333,40 @@ internal object FacilityProfileCompactComponent {
                         styleType = TextStyleType.BodySmallSemibold,
                         modifier = Modifier.weight(1f).padding(horizontal = 4.dp)
                     )
+                }
+
+                if (content.isVisiting) {
+                    Spacer(modifier = Modifier.height(16.dp))
+
+                    FeatureVisible(true) {
+                        SkyFitButtonComponent(
+                            modifier = Modifier.fillMaxWidth(),
+                            text = stringResource(if (content.isVisitorFollowing) Res.string.unfollow_action else Res.string.follow_action),
+                            onClick = { onAction(FacilityProfileUiAction.OnToggleFollow) },
+                            variant = ButtonVariant.Primary,
+                            size = ButtonSize.Large
+                        )
+                    }
+
+                    Spacer(modifier = Modifier.height(16.dp))
+
+                    Row(verticalAlignment = Alignment.CenterVertically) {
+                        SkyFitButtonComponent(
+                            modifier = Modifier.weight(1f),
+                            text = stringResource(Res.string.appointment_book_action),
+                            onClick = { onAction(FacilityProfileUiAction.OnClickShowSchedule) },
+                            variant = ButtonVariant.Secondary,
+                            size = ButtonSize.Large,
+                            leftIconPainter = painterResource(Res.drawable.ic_calendar_dots)
+                        )
+                        if (content.isVisitorFollowing) {
+                            Spacer(modifier = Modifier.width(10.dp))
+                            SkyFitSecondaryIconButton(
+                                painter = painterResource(Res.drawable.ic_send),
+                                modifier = Modifier.size(44.dp)
+                            )
+                        }
+                    }
                 }
             }
         )
@@ -568,42 +486,55 @@ internal object FacilityProfileCompactComponent {
     }
 
     @Composable
-    private fun MobileFacilityProfileOwner_LessonsEmptyCard(onClickAdd: () -> Unit) {
-        Column(Modifier.fillMaxWidth()) {
+    fun AboutContent(
+        content: FacilityProfileUiState.Content,
+        onAction: (FacilityProfileUiAction) -> Unit
+    ) {
+        val weekDaySelectorController = rememberCalendarWeekDaySelectorController()
+        val calendarUiState = rememberWeekDaySelectorState(weekDaySelectorController)
 
-            SkyText(
-                text = stringResource(Res.string.lessons_label),
-                styleType = TextStyleType.BodyLargeSemibold
+        if (content.isVisiting) {
+            LaunchedEffect(calendarUiState.selectedDate) {
+                onAction(FacilityProfileUiAction.ChangeDate(calendarUiState.selectedDate))
+            }
+        }
+
+        if (content.isVisiting) {
+            ProfileCompactComponent.WeeklyLessonScheduleGroup(
+                calendarUiState = calendarUiState,
+                calendarViewModel = weekDaySelectorController,
+                lessons = content.lessons,
+                goToVisitCalendar = { onAction(FacilityProfileUiAction.OnClickShowSchedule) },
+                modifier = Modifier.fillMaxWidth()
             )
-            Spacer(Modifier.height(16.dp))
-
-            Column(
-                Modifier
-                    .fillMaxWidth()
-                    .background(SkyFitColor.background.surfaceSecondary, RoundedCornerShape(16.dp))
-                    .padding(vertical = 34.dp, horizontal = 24.dp),
-                verticalArrangement = Arrangement.Center,
-                horizontalAlignment = Alignment.CenterHorizontally
-            ) {
-                SkyText(
-                    text = "📅 Henüz yaklaşan bir dersiniz yok.",
-                    styleType = TextStyleType.BodyLargeSemibold,
-                    color = SkyFitColor.text.default
-                )
-                Spacer(Modifier.height(8.dp))
-                SkyText(
-                    text = "Yeni bir ders oluşturmak için “Ders Ekle” butonunu kullanabilirsiniz.",
-                    styleType = TextStyleType.BodyMediumRegular,
-                    color = SkyFitColor.text.secondary,
-                    modifier = Modifier.fillMaxWidth()
-                )
-                Spacer(Modifier.height(12.dp))
-                SkyButton(
-                    label = stringResource(Res.string.add_lesson_action),
-                    size = SkyButtonSize.Medium,
-                    onClick = onClickAdd,
+        } else {
+            if (content.lessons.isEmpty()) {
+                ProfileCompactComponent.NoScheduledLessonsCard()
+            } else {
+                ProfileCompactComponent.LessonSchedule(
+                    lessons = content.lessons,
+                    goToLessons = { onAction(FacilityProfileUiAction.OnClickAllLessons) }
                 )
             }
+        }
+    }
+
+    @Composable
+    fun PostsContent(
+        content: FacilityProfileUiState.Content,
+        onAction: (FacilityProfileUiAction) -> Unit
+    ) {
+        SocialQuickPostInputCard(modifier = Modifier.padding(horizontal = 16.dp), onClickSend = {})
+
+        content.posts.forEach { post ->
+            SocialPostCard(
+                data = post,
+                modifier = Modifier.padding(horizontal = 16.dp),
+                onClick = {},
+                onClickComment = {},
+                onClickLike = {},
+                onClickShare = {}
+            )
         }
     }
 }

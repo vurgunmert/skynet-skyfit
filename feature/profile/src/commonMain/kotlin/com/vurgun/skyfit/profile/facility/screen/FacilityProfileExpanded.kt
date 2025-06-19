@@ -60,7 +60,7 @@ private object FacilityProfileExpandedComponent {
     @Composable
     fun Header(
         content: FacilityProfileUiState.Content,
-        onAction: (FacilityProfileAction) -> Unit,
+        onAction: (FacilityProfileUiAction) -> Unit,
         modifier: Modifier = Modifier
     ) {
         TodoBox("Header")
@@ -69,7 +69,7 @@ private object FacilityProfileExpandedComponent {
     @Composable
     fun AboutContent(
         content: FacilityProfileUiState.Content,
-        onAction: (FacilityProfileAction) -> Unit,
+        onAction: (FacilityProfileUiAction) -> Unit,
         modifier: Modifier = Modifier
     ) {
         TodoBox("AboutContent", modifier)
@@ -78,7 +78,7 @@ private object FacilityProfileExpandedComponent {
     @Composable
     fun PostsContent(
         content: FacilityProfileUiState.Content,
-        onAction: (FacilityProfileAction) -> Unit,
+        onAction: (FacilityProfileUiAction) -> Unit,
         modifier: Modifier = Modifier
     ) {
         TodoBox("PostsContent", modifier)
