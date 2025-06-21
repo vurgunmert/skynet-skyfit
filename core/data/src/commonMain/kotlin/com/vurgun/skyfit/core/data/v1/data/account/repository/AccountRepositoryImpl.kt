@@ -3,6 +3,7 @@ package com.vurgun.skyfit.core.data.v1.data.account.repository
 import com.vurgun.skyfit.core.data.storage.Storage
 import com.vurgun.skyfit.core.data.storage.TokenManager
 import com.vurgun.skyfit.core.data.v1.data.account.mapper.AccountDataMapper.toDomain
+import com.vurgun.skyfit.core.data.v1.data.account.model.ChangePasswordRequestDTO
 import com.vurgun.skyfit.core.data.v1.data.account.model.SelectActiveAccountTypeResponseDTO
 import com.vurgun.skyfit.core.data.v1.data.account.service.AccountApiService
 import com.vurgun.skyfit.core.data.v1.domain.account.model.Account
@@ -24,7 +25,7 @@ class AccountRepositoryImpl(
     private val dispatchers: DispatcherProvider,
     private val storage: Storage,
     private val tokenManager: TokenManager,
-): AccountRepository {
+) : AccountRepository {
 
     private suspend fun fetchDetails(): Result<Account> = ioResult(dispatchers) {
         tokenManager.waitUntilTokenReady()
@@ -55,7 +56,9 @@ class AccountRepositoryImpl(
 
                         val selectionResult = selectActiveAccountType(fallbackType.typeId)
                         if (selectionResult.isFailure) {
-                            return@withContext Result.failure(selectionResult.exceptionOrNull() ?: UnknownServerException)
+                            return@withContext Result.failure(
+                                selectionResult.exceptionOrNull() ?: UnknownServerException
+                            )
                         }
 
                         return@withContext fetchDetails()
@@ -77,39 +80,47 @@ class AccountRepositoryImpl(
         }
     }
 
-    override suspend fun selectActiveAccountType(typeId: Int): Result<SelectActiveAccountTypeResponseDTO> = withContext(dispatchers.io) {
-        runCatching {
-            val token = tokenManager.getTokenOrThrow()
+    override suspend fun selectActiveAccountType(typeId: Int): Result<SelectActiveAccountTypeResponseDTO> =
+        withContext(dispatchers.io) {
+            runCatching {
+                val token = tokenManager.getTokenOrThrow()
 
-            when (val response = apiService.selectUserType(typeId, token)) {
-                is ApiResult.Success -> {
-                    tokenManager.setToken(response.data.token)
-                    tokenManager.waitUntilTokenReady()
-                    response.data
+                when (val response = apiService.selectUserType(typeId, token)) {
+                    is ApiResult.Success -> {
+                        tokenManager.setToken(response.data.token)
+                        tokenManager.waitUntilTokenReady()
+                        response.data
+                    }
+
+                    is ApiResult.Error -> throw IllegalStateException(response.message)
+                    is ApiResult.Exception -> throw response.exception
                 }
-
-                is ApiResult.Error -> throw IllegalStateException(response.message)
-                is ApiResult.Exception -> throw response.exception
             }
         }
-    }
 
     override suspend fun getRegisteredAccountTypes(): Result<List<AccountType>> = ioResult(dispatchers) {
         val token = tokenManager.getTokenOrThrow()
         apiService.getAccountTypes(token).mapOrThrow { it.toDomain() }
     }
 
-    override suspend fun submitOnboarding(request: AccountOnboardingFormData, isAccountAddition: Boolean) = withContext(dispatchers.io) {
-        val token = tokenManager.getTokenOrNull() ?: return@withContext AccountOnboardingResult.Unauthorized
+    override suspend fun submitOnboarding(request: AccountOnboardingFormData, isAccountAddition: Boolean) =
+        withContext(dispatchers.io) {
+            val token = tokenManager.getTokenOrNull() ?: return@withContext AccountOnboardingResult.Unauthorized
 
-        val response = when {
-            isAccountAddition -> apiService.onboardingAdditionalAccount(request, token)
-            else -> apiService.onboardNewAccount(request, token)
+            val response = when {
+                isAccountAddition -> apiService.onboardingAdditionalAccount(request, token)
+                else -> apiService.onboardNewAccount(request, token)
+            }
+            when (response) {
+                is ApiResult.Error -> AccountOnboardingResult.Error(response.message)
+                is ApiResult.Exception -> AccountOnboardingResult.Error(response.exception.message)
+                is ApiResult.Success -> AccountOnboardingResult.Success
+            }
         }
-        when (response) {
-            is ApiResult.Error -> AccountOnboardingResult.Error(response.message)
-            is ApiResult.Exception -> AccountOnboardingResult.Error(response.exception.message)
-            is ApiResult.Success -> AccountOnboardingResult.Success
-        }
+
+    override suspend fun changePassword(old: String, new: String, again: String): Result<Unit> = ioResult(dispatchers) {
+        val token = tokenManager.getTokenOrThrow()
+        val body = ChangePasswordRequestDTO(old, new, again)
+        apiService.changePassword(body, token).mapOrThrow { }
     }
 }

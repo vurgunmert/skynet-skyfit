@@ -43,6 +43,7 @@ import com.kashif.cameraK.ui.CameraPreview
 import com.kashif.imagesaverplugin.ImageSaverConfig
 import com.kashif.imagesaverplugin.ImageSaverPlugin
 import com.kashif.imagesaverplugin.rememberImageSaverPlugin
+import com.vurgun.skyfit.core.data.utility.PlatformType
 import com.vurgun.skyfit.core.data.v1.data.posture.model.PostureTypeDTO
 import com.vurgun.skyfit.core.ui.components.button.PrimaryIconButton
 import com.vurgun.skyfit.core.ui.components.button.SecondaryFlatIconButton
@@ -70,6 +71,57 @@ import skyfit.core.ui.generated.resources.posture_view_left
 import skyfit.core.ui.generated.resources.posture_view_right
 
 @Composable
+internal fun DesktopCameraPreviewContent(
+    content: PostureAnalysisContentState.CameraPreview,
+    viewModel: PostureAnalysisViewModel,
+) {
+    val permissions: Permissions = providePermissions()
+    val headerState by viewModel.headerState.collectAsState()
+
+    Scaffold(
+        backgroundColor = SkyFitColor.background.default
+    ) {
+
+        Column(
+            modifier = Modifier.fillMaxSize(),
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.Center
+        ) {
+            Box(
+                modifier = Modifier.weight(1f)
+            ) {
+                if (headerState.gridGuideEnabled) {
+                    PostureAnalysisGrid()
+                }
+
+                if (headerState.bodyGuideEnabled) {
+                    HumanGuideOverlay(content.postureType)
+                }
+            }
+
+            PostureAnalysisBottomBar(
+                modifier = Modifier
+                    .windowInsetsPadding(WindowInsets.systemBars),
+                onClickRetake = {
+                    viewModel.onAction(PostureAnalysisAction.RetakeOption)
+                },
+                onClickCapture = { },
+                onImagesSelected = { bytes, bitmap ->
+                    viewModel.onAction(
+                        PostureAnalysisAction.CaptureFromGallery(
+                            byteArray = bytes,
+                            bitmap = bitmap
+                        )
+                    )
+                }
+            )
+
+            Spacer(Modifier.height(30.dp))
+        }
+    }
+}
+
+@Composable
 internal fun CameraPreviewContent(
     content: PostureAnalysisContentState.CameraPreview,
     viewModel: PostureAnalysisViewModel,
@@ -77,7 +129,9 @@ internal fun CameraPreviewContent(
     val permissions: Permissions = providePermissions()
     val headerState by viewModel.headerState.collectAsState()
 
-    Scaffold {
+    Scaffold(
+        backgroundColor = SkyFitColor.background.default
+    ) {
         val cameraPermissionState = remember { mutableStateOf(permissions.hasCameraPermission()) }
         val storagePermissionState = remember { mutableStateOf(permissions.hasStoragePermission()) }
 

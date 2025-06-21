@@ -6,6 +6,7 @@ import com.vurgun.skyfit.feature.schedule.screen.appointments.TrainerAppointment
 import com.vurgun.skyfit.feature.schedule.screen.appointments.TrainerAppointmentListingViewModel
 import com.vurgun.skyfit.feature.schedule.screen.appointments.UserAppointmentDetailViewModel
 import com.vurgun.skyfit.feature.schedule.screen.appointments.UserAppointmentListingViewModel
+import com.vurgun.skyfit.feature.schedule.screen.lessons.FacilityLessonCategoryListingViewModel
 import com.vurgun.skyfit.feature.schedule.screen.lessons.FacilityLessonEditViewModel
 import com.vurgun.skyfit.feature.schedule.screen.lessons.FacilityLessonListingViewModel
 import org.koin.dsl.module
@@ -25,4 +26,5 @@ val dataScheduleModule = module {
 
     factory { FacilityLessonListingViewModel(get(), get(), get()) }
     factory { FacilityLessonEditViewModel(get(), get(), get()) }
+    factory { FacilityLessonCategoryListingViewModel(get()) }
 }

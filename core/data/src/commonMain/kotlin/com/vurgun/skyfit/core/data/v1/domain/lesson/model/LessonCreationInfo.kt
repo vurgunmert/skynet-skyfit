@@ -16,7 +16,8 @@ data class LessonCreationInfo(
     val lastCancelableHoursBefore: Int,
     val isRequiredAppointment: Boolean,
     val price: Int = 0,
-    val participantType: Int = 1  // 1=everyone, 2=members, 3=followers
+    val participantType: Int = 1,  // 1=everyone, 2=members, 3=followers
+    val categoryIds: List<Int>
 )
 
 data class LessonUpdateInfo(
@@ -31,5 +32,6 @@ data class LessonUpdateInfo(
     val isRequiredAppointment: Boolean,
     val price: Int = 0,
     val participantType: Int = 1,  // 1=everyone, 2=members, 3=followers
-    val participantsIds: List<Int> = emptyList()
+    val participantsIds: List<Int> = emptyList(),
+    val categoryIds: List<Int>
 )

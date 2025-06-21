@@ -43,7 +43,7 @@ import skyfit.core.ui.generated.resources.*
 @Composable
 fun DashboardCompact(viewModel: DashboardViewModel) {
     val mainNavigator = LocalNavigator.currentOrThrow.findRootNavigator()
-    val overlayNavigation by viewModel.overlayNavigation.collectAsState()
+    val overlayNavigation by viewModel.compactOverlayNavigation.collectAsState()
     val homeScreen = rememberScreen(SharedScreen.Home)
 
     Navigator(homeScreen) { dashboardNavigator ->
@@ -99,7 +99,7 @@ fun DashboardCompact(viewModel: DashboardViewModel) {
                 CrossfadeTransition(navigator = dashboardNavigator)
 
                 overlayNavigation?.let {
-                    ScreenOverlay(it, onDismiss = viewModel::dismissOverlay)
+                    ScreenOverlay(it, onDismiss = viewModel::dismissCompactOverlay)
                 }
             }
         }

@@ -316,4 +316,5 @@
     <string name="new_membership_request_label">Yeni Üyelik Talebi</string>
     <string name="membership_request_approval_message">%1$s seni spor salonu üyesi olarak ekledi. Onaylıyor musun?</string>
 
+    <string name="lesson_categories_label">Ders Kategorileri</string>
 </resources>

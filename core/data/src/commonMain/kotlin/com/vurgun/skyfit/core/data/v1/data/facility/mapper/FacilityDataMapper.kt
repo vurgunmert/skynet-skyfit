@@ -4,12 +4,11 @@ import com.vurgun.skyfit.core.data.serverImageFromPath
 import com.vurgun.skyfit.core.data.utility.formatToServerDate
 import com.vurgun.skyfit.core.data.utility.formatToServerTime
 import com.vurgun.skyfit.core.data.utility.parseServerToDateOnly
-import com.vurgun.skyfit.core.data.v1.data.facility.model.CreateLessonRequest
-import com.vurgun.skyfit.core.data.v1.data.facility.model.FacilityMemberDTO
-import com.vurgun.skyfit.core.data.v1.data.facility.model.FacilityProfileDTO
-import com.vurgun.skyfit.core.data.v1.data.facility.model.UpdateLessonRequest
+import com.vurgun.skyfit.core.data.utility.parseServerToHHMMTime
+import com.vurgun.skyfit.core.data.v1.data.facility.model.*
 import com.vurgun.skyfit.core.data.v1.data.lesson.model.LessonParticipantDTO
 import com.vurgun.skyfit.core.data.v1.data.trainer.model.FacilityTrainerProfileDTO
+import com.vurgun.skyfit.core.data.v1.domain.facility.model.FacilityMemberPackage
 import com.vurgun.skyfit.core.data.v1.domain.facility.model.FacilityProfile
 import com.vurgun.skyfit.core.data.v1.domain.global.model.BodyType
 import com.vurgun.skyfit.core.data.v1.domain.global.model.Member
@@ -17,6 +16,7 @@ import com.vurgun.skyfit.core.data.v1.domain.lesson.model.LessonCreationInfo
 import com.vurgun.skyfit.core.data.v1.domain.lesson.model.LessonParticipant
 import com.vurgun.skyfit.core.data.v1.domain.lesson.model.LessonUpdateInfo
 import com.vurgun.skyfit.core.data.v1.domain.trainer.model.FacilityTrainerProfile
+import kotlinx.datetime.LocalDateTime
 
 internal object FacilityDataMapper {
 
@@ -88,14 +88,31 @@ internal object FacilityDataMapper {
             profileImageUrl = serverImageFromPath(profilePhotoPath),
             username = username,
             name = name,
-            surname = surname
+            surname = surname,
+            status = status,
+            statusName = statusName,
+            usedLessonCount = usedLessonCount ?: 0,
+            membershipPackage = membershipPackage.toDomainPackage()
         )
     }
 
     fun List<FacilityMemberDTO>.toMemberDomainList(): List<Member> = map { it.toMemberDomain() }
 
-    internal fun LessonCreationInfo.toCreateLessonRequest(): CreateLessonRequest {
-        return CreateLessonRequest(
+    fun FacilityMemberPackageDTO?.toDomainPackage(): FacilityMemberPackage? {
+        return this?.run {
+            FacilityMemberPackage(
+                memberPackageId = memberPackageId,
+                packageId = packageId,
+                packageName = packageName,
+                startDate = startDate.parseServerToDateOnly(),
+                endDate = endDate?.parseServerToDateOnly(),
+                lessonCount = lessonCount
+            )
+        }
+    }
+
+    internal fun LessonCreationInfo.toCreateLessonRequest(): CreateLessonRequestDTO {
+        return CreateLessonRequestDTO(
             gymId = gymId,
             iconId = iconId,
             title = title,
@@ -111,7 +128,8 @@ internal object FacilityDataMapper {
             lastCancelTime = lastCancelableHoursBefore,
             isRequiredAppointment = isRequiredAppointment,
             price = price,
-            participantType = participantType
+            participantType = participantType,
+            categories = categoryIds
         )
     }
 

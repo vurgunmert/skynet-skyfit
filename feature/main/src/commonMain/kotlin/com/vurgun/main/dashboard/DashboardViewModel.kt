@@ -8,7 +8,6 @@ import com.vurgun.skyfit.core.data.utility.SingleSharedFlow
 import com.vurgun.skyfit.core.data.utility.emitIn
 import com.vurgun.skyfit.core.data.v1.domain.account.manager.ActiveAccountManager
 import com.vurgun.skyfit.core.data.v1.domain.global.model.AccountRole
-import com.vurgun.skyfit.core.navigation.SharedScreen
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -56,7 +55,10 @@ sealed interface DashboardUiEffect {
 class DashboardViewModel(userManager: ActiveAccountManager) : ScreenModel {
 
     private val _overlayNavigation = MutableStateFlow<ScreenProvider?>(null)
-    val overlayNavigation = _overlayNavigation.asStateFlow()
+    val compactOverlayNavigation = _overlayNavigation.asStateFlow()
+
+    private val _expandedOverlayNavigation = MutableStateFlow<ScreenProvider?>(null)
+    val expandedOverlayNavigation = _expandedOverlayNavigation.asStateFlow()
 
     private val _effect = SingleSharedFlow<DashboardUiEffect>()
     val effect = _effect.asSharedFlow()
@@ -98,11 +100,19 @@ class DashboardViewModel(userManager: ActiveAccountManager) : ScreenModel {
         }
     }
 
-    fun setOverlay(screen: ScreenProvider?) {
+    fun setCompactOverlay(screen: ScreenProvider?) {
         _overlayNavigation.value = screen
     }
 
-    fun dismissOverlay() {
+    fun setExpandedOverlay(screen: ScreenProvider?) {
+        _expandedOverlayNavigation.value = screen
+    }
+
+    fun dismissCompactOverlay() {
         _overlayNavigation.value = null
+    }
+
+    fun dismissExpandedOverlay() {
+        _expandedOverlayNavigation.value = null
     }
 }

@@ -181,8 +181,8 @@ class SettingsViewModel(
     private fun getUserMenuGroupedItems(): Map<Int, List<SettingsMenuItem>> =
         listOf(
             1 to SettingsMenuItem.Account,
-            1 to SettingsMenuItem.Payment,
-            2 to SettingsMenuItem.Notifications,
+//            1 to SettingsMenuItem.Payment,
+//            2 to SettingsMenuItem.Notifications,
             3 to SettingsMenuItem.Support,
         ).groupBy { it.first }
             .mapValues { entry -> entry.value.map { it.second } }
@@ -193,12 +193,12 @@ class SettingsViewModel(
     private fun getFacilityMenuGroupedItems(): Map<Int, List<SettingsMenuItem>> =
         listOf(
             1 to SettingsMenuItem.Account,
-            1 to SettingsMenuItem.Payment,
+//            1 to SettingsMenuItem.Payment,
             1 to SettingsMenuItem.LessonPackages,
-            2 to SettingsMenuItem.Notifications,
+//            2 to SettingsMenuItem.Notifications,
             3 to SettingsMenuItem.Members,
             3 to SettingsMenuItem.Trainers,
-            3 to SettingsMenuItem.Branches,
+//            3 to SettingsMenuItem.Branches,
             4 to SettingsMenuItem.Support,
         ).groupBy { it.first }
             .mapValues { entry -> entry.value.map { it.second } }

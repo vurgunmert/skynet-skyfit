@@ -1,10 +1,44 @@
 package com.vurgun.skyfit.settings.shared.changepassword
 
 import cafe.adriel.voyager.core.model.ScreenModel
+import cafe.adriel.voyager.core.model.screenModelScope
+import com.vurgun.skyfit.core.data.utility.SingleSharedFlow
+import com.vurgun.skyfit.core.data.utility.UiStateDelegate
+import com.vurgun.skyfit.core.data.utility.emitIn
+import com.vurgun.skyfit.core.data.v1.domain.account.repository.AccountRepository
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asSharedFlow
+import kotlinx.coroutines.launch
 
-class PasswordSettingsViewModel : ScreenModel {
+sealed class PasswordSettingsUiState {
+    data object Idle : PasswordSettingsUiState()
+    data object Loading : PasswordSettingsUiState()
+    data class Error(val message: String?) : PasswordSettingsUiState()
+}
+
+sealed interface PasswordSettingsUiAction {
+    data object OnClickBack : PasswordSettingsUiAction
+    data object OnClickSubmit : PasswordSettingsUiAction
+    data class OnCurrentPasswordChanged(val value: String) : PasswordSettingsUiAction
+    data class OnNewPasswordChanged(val value: String) : PasswordSettingsUiAction
+    data class OnAgainPasswordChanged(val value: String) : PasswordSettingsUiAction
+}
+
+sealed interface PasswordSettingsUiEffect {
+    data object NavigateBack : PasswordSettingsUiEffect
+}
+
+class PasswordSettingsViewModel(
+    private val accountRepository: AccountRepository
+) : ScreenModel {
+
+    private val _uiState = UiStateDelegate<PasswordSettingsUiState>(PasswordSettingsUiState.Idle)
+    val uiState = _uiState.asStateFlow()
+
+    private val _uiEffect = SingleSharedFlow<PasswordSettingsUiEffect>()
+    val uiEffect = _uiEffect.asSharedFlow()
+
     private val _currentPassword = MutableStateFlow("")
     val currentPassword: StateFlow<String> = _currentPassword
 
@@ -17,17 +51,28 @@ class PasswordSettingsViewModel : ScreenModel {
     private val _isSaveEnabled = MutableStateFlow(false)
     val isSaveEnabled: StateFlow<Boolean> = _isSaveEnabled
 
-    fun updateCurrentPassword(value: String) {
+    fun onAction(action: PasswordSettingsUiAction) {
+        when (action) {
+            PasswordSettingsUiAction.OnClickBack ->
+                _uiEffect.emitIn(screenModelScope, PasswordSettingsUiEffect.NavigateBack)
+            PasswordSettingsUiAction.OnClickSubmit -> submitPasswordChange()
+            is PasswordSettingsUiAction.OnCurrentPasswordChanged -> updateCurrentPassword(action.value)
+            is PasswordSettingsUiAction.OnNewPasswordChanged -> updateNewPassword(action.value)
+            is PasswordSettingsUiAction.OnAgainPasswordChanged -> updateConfirmedPassword(action.value)
+        }
+    }
+
+    private fun updateCurrentPassword(value: String) {
         _currentPassword.value = value
         validateForm()
     }
 
-    fun updateNewPassword(value: String) {
+    private fun updateNewPassword(value: String) {
         _newPassword.value = value
         validateForm()
     }
 
-    fun updateConfirmedPassword(value: String) {
+    private fun updateConfirmedPassword(value: String) {
         _confirmedPassword.value = value
         validateForm()
     }
@@ -39,7 +84,14 @@ class PasswordSettingsViewModel : ScreenModel {
                 _newPassword.value == _confirmedPassword.value
     }
 
-    fun saveChanged() {
-        //TODO: Submit new password
+    private fun submitPasswordChange() {
+        _uiState.update(PasswordSettingsUiState.Loading)
+        screenModelScope.launch {
+            runCatching {
+                accountRepository.changePassword(currentPassword.value, newPassword.value, confirmedPassword.value)
+            }.onFailure { error ->
+                _uiState.update(PasswordSettingsUiState.Error(error.message))
+           }
+        }
     }
 }

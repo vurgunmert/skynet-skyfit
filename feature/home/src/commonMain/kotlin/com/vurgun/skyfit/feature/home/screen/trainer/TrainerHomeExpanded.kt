@@ -16,7 +16,7 @@ import com.vurgun.skyfit.core.ui.components.layout.ExpandedLayout
 import com.vurgun.skyfit.core.ui.components.loader.FullScreenLoaderContent
 import com.vurgun.skyfit.core.ui.screen.ErrorScreen
 import com.vurgun.skyfit.core.ui.utils.CollectEffect
-import com.vurgun.skyfit.core.ui.utils.LocalOverlayController
+import com.vurgun.skyfit.core.ui.utils.LocalCompactOverlayController
 import com.vurgun.skyfit.feature.home.component.HomeCompactComponent
 import com.vurgun.skyfit.feature.home.component.HomeLessonTableComponents
 import com.vurgun.skyfit.feature.home.component.HomeStatisticComponents
@@ -34,7 +34,7 @@ import skyfit.core.ui.generated.resources.refresh_action
 internal fun TrainerHomeExpanded(viewModel: TrainerHomeViewModel) {
 
     val dashboardNavigator = LocalNavigator.currentOrThrow
-    val overlayController = LocalOverlayController.current
+    val overlayController = LocalCompactOverlayController.current
     val uiState by viewModel.uiState.collectAsState()
 
     CollectEffect(viewModel.effect) { effect ->

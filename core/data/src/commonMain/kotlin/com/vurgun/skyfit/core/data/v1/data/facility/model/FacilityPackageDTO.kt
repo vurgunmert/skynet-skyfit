@@ -45,3 +45,13 @@ data class FacilityLessonPackageDTO(
     val packageMemberCount: Int,
     val packageContents: List<String>,
 )
+
+@Serializable
+data class FacilityMemberPackageDTO(
+    val memberPackageId: Int,
+    val packageId: Int,
+    val packageName: String,
+    val startDate: String,
+    val endDate: String?,
+    val lessonCount: Int
+)

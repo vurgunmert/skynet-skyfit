@@ -14,9 +14,14 @@ import com.vurgun.skyfit.core.data.v1.data.explore.ExploreRepositoryImpl
 import com.vurgun.skyfit.core.data.v1.data.explore.service.ExploreApiService
 import com.vurgun.skyfit.core.data.v1.data.facility.repository.FacilityRepositoryImpl
 import com.vurgun.skyfit.core.data.v1.data.facility.service.FacilityApiService
+import com.vurgun.skyfit.core.data.v1.data.global.repository.GlobalRepositoryImpl
 import com.vurgun.skyfit.core.data.v1.data.lesson.mapper.LessonSessionItemViewDataMapper
 import com.vurgun.skyfit.core.data.v1.data.lesson.repository.LessonRepositoryImpl
 import com.vurgun.skyfit.core.data.v1.data.lesson.service.LessonApiService
+import com.vurgun.skyfit.core.data.v1.data.social.repository.SocialMediaRepositoryImpl
+import com.vurgun.skyfit.core.data.v1.data.social.service.SocialMediaApiService
+import com.vurgun.skyfit.core.data.v1.data.support.SupportApiService
+import com.vurgun.skyfit.core.data.v1.data.support.repository.SupportRepositoryImpl
 import com.vurgun.skyfit.core.data.v1.data.trainer.TrainerApiService
 import com.vurgun.skyfit.core.data.v1.data.trainer.repository.TrainerRepositoryImpl
 import com.vurgun.skyfit.core.data.v1.data.user.repository.UserRepositoryImpl
@@ -30,8 +35,11 @@ import com.vurgun.skyfit.core.data.v1.domain.chatbot.ChatbotApiUseCase
 import com.vurgun.skyfit.core.data.v1.domain.config.AppConfigRepository
 import com.vurgun.skyfit.core.data.v1.domain.explore.ExploreRepository
 import com.vurgun.skyfit.core.data.v1.domain.facility.repository.FacilityRepository
+import com.vurgun.skyfit.core.data.v1.domain.global.repository.GlobalRepository
 import com.vurgun.skyfit.core.data.v1.domain.lesson.repository.LessonRepository
 import com.vurgun.skyfit.core.data.v1.domain.posture.repository.PostureAnalysisRepository
+import com.vurgun.skyfit.core.data.v1.domain.social.repository.SocialMediaRepository
+import com.vurgun.skyfit.core.data.v1.domain.support.repository.SupportRepository
 import com.vurgun.skyfit.core.data.v1.domain.trainer.repository.TrainerRepository
 import com.vurgun.skyfit.core.data.v1.domain.user.repository.UserRepository
 import com.vurgun.skyfit.core.data.v1.domain.workout.repository.WorkoutRepository
@@ -57,6 +65,9 @@ val dataCoreModule = module {
 
     //Config
     single<AppConfigRepository> { AppConfigRepositoryImpl() }
+
+    //Global
+    single<GlobalRepository> { GlobalRepositoryImpl(get(), get(), get()) }
 
     //Auth
     single { AuthApiService(get()) }
@@ -97,6 +108,14 @@ val dataCoreModule = module {
     //Explore
     single<ExploreApiService> { ExploreApiService(get()) }
     single<ExploreRepository> { ExploreRepositoryImpl(get(), get(), get()) }
+
+    //Support
+    single<SupportApiService> { SupportApiService(get()) }
+    single<SupportRepository> { SupportRepositoryImpl(get(), get(), get()) }
+
+    //Social
+    single<SocialMediaApiService> { SocialMediaApiService(get()) }
+    single<SocialMediaRepository> { SocialMediaRepositoryImpl(get(), get(), get()) }
 }
 
 internal expect val platformModule: Module

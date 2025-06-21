@@ -20,6 +20,7 @@ import cafe.adriel.voyager.navigator.CurrentScreen
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.Navigator
 import cafe.adriel.voyager.navigator.currentOrThrow
+import com.vurgun.main.component.ExpandedScreenOverlay
 import com.vurgun.main.dashboard.DashboardUiAction
 import com.vurgun.main.dashboard.DashboardUiEffect
 import com.vurgun.main.dashboard.DashboardViewModel
@@ -34,10 +35,11 @@ import com.vurgun.skyfit.core.ui.components.special.FiweLogoDark
 import com.vurgun.skyfit.core.ui.components.topbar.ExpandedTopBar
 import com.vurgun.skyfit.core.ui.styling.SkyFitColor
 import com.vurgun.skyfit.core.ui.utils.CollectEffect
-import com.vurgun.skyfit.core.ui.utils.LocalOverlayController
+import com.vurgun.skyfit.core.ui.utils.LocalCompactOverlayController
 import com.vurgun.skyfit.core.utils.rememberAccount
 import com.vurgun.main.component.ScreenOverlay
 import com.vurgun.skyfit.core.navigation.findRootNavigator
+import com.vurgun.skyfit.core.ui.utils.LocalExpandedOverlayController
 import org.jetbrains.compose.resources.DrawableResource
 import skyfit.core.ui.generated.resources.*
 
@@ -45,10 +47,14 @@ import skyfit.core.ui.generated.resources.*
 fun DashboardExpanded(viewModel: DashboardViewModel) {
 
     val mainNavigator = LocalNavigator.currentOrThrow.findRootNavigator()
-    val overlayNavigation by viewModel.overlayNavigation.collectAsState()
+    val compactOverlayNavigation by viewModel.compactOverlayNavigation.collectAsState()
+    val expandedOverlayNavigation by viewModel.expandedOverlayNavigation.collectAsState()
     val homeScreen = rememberScreen(SharedScreen.Home)
 
-    CompositionLocalProvider(LocalOverlayController provides viewModel::setOverlay) {
+    CompositionLocalProvider(
+        LocalCompactOverlayController provides viewModel::setCompactOverlay,
+        LocalExpandedOverlayController provides viewModel::setExpandedOverlay,
+    ) {
 
         Navigator(homeScreen, key = "dashboard") { dashboardNavigator ->
 
@@ -59,31 +65,37 @@ fun DashboardExpanded(viewModel: DashboardViewModel) {
                             dashboardNavigator.replace(SharedScreen.Home)
                         }
                     }
-                    DashboardUiEffect.NavigateToExplore ->{
+
+                    DashboardUiEffect.NavigateToExplore -> {
                         if (dashboardNavigator.lastItem.key != SharedScreen.Explore.key) {
                             dashboardNavigator.replace(SharedScreen.Explore)
                         }
                     }
+
                     DashboardUiEffect.NavigateToSocial -> {
                         if (dashboardNavigator.lastItem.key != SharedScreen.Social.key) {
                             dashboardNavigator.replace(SharedScreen.Social)
                         }
                     }
+
                     DashboardUiEffect.NavigateToNutrition -> {
                         if (dashboardNavigator.lastItem.key != SharedScreen.Nutrition.key) {
                             dashboardNavigator.replace(SharedScreen.Nutrition)
                         }
                     }
+
                     DashboardUiEffect.NavigateToProfile -> {
                         if (dashboardNavigator.lastItem.key != SharedScreen.Profile.key) {
                             dashboardNavigator.replace(SharedScreen.Profile)
                         }
                     }
+
                     DashboardUiEffect.NavigateToSettings -> {
                         if (dashboardNavigator.lastItem.key != SharedScreen.Settings.key) {
                             dashboardNavigator.replace(SharedScreen.Settings)
                         }
                     }
+
                     DashboardUiEffect.ShowChatBot -> dashboardNavigator.replace(SharedScreen.ChatBot)
                     else -> {
                     }
@@ -107,8 +119,12 @@ fun DashboardExpanded(viewModel: DashboardViewModel) {
                         content = { CurrentScreen() }
                     )
 
-                    overlayNavigation?.let {
-                        ScreenOverlay(it, onDismiss = viewModel::dismissOverlay)
+                    compactOverlayNavigation?.let { screen ->
+                        ScreenOverlay(screen, onDismiss = viewModel::dismissCompactOverlay)
+                    }
+
+                    expandedOverlayNavigation?.let { screen ->
+                        ExpandedScreenOverlay(screen, onDismiss = viewModel::dismissExpandedOverlay)
                     }
                 }
             }
@@ -213,7 +229,7 @@ private object DashboardExpandedComponents {
                 selected = activeScreen.key == SharedScreen.Nutrition.key,
                 selectedIcon = Res.drawable.ic_coffee_fill,
                 unselectedIcon = Res.drawable.ic_coffee,
-                onClick =onClickNutrition
+                onClick = onClickNutrition
             )
         }
     }

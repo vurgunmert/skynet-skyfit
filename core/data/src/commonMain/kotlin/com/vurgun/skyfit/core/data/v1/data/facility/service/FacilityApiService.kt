@@ -2,7 +2,12 @@ package com.vurgun.skyfit.core.data.v1.data.facility.service
 
 import com.vurgun.skyfit.core.data.v1.data.facility.model.*
 import com.vurgun.skyfit.core.data.v1.data.global.model.EmptyDTO
+import com.vurgun.skyfit.core.data.v1.data.lesson.model.AddLessonCategoryRequestDTO
+import com.vurgun.skyfit.core.data.v1.data.lesson.model.DeleteLessonCategoryRequestDTO
+import com.vurgun.skyfit.core.data.v1.data.lesson.model.GetLessonCategoriesRequestDTO
+import com.vurgun.skyfit.core.data.v1.data.lesson.model.LessonCategoryDTO
 import com.vurgun.skyfit.core.data.v1.data.lesson.model.LessonDTO
+import com.vurgun.skyfit.core.data.v1.data.lesson.model.UpdateLessonCategoryRequestDTO
 import com.vurgun.skyfit.core.data.v1.data.trainer.model.FacilityTrainerProfileDTO
 import com.vurgun.skyfit.core.data.v1.data.trainer.model.GetFacilityTrainerProfilesRequestDTO
 import com.vurgun.skyfit.core.data.v1.data.trainer.model.TrainerDTO
@@ -15,27 +20,29 @@ import io.ktor.http.*
 
 class FacilityApiService(private val apiClient: ApiClient) {
 
-    private object Endpoints {
+    private companion object Endpoint {
         const val GET_FACILITY_PROFILE = "profile/get/gym"
         const val GET_FACILITY_TRAINER_PROFILES = "profile/gym/trainers"
         const val UPDATE_FACILITY_PROFILE = "profile/update/gym"
         const val DELETE_PROFILE_TAG = "profile/delete/tag"
 
         const val ADD_GYM_USER = "add/gym/user"
-        const val GET_GYM_MEMBERS = "get/gym/members"
+        const val GET_GYM_MEMBERS = "facility/membership/member/all"
         const val GET_ALL_PLATFORM_MEMBERS = "get/all/platform/members"
         const val DELETE_GYM_MEMBER = "delete/gym/member"
+        const val ADD_PACKAGE_TO_MEMBER = "facility/membership/member/package/add"
+        const val DELETE_PACKAGE_FROM_MEMBER = "facility/membership/member/package/delete"
+        const val UPDATE_MEMBER_PACKAGE = "facility/membership/member/package/update"
 
         const val ADD_GYM_TRAINER = "add/gym/trainer"
         const val GET_GYM_TRAINERS = "get/gym/trainers"
         const val GET_ALL_PLATFORM_TRAINERS = "get/all/platform/trainers"
         const val DELETE_GYM_TRAINER = "delete/gym/trainer"
 
-        const val CREATE_GYM_PACKAGE = "create/gym/package"
-        const val UPDATE_GYM_PACKAGE = "update/gym/package"
-        const val GET_GYM_PACKAGE = "get/gym/packages"
-        const val DELETE_GYM_PACKAGE = "delete/gym/package"
-
+        const val CREATE_GYM_PACKAGE = "facility/membership/package/add"
+        const val UPDATE_GYM_PACKAGE = "facility/membership/package/update"
+        const val GET_GYM_PACKAGES = "facility/membership/package/list"
+        const val DELETE_GYM_PACKAGE = "facility/membership/package/delete"
 
         const val CREATE_LESSON = "create/lesson"
         const val UPDATE_LESSON = "update/lesson"
@@ -45,6 +52,10 @@ class FacilityApiService(private val apiClient: ApiClient) {
         const val GET_ACTIVE_LESSONS_BY_GYM = "get/lessons/gym"
         const val GET_ALL_LESSONS_BY_GYM = "get/all/lessons/gym"
         const val GET_UPCOMING_LESSONS_BY_GYM = "get/close/lessons/gym"
+        const val GET_FACILITY_LESSON_CATEGORIES = "facility/lesson/category/all"
+        const val ADD_FACILITY_LESSON_CATEGORY = "facility/lesson/category/add"
+        const val DELETE_FACILITY_LESSON_CATEGORY = "facility/lesson/category/delete"
+        const val UPDATE_FACILITY_LESSON_CATEGORY = "facility/lesson/category/update"
     }
 
     //region Profile
@@ -52,7 +63,7 @@ class FacilityApiService(private val apiClient: ApiClient) {
         return apiClient.safeApiCall<FacilityProfileDTO> {
             method = HttpMethod.Post
             bearerAuth(token)
-            url(Endpoints.GET_FACILITY_PROFILE)
+            url(Endpoint.GET_FACILITY_PROFILE)
             setBody(request)
         }
     }
@@ -64,7 +75,7 @@ class FacilityApiService(private val apiClient: ApiClient) {
         return apiClient.safeApiCall<List<FacilityTrainerProfileDTO>> {
             method = HttpMethod.Post
             bearerAuth(token)
-            url(Endpoints.GET_FACILITY_TRAINER_PROFILES)
+            url(Endpoint.GET_FACILITY_TRAINER_PROFILES)
             setBody(request)
         }
     }
@@ -73,7 +84,7 @@ class FacilityApiService(private val apiClient: ApiClient) {
         return apiClient.safeApiCall<EmptyDTO> {
             method = HttpMethod.Put
             bearerAuth(token)
-            url(Endpoints.UPDATE_FACILITY_PROFILE)
+            url(Endpoint.UPDATE_FACILITY_PROFILE)
             setBody(buildFacilityProfileFormData(request))
         }
     }
@@ -82,7 +93,7 @@ class FacilityApiService(private val apiClient: ApiClient) {
         return apiClient.safeApiCall<EmptyDTO> {
             method = HttpMethod.Put
             bearerAuth(token)
-            url(Endpoints.DELETE_PROFILE_TAG)
+            url(Endpoint.DELETE_PROFILE_TAG)
             setBody(request)
         }
     }
@@ -114,7 +125,7 @@ class FacilityApiService(private val apiClient: ApiClient) {
         return apiClient.safeApiCall<EmptyDTO> {
             method = HttpMethod.Companion.Post
             bearerAuth(token)
-            url(Endpoints.ADD_GYM_USER)
+            url(Endpoint.ADD_GYM_USER)
             setBody(request)
         }
     }
@@ -123,7 +134,7 @@ class FacilityApiService(private val apiClient: ApiClient) {
         return apiClient.safeApiCall<List<FacilityMemberDTO>> {
             method = HttpMethod.Companion.Post
             bearerAuth(token)
-            url(Endpoints.GET_GYM_MEMBERS)
+            url(Endpoint.GET_GYM_MEMBERS)
             setBody(request)
         }
     }
@@ -135,7 +146,7 @@ class FacilityApiService(private val apiClient: ApiClient) {
         return apiClient.safeApiCall<List<FacilityMemberDTO>> {
             method = HttpMethod.Companion.Post
             bearerAuth(token)
-            url(Endpoints.GET_ALL_PLATFORM_MEMBERS)
+            url(Endpoint.GET_ALL_PLATFORM_MEMBERS)
             setBody(request)
         }
     }
@@ -144,7 +155,34 @@ class FacilityApiService(private val apiClient: ApiClient) {
         return apiClient.safeApiCall<EmptyDTO> {
             method = HttpMethod.Companion.Delete
             bearerAuth(token)
-            url(Endpoints.DELETE_GYM_MEMBER)
+            url(Endpoint.DELETE_GYM_MEMBER)
+            setBody(request)
+        }
+    }
+
+    suspend fun addPackageToMember(request: AddPackageToMember, token: String): ApiResult<EmptyDTO> {
+        return apiClient.safeApiCall<EmptyDTO> {
+            method = HttpMethod.Companion.Post
+            bearerAuth(token)
+            url(Endpoint.ADD_PACKAGE_TO_MEMBER)
+            setBody(request)
+        }
+    }
+
+    suspend fun updateMemberPackage(request: UpdateMemberPackage, token: String): ApiResult<EmptyDTO> {
+        return apiClient.safeApiCall<EmptyDTO> {
+            method = HttpMethod.Companion.Put
+            bearerAuth(token)
+            url(Endpoint.UPDATE_MEMBER_PACKAGE)
+            setBody(request)
+        }
+    }
+
+    suspend fun deleteMemberPackage(request: DeleteMemberPackage, token: String): ApiResult<EmptyDTO> {
+        return apiClient.safeApiCall<EmptyDTO> {
+            method = HttpMethod.Companion.Delete
+            bearerAuth(token)
+            url(Endpoint.DELETE_PACKAGE_FROM_MEMBER)
             setBody(request)
         }
     }
@@ -155,7 +193,7 @@ class FacilityApiService(private val apiClient: ApiClient) {
         return apiClient.safeApiCall<EmptyDTO> {
             method = HttpMethod.Companion.Post
             bearerAuth(token)
-            url(Endpoints.ADD_GYM_TRAINER)
+            url(Endpoint.ADD_GYM_TRAINER)
             setBody(request)
         }
     }
@@ -164,7 +202,7 @@ class FacilityApiService(private val apiClient: ApiClient) {
         return apiClient.safeApiCall<List<TrainerDTO>> {
             method = HttpMethod.Companion.Post
             bearerAuth(token)
-            url(Endpoints.GET_GYM_TRAINERS)
+            url(Endpoint.GET_GYM_TRAINERS)
             setBody(request)
         }
     }
@@ -173,7 +211,7 @@ class FacilityApiService(private val apiClient: ApiClient) {
         return apiClient.safeApiCall<List<TrainerDTO>> {
             method = HttpMethod.Companion.Post
             bearerAuth(token)
-            url(Endpoints.GET_ALL_PLATFORM_TRAINERS)
+            url(Endpoint.GET_ALL_PLATFORM_TRAINERS)
             setBody(request)
         }
     }
@@ -182,7 +220,7 @@ class FacilityApiService(private val apiClient: ApiClient) {
         return apiClient.safeApiCall<EmptyDTO> {
             method = HttpMethod.Companion.Delete
             bearerAuth(token)
-            url(Endpoints.DELETE_GYM_TRAINER)
+            url(Endpoint.DELETE_GYM_TRAINER)
             setBody(request)
         }
     }
@@ -196,7 +234,7 @@ class FacilityApiService(private val apiClient: ApiClient) {
         return apiClient.safeApiCall<EmptyDTO> {
             method = HttpMethod.Companion.Post
             bearerAuth(token)
-            url(Endpoints.CREATE_GYM_PACKAGE)
+            url(Endpoint.CREATE_GYM_PACKAGE)
             setBody(request)
         }
     }
@@ -208,7 +246,7 @@ class FacilityApiService(private val apiClient: ApiClient) {
         return apiClient.safeApiCall<EmptyDTO> {
             method = HttpMethod.Companion.Put
             bearerAuth(token)
-            url(Endpoints.UPDATE_GYM_PACKAGE)
+            url(Endpoint.UPDATE_GYM_PACKAGE)
             setBody(request)
         }
     }
@@ -220,7 +258,7 @@ class FacilityApiService(private val apiClient: ApiClient) {
         return apiClient.safeApiCall<List<FacilityLessonPackageDTO>> {
             method = HttpMethod.Companion.Post
             bearerAuth(token)
-            url(Endpoints.GET_GYM_PACKAGE)
+            url(Endpoint.GET_GYM_PACKAGES)
             setBody(request)
         }
     }
@@ -232,7 +270,7 @@ class FacilityApiService(private val apiClient: ApiClient) {
         return apiClient.safeApiCall<EmptyDTO> {
             method = HttpMethod.Companion.Delete
             bearerAuth(token)
-            url(Endpoints.DELETE_GYM_PACKAGE)
+            url(Endpoint.DELETE_GYM_PACKAGE)
             setBody(request)
         }
     }
@@ -240,11 +278,11 @@ class FacilityApiService(private val apiClient: ApiClient) {
 
     //region Lesson
 
-    internal suspend fun createLesson(request: CreateLessonRequest, token: String): ApiResult<EmptyDTO> {
+    internal suspend fun createLesson(request: CreateLessonRequestDTO, token: String): ApiResult<EmptyDTO> {
         return apiClient.safeApiCall<EmptyDTO> {
             method = HttpMethod.Post
             bearerAuth(token)
-            url(Endpoints.CREATE_LESSON)
+            url(Endpoint.CREATE_LESSON)
             setBody(request)
         }
     }
@@ -253,7 +291,7 @@ class FacilityApiService(private val apiClient: ApiClient) {
         return apiClient.safeApiCall<EmptyDTO> {
             method = HttpMethod.Put
             bearerAuth(token)
-            url(Endpoints.UPDATE_LESSON)
+            url(Endpoint.UPDATE_LESSON)
             setBody(request)
         }
     }
@@ -262,7 +300,7 @@ class FacilityApiService(private val apiClient: ApiClient) {
         return apiClient.safeApiCall<EmptyDTO> {
             method = HttpMethod.Put
             bearerAuth(token)
-            url(Endpoints.DEACTIVATE_LESSON)
+            url(Endpoint.DEACTIVATE_LESSON)
             setBody(request)
         }
     }
@@ -271,7 +309,7 @@ class FacilityApiService(private val apiClient: ApiClient) {
         return apiClient.safeApiCall<EmptyDTO> {
             method = HttpMethod.Put
             bearerAuth(token)
-            url(Endpoints.ACTIVATE_LESSON)
+            url(Endpoint.ACTIVATE_LESSON)
             setBody(request)
         }
     }
@@ -280,7 +318,7 @@ class FacilityApiService(private val apiClient: ApiClient) {
         return apiClient.safeApiCall<EmptyDTO> {
             method = HttpMethod.Delete
             bearerAuth(token)
-            url(Endpoints.DELETE_LESSON)
+            url(Endpoint.DELETE_LESSON)
             setBody(request)
         }
     }
@@ -292,7 +330,7 @@ class FacilityApiService(private val apiClient: ApiClient) {
         return apiClient.safeApiCall<List<LessonDTO>> {
             method = HttpMethod.Post
             bearerAuth(token)
-            url(Endpoints.GET_ALL_LESSONS_BY_GYM)
+            url(Endpoint.GET_ALL_LESSONS_BY_GYM)
             setBody(request)
         }
     }
@@ -304,7 +342,7 @@ class FacilityApiService(private val apiClient: ApiClient) {
         return apiClient.safeApiCall<List<LessonDTO>> {
             method = HttpMethod.Post
             bearerAuth(token)
-            url(Endpoints.GET_ACTIVE_LESSONS_BY_GYM)
+            url(Endpoint.GET_ACTIVE_LESSONS_BY_GYM)
             setBody(request)
         }
     }
@@ -316,7 +354,43 @@ class FacilityApiService(private val apiClient: ApiClient) {
         return apiClient.safeApiCall<List<LessonDTO>> {
             method = HttpMethod.Post
             bearerAuth(token)
-            url(Endpoints.GET_UPCOMING_LESSONS_BY_GYM)
+            url(Endpoint.GET_UPCOMING_LESSONS_BY_GYM)
+            setBody(request)
+        }
+    }
+
+    suspend fun getFacilityLessonCategories(request: GetLessonCategoriesRequestDTO, token: String) : ApiResult<List<LessonCategoryDTO>> {
+        return apiClient.safeApiCall<List<LessonCategoryDTO>> {
+            method = HttpMethod.Post
+            bearerAuth(token)
+            url(Endpoint.GET_FACILITY_LESSON_CATEGORIES)
+            setBody(request)
+        }
+    }
+
+    suspend fun addFacilityLessonCategory(request: AddLessonCategoryRequestDTO, token: String) : ApiResult<EmptyDTO> {
+        return apiClient.safeApiCall<EmptyDTO> {
+            method = HttpMethod.Post
+            bearerAuth(token)
+            url(Endpoint.ADD_FACILITY_LESSON_CATEGORY)
+            setBody(request)
+        }
+    }
+
+    suspend fun updateFacilityLessonCategory(request: UpdateLessonCategoryRequestDTO, token: String) : ApiResult<EmptyDTO> {
+        return apiClient.safeApiCall<EmptyDTO> {
+            method = HttpMethod.Put
+            bearerAuth(token)
+            url(Endpoint.UPDATE_FACILITY_LESSON_CATEGORY)
+            setBody(request)
+        }
+    }
+
+    suspend fun deleteFacilityLessonCategory(request: DeleteLessonCategoryRequestDTO, token: String) : ApiResult<EmptyDTO> {
+        return apiClient.safeApiCall<EmptyDTO> {
+            method = HttpMethod.Delete
+            bearerAuth(token)
+            url(Endpoint.DELETE_FACILITY_LESSON_CATEGORY)
             setBody(request)
         }
     }

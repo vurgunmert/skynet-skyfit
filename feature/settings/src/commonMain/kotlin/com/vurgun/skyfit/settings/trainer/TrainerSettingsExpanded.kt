@@ -12,7 +12,7 @@ import com.vurgun.skyfit.core.ui.components.loader.FullScreenLoaderContent
 import com.vurgun.skyfit.core.ui.screen.ErrorScreen
 import com.vurgun.skyfit.core.ui.screen.UnauthorizedAccessScreen
 import com.vurgun.skyfit.core.ui.utils.CollectEffect
-import com.vurgun.skyfit.feature.persona.settings.shared.helpsupport.SettingsSupportHelpScreen
+import com.vurgun.skyfit.settings.shared.helpsupport.SettingsSupportHelpScreen
 import com.vurgun.skyfit.settings.trainer.notification.TrainerNotificationSettingsScreen
 import com.vurgun.skyfit.settings.trainer.payment.TrainerPaymentHistorySettingsScreen
 import com.vurgun.skyfit.settings.component.SettingsExpandedComponent

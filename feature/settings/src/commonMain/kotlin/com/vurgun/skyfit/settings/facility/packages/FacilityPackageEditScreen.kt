@@ -107,7 +107,7 @@ private fun CreateServicePackageScreen_Content(
                 onValueChange = { onAction(FacilityPackageEditAction.OnLessonCountChanged(it)) },
             )
 
-            SkyFormSelectWorkoutCategory(
+            SkyFormSelectLessonCategory(
                 title = stringResource(Res.string.course_contents_label),
                 hint = stringResource(Res.string.course_contents_input_hint),
                 availableTags = content.categories,

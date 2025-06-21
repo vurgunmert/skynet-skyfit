@@ -1,10 +1,8 @@
 package com.vurgun.skyfit.core.data.v1.data.facility.repository
 
-import com.vurgun.skyfit.core.data.v1.domain.lesson.model.Lesson
-import com.vurgun.skyfit.core.data.v1.domain.lesson.model.LessonCreationInfo
-import com.vurgun.skyfit.core.data.v1.domain.lesson.model.LessonUpdateInfo
 import com.vurgun.skyfit.core.data.storage.TokenManager
 import com.vurgun.skyfit.core.data.utility.formatToServerDate
+import com.vurgun.skyfit.core.data.utility.now
 import com.vurgun.skyfit.core.data.v1.data.facility.mapper.FacilityDataMapper.toCreateLessonRequest
 import com.vurgun.skyfit.core.data.v1.data.facility.mapper.FacilityDataMapper.toDomainFacilityProfile
 import com.vurgun.skyfit.core.data.v1.data.facility.mapper.FacilityDataMapper.toFacilityTrainerProfiles
@@ -12,12 +10,21 @@ import com.vurgun.skyfit.core.data.v1.data.facility.mapper.FacilityDataMapper.to
 import com.vurgun.skyfit.core.data.v1.data.facility.mapper.FacilityDataMapper.toUpdateLessonRequest
 import com.vurgun.skyfit.core.data.v1.data.facility.model.*
 import com.vurgun.skyfit.core.data.v1.data.facility.service.FacilityApiService
+import com.vurgun.skyfit.core.data.v1.data.lesson.mapper.LessonDataMapper.toDomainCategories
 import com.vurgun.skyfit.core.data.v1.data.lesson.mapper.LessonDataMapper.toLessonDomainList
+import com.vurgun.skyfit.core.data.v1.data.lesson.model.AddLessonCategoryRequestDTO
+import com.vurgun.skyfit.core.data.v1.data.lesson.model.DeleteLessonCategoryRequestDTO
+import com.vurgun.skyfit.core.data.v1.data.lesson.model.GetLessonCategoriesRequestDTO
+import com.vurgun.skyfit.core.data.v1.data.lesson.model.UpdateLessonCategoryRequestDTO
 import com.vurgun.skyfit.core.data.v1.data.trainer.mapper.TrainerDataMapper.toTrainerDomainList
 import com.vurgun.skyfit.core.data.v1.data.trainer.model.GetFacilityTrainerProfilesRequestDTO
 import com.vurgun.skyfit.core.data.v1.domain.facility.model.FacilityProfile
 import com.vurgun.skyfit.core.data.v1.domain.facility.repository.FacilityRepository
 import com.vurgun.skyfit.core.data.v1.domain.global.model.Member
+import com.vurgun.skyfit.core.data.v1.domain.lesson.model.Lesson
+import com.vurgun.skyfit.core.data.v1.domain.lesson.model.LessonCategory
+import com.vurgun.skyfit.core.data.v1.domain.lesson.model.LessonCreationInfo
+import com.vurgun.skyfit.core.data.v1.domain.lesson.model.LessonUpdateInfo
 import com.vurgun.skyfit.core.data.v1.domain.trainer.model.FacilityTrainerProfile
 import com.vurgun.skyfit.core.data.v1.domain.trainer.model.TrainerPreview
 import com.vurgun.skyfit.core.network.ApiResult
@@ -26,6 +33,7 @@ import com.vurgun.skyfit.core.network.utils.ioResult
 import com.vurgun.skyfit.core.network.utils.mapOrThrow
 import kotlinx.coroutines.withContext
 import kotlinx.datetime.LocalDate
+import kotlinx.datetime.plus
 
 class FacilityRepositoryImpl(
     private val apiService: FacilityApiService,
@@ -40,11 +48,12 @@ class FacilityRepositoryImpl(
         apiService.getFacilityProfile(request, token).mapOrThrow { it.toDomainFacilityProfile() }
     }
 
-    override suspend fun getFacilityTrainerProfiles(facilityId: Int): Result<List<FacilityTrainerProfile>> = ioResult(dispatchers) {
-        val token = tokenManager.getTokenOrThrow()
-        val request = GetFacilityTrainerProfilesRequestDTO(facilityId)
-        apiService.getFacilityTrainerProfiles(request, token).mapOrThrow { it.toFacilityTrainerProfiles() }
-    }
+    override suspend fun getFacilityTrainerProfiles(facilityId: Int): Result<List<FacilityTrainerProfile>> =
+        ioResult(dispatchers) {
+            val token = tokenManager.getTokenOrThrow()
+            val request = GetFacilityTrainerProfilesRequestDTO(facilityId)
+            apiService.getFacilityTrainerProfiles(request, token).mapOrThrow { it.toFacilityTrainerProfiles() }
+        }
 
     override suspend fun updateFacilityProfile(
         gymId: Int,
@@ -67,7 +76,30 @@ class FacilityRepositoryImpl(
     }
     //endregion Profile
 
-    override suspend fun addMemberToFacility(gymId: Int, userId: Int): Result<Unit> = ioResult(dispatchers) {
+    override suspend fun deleteMemberPackage(userId: Int, packageId: Int): Result<Unit> = ioResult(dispatchers) {
+        val token = tokenManager.getTokenOrThrow()
+        val request = DeleteMemberPackage(userId, packageId)
+        apiService.deleteMemberPackage(request, token).mapOrThrow { }
+    }
+    override suspend fun addPackageToMember(
+        userId: Int,
+        packageId: Int,
+        startDate: LocalDate,
+        endDate: LocalDate,
+        lessonCount: Int?
+    ): Result<Unit> = ioResult(dispatchers) {
+        val token = tokenManager.getTokenOrThrow()
+        val request = AddPackageToMember(userId, packageId, startDate.toString(), endDate.toString(), lessonCount)
+        apiService.addPackageToMember(request, token).mapOrThrow { }
+    }
+
+    override suspend fun updateMemberPackage(userId: Int, gymId: Int, packageId: Int): Result<Unit> = ioResult(dispatchers) {
+        val token = tokenManager.getTokenOrThrow()
+        val request = UpdateMemberPackage(userId, gymId,packageId)
+        apiService.updateMemberPackage(request, token).mapOrThrow { }
+    }
+
+    override suspend fun addMemberToFacility(userId: Int, gymId: Int): Result<Unit> = ioResult(dispatchers) {
         val token = tokenManager.getTokenOrThrow()
         val request = AddGymMemberRequest(gymId, userId)
         apiService.addGymMember(request, token).mapOrThrow { }
@@ -206,6 +238,31 @@ class FacilityRepositoryImpl(
         apiService.deleteLesson(request, token).mapOrThrow { }
     }
 
+    override suspend fun addLessonCategory(name: String, gymId: Int): Result<Unit> = ioResult(dispatchers) {
+        val token = tokenManager.getTokenOrThrow()
+        val request = AddLessonCategoryRequestDTO(categoryName = name, gymId = gymId)
+        apiService.addFacilityLessonCategory(request, token).mapOrThrow { }
+    }
+
+    override suspend fun updateLessonCategory(categoryId: Int, categoryName: String, gymId: Int): Result<Unit> =
+        ioResult(dispatchers) {
+            val token = tokenManager.getTokenOrThrow()
+            val request = UpdateLessonCategoryRequestDTO(categoryId, categoryName, gymId)
+            apiService.updateFacilityLessonCategory(request, token).mapOrThrow { }
+        }
+
+    override suspend fun deleteLessonCategory(categoryId: Int, gymId: Int): Result<Unit> = ioResult(dispatchers) {
+        val token = tokenManager.getTokenOrThrow()
+        val request = DeleteLessonCategoryRequestDTO(categoryId, gymId)
+        apiService.deleteFacilityLessonCategory(request, token).mapOrThrow { }
+    }
+
+    override suspend fun getLessonCategories(gymId: Int): Result<List<LessonCategory>> = ioResult(dispatchers) {
+        val token = tokenManager.getTokenOrThrow()
+        val request = GetLessonCategoriesRequestDTO(gymId)
+        apiService.getFacilityLessonCategories(request, token).mapOrThrow { it.toDomainCategories() }
+    }
+
     override suspend fun getUpcomingLessonsByFacility(gymId: Int, limit: Int): Result<List<Lesson>> =
         withContext(dispatchers.io) {
             runCatching {
@@ -219,10 +276,18 @@ class FacilityRepositoryImpl(
             }
         }
 
-    override suspend fun getActiveLessonsByFacility(gymId: Int, startDate: LocalDate, endDate: LocalDate?): Result<List<Lesson>> =
+    override suspend fun getActiveLessonsByFacility(
+        gymId: Int,
+        startDate: LocalDate,
+        endDate: LocalDate?
+    ): Result<List<Lesson>> =
         getActiveLessonsByFacility(gymId, startDate.formatToServerDate(), endDate?.formatToServerDate())
 
-    override suspend fun getActiveLessonsByFacility(gymId: Int, startDate: String, endDate: String?): Result<List<Lesson>> =
+    override suspend fun getActiveLessonsByFacility(
+        gymId: Int,
+        startDate: String,
+        endDate: String?
+    ): Result<List<Lesson>> =
         withContext(dispatchers.io) {
             runCatching {
                 val token = tokenManager.getTokenOrThrow()
@@ -235,10 +300,18 @@ class FacilityRepositoryImpl(
             }
         }
 
-    override suspend fun getAllLessonsByFacility(gymId: Int, startDate: LocalDate, endDate: LocalDate?): Result<List<Lesson>> =
+    override suspend fun getAllLessonsByFacility(
+        gymId: Int,
+        startDate: LocalDate,
+        endDate: LocalDate?
+    ): Result<List<Lesson>> =
         getAllLessonsByFacility(gymId, startDate.formatToServerDate(), endDate?.formatToServerDate())
 
-    override suspend fun getAllLessonsByFacility(gymId: Int, startDate: String, endDate: String?): Result<List<Lesson>> =
+    override suspend fun getAllLessonsByFacility(
+        gymId: Int,
+        startDate: String,
+        endDate: String?
+    ): Result<List<Lesson>> =
         withContext(dispatchers.io) {
             runCatching {
                 val token = tokenManager.getTokenOrThrow()

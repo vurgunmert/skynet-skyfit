@@ -1,100 +1,95 @@
-package com.vurgun.skyfit.feature.persona.settings.shared.helpsupport
+package com.vurgun.skyfit.settings.shared.helpsupport
 
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.BoxWithConstraints
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Divider
 import androidx.compose.material.Icon
 import androidx.compose.material.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import cafe.adriel.voyager.core.screen.Screen
+import cafe.adriel.voyager.koin.koinScreenModel
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
+import com.vurgun.skyfit.core.data.v1.domain.support.model.SupportType
 import com.vurgun.skyfit.core.ui.components.box.DashedBorderBox
 import com.vurgun.skyfit.core.ui.components.button.PrimaryLargeButton
 import com.vurgun.skyfit.core.ui.components.button.SecondaryLargeButton
+import com.vurgun.skyfit.core.ui.components.dialog.BasicDialog
+import com.vurgun.skyfit.core.ui.components.dialog.rememberBasicDialogState
+import com.vurgun.skyfit.core.ui.components.loader.FullScreenLoaderContent
 import com.vurgun.skyfit.core.ui.components.popup.BasicPopupMenu
 import com.vurgun.skyfit.core.ui.components.popup.SelectablePopupMenuItem
-import com.vurgun.skyfit.core.ui.components.special.SkyFitMobileScaffold
 import com.vurgun.skyfit.core.ui.components.special.CompactTopBar
-import com.vurgun.skyfit.core.ui.components.text.BodyMediumRegularText
-import com.vurgun.skyfit.core.ui.components.text.BodyMediumSemiboldText
-import com.vurgun.skyfit.core.ui.components.text.BodySmallRegularText
-import com.vurgun.skyfit.core.ui.components.text.MultiLineInputText
-import com.vurgun.skyfit.core.ui.components.text.SingleLineInputText
-import com.vurgun.skyfit.core.ui.components.text.TitledMediumRegularText
+import com.vurgun.skyfit.core.ui.components.special.FeatureVisible
+import com.vurgun.skyfit.core.ui.components.special.SkyFitMobileScaffold
+import com.vurgun.skyfit.core.ui.components.text.*
+import com.vurgun.skyfit.core.ui.screen.ErrorScreen
 import com.vurgun.skyfit.core.ui.styling.SkyFitColor
 import com.vurgun.skyfit.core.ui.styling.SkyFitTypography
+import com.vurgun.skyfit.core.ui.utils.CollectEffect
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
-import skyfit.core.ui.generated.resources.Res
-import skyfit.core.ui.generated.resources.ic_arrow_line_up
-import skyfit.core.ui.generated.resources.ic_chevron_down
-import skyfit.core.ui.generated.resources.ic_open_link
-import skyfit.core.ui.generated.resources.send_action
-import skyfit.core.ui.generated.resources.settings_support_description_hint
-import skyfit.core.ui.generated.resources.settings_support_description_label
-import skyfit.core.ui.generated.resources.settings_support_email_hint
-import skyfit.core.ui.generated.resources.settings_support_email_label
-import skyfit.core.ui.generated.resources.settings_support_help_subtitle
-import skyfit.core.ui.generated.resources.settings_support_issue_account_label
-import skyfit.core.ui.generated.resources.settings_support_issue_other_label
-import skyfit.core.ui.generated.resources.settings_support_issue_payment_label
-import skyfit.core.ui.generated.resources.settings_support_issue_technical_label
-import skyfit.core.ui.generated.resources.settings_support_label
-import skyfit.core.ui.generated.resources.settings_support_questions_label
-import skyfit.core.ui.generated.resources.settings_support_subject_label
-import skyfit.core.ui.generated.resources.settings_support_upload_file_hint
-import skyfit.core.ui.generated.resources.settings_support_upload_file_label
+import skyfit.core.ui.generated.resources.*
 
 class SettingsSupportHelpScreen : Screen {
 
     @Composable
     override fun Content() {
         val navigator = LocalNavigator.currentOrThrow
-        MobileSettingsSupportHelpScreen(
-            goToBack = { navigator.pop() }
-        )
-    }
+        val viewModel = koinScreenModel<HelpSupportViewModel>()
+        val uiState by viewModel.uiState.collectAsState()
+        val dialogState = rememberBasicDialogState()
 
+        CollectEffect(viewModel.uiEffect) { effect ->
+            when (effect) {
+                HelpSupportUiEffect.NavigateBack -> navigator.pop()
+                HelpSupportUiEffect.NotifyRequestSuccess -> {
+                    dialogState.show(
+                        title = "Istek gonderildi",
+                        message = "Iletisim bilgilerinizi kontrol ediniz.",
+                        dismissText = "Tamam"
+                    )
+                }
+            }
+        }
+
+        when (uiState) {
+            HelpSupportUiState.Loading -> {
+                FullScreenLoaderContent()
+            }
+
+            is HelpSupportUiState.Error -> {
+                ErrorScreen(message = (uiState as HelpSupportUiState.Error).message) { navigator.pop() }
+            }
+
+            is HelpSupportUiState.Content -> {
+                val content = uiState as HelpSupportUiState.Content
+                MobileSettingsSupportHelpScreen(content, viewModel::onAction)
+            }
+        }
+
+        BasicDialog(state = dialogState)
+    }
 }
 
 @Composable
-fun MobileSettingsSupportHelpScreen(goToBack: () -> Unit) {
-
-    var email: String? by remember { mutableStateOf(null) }
-    var description: String? by remember { mutableStateOf(null) }
+fun MobileSettingsSupportHelpScreen(
+    content: HelpSupportUiState.Content,
+    onAction: (HelpSupportUiAction) -> Unit
+) {
     var isSubjectPopupOpened by remember { mutableStateOf(false) }
-    var selectedSubjectType by remember { mutableStateOf(HelpSupportSubjectType.ACCOUNT) }
-    val supportOptions = listOf(
-        HelpSupportSubjectType.ACCOUNT to stringResource(Res.string.settings_support_issue_account_label),
-        HelpSupportSubjectType.PAYMENT to stringResource(Res.string.settings_support_issue_payment_label),
-        HelpSupportSubjectType.TECHNICAL to stringResource(Res.string.settings_support_issue_technical_label),
-        HelpSupportSubjectType.OTHER to stringResource(Res.string.settings_support_issue_other_label),
-    )
 
     SkyFitMobileScaffold(
         topBar = {
-            CompactTopBar(stringResource(Res.string.settings_support_label), onClickBack = goToBack)
+            CompactTopBar(
+                title = stringResource(Res.string.settings_support_label),
+                onClickBack = { onAction(HelpSupportUiAction.OnClickBack) })
         }
     ) {
         Column(
@@ -116,7 +111,7 @@ fun MobileSettingsSupportHelpScreen(goToBack: () -> Unit) {
                 TitledMediumRegularText(
                     modifier = Modifier.fillMaxWidth().clickable { isSubjectPopupOpened = true },
                     title = stringResource(Res.string.settings_support_subject_label),
-                    value = supportOptions.first { it.first == selectedSubjectType }.second,
+                    value = content.selectedSupportType.name,
                     rightIconRes = Res.drawable.ic_chevron_down
                 )
 
@@ -124,47 +119,50 @@ fun MobileSettingsSupportHelpScreen(goToBack: () -> Unit) {
                     modifier = Modifier.fillMaxWidth(),
                     isOpen = isSubjectPopupOpened,
                     onDismiss = { isSubjectPopupOpened = false },
-                    selectedType = selectedSubjectType,
-                    onSelectionChanged = { selectedSubjectType = it }
+                    types = content.supportTypes,
+                    selectedType = content.selectedSupportType,
+                    onSelectionChanged = { onAction(HelpSupportUiAction.OnChangeSupportType(it)) }
                 )
             }
 
             SingleLineInputText(
                 title = stringResource(Res.string.settings_support_email_label),
                 hint = stringResource(Res.string.settings_support_email_hint),
-                value = email,
-                onValueChange = { email = it }
+                value = content.email,
+                onValueChange = { onAction(HelpSupportUiAction.OnChangeEmail(it)) }
             )
 
             MultiLineInputText(
                 title = stringResource(Res.string.settings_support_description_label),
                 hint = stringResource(Res.string.settings_support_description_hint),
-                value = description,
-                onValueChange = { description = it }
+                value = content.description,
+                onValueChange = { onAction(HelpSupportUiAction.OnChangeDescription(it)) }
             )
 
-            Column(Modifier.fillMaxWidth()) {
-                BodyMediumSemiboldText(
-                    text = stringResource(Res.string.settings_support_upload_file_label),
-                    modifier = Modifier.padding(horizontal = 8.dp)
-                )
-                Spacer(Modifier.height(8.dp))
-                DashedBorderBox {
-                    Column(
-                        Modifier.padding(12.dp).fillMaxSize(),
-                        horizontalAlignment = Alignment.CenterHorizontally
-                    ) {
-                        Icon(
-                            painter = painterResource(Res.drawable.ic_arrow_line_up),
-                            contentDescription = null,
-                            modifier = Modifier.size(40.dp),
-                            tint = SkyFitColor.icon.default
-                        )
-                        Spacer(Modifier.height(16.dp))
-                        BodySmallRegularText(
-                            text = stringResource(Res.string.settings_support_upload_file_hint),
-                            color = SkyFitColor.text.secondary
-                        )
+            FeatureVisible(false) {
+                Column(Modifier.fillMaxWidth()) {
+                    BodyMediumSemiboldText(
+                        text = stringResource(Res.string.settings_support_upload_file_label),
+                        modifier = Modifier.padding(horizontal = 8.dp)
+                    )
+                    Spacer(Modifier.height(8.dp))
+                    DashedBorderBox {
+                        Column(
+                            Modifier.padding(12.dp).fillMaxSize(),
+                            horizontalAlignment = Alignment.CenterHorizontally
+                        ) {
+                            Icon(
+                                painter = painterResource(Res.drawable.ic_arrow_line_up),
+                                contentDescription = null,
+                                modifier = Modifier.size(40.dp),
+                                tint = SkyFitColor.icon.default
+                            )
+                            Spacer(Modifier.height(16.dp))
+                            BodySmallRegularText(
+                                text = stringResource(Res.string.settings_support_upload_file_hint),
+                                color = SkyFitColor.text.secondary
+                            )
+                        }
                     }
                 }
             }
@@ -191,15 +189,10 @@ private fun SelectSupportSubjectPopupMenu(
     modifier: Modifier = Modifier,
     isOpen: Boolean,
     onDismiss: () -> Unit,
-    selectedType: HelpSupportSubjectType,
-    onSelectionChanged: (HelpSupportSubjectType) -> Unit
+    types: List<SupportType>,
+    selectedType: SupportType,
+    onSelectionChanged: (SupportType) -> Unit
 ) {
-    val supportOptions = listOf(
-        HelpSupportSubjectType.ACCOUNT to stringResource(Res.string.settings_support_issue_account_label),
-        HelpSupportSubjectType.PAYMENT to stringResource(Res.string.settings_support_issue_payment_label),
-        HelpSupportSubjectType.TECHNICAL to stringResource(Res.string.settings_support_issue_technical_label),
-        HelpSupportSubjectType.OTHER to stringResource(Res.string.settings_support_issue_other_label),
-    )
 
     BoxWithConstraints(modifier.fillMaxWidth()) {
         BasicPopupMenu(
@@ -207,7 +200,7 @@ private fun SelectSupportSubjectPopupMenu(
             isOpen = isOpen,
             onDismiss = onDismiss
         ) {
-            supportOptions.forEachIndexed { index, (type, label) ->
+            types.forEachIndexed { index, type ->
                 SelectablePopupMenuItem(
                     selected = selectedType == type,
                     onSelect = {
@@ -215,10 +208,10 @@ private fun SelectSupportSubjectPopupMenu(
                         onDismiss()
                     },
                     content = {
-                        BodyMediumRegularText(label, modifier = Modifier.weight(1f))
+                        BodyMediumRegularText(type.name, modifier = Modifier.weight(1f))
                     }
                 )
-                if (index != supportOptions.lastIndex) {
+                if (index != types.lastIndex) {
                     Divider(Modifier.fillMaxWidth(), color = SkyFitColor.border.default)
                 }
             }

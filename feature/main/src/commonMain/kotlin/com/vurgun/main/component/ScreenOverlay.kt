@@ -53,3 +53,16 @@ internal fun ScreenOverlay(
         }
     }
 }
+@Composable
+internal fun ExpandedScreenOverlay(
+    screenProvider: ScreenProvider,
+    onDismiss: () -> Unit,
+) {
+    val root = rememberScreen(screenProvider)
+
+    Box(modifier = Modifier.fillMaxSize()) {
+        Navigator(screen = root) { navigator ->
+            CurrentScreen()
+        }
+    }
+}

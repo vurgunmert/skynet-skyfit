@@ -20,6 +20,7 @@ import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.koin.koinScreenModel
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
+import com.vurgun.skyfit.core.data.utility.PlatformType
 import com.vurgun.skyfit.core.ui.components.button.PrimaryIconButton
 import com.vurgun.skyfit.core.ui.components.button.SecondaryIconButton
 import com.vurgun.skyfit.core.ui.components.dialog.BasicDialog
@@ -28,7 +29,10 @@ import com.vurgun.skyfit.core.ui.components.icon.BackIcon
 import com.vurgun.skyfit.core.ui.components.special.SkyFitMobileFillScaffold
 import com.vurgun.skyfit.core.ui.components.text.BodyLargeSemiboldText
 import com.vurgun.skyfit.core.ui.utils.CollectEffect
+import com.vurgun.skyfit.core.ui.utils.LocalCompactOverlayController
+import com.vurgun.skyfit.core.ui.utils.LocalExpandedOverlayController
 import com.vurgun.skyfit.health.posture.internal.CameraPreviewContent
+import com.vurgun.skyfit.health.posture.internal.DesktopCameraPreviewContent
 import com.vurgun.skyfit.health.posture.internal.PostureInstructionContent
 import com.vurgun.skyfit.health.posture.internal.PostureOptionsContent
 import com.vurgun.skyfit.health.posture.internal.PostureReportContent
@@ -52,10 +56,14 @@ class PostureAnalysisScreen : Screen {
         val contentState by viewModel.contentState.collectAsState()
 
         val dialogState = rememberBasicDialogState()
+        val overlayController = LocalCompactOverlayController.currentOrThrow
+        val expandedOverlayController = LocalExpandedOverlayController.currentOrThrow
 
         CollectEffect(viewModel.effect) { effect ->
             when (effect) {
                 PostureAnalysisEffect.Exit -> {
+                    overlayController.invoke(null)
+                    expandedOverlayController.invoke(null)
                     navigator.pop()
                 }
 
@@ -88,7 +96,12 @@ class PostureAnalysisScreen : Screen {
 
                     is PostureAnalysisContentState.CameraPreview -> {
                         val content = (contentState as PostureAnalysisContentState.CameraPreview)
-                        CameraPreviewContent(content, viewModel)
+
+                        if (PlatformType.isDesktop) {
+                            DesktopCameraPreviewContent(content, viewModel)
+                        } else {
+                            CameraPreviewContent(content, viewModel)
+                        }
                     }
 
                     is PostureAnalysisContentState.ImageScanner -> {

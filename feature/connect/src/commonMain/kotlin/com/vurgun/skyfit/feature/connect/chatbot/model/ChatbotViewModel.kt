@@ -5,22 +5,26 @@ import cafe.adriel.voyager.core.model.screenModelScope
 import com.vurgun.skyfit.core.data.storage.Storage
 import com.vurgun.skyfit.core.data.utility.SingleSharedFlow
 import com.vurgun.skyfit.core.data.utility.emitIn
+import com.vurgun.skyfit.feature.connect.chatbot.model.ChatBotEffect.*
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 
 sealed class ChatBotAction {
     data object OnClickBack : ChatBotAction()
-    data object OnClickStart : ChatBotAction()
-    data object OnClickNew : ChatBotAction()
+    data object OnClickOnboardingStart : ChatBotAction()
+    data object OnClickNewChat : ChatBotAction()
+    data object OnClickPostureAnalysis : ChatBotAction()
+    data object OnClickMealReport : ChatBotAction()
+    data class OnSubmitNewQuery(val query: String) : ChatBotAction()
     data class OnClickHistoryItem(val query: String) : ChatBotAction()
 
-    data object OnClickPostureAnalysis : ChatBotAction()
 }
 
 sealed class ChatBotEffect {
     data object Dismiss : ChatBotEffect()
     data object NavigateToPostureAnalysis : ChatBotEffect()
-    data class NavigateChat(
+    data object NavigateToMealReport : ChatBotEffect()
+    data class NavigateToChat(
         val presetQuery: String? = null
     ) : ChatBotEffect()
 }
@@ -49,17 +53,24 @@ class ChatbotViewModel(
                 _effect.emitIn(screenModelScope, ChatBotEffect.Dismiss)
             }
 
-            ChatBotAction.OnClickNew -> {
-                _effect.emitIn(screenModelScope, ChatBotEffect.NavigateChat())
+            ChatBotAction.OnClickNewChat -> {
+                _effect.emitIn(screenModelScope, NavigateToChat())
             }
 
             ChatBotAction.OnClickPostureAnalysis -> {
                 _effect.emitIn(screenModelScope, ChatBotEffect.NavigateToPostureAnalysis)
             }
 
-            ChatBotAction.OnClickStart -> finalizeOnboarding()
+            ChatBotAction.OnClickOnboardingStart -> finalizeOnboarding()
             is ChatBotAction.OnClickHistoryItem -> {
-                _effect.emitIn(screenModelScope, ChatBotEffect.NavigateChat(action.query))
+                _effect.emitIn(screenModelScope, NavigateToChat(action.query))
+            }
+
+            ChatBotAction.OnClickMealReport -> {
+                _effect.emitIn(screenModelScope, ChatBotEffect.NavigateToMealReport)
+            }
+            is ChatBotAction.OnSubmitNewQuery -> {
+                _effect.emitIn(screenModelScope, NavigateToChat(action.query))
             }
         }
     }

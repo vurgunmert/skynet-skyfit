@@ -509,7 +509,9 @@ internal object FacilityProfileCompactComponent {
             )
         } else {
             if (content.lessons.isEmpty()) {
-                ProfileCompactComponent.NoScheduledLessonsCard()
+                ProfileCompactComponent.NoScheduledLessonsCard(
+                    onClickAdd = { onAction(FacilityProfileUiAction.OnClickAllLessons)
+                })
             } else {
                 ProfileCompactComponent.LessonSchedule(
                     lessons = content.lessons,

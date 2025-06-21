@@ -9,7 +9,7 @@ import com.vurgun.skyfit.core.data.v1.data.facility.model.FacilityLessonPackageD
 import com.vurgun.skyfit.core.data.v1.domain.account.manager.ActiveAccountManager
 import com.vurgun.skyfit.core.data.v1.domain.account.model.FacilityAccount
 import com.vurgun.skyfit.core.data.v1.domain.facility.repository.FacilityRepository
-import com.vurgun.skyfit.core.data.v1.domain.workout.model.WorkoutCategory
+import com.vurgun.skyfit.core.data.v1.domain.lesson.model.LessonCategory
 import com.vurgun.skyfit.core.data.v1.domain.workout.repository.WorkoutRepository
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharedFlow
@@ -21,8 +21,8 @@ sealed class FacilityPackageEditUiState {
     data object Loading : FacilityPackageEditUiState()
     data class Error(val message: String?) : FacilityPackageEditUiState()
     data class Content(
-        val categories: List<WorkoutCategory>,
-        val branches: List<String>
+        val categories: List<LessonCategory>,
+        val branches: List<String> = emptyList<String>()
     ) : FacilityPackageEditUiState()
 }
 
@@ -31,7 +31,7 @@ data class FacilityPackageEditFormState(
     val packageId: Int? = null,
     val title: String? = null,
     val lessonCount: String? = null,
-    val categories: List<WorkoutCategory> = emptyList(),
+    val categories: List<LessonCategory> = emptyList(),
     val description: String? = null,
     val monthCount: String? = null,
     val branch: String? = null,
@@ -45,7 +45,7 @@ sealed class FacilityPackageEditAction {
     data object OnClickSave : FacilityPackageEditAction()
     data class OnTitleChanged(val title: String) : FacilityPackageEditAction()
     data class OnLessonCountChanged(val lessonCount: String) : FacilityPackageEditAction()
-    data class OnServicesChanged(val services: List<WorkoutCategory>) : FacilityPackageEditAction()
+    data class OnServicesChanged(val services: List<LessonCategory>) : FacilityPackageEditAction()
     data class OnDescriptionChanged(val description: String) : FacilityPackageEditAction()
     data class OnDurationMonthChanged(val monthCount: String) : FacilityPackageEditAction()
     data class OnBranchChanged(val branch: String) : FacilityPackageEditAction()
@@ -117,8 +117,7 @@ class FacilityPackageEditViewModel(
         screenModelScope.launch {
             runCatching {
 
-                val categories = workoutRepository.getCategories().getOrThrow()
-                val branches = listOf("Test Şube 1", "Test Şube 2")
+                val categories = facilityRepository.getLessonCategories(facilityUser.gymId).getOrDefault(emptyList())
 
                 if (lessonPackage != null) {
                     _formState.value = FacilityPackageEditFormState(
@@ -126,7 +125,7 @@ class FacilityPackageEditViewModel(
                         packageId = lessonPackage.packageId,
                         title = lessonPackage.title,
                         lessonCount = lessonPackage.lessonCount.toString(),
-                        categories = categories.filter { it.name in lessonPackage.packageContents },
+                        categories = categories.filter { it.name in lessonPackage.title },
                         description = lessonPackage.description,
                         monthCount = lessonPackage.duration.toString(),
                         branch = "",
@@ -136,10 +135,7 @@ class FacilityPackageEditViewModel(
                 }
 
                 _uiState.update(
-                    FacilityPackageEditUiState.Content(
-                        categories = categories,
-                        branches = branches
-                    )
+                    FacilityPackageEditUiState.Content(categories = categories)
                 )
 
             }.onFailure { error ->

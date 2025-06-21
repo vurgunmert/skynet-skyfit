@@ -1,36 +1,32 @@
 package com.vurgun.skyfit.core.data.v1.data.account.service
 
+import com.vurgun.skyfit.core.data.v1.data.account.model.*
 import com.vurgun.skyfit.core.data.v1.data.global.model.EmptyDTO
-import com.vurgun.skyfit.core.data.v1.data.account.model.AccountTypeDTO
-import com.vurgun.skyfit.core.data.v1.data.account.model.AccountDTO
-import com.vurgun.skyfit.core.data.v1.data.account.model.SelectActiveAccountTypeRequestDTO
-import com.vurgun.skyfit.core.data.v1.data.account.model.SelectActiveAccountTypeResponseDTO
 import com.vurgun.skyfit.core.data.v1.domain.account.model.AccountOnboardingFormData
 import com.vurgun.skyfit.core.network.ApiClient
 import com.vurgun.skyfit.core.network.ApiResult
-import io.ktor.client.request.bearerAuth
-import io.ktor.client.request.forms.MultiPartFormDataContent
-import io.ktor.client.request.forms.formData
-import io.ktor.client.request.setBody
-import io.ktor.client.request.url
-import io.ktor.http.HttpHeaders
-import io.ktor.http.HttpMethod
-import io.ktor.http.headersOf
+import io.ktor.client.request.*
+import io.ktor.client.request.forms.*
+import io.ktor.http.*
 import kotlin.uuid.ExperimentalUuidApi
 import kotlin.uuid.Uuid
 
 class AccountApiService(private val apiClient: ApiClient) {
 
     private companion object Endpoint {
-        const val ONBOARDING_NEW = "auth/onboarding"
-        const val ONBOARDING_ADD = "new/type/onboarding"
+        const val SUBMIT_ONBOARDING_NEW = "account/onboarding/new"
+        const val SUBMIT_ONBOARDING_ADD = "account/onboarding/add"
+        const val CHANGE_PASSWORD = "account/change-password"
+        const val GET_ACCOUNT_DETAILS = "account/details"
+        const val SELECT_USER_TYPE = "account/user-type/select"
+        const val GET_USER_TYPES = "global/user-types" //TODO: Chane to account user types
     }
 
     suspend fun getDetails(token: String): ApiResult<AccountDTO> {
         return apiClient.safeApiCall<AccountDTO> {
             method = HttpMethod.Companion.Post
             bearerAuth(token)
-            url("user/detail")
+            url(GET_ACCOUNT_DETAILS)
         }
     }
 
@@ -38,7 +34,7 @@ class AccountApiService(private val apiClient: ApiClient) {
         return apiClient.safeApiCall<List<AccountTypeDTO>> {
             method = HttpMethod.Companion.Post
             bearerAuth(token)
-            url("get/usertypes")
+            url(GET_USER_TYPES)
         }
     }
 
@@ -47,7 +43,7 @@ class AccountApiService(private val apiClient: ApiClient) {
         return apiClient.safeApiCall<SelectActiveAccountTypeResponseDTO> {
             method = HttpMethod.Companion.Post
             bearerAuth(token)
-            url("select/usertype")
+            url(SELECT_USER_TYPE)
             setBody(request)
         }
     }
@@ -55,7 +51,7 @@ class AccountApiService(private val apiClient: ApiClient) {
     suspend fun onboardNewAccount(request: AccountOnboardingFormData, token: String): ApiResult<EmptyDTO> {
         return apiClient.safeApiCall<EmptyDTO> {
             method = HttpMethod.Post
-            url(Endpoint.ONBOARDING_NEW)
+            url(SUBMIT_ONBOARDING_NEW)
             bearerAuth(token)
             setBody(buildMultipartFormData(request))
         }
@@ -64,7 +60,7 @@ class AccountApiService(private val apiClient: ApiClient) {
     suspend fun onboardingAdditionalAccount(request: AccountOnboardingFormData, token: String): ApiResult<EmptyDTO> {
         return apiClient.safeApiCall<EmptyDTO> {
             method = HttpMethod.Post
-            url(Endpoint.ONBOARDING_ADD)
+            url(SUBMIT_ONBOARDING_ADD)
             bearerAuth(token)
             setBody(buildMultipartFormData(request))
         }
@@ -105,5 +101,14 @@ class AccountApiService(private val apiClient: ApiClient) {
                 }
             }
         )
+    }
+
+    suspend fun changePassword(requestBody: ChangePasswordRequestDTO, token: String): ApiResult<EmptyDTO> {
+        return apiClient.safeApiCall<EmptyDTO> {
+            method = HttpMethod.Post
+            url(Endpoint.CHANGE_PASSWORD)
+            bearerAuth(token)
+            setBody(requestBody)
+        }
     }
 }

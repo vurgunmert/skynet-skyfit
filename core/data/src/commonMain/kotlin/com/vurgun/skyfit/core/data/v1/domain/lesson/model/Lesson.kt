@@ -49,6 +49,7 @@ data class Lesson(
     val endTime: LocalTime,
 
     // Info
+    val categoryIds: List<Int> = emptyList(),
     val capacityRatio: String,
     val trainerId: Int,
     val trainerFullName: String,

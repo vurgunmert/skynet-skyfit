@@ -16,7 +16,7 @@ internal data class GetUpcomingFacilityLessonsRequestDTO(
 )
 
 @Serializable
-internal data class CreateLessonRequest(
+internal data class CreateLessonRequestDTO(
     val gymId: Int,
     val iconId: Int,
     val title: String,
@@ -33,6 +33,7 @@ internal data class CreateLessonRequest(
     val isRequiredAppointment: Boolean, // zorunlu randevu alımı
     val price: Int, // fiyat yok ise 0 gönder
     val participantType: Int, //1 herkes, 2 üyeler, 3 takipçiler
+    val categories: List<Int>
 )
 
 @Serializable

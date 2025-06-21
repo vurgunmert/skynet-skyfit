@@ -11,7 +11,7 @@ class ExploreApiService(private val apiClient: ApiClient) {
 
     private object Endpoint {
         const val GET_ALL_FACILITIES = "get/all/gyms"
-        const val GET_ALL_TRAINERS = "get/all/trainers"
+        const val GET_ALL_TRAINERS = "get/all/platform/trainers"
     }
 
     suspend fun getFacilities(token: String): ApiResult<List<FacilityProfileDTO>> {

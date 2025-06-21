@@ -17,7 +17,7 @@ class GlobalRepositoryImpl(
 
     override suspend fun getProfileTags() = ioResult(dispatchers) {
         val token = tokenManager.getTokenOrThrow()
-        apiService.getAllTags(token).mapOrThrow { list -> list.map { ProfileTag(it.tagId, it.tagName) } }
+        apiService.getProfileTags(token).mapOrThrow { list -> list.map { ProfileTag(it.tagId, it.tagName) } }
     }
 
     override suspend fun getGoals() = ioResult(dispatchers) {

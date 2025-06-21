@@ -22,9 +22,12 @@ import cafe.adriel.voyager.navigator.currentOrThrow
 import com.vurgun.skyfit.core.data.v1.domain.lesson.model.CalendarRecurrence
 import com.vurgun.skyfit.core.data.v1.domain.lesson.model.CalendarRecurrenceType
 import com.vurgun.skyfit.core.data.v1.domain.lesson.model.Lesson
+import com.vurgun.skyfit.core.data.v1.domain.lesson.model.LessonCategory
 import com.vurgun.skyfit.core.ui.components.button.*
+import com.vurgun.skyfit.core.ui.components.dialog.BasicDialog
 import com.vurgun.skyfit.core.ui.components.dialog.DestructiveDialog
 import com.vurgun.skyfit.core.ui.components.dialog.ErrorDialog
+import com.vurgun.skyfit.core.ui.components.dialog.rememberBasicDialogState
 import com.vurgun.skyfit.core.ui.components.icon.ActionIcon
 import com.vurgun.skyfit.core.ui.components.image.CircleNetworkImage
 import com.vurgun.skyfit.core.ui.components.picker.SelectStartEndDateRow
@@ -48,9 +51,10 @@ class FacilityLessonEditScreen(private val lesson: Lesson? = null) : Screen {
         val navigator = LocalNavigator.currentOrThrow
         val viewModel = koinScreenModel<FacilityLessonEditViewModel>()
         var showNoTrainerError by remember { mutableStateOf(false) }
+        val basicDialogState = rememberBasicDialogState()
 
-        CollectEffect(viewModel.effect) { effect ->
-            when (effect) {
+        CollectEffect(viewModel.effect) {
+            when (val effect = it) {
                 FacilityLessonEditEffect.NavigateToBack -> {
                     navigator.pop()
                 }
@@ -67,11 +71,34 @@ class FacilityLessonEditScreen(private val lesson: Lesson? = null) : Screen {
                     navigator.replace(FacilityLessonCreatedScreen(isUpdate = true, effect.lesson))
                 }
 
+                is FacilityLessonEditEffect.ShowNoCategoryError -> {
+                    basicDialogState.show(
+                        title = "Ders Kategorileri",
+                        message = "Ders ekleyebilmek icin ders kategorisi tanimlamalisiniz.",
+                        confirmText = "Ekle",
+                        dismissText = "Iptal",
+                        onConfirm = {
+                            navigator.push(FacilityLessonCategoryListingScreen(effect.facilityId))
+                        }
+                    )
+                }
+
+                is FacilityLessonEditEffect.NavigateToCategoryListing -> {
+                    navigator.push(FacilityLessonCategoryListingScreen(effect.facilityId))
+                }
+
+                is FacilityLessonEditEffect.ShowError -> {
+                    basicDialogState.show(
+                        title = "Ders Olusturulamadi",
+                        message = effect.message.toString(),
+                        onConfirm = { }
+                    )
+                }
             }
         }
 
         LaunchedEffect(Unit) {
-            viewModel.loadLesson(lesson)
+            viewModel.loadData(lesson)
         }
 
         MobileFacilityEditLessonScreen(
@@ -84,6 +111,8 @@ class FacilityLessonEditScreen(private val lesson: Lesson? = null) : Screen {
                 onDismiss = { navigator.pop() }
             )
         }
+
+        BasicDialog(basicDialogState)
     }
 
 }
@@ -160,6 +189,15 @@ private fun MobileFacilityEditLessonScreen(
                 selectedRecurrence = uiState.recurrence,
                 onSelectionChanged = viewModel::updateRecurrence,
                 isEditing = uiState.isEditing
+            )
+            // endregion
+
+            // region: Category
+            LessonSelectCategoryRow(
+                allCategories = uiState.categories,
+                selectedCategories = uiState.selectedCategories,
+                onSelectionChanged = viewModel::updateSelectedCategories,
+                onAddNew = { viewModel.onAction(FacilityLessonEditAction.AddNewCategory) },
             )
             // endregion
 
@@ -578,6 +616,40 @@ fun LessonEditRecurrenceRow(
     }
 }
 //endregion Date Time Components
+
+
+//region Lesson Category
+@Composable
+private fun LessonSelectCategoryRow(
+    allCategories: List<LessonCategory>,
+    selectedCategories: List<LessonCategory>,
+    onSelectionChanged: (List<LessonCategory>) -> Unit,
+    onAddNew: () -> Unit
+) {
+    var isCategoryPopupOpened by remember { mutableStateOf(false) }
+
+    Column {
+        TitledMediumRegularText(
+            modifier = Modifier.fillMaxWidth()
+                .clickable { isCategoryPopupOpened = true },
+            title = stringResource(Res.string.lesson_categories_label),
+            value = selectedCategories.joinToString(", ") { it.name },
+            rightIconRes = Res.drawable.ic_chevron_down
+        )
+
+        if (isCategoryPopupOpened) {
+            LessonSelectCategoryPopupMenu(
+                isOpen = isCategoryPopupOpened,
+                onDismiss = { isCategoryPopupOpened = false },
+                allCategories = allCategories.toSet(),
+                selectedCategories = selectedCategories.toSet(),
+                onSelectionChanged = { onSelectionChanged(it.toList()) },
+                onAddNew = onAddNew
+            )
+        }
+    }
+}
+//endregion Lesson Category
 
 //region Capacity
 @Composable

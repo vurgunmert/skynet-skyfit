@@ -48,7 +48,7 @@ import com.vurgun.skyfit.core.ui.components.text.BodyMediumMediumText
 import com.vurgun.skyfit.core.ui.screen.ErrorScreen
 import com.vurgun.skyfit.core.ui.styling.SkyFitColor
 import com.vurgun.skyfit.core.ui.utils.CollectEffect
-import com.vurgun.skyfit.core.ui.utils.LocalOverlayController
+import com.vurgun.skyfit.core.ui.utils.LocalCompactOverlayController
 import com.vurgun.skyfit.core.ui.utils.LocalWindowSize
 import com.vurgun.skyfit.core.ui.utils.WindowSize
 import org.jetbrains.compose.resources.painterResource
@@ -70,7 +70,7 @@ class TrainerAppointmentListingScreen : Screen {
         val activeTab = (uiState as? TrainerAppointmentListingUiState.Content)?.activeTab
             ?: TrainerAppointmentListingTab.Completed
         val windowSize = LocalWindowSize.current
-        val overlayController = LocalOverlayController.current
+        val overlayController = LocalCompactOverlayController.current
 
         CollectEffect(viewModel.effect) { effect ->
             when (effect) {

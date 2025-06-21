@@ -33,7 +33,7 @@ import com.vurgun.skyfit.core.ui.screen.ErrorScreen
 import com.vurgun.skyfit.core.ui.styling.SkyFitColor
 import com.vurgun.skyfit.core.ui.styling.SkyFitTypography
 import com.vurgun.skyfit.core.ui.utils.CollectEffect
-import com.vurgun.skyfit.core.ui.utils.LocalOverlayController
+import com.vurgun.skyfit.core.ui.utils.LocalCompactOverlayController
 import com.vurgun.skyfit.core.ui.utils.LocalWindowSize
 import com.vurgun.skyfit.core.ui.utils.WindowSize
 
@@ -43,7 +43,7 @@ class TrainerAppointmentDetailScreen(private val lessonId: Int) : Screen {
     override fun Content() {
         val navigator = LocalNavigator.currentOrThrow
         val viewModel = koinScreenModel<TrainerAppointmentDetailViewModel>()
-        val overlayController = LocalOverlayController.current
+        val overlayController = LocalCompactOverlayController.current
 
         CollectEffect(viewModel.effect) { effect ->
             when (effect) {

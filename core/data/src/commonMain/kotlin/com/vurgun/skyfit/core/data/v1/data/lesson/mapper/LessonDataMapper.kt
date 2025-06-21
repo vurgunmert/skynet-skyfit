@@ -1,11 +1,13 @@
 package com.vurgun.skyfit.core.data.v1.data.lesson.mapper
 
-import com.vurgun.skyfit.core.data.v1.domain.lesson.model.Lesson
-import com.vurgun.skyfit.core.data.v1.domain.lesson.model.ScheduledLessonDetail
 import com.vurgun.skyfit.core.data.utility.parseServerToDateOnly
 import com.vurgun.skyfit.core.data.utility.parseServerToHHMMTime
+import com.vurgun.skyfit.core.data.v1.data.lesson.model.LessonCategoryDTO
 import com.vurgun.skyfit.core.data.v1.data.lesson.model.LessonDTO
 import com.vurgun.skyfit.core.data.v1.data.lesson.model.ScheduledLessonDetailDTO
+import com.vurgun.skyfit.core.data.v1.domain.lesson.model.Lesson
+import com.vurgun.skyfit.core.data.v1.domain.lesson.model.LessonCategory
+import com.vurgun.skyfit.core.data.v1.domain.lesson.model.ScheduledLessonDetail
 import kotlinx.datetime.Instant
 import kotlinx.datetime.LocalDate
 import kotlinx.datetime.LocalDateTime
@@ -71,4 +73,10 @@ object LessonDataMapper {
             statusName = statusName
         )
     }
+
+    fun LessonCategoryDTO.toDomainCategory(): LessonCategory {
+        return LessonCategory(categoryId, categoryName)
+    }
+
+    fun List<LessonCategoryDTO>.toDomainCategories(): List<LessonCategory> = map { it.toDomainCategory() }
 }

@@ -16,10 +16,10 @@ import io.ktor.http.HttpMethod
 class AuthApiService(private val apiClient: ApiClient) {
 
     private object Endpoint {
-        const val AUTH = "auth"
-        const val AUTH_VERIFY_OTP = "auth/otpverify"
-        const val AUTH_FORGOT_VERIFY_OTP = "forgot/verify"
-        const val AUTH_SEND_OTP = "send/otp"
+        const val LOGIN = "auth/login"
+        const val LOGIN_VERIFY_OTP = "auth/login/verify"
+        const val FORGOT_VERIFY_OTP = "auth/forgot-password/verify"
+        const val RESEND_OTP = "auth/create-password"
         const val AUTH_CREATE_PASSWORD = "auth/createpassword"
         const val AUTH_FORGOT_PASSWORD_RESET = "forgot/change/password"
     }
@@ -27,7 +27,7 @@ class AuthApiService(private val apiClient: ApiClient) {
     suspend fun login(request: AuthRequestDTO): ApiResult<AuthResponseDTO> {
         return apiClient.safeApiCall<AuthResponseDTO> {
             method = HttpMethod.Companion.Post
-            url(Endpoint.AUTH)
+            url(Endpoint.LOGIN)
             setBody(request)
         }
     }
@@ -36,7 +36,7 @@ class AuthApiService(private val apiClient: ApiClient) {
         return apiClient.safeApiCall<AuthResponseDTO> {
             method = HttpMethod.Companion.Post
             bearerAuth(token)
-            url(Endpoint.AUTH_VERIFY_OTP)
+            url(Endpoint.LOGIN_VERIFY_OTP)
             setBody(request)
         }
     }
@@ -47,7 +47,7 @@ class AuthApiService(private val apiClient: ApiClient) {
         return apiClient.safeApiCall<AuthResponseDTO> {
             method = HttpMethod.Companion.Post
             bearerAuth(token)
-            url(Endpoint.AUTH_FORGOT_VERIFY_OTP)
+            url(Endpoint.FORGOT_VERIFY_OTP)
             setBody(request)
         }
     }
@@ -56,7 +56,7 @@ class AuthApiService(private val apiClient: ApiClient) {
         return apiClient.safeApiCall<AuthResponseDTO> {
             method = HttpMethod.Companion.Post
             bearerAuth(token)
-            url(Endpoint.AUTH_SEND_OTP)
+            url(Endpoint.RESEND_OTP)
             setBody(request)
         }
     }

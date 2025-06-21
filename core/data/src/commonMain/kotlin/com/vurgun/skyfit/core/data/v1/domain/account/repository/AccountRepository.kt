@@ -11,4 +11,5 @@ interface AccountRepository {
     suspend fun getRegisteredAccountTypes(): Result<List<AccountType>>
     suspend fun getAccountDetails(): Result<Account>
     suspend fun selectActiveAccountType(typeId: Int): Result<SelectActiveAccountTypeResponseDTO>
+    suspend fun changePassword(old: String, new: String, again: String): Result<Unit>
 }

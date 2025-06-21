@@ -3,7 +3,7 @@ package com.vurgun.skyfit.settings
 import com.vurgun.skyfit.core.data.dataCoreModule
 import com.vurgun.skyfit.core.network.dataNetworkModule
 import com.vurgun.skyfit.settings.facility.member.FacilityAddMembersViewModel
-import com.vurgun.skyfit.settings.facility.member.FacilityManageMembersViewModel
+import com.vurgun.skyfit.settings.facility.member.FacilityMemberSettingsViewModel
 import com.vurgun.skyfit.settings.facility.notification.FacilityNotificationSettingsViewModel
 import com.vurgun.skyfit.settings.facility.packages.FacilityPackageEditViewModel
 import com.vurgun.skyfit.settings.facility.packages.FacilityPackageListingViewModel
@@ -15,6 +15,7 @@ import com.vurgun.skyfit.settings.facility.trainer.FacilityManageTrainersViewMod
 import com.vurgun.skyfit.settings.shared.SettingsViewModel
 import com.vurgun.skyfit.settings.shared.account.AccountRoleSettingsViewModel
 import com.vurgun.skyfit.settings.shared.changepassword.PasswordSettingsViewModel
+import com.vurgun.skyfit.settings.shared.helpsupport.HelpSupportViewModel
 import com.vurgun.skyfit.settings.trainer.notification.TrainerNotificationSettingsViewModel
 import com.vurgun.skyfit.settings.trainer.profile.TrainerSettingsEditProfileViewModel
 import com.vurgun.skyfit.settings.trainer.profile.TrainerAccountSettingsViewModel
@@ -27,7 +28,7 @@ val dataPersonaModule = module {
     includes(dataNetworkModule, dataCoreModule)
 
     factory { SettingsViewModel(get()) }
-    factory { PasswordSettingsViewModel() }
+    factory { PasswordSettingsViewModel(get()) }
     factory { AccountRoleSettingsViewModel(get()) }
 
     factory { UserAccountSettingsViewModel(get(), get()) }
@@ -38,7 +39,7 @@ val dataPersonaModule = module {
 
     factory { FacilityAccountSettingsViewModel(get(), get()) }
     factory { FacilityProfileSettingsViewModel(get(), get(), get(), get()) }
-    factory { FacilityManageMembersViewModel(get(), get()) }
+    factory { FacilityMemberSettingsViewModel(get(), get()) }
     factory { FacilityAddMembersViewModel(get(), get()) }
     factory { FacilityManageTrainersViewModel(get(), get()) }
     factory { FacilityPaymentHistoryViewModel() }
@@ -50,4 +51,5 @@ val dataPersonaModule = module {
     factory { TrainerNotificationSettingsViewModel() }
 
     factory { UserNotificationSettingsViewModel() }
+    factory { HelpSupportViewModel(get()) }
 }

@@ -1,20 +1,20 @@
 package com.vurgun.skyfit.feature.connect.chatbot.screen
 
+import androidx.compose.animation.core.animateFloatAsState
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
+import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.graphicsLayer
+import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.dp
 import cafe.adriel.voyager.navigator.LocalNavigator
@@ -55,8 +55,10 @@ fun ChatbotCompact(viewModel: ChatbotViewModel) {
             ChatBotEffect.NavigateToPostureAnalysis ->
                 navigator.push(SharedScreen.PostureAnalysis)
 
-            is ChatBotEffect.NavigateChat ->
+            is ChatBotEffect.NavigateToChat ->
                 navigator.push(ChatWithBotScreen(presetQuery = effect.presetQuery))
+
+            ChatBotEffect.NavigateToMealReport -> Unit
         }
     }
 
@@ -67,9 +69,6 @@ fun ChatbotCompact(viewModel: ChatbotViewModel) {
                 onClickBack = { viewModel.onAction(ChatBotAction.OnClickBack) },
                 modifier = Modifier.systemBarsPadding()
             )
-        },
-        bottomBar = {
-
         }
     ) {
         Box(Modifier.fillMaxSize()) {
@@ -89,17 +88,17 @@ fun ChatbotCompact(viewModel: ChatbotViewModel) {
                         viewModel.onAction(ChatBotAction.OnClickPostureAnalysis)
                     },
                     onClickChatHistory = {
-                        viewModel.onAction(ChatBotAction.OnClickNew)
+                        viewModel.onAction(ChatBotAction.OnClickNewChat)
                     },
                     onClickChat = {
-                        viewModel.onAction(ChatBotAction.OnClickNew)
+                        viewModel.onAction(ChatBotAction.OnClickNewChat)
                     }
                 )
             } else {
                 ChatbotCompactComponent.Onboarding(
                     modifier = Modifier.align(Alignment.BottomStart),
                     onComplete = {
-                        viewModel.onAction(ChatBotAction.OnClickStart)
+                        viewModel.onAction(ChatBotAction.OnClickOnboardingStart)
                     }
                 )
             }
@@ -265,63 +264,83 @@ private object ChatbotCompactComponent {
             )
         }
     }
+}
+@Composable
+fun ShortcutCardBox(
+    modifier: Modifier = Modifier,
+    leftRes: DrawableResource,
+    rightRes: DrawableResource,
+    title: String,
+    onClick: () -> Unit
+) {
+    var isPressed by remember { mutableStateOf(false) }
 
+    val scale by animateFloatAsState(
+        targetValue = if (isPressed) 0.96f else 1f,
+        animationSpec = tween(durationMillis = 100),
+        label = "scale"
+    )
 
-    @Composable
-    private fun ShortcutCardBox(
-        modifier: Modifier = Modifier,
-        leftRes: DrawableResource,
-        rightRes: DrawableResource,
-        title: String,
-        onClick: () -> Unit
+    Box(
+        modifier = modifier
+            .graphicsLayer {
+                scaleX = scale
+                scaleY = scale
+                shape = RoundedCornerShape(20)
+                clip = true
+            }
+            .pointerInput(Unit) {
+                detectTapGestures(
+                    onPress = {
+                        isPressed = true
+                        tryAwaitRelease()
+                        isPressed = false
+                        onClick()
+                    }
+                )
+            }
+            .background(SkyFitColor.specialty.buttonBgRest)
+            .sizeIn(minWidth = 100.dp, minHeight = 100.dp, maxWidth = 180.dp, maxHeight = 180.dp)
+            .aspectRatio(1f)
     ) {
-        Box(
-            modifier = modifier
-                .clickable(onClick = onClick)
-                .clip(shape = RoundedCornerShape(20))
-                .background(SkyFitColor.specialty.buttonBgRest)
-                .sizeIn(minWidth = 100.dp, minHeight = 100.dp, maxWidth = 180.dp, maxHeight = 180.dp)
-                .aspectRatio(1f)
-        ) {
-            Row(Modifier.fillMaxSize()) {
-                Image(
-                    painter = painterResource(leftRes),
-                    contentDescription = "Left Image",
-                    modifier = Modifier
-                        .weight(0.5f, fill = true)
-                        .fillMaxHeight(),
-                    contentScale = ContentScale.Fit
-                )
-
-                Image(
-                    painter = painterResource(rightRes),
-                    contentDescription = "Right Image",
-                    modifier = Modifier
-                        .weight(0.5f, fill = true)
-                        .fillMaxHeight(),
-                    contentScale = ContentScale.Fit
-                )
-            }
-
-            Box(
+        Row(Modifier.fillMaxSize()) {
+            Image(
+                painter = painterResource(leftRes),
+                contentDescription = null,
                 modifier = Modifier
-                    .padding(start = 16.dp, bottom = 16.dp)
-                    .align(Alignment.BottomStart)
-                    .height(36.dp)
-                    .background(
-                        color = SkyFitColor.background.default.copy(alpha = 0.8f),
-                        shape = RoundedCornerShape(50)
-                    )
-            ) {
-                Text(
-                    modifier = Modifier
-                        .align(Alignment.Center)
-                        .padding(8.dp),
-                    text = title,
-                    color = SkyFitColor.text.default,
-                    style = SkyFitTypography.bodyMediumMedium
+                    .weight(0.5f)
+                    .fillMaxHeight(),
+                contentScale = ContentScale.Fit
+            )
+
+            Image(
+                painter = painterResource(rightRes),
+                contentDescription = null,
+                modifier = Modifier
+                    .weight(0.5f)
+                    .fillMaxHeight(),
+                contentScale = ContentScale.Fit
+            )
+        }
+
+        Box(
+            modifier = Modifier
+                .padding(start = 16.dp, bottom = 16.dp)
+                .align(Alignment.BottomStart)
+                .height(36.dp)
+                .background(
+                    SkyFitColor.background.default.copy(alpha = 0.8f),
+                    shape = RoundedCornerShape(50)
                 )
-            }
+        ) {
+            Text(
+                modifier = Modifier
+                    .align(Alignment.Center)
+                    .padding(8.dp),
+                text = title,
+                color = SkyFitColor.text.default,
+                style = SkyFitTypography.bodyMediumMedium
+            )
         }
     }
 }

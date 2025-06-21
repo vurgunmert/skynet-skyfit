@@ -33,7 +33,7 @@ import com.vurgun.skyfit.core.ui.components.text.TextStyleType
 import com.vurgun.skyfit.core.ui.screen.ErrorScreen
 import com.vurgun.skyfit.core.ui.styling.SkyFitColor
 import com.vurgun.skyfit.core.ui.utils.CollectEffect
-import com.vurgun.skyfit.core.ui.utils.LocalOverlayController
+import com.vurgun.skyfit.core.ui.utils.LocalCompactOverlayController
 import com.vurgun.skyfit.feature.home.model.UserHomeAction
 import com.vurgun.skyfit.feature.home.model.UserHomeEffect.*
 import com.vurgun.skyfit.feature.home.model.UserHomeUiState
@@ -48,7 +48,7 @@ import skyfit.core.ui.generated.resources.refresh_action
 internal fun UserHomeExpanded(viewModel: UserHomeViewModel) {
 
     val dashboardNavigator = LocalNavigator.currentOrThrow.findParentByKey("dashboard")
-    val overlayController = LocalOverlayController.current
+    val overlayController = LocalCompactOverlayController.current
     val uiState by viewModel.uiState.collectAsState()
 
     CollectEffect(viewModel.effect) { effect ->

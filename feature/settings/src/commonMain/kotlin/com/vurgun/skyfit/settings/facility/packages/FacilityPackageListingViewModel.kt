@@ -45,7 +45,6 @@ class FacilityPackageListingViewModel(
         get() = userManager.account.value as? FacilityAccount
             ?: error("User is not a Facility!")
 
-
     private val _uiState =
         UiStateDelegate<FacilityPackageListingUiState>(FacilityPackageListingUiState.Loading)
     val uiState = _uiState.asStateFlow()
@@ -77,7 +76,7 @@ class FacilityPackageListingViewModel(
 
             runCatching {
                 val packages = facilityRepository.getFacilityLessonPackages(facilityUser.gymId)
-                    .getOrThrow()
+                    .getOrDefault(emptyList())
                     .map { data ->
                         ServicePackageUiData(
                             id = data.packageId,
