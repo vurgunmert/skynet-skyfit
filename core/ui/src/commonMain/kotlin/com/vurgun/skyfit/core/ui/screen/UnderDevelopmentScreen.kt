@@ -9,7 +9,7 @@ import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
 import com.vurgun.skyfit.core.ui.components.special.SkyFitMobileScaffold
-import com.vurgun.skyfit.core.ui.components.special.SkyFitScreenHeader
+import com.vurgun.skyfit.core.ui.components.special.CompactTopBar
 import com.vurgun.skyfit.core.ui.components.text.SkyText
 import com.vurgun.skyfit.core.ui.components.text.TextStyleType
 import com.vurgun.skyfit.core.ui.styling.SkyFitColor
@@ -25,7 +25,7 @@ class UnderDevelopmentScreen(
 
         SkyFitMobileScaffold(
             topBar = {
-                SkyFitScreenHeader(
+                CompactTopBar(
                     title = title,
                     onClickBack = { navigator.pop() }
                 )

@@ -3,8 +3,8 @@ package com.vurgun.skyfit.feature.schedule.screen.activitycalendar
 
 import cafe.adriel.voyager.core.model.ScreenModel
 import cafe.adriel.voyager.core.model.screenModelScope
-import com.vurgun.skyfit.core.data.schedule.domain.repository.UserCalendarRepository
 import com.vurgun.skyfit.core.data.utility.*
+import com.vurgun.skyfit.core.data.v1.domain.user.repository.UserRepository
 import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.launch
 import kotlinx.datetime.LocalDateTime
@@ -33,7 +33,7 @@ sealed class CalendarWorkoutEditConfirmEffect {
 }
 
 class CalendarWorkoutEditConfirmViewModel(
-    private val calendarRepository: UserCalendarRepository
+    private val userRepository: UserRepository
 ) : ScreenModel {
 
     private val _uiState = UiStateDelegate<CalendarWorkoutEditConfirmUiState>(CalendarWorkoutEditConfirmUiState.Loading)
@@ -80,7 +80,7 @@ class CalendarWorkoutEditConfirmViewModel(
             _uiState.update(CalendarWorkoutEditConfirmUiState.Loading)
 
             runCatching {
-                calendarRepository.addCalendarEvents(
+                userRepository.addCalendarEvents(
                     workoutId = content.workoutId,
                     eventName = content.workoutName,
                     startDate = content.startDateTime.toString(),

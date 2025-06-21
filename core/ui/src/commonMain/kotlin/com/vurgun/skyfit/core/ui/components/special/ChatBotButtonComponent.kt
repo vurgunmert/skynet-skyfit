@@ -3,12 +3,11 @@ package com.vurgun.skyfit.core.ui.components.special
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.aspectRatio
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.indication
+import androidx.compose.foundation.interaction.MutableInteractionSource
+import androidx.compose.foundation.layout.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Paint
@@ -19,7 +18,8 @@ import androidx.compose.ui.unit.dp
 import com.vurgun.skyfit.core.ui.styling.SkyFitColor
 import org.jetbrains.compose.resources.painterResource
 import skyfit.core.ui.generated.resources.Res
-import skyfit.core.ui.generated.resources.logo_skyfit
+import skyfit.core.ui.generated.resources.ic_fiwe_logo_dark
+import skyfit.core.ui.generated.resources.ic_fiwe_logo_light
 import kotlin.math.sqrt
 
 @Composable
@@ -65,18 +65,20 @@ fun ChatBotButtonComponent(
 ) {
     Box(
         modifier = modifier
-            .size(44.dp, 48.dp)
-            .clickable(onClick = onClick),
+            .size(52.dp)
+            .clickable(
+                interactionSource = remember { MutableInteractionSource() },
+                indication = null,
+                onClick = onClick
+            ),
         contentAlignment = Alignment.Center
     ) {
         Hexagon()
 
         Image(
-            painterResource(Res.drawable.logo_skyfit),
+            painterResource(Res.drawable.ic_fiwe_logo_light),
             contentDescription = "ChatBot",
-            modifier = Modifier
-                .padding(top = 2.dp)
-                .size(29.dp, 32.dp)
+            modifier = Modifier.padding(top = 4.dp).padding(12.dp)
         )
     }
 }

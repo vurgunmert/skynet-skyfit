@@ -52,11 +52,15 @@ kotlin {
             implementation(libs.koin.core)
             implementation(libs.koin.compose)
 
-            implementation(projects.feature.access)
-            implementation(projects.feature.dashboard)
+            implementation(projects.feature.auth)
+            implementation(projects.feature.onboarding)
+            implementation(projects.feature.home)
+            implementation(projects.feature.profile)
+            implementation(projects.feature.explore)
+            implementation(projects.feature.main)
             implementation(projects.feature.schedule)
-            implementation(projects.feature.persona)
-            implementation(projects.feature.wellbeing)
+            implementation(projects.feature.settings)
+            implementation(projects.feature.health)
             implementation(projects.feature.connect)
         }
 

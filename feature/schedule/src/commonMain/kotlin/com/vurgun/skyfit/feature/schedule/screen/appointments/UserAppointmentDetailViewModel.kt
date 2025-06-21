@@ -2,8 +2,8 @@ package com.vurgun.skyfit.feature.schedule.screen.appointments
 
 import cafe.adriel.voyager.core.model.ScreenModel
 import cafe.adriel.voyager.core.model.screenModelScope
-import com.vurgun.skyfit.core.data.schedule.domain.model.AppointmentDetail
-import com.vurgun.skyfit.core.data.schedule.domain.repository.CourseRepository
+import com.vurgun.skyfit.core.data.v1.domain.user.model.AppointmentDetail
+import com.vurgun.skyfit.core.data.v1.domain.user.repository.UserRepository
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharedFlow
@@ -27,7 +27,7 @@ sealed class UserAppointmentDetailEffect {
 }
 
 class UserAppointmentDetailViewModel(
-    private val courseRepository: CourseRepository
+    private val userRepository: UserRepository
 ) : ScreenModel {
 
     private val _uiState = MutableStateFlow<UserAppointmentDetailUiState>(UserAppointmentDetailUiState.Loading)
@@ -46,7 +46,7 @@ class UserAppointmentDetailViewModel(
     fun loadAppointment(lpId: Int) {
         screenModelScope.launch {
             try {
-                val appointment = courseRepository.getAppointmentDetail(lpId).getOrThrow()
+                val appointment = userRepository.getAppointmentDetail(lpId).getOrThrow()
                 _uiState.value = UserAppointmentDetailUiState.Content(appointment)
             } catch (e: Exception) {
                 _uiState.value = UserAppointmentDetailUiState.Error(e.message ?: "Randevu getirme hatasi")
@@ -59,7 +59,7 @@ class UserAppointmentDetailViewModel(
 
         screenModelScope.launch {
             try {
-                courseRepository.cancelAppointment(appointment.lessonId, appointment.lpId).getOrThrow()
+                userRepository.cancelAppointment(appointment.lessonId, appointment.lpId).getOrThrow()
                 loadAppointment(appointment.lpId)
             } catch (e: Exception) {
                 emitEffect(UserAppointmentDetailEffect.ShowCancelError(e.message ?: "Randevu iptal hatasi"))

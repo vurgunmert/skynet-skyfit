@@ -9,10 +9,12 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
-import com.vurgun.skyfit.core.data.persona.domain.model.Member
+import com.vurgun.skyfit.core.data.v1.data.facility.model.FacilityLessonPackageDTO
+import com.vurgun.skyfit.core.data.v1.domain.global.model.Member
 import com.vurgun.skyfit.core.ui.components.button.SkyButton
 import com.vurgun.skyfit.core.ui.components.button.SkyButtonSize
 import com.vurgun.skyfit.core.ui.components.button.SkyButtonVariant
@@ -27,10 +29,7 @@ import com.vurgun.skyfit.core.ui.components.popup.BasicPopupMenu
 import com.vurgun.skyfit.core.ui.components.popup.SelectablePopupMenuItem
 import com.vurgun.skyfit.core.ui.components.popup.TextPopupMenuItem
 import com.vurgun.skyfit.core.ui.components.progress.RoundedLinearProgress
-import com.vurgun.skyfit.core.ui.components.text.BodyMediumRegularText
-import com.vurgun.skyfit.core.ui.components.text.CardFieldIconText
-import com.vurgun.skyfit.core.ui.components.text.SkyText
-import com.vurgun.skyfit.core.ui.components.text.TextStyleType
+import com.vurgun.skyfit.core.ui.components.text.*
 import com.vurgun.skyfit.core.ui.model.ServicePackageUiData
 import com.vurgun.skyfit.core.ui.styling.SkyFitColor
 import org.jetbrains.compose.resources.painterResource
@@ -162,34 +161,26 @@ object SettingsPackageComponent {
     }
 
     @Composable
-    fun Standard() {
+    fun PackageChip(name: String, color: Color = SkyFitColor.background.surfaceInfo) {
         RectangleChip(
-            "Standart Paket",
-            backgroundColor = SkyFitColor.background.surfaceWarning
+            text = name,
+            backgroundColor = color
         )
     }
 
     @Composable
-    fun Special() {
+    fun RemainingUsage(used: Int, total: Int) {
         RectangleChip(
-            "Standart Paket",
-            backgroundColor = SkyFitColor.background.surfaceWarning
-        )
-    }
-
-    @Composable
-    fun RemainingUsage() {
-        RectangleChip(
-            "4/16",
+            text = "${used}/${total}",
             backgroundColor = SkyFitColor.background.fillTransparentSecondary
         )
     }
 
     @Composable
-    fun NoRemainingUsage() {
+    fun NoRemainingUsage(used: Int, total: Int) {
         RectangleChip(
-            "16/16",
-            backgroundColor = SkyFitColor.background.fillTransparentSecondary,
+            "${used}/${total}",
+            backgroundColor = SkyFitColor.background.surfaceCriticalActive,
             rightIconRes = Res.drawable.ic_warning_diamond,
             rightIconTint = SkyIconTint.Critical
         )
@@ -203,7 +194,6 @@ fun FacilitySettingMemberItem(
     onClickDelete: () -> Unit,
 ) {
     var isMenuOpen by remember { mutableStateOf<Boolean>(false) }
-    var isEditDialogVisible by remember { mutableStateOf(false) }
 
     Row(
         Modifier.fillMaxWidth(),
@@ -212,7 +202,8 @@ fun FacilitySettingMemberItem(
         SkyImage(
             url = item.profileImageUrl,
             shape = SkyImageShape.Circle,
-            size = SkyImageSize.Size60
+            size = SkyImageSize.Size60,
+            error = Res.drawable.ic_profile,
         )
 
         Spacer(Modifier.width(16.dp))
@@ -222,11 +213,20 @@ fun FacilitySettingMemberItem(
                 text = item.fullName,
                 styleType = TextStyleType.BodyLargeSemibold
             )
-            Spacer(Modifier.height(8.dp))
-            Row {
-                SettingsPackageComponent.Standard()
-                Spacer(Modifier.width(8.dp))
-                SettingsPackageComponent.RemainingUsage()
+            item.membershipPackage?.let { pkg ->
+                Spacer(Modifier.height(8.dp))
+                Row {
+                    SettingsPackageComponent.PackageChip(pkg.packageName)
+
+                    Spacer(Modifier.width(8.dp))
+                    val pckCountTotal = pkg.lessonCount
+                    val usedCount = item.usedLessonCount
+                    if (usedCount < pckCountTotal) {
+                        SettingsPackageComponent.RemainingUsage(usedCount, pckCountTotal)
+                    } else {
+                        SettingsPackageComponent.NoRemainingUsage(usedCount, pckCountTotal)
+                    }
+                }
             }
         }
         Spacer(Modifier.width(16.dp))
@@ -240,20 +240,16 @@ fun FacilitySettingMemberItem(
             MemberOptionMenu(
                 isOpen = isMenuOpen,
                 onDismiss = { isMenuOpen = false },
-                onEdit = { isEditDialogVisible = true },
-                onDelete = onClickDelete
+                onEdit = {
+                    onClickEdit()
+                    isMenuOpen = false
+                },
+                onDelete = {
+                    onClickDelete()
+                    isMenuOpen = false
+                }
             )
         }
-    }
-
-
-    if (isEditDialogVisible) {
-        EditMemberPackageDialog(
-            showDialog = isEditDialogVisible,
-            onClickSave = { },
-            onClickCancel = { isEditDialogVisible = false },
-            onClickDelete = { }
-        )
     }
 }
 
@@ -296,13 +292,24 @@ private fun MemberOptionMenu(
 @Composable
 fun EditMemberPackageDialog(
     showDialog: Boolean,
-    onClickSave: (option: String) -> Unit,
+    member: Member,
+    packages: List<FacilityLessonPackageDTO>,
+    onClickSave: (packageId: Int) -> Unit,
+    onClickDelete: (packageId: Int) -> Unit,
     onClickCancel: () -> Unit,
-    onClickDelete: () -> Unit,
 ) {
-    val isFull: Boolean = false
+    if (packages.isEmpty()) {
+        print("Package list is empty")
+        return
+    }
+
     var isPackageListOpen by remember { mutableStateOf(false) }
-    var selectedOption by remember { mutableStateOf("Standart") }
+
+    val initialPackage = member.membershipPackage
+        ?.let { selectedMemberPackage -> packages.first { it.packageId == selectedMemberPackage.packageId } }
+        ?: packages.first()
+
+    var selectedOption by remember { mutableStateOf(initialPackage) }
 
     if (showDialog) {
         Dialog(
@@ -317,8 +324,9 @@ fun EditMemberPackageDialog(
             ) {
                 Column(
                     modifier = Modifier.fillMaxWidth(),
-                    horizontalAlignment = Alignment.CenterHorizontally
+                    verticalArrangement = Arrangement.spacedBy(16.dp)
                 ) {
+
                     Row(
                         modifier = Modifier
                             .background(SkyFitColor.background.default)
@@ -337,69 +345,79 @@ fun EditMemberPackageDialog(
                         )
                     }
 
-                    Spacer(Modifier.height(16.dp))
-
-                    Column(
-                        modifier = Modifier.fillMaxWidth().padding(16.dp),
-                        verticalArrangement = Arrangement.Center,
-                    ) {
-                        SkyText(
-                            text = stringResource(Res.string.completed_lesson_count_label),
-                            styleType = TextStyleType.BodyMediumSemibold
-                        )
-                        Spacer(Modifier.height(8.dp))
-                        Row(verticalAlignment = Alignment.CenterVertically) {
-                            RoundedLinearProgress(
-                                progress = 0.4f,
-                                modifier = Modifier.weight(1f),
-                            )
-
-                            Spacer(Modifier.width(8.dp))
+                    member.membershipPackage?.let { selectedMemberPackage ->
+                        val relatedLessonPackage = packages.first { it.packageId == selectedMemberPackage.packageId }
+                        Column(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(16.dp),
+                        ) {
                             SkyText(
-                                text = "4/16",
-                                styleType = TextStyleType.BodyMediumRegular
+                                text = stringResource(Res.string.completed_lesson_count_label),
+                                styleType = TextStyleType.BodyLarge
                             )
 
-                            if (isFull) {
-                                Spacer(Modifier.width(8.dp))
-                                SkyIcon(
-                                    res = Res.drawable.ic_warning_diamond,
-                                    size = SkyIconSize.Small,
-                                    tint = SkyIconTint.Critical
+                            Spacer(Modifier.height(10.dp))
+
+                            Row {
+                                RoundedLinearProgress(
+                                    progress = selectedMemberPackage.lessonCount / relatedLessonPackage.lessonCount.toFloat(),
+                                    modifier = Modifier.weight(1f),
+                                    backgroundColor = SkyFitColor.background.fillTransparentSecondary,
+                                    progressColor = SkyFitColor.specialty.buttonBgRest,
+                                    height = 16.dp,
+                                    cornerRadius = 20.dp
+                                )
+                                Spacer(Modifier.width(16.dp))
+                                SkyText(
+                                    text = "${selectedMemberPackage.lessonCount}/${relatedLessonPackage.lessonCount}",
+                                    styleType = TextStyleType.BodyMediumRegular,
+                                    modifier = Modifier.padding(start = 16.dp)
                                 )
                             }
                         }
-                        Spacer(Modifier.height(8.dp))
-                        SkyText(
-                            text = stringResource(Res.string.package_selection_label),
-                            styleType = TextStyleType.BodyMediumSemibold
-                        )
-                        Spacer(Modifier.height(8.dp))
-
-                        SkyText(
-                            text = selectedOption,
-                            styleType = TextStyleType.BodyLarge,
-                            modifier = Modifier
-                                .clip(RoundedCornerShape(50))
-                                .fillMaxWidth()
-                                .clickable { isPackageListOpen = !isPackageListOpen }
-                                .background(SkyFitColor.background.surfaceSecondary)
-                                .padding(horizontal = 16.dp, vertical = 12.dp),
-                            color = SkyFitColor.text.secondary
-                        )
+                        Spacer(Modifier.height(10.dp))
                     }
 
-                    Spacer(modifier = Modifier.height(16.dp))
+                    Column(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(16.dp),
+                    ) {
+                            TitledMediumRegularText(
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .clickable { isPackageListOpen = true },
+                                title = stringResource(Res.string.package_selection_label),
+                                value = selectedOption.title,
+                                rightIconRes = Res.drawable.ic_chevron_down
+                            )
+
+                            if (isPackageListOpen) {
+                                SelectPackagePopupMenu(
+                                    modifier = Modifier.fillMaxWidth(),
+                                    isOpen = isPackageListOpen,
+                                    onDismiss = { isPackageListOpen = false },
+                                    selectedOption = selectedOption.title,
+                                    options = packages.map { it.title },
+                                    onSelectionChanged = { name ->
+                                        selectedOption = packages.first { p -> p.title == name }
+                                    }
+                                )
+                            }
+                    }
 
                     Row(
-                        modifier = Modifier.fillMaxWidth().padding(16.dp),
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(16.dp),
                         horizontalArrangement = Arrangement.spacedBy(16.dp, Alignment.End),
                     ) {
                         SkyButton(
                             label = stringResource(Res.string.delete_action),
                             leftIcon = painterResource(Res.drawable.ic_delete),
                             variant = SkyButtonVariant.Destructive,
-                            onClick = onClickDelete
+                            onClick = { onClickDelete(selectedOption.packageId) }
                         )
                         SkyButton(
                             label = stringResource(Res.string.cancel_action),
@@ -409,23 +427,12 @@ fun EditMemberPackageDialog(
                         SkyButton(
                             label = stringResource(Res.string.save_action),
                             variant = SkyButtonVariant.Primary,
-                            onClick = { onClickSave(selectedOption) }
+                            onClick = { onClickSave(selectedOption.packageId) }
                         )
                     }
                 }
             }
         }
-    }
-
-    if (isPackageListOpen) {
-        SelectPackagePopupMenu(
-            modifier = Modifier.fillMaxWidth(),
-            isOpen = isPackageListOpen,
-            onDismiss = { isPackageListOpen = false },
-            selectedOption = "Standart",
-            options = listOf("Standart", "Ozel", "Premium"),
-            onSelectionChanged = { selectedOption = it }
-        )
     }
 }
 

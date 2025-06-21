@@ -2,14 +2,14 @@ package com.vurgun.skyfit.feature.schedule.screen.appointments
 
 import cafe.adriel.voyager.core.model.ScreenModel
 import cafe.adriel.voyager.core.model.screenModelScope
-import com.vurgun.skyfit.core.data.schedule.domain.model.LessonParticipant
+import com.vurgun.skyfit.core.data.utility.UiStateDelegate
 import com.vurgun.skyfit.core.data.utility.emitIn
-import com.vurgun.skyfit.core.data.schedule.domain.model.ScheduledLessonDetail
-import com.vurgun.skyfit.core.data.schedule.domain.repository.CourseRepository
+import com.vurgun.skyfit.core.data.v1.domain.lesson.model.LessonParticipant
+import com.vurgun.skyfit.core.data.v1.domain.lesson.model.ScheduledLessonDetail
+import com.vurgun.skyfit.core.data.v1.domain.lesson.repository.LessonRepository
+import com.vurgun.skyfit.core.data.v1.domain.trainer.repository.TrainerRepository
 import kotlinx.coroutines.flow.MutableSharedFlow
-import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharedFlow
-import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 
 sealed interface TrainerAppointmentDetailUiState {
@@ -23,7 +23,8 @@ sealed interface TrainerAppointmentDetailUiState {
 
 sealed interface TrainerAppointmentDetailAction {
     data object NavigateToBack : TrainerAppointmentDetailAction
-    data class EvaluateParticipant(val participant: LessonParticipant, val evaluation: String) : TrainerAppointmentDetailAction
+    data class EvaluateParticipant(val participant: LessonParticipant, val evaluation: String) :
+        TrainerAppointmentDetailAction
 }
 
 sealed interface TrainerAppointmentDetailEffect {
@@ -31,14 +32,17 @@ sealed interface TrainerAppointmentDetailEffect {
 }
 
 class TrainerAppointmentDetailViewModel(
-    private val courseRepository: CourseRepository
+    private val trainerRepository: TrainerRepository,
+    private val lessonRepository: LessonRepository
 ) : ScreenModel {
 
-    private val _uiState = MutableStateFlow<TrainerAppointmentDetailUiState>(TrainerAppointmentDetailUiState.Loading)
-    val uiState: StateFlow<TrainerAppointmentDetailUiState> get() = _uiState
+    private val _uiState = UiStateDelegate<TrainerAppointmentDetailUiState>(TrainerAppointmentDetailUiState.Loading)
+    val uiState = _uiState.asStateFlow()
 
     private val _effect = MutableSharedFlow<TrainerAppointmentDetailEffect>()
     val effect: SharedFlow<TrainerAppointmentDetailEffect> = _effect
+
+    private var activeLessonId: Int? = null
 
     fun onAction(action: TrainerAppointmentDetailAction) {
         when (action) {
@@ -51,39 +55,52 @@ class TrainerAppointmentDetailViewModel(
     }
 
     fun loadAppointment(lessonId: Int) {
+        activeLessonId = lessonId
+
         screenModelScope.launch {
             try {
-                val lesson = courseRepository.getScheduledLessonDetail(lessonId).getOrThrow()
+                val lesson = lessonRepository.getScheduledLessonDetail(lessonId).getOrThrow()
 
-                val participants = courseRepository.getLessonParticipants(lessonId).getOrDefault(emptyList())
+                val participants = lessonRepository.getLessonParticipants(lessonId).getOrDefault(emptyList())
 
-                _uiState.value = TrainerAppointmentDetailUiState.Content(lesson, participants)
+                _uiState.update(TrainerAppointmentDetailUiState.Content(lesson, participants))
             } catch (e: Exception) {
-                _uiState.value = TrainerAppointmentDetailUiState.Error(e.message ?: "Ders getirme hatasi")
+                _uiState.update(TrainerAppointmentDetailUiState.Error(e.message ?: "Ders getirme hatasi"))
             }
         }
+    }
+
+    fun refresh() {
+        loadAppointment(activeLessonId ?: return)
     }
 
     private fun evaluateParticipant(
         participant: LessonParticipant,
         evaluation: String
     ) {
-        val currentState = _uiState.value as? TrainerAppointmentDetailUiState.Content ?: return
-
-        val updatedParticipants = currentState.participants.map {
-            if (it.lpId == participant.lpId) {
-                it.copy(trainerEvaluation = evaluation)
-            } else {
-                it
-            }
-        }
+        val currentState = uiState.value as? TrainerAppointmentDetailUiState.Content ?: return
 
         screenModelScope.launch {
-            try {
-                courseRepository.evaluateParticipants(participant.lpId, updatedParticipants)
-                _uiState.value = currentState.copy(participants = updatedParticipants)
-            } catch (e: Exception) {
-                e.printStackTrace()
+
+            runCatching {
+                val updatedParticipants = currentState.participants.map {
+                    if (it.lpId == participant.lpId) {
+                        it.copy(trainerEvaluation = evaluation)
+                    } else {
+                        it
+                    }
+                }
+
+                trainerRepository.evaluateParticipants(participant.lpId, updatedParticipants)
+
+                _uiState.update(currentState.copy(participants = updatedParticipants))
+
+            }.onFailure { error ->
+                _uiState.update(
+                    TrainerAppointmentDetailUiState.Error(
+                        error.message ?: "Katilimci degerlendirme hatasi"
+                    )
+                )
             }
         }
     }

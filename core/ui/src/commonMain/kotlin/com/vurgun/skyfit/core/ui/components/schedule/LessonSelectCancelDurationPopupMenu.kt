@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.material.Divider
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import com.vurgun.skyfit.core.data.v1.data.facility.model.FacilityLessonPackageDTO
 import com.vurgun.skyfit.core.ui.components.popup.SelectablePopupMenuItem
 import com.vurgun.skyfit.core.ui.components.popup.BasicPopupMenu
 import com.vurgun.skyfit.core.ui.components.text.BodyMediumRegularText
@@ -38,6 +39,40 @@ fun LessonSelectCancelDurationPopupMenu(
                     }
                 )
                 if (index != hours.lastIndex) {
+                    Divider(Modifier.fillMaxWidth(), color = SkyFitColor.border.default)
+                }
+            }
+        }
+    }
+}
+
+@Composable
+fun MembershipPackagePopupMenu(
+    modifier: Modifier = Modifier,
+    isOpen: Boolean,
+    onDismiss: () -> Unit,
+    selected: FacilityLessonPackageDTO,
+    packages: List<FacilityLessonPackageDTO>,
+    onSelectionChanged: (FacilityLessonPackageDTO) -> Unit
+) {
+    BoxWithConstraints(modifier.fillMaxWidth()) {
+        BasicPopupMenu(
+            modifier = Modifier.width(this.maxWidth),
+            isOpen = isOpen,
+            onDismiss = onDismiss
+        ) {
+            packages.forEachIndexed { index, value ->
+                SelectablePopupMenuItem(
+                    selected = value == selected,
+                    onSelect = {
+                        onSelectionChanged(value)
+                        onDismiss()
+                    },
+                    content = {
+                        BodyMediumRegularText("$value saat kala", modifier = Modifier.weight(1f))
+                    }
+                )
+                if (index != packages.lastIndex) {
                     Divider(Modifier.fillMaxWidth(), color = SkyFitColor.border.default)
                 }
             }

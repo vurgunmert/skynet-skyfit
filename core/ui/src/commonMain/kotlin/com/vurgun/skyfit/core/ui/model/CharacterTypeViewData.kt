@@ -1,6 +1,6 @@
 package com.vurgun.skyfit.core.ui.model
 
-import com.vurgun.skyfit.core.data.persona.domain.model.CharacterType
+import com.vurgun.skyfit.core.data.v1.domain.global.model.CharacterType
 import com.vurgun.skyfit.core.ui.styling.SkyFitAsset
 
 sealed class CharacterTypeViewData(val id: Int, val icon: SkyFitAsset.CharacterIcon) {

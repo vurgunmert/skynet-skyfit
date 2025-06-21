@@ -19,7 +19,7 @@ import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.koin.koinScreenModel
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
-import com.vurgun.skyfit.core.data.schedule.domain.model.WorkoutType
+import com.vurgun.skyfit.core.data.v1.data.workout.WorkoutTypeUiData
 import com.vurgun.skyfit.core.ui.components.button.PrimaryMicroButton
 import com.vurgun.skyfit.core.ui.components.chip.SecondaryPillChip
 import com.vurgun.skyfit.core.ui.components.loader.FullScreenLoaderContent
@@ -185,7 +185,7 @@ private fun ActivityCalendarSearchScreenFilterChips(
     ) {
         items(content.categories) { category ->
             SecondaryPillChip(
-                text = category.displayName.getValue("tr"),
+                text = category.name,
                 selected = category.id == content.selectedCategoryId,
                 onClick = { onAction(UserActivityCalendarSearchAction.SelectCategory(category.id)) }
             )
@@ -204,7 +204,7 @@ private fun CalendarActivityWorkoutsGroupTitle(text: String) {
 }
 
 @Composable
-private fun CalendarActivityWorkoutItem(workoutType: WorkoutType, onClick: (WorkoutType) -> Unit) {
+private fun CalendarActivityWorkoutItem(workoutType: WorkoutTypeUiData, onClick: (WorkoutTypeUiData) -> Unit) {
     Box {
         Row(
             modifier = Modifier

@@ -2,9 +2,8 @@ package com.vurgun.skyfit.feature.schedule.screen.activitycalendar
 
 import cafe.adriel.voyager.core.model.ScreenModel
 import cafe.adriel.voyager.core.model.screenModelScope
-import com.vurgun.skyfit.core.data.schedule.domain.model.WorkoutType
-import com.vurgun.skyfit.core.data.schedule.domain.repository.UserCalendarRepository
 import com.vurgun.skyfit.core.data.utility.*
+import com.vurgun.skyfit.core.data.v1.data.workout.WorkoutTypeUiData
 import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.datetime.LocalDate
 import kotlinx.datetime.LocalDateTime
@@ -104,7 +103,7 @@ class CalendarWorkoutEditViewModel : ScreenModel {
         )
     }
 
-    fun loadData(initialDate: LocalDate, workoutType: WorkoutType?) {
+    fun loadData(initialDate: LocalDate, workoutType: WorkoutTypeUiData?) {
         if (uiState.value is CalendarWorkoutEditUiState.Content) return
 
         val startDate = if (initialDate <= LocalDate.now()) {

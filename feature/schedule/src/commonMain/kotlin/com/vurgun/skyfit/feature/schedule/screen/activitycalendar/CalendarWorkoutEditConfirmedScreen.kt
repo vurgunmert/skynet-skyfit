@@ -85,7 +85,7 @@ class CalendarWorkoutEditConfirmedScreen(
                         variant = SkyButtonVariant.Secondary,
                         size = SkyButtonSize.Large,
                         onClick = {
-                            navigator.popUntil(SharedScreen.Dashboard)
+                            navigator.popUntil(SharedScreen.Main)
                         },
                         modifier = Modifier.fillMaxWidth()
                     )

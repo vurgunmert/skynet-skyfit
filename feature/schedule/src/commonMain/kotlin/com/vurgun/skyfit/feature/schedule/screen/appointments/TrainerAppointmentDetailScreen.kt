@@ -1,26 +1,14 @@
 package com.vurgun.skyfit.feature.schedule.screen.appointments
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicTextField
+import androidx.compose.material.Scaffold
 import androidx.compose.material.Surface
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.SolidColor
@@ -30,7 +18,7 @@ import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.koin.koinScreenModel
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
-import com.vurgun.skyfit.core.data.schedule.domain.model.LessonParticipant
+import com.vurgun.skyfit.core.data.v1.domain.lesson.model.LessonParticipant
 import com.vurgun.skyfit.core.ui.components.button.PrimaryMicroButton
 import com.vurgun.skyfit.core.ui.components.button.SecondaryDestructiveMicroButton
 import com.vurgun.skyfit.core.ui.components.button.SecondaryMediumButton
@@ -38,7 +26,6 @@ import com.vurgun.skyfit.core.ui.components.chip.RectangleChip
 import com.vurgun.skyfit.core.ui.components.image.CircleNetworkImage
 import com.vurgun.skyfit.core.ui.components.loader.FullScreenLoaderContent
 import com.vurgun.skyfit.core.ui.components.special.SkyFitCheckBox
-import com.vurgun.skyfit.core.ui.components.special.SkyFitMobileScaffold
 import com.vurgun.skyfit.core.ui.components.text.BodyLargeMediumText
 import com.vurgun.skyfit.core.ui.components.text.BodyMediumRegularText
 import com.vurgun.skyfit.core.ui.components.text.BodyMediumSemiboldText
@@ -46,6 +33,9 @@ import com.vurgun.skyfit.core.ui.screen.ErrorScreen
 import com.vurgun.skyfit.core.ui.styling.SkyFitColor
 import com.vurgun.skyfit.core.ui.styling.SkyFitTypography
 import com.vurgun.skyfit.core.ui.utils.CollectEffect
+import com.vurgun.skyfit.core.ui.utils.LocalCompactOverlayController
+import com.vurgun.skyfit.core.ui.utils.LocalWindowSize
+import com.vurgun.skyfit.core.ui.utils.WindowSize
 
 class TrainerAppointmentDetailScreen(private val lessonId: Int) : Screen {
 
@@ -53,11 +43,13 @@ class TrainerAppointmentDetailScreen(private val lessonId: Int) : Screen {
     override fun Content() {
         val navigator = LocalNavigator.currentOrThrow
         val viewModel = koinScreenModel<TrainerAppointmentDetailViewModel>()
+        val overlayController = LocalCompactOverlayController.current
 
         CollectEffect(viewModel.effect) { effect ->
             when (effect) {
                 TrainerAppointmentDetailEffect.NavigateToBack -> {
                     navigator.pop()
+                    overlayController?.invoke(null)
                 }
             }
         }
@@ -82,7 +74,7 @@ private fun MobileTrainerAppointmentDetailScreen(
             val message = (uiState as TrainerAppointmentDetailUiState.Error).message
             ErrorScreen(
                 message = message,
-                onConfirm = { viewModel.onAction(TrainerAppointmentDetailAction.NavigateToBack) })
+                onConfirm = { viewModel.refresh() })
         }
 
         is TrainerAppointmentDetailUiState.Content -> {
@@ -99,14 +91,26 @@ private object MobileTrainerAppointmentDetailComponent {
         content: TrainerAppointmentDetailUiState.Content,
         onAction: (TrainerAppointmentDetailAction) -> Unit
     ) {
-        SkyFitMobileScaffold(
+        val windowSize = LocalWindowSize.current
+
+        Scaffold(
             topBar = {
-                MobileAppointmentDetailComponent.MobileUserAppointmentDetail_TopBar(
-                    title = content.lesson.title,
-                    onClickBack = { onAction(TrainerAppointmentDetailAction.NavigateToBack) },
-                    status = content.lesson.status,
-                    statusName = content.lesson.statusName
-                )
+
+                if (windowSize == WindowSize.EXPANDED) {
+                    MobileAppointmentDetailComponent.StatusTopBarExpanded(
+                        title = content.lesson.title,
+                        onClickBack = { onAction(TrainerAppointmentDetailAction.NavigateToBack) },
+                        status = content.lesson.status,
+                        statusName = content.lesson.statusName
+                    )
+                } else {
+                    MobileAppointmentDetailComponent.StatusTopBarCompact(
+                        title = content.lesson.title,
+                        onClickBack = { onAction(TrainerAppointmentDetailAction.NavigateToBack) },
+                        status = content.lesson.status,
+                        statusName = content.lesson.statusName
+                    )
+                }
             }
         ) {
             Column(

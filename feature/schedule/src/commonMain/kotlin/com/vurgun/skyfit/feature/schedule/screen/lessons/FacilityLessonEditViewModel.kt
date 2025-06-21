@@ -2,22 +2,17 @@ package com.vurgun.skyfit.feature.schedule.screen.lessons
 
 import cafe.adriel.voyager.core.model.ScreenModel
 import cafe.adriel.voyager.core.model.screenModelScope
-import com.vurgun.skyfit.core.data.schedule.domain.model.CalendarRecurrence
-import com.vurgun.skyfit.core.data.schedule.domain.model.CalendarRecurrenceType
-import com.vurgun.skyfit.core.data.persona.domain.model.FacilityDetail
-import com.vurgun.skyfit.core.data.persona.domain.repository.UserManager
 import com.vurgun.skyfit.core.data.utility.SingleSharedFlow
 import com.vurgun.skyfit.core.data.utility.emitIn
 import com.vurgun.skyfit.core.data.utility.formatToSlashedDate
 import com.vurgun.skyfit.core.data.utility.now
+import com.vurgun.skyfit.core.data.v1.domain.account.manager.ActiveAccountManager
+import com.vurgun.skyfit.core.data.v1.domain.account.model.FacilityAccount
+import com.vurgun.skyfit.core.data.v1.domain.facility.repository.FacilityRepository
+import com.vurgun.skyfit.core.data.v1.domain.global.model.Member
+import com.vurgun.skyfit.core.data.v1.domain.lesson.model.*
+import com.vurgun.skyfit.core.data.v1.domain.lesson.repository.LessonRepository
 import com.vurgun.skyfit.core.ui.components.event.AppointmentCardViewData
-import com.vurgun.skyfit.core.data.schedule.domain.model.Lesson
-import com.vurgun.skyfit.core.data.schedule.domain.model.LessonCreationInfo
-import com.vurgun.skyfit.core.data.schedule.domain.model.LessonUpdateInfo
-import com.vurgun.skyfit.core.data.schedule.domain.repository.CourseRepository
-import com.vurgun.skyfit.core.data.persona.domain.model.Member
-import com.vurgun.skyfit.core.data.persona.domain.repository.MemberRepository
-import com.vurgun.skyfit.core.data.persona.domain.repository.TrainerRepository
 import com.vurgun.skyfit.core.ui.components.schedule.SelectableTrainerMenuItemModel
 import kotlinx.coroutines.async
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -25,13 +20,7 @@ import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
-import kotlinx.datetime.DayOfWeek
-import kotlinx.datetime.Instant
-import kotlinx.datetime.LocalDate
-import kotlinx.datetime.LocalDateTime
-import kotlinx.datetime.LocalTime
-import kotlinx.datetime.TimeZone
-import kotlinx.datetime.toInstant
+import kotlinx.datetime.*
 
 data class FacilityEditLessonViewState(
     val lessonId: Int? = null,
@@ -51,7 +40,9 @@ data class FacilityEditLessonViewState(
     val isReadyToSave: Boolean = false,
     val trainer: SelectableTrainerMenuItemModel? = null,
     val trainers: List<SelectableTrainerMenuItemModel> = emptyList(),
-    val participantMembers: List<ParticipatedMember> = emptyList()
+    val participantMembers: List<ParticipatedMember> = emptyList(),
+    val categories: List<LessonCategory> = emptyList(),
+    val selectedCategories: List<LessonCategory> = emptyList()
 ) {
     val isEditing: Boolean = lessonId != null
 }
@@ -64,32 +55,30 @@ data class ParticipatedMember(
 sealed class FacilityLessonEditAction {
     data object NavigateToBack : FacilityLessonEditAction()
     data object Save : FacilityLessonEditAction()
+    data object AddNewCategory : FacilityLessonEditAction()
 }
 
 sealed class FacilityLessonEditEffect {
     data object NavigateToBack : FacilityLessonEditEffect()
+    data class ShowError(val message: String?) : FacilityLessonEditEffect()
     data object ShowNoTrainerError : FacilityLessonEditEffect()
-    data class NavigateToCreateComplete(
-        val lesson: AppointmentCardViewData
-    ) : FacilityLessonEditEffect()
-
-    data class NavigateToUpdateComplete(
-        val lesson: AppointmentCardViewData
-    ) : FacilityLessonEditEffect()
+    data class ShowNoCategoryError(val facilityId: Int) : FacilityLessonEditEffect()
+    data class NavigateToCreateComplete(val lesson: AppointmentCardViewData) : FacilityLessonEditEffect()
+    data class NavigateToUpdateComplete(val lesson: AppointmentCardViewData) : FacilityLessonEditEffect()
+    data class NavigateToCategoryListing(val facilityId: Int) : FacilityLessonEditEffect()
 }
 
 class FacilityLessonEditViewModel(
-    private val userManager: UserManager,
-    private val courseRepository: CourseRepository,
-    private val trainerRepository: TrainerRepository,
-    private val memberRepository: MemberRepository
+    private val userManager: ActiveAccountManager,
+    private val facilityRepository: FacilityRepository,
+    private val lessonRepository: LessonRepository
 ) : ScreenModel {
 
     private val _effect = SingleSharedFlow<FacilityLessonEditEffect>()
     val effect: SharedFlow<FacilityLessonEditEffect> = _effect
 
-    private val facilityUser: FacilityDetail
-        get() = userManager.user.value as? FacilityDetail
+    private val facilityUser: FacilityAccount
+        get() = userManager.account.value as? FacilityAccount
             ?: error("User is not a Facility!")
 
     val gymId: Int
@@ -102,28 +91,41 @@ class FacilityLessonEditViewModel(
 
     fun onAction(action: FacilityLessonEditAction) {
         when (action) {
-            FacilityLessonEditAction.NavigateToBack -> _effect.emitIn(screenModelScope, FacilityLessonEditEffect.NavigateToBack)
+            FacilityLessonEditAction.NavigateToBack -> _effect.emitIn(
+                screenModelScope,
+                FacilityLessonEditEffect.NavigateToBack
+            )
+
             FacilityLessonEditAction.Save -> submitLesson()
+            FacilityLessonEditAction.AddNewCategory -> {
+                _effect.emitIn(screenModelScope, FacilityLessonEditEffect.NavigateToCategoryListing(gymId))
+            }
         }
     }
 
-    fun loadLesson(lesson: Lesson? = null) {
-
+    fun loadData(lesson: Lesson? = null) {
         screenModelScope.launch {
-            val facilityTrainers = trainerRepository.getFacilityTrainers(gymId)
-                .getOrDefault(emptyList()) //TODO: FAIL TO USER
-                .map {
-                    SelectableTrainerMenuItemModel(it.trainerId, it.fullName, it.profileImageUrl)
-                }
+            val trainersResult = facilityRepository.getFacilityTrainers(gymId)
+            val categoriesResult = facilityRepository.getLessonCategories(gymId)
+
+            val facilityTrainers = trainersResult.getOrDefault(emptyList())
+                .map { SelectableTrainerMenuItemModel(it.trainerId, it.fullName, it.profileImageUrl) }
+
+            val lessonCategories = categoriesResult.getOrDefault(emptyList())
 
             if (facilityTrainers.isEmpty()) {
                 _effect.emitIn(this, FacilityLessonEditEffect.ShowNoTrainerError)
                 return@launch
             }
 
+            if (lessonCategories.isEmpty()) {
+                _effect.emitIn(this, FacilityLessonEditEffect.ShowNoCategoryError(gymId))
+                return@launch
+            }
+
+            // continue as normal
             if (lesson != null) {
                 val cancelPeriod = getLastCancelDurationHours(lesson.startDateTime, lesson.lastCancelableAt)
-
                 val deferredMembers = async { getParticipantMembers(lesson.lessonId) }
 
                 initialState = FacilityEditLessonViewState(
@@ -140,21 +142,28 @@ class FacilityLessonEditViewModel(
                     cancelDurationHour = cancelPeriod.toInt(),
                     trainer = facilityTrainers.firstOrNull { it.id == lesson.trainerId },
                     trainers = facilityTrainers,
-                    participantMembers = deferredMembers.await()
+                    participantMembers = deferredMembers.await(),
+                    categories = lessonCategories,
+                    selectedCategories = lessonCategories.filter { it.id in lesson.categoryIds }
                 )
             } else {
                 initialState = FacilityEditLessonViewState(
                     trainer = facilityTrainers.firstOrNull(),
-                    trainers = facilityTrainers
+                    trainers = facilityTrainers,
+                    categories = lessonCategories,
+                    selectedCategories = lessonCategories.take(1)
                 )
             }
+
             _uiState.value = initialState
         }
     }
 
+
     private suspend fun getParticipantMembers(lessonId: Int): List<ParticipatedMember> {
-        val participantUserIdList = courseRepository.getLessonParticipants(lessonId = lessonId).getOrDefault(emptyList()).map { it.userId }
-        val memberList = memberRepository.getFacilityMembers(gymId = facilityUser.gymId).getOrDefault(emptyList())
+        val participantUserIdList =
+            lessonRepository.getLessonParticipants(lessonId = lessonId).getOrDefault(emptyList()).map { it.userId }
+        val memberList = facilityRepository.getFacilityMembers(gymId = facilityUser.gymId).getOrDefault(emptyList())
 
         return memberList.map { member ->
             ParticipatedMember(added = member.userId in participantUserIdList, member)
@@ -209,6 +218,11 @@ class FacilityLessonEditViewModel(
 
     fun updateRecurrence(option: CalendarRecurrence) {
         _uiState.update { it.copy(recurrence = option) }
+        checkIfModified()
+    }
+
+    fun updateSelectedCategories(categories: List<LessonCategory>) {
+        _uiState.update { it.copy(selectedCategories = categories) }
         checkIfModified()
     }
 
@@ -273,7 +287,7 @@ class FacilityLessonEditViewModel(
             LessonCreationInfo(
                 gymId = gymId,
                 iconId = it.iconId,
-                title = it.title.toString(),
+                title = it.title,
                 trainerNote = it.trainerNote,
                 trainerId = trainer.id,
                 startDateTime = LocalDateTime(it.startDate, LocalTime.parse(it.startTime)),
@@ -284,10 +298,11 @@ class FacilityLessonEditViewModel(
                 lastCancelableHoursBefore = it.cancelDurationHour,
                 isRequiredAppointment = it.isAppointmentMandatory,
                 price = it.cost,
+                categoryIds = it.selectedCategories.map { category -> category.id }
             )
         }
 
-        courseRepository.createLesson(info = creationInfo).fold(
+        facilityRepository.createLesson(info = creationInfo).fold(
             onSuccess = {
                 val createdLesson = AppointmentCardViewData(
                     iconId = state.iconId,
@@ -309,7 +324,7 @@ class FacilityLessonEditViewModel(
                 _effect.emitIn(screenModelScope, FacilityLessonEditEffect.NavigateToCreateComplete(createdLesson))
             },
             onFailure = { error ->
-                println("❌ CANNOT CREATE LESSON: $error")
+                _effect.emitIn(screenModelScope, FacilityLessonEditEffect.ShowError(error.message))
             }
         )
     }
@@ -331,10 +346,11 @@ class FacilityLessonEditViewModel(
             lastCancelableHoursBefore = state.cancelDurationHour,
             isRequiredAppointment = state.isAppointmentMandatory,
             price = state.cost,
-            participantsIds = participantIds
+            participantsIds = participantIds,
+            categoryIds = state.selectedCategories.map { category -> category.id }
         )
 
-        courseRepository.updateLesson(info = updateInfo).fold(
+        facilityRepository.updateLesson(info = updateInfo).fold(
             onSuccess = {
 
                 val updatedLesson = AppointmentCardViewData(

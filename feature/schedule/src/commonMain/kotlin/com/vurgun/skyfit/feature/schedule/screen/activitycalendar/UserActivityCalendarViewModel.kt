@@ -2,18 +2,10 @@ package com.vurgun.skyfit.feature.schedule.screen.activitycalendar
 
 import cafe.adriel.voyager.core.model.ScreenModel
 import cafe.adriel.voyager.core.model.screenModelScope
-import com.vurgun.skyfit.core.data.schedule.domain.model.CalendarEvent
-import com.vurgun.skyfit.core.data.schedule.domain.repository.UserCalendarRepository
-import com.vurgun.skyfit.core.data.utility.SingleSharedFlow
-import com.vurgun.skyfit.core.data.utility.UiStateDelegate
-import com.vurgun.skyfit.core.data.utility.emitOrNull
-import com.vurgun.skyfit.core.data.utility.now
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.SharedFlow
-import kotlinx.coroutines.flow.SharingStarted
-import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.combine
-import kotlinx.coroutines.flow.stateIn
+import com.vurgun.skyfit.core.data.utility.*
+import com.vurgun.skyfit.core.data.v1.domain.user.model.CalendarEvent
+import com.vurgun.skyfit.core.data.v1.domain.user.repository.UserRepository
+import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import kotlinx.datetime.LocalDate
 
@@ -37,7 +29,7 @@ sealed class UserActivityCalendarEffect {
 }
 
 class UserActivityCalendarViewModel(
-    private val calendarRepository: UserCalendarRepository
+    private val userRepository: UserRepository
 ) : ScreenModel {
 
     private val _uiState = UiStateDelegate<UserActivityCalendarUiState>(UserActivityCalendarUiState.Loading)
@@ -84,14 +76,14 @@ class UserActivityCalendarViewModel(
         }
     }
 
-    fun loadData(initialDate: LocalDate? = null) {
+    fun loadData(initialDate: LocalDate? = null, selectedDate: LocalDate? = null) {
         if (uiState.value is UserActivityCalendarUiState.Content) return
 
-        _selectedDate.value = initialDate ?: LocalDate.now()
+        _selectedDate.value = selectedDate ?: initialDate ?: LocalDate.now()
 
         screenModelScope.launch {
             runCatching {
-                val events = calendarRepository.getCalendarEvents().getOrDefault(emptyList())
+                val events = userRepository.getCalendarEvents(startDate = initialDate?.formatToServerDate(), null).getOrDefault(emptyList())
                 val active = events.map { it.startDate }.toSet()
                 val completed = emptySet<LocalDate>() //events.filter { it.isBeforeNow }.map { it.startDate }.toSet()
                 _activeDays.value = active

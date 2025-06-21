@@ -20,7 +20,7 @@
         android:required="false" />
 
     <application
-        android:name=".AndroidApplication"
+        android:name=".MainApplication"
         android:allowBackup="false"
         android:icon="@mipmap/ic_launcher"
         android:roundIcon="@mipmap/ic_launcher_circle"
@@ -33,7 +33,7 @@
 
         <!--            android:screenOrientation="sensorPortrait"-->
         <activity
-            android:name=".AndroidHostActivity"
+            android:name=".MainActivity"
             android:configChanges="orientation|screenSize|screenLayout|keyboardHidden|mnc|colorMode|density|fontScale|fontWeightAdjustment|keyboard|layoutDirection|locale|mcc|navigation|smallestScreenSize|touchscreen|uiMode"
             android:exported="true"
             android:theme="@style/Theme.SkyFitMobile.NoSplash"
@@ -46,15 +46,15 @@
             </intent-filter>
         </activity>
 
-        <provider
-            android:name="androidx.startup.InitializationProvider"
-            android:authorities="${applicationId}.androidx-startup"
-            android:exported="false"
-            tools:node="merge">
-            <meta-data
-                android:name="app.rive.runtime.kotlin.RiveInitializer"
-                android:value="androidx.startup" />
-        </provider>
+<!--        <provider-->
+<!--            android:name="androidx.startup.InitializationProvider"-->
+<!--            android:authorities="${applicationId}.androidx-startup"-->
+<!--            android:exported="false"-->
+<!--            tools:node="merge">-->
+<!--            <meta-data-->
+<!--                android:name="app.rive.runtime.kotlin.RiveInitializer"-->
+<!--                android:value="androidx.startup" />-->
+<!--        </provider>-->
 
         <!-- For supported versions through Android 13, create an activity to show the rationale
 of Health Connect permissions once users click the privacy policy link. -->

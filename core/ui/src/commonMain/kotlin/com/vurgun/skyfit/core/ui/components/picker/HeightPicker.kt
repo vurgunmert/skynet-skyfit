@@ -20,7 +20,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
-import com.vurgun.skyfit.core.data.shared.domain.model.HeightUnitType
+import com.vurgun.skyfit.core.data.v1.domain.global.model.HeightUnitType
 import com.vurgun.skyfit.core.ui.components.button.PrimaryDialogButton
 import com.vurgun.skyfit.core.ui.components.button.SecondaryDialogButton
 import com.vurgun.skyfit.core.ui.components.special.SkyFitWheelPickerComponent
@@ -151,7 +151,7 @@ fun HeightUnitPicker(
         items = units,
         selectedItem = selectedHeightUnit,
         onItemSelected = onHeightUnitSelected,
-        itemText = { it.label },
+        itemText = { it.shortLabel },
         visibleItemCount = 3,
         modifier = Modifier.width(36.dp)
     )

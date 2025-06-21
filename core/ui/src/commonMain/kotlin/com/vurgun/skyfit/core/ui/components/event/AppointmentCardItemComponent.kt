@@ -36,7 +36,7 @@ import skyfit.core.ui.generated.resources.ic_location_pin
 import skyfit.core.ui.generated.resources.ic_note
 import skyfit.core.ui.generated.resources.ic_posture
 import skyfit.core.ui.generated.resources.ic_profile
-import skyfit.core.ui.generated.resources.logo_skyfit
+import skyfit.core.ui.generated.resources.ic_app_logo
 
 data class AppointmentCardViewData(
     val iconId: Int,
@@ -159,7 +159,7 @@ fun AppointmentCardItemComponent(item: AppointmentCardViewData, modifier: Modifi
             Box(Modifier.fillMaxWidth().background(SkyFitColor.background.surfaceCautionActive, RoundedCornerShape(12.dp)).padding(16.dp)) {
                 Row(Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
                     Icon(
-                        painter = painterResource(Res.drawable.logo_skyfit),
+                        painter = painterResource(Res.drawable.ic_app_logo),
                         contentDescription = "Warning",
                         tint = SkyFitColor.icon.caution,
                         modifier = Modifier.size(16.dp)

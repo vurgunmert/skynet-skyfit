@@ -1,5 +1,6 @@
 package com.vurgun.skyfit.core.navigation
 
+import cafe.adriel.voyager.core.annotation.InternalVoyagerApi
 import cafe.adriel.voyager.core.registry.ScreenProvider
 import cafe.adriel.voyager.core.registry.ScreenRegistry
 import cafe.adriel.voyager.navigator.Navigator
@@ -43,4 +44,15 @@ fun Navigator.findRootNavigator(): Navigator {
         root = root.parent!!
     }
     return root
+}
+
+
+@OptIn(InternalVoyagerApi::class)
+fun Navigator?.findParentByKey(key: String): Navigator? {
+    var current = this
+    while (current != null) {
+        if (current.key == key) return current
+        current = current.parent
+    }
+    return null
 }

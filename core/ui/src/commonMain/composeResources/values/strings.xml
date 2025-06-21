@@ -118,11 +118,12 @@
     <string name="lesson_count_input_hint">örn: 16</string>
     <string name="course_contents_label">Ders İçerikleri</string>
     <string name="course_contents_input_hint">Pilates</string>
-    <string name="package_description_title_label">Ders İçerikleri (İsteğe Bağlı)</string>
+    <string name="package_description_title_label">Ders Hakkinda (İsteğe Bağlı)</string>
     <string name="number_of_member_label">%1$d Üye</string>
     <string name="number_of_month_label">%1$d Ay</string>
     <string name="free_label">Ücretsiz</string>
     <string name="valid_month_count_label">Geçerli Ay Sayısı</string>
+    <string name="messages_label">Mesajlar</string>
 
     <!-- 🔷 Lesson Related -->
     <string name="lesson_status_completed">Tamamlandı</string>
@@ -208,16 +209,28 @@
 
     <string name="settings_title">Ayarlar</string>
     <string name="settings_account_label">Hesap Ayarları</string>
+    <string name="settings_account">Hesap Ayarları</string>
+    <string name="settings_profile">Hesap Ayarları</string>
+    <string name="settings_add_account">Hesap Ekle</string>
     <string name="settings_payment_history_label">Ödeme Geçmişi</string>
+    <string name="settings_payment">Ödeme Geçmişi</string>
+    <string name="settings_members">Üyeler</string>
+    <string name="settings_trainers">Eğitmenler</string>
+    <string name="settings_branches">Şubeler</string>
     <string name="notifications_label">Bildirimler</string>
+    <string name="settings_notifications">Bildirimler</string>
     <string name="notification_settings_label">Bilidirim Ayarları</string>
     <string name="settings_support_label">Destek ve Yardım</string>
+    <string name="settings_support">Destek ve Yardım</string>
+    <string name="settings_lesson_packages">Paketler</string>
+    <string name="settings_add_lesson_package">Paket Oluştur</string>
     <string name="settings_support_help_subtitle">Sık sorulan soruların yanıtlarını bulun veya doğrudan bizimle iletişime geçin</string>
 
     <string name="accounts_title">Hesaplar</string>
     <string name="add_account_action">Hesap Ekle</string>
     <string name="delete_account_action">Hesabı Sil</string>
     <string name="settings_change_my_password_label">Şifremi Değiştir</string>
+    <string name="settings_password">Şifremi Değiştir</string>
     <string name="settings_current_password_label">Güncel Şifre</string>
     <string name="settings_current_password_hint">Güncel şifrenizi girin</string>
     <string name="settings_new_password_label">Yeni Şifre</string>
@@ -245,7 +258,7 @@
     <string name="settings_edit_profile_firstname_label">Kullanıcı adını girin</string>
     <string name="settings_edit_profile_height_label">Boy (%1$s)</string>
     <string name="settings_edit_profile_weight_label">Kilo (%1$s)</string>
-    <string name="settings_edit_profile_body_type_label">Vücut Tipi</string>
+    <string name="body_type_label">Vücut Tipi</string>
     <string name="settings_edit_profile_biography_label">Biyografi *</string>
     <string name="settings_edit_profile_biography_hint">Kendinizi veya kuruluşunuzu kısaca tanıtın</string>
     <string name="settings_edit_profile_address_label">Adres *</string>
@@ -303,4 +316,5 @@
     <string name="new_membership_request_label">Yeni Üyelik Talebi</string>
     <string name="membership_request_approval_message">%1$s seni spor salonu üyesi olarak ekledi. Onaylıyor musun?</string>
 
+    <string name="lesson_categories_label">Ders Kategorileri</string>
 </resources>

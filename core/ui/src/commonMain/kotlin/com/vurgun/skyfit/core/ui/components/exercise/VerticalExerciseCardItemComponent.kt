@@ -22,7 +22,7 @@ import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
 import skyfit.core.ui.generated.resources.Res
 import skyfit.core.ui.generated.resources.ic_image
-import skyfit.core.ui.generated.resources.logo_skyfit
+import skyfit.core.ui.generated.resources.ic_app_logo
 
 @Composable
 fun VerticalExerciseCardItemComponent(
@@ -115,7 +115,7 @@ fun VerticalExerciseCardItemComponent(
                     Spacer(modifier = Modifier.weight(1f))
 
                     Icon(
-                        painter = painterResource(Res.drawable.logo_skyfit),
+                        painter = painterResource(Res.drawable.ic_app_logo),
                         contentDescription = "Preview exercise",
                         tint = SkyFitColor.icon.default,
                         modifier = Modifier.size(24.dp)

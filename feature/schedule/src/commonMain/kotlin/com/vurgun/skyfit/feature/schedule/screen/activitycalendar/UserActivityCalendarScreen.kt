@@ -7,6 +7,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
@@ -14,8 +17,9 @@ import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.koin.koinScreenModel
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
-import com.vurgun.skyfit.core.data.schedule.domain.model.CalendarEvent
+import com.vurgun.skyfit.core.data.utility.now
 import com.vurgun.skyfit.core.data.utility.toTurkishLongDate
+import com.vurgun.skyfit.core.data.v1.domain.user.model.CalendarEvent
 import com.vurgun.skyfit.core.navigation.SharedScreen
 import com.vurgun.skyfit.core.navigation.popUntil
 import com.vurgun.skyfit.core.ui.components.button.SkyButton
@@ -26,28 +30,38 @@ import com.vurgun.skyfit.core.ui.components.loader.FullScreenLoaderContent
 import com.vurgun.skyfit.core.ui.components.schedule.monthly.EventCalendarSelector
 import com.vurgun.skyfit.core.ui.components.schedule.monthly.rememberEventCalendarController
 import com.vurgun.skyfit.core.ui.components.special.SkyFitMobileScaffold
-import com.vurgun.skyfit.core.ui.components.special.SkyFitScreenHeader
+import com.vurgun.skyfit.core.ui.components.special.CompactTopBar
+import com.vurgun.skyfit.core.ui.components.special.ExpandedTopBar
 import com.vurgun.skyfit.core.ui.components.text.SkyText
 import com.vurgun.skyfit.core.ui.components.text.TextStyleType
 import com.vurgun.skyfit.core.ui.screen.ErrorScreen
 import com.vurgun.skyfit.core.ui.styling.SkyFitAsset
 import com.vurgun.skyfit.core.ui.utils.CollectEffect
+import com.vurgun.skyfit.core.ui.utils.LocalCompactOverlayController
+import com.vurgun.skyfit.core.ui.utils.LocalWindowSize
+import com.vurgun.skyfit.core.ui.utils.WindowSize
 import kotlinx.datetime.LocalDate
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
 import skyfit.core.ui.generated.resources.*
 
-class UserActivityCalendarScreen(private val selectedDate: LocalDate? = null) : Screen {
+class UserActivityCalendarScreen(private val initialDate: LocalDate? = null) : Screen {
 
     @Composable
     override fun Content() {
         val navigator = LocalNavigator.currentOrThrow
         val viewModel = koinScreenModel<UserActivityCalendarViewModel>()
         val uiState by viewModel.uiState.collectAsState()
+        val selectedDate by viewModel.selectedDate.collectAsState()
+        val overlayController = LocalCompactOverlayController.current
 
         CollectEffect(viewModel.effect) { effect ->
             when (effect) {
-                UserActivityCalendarEffect.NavigateToBack -> navigator.pop()
+                UserActivityCalendarEffect.NavigateToBack -> {
+                    overlayController?.invoke(null)
+                    navigator.pop()
+                }
+
                 is UserActivityCalendarEffect.NavigateToCalendarSearch -> {
                     navigator.push(UserActivityCalendarSearchScreen(effect.date))
                 }
@@ -55,7 +69,7 @@ class UserActivityCalendarScreen(private val selectedDate: LocalDate? = null) : 
         }
 
         LaunchedEffect(selectedDate) {
-            viewModel.loadData(selectedDate)
+            viewModel.loadData(initialDate, selectedDate)
         }
 
         when (uiState) {
@@ -64,7 +78,7 @@ class UserActivityCalendarScreen(private val selectedDate: LocalDate? = null) : 
                 val message = (uiState as UserActivityCalendarUiState.Error).message
                 ErrorScreen(
                     message = message,
-                    onConfirm = { navigator.popUntil(SharedScreen.Dashboard) },
+                    onConfirm = { navigator.popUntil(SharedScreen.Main) },
                     confirmText = stringResource(Res.string.go_to_home_action)
                 )
             }
@@ -85,6 +99,7 @@ private fun MobileUserActivityCalendarScreen(
     val completedDays by viewModel.completedDays.collectAsState()
     val selectedDay by viewModel.selectedDate.collectAsState()
     val events by viewModel.filteredEvents.collectAsState()
+    val windowSize = LocalWindowSize.current
 
     val controller = rememberEventCalendarController(
         initialSelectedDate = selectedDay,
@@ -98,10 +113,17 @@ private fun MobileUserActivityCalendarScreen(
 
     SkyFitMobileScaffold(
         topBar = {
-            SkyFitScreenHeader(
-                title = stringResource(Res.string.calendar_label),
-                onClickBack = { onAction(UserActivityCalendarAction.OnClickBack) }
-            )
+            if (windowSize == WindowSize.EXPANDED) {
+                ExpandedTopBar(
+                    title = stringResource(Res.string.calendar_label),
+                    onClickBack = { onAction(UserActivityCalendarAction.OnClickBack) }
+                )
+            } else {
+                CompactTopBar(
+                    title = stringResource(Res.string.calendar_label),
+                    onClickBack = { onAction(UserActivityCalendarAction.OnClickBack) }
+                )
+            }
         }
     ) {
         Column(

@@ -3,29 +3,12 @@ package com.vurgun.skyfit.feature.schedule.screen.appointments
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.BoxWithConstraints
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.heightIn
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Icon
 import androidx.compose.material.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.MutableState
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -45,18 +28,13 @@ import com.vurgun.skyfit.core.ui.screen.ErrorScreen
 import com.vurgun.skyfit.core.ui.styling.SkyFitColor
 import com.vurgun.skyfit.core.ui.styling.SkyFitTypography
 import com.vurgun.skyfit.core.ui.utils.CollectEffect
+import com.vurgun.skyfit.core.ui.utils.LocalCompactOverlayController
+import com.vurgun.skyfit.core.ui.utils.LocalWindowSize
+import com.vurgun.skyfit.core.ui.utils.WindowSize
 import org.jetbrains.compose.resources.DrawableResource
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
-import skyfit.core.ui.generated.resources.Res
-import skyfit.core.ui.generated.resources.cancel_action
-import skyfit.core.ui.generated.resources.error_cancel_appointment_title
-import skyfit.core.ui.generated.resources.ic_check_circle
-import skyfit.core.ui.generated.resources.ic_chevron_left
-import skyfit.core.ui.generated.resources.ic_clock
-import skyfit.core.ui.generated.resources.ic_location_pin
-import skyfit.core.ui.generated.resources.ic_profile
-import skyfit.core.ui.generated.resources.trainer_note_label
+import skyfit.core.ui.generated.resources.*
 
 class UserAppointmentDetailScreen(private val lpId: Int) : Screen {
 
@@ -66,9 +44,15 @@ class UserAppointmentDetailScreen(private val lpId: Int) : Screen {
         val viewModel = koinScreenModel<UserAppointmentDetailViewModel>()
         val cancelDialog = rememberErrorDialogState()
 
+        val overlayController = LocalCompactOverlayController.current
+
         CollectEffect(viewModel.effect) { effect ->
             when (effect) {
-                UserAppointmentDetailEffect.NavigateToBack -> navigator.pop()
+                UserAppointmentDetailEffect.NavigateToBack -> {
+                    navigator.pop()
+                    overlayController?.invoke(null)
+                }
+
                 is UserAppointmentDetailEffect.ShowCancelError -> cancelDialog.show(effect.message)
             }
         }
@@ -116,14 +100,25 @@ private object MobileUserAppointmentDetailComponent {
         content: UserAppointmentDetailUiState.Content,
         onAction: (UserAppointmentDetailAction) -> Unit
     ) {
+        val windowSize = LocalWindowSize.current
+
         SkyFitMobileScaffold(
             topBar = {
-                MobileAppointmentDetailComponent.MobileUserAppointmentDetail_TopBar(
-                    title = content.appointment.title,
-                    onClickBack = { onAction(UserAppointmentDetailAction.NavigateToBack) },
-                    status = content.appointment.status,
-                    statusName = content.appointment.statusName
-                )
+                if (windowSize == WindowSize.EXPANDED) {
+                    MobileAppointmentDetailComponent.StatusTopBarExpanded(
+                        title = content.appointment.title,
+                        onClickBack = { onAction(UserAppointmentDetailAction.NavigateToBack) },
+                        status = content.appointment.status,
+                        statusName = content.appointment.statusName
+                    )
+                } else {
+                    MobileAppointmentDetailComponent.StatusTopBarCompact(
+                        title = content.appointment.title,
+                        onClickBack = { onAction(UserAppointmentDetailAction.NavigateToBack) },
+                        status = content.appointment.status,
+                        statusName = content.appointment.statusName
+                    )
+                }
             }
         ) {
             Column(
@@ -179,13 +174,38 @@ private object MobileUserAppointmentDetailComponent {
 
 object MobileAppointmentDetailComponent {
     @Composable
-    fun MobileUserAppointmentDetail_TopBar(
+    fun StatusTopBarCompact(
         title: String,
         status: Int,
         statusName: String,
         onClickBack: () -> Unit
     ) {
         Box(Modifier.fillMaxWidth().padding(horizontal = 24.dp, vertical = 8.dp)) {
+            Icon(
+                painter = painterResource(Res.drawable.ic_chevron_left),
+                contentDescription = "Back",
+                tint = SkyFitColor.text.default,
+                modifier = Modifier.align(Alignment.CenterStart).size(16.dp).clickable(onClick = onClickBack)
+            )
+
+            Text(
+                text = title,
+                style = SkyFitTypography.bodyLargeSemibold,
+                modifier = Modifier.align(Alignment.Center)
+            )
+
+            AppointmentStatusChip(status, statusName, modifier = Modifier.align(Alignment.CenterEnd))
+        }
+    }
+
+    @Composable
+    fun StatusTopBarExpanded(
+        title: String,
+        status: Int,
+        statusName: String,
+        onClickBack: () -> Unit
+    ) {
+        Box(Modifier.fillMaxWidth().padding(horizontal = 16.dp, vertical = 32.dp)) {
             Icon(
                 painter = painterResource(Res.drawable.ic_chevron_left),
                 contentDescription = "Back",
