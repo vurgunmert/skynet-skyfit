@@ -59,7 +59,7 @@ internal fun UserHomeCompact(viewModel: UserHomeViewModel) {
 
     CollectEffect(viewModel.effect) { effect ->
         val screen = when (effect) {
-            is NavigateToVisitFacility -> SharedScreen.FacilityProfileVisitor(effect.facilityId)
+            is NavigateToVisitFacility -> SharedScreen.FacilityProfile(effect.facilityId)
             NavigateToConversations -> SharedScreen.Conversations
             NavigateToAppointments -> SharedScreen.UserAppointmentListing
             NavigateToNotifications -> SharedScreen.Notifications

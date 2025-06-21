@@ -37,7 +37,7 @@ internal data class CreateLessonRequestDTO(
 )
 
 @Serializable
-internal data class UpdateLessonRequest(
+internal data class UpdateLessonRequestDTO(
     val lessonId: Int,
     val iconId: Int,
     val trainerNote: String?,
@@ -52,6 +52,7 @@ internal data class UpdateLessonRequest(
     val price: Int,
     val participantType: Int,
     val participants: List<Int>,
+    val categories: List<Int>,
 )
 
 @Serializable

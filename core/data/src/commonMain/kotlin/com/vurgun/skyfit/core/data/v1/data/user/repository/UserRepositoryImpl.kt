@@ -1,18 +1,16 @@
 package com.vurgun.skyfit.core.data.v1.data.user.repository
 
-import com.vurgun.skyfit.core.data.v1.domain.user.model.Appointment
-import com.vurgun.skyfit.core.data.v1.domain.user.model.AppointmentDetail
 import com.vurgun.skyfit.core.data.storage.TokenManager
 import com.vurgun.skyfit.core.data.v1.data.user.mapper.UserDataMapper.toAppointmentDetailDomain
 import com.vurgun.skyfit.core.data.v1.data.user.mapper.UserDataMapper.toDomainCalendarEvents
 import com.vurgun.skyfit.core.data.v1.data.user.mapper.UserDataMapper.toDomainUserProfile
-import com.vurgun.skyfit.core.data.v1.data.user.mapper.UserDataMapper.toDomainWorkoutEvents
 import com.vurgun.skyfit.core.data.v1.data.user.mapper.UserDataMapper.toLessonDomain
 import com.vurgun.skyfit.core.data.v1.data.user.model.*
 import com.vurgun.skyfit.core.data.v1.data.user.service.UserApiService
+import com.vurgun.skyfit.core.data.v1.domain.user.model.Appointment
+import com.vurgun.skyfit.core.data.v1.domain.user.model.AppointmentDetail
 import com.vurgun.skyfit.core.data.v1.domain.user.model.CalendarEvent
 import com.vurgun.skyfit.core.data.v1.domain.user.model.UserProfile
-import com.vurgun.skyfit.core.data.v1.data.workout.WorkoutEvent
 import com.vurgun.skyfit.core.data.v1.domain.user.repository.UserRepository
 import com.vurgun.skyfit.core.network.DispatcherProvider
 import com.vurgun.skyfit.core.network.utils.ioResult
@@ -113,10 +111,5 @@ class UserRepositoryImpl(
             .mapOrThrow { it.toDomainCalendarEvents() }
     }
 
-    //TODO MOVE TO GLOBAL
-    override suspend fun getWorkoutEvents(): Result<List<WorkoutEvent>> = ioResult(dispatchers) {
-        val token = tokenManager.getTokenOrThrow()
-        apiService.getWorkoutEvents(token).mapOrThrow { it.toDomainWorkoutEvents() }
-    }
     //endregion Calendar
 }

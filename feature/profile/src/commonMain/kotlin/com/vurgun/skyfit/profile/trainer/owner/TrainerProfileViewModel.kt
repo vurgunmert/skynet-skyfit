@@ -84,6 +84,7 @@ sealed interface TrainerProfileUiState {
 
 sealed interface TrainerProfileUiAction {
     data class OnDestinationChanged(val destination: ProfileDestination) : TrainerProfileUiAction
+    data object OnClickBack : TrainerProfileUiAction
     data object OnClickSettings : TrainerProfileUiAction
     data object OnClickNewPost : TrainerProfileUiAction
     data object OnClickToCreatePost : TrainerProfileUiAction
@@ -123,6 +124,7 @@ class TrainerProfileViewModel(
             is TrainerProfileUiAction.OnClickToCreatePost -> emitEffect(TrainerProfileUiEffect.NavigateToCreatePost)
             is TrainerProfileUiAction.OnClickSettings -> emitEffect(TrainerProfileUiEffect.NavigateToSettings)
             is TrainerProfileUiAction.OnClickToAppointments -> emitEffect(TrainerProfileUiEffect.NavigateToAppointments)
+            TrainerProfileUiAction.OnClickBack -> emitEffect(TrainerProfileUiEffect.NavigateBack)
             TrainerProfileUiAction.OnClickNewPost -> emitEffect(TrainerProfileUiEffect.NavigateToCreatePost)
             TrainerProfileUiAction.OnClickBookAppointment ->  emitEffect(NavigateToTrainerSchedule(activeTrainerId!!))
             TrainerProfileUiAction.OnClickSendMessage -> emitEffect(NavigateToChatWithTrainer(activeTrainerId!!))

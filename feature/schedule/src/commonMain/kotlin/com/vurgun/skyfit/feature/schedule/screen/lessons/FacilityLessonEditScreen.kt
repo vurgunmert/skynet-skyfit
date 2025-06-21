@@ -39,6 +39,8 @@ import com.vurgun.skyfit.core.ui.styling.SkyFitAsset
 import com.vurgun.skyfit.core.ui.styling.SkyFitColor
 import com.vurgun.skyfit.core.ui.styling.SkyFitTypography
 import com.vurgun.skyfit.core.ui.utils.CollectEffect
+import com.vurgun.skyfit.core.ui.utils.LocalWindowSize
+import com.vurgun.skyfit.core.ui.utils.WindowSize
 import kotlinx.datetime.DayOfWeek
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
@@ -127,13 +129,28 @@ private fun MobileFacilityEditLessonScreen(
 
     SkyFitMobileScaffold(
         topBar = {
-            CompactTopBar(stringResource(Res.string.lesson_edit_action), onClickBack = {
-                if (uiState.isReadyToSave) {
-                    viewModel.updateShowCancelDialog(true)
-                } else {
-                    viewModel.onAction(FacilityLessonEditAction.NavigateToBack)
+
+            when (LocalWindowSize.current) {
+                WindowSize.COMPACT, WindowSize.MEDIUM -> {
+                    CompactTopBar(stringResource(Res.string.lesson_edit_action), onClickBack = {
+                        if (uiState.isReadyToSave) {
+                            viewModel.updateShowCancelDialog(true)
+                        } else {
+                            viewModel.onAction(FacilityLessonEditAction.NavigateToBack)
+                        }
+                    })
                 }
-            })
+
+                WindowSize.EXPANDED -> {
+                    ExpandedTopBar(stringResource(Res.string.lesson_edit_action), onClickBack = {
+                        if (uiState.isReadyToSave) {
+                            viewModel.updateShowCancelDialog(true)
+                        } else {
+                            viewModel.onAction(FacilityLessonEditAction.NavigateToBack)
+                        }
+                    })
+                }
+            }
         }
     ) {
 

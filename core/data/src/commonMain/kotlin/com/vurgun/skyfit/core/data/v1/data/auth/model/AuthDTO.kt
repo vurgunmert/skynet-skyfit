@@ -30,3 +30,10 @@ data class ResetPasswordRequestDTO(
     val password: String,
     val againPassword: String
 )
+
+@Serializable
+data class ChangePasswordRequestDTO(
+    val oldPassword: String,
+    val newPassword: String,
+    val againPassword: String
+)

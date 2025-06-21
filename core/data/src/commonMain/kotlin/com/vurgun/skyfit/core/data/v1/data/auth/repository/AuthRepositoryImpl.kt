@@ -3,6 +3,7 @@ package com.vurgun.skyfit.core.data.v1.data.auth.repository
 import com.vurgun.skyfit.core.data.storage.Storage
 import com.vurgun.skyfit.core.data.storage.TokenManager
 import com.vurgun.skyfit.core.data.v1.data.auth.model.AuthRequestDTO
+import com.vurgun.skyfit.core.data.v1.data.auth.model.ChangePasswordRequestDTO
 import com.vurgun.skyfit.core.data.v1.data.auth.model.CreatePasswordRequestDTO
 import com.vurgun.skyfit.core.data.v1.data.auth.model.ResetPasswordRequestDTO
 import com.vurgun.skyfit.core.data.v1.data.auth.model.VerifyAuthRequestDTO
@@ -12,6 +13,8 @@ import com.vurgun.skyfit.core.data.v1.domain.auth.repository.AuthRepository
 import com.vurgun.skyfit.core.data.v1.domain.global.model.MissingTokenException
 import com.vurgun.skyfit.core.network.ApiResult
 import com.vurgun.skyfit.core.network.DispatcherProvider
+import com.vurgun.skyfit.core.network.utils.ioResult
+import com.vurgun.skyfit.core.network.utils.mapOrThrow
 import kotlinx.coroutines.withContext
 
 class AuthRepositoryImpl(
@@ -154,4 +157,10 @@ class AuthRepositoryImpl(
                 ResetPasswordResult.Error(e.message)
             }
         }
+
+    override suspend fun changePassword(old: String, new: String, again: String): Result<Unit> = ioResult(dispatchers) {
+        val token = tokenManager.getTokenOrThrow()
+        val body = ChangePasswordRequestDTO(old, new, again)
+        apiService.changePassword(body, token).mapOrThrow { }
+    }
 }

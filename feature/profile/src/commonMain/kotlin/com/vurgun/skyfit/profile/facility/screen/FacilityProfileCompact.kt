@@ -75,7 +75,7 @@ internal fun FacilityProfileCompact(
             }
 
             is FacilityProfileUiEffect.NavigateToVisitTrainer -> {
-                appNavigator.push(TrainerProfileVisitor(effect.trainerId))
+                appNavigator.push(TrainerProfile(effect.trainerId))
             }
 
             is FacilityProfileUiEffect.NavigateToFacilityChat -> {
@@ -157,7 +157,7 @@ internal object FacilityProfileCompactComponent {
                     Spacer(Modifier.height(124.dp))
                 }
             },
-            modifier = Modifier.fillMaxSize()
+            modifier = Modifier.fillMaxSize().background(SkyFitColor.background.default)
         )
     }
 
@@ -338,7 +338,7 @@ internal object FacilityProfileCompactComponent {
                 if (content.isVisiting) {
                     Spacer(modifier = Modifier.height(16.dp))
 
-                    FeatureVisible(true) {
+                    FeatureVisible(false) {
                         SkyFitButtonComponent(
                             modifier = Modifier.fillMaxWidth(),
                             text = stringResource(if (content.isVisitorFollowing) Res.string.unfollow_action else Res.string.follow_action),
@@ -368,7 +368,9 @@ internal object FacilityProfileCompactComponent {
                         }
                     }
                 }
-            }
+            },
+            canNavigateBack = content.isVisiting,
+            onClickBack = { onAction(FacilityProfileUiAction.NavigateBack) }
         )
     }
 
@@ -526,7 +528,10 @@ internal object FacilityProfileCompactComponent {
         content: FacilityProfileUiState.Content,
         onAction: (FacilityProfileUiAction) -> Unit
     ) {
-        SocialQuickPostInputCard(modifier = Modifier.padding(horizontal = 16.dp), onClickSend = {})
+
+        FeatureVisible(!content.isVisiting) {
+            SocialQuickPostInputCard(modifier = Modifier.padding(horizontal = 16.dp), onClickSend = {})
+        }
 
         content.posts.forEach { post ->
             SocialPostCard(

@@ -4,8 +4,8 @@ import com.vurgun.skyfit.core.data.serverImageFromPath
 import com.vurgun.skyfit.core.data.utility.formatToServerDate
 import com.vurgun.skyfit.core.data.utility.formatToServerTime
 import com.vurgun.skyfit.core.data.utility.parseServerToDateOnly
-import com.vurgun.skyfit.core.data.utility.parseServerToHHMMTime
 import com.vurgun.skyfit.core.data.v1.data.facility.model.*
+import com.vurgun.skyfit.core.data.v1.data.lesson.mapper.LessonDataMapper.toDomainCategory
 import com.vurgun.skyfit.core.data.v1.data.lesson.model.LessonParticipantDTO
 import com.vurgun.skyfit.core.data.v1.data.trainer.model.FacilityTrainerProfileDTO
 import com.vurgun.skyfit.core.data.v1.domain.facility.model.FacilityMemberPackage
@@ -16,7 +16,6 @@ import com.vurgun.skyfit.core.data.v1.domain.lesson.model.LessonCreationInfo
 import com.vurgun.skyfit.core.data.v1.domain.lesson.model.LessonParticipant
 import com.vurgun.skyfit.core.data.v1.domain.lesson.model.LessonUpdateInfo
 import com.vurgun.skyfit.core.data.v1.domain.trainer.model.FacilityTrainerProfile
-import kotlinx.datetime.LocalDateTime
 
 internal object FacilityDataMapper {
 
@@ -56,8 +55,8 @@ internal object FacilityDataMapper {
             facilityName = gymName,
             gymAddress = address,
             bio = bio,
-            trainerCount = gymTrainerCount,
-            memberCount = gymMemberCount,
+            trainerCount = gymTrainerCount ?: 0,
+            memberCount = gymMemberCount ?: 0,
             point = point ?: 0f
         )
     }
@@ -106,7 +105,9 @@ internal object FacilityDataMapper {
                 packageName = packageName,
                 startDate = startDate.parseServerToDateOnly(),
                 endDate = endDate?.parseServerToDateOnly(),
-                lessonCount = lessonCount
+                lessonCount = lessonCount,
+                usedLessonCount = usedLessonCount ?: 0,
+                categories = categories?.let { it.map { category -> category.toDomainCategory() } } ?: emptyList()
             )
         }
     }
@@ -133,8 +134,8 @@ internal object FacilityDataMapper {
         )
     }
 
-    internal fun LessonUpdateInfo.toUpdateLessonRequest(): UpdateLessonRequest {
-        return UpdateLessonRequest(
+    internal fun LessonUpdateInfo.toUpdateLessonRequest(): UpdateLessonRequestDTO {
+        return UpdateLessonRequestDTO(
             lessonId = lessonId,
             iconId = iconId,
             trainerNote = trainerNote,
@@ -148,7 +149,8 @@ internal object FacilityDataMapper {
             isRequiredAppointment = isRequiredAppointment,
             price = price,
             participantType = participantType,
-            participants = participantsIds
+            participants = participantsIds,
+            categories = categoryIds
         )
     }
 }

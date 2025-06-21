@@ -3,6 +3,7 @@ package com.vurgun.skyfit.core.data.v1.data.auth.service
 import com.vurgun.skyfit.core.data.v1.data.global.model.EmptyDTO
 import com.vurgun.skyfit.core.data.v1.data.auth.model.AuthRequestDTO
 import com.vurgun.skyfit.core.data.v1.data.auth.model.AuthResponseDTO
+import com.vurgun.skyfit.core.data.v1.data.auth.model.ChangePasswordRequestDTO
 import com.vurgun.skyfit.core.data.v1.data.auth.model.CreatePasswordRequestDTO
 import com.vurgun.skyfit.core.data.v1.data.auth.model.ResetPasswordRequestDTO
 import com.vurgun.skyfit.core.data.v1.data.auth.model.VerifyAuthRequestDTO
@@ -22,6 +23,7 @@ class AuthApiService(private val apiClient: ApiClient) {
         const val RESEND_OTP = "auth/create-password"
         const val AUTH_CREATE_PASSWORD = "auth/createpassword"
         const val AUTH_FORGOT_PASSWORD_RESET = "forgot/change/password"
+        const val AUTH_CHANGE_PASSWORD = "auth/change-password"
     }
 
     suspend fun login(request: AuthRequestDTO): ApiResult<AuthResponseDTO> {
@@ -75,6 +77,15 @@ class AuthApiService(private val apiClient: ApiClient) {
             method = HttpMethod.Companion.Put
             bearerAuth(token)
             url(Endpoint.AUTH_FORGOT_PASSWORD_RESET)
+            setBody(request)
+        }
+    }
+
+    suspend fun changePassword(request: ChangePasswordRequestDTO, token: String): ApiResult<EmptyDTO> {
+        return apiClient.safeApiCall<EmptyDTO> {
+            method = HttpMethod.Companion.Put
+            bearerAuth(token)
+            url(Endpoint.AUTH_CHANGE_PASSWORD)
             setBody(request)
         }
     }

@@ -49,7 +49,7 @@ class FacilityProfileVisitorScreen(private val facilityId: Int) : Screen {
                 }
 
                 is FacilityProfileVisitorEffect.NavigateToTrainer -> {
-                    appNavigator.push(SharedScreen.TrainerProfileVisitor(effect.trainerId))
+                    appNavigator.push(SharedScreen.TrainerProfile(effect.trainerId))
                 }
 
                 is FacilityProfileVisitorEffect.NavigateToSchedule -> {

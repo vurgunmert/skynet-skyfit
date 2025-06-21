@@ -13,4 +13,6 @@ interface AuthRepository {
     suspend fun resetPassword(password: String, againPassword: String): ResetPasswordResult
 
     data object UserPhoneNumber : Storage.Key.StringKey("user_phone_number", null)
+
+    suspend fun changePassword(old: String, new: String, again: String): Result<Unit>
 }

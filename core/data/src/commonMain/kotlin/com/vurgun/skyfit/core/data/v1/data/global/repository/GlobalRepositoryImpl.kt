@@ -1,7 +1,9 @@
 package com.vurgun.skyfit.core.data.v1.data.global.repository
 
 import com.vurgun.skyfit.core.data.storage.TokenManager
+import com.vurgun.skyfit.core.data.v1.data.global.mapper.GlobalDataMapper.toDomainWorkoutEvents
 import com.vurgun.skyfit.core.data.v1.data.global.service.GlobalApiService
+import com.vurgun.skyfit.core.data.v1.data.workout.WorkoutEvent
 import com.vurgun.skyfit.core.data.v1.domain.global.model.ProfileTag
 import com.vurgun.skyfit.core.data.v1.domain.global.model.UserGoal
 import com.vurgun.skyfit.core.data.v1.domain.global.repository.GlobalRepository
@@ -23,5 +25,10 @@ class GlobalRepositoryImpl(
     override suspend fun getGoals() = ioResult(dispatchers) {
         val token = tokenManager.getTokenOrThrow()
         apiService.getAllGoals(token).mapOrThrow { list -> list.map { UserGoal(it.goalId, it.goalName) } }
+    }
+
+    override suspend fun getWorkoutEvents(): Result<List<WorkoutEvent>> = ioResult(dispatchers) {
+        val token = tokenManager.getTokenOrThrow()
+        apiService.getWorkoutEvents(token).mapOrThrow { it.toDomainWorkoutEvents() }
     }
 }

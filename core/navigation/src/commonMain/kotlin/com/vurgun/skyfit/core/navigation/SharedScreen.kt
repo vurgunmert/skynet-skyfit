@@ -76,21 +76,13 @@ sealed class SharedScreen(open val key: String) : ScreenProvider {
     data object ChatBot : SharedScreen("chat_bot")
 
     // Profiles
-    data class UserProfileVisitor(val id: Int) :
-        SharedScreen("profile:user:$id")
-
-    data class FacilityProfileVisitor(val id: Int) :
-        SharedScreen("profile:facility:$id")
-
-    data class TrainerProfileVisitor(val id: Int) :
-        SharedScreen("profile:trainer:$id")
+    data class UserProfile(val userId: Int) : SharedScreen("profile:user:$userId")
+    data class FacilityProfile(val facilityId: Int) : SharedScreen("profile:facility:$facilityId")
+    data class TrainerProfile(val trainerId: Int) : SharedScreen("profile:trainer:$trainerId")
 
     // Schedules
-    data class FacilitySchedule(val id: Int) :
-        SharedScreen("schedule:facility:$id")
-
-    data class TrainerSchedule(val id: Int) :
-        SharedScreen("schedule:trainer:$id")
+    data class FacilitySchedule(val facilityId: Int) : SharedScreen("schedule:facility:$facilityId")
+    data class TrainerSchedule(val trainerId: Int) : SharedScreen("schedule:trainer:$trainerId")
 
     // Courses / Lessons
     data object FacilityManageLessons : SharedScreen("facility:schedule:lessons")

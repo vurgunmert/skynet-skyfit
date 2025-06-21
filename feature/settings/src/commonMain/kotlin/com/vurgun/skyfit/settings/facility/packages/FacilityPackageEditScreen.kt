@@ -19,6 +19,7 @@ import com.vurgun.skyfit.core.ui.components.form.*
 import com.vurgun.skyfit.core.ui.components.loader.FullScreenLoaderContent
 import com.vurgun.skyfit.core.ui.components.special.SkyFitMobileScaffold
 import com.vurgun.skyfit.core.ui.components.special.CompactTopBar
+import com.vurgun.skyfit.core.ui.components.special.FeatureVisible
 import com.vurgun.skyfit.core.ui.screen.ErrorScreen
 import com.vurgun.skyfit.core.ui.styling.LocalPadding
 import com.vurgun.skyfit.core.ui.utils.CollectEffect
@@ -110,9 +111,9 @@ private fun CreateServicePackageScreen_Content(
             SkyFormSelectLessonCategory(
                 title = stringResource(Res.string.course_contents_label),
                 hint = stringResource(Res.string.course_contents_input_hint),
-                availableTags = content.categories,
-                selectedTags = formState.categories,
-                onTagsSelected = { onAction(FacilityPackageEditAction.OnServicesChanged(it)) },
+                availableCategories = content.categories,
+                selectedCategories = formState.categories,
+                onSelectionChanged = { onAction(FacilityPackageEditAction.OnServicesChanged(it)) },
                 modifier = Modifier.fillMaxWidth(),
             )
 
@@ -131,13 +132,16 @@ private fun CreateServicePackageScreen_Content(
                 onSelectionChanged = { onAction(FacilityPackageEditAction.OnDurationMonthChanged(it)) }
             )
 
-            SkyFormSelectText(
-                title = stringResource(Res.string.add_branch_action),
-                hint = stringResource(Res.string.select_action),
-                options = content.branches,
-                selected = formState.branch,
-                onSelectionChanged = { onAction(FacilityPackageEditAction.OnBranchChanged(it)) }
-            )
+
+            FeatureVisible(false) {
+                SkyFormSelectText(
+                    title = stringResource(Res.string.add_branch_action),
+                    hint = stringResource(Res.string.select_action),
+                    options = content.branches,
+                    selected = formState.branch,
+                    onSelectionChanged = { onAction(FacilityPackageEditAction.OnBranchChanged(it)) }
+                )
+            }
 
             SkyFormInputCostText(
                 cost = formState.price.toInt(),

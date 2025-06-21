@@ -9,9 +9,9 @@ import com.vurgun.skyfit.core.data.utility.UiStateDelegate
 import com.vurgun.skyfit.core.data.utility.emitIn
 import com.vurgun.skyfit.core.data.utility.now
 import com.vurgun.skyfit.core.data.v1.data.workout.WorkoutTypeUiData
+import com.vurgun.skyfit.core.data.v1.domain.global.repository.GlobalRepository
 import com.vurgun.skyfit.core.data.v1.domain.user.repository.UserRepository
 import com.vurgun.skyfit.core.data.v1.domain.workout.model.WorkoutCategory
-import com.vurgun.skyfit.core.data.v1.domain.workout.repository.WorkoutRepository
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
@@ -49,7 +49,7 @@ sealed class UserActivityCalendarSearchEffect {
 
 class UserActivityCalendarSearchViewModel(
     private val userRepository: UserRepository,
-    private val workoutRepository: WorkoutRepository,
+    private val globalRepository: GlobalRepository
 ) : ScreenModel {
 
     private val _uiState = UiStateDelegate<UserActivityCalendarSearchUiState>(UserActivityCalendarSearchUiState.Loading)
@@ -91,16 +91,16 @@ class UserActivityCalendarSearchViewModel(
     fun loadData(onDate: LocalDate? = null) {
         screenModelScope.launch {
             runCatching {
-                val workoutTypes = userRepository.getWorkoutEvents()
-                    .getOrDefault(emptyList())
+                val workoutTypes = globalRepository.getWorkoutEvents().getOrThrow()
                     .map { WorkoutTypeUiData(it.id, it.name) }
 
-                val workoutCategories = workoutRepository.getCategories()
-                    .getOrThrow()
+                val categories = workoutTypes.map {
+                    WorkoutCategory(id = it.categoryId, key = it.id.toString(), name = it.name)
+                }
 
                 _uiState.update(
                     UserActivityCalendarSearchUiState.Content(
-                        categories = workoutCategories,
+                        categories = categories,
                         allWorkoutTypes = workoutTypes,
                         date = onDate ?: LocalDate.now()
                     )
@@ -116,7 +116,7 @@ class UserActivityCalendarSearchViewModel(
     private fun selectWorkout(workoutType: WorkoutTypeUiData? = null) {
         val content = (uiState.value as? UserActivityCalendarSearchUiState.Content) ?: return
 
-        val category = workoutType?.categoryId?.let { catId -> content.categories.first{ it.id == catId } }
+        val category = workoutType?.categoryId?.let { catId -> content.categories.first { it.id == catId } }
         _effect.emitIn(
             screenModelScope, UserActivityCalendarSearchEffect.NavigateToNew(
                 date = content.date,

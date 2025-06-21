@@ -1,6 +1,9 @@
 package com.vurgun.skyfit.core.data.v1.data.account.service
 
-import com.vurgun.skyfit.core.data.v1.data.account.model.*
+import com.vurgun.skyfit.core.data.v1.data.account.model.AccountDTO
+import com.vurgun.skyfit.core.data.v1.data.account.model.AccountTypeDTO
+import com.vurgun.skyfit.core.data.v1.data.account.model.SelectActiveAccountTypeRequestDTO
+import com.vurgun.skyfit.core.data.v1.data.account.model.SelectActiveAccountTypeResponseDTO
 import com.vurgun.skyfit.core.data.v1.data.global.model.EmptyDTO
 import com.vurgun.skyfit.core.data.v1.domain.account.model.AccountOnboardingFormData
 import com.vurgun.skyfit.core.network.ApiClient
@@ -16,7 +19,6 @@ class AccountApiService(private val apiClient: ApiClient) {
     private companion object Endpoint {
         const val SUBMIT_ONBOARDING_NEW = "account/onboarding/new"
         const val SUBMIT_ONBOARDING_ADD = "account/onboarding/add"
-        const val CHANGE_PASSWORD = "account/change-password"
         const val GET_ACCOUNT_DETAILS = "account/details"
         const val SELECT_USER_TYPE = "account/user-type/select"
         const val GET_USER_TYPES = "global/user-types" //TODO: Chane to account user types
@@ -101,14 +103,5 @@ class AccountApiService(private val apiClient: ApiClient) {
                 }
             }
         )
-    }
-
-    suspend fun changePassword(requestBody: ChangePasswordRequestDTO, token: String): ApiResult<EmptyDTO> {
-        return apiClient.safeApiCall<EmptyDTO> {
-            method = HttpMethod.Post
-            url(Endpoint.CHANGE_PASSWORD)
-            bearerAuth(token)
-            setBody(requestBody)
-        }
     }
 }

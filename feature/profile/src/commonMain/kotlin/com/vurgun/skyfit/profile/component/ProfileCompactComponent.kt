@@ -16,6 +16,7 @@ import androidx.compose.ui.unit.dp
 import com.vurgun.skyfit.core.data.v1.domain.lesson.model.LessonSessionItemViewData
 import com.vurgun.skyfit.core.ui.components.button.SkyButton
 import com.vurgun.skyfit.core.ui.components.button.SkyButtonSize
+import com.vurgun.skyfit.core.ui.components.button.SkyFitPrimaryCircularBackButton
 import com.vurgun.skyfit.core.ui.components.divider.VerticalDivider
 import com.vurgun.skyfit.core.ui.components.event.AvailableActivityCalendarEventItem
 import com.vurgun.skyfit.core.ui.components.event.LessonSessionColumn
@@ -47,7 +48,9 @@ internal object ProfileCompactComponent {
         content: @Composable () -> Unit,
         modifier: Modifier = Modifier.fillMaxSize()
     ) {
-        Column(modifier = modifier.verticalScroll(rememberScrollState())) {
+        Column(modifier = modifier
+            .background(SkyFitColor.background.default)
+            .verticalScroll(rememberScrollState())) {
             header()
             Spacer(Modifier.height(20.dp))
             content()
@@ -60,6 +63,8 @@ internal object ProfileCompactComponent {
         backgroundImageModifier: Modifier = Modifier.fillMaxWidth(),
         profileImageUrl: String?,
         cardContents: @Composable ColumnScope.() -> Unit,
+        canNavigateBack: Boolean = false,
+        onClickBack: (() -> Unit)? = null,
         cardContentsModifier: Modifier = Modifier.fillMaxWidth().padding(top = 150.dp),
     ) {
 
@@ -100,6 +105,16 @@ internal object ProfileCompactComponent {
                     .clip(RoundedCornerShape(20.dp))
                     .size(100.dp)
             )
+
+            if (canNavigateBack) {
+                SkyFitPrimaryCircularBackButton(
+                    modifier = Modifier
+                        .align(Alignment.TopStart)
+                        .padding(top = 48.dp, start = 24.dp)
+                        .size(48.dp),
+                    onClick = { onClickBack?.invoke() }
+                )
+            }
         }
     }
 

@@ -3,7 +3,6 @@ package com.vurgun.skyfit.core.data.v1.data.account.repository
 import com.vurgun.skyfit.core.data.storage.Storage
 import com.vurgun.skyfit.core.data.storage.TokenManager
 import com.vurgun.skyfit.core.data.v1.data.account.mapper.AccountDataMapper.toDomain
-import com.vurgun.skyfit.core.data.v1.data.account.model.ChangePasswordRequestDTO
 import com.vurgun.skyfit.core.data.v1.data.account.model.SelectActiveAccountTypeResponseDTO
 import com.vurgun.skyfit.core.data.v1.data.account.service.AccountApiService
 import com.vurgun.skyfit.core.data.v1.domain.account.model.Account
@@ -117,10 +116,4 @@ class AccountRepositoryImpl(
                 is ApiResult.Success -> AccountOnboardingResult.Success
             }
         }
-
-    override suspend fun changePassword(old: String, new: String, again: String): Result<Unit> = ioResult(dispatchers) {
-        val token = tokenManager.getTokenOrThrow()
-        val body = ChangePasswordRequestDTO(old, new, again)
-        apiService.changePassword(body, token).mapOrThrow { }
-    }
 }

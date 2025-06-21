@@ -37,6 +37,7 @@ import com.vurgun.skyfit.core.ui.styling.SkyFitColor
 import com.vurgun.skyfit.core.ui.utils.CollectEffect
 import com.vurgun.main.component.ScreenOverlay
 import com.vurgun.main.screen.DashboardCompactComponent.BottomBar
+import com.vurgun.skyfit.core.ui.components.special.FeatureVisible
 import org.jetbrains.compose.resources.DrawableResource
 import skyfit.core.ui.generated.resources.*
 
@@ -158,12 +159,14 @@ private object DashboardCompactComponent {
                         onClick = onClickExplore
                     )
 
-                    BottomBarItem(
-                        selected = activeScreen.key == SharedScreen.Social.key,
-                        selectedIcon = Res.drawable.ic_plus,
-                        unselectedIcon = Res.drawable.ic_search,
-                        onClick = onClickSocial
-                    )
+                    FeatureVisible(false) {
+                        BottomBarItem(
+                            selected = activeScreen.key == SharedScreen.Social.key,
+                            selectedIcon = Res.drawable.ic_plus,
+                            unselectedIcon = Res.drawable.ic_search,
+                            onClick = onClickSocial
+                        )
+                    }
 
                     BottomBarItem(
                         selected = activeScreen.key == SharedScreen.Profile.key,

@@ -76,10 +76,10 @@ class UserActivityCalendarViewModel(
         }
     }
 
-    fun loadData(initialDate: LocalDate? = null) {
+    fun loadData(initialDate: LocalDate? = null, selectedDate: LocalDate? = null) {
         if (uiState.value is UserActivityCalendarUiState.Content) return
 
-        _selectedDate.value = initialDate ?: LocalDate.now()
+        _selectedDate.value = selectedDate ?: initialDate ?: LocalDate.now()
 
         screenModelScope.launch {
             runCatching {

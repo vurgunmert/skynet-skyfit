@@ -13,8 +13,8 @@ data class FacilityProfileDTO(
     val gymName: String,
     @SerialName(value = "gymAdress") val address: String,
     val bio: String,
-    val gymTrainerCount: Int,
-    val gymMemberCount: Int,
+    val gymTrainerCount: Int?,
+    val gymMemberCount: Int?,
     val point: Float?,
 )
 

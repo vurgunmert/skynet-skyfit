@@ -22,11 +22,15 @@ import com.vurgun.skyfit.core.ui.components.schedule.LessonEventItemPopupMenu
 import com.vurgun.skyfit.core.ui.components.schedule.weekly.CalendarWeekDaySelector
 import com.vurgun.skyfit.core.ui.components.schedule.weekly.rememberCalendarWeekDaySelectorController
 import com.vurgun.skyfit.core.ui.components.schedule.weekly.rememberWeekDaySelectorState
-import com.vurgun.skyfit.core.ui.components.special.SkyFitMobileScaffold
 import com.vurgun.skyfit.core.ui.components.special.CompactTopBar
+import com.vurgun.skyfit.core.ui.components.special.ExpandedTopBar
+import com.vurgun.skyfit.core.ui.components.special.SkyFitMobileScaffold
 import com.vurgun.skyfit.core.ui.styling.SkyFitColor
 import com.vurgun.skyfit.core.ui.styling.SkyFitTypography
 import com.vurgun.skyfit.core.ui.utils.CollectEffect
+import com.vurgun.skyfit.core.ui.utils.LocalCompactOverlayController
+import com.vurgun.skyfit.core.ui.utils.LocalWindowSize
+import com.vurgun.skyfit.core.ui.utils.WindowSize
 import org.jetbrains.compose.resources.stringResource
 import skyfit.core.ui.generated.resources.*
 
@@ -36,10 +40,15 @@ class FacilityLessonListingScreen : Screen {
     override fun Content() {
         val navigator = LocalNavigator.currentOrThrow
         val viewModel = koinScreenModel<FacilityLessonListingViewModel>()
+        val overlayController = LocalCompactOverlayController.current
 
         CollectEffect(viewModel.effect) { effect ->
             when (effect) {
-                is FacilityLessonListingEffect.NavigateToBack -> navigator.pop()
+                is FacilityLessonListingEffect.NavigateToBack -> {
+                    overlayController?.invoke(null)
+                    navigator.pop()
+                }
+
                 is FacilityLessonListingEffect.NavigateToEditLesson -> {
                     navigator.push(FacilityLessonEditScreen(effect.lesson))
                 }
@@ -67,9 +76,19 @@ private fun MobileFacilityLessonListScreen(viewModel: FacilityLessonListingViewM
 
     SkyFitMobileScaffold(
         topBar = {
-            CompactTopBar(
-                stringResource(Res.string.lessons_label),
-                onClickBack = { viewModel.onAction(FacilityLessonListingAction.NavigateToBack) })
+            when (LocalWindowSize.current) {
+                WindowSize.COMPACT, WindowSize.MEDIUM -> {
+                    CompactTopBar(
+                        stringResource(Res.string.lessons_label),
+                        onClickBack = { viewModel.onAction(FacilityLessonListingAction.NavigateToBack) })
+                }
+
+                WindowSize.EXPANDED -> {
+                    ExpandedTopBar(
+                        stringResource(Res.string.lessons_label),
+                        onClickBack = { viewModel.onAction(FacilityLessonListingAction.NavigateToBack) })
+                }
+            }
         }
     ) {
 

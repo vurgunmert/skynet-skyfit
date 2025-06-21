@@ -7,6 +7,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
@@ -14,6 +17,7 @@ import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.koin.koinScreenModel
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
+import com.vurgun.skyfit.core.data.utility.now
 import com.vurgun.skyfit.core.data.utility.toTurkishLongDate
 import com.vurgun.skyfit.core.data.v1.domain.user.model.CalendarEvent
 import com.vurgun.skyfit.core.navigation.SharedScreen
@@ -33,6 +37,7 @@ import com.vurgun.skyfit.core.ui.components.text.TextStyleType
 import com.vurgun.skyfit.core.ui.screen.ErrorScreen
 import com.vurgun.skyfit.core.ui.styling.SkyFitAsset
 import com.vurgun.skyfit.core.ui.utils.CollectEffect
+import com.vurgun.skyfit.core.ui.utils.LocalCompactOverlayController
 import com.vurgun.skyfit.core.ui.utils.LocalWindowSize
 import com.vurgun.skyfit.core.ui.utils.WindowSize
 import kotlinx.datetime.LocalDate
@@ -40,17 +45,20 @@ import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
 import skyfit.core.ui.generated.resources.*
 
-class UserActivityCalendarScreen(private val selectedDate: LocalDate? = null) : Screen {
+class UserActivityCalendarScreen(private val initialDate: LocalDate? = null) : Screen {
 
     @Composable
     override fun Content() {
         val navigator = LocalNavigator.currentOrThrow
         val viewModel = koinScreenModel<UserActivityCalendarViewModel>()
         val uiState by viewModel.uiState.collectAsState()
+        val selectedDate by viewModel.selectedDate.collectAsState()
+        val overlayController = LocalCompactOverlayController.current
 
         CollectEffect(viewModel.effect) { effect ->
             when (effect) {
                 UserActivityCalendarEffect.NavigateToBack -> {
+                    overlayController?.invoke(null)
                     navigator.pop()
                 }
 
@@ -61,7 +69,7 @@ class UserActivityCalendarScreen(private val selectedDate: LocalDate? = null) : 
         }
 
         LaunchedEffect(selectedDate) {
-            viewModel.loadData(selectedDate)
+            viewModel.loadData(initialDate, selectedDate)
         }
 
         when (uiState) {

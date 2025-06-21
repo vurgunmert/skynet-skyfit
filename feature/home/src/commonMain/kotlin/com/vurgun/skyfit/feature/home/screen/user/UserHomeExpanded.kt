@@ -18,6 +18,7 @@ import cafe.adriel.voyager.navigator.currentOrThrow
 import com.vurgun.skyfit.core.navigation.SharedScreen
 import com.vurgun.skyfit.core.navigation.findParentByKey
 import com.vurgun.skyfit.core.navigation.push
+import com.vurgun.skyfit.core.navigation.replace
 import com.vurgun.skyfit.core.ui.components.button.SkyButton
 import com.vurgun.skyfit.core.ui.components.button.SkyButtonSize
 import com.vurgun.skyfit.core.ui.components.button.SkyButtonState
@@ -47,14 +48,14 @@ import skyfit.core.ui.generated.resources.refresh_action
 @Composable
 internal fun UserHomeExpanded(viewModel: UserHomeViewModel) {
 
-    val dashboardNavigator = LocalNavigator.currentOrThrow.findParentByKey("dashboard")
+    val dashboardNavigator = LocalNavigator.currentOrThrow
     val overlayController = LocalCompactOverlayController.current
     val uiState by viewModel.uiState.collectAsState()
 
     CollectEffect(viewModel.effect) { effect ->
         when (effect) {
             is NavigateToVisitFacility ->
-                dashboardNavigator?.push(SharedScreen.FacilityProfileVisitor(effect.facilityId))
+                dashboardNavigator.push(SharedScreen.FacilityProfile(effect.facilityId))
 
             NavigateToConversations ->
                 overlayController?.invoke(SharedScreen.Conversations)
@@ -65,8 +66,9 @@ internal fun UserHomeExpanded(viewModel: UserHomeViewModel) {
             NavigateToAppointments ->
                 overlayController?.invoke(SharedScreen.UserAppointmentListing)
 
-            NavigateToChatbot ->
-                overlayController?.invoke(SharedScreen.ChatBot)
+            NavigateToChatbot -> {
+                dashboardNavigator.replace(SharedScreen.ChatBot)
+            }
 
             is NavigateToActivityCalendar ->
                 overlayController?.invoke(SharedScreen.UserActivityCalendar())

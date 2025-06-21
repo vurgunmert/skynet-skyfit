@@ -192,7 +192,9 @@ private object TrainerProfileCompactComponent {
                     }
                 }
             },
-            cardContentsModifier = Modifier.padding(top = 140.dp)
+            cardContentsModifier = Modifier.padding(top = 140.dp),
+            canNavigateBack = content.isVisiting,
+            onClickBack = { onAction(TrainerProfileUiAction.OnClickBack) }
         )
     }
 

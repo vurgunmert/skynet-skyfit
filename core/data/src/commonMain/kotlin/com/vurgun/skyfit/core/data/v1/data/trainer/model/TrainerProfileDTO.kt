@@ -14,9 +14,9 @@ data class TrainerProfileDTO(
     val surname: String,
     val gymId: Int?,
     val gymName: String?,
-    val postCount: Int,
-    val lessonCount: Int,
-    val followerCount: Int,
+    val postCount: Int? = null,
+    val lessonCount: Int? = null,
+    val followerCount: Int? = null,
     val point: Float? = null
 )
 

@@ -15,6 +15,7 @@ import com.vurgun.skyfit.core.data.v1.data.explore.service.ExploreApiService
 import com.vurgun.skyfit.core.data.v1.data.facility.repository.FacilityRepositoryImpl
 import com.vurgun.skyfit.core.data.v1.data.facility.service.FacilityApiService
 import com.vurgun.skyfit.core.data.v1.data.global.repository.GlobalRepositoryImpl
+import com.vurgun.skyfit.core.data.v1.data.global.service.GlobalApiService
 import com.vurgun.skyfit.core.data.v1.data.lesson.mapper.LessonSessionItemViewDataMapper
 import com.vurgun.skyfit.core.data.v1.data.lesson.repository.LessonRepositoryImpl
 import com.vurgun.skyfit.core.data.v1.data.lesson.service.LessonApiService
@@ -67,6 +68,7 @@ val dataCoreModule = module {
     single<AppConfigRepository> { AppConfigRepositoryImpl() }
 
     //Global
+    single<GlobalApiService> { GlobalApiService(get()) }
     single<GlobalRepository> { GlobalRepositoryImpl(get(), get(), get()) }
 
     //Auth

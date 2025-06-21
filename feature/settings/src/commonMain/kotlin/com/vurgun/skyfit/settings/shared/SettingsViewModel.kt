@@ -171,11 +171,11 @@ class SettingsViewModel(
         SettingsMenuItem.Account,
 //        SettingsMenuItem.Notifications,
 //        SettingsMenuItem.Payment,
-        SettingsMenuItem.Support,
+        SettingsMenuItem.LessonPackages,
         SettingsMenuItem.Members,
         SettingsMenuItem.Trainers,
-        SettingsMenuItem.Branches,
-        SettingsMenuItem.LessonPackages,
+        SettingsMenuItem.Support,
+//        SettingsMenuItem.Branches,
     )
 
     private fun getUserMenuGroupedItems(): Map<Int, List<SettingsMenuItem>> =

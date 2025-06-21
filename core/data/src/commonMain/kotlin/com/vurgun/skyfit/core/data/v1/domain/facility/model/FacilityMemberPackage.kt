@@ -1,5 +1,6 @@
 package com.vurgun.skyfit.core.data.v1.domain.facility.model
 
+import com.vurgun.skyfit.core.data.v1.domain.lesson.model.LessonCategory
 import kotlinx.datetime.LocalDate
 
 data class FacilityMemberPackage(
@@ -8,5 +9,7 @@ data class FacilityMemberPackage(
     val packageName: String,
     val startDate: LocalDate,
     val endDate: LocalDate? = null,
-    val lessonCount: Int
+    val lessonCount: Int,
+    val usedLessonCount: Int,
+    val categories: List<LessonCategory>
 )

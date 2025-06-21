@@ -118,7 +118,7 @@
     <string name="lesson_count_input_hint">örn: 16</string>
     <string name="course_contents_label">Ders İçerikleri</string>
     <string name="course_contents_input_hint">Pilates</string>
-    <string name="package_description_title_label">Ders İçerikleri (İsteğe Bağlı)</string>
+    <string name="package_description_title_label">Ders Hakkinda (İsteğe Bağlı)</string>
     <string name="number_of_member_label">%1$d Üye</string>
     <string name="number_of_month_label">%1$d Ay</string>
     <string name="free_label">Ücretsiz</string>

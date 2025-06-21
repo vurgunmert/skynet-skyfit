@@ -52,33 +52,35 @@ fun SkyFormSelectLessonCategory(
     title: String,
     hint: String,
     modifier: Modifier = Modifier,
-    availableTags: List<LessonCategory>,
-    selectedTags: List<LessonCategory>,
-    onTagsSelected: (List<LessonCategory>) -> Unit
+    availableCategories: List<LessonCategory>,
+    selectedCategories: List<LessonCategory>,
+    onSelectionChanged: (List<LessonCategory>) -> Unit
 ) {
     Column(modifier.fillMaxWidth()) {
 
         SkyFormSelectText(
             title = title,
             hint = hint,
-            options = (availableTags - selectedTags).map { it.name },
+            options = (availableCategories - selectedCategories).map { it.name },
             selected = null,
             onSelectionChanged = { selectedOption ->
-                onTagsSelected(selectedTags + availableTags.first { it.name == selectedOption })
+                onSelectionChanged(selectedCategories + availableCategories.first { it.name == selectedOption })
             }
         )
 
-        Spacer(Modifier.height(12.dp))
+        if (selectedCategories.isNotEmpty()) {
+            Spacer(Modifier.height(12.dp))
 
-        FlowRow(
-            modifier = Modifier.fillMaxWidth().padding(8.dp),
-            horizontalArrangement = Arrangement.spacedBy(16.dp),
-            verticalArrangement = Arrangement.spacedBy(16.dp),
-        ) {
-            selectedTags.forEach {
-                SkyFitAccountSettingsProfileTagItemComponent(
-                    value = it.name,
-                    onClick = { onTagsSelected(selectedTags - it) })
+            FlowRow(
+                modifier = Modifier.fillMaxWidth().padding(8.dp),
+                horizontalArrangement = Arrangement.spacedBy(16.dp),
+                verticalArrangement = Arrangement.spacedBy(16.dp),
+            ) {
+                selectedCategories.forEach {
+                    SkyFitAccountSettingsProfileTagItemComponent(
+                        value = it.name,
+                        onClick = { onSelectionChanged(selectedCategories - it) })
+                }
             }
         }
     }

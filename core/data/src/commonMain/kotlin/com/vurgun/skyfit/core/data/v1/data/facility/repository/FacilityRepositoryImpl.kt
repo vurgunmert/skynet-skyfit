@@ -2,7 +2,6 @@ package com.vurgun.skyfit.core.data.v1.data.facility.repository
 
 import com.vurgun.skyfit.core.data.storage.TokenManager
 import com.vurgun.skyfit.core.data.utility.formatToServerDate
-import com.vurgun.skyfit.core.data.utility.now
 import com.vurgun.skyfit.core.data.v1.data.facility.mapper.FacilityDataMapper.toCreateLessonRequest
 import com.vurgun.skyfit.core.data.v1.data.facility.mapper.FacilityDataMapper.toDomainFacilityProfile
 import com.vurgun.skyfit.core.data.v1.data.facility.mapper.FacilityDataMapper.toFacilityTrainerProfiles
@@ -33,7 +32,6 @@ import com.vurgun.skyfit.core.network.utils.ioResult
 import com.vurgun.skyfit.core.network.utils.mapOrThrow
 import kotlinx.coroutines.withContext
 import kotlinx.datetime.LocalDate
-import kotlinx.datetime.plus
 
 class FacilityRepositoryImpl(
     private val apiService: FacilityApiService,
@@ -160,7 +158,7 @@ class FacilityRepositoryImpl(
         val request = CreateFacilityLessonPackageRequestDTO(
             gymId = gymId,
             title = title,
-            contents = contentIds,
+            categories = contentIds,
             description = description,
             lessonCount = lessonCount,
             duration = duration,
@@ -183,7 +181,7 @@ class FacilityRepositoryImpl(
         val request = UpdateFacilityLessonPackageRequestDTO(
             packageId = packageId,
             title = title,
-            contents = contentIds,
+            categories = contentIds,
             description = description,
             lessonCount = lessonCount,
             duration = duration,

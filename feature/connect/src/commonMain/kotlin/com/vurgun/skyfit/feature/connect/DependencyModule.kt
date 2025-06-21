@@ -6,7 +6,7 @@ import com.vurgun.skyfit.feature.connect.chatbot.model.ChatbotViewModel
 import com.vurgun.skyfit.feature.connect.conversation.ChatViewModel
 import com.vurgun.skyfit.feature.connect.conversation.ConversationsViewModel
 import com.vurgun.skyfit.feature.connect.notification.NotificationsViewModel
-import com.vurgun.skyfit.feature.connect.social.SocialMediaViewModel
+import com.vurgun.skyfit.feature.connect.social.UserSocialMediaFeedViewModel
 import org.koin.dsl.module
 
 val dataConnectModule = module {
@@ -19,5 +19,5 @@ val dataConnectModule = module {
     factory { NotificationsViewModel() }
     factory { ConversationsViewModel() }
 
-    factory { SocialMediaViewModel() }
+    factory { UserSocialMediaFeedViewModel(get(), get()) }
 }

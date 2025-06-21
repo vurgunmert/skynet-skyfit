@@ -1,5 +1,6 @@
 package com.vurgun.skyfit.core.data.v1.data.user.model
 
+import com.vurgun.skyfit.core.data.v1.data.facility.model.FacilityMemberPackageDTO
 import kotlinx.serialization.Serializable
 
 @Serializable
@@ -17,8 +18,11 @@ data class UserProfileDTO(
     val name: String,
     val surname: String,
     val username: String,
-    val gymId: Int?,
-    val gymJoinDate: String?
+    val gymId: Int? = null,
+    val gymName: String? = null,
+    val gymJoinDate: String? = null,
+    val membershipPackage: FacilityMemberPackageDTO? = null,
+    val usedLessonCount: Int? = null
 )
 
 @Serializable

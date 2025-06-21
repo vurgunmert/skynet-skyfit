@@ -41,7 +41,7 @@ fun FacilityHomeExpanded(viewModel: FacilityHomeViewModel) {
                 overlayController?.invoke(effect.screen)
 
             FacilityHomeEffect.NavigateToManageLessons ->
-                dashboardNavigator.push(SharedScreen.FacilityManageLessons)
+                overlayController?.invoke(SharedScreen.FacilityManageLessons)
 
             FacilityHomeEffect.DismissOverlay ->
                 overlayController?.invoke(null)

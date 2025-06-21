@@ -5,7 +5,7 @@ import cafe.adriel.voyager.core.model.screenModelScope
 import com.vurgun.skyfit.core.data.utility.SingleSharedFlow
 import com.vurgun.skyfit.core.data.utility.UiStateDelegate
 import com.vurgun.skyfit.core.data.utility.emitIn
-import com.vurgun.skyfit.core.data.v1.domain.account.repository.AccountRepository
+import com.vurgun.skyfit.core.data.v1.domain.auth.repository.AuthRepository
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asSharedFlow
@@ -30,7 +30,7 @@ sealed interface PasswordSettingsUiEffect {
 }
 
 class PasswordSettingsViewModel(
-    private val accountRepository: AccountRepository
+    private val authRepository: AuthRepository
 ) : ScreenModel {
 
     private val _uiState = UiStateDelegate<PasswordSettingsUiState>(PasswordSettingsUiState.Idle)
@@ -55,6 +55,7 @@ class PasswordSettingsViewModel(
         when (action) {
             PasswordSettingsUiAction.OnClickBack ->
                 _uiEffect.emitIn(screenModelScope, PasswordSettingsUiEffect.NavigateBack)
+
             PasswordSettingsUiAction.OnClickSubmit -> submitPasswordChange()
             is PasswordSettingsUiAction.OnCurrentPasswordChanged -> updateCurrentPassword(action.value)
             is PasswordSettingsUiAction.OnNewPasswordChanged -> updateNewPassword(action.value)
@@ -88,10 +89,15 @@ class PasswordSettingsViewModel(
         _uiState.update(PasswordSettingsUiState.Loading)
         screenModelScope.launch {
             runCatching {
-                accountRepository.changePassword(currentPassword.value, newPassword.value, confirmedPassword.value)
+                authRepository.changePassword(
+                    old = currentPassword.value,
+                    new = newPassword.value,
+                    again = confirmedPassword.value
+                ).getOrThrow()
+                _uiEffect.emitIn(screenModelScope, PasswordSettingsUiEffect.NavigateBack)
             }.onFailure { error ->
                 _uiState.update(PasswordSettingsUiState.Error(error.message))
-           }
+            }
         }
     }
 }

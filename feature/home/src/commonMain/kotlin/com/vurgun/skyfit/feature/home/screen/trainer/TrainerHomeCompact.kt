@@ -44,7 +44,7 @@ internal fun TrainerHomeCompact(viewModel: TrainerHomeViewModel) {
     CollectEffect(viewModel.effect) { effect ->
         when (effect) {
             is NavigateToVisitFacility -> {
-                appNavigator.push(FacilityProfileVisitor(effect.facilityId))
+                appNavigator.push(FacilityProfile(effect.facilityId))
             }
 
             NavigateToConversations ->

@@ -29,5 +29,4 @@ interface UserRepository {
 
     suspend fun addCalendarEvents(workoutId: Int?, eventName: String, startDate: String, endDate: String): Result<Unit>
     suspend fun getCalendarEvents(startDate: String? = null, endDate: String? = null): Result<List<CalendarEvent>>
-    suspend fun getWorkoutEvents(): Result<List<WorkoutEvent>>
 }

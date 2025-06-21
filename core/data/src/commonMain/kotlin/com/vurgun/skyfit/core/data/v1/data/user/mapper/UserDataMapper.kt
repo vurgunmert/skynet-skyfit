@@ -1,31 +1,22 @@
 package com.vurgun.skyfit.core.data.v1.data.user.mapper
 
-import com.vurgun.skyfit.core.data.v1.domain.user.model.Appointment
-import com.vurgun.skyfit.core.data.v1.domain.user.model.AppointmentDetail
+import com.vurgun.skyfit.core.data.serverImageFromPath
 import com.vurgun.skyfit.core.data.utility.now
 import com.vurgun.skyfit.core.data.utility.parseServerToDateOnly
 import com.vurgun.skyfit.core.data.utility.parseServerToHHMMTime
-import com.vurgun.skyfit.core.data.serverImageFromPath
-import com.vurgun.skyfit.core.data.v1.data.user.model.AppointmentDTO
-import com.vurgun.skyfit.core.data.v1.data.user.model.AppointmentDetailDTO
-import com.vurgun.skyfit.core.data.v1.data.user.model.CalendarEventDTO
-import com.vurgun.skyfit.core.data.v1.data.user.model.CalendarWorkoutEventDTO
-import com.vurgun.skyfit.core.data.v1.data.user.model.UserProfileDTO
+import com.vurgun.skyfit.core.data.v1.data.facility.mapper.FacilityDataMapper.toDomainPackage
+import com.vurgun.skyfit.core.data.v1.data.statistics.front.UserStatistics
+import com.vurgun.skyfit.core.data.v1.data.user.model.*
+import com.vurgun.skyfit.core.data.v1.data.workout.WorkoutEvent
 import com.vurgun.skyfit.core.data.v1.domain.global.model.BodyType
 import com.vurgun.skyfit.core.data.v1.domain.global.model.HeightUnitType
 import com.vurgun.skyfit.core.data.v1.domain.global.model.WeightUnitType
+import com.vurgun.skyfit.core.data.v1.domain.user.model.Appointment
+import com.vurgun.skyfit.core.data.v1.domain.user.model.AppointmentDetail
 import com.vurgun.skyfit.core.data.v1.domain.user.model.CalendarEvent
 import com.vurgun.skyfit.core.data.v1.domain.user.model.UserProfile
-import com.vurgun.skyfit.core.data.v1.data.workout.WorkoutEvent
 import com.vurgun.skyfit.core.data.v1.statistics.back.model.UserStatisticsDTO
-import com.vurgun.skyfit.core.data.v1.data.statistics.front.UserStatistics
-import kotlinx.datetime.Instant
-import kotlinx.datetime.LocalDate
-import kotlinx.datetime.LocalDateTime
-import kotlinx.datetime.LocalTime
-import kotlinx.datetime.TimeZone
-import kotlinx.datetime.daysUntil
-import kotlinx.datetime.toLocalDateTime
+import kotlinx.datetime.*
 
 internal object UserDataMapper {
 
@@ -45,8 +36,10 @@ internal object UserDataMapper {
             lastName = surname,
             username = username,
             memberGymId = gymId,
+            memberGymName = gymName,
             memberGymJoinedAt = gymJoinDate?.parseServerToDateOnly(),
-            memberDurationDays = gymJoinDate?.parseServerToDateOnly()?.daysUntil(LocalDate.now())
+            memberDurationDays = gymJoinDate?.parseServerToDateOnly()?.daysUntil(LocalDate.now()),
+            membershipPackage = membershipPackage.toDomainPackage()
         )
     }
 
@@ -148,16 +141,5 @@ internal object UserDataMapper {
 
     fun List<CalendarEventDTO>.toDomainCalendarEvents(): List<CalendarEvent> {
         return map { it.toDomainCalendarEvent() }
-    }
-
-    fun CalendarWorkoutEventDTO.toDomainWorkoutEvent(): WorkoutEvent {
-        return WorkoutEvent(
-            id = this.workoutEventId,
-            name = this.eventName
-        )
-    }
-
-    fun List<CalendarWorkoutEventDTO>.toDomainWorkoutEvents(): List<WorkoutEvent> {
-        return map { it.toDomainWorkoutEvent() }
     }
 }

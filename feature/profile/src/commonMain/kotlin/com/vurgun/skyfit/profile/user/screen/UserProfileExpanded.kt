@@ -1,24 +1,33 @@
 package com.vurgun.skyfit.profile.user.screen
 
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.unit.dp
+import cafe.adriel.voyager.navigator.LocalNavigator
+import cafe.adriel.voyager.navigator.currentOrThrow
+import com.vurgun.skyfit.core.navigation.SharedScreen
+import com.vurgun.skyfit.core.navigation.findRootNavigator
+import com.vurgun.skyfit.core.navigation.replace
+import com.vurgun.skyfit.core.navigation.replaceAll
 import com.vurgun.skyfit.core.ui.components.box.TodoBox
 import com.vurgun.skyfit.core.ui.components.loader.FullScreenLoaderContent
 import com.vurgun.skyfit.core.ui.components.profile.SocialPostCard
 import com.vurgun.skyfit.core.ui.components.profile.SocialQuickPostInputCard
 import com.vurgun.skyfit.core.ui.screen.ErrorScreen
+import com.vurgun.skyfit.core.ui.utils.CollectEffect
+import com.vurgun.skyfit.core.ui.utils.LocalCompactOverlayController
 import com.vurgun.skyfit.profile.component.ProfileCompactComponent
 import com.vurgun.skyfit.profile.component.ProfileExpandedComponent
 import com.vurgun.skyfit.profile.model.ProfileDestination
 import com.vurgun.skyfit.profile.user.model.UserProfileAction
+import com.vurgun.skyfit.profile.user.model.UserProfileEffect
 import com.vurgun.skyfit.profile.user.model.UserProfileUiState
 import com.vurgun.skyfit.profile.user.model.UserProfileViewModel
+import com.vurgun.skyfit.profile.user.screen.UserProfileCompactComponent.Appointments
+import com.vurgun.skyfit.profile.user.screen.UserProfileCompactComponent.MyDiet
 import org.jetbrains.compose.resources.stringResource
 import skyfit.core.ui.generated.resources.*
 
@@ -27,7 +36,30 @@ fun UserProfileExpanded(
     viewModel: UserProfileViewModel,
     modifier: Modifier = Modifier.fillMaxSize()
 ) {
+    val dashboardNavigator = LocalNavigator.currentOrThrow
+    val appNavigator = dashboardNavigator.findRootNavigator()
+    val overlayController = LocalCompactOverlayController.current
     val uiState by viewModel.uiState.collectAsState()
+
+    CollectEffect(viewModel.effect) { effect ->
+        when(effect) {
+             UserProfileEffect.NavigateBack -> {
+                 appNavigator.replaceAll(SharedScreen.Home)
+             }
+            UserProfileEffect.NavigateToAppointments -> {
+                overlayController?.invoke(SharedScreen.UserAppointmentListing)
+            }
+            UserProfileEffect.NavigateToCreatePost -> {
+                overlayController?.invoke(SharedScreen.CreatePost)
+            }
+            UserProfileEffect.NavigateToSettings -> {
+                dashboardNavigator.replace(SharedScreen.Settings)
+            }
+            is UserProfileEffect.NavigateToVisitFacility -> {
+                dashboardNavigator.replace(SharedScreen.FacilityProfile(effect.gymId))
+            }
+        }
+    }
 
     when (uiState) {
         UserProfileUiState.Loading ->
@@ -78,7 +110,20 @@ fun UserProfileExpanded(
     }
 }
 
+@Composable
+fun UserProfileMeasurementContent(
+    content: UserProfileUiState.Content,
+    onAction: (UserProfileAction) -> Unit,
+    modifier: Modifier
+) {
+    TodoBox(
+        "OLCUMLER",
+        modifier = modifier.widthIn(max = 680.dp)
+    )
+}
+
 private object UserProfileExpandedComponent {
+
 
     @Composable
     fun Header(
@@ -143,15 +188,22 @@ private object UserProfileExpandedComponent {
         onAction: (UserProfileAction) -> Unit,
         modifier: Modifier = Modifier
     ) {
-        FlowColumn(
-            modifier
-                .clip(RoundedCornerShape(20.dp))
-                .fillMaxWidth()
-                .padding(16.dp)
-        ) {
-            TodoBox("PostsContent", Modifier.size(372.dp, 392.dp))
-            TodoBox("PostsContent", Modifier.size(372.dp, 392.dp))
-            TodoBox("PostsContent", Modifier.size(372.dp, 392.dp))
+        Row(modifier.fillMaxSize()) {
+
+            Column(modifier = Modifier.weight(1f)) {
+                UserProfileCompactComponent.MyLessonPackages(content, onAction, modifier = Modifier.fillMaxWidth())
+            }
+
+            Spacer(Modifier.width(16.dp))
+
+            Column(modifier = Modifier.weight(1f)) {
+
+                Appointments(content, onAction)
+
+                Spacer(Modifier.height(16.dp))
+
+                MyDiet(content, onAction, modifier = Modifier.fillMaxWidth())
+            }
         }
     }
 

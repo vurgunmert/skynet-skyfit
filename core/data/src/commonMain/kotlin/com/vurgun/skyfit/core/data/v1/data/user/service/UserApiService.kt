@@ -22,7 +22,6 @@ class UserApiService(private val apiClient: ApiClient) {
 
         const val ADD_WORKOUT_EVENTS = "add/calendar"
         const val GET_CALENDAR_SCHEDULE = "get/calendar"
-        const val GET_WORKOUT_EVENTS = "get/events"
     }
 
     //region Profile
@@ -155,14 +154,6 @@ class UserApiService(private val apiClient: ApiClient) {
             bearerAuth(token)
             url(Endpoints.GET_CALENDAR_SCHEDULE)
             setBody(request)
-        }
-    }
-
-    internal suspend fun getWorkoutEvents(token: String): ApiResult<List<CalendarWorkoutEventDTO>> {
-        return apiClient.safeApiCall<List<CalendarWorkoutEventDTO>> {
-            method = HttpMethod.Post
-            bearerAuth(token)
-            url(Endpoints.GET_WORKOUT_EVENTS)
         }
     }
     //endregion Calendar

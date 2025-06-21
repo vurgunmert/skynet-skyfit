@@ -20,9 +20,9 @@ internal object TrainerDataMapper {
             lastName = surname,
             gymId = gymId,
             gymName = gymName,
-            postCount = postCount,
-            lessonCount = lessonCount,
-            followerCount = followerCount,
+            postCount = postCount ?: 0,
+            lessonCount = lessonCount ?: 0,
+            followerCount = followerCount ?: 0,
             point = point ?: 0f
         )
     }

@@ -20,8 +20,14 @@ import com.vurgun.skyfit.core.navigation.findRootNavigator
 import com.vurgun.skyfit.core.navigation.push
 import com.vurgun.skyfit.core.ui.components.box.TodoBox
 import com.vurgun.skyfit.core.ui.components.button.SkyButton
+import com.vurgun.skyfit.core.ui.components.chip.RectangleChip
 import com.vurgun.skyfit.core.ui.components.event.AvailableActivityCalendarEventItem
+import com.vurgun.skyfit.core.ui.components.icon.SkyIcon
+import com.vurgun.skyfit.core.ui.components.icon.SkyIconSize
 import com.vurgun.skyfit.core.ui.components.loader.FullScreenLoaderContent
+import com.vurgun.skyfit.core.ui.components.special.FeatureVisible
+import com.vurgun.skyfit.core.ui.components.text.SkyText
+import com.vurgun.skyfit.core.ui.components.text.TextStyleType
 import com.vurgun.skyfit.core.ui.screen.ErrorScreen
 import com.vurgun.skyfit.core.ui.styling.SkyFitAsset
 import com.vurgun.skyfit.core.ui.styling.SkyFitColor
@@ -29,6 +35,7 @@ import com.vurgun.skyfit.core.ui.styling.SkyFitTypography
 import com.vurgun.skyfit.core.ui.utils.CollectEffect
 import com.vurgun.skyfit.profile.component.ProfileCompactComponent
 import com.vurgun.skyfit.profile.model.ProfileDestination
+import com.vurgun.skyfit.profile.trainer.owner.TrainerProfileUiAction
 import com.vurgun.skyfit.profile.user.model.UserProfileAction
 import com.vurgun.skyfit.profile.user.model.UserProfileEffect
 import com.vurgun.skyfit.profile.user.model.UserProfileUiState
@@ -64,7 +71,7 @@ fun UserProfileCompact(
             }
 
             is UserProfileEffect.NavigateToVisitFacility -> {
-                appNavigator.push(SharedScreen.FacilityProfileVisitor(effect.gymId))
+                appNavigator.push(SharedScreen.FacilityProfile(effect.gymId))
             }
         }
     }
@@ -80,29 +87,9 @@ fun UserProfileCompact(
 
         is UserProfileUiState.Content -> {
             val content = uiState as UserProfileUiState.Content
-
-            ProfileCompactComponent.Layout(
-                header = {
-                    UserProfileCompactComponent.Header(content, viewModel::onAction)
-                },
-                content = {
-                    UserProfileCompactComponent.Content(content, viewModel::onAction)
-                }
-            )
+            UserProfileCompactComponent.Content(content, viewModel::onAction)
         }
     }
-}
-
-@Composable
-fun UserProfileMeasurementContent(
-    content: UserProfileUiState.Content,
-    onAction: (UserProfileAction) -> Unit,
-    modifier: Modifier
-) {
-    TodoBox(
-        "OLCUMLER",
-        modifier = modifier.widthIn(max = 680.dp)
-    )
 }
 
 internal object UserProfileCompactComponent {
@@ -110,7 +97,8 @@ internal object UserProfileCompactComponent {
     @Composable
     fun Content(
         content: UserProfileUiState.Content,
-        onAction: (UserProfileAction) -> Unit) {
+        onAction: (UserProfileAction) -> Unit
+    ) {
 
         ProfileCompactComponent.Layout(
             header = {
@@ -133,6 +121,8 @@ internal object UserProfileCompactComponent {
                     } else {
                         AboutContent(content, onAction)
                     }
+
+                    Spacer(Modifier.height(132.dp))
                 }
             }
         )
@@ -184,6 +174,8 @@ internal object UserProfileCompactComponent {
                 )
             },
             cardContentsModifier = Modifier.fillMaxWidth().padding(top = 118.dp),
+            canNavigateBack = content.isVisiting,
+            onClickBack = { onAction(UserProfileAction.ClickBack) }
         )
     }
 
@@ -275,10 +267,56 @@ internal object UserProfileCompactComponent {
         onAction: (UserProfileAction) -> Unit,
         modifier: Modifier = Modifier,
     ) {
-        TodoBox(
-            "Paketlerim",
-            modifier = Modifier.fillMaxWidth().height(196.dp)
-        )
+        val myPackage = content.profile.membershipPackage ?: return
+        Column(
+            modifier = modifier
+                .fillMaxWidth()
+                .background(
+                    color = SkyFitColor.background.fillTransparentSecondary,
+                    shape = RoundedCornerShape(size = 16.dp)
+                )
+                .padding(16.dp)
+        ) {
+            Row(verticalAlignment = Alignment.CenterVertically) {
+                SkyIcon(
+                    res = Res.drawable.ic_package,
+                    size = SkyIconSize.Large,
+                )
+                Spacer(Modifier.width(8.dp))
+                SkyText(
+                    text = myPackage.packageName,
+                    styleType = TextStyleType.BodyMediumSemibold
+                )
+                Spacer(Modifier.weight(1f))
+                RectangleChip("${myPackage.usedLessonCount}/${myPackage.lessonCount}")
+            }
+
+            Spacer(Modifier.height(8.dp))
+
+            Column(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .background(
+                        color = SkyFitColor.background.default,
+                        shape = RoundedCornerShape(size = 8.dp)
+                    )
+                    .padding(8.dp)
+            ) {
+                SkyText(
+                    text = stringResource(Res.string.course_contents_label),
+                    styleType = TextStyleType.BodyMediumSemibold
+                )
+                Spacer(Modifier.height(8.dp))
+                myPackage.categories.map {
+                    it.name
+                }
+                SkyText(
+                    text = myPackage.categories.joinToString("\n") { "• ${it.name}" },
+                    styleType = TextStyleType.BodyMediumRegular,
+                    color = SkyFitColor.text.secondary
+                )
+            }
+        }
     }
 
     @Composable
@@ -351,10 +389,12 @@ internal object UserProfileCompactComponent {
         onAction: (UserProfileAction) -> Unit,
         modifier: Modifier = Modifier,
     ) {
-        TodoBox(
-            "Diyet Listesi",
-            modifier = Modifier.fillMaxWidth().height(196.dp)
-        )
+        FeatureVisible(false) {
+            TodoBox(
+                "Diyet Listesi",
+                modifier = Modifier.fillMaxWidth().height(196.dp)
+            )
+        }
     }
 
     @Composable

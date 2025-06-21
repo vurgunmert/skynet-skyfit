@@ -16,7 +16,7 @@ import com.vurgun.skyfit.core.ui.components.special.SkyFitMobileScaffold
 @Composable
 fun SocialMediaCompact(
     onClickNewPost: () -> Unit,
-    viewModel: SocialMediaViewModel
+    viewModel: UserSocialMediaFeedViewModel
 ) {
     SocialMediaCompactComponents.Content(onClickNewPost, viewModel)
 }
@@ -26,7 +26,7 @@ private object SocialMediaCompactComponents {
     @Composable
     fun Content(
         onClickNewPost: () -> Unit,
-        viewModel: SocialMediaViewModel
+        viewModel: UserSocialMediaFeedViewModel
     ) {
 
         val posts = viewModel.posts.collectAsState().value

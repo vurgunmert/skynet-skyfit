@@ -139,7 +139,7 @@ fun MobileSettingsSupportHelpScreen(
                 onValueChange = { onAction(HelpSupportUiAction.OnChangeDescription(it)) }
             )
 
-            FeatureVisible(false) {
+            FeatureVisible(false) { // Attachment
                 Column(Modifier.fillMaxWidth()) {
                     BodyMediumSemiboldText(
                         text = stringResource(Res.string.settings_support_upload_file_label),
@@ -174,12 +174,14 @@ fun MobileSettingsSupportHelpScreen(
                 )
             }
 
-            SecondaryLargeButton(
-                text = stringResource(Res.string.settings_support_questions_label),
-                modifier = Modifier.fillMaxWidth(),
-                rightIconPainter = painterResource(Res.drawable.ic_open_link),
-                onClick = {}
-            )
+            FeatureVisible(false) { // SSS
+                SecondaryLargeButton(
+                    text = stringResource(Res.string.settings_support_questions_label),
+                    modifier = Modifier.fillMaxWidth(),
+                    rightIconPainter = painterResource(Res.drawable.ic_open_link),
+                    onClick = {}
+                )
+            }
         }
     }
 }

@@ -64,11 +64,11 @@ class ExploreScreen : Screen {
                 }
 
                 is ExploreEffect.NavigateToVisitFacility -> {
-                    appNavigator.push(SharedScreen.FacilityProfileVisitor(effect.facilityId))
+                    appNavigator.push(SharedScreen.FacilityProfile(effect.facilityId))
                 }
 
                 is ExploreEffect.NavigateToVisitTrainer -> {
-                    appNavigator.push(SharedScreen.TrainerProfileVisitor(effect.trainerId))
+                    appNavigator.push(SharedScreen.TrainerProfile(effect.trainerId))
                 }
             }
         }

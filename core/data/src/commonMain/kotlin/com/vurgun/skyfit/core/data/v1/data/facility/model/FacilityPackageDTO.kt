@@ -1,12 +1,13 @@
 package com.vurgun.skyfit.core.data.v1.data.facility.model
 
+import com.vurgun.skyfit.core.data.v1.data.lesson.model.LessonCategoryDTO
 import kotlinx.serialization.Serializable
 
 @Serializable
 data class CreateFacilityLessonPackageRequestDTO(
     val gymId: Int,
     val title: String,
-    val contents: List<Int>,
+    val categories: List<Int>,
     val description: String,
     val lessonCount: Int,
     val duration: Int,
@@ -17,7 +18,7 @@ data class CreateFacilityLessonPackageRequestDTO(
 data class UpdateFacilityLessonPackageRequestDTO(
     val packageId: Int,
     val title: String,
-    val contents: List<Int>,
+    val categories: List<Int>,
     val description: String,
     val lessonCount: Int,
     val duration: Int,
@@ -53,5 +54,7 @@ data class FacilityMemberPackageDTO(
     val packageName: String,
     val startDate: String,
     val endDate: String?,
-    val lessonCount: Int
+    val lessonCount: Int,
+    val usedLessonCount: Int? = null,
+    val categories: List<LessonCategoryDTO>? = null
 )

@@ -19,7 +19,7 @@ class SocialMediaScreen : Screen {
     @Composable
     override fun Content() {
         val navigator = LocalNavigator.currentOrThrow
-        val viewModel = koinScreenModel<SocialMediaViewModel>()
+        val viewModel = koinScreenModel<UserSocialMediaFeedViewModel>()
         val windowSize = LocalWindowSize.current
 
         if (windowSize == WindowSize.EXPANDED) {

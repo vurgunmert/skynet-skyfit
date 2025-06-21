@@ -287,7 +287,7 @@ class FacilityApiService(private val apiClient: ApiClient) {
         }
     }
 
-    internal suspend fun updateLesson(request: UpdateLessonRequest, token: String): ApiResult<EmptyDTO> {
+    internal suspend fun updateLesson(request: UpdateLessonRequestDTO, token: String): ApiResult<EmptyDTO> {
         return apiClient.safeApiCall<EmptyDTO> {
             method = HttpMethod.Put
             bearerAuth(token)

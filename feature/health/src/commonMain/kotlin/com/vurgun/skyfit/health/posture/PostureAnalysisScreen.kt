@@ -56,14 +56,14 @@ class PostureAnalysisScreen : Screen {
         val contentState by viewModel.contentState.collectAsState()
 
         val dialogState = rememberBasicDialogState()
-        val overlayController = LocalCompactOverlayController.currentOrThrow
-        val expandedOverlayController = LocalExpandedOverlayController.currentOrThrow
+        val overlayController = LocalCompactOverlayController.current
+        val expandedOverlayController = LocalExpandedOverlayController.current
 
         CollectEffect(viewModel.effect) { effect ->
             when (effect) {
                 PostureAnalysisEffect.Exit -> {
-                    overlayController.invoke(null)
-                    expandedOverlayController.invoke(null)
+                    overlayController?.invoke(null)
+                    expandedOverlayController?.invoke(null)
                     navigator.pop()
                 }
 

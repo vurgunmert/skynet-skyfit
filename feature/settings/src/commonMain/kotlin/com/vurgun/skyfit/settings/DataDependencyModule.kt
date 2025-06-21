@@ -27,7 +27,7 @@ import org.koin.dsl.module
 val dataPersonaModule = module {
     includes(dataNetworkModule, dataCoreModule)
 
-    factory { SettingsViewModel(get()) }
+    single { SettingsViewModel(get()) }
     factory { PasswordSettingsViewModel(get()) }
     factory { AccountRoleSettingsViewModel(get()) }
 
@@ -46,7 +46,7 @@ val dataPersonaModule = module {
     factory { FacilityAddTrainerViewModel(get(), get()) }
     factory { FacilityNotificationSettingsViewModel() }
     factory { FacilityPackageListingViewModel(get(), get()) }
-    factory { FacilityPackageEditViewModel(get(), get(), get()) }
+    factory { FacilityPackageEditViewModel(get(), get()) }
 
     factory { TrainerNotificationSettingsViewModel() }
 

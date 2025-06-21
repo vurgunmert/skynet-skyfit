@@ -21,7 +21,7 @@ import skyfit.core.ui.generated.resources.ic_plus
 @Composable
 fun SocialMediaExpanded(
     onClickNewPost: () -> Unit,
-    viewModel: SocialMediaViewModel
+    viewModel: UserSocialMediaFeedViewModel
 ) {
     SocialMediaExpandedComponents.Content(onClickNewPost = onClickNewPost, viewModel = viewModel)
 }
@@ -31,7 +31,7 @@ private object SocialMediaExpandedComponents {
     @Composable
     fun Content(
         onClickNewPost: () -> Unit,
-        viewModel: SocialMediaViewModel
+        viewModel: UserSocialMediaFeedViewModel
     ) {
 
         val posts = viewModel.posts.collectAsState().value

@@ -2,9 +2,12 @@ package com.vurgun.skyfit.core.data.v1.data.global.service
 
 import com.vurgun.skyfit.core.data.v1.data.global.model.GoalDTO
 import com.vurgun.skyfit.core.data.v1.data.global.model.TagDTO
+import com.vurgun.skyfit.core.data.v1.data.user.model.CalendarWorkoutEventDTO
+import com.vurgun.skyfit.core.data.v1.data.user.service.UserApiService
 import com.vurgun.skyfit.core.network.ApiClient
 import com.vurgun.skyfit.core.network.ApiResult
 import io.ktor.client.request.*
+import io.ktor.client.request.url
 import io.ktor.http.*
 
 class GlobalApiService(private val apiClient: ApiClient) {
@@ -17,6 +20,7 @@ class GlobalApiService(private val apiClient: ApiClient) {
         const val GET_USER_TROPHIES = "global/user-trophies"
         const val GET_TRAINER_TROPHIES = "global/trainer-trophies"
         const val GET_FACILITY_TROPHIES = "global/facility-trophies"
+        const val GET_WORKOUT_EVENTS = "get/events"
     }
 
     suspend fun getAllGoals(token: String): ApiResult<List<GoalDTO>> {
@@ -32,6 +36,14 @@ class GlobalApiService(private val apiClient: ApiClient) {
             method = HttpMethod.Companion.Post
             bearerAuth(token)
             url(GET_PROFILE_TAGS)
+        }
+    }
+
+    internal suspend fun getWorkoutEvents(token: String): ApiResult<List<CalendarWorkoutEventDTO>> {
+        return apiClient.safeApiCall<List<CalendarWorkoutEventDTO>> {
+            method = HttpMethod.Post
+            bearerAuth(token)
+            url(GET_WORKOUT_EVENTS)
         }
     }
 }

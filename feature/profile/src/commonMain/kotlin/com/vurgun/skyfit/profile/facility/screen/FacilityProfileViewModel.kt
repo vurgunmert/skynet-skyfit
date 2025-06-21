@@ -35,7 +35,6 @@ sealed interface FacilityProfileUiState {
         val lessons: List<LessonSessionItemViewData> = emptyList(),
         val trainers: List<FacilityTrainerProfile> = emptyList(),
         val posts: List<SocialPostItemViewData> = emptyList(),
-        val postsVisible: Boolean = false
     ) : FacilityProfileUiState
 }
 

@@ -39,6 +39,7 @@ import com.vurgun.skyfit.core.ui.utils.LocalCompactOverlayController
 import com.vurgun.skyfit.core.utils.rememberAccount
 import com.vurgun.main.component.ScreenOverlay
 import com.vurgun.skyfit.core.navigation.findRootNavigator
+import com.vurgun.skyfit.core.ui.components.special.FeatureVisible
 import com.vurgun.skyfit.core.ui.utils.LocalExpandedOverlayController
 import org.jetbrains.compose.resources.DrawableResource
 import skyfit.core.ui.generated.resources.*
@@ -51,6 +52,11 @@ fun DashboardExpanded(viewModel: DashboardViewModel) {
     val expandedOverlayNavigation by viewModel.expandedOverlayNavigation.collectAsState()
     val homeScreen = rememberScreen(SharedScreen.Home)
 
+    val clearOverlays = {
+        viewModel.setCompactOverlay(null)
+        viewModel.setExpandedOverlay(null)
+    }
+
     CompositionLocalProvider(
         LocalCompactOverlayController provides viewModel::setCompactOverlay,
         LocalExpandedOverlayController provides viewModel::setExpandedOverlay,
@@ -59,6 +65,8 @@ fun DashboardExpanded(viewModel: DashboardViewModel) {
         Navigator(homeScreen, key = "dashboard") { dashboardNavigator ->
 
             CollectEffect(viewModel.effect) { effect ->
+                clearOverlays()
+
                 when (effect) {
                     DashboardUiEffect.NavigateToHome -> {
                         if (dashboardNavigator.lastItem.key != SharedScreen.Home.key) {
@@ -186,7 +194,6 @@ private object DashboardExpandedComponents {
         }
     }
 
-
     @Composable
     fun SidebarNavigationTopGroup(
         activeScreen: Screen,
@@ -218,19 +225,23 @@ private object DashboardExpandedComponents {
                 onClick = onClickExplore
             )
 
-            SidebarNavigationItem(
-                selected = activeScreen.key == SharedScreen.Social.key,
-                selectedIcon = Res.drawable.ic_search,
-                unselectedIcon = Res.drawable.ic_search,
-                onClick = onClickSocial
-            )
+            FeatureVisible(false) {
+                SidebarNavigationItem(
+                    selected = activeScreen.key == SharedScreen.Social.key,
+                    selectedIcon = Res.drawable.ic_search,
+                    unselectedIcon = Res.drawable.ic_search,
+                    onClick = onClickSocial
+                )
+            }
 
-            SidebarNavigationItem(
-                selected = activeScreen.key == SharedScreen.Nutrition.key,
-                selectedIcon = Res.drawable.ic_coffee_fill,
-                unselectedIcon = Res.drawable.ic_coffee,
-                onClick = onClickNutrition
-            )
+            FeatureVisible(false) {
+                SidebarNavigationItem(
+                    selected = activeScreen.key == SharedScreen.Nutrition.key,
+                    selectedIcon = Res.drawable.ic_coffee_fill,
+                    unselectedIcon = Res.drawable.ic_coffee,
+                    onClick = onClickNutrition
+                )
+            }
         }
     }
 

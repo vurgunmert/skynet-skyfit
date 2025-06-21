@@ -58,7 +58,6 @@ sealed class FacilityPackageEditEffect {
 
 class FacilityPackageEditViewModel(
     private val userManager: ActiveAccountManager,
-    private val workoutRepository: WorkoutRepository,
     private val facilityRepository: FacilityRepository
 ) : ScreenModel {
 
@@ -134,8 +133,7 @@ class FacilityPackageEditViewModel(
                     checkIfReadyToSave()
                 }
 
-                _uiState.update(
-                    FacilityPackageEditUiState.Content(categories = categories)
+                _uiState.update(FacilityPackageEditUiState.Content(categories = categories)
                 )
 
             }.onFailure { error ->
@@ -151,8 +149,7 @@ class FacilityPackageEditViewModel(
                 !state.title.isNullOrEmpty() &&
                         !state.lessonCount.isNullOrEmpty() &&
                         state.categories.isNotEmpty() &&
-                        !state.monthCount.isNullOrEmpty() &&
-                        !state.branch.isNullOrEmpty()
+                        !state.monthCount.isNullOrEmpty()
 
             state.copy(isReadyToSave = isReadyToSave)
         }

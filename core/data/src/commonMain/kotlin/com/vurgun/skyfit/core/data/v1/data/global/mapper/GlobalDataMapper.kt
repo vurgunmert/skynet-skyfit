@@ -4,6 +4,8 @@ import com.vurgun.skyfit.core.data.serverImageFromPath
 import com.vurgun.skyfit.core.data.v1.data.global.model.ChallengeDTO
 import com.vurgun.skyfit.core.data.v1.data.global.model.MediaCategoryDTO
 import com.vurgun.skyfit.core.data.v1.data.global.model.UnitDescriptionDTO
+import com.vurgun.skyfit.core.data.v1.data.user.model.CalendarWorkoutEventDTO
+import com.vurgun.skyfit.core.data.v1.data.workout.WorkoutEvent
 import com.vurgun.skyfit.core.data.v1.domain.global.model.*
 import kotlinx.datetime.Instant
 
@@ -54,4 +56,15 @@ object GlobalDataMapper {
         fullName = fullName,
         system = system
     )
+
+    fun CalendarWorkoutEventDTO.toDomainWorkoutEvent(): WorkoutEvent {
+        return WorkoutEvent(
+            id = this.workoutEventId,
+            name = this.eventName
+        )
+    }
+
+    fun List<CalendarWorkoutEventDTO>.toDomainWorkoutEvents(): List<WorkoutEvent> {
+        return map { it.toDomainWorkoutEvent() }
+    }
 }
