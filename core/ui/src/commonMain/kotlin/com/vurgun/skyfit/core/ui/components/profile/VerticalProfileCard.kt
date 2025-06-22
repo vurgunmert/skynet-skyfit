@@ -24,7 +24,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import com.vurgun.skyfit.core.ui.components.divider.VerticalDivider
 import com.vurgun.skyfit.core.ui.components.image.NetworkImage
-import com.vurgun.skyfit.core.ui.components.special.RatingStarComponent
+import com.vurgun.skyfit.core.ui.components.special.RatingButton
 import com.vurgun.skyfit.core.ui.styling.SkyFitColor
 import com.vurgun.skyfit.core.ui.styling.SkyFitTypography
 import org.jetbrains.compose.resources.stringResource
@@ -100,7 +100,7 @@ private fun ProfileCardItemBox(
                 .fillMaxSize(),
         )
 
-        RatingStarComponent(rating, Modifier.align(Alignment.TopEnd).padding(8.dp))
+        RatingButton(rating, Modifier.align(Alignment.TopEnd).padding(8.dp))
 
         Box(
             Modifier
@@ -144,7 +144,7 @@ private fun ProfileCardItemBox(
                     }
                     if (showRatingInDetail) {
                         VerticalDivider(Modifier.height(48.dp))
-                        RatingStarComponent(rating, Modifier.padding(8.dp))
+                        RatingButton(rating, Modifier.padding(8.dp))
                     }
                 }
             }

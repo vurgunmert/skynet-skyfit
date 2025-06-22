@@ -84,6 +84,7 @@ internal object FacilityDataMapper {
     fun FacilityMemberDTO.toMemberDomain(): Member {
         return Member(
             userId = userId,
+            normalUserId = nmId,
             profileImageUrl = serverImageFromPath(profilePhotoPath),
             username = username,
             name = name,

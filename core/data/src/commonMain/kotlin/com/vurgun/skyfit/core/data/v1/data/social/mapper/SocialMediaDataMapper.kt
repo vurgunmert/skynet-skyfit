@@ -1,6 +1,7 @@
 package com.vurgun.skyfit.core.data.v1.data.social.mapper
 
 import com.vurgun.skyfit.core.data.serverImageFromPath
+import com.vurgun.skyfit.core.data.utility.parseServerToLocalDateTime
 import com.vurgun.skyfit.core.data.v1.data.social.model.UserPostDTO
 import com.vurgun.skyfit.core.data.v1.domain.social.model.UserPost
 import kotlinx.datetime.LocalDateTime
@@ -15,8 +16,8 @@ internal object SocialMediaDataMapper {
             username = username,
             name = name,
             contentText = contentText,
-            createdDate = LocalDateTime.Companion.parse(createdDate),
-            updateDate = updateDate?.let { LocalDateTime.Companion.parse(it) },
+            createdDate = createdDate.parseServerToLocalDateTime(),
+            updateDate = updateDate?.parseServerToLocalDateTime(),
             shareCount = shareCount ?: 0,
             likeCount = likeCount ?: 0,
             commentCount = commentCount ?: 0,

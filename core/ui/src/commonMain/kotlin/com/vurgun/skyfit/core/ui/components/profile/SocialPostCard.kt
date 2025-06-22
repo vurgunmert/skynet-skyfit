@@ -25,21 +25,22 @@ import skyfit.core.ui.generated.resources.*
 
 @Composable
 fun SocialPostCard(
-    data: SocialPostItemViewData,
-    modifier: Modifier = Modifier,
+    post: SocialPostItemViewData,
     onClickShare: () -> Unit,
     onClickComment: () -> Unit,
     onClickLike: () -> Unit,
-    onClick: () -> Unit
+    onClick: () -> Unit,
+    modifier: Modifier = Modifier
+        .clip(RoundedCornerShape(12.dp))
+        .background(SkyFitColor.background.default)
+        .fillMaxWidth(),
 ) {
     Row(
         modifier = modifier
-            .fillMaxWidth()
-            .background(SkyFitColor.background.default, RoundedCornerShape(12.dp))
             .clickable(onClick = onClick)
             .padding(16.dp)
     ) {
-        ProfileImage(data.profileImageUrl)
+        ProfileImage(post.creatorImageUrl)
 
         Spacer(Modifier.width(8.dp))
 
@@ -48,12 +49,12 @@ fun SocialPostCard(
             verticalArrangement = Arrangement.spacedBy(8.dp)
         ) {
             SkyFitPostItemUserInfoRow(
-                username = data.username,
-                socialLink = data.socialLink,
-                timeAgo = data.timeAgo
+                username = post.creatorName,
+                socialLink = post.creatorUsername,
+                timeAgo = post.timeAgo
             )
 
-            data.imageUrl?.let {
+            post.imageUrl?.let {
                 NetworkImage(
                     imageUrl = it,
                     modifier = Modifier
@@ -63,16 +64,16 @@ fun SocialPostCard(
             }
 
             Text(
-                text = data.content,
+                text = post.content,
                 color = SkyFitColor.text.default,
                 style = SkyFitTypography.bodySmall,
                 modifier = Modifier.fillMaxWidth()
             )
 
             InteractionRow(
-                likeCount = data.favoriteCount,
-                commentCount = data.commentCount,
-                shareCount = data.shareCount,
+                likeCount = post.likeCount,
+                commentCount = post.commentCount,
+                shareCount = post.shareCount,
                 onClickComment = onClickComment,
                 onClickLike = onClickLike,
                 onClickShare = onClickShare

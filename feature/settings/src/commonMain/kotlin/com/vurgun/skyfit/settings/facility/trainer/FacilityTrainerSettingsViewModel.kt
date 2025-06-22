@@ -21,7 +21,7 @@ internal data class FacilityManageTrainersUiState(
     val unauthorized: Boolean = false
 )
 
-internal class FacilityManageTrainersViewModel(
+internal class FacilityTrainerSettingsViewModel(
     private val userManager: ActiveAccountManager,
     private val facilityRepository: FacilityRepository
 ) : ScreenModel {

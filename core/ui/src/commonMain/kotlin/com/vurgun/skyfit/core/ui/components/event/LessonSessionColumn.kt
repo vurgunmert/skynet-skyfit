@@ -27,14 +27,13 @@ fun LessonSessionColumn(
     lessons: List<LessonSessionItemViewData>,
     onClickItem: ((LessonSessionItemViewData) -> Unit)? = null,
     onClickShowAll: (() -> Unit)? = null,
-    modifier: Modifier = Modifier,
+    modifier: Modifier = Modifier
+        .fillMaxWidth()
+        .clip(RoundedCornerShape(20.dp))
+        .background(SkyFitColor.background.fillTransparent),
 ) {
     Column(
-        modifier.fillMaxWidth()
-            .clip(RoundedCornerShape(20.dp))
-            .background(SkyFitColor.background.fillTransparent)
-            .clickable(onClick = { onClickShowAll?.invoke() })
-            .padding(16.dp),
+        modifier = modifier.padding(16.dp),
         verticalArrangement = Arrangement.spacedBy(16.dp)
     ) {
         Row(
@@ -77,7 +76,8 @@ fun LessonSessionColumn(
                     location = item.location.toString(),
                     trainer = item.trainer.toString(),
                     capacity = item.capacityRatio.toString(),
-                    note = item.note
+                    note = item.note,
+                    modifier = Modifier.clickable { onClickItem?.invoke(item) }
                 )
             }
         }

@@ -30,7 +30,7 @@ fun LazySocialPostsColumn(
 
         items(posts) {
             SocialPostCard(
-                data = it,
+                post = it,
                 onClick = {},
                 onClickComment = {},
                 onClickLike = {},
@@ -55,7 +55,7 @@ fun SocialPostsGrid(posts: List<SocialPostItemViewData>) {
 
         items(posts) { post ->
             SocialPostCard(
-                data = post,
+                post = post,
                 onClick = {},
                 onClickComment = {},
                 onClickLike = {},

@@ -30,7 +30,7 @@ import com.vurgun.skyfit.core.ui.components.image.NetworkImage
 import com.vurgun.skyfit.core.ui.components.special.ButtonSize
 import com.vurgun.skyfit.core.ui.components.special.ButtonState
 import com.vurgun.skyfit.core.ui.components.special.ButtonVariant
-import com.vurgun.skyfit.core.ui.components.special.RatingStarComponent
+import com.vurgun.skyfit.core.ui.components.special.RatingButton
 import com.vurgun.skyfit.core.ui.components.special.SkyFitButtonComponent
 import com.vurgun.skyfit.core.ui.components.special.SkyFitScaffold
 import com.vurgun.skyfit.core.ui.styling.SkyFitColor
@@ -191,7 +191,7 @@ private fun MobileExerciseActionDetailScreenCategoryComponent() {
             size = ButtonSize.Micro
         )
         Spacer(Modifier.weight(1f))
-        RatingStarComponent(4.8f, Modifier.wrapContentWidth())
+        RatingButton(4.8f, Modifier.wrapContentWidth())
     }
 }
 

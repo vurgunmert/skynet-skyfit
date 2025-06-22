@@ -51,6 +51,7 @@ class SocialMediaApiService(private val apiClient: ApiClient) {
             method = HttpMethod.Companion.Post
             bearerAuth(token)
             url(GET_POSTS_BY_USER)
+            setBody(request)
         }
 
     suspend fun createComment(request: CreateCommentRequestDTO, token: String): ApiResult<EmptyDTO> =

@@ -24,11 +24,17 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.unit.dp
 import com.vurgun.skyfit.core.ui.components.icon.IconAsset
+import com.vurgun.skyfit.core.ui.components.icon.SkyIcon
+import com.vurgun.skyfit.core.ui.components.icon.SkyIconSize
+import com.vurgun.skyfit.core.ui.components.icon.SkyIconTint
 import com.vurgun.skyfit.core.ui.components.text.BodyMediumRegularText
 import com.vurgun.skyfit.core.ui.styling.SkyFitColor
 import com.vurgun.skyfit.core.ui.styling.SkyFitTypography
 import kotlinx.datetime.LocalDate
 import org.jetbrains.compose.resources.painterResource
+import skyfit.core.ui.generated.resources.Res
+import skyfit.core.ui.generated.resources.ic_chevron_left
+import skyfit.core.ui.generated.resources.ic_chevron_right
 
 data class CalendarWeekDayItemModel(
     val date: LocalDate,
@@ -74,10 +80,11 @@ fun CalendarWeekDaySelector(
             horizontalArrangement = Arrangement.spacedBy(4.dp, Alignment.CenterHorizontally),
             verticalAlignment = Alignment.CenterVertically,
         ) {
-            Icon(
-                painter = painterResource(IconAsset.ChevronLeft.resource),
-                contentDescription = null,
-                modifier = Modifier.size(24.dp).clickable(onClick = onPreviousWeek)
+            SkyIcon(
+                res = Res.drawable.ic_chevron_left,
+                size = SkyIconSize.Medium,
+                tint = SkyIconTint.Default,
+                onClick = onPreviousWeek
             )
 
             daysOfWeek.forEach { day ->
@@ -88,10 +95,11 @@ fun CalendarWeekDaySelector(
                 )
             }
 
-            Icon(
-                painter = painterResource(IconAsset.ChevronRight.resource),
-                contentDescription = null,
-                modifier = Modifier.size(24.dp).clickable(onClick = onNextWeek)
+            SkyIcon(
+                res = Res.drawable.ic_chevron_right,
+                size = SkyIconSize.Medium,
+                tint = SkyIconTint.Default,
+                onClick = onNextWeek
             )
         }
     }

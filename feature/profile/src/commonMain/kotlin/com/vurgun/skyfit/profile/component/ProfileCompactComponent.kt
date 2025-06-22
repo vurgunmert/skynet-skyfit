@@ -48,9 +48,11 @@ internal object ProfileCompactComponent {
         content: @Composable () -> Unit,
         modifier: Modifier = Modifier.fillMaxSize()
     ) {
-        Column(modifier = modifier
-            .background(SkyFitColor.background.default)
-            .verticalScroll(rememberScrollState())) {
+        Column(
+            modifier = modifier
+                .background(SkyFitColor.background.default)
+                .verticalScroll(rememberScrollState())
+        ) {
             header()
             Spacer(Modifier.height(20.dp))
             content()
@@ -97,14 +99,16 @@ internal object ProfileCompactComponent {
                 horizontalAlignment = Alignment.CenterHorizontally,
             )
 
-            NetworkImage(
-                imageUrl = profileImageUrl,
-                modifier = Modifier
-                    .align(Alignment.TopCenter)
-                    .padding(top = 50.dp)
-                    .clip(RoundedCornerShape(20.dp))
-                    .size(100.dp)
-            )
+            profileImageUrl.takeUnless { it.isNullOrEmpty() }?.let { url ->
+                NetworkImage(
+                    imageUrl = url,
+                    modifier = Modifier
+                        .align(Alignment.TopCenter)
+                        .padding(top = 50.dp)
+                        .clip(RoundedCornerShape(20.dp))
+                        .size(100.dp)
+                )
+            }
 
             if (canNavigateBack) {
                 SkyFitPrimaryCircularBackButton(
@@ -388,14 +392,14 @@ internal object ProfileCompactComponent {
         calendarViewModel: CalendarWeekDaySelectorController,
         lessons: List<LessonSessionItemViewData>,
         goToVisitCalendar: () -> Unit,
-        modifier: Modifier = Modifier,
+        modifier: Modifier = Modifier.fillMaxWidth()
+            .clip(RoundedCornerShape(20.dp))
+            .background(SkyFitColor.background.fillTransparent),
     ) {
         Column(
-            modifier.fillMaxWidth()
-                .clip(RoundedCornerShape(20.dp))
-                .background(SkyFitColor.background.fillTransparent)
-                .padding(16.dp),
-            verticalArrangement = Arrangement.spacedBy(16.dp)
+            modifier.padding(16.dp),
+            verticalArrangement = Arrangement.spacedBy(16.dp),
+            horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Row(
                 verticalAlignment = Alignment.CenterVertically,
@@ -457,19 +461,25 @@ internal object ProfileCompactComponent {
     @Composable
     fun LessonSchedule(
         lessons: List<LessonSessionItemViewData>,
-        goToLessons: () -> Unit,
+        onClickShowAll: () -> Unit,
+        onClickLesson: (LessonSessionItemViewData) -> Unit,
         modifier: Modifier = Modifier,
     ) {
         LessonSessionColumn(
             lessons = lessons,
-            onClickShowAll = goToLessons,
-            onClickItem = { goToLessons() },
+            onClickShowAll = onClickShowAll,
+            onClickItem = onClickLesson,
             modifier = modifier
         )
     }
 
     @Composable
-    fun NoScheduledLessonsCard(onClickAdd: (() -> Unit)? = null) {
+    fun NoScheduledLessonsCard(
+        onClickAdd: (() -> Unit)? = null,
+        cardModifier: Modifier = Modifier.fillMaxWidth()
+            .clip(RoundedCornerShape(20.dp))
+            .background(SkyFitColor.background.fillTransparent)
+    ) {
         Column(Modifier.fillMaxWidth()) {
 
             SkyText(
@@ -479,10 +489,7 @@ internal object ProfileCompactComponent {
             Spacer(Modifier.height(16.dp))
 
             Column(
-                Modifier
-                    .fillMaxWidth()
-                    .background(SkyFitColor.background.surfaceSecondary, RoundedCornerShape(16.dp))
-                    .padding(vertical = 34.dp, horizontal = 24.dp),
+                cardModifier.padding(vertical = 34.dp, horizontal = 24.dp),
                 verticalArrangement = Arrangement.Center,
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {

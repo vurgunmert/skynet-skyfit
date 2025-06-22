@@ -19,7 +19,7 @@ val dataProfileModule = module {
     factory { TrainerProfileVisitorViewModel(get(), get(), get()) }
     factory { TrainerProfileScheduleViewModel(get(), get(), get()) }
 
-    factory { FacilityProfileViewModel(get(), get(), get()) }
+    factory { FacilityProfileViewModel(get(), get(), get(), get()) }
     factory { FacilityProfileVisitorViewModel(get(), get(), get()) }
     factory { FacilityProfileScheduleViewModel(get(), get(), get()) }
 

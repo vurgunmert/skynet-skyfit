@@ -9,6 +9,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.vurgun.skyfit.core.ui.components.icon.SkyIcon
+import com.vurgun.skyfit.core.ui.components.icon.SkyIconButton
 import com.vurgun.skyfit.core.ui.components.icon.SkyIconSize
 import com.vurgun.skyfit.core.ui.components.text.SkyText
 import com.vurgun.skyfit.core.ui.components.text.TextStyleType
@@ -18,7 +19,7 @@ import skyfit.core.ui.generated.resources.ic_chevron_left
 @Composable
 fun CompactTopBar(
     title: String,
-    onClickBack: () -> Unit,
+    onClickBack: (() -> Unit)? = null,
     modifier: Modifier = Modifier
 ) {
     Box(
@@ -27,12 +28,14 @@ fun CompactTopBar(
             .wrapContentHeight()
             .padding(horizontal = 24.dp, vertical = 8.dp)
     ) {
-        SkyIcon(
-            res = Res.drawable.ic_chevron_left,
-            size = SkyIconSize.Small,
-            onClick = onClickBack,
-            modifier = Modifier.align(Alignment.CenterStart)
-        )
+        onClickBack?.let {
+            SkyIconButton(
+                res = Res.drawable.ic_chevron_left,
+                size = SkyIconSize.Small,
+                onClick = onClickBack,
+                modifier = Modifier.align(Alignment.CenterStart)
+            )
+        }
 
         SkyText(
             text = title,
@@ -46,7 +49,7 @@ fun CompactTopBar(
 @Composable
 fun ExpandedTopBar(
     title: String,
-    onClickBack: () -> Unit,
+    onClickBack: (() -> Unit)? = null,
     modifier: Modifier = Modifier
 ) {
     Box(
@@ -55,12 +58,14 @@ fun ExpandedTopBar(
             .wrapContentHeight()
             .padding(horizontal = 16.dp, vertical = 32.dp)
     ) {
-        SkyIcon(
-            res = Res.drawable.ic_chevron_left,
-            size = SkyIconSize.Small,
-            onClick = onClickBack,
-            modifier = Modifier.align(Alignment.CenterStart)
-        )
+        onClickBack?.let {
+            SkyIconButton(
+                res = Res.drawable.ic_chevron_left,
+                size = SkyIconSize.Small,
+                onClick = onClickBack,
+                modifier = Modifier.align(Alignment.CenterStart)
+            )
+        }
 
         SkyText(
             text = title,

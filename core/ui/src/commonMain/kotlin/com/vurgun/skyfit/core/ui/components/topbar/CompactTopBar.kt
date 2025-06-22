@@ -11,6 +11,11 @@ import androidx.compose.ui.unit.dp
 import com.vurgun.skyfit.core.ui.components.button.SkyButton
 import com.vurgun.skyfit.core.ui.components.button.SkyButtonSize
 import com.vurgun.skyfit.core.ui.components.button.SkyButtonVariant
+import com.vurgun.skyfit.core.ui.components.icon.SkyIcon
+import com.vurgun.skyfit.core.ui.components.icon.SkyIconButton
+import com.vurgun.skyfit.core.ui.components.icon.SkyIconSize
+import com.vurgun.skyfit.core.ui.components.text.SkyText
+import com.vurgun.skyfit.core.ui.components.text.TextStyleType
 import com.vurgun.skyfit.core.ui.styling.SkyFitColor
 import com.vurgun.skyfit.core.ui.styling.SkyFitTypography
 import org.jetbrains.compose.resources.painterResource
@@ -22,7 +27,7 @@ object CompactTopBar {
     @Composable
     fun TopBarWithTitle(
         title: String,
-        onClickBack: () -> Unit,
+        onClickBack: (() -> Unit)? = null,
         modifier: Modifier = Modifier
     ) {
         Box(
@@ -30,22 +35,18 @@ object CompactTopBar {
                 .fillMaxWidth()
                 .height(40.dp)
         ) {
-            IconButton(
-                onClick = onClickBack,
-                modifier = Modifier
-                    .align(Alignment.CenterStart)
-            ) {
-                Icon(
-                    painter = painterResource(Res.drawable.ic_chevron_left),
-                    contentDescription = "Back",
-                    tint = SkyFitColor.text.default,
-                    modifier = Modifier.size(16.dp)
+            onClickBack?.let {
+                SkyIconButton(
+                    res = Res.drawable.ic_chevron_left,
+                    size = SkyIconSize.Small,
+                    onClick = onClickBack,
+                    modifier = Modifier.align(Alignment.CenterStart)
                 )
             }
 
-            Text(
+            SkyText(
                 text = title,
-                style = SkyFitTypography.bodyLargeSemibold,
+                styleType = TextStyleType.BodyLargeSemibold,
                 modifier = Modifier.align(Alignment.Center)
             )
         }
@@ -55,7 +56,7 @@ object CompactTopBar {
     fun TopbarWithEndAction(
         title: String,
         actionLabel: String,
-        onClickBack: () -> Unit,
+        onClickBack: (() -> Unit)? = null,
         onClickAction: () -> Unit,
         modifier: Modifier = Modifier
     ) {

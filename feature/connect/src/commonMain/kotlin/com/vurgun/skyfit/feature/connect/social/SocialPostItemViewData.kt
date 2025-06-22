@@ -5,16 +5,15 @@ import com.vurgun.skyfit.core.data.v1.domain.profile.SocialPostItemViewData
 
 val fakePosts: List<SocialPostItemViewData> = List(6) { index ->
     SocialPostItemViewData(
-        postId = "post_${index + 1}",
-        username = listOf("JohnDoe", "FitnessQueen", "MikeTrainer", "EmmaRunner", "DavidGym", "SophiaYoga").random(),
-        socialLink = listOf(
+        postId = index,
+        creatorName = listOf("JohnDoe", "FitnessQueen", "MikeTrainer", "EmmaRunner", "DavidGym", "SophiaYoga").random(),
+        creatorUsername = listOf(
             "https://instagram.com/user",
             "https://twitter.com/user",
-            "https://linkedin.com/user",
-            null
+            "https://linkedin.com/user"
         ).random(),
         timeAgo = listOf("5 min ago", "2 hours ago", "1 day ago", "3 days ago", "1 week ago").random(),
-        profileImageUrl = listOf(
+        creatorImageUrl = listOf(
             "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSxNUUshHHqOs2sWxJAZPctGScPNewNivZn-w&s",
             "https://images.squarespace-cdn.com/content/v1/63f59136c5b45330af8a1b13/be8fe8de-0eec-49c6-9140-82a501e0422e/Screen+Shot+2023-04-19+at+3.01.08+PM.png",
             "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSxNUUshHHqOs2sWxJAZPctGScPNewNivZn-w&s",
@@ -38,7 +37,7 @@ val fakePosts: List<SocialPostItemViewData> = List(6) { index ->
             null,
             null
         ).random(),
-        favoriteCount = (0..500).random(),
+        likeCount = (0..500).random(),
         commentCount = (0..200).random(),
         shareCount = (0..100).random(),
     )

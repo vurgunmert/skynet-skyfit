@@ -72,7 +72,8 @@ internal object ProfileExpandedComponent {
         profilePlaceholder: String? = null,
         leftContent: @Composable RowScope.() -> Unit,
         centerContent: @Composable RowScope.() -> Unit,
-        rightContent: @Composable RowScope.() -> Unit
+        rightContent: @Composable RowScope.() -> Unit,
+        modifier: Modifier = Modifier.fillMaxWidth()
     ) {
 
         val hazeState = rememberHazeState()
@@ -85,9 +86,7 @@ internal object ProfileExpandedComponent {
             noiseFactor = 0f
         )
 
-        Box(
-            modifier = Modifier.fillMaxWidth()
-        ) {
+        Box(modifier) {
             NetworkImage(
                 imageUrl = backgroundImageUrl,
                 modifier = Modifier

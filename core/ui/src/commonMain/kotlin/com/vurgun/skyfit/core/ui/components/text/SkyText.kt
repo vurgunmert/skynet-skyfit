@@ -70,6 +70,7 @@ fun SkyText(
     text: String,
     styleType: TextStyleType,
     alignment: TextAlign = TextAlign.Start,
+    maxLines: Int = Int.MAX_VALUE,
     modifier: Modifier = Modifier,
     color: Color? = null
 ) {
@@ -80,6 +81,7 @@ fun SkyText(
         text = text,
         style = resolvedStyle.copy(color = finalColor),
         textAlign = alignment,
+        maxLines = maxLines,
         modifier = modifier
     )
 }

@@ -14,7 +14,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.unit.dp
 import com.vurgun.skyfit.core.ui.components.image.CircularImage
 import com.vurgun.skyfit.core.ui.components.image.SkyImage
-import com.vurgun.skyfit.core.ui.components.special.RatingStarComponent
+import com.vurgun.skyfit.core.ui.components.special.RatingButton
 import com.vurgun.skyfit.core.ui.styling.SkyFitColor
 import com.vurgun.skyfit.core.ui.styling.SkyFitTypography
 import dev.chrisbanes.haze.*
@@ -60,7 +60,7 @@ fun VerticalExerciseCardItemComponent(
         )
 
         // Rating Star Component
-        RatingStarComponent(rating, Modifier.align(Alignment.TopEnd).padding(8.dp))
+        RatingButton(rating, Modifier.align(Alignment.TopEnd).padding(8.dp))
 
         // Bottom Content with hazeEffect
         Box(

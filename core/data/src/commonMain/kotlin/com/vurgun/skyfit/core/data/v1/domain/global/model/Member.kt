@@ -4,6 +4,7 @@ import com.vurgun.skyfit.core.data.v1.domain.facility.model.FacilityMemberPackag
 
 data class Member(
     val userId: Int,
+    val normalUserId: Int,
     val profileImageUrl: String? = null,
     val username: String,
     val name: String,

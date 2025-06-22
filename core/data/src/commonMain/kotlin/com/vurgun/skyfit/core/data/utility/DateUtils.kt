@@ -223,6 +223,13 @@ fun String.parseServerToDateOnly(): LocalDate {
     return LocalDate.parse(this.substringBefore("T"))
 }
 
+fun String.parseServerToLocalDateTime(
+    zone: TimeZone = TimeZone.currentSystemDefault()
+): LocalDateTime {
+    return Instant.parse(this).toLocalDateTime(zone)
+}
+
+
 fun String.parseServerToHHMMTime(): LocalTime {
     return LocalTime.parse(this.substring(0, 5))
 }
@@ -248,7 +255,11 @@ private val turkishDays = mapOf(
     5 to "Cuma", 6 to "Cumartesi", 7 to "Pazar"
 )
 
-fun durationBetween(start: LocalDateTime, end: LocalDateTime, timeZone: TimeZone = TimeZone.currentSystemDefault()): Duration {
+fun durationBetween(
+    start: LocalDateTime,
+    end: LocalDateTime,
+    timeZone: TimeZone = TimeZone.currentSystemDefault()
+): Duration {
     val startInstant = start.toInstant(timeZone)
     val endInstant = end.toInstant(timeZone)
     return endInstant - startInstant
@@ -265,4 +276,26 @@ fun Duration.toHourMinute(): DurationComponents {
     val hours = (totalMinutes / 60).toInt()
     val minutes = (totalMinutes % 60).toInt()
     return DurationComponents(hours, minutes)
+}
+
+fun LocalDateTime.humanizeAgo(
+    now: LocalDateTime = Clock.System.now().toLocalDateTime(TimeZone.currentSystemDefault())
+): String {
+    val duration = durationBetween(this, now)
+
+    val minutes = duration.inWholeMinutes
+    val hours = duration.inWholeHours
+    val days = duration.inWholeDays
+
+    return when {
+        minutes < 60 -> "$minutes dk önce"
+        hours < 24 -> "$hours saat önce"
+        days in 1..9 -> "$days gün önce"
+        else -> {
+            val day = this.dayOfMonth.toString().padStart(2, '0')
+            val month = this.monthNumber.toString().padStart(2, '0')
+            val year = this.year.toString()
+            "$day/$month/$year"
+        }
+    }
 }

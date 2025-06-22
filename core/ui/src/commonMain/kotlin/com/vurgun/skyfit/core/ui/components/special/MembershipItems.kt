@@ -20,6 +20,7 @@ import com.vurgun.skyfit.core.ui.components.button.SkyButtonSize
 import com.vurgun.skyfit.core.ui.components.button.SkyButtonVariant
 import com.vurgun.skyfit.core.ui.components.chip.RectangleChip
 import com.vurgun.skyfit.core.ui.components.icon.SkyIcon
+import com.vurgun.skyfit.core.ui.components.icon.SkyIconButton
 import com.vurgun.skyfit.core.ui.components.icon.SkyIconSize
 import com.vurgun.skyfit.core.ui.components.icon.SkyIconTint
 import com.vurgun.skyfit.core.ui.components.image.SkyImage
@@ -190,13 +191,17 @@ object SettingsPackageComponent {
 @Composable
 fun FacilitySettingMemberItem(
     item: Member,
+    onClickItem: () -> Unit,
     onClickEdit: () -> Unit,
     onClickDelete: () -> Unit,
 ) {
     var isMenuOpen by remember { mutableStateOf<Boolean>(false) }
 
     Row(
-        Modifier.fillMaxWidth(),
+        modifier = Modifier
+            .clip(RoundedCornerShape(16.dp))
+            .fillMaxWidth()
+            .clickable { onClickItem() },
         verticalAlignment = Alignment.CenterVertically
     ) {
         SkyImage(
@@ -231,10 +236,10 @@ fun FacilitySettingMemberItem(
         }
         Spacer(Modifier.width(16.dp))
         Box {
-            SkyIcon(
+            SkyIconButton(
                 res = Res.drawable.ic_dots_vertical,
                 size = SkyIconSize.Small,
-                modifier = Modifier.clickable { isMenuOpen = !isMenuOpen }
+                onClick = { isMenuOpen = !isMenuOpen }
             )
 
             MemberOptionMenu(

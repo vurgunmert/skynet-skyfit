@@ -38,7 +38,7 @@ fun VerticalFacilityProfileCardsRow(
 @Composable
 fun VerticalTrainerProfileCardsRow(
     trainers: List<FacilityTrainerProfile>,
-    onClick: () -> Unit = {},
+    onClick: (FacilityTrainerProfile) -> Unit = {},
     modifier: Modifier = Modifier,
     contentPaddingStart: Dp
 ) {
@@ -55,7 +55,7 @@ fun VerticalTrainerProfileCardsRow(
                 lessonCount = trainer.lessonTypeCount,
                 videoCount = trainer.videoCount,
                 rating = trainer.point,
-                onClick = onClick
+                onClick = {onClick(trainer)}
             )
         }
     }

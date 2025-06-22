@@ -1,6 +1,7 @@
 package com.vurgun.skyfit.profile.facility.screen
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Icon
@@ -11,13 +12,13 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.unit.dp
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
 import com.vurgun.skyfit.core.data.v1.domain.facility.model.FacilityProfile
 import com.vurgun.skyfit.core.data.v1.domain.profile.PhotoGalleryStackViewData
 import com.vurgun.skyfit.core.data.v1.domain.trainer.model.FacilityTrainerProfile
-import com.vurgun.skyfit.core.navigation.SharedScreen
 import com.vurgun.skyfit.core.navigation.SharedScreen.*
 import com.vurgun.skyfit.core.navigation.findRootNavigator
 import com.vurgun.skyfit.core.navigation.push
@@ -58,20 +59,20 @@ internal fun FacilityProfileCompact(
             }
 
             FacilityProfileUiEffect.NavigateToCreatePost -> {
-                appNavigator.push(SharedScreen.CreatePost)
+                appNavigator.push(CreatePost)
             }
 
             FacilityProfileUiEffect.NavigateToGallery -> {}
             FacilityProfileUiEffect.NavigateToLessonListing -> {
-                appNavigator.push(SharedScreen.FacilityManageLessons)
+                appNavigator.push(FacilityManageLessons)
             }
 
             FacilityProfileUiEffect.NavigateToSettings -> {
-                appNavigator.push(SharedScreen.Settings)
+                appNavigator.push(Settings)
             }
 
-            FacilityProfileUiEffect.NavigateToTrainers -> {
-                appNavigator.push(SharedScreen.ExploreTrainers)
+            FacilityProfileUiEffect.NavigateToExplore -> {
+                appNavigator.push(ExploreTrainers)
             }
 
             is FacilityProfileUiEffect.NavigateToVisitTrainer -> {
@@ -79,11 +80,19 @@ internal fun FacilityProfileCompact(
             }
 
             is FacilityProfileUiEffect.NavigateToFacilityChat -> {
-                appNavigator.push(SharedScreen.ChatWithFacility(effect.facilityId))
+                appNavigator.push(ChatWithFacility(effect.facilityId))
             }
 
             is FacilityProfileUiEffect.NavigateToFacilitySchedule -> {
-                appNavigator.push(SharedScreen.FacilitySchedule(effect.facilityId))
+                appNavigator.push(FacilitySchedule(effect.facilityId))
+            }
+
+            FacilityProfileUiEffect.ShareProfile -> {
+
+            }
+
+            FacilityProfileUiEffect.NavigateToTrainerSettings -> {
+                appNavigator.push(FacilityTrainerSettings)
             }
         }
     }
@@ -163,16 +172,28 @@ internal object FacilityProfileCompactComponent {
 
     //region Trainers
     @Composable
-    private fun MobileFacilityProfileTrainersRow(
+    fun OurTrainerList(
         trainers: List<FacilityTrainerProfile>,
-        onClick: () -> Unit
+        onClickShowAll: () -> Unit,
+        onClick: (FacilityTrainerProfile) -> Unit
     ) {
         Column(modifier = Modifier.fillMaxWidth()) {
-            Text(
-                text = stringResource(Res.string.our_trainers_label),
-                style = SkyFitTypography.bodyLargeSemibold,
-                modifier = Modifier.padding(horizontal = 12.dp, vertical = 16.dp)
-            )
+            Row(
+                Modifier.fillMaxWidth().padding(horizontal = 12.dp, vertical = 16.dp),
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                SkyText(
+                    text = stringResource(Res.string.our_trainers_label),
+                    styleType = TextStyleType.BodyLargeSemibold,
+                    modifier = Modifier.weight(1f)
+                )
+                Text(
+                    text = stringResource(Res.string.show_all_action),
+                    style = SkyFitTypography.bodyXSmall,
+                    color = SkyFitColor.border.secondaryButton,
+                    modifier = Modifier.clickable(onClick = onClickShowAll)
+                )
+            }
             VerticalTrainerProfileCardsRow(
                 trainers = trainers,
                 onClick = onClick,
@@ -182,16 +203,19 @@ internal object FacilityProfileCompactComponent {
     }
 
     @Composable
-    fun TrainerCards(
+    fun FacilityProfileTrainerCards(
         trainers: List<FacilityTrainerProfile>,
-        goToVisitTrainerProfile: () -> Unit,
+        onAction: (FacilityProfileUiAction) -> Unit,
     ) {
         if (trainers.isEmpty()) {
-            MobileFacilityProfileOwner_NoTrainerCard(onClickAdd = goToVisitTrainerProfile)
+            MobileFacilityProfileOwner_NoTrainerCard(
+                onClickAdd = { onAction(FacilityProfileUiAction.OnClickAddTrainer) }
+            )
         } else {
-            MobileFacilityProfileTrainersRow(
+            OurTrainerList(
                 trainers = trainers,
-                onClick = goToVisitTrainerProfile
+                onClickShowAll = { onAction(FacilityProfileUiAction.OnClickShowAllTrainers) },
+                onClick = { onAction(FacilityProfileUiAction.OnSelectTrainer(it.trainerId)) }
             )
         }
     }
@@ -307,7 +331,7 @@ internal object FacilityProfileCompactComponent {
                         subtitle = stringResource(Res.string.trainer_label)
                     )
                     VerticalDivider(Modifier.height(48.dp))
-                    RatingStarComponent(profile.point ?: 0f)
+                    RatingButton(profile.point ?: 0f)
                 }
 
                 Spacer(Modifier.height(16.dp))
@@ -427,7 +451,7 @@ internal object FacilityProfileCompactComponent {
                         subtitle = stringResource(Res.string.trainer_label)
                     )
                     VerticalDivider(Modifier.height(48.dp))
-                    RatingStarComponent(profile.point ?: 0f)
+                    RatingButton(profile.point ?: 0f)
                 }
 
                 Spacer(Modifier.height(16.dp))
@@ -508,16 +532,25 @@ internal object FacilityProfileCompactComponent {
                 lessons = content.lessons,
                 goToVisitCalendar = { onAction(FacilityProfileUiAction.OnClickShowSchedule) },
                 modifier = Modifier.fillMaxWidth()
+                    .clip(RoundedCornerShape(20.dp))
+                    .background(SkyFitColor.background.fillTransparent)
+            )
+
+            FacilityProfileTrainerCards(
+                trainers = content.trainers,
+                onAction = onAction
             )
         } else {
             if (content.lessons.isEmpty()) {
                 ProfileCompactComponent.NoScheduledLessonsCard(
-                    onClickAdd = { onAction(FacilityProfileUiAction.OnClickAllLessons)
-                })
+                    onClickAdd = {
+                        onAction(FacilityProfileUiAction.OnClickAllLessons)
+                    })
             } else {
                 ProfileCompactComponent.LessonSchedule(
                     lessons = content.lessons,
-                    goToLessons = { onAction(FacilityProfileUiAction.OnClickAllLessons) }
+                    onClickShowAll = { onAction(FacilityProfileUiAction.OnClickAllLessons) },
+                    onClickLesson = { onAction(FacilityProfileUiAction.OnClickAllLessons) }
                 )
             }
         }
@@ -526,22 +559,36 @@ internal object FacilityProfileCompactComponent {
     @Composable
     fun PostsContent(
         content: FacilityProfileUiState.Content,
-        onAction: (FacilityProfileUiAction) -> Unit
+        onAction: (FacilityProfileUiAction) -> Unit,
+        modifier: Modifier = Modifier
     ) {
+        Column(
+            modifier = modifier.fillMaxSize(),
+            verticalArrangement = Arrangement.spacedBy(16.dp),
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            FeatureVisible(!content.isVisiting) {
+                SocialQuickPostInputCard(
+                    creatorImageUrl = content.profile.backgroundImageUrl,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .background(SkyFitColor.background.fillTransparentSecondary, RoundedCornerShape(16.dp))
+                ) { onAction(FacilityProfileUiAction.OnSendQuickPost(it)) }
+            }
 
-        FeatureVisible(!content.isVisiting) {
-            SocialQuickPostInputCard(modifier = Modifier.padding(horizontal = 16.dp), onClickSend = {})
-        }
-
-        content.posts.forEach { post ->
-            SocialPostCard(
-                data = post,
-                modifier = Modifier.padding(horizontal = 16.dp),
-                onClick = {},
-                onClickComment = {},
-                onClickLike = {},
-                onClickShare = {}
-            )
+            content.posts.forEach { post ->
+                SocialPostCard(
+                    post = post,
+                    onClick = { onAction(FacilityProfileUiAction.OnClickPost) },
+                    onClickComment = { onAction(FacilityProfileUiAction.OnClickCommentPost) },
+                    onClickLike = { onAction(FacilityProfileUiAction.OnClickLikePost) },
+                    onClickShare = { onAction(FacilityProfileUiAction.OnClickSharePost) },
+                    modifier = Modifier
+                        .clip(RoundedCornerShape(12.dp))
+                        .background(SkyFitColor.background.fillTransparentSecondary)
+                        .fillMaxWidth()
+                )
+            }
         }
     }
 }

@@ -41,8 +41,10 @@ private fun EventItemColumn(
     content: @Composable ColumnScope.() -> Unit
 ) {
     Column(
-        modifier = modifier
-            .background(SkyFitColor.background.fillTransparentSecondary, RoundedCornerShape(16.dp))
+        modifier = Modifier
+            .clip(RoundedCornerShape(16.dp))
+            .then(modifier)
+            .background(SkyFitColor.background.fillTransparentSecondary)
             .padding(12.dp),
         verticalArrangement = Arrangement.spacedBy(8.dp)
     ) {

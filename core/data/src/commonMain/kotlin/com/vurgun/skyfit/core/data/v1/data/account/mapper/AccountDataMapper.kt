@@ -85,7 +85,7 @@ internal object AccountDataMapper {
         return this.map {
             AccountType(
                 typeId = it.usertypeId,
-                profilePhoto = serverImageFromPath(it.profilePhoto),
+                photoImageUrl = serverImageFromPath(it.profilePhoto),
                 typeName = it.typeName,
                 fullName = it.name
             )

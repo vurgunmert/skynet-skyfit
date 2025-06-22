@@ -8,11 +8,11 @@ kotlinxSerialization = "1.8.1"
 kotlinxDatetime = "0.6.2"
 kotlinxCoroutines = "1.10.2"
 # Compose
-compose = "1.8.0"
+compose = "1.8.2"
 composeHotReload = "1.0.0-alpha10"
 
 # Android
-agp = "8.9.1"
+agp = "8.9.3"
 android-compileSdk = "35"
 android-minSdk = "24"
 android-targetSdk = "35"
@@ -20,7 +20,7 @@ androidx-activityCompose = "1.10.1"
 android-rive = "9.6.5"
 
 # Dependency Injection
-koin = "4.1.0-Beta4"
+koin = "4.1.0"
 
 # Navigation
 voyager = "1.1.0-beta03"
@@ -34,7 +34,7 @@ calf = "0.7.1"
 skiko = "0.9.4"
 
 khealth = "1.1.0"
-uiTooling = "1.8.2"
+uiTooling = "1.8.3"
 haze = "1.6.2"
 
 #pods-google-maps = "9.1.1"

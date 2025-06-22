@@ -3,6 +3,7 @@ package com.vurgun.skyfit.settings.facility.packages
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.Scaffold
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
@@ -19,10 +20,13 @@ import com.vurgun.skyfit.core.ui.components.form.*
 import com.vurgun.skyfit.core.ui.components.loader.FullScreenLoaderContent
 import com.vurgun.skyfit.core.ui.components.special.SkyFitMobileScaffold
 import com.vurgun.skyfit.core.ui.components.special.CompactTopBar
+import com.vurgun.skyfit.core.ui.components.special.ExpandedTopBar
 import com.vurgun.skyfit.core.ui.components.special.FeatureVisible
 import com.vurgun.skyfit.core.ui.screen.ErrorScreen
 import com.vurgun.skyfit.core.ui.styling.LocalPadding
 import com.vurgun.skyfit.core.ui.utils.CollectEffect
+import com.vurgun.skyfit.core.ui.utils.LocalWindowSize
+import com.vurgun.skyfit.core.ui.utils.WindowSize
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
 import skyfit.core.ui.generated.resources.*
@@ -71,17 +75,29 @@ private fun CreateServicePackageScreen_Content(
     formState: FacilityPackageEditFormState,
     onAction: (FacilityPackageEditAction) -> Unit,
 ) {
+    val windowSize = LocalWindowSize.current
     var showCancelDialog by remember { mutableStateOf(false) }
 
-    SkyFitMobileScaffold(
+    Scaffold(
         topBar = {
-            CompactTopBar(stringResource(Res.string.create_package_action), onClickBack = {
-                if (formState.isReadyToSave) {
-                    showCancelDialog = true
-                } else {
-                    onAction(FacilityPackageEditAction.OnClickBack)
-                }
-            })
+
+            if (windowSize == WindowSize.EXPANDED) {
+                ExpandedTopBar(stringResource(Res.string.create_package_action), onClickBack = {
+                    if (formState.isReadyToSave) {
+                        showCancelDialog = true
+                    } else {
+                        onAction(FacilityPackageEditAction.OnClickBack)
+                    }
+                })
+            } else {
+                CompactTopBar(stringResource(Res.string.create_package_action), onClickBack = {
+                    if (formState.isReadyToSave) {
+                        showCancelDialog = true
+                    } else {
+                        onAction(FacilityPackageEditAction.OnClickBack)
+                    }
+                })
+            }
         }
     ) {
 

@@ -14,6 +14,7 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
+import kotlinx.coroutines.launch
 
 class AccountManagerImpl(
     appScope: CoroutineScope,
@@ -33,6 +34,14 @@ class AccountManagerImpl(
     private val _accountTypes = MutableStateFlow<List<AccountType>>(emptyList())
     override val accountTypes: StateFlow<List<AccountType>> = _accountTypes
 
+    init {
+        appScope.launch {
+            runCatching { getAccountTypes() }.onFailure { error ->
+                print(error)
+            }
+        }
+    }
+
     override suspend fun getAccountTypes(): List<AccountType> {
         if (_accountTypes.value.isNotEmpty()) return _accountTypes.value
 
@@ -50,6 +59,7 @@ class AccountManagerImpl(
         }
 
         val result = repository.getAccountDetails()
+        getAccountTypes()
 
         return result
             .onSuccess { userFlow.value = it }

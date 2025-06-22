@@ -14,6 +14,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.unit.dp
 import cafe.adriel.voyager.core.screen.Screen
+import cafe.adriel.voyager.navigator.Navigator
+import cafe.adriel.voyager.transitions.CrossfadeTransition
 import com.vurgun.skyfit.core.ui.components.button.SkyButton
 import com.vurgun.skyfit.core.ui.components.button.SkyButtonSize
 import com.vurgun.skyfit.core.ui.components.button.SkyButtonVariant
@@ -35,7 +37,7 @@ internal object SettingsExpandedComponent {
     fun LandingContent(
         content: SettingsUiState.Content,
         onAction: (SettingsUiAction) -> Unit,
-        screen: Screen
+        container: @Composable () -> Unit
     ) {
         Row(
             modifier = Modifier.padding(bottom = 16.dp, end = 16.dp).fillMaxSize()
@@ -57,7 +59,8 @@ internal object SettingsExpandedComponent {
                 modifier = Modifier.width(315.dp).fillMaxHeight()
             )
             Spacer(Modifier.width(16.dp))
-            screen.Content()
+
+            container()
         }
     }
 

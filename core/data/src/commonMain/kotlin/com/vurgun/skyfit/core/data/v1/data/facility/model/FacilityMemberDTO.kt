@@ -6,6 +6,7 @@ import kotlinx.serialization.Serializable
 @Serializable
 data class FacilityMemberDTO(
     val userId: Int,
+    val nmId: Int,
     @SerialName("profilePhoto")
     val profilePhotoPath: String? = null,
     val username: String,

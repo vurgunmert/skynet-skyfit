@@ -19,6 +19,8 @@ import com.vurgun.skyfit.core.ui.components.special.CompactTopBar
 import com.vurgun.skyfit.core.ui.components.special.MobileSettingsDeleteAccountBottomSheet
 import com.vurgun.skyfit.core.ui.screen.ErrorScreen
 import com.vurgun.skyfit.core.ui.utils.CollectEffect
+import com.vurgun.skyfit.core.ui.utils.LocalWindowSize
+import com.vurgun.skyfit.core.ui.utils.WindowSize
 import com.vurgun.skyfit.feature.persona.settings.shared.component.FacilityAccountSettingsProfileCard
 import com.vurgun.skyfit.settings.facility.profile.FacilityProfileSettingsScreen
 import com.vurgun.skyfit.settings.facility.profile.FacilityProfileSettingsUiAction
@@ -84,29 +86,22 @@ class FacilityAccountSettingsScreen : Screen {
 }
 
 @Composable
-private fun FacilityAccountSettingsCompact() {
-
-}
-
-@Composable
-private fun FacilityAccountSettingsExpanded() {
-
-}
-
-@Composable
 private fun MobileFacilitySettingsAccountScreen(
     content: FacilityAccountSettingsUiState.Content,
     onAction: (FacilityAccountSettingsUiAction) -> Unit
 ) {
+    val windowSize = LocalWindowSize.current
     val scrollState = rememberScrollState()
     var showDeleteConfirm by remember { mutableStateOf(false) }
     val accountState = content.form
 
     Scaffold(
         topBar = {
-            CompactTopBar(
-                stringResource(Res.string.settings_account_label),
-                onClickBack = { onAction(FacilityAccountSettingsUiAction.NavigateToBack) })
+            if (windowSize != WindowSize.EXPANDED) {
+                CompactTopBar(
+                    stringResource(Res.string.settings_account_label),
+                    onClickBack = { onAction(FacilityAccountSettingsUiAction.NavigateToBack) })
+            }
         },
         bottomBar = {
             if (showDeleteConfirm) {

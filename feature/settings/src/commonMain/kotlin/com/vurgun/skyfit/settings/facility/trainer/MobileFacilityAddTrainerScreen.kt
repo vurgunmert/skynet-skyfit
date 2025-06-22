@@ -79,7 +79,7 @@ private fun MobileFacilityAddTrainerScreen(
         ) {
             items(uiState.filtered) {
                 MobileFacilityTrainerItemComponent(
-                    item = it,
+                    trainer = it,
                     onClick = {},
                     actionContent = {
                         LegacySecondaryMicroButton(

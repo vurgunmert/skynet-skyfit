@@ -1,13 +1,9 @@
 package com.vurgun.skyfit.settings.facility.member
 
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.wrapContentWidth
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.material.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -18,10 +14,16 @@ import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.koin.koinScreenModel
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
-import com.vurgun.skyfit.core.ui.components.button.LegacySecondaryMicroButton
-import com.vurgun.skyfit.core.ui.components.special.SkyFitMobileScaffold
+import com.vurgun.skyfit.core.navigation.SharedScreen
+import com.vurgun.skyfit.core.navigation.push
+import com.vurgun.skyfit.core.ui.components.button.SkyButton
+import com.vurgun.skyfit.core.ui.components.button.SkyButtonSize
+import com.vurgun.skyfit.core.ui.components.button.SkyButtonVariant
 import com.vurgun.skyfit.core.ui.components.special.CompactTopBar
+import com.vurgun.skyfit.core.ui.components.special.ExpandedTopBar
 import com.vurgun.skyfit.core.ui.components.special.SkyFitSearchTextInputComponent
+import com.vurgun.skyfit.core.ui.utils.LocalWindowSize
+import com.vurgun.skyfit.core.ui.utils.WindowSize
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
 import skyfit.core.ui.generated.resources.Res
@@ -42,6 +44,7 @@ class FacilityAddMemberScreen : Screen {
 
         MobileFacilityAddMemberScreen(
             goToBack = { navigator.pop() },
+            onSelectMember = { navigator.push(SharedScreen.UserProfile(it)) },
             viewModel = viewModel
         )
     }
@@ -51,14 +54,21 @@ class FacilityAddMemberScreen : Screen {
 @Composable
 internal fun MobileFacilityAddMemberScreen(
     goToBack: () -> Unit,
+    onSelectMember: (normalUserId: Int) -> Unit,
     viewModel: FacilityAddMembersViewModel
 ) {
+    val windowSize = LocalWindowSize.current
     val uiState by viewModel.uiState.collectAsState()
 
-    SkyFitMobileScaffold(
+    Scaffold(
         topBar = {
             Column(Modifier.fillMaxWidth()) {
-                CompactTopBar(stringResource(Res.string.add_action), onClickBack = goToBack)
+
+                if (windowSize == WindowSize.EXPANDED) {
+                    CompactTopBar(stringResource(Res.string.add_action), onClickBack = goToBack)
+                } else {
+                    ExpandedTopBar(stringResource(Res.string.add_action), onClickBack = goToBack)
+                }
 
                 SkyFitSearchTextInputComponent(
                     hint = stringResource(Res.string.search_action),
@@ -80,13 +90,14 @@ internal fun MobileFacilityAddMemberScreen(
             items(uiState.filtered) {
                 MobileFacilityMemberItemComponent(
                     item = it,
-                    onClick = {},
+                    onClick = { onSelectMember(it.normalUserId) },
                     actionContent = {
-                        LegacySecondaryMicroButton(
-                            text = stringResource(Res.string.add_action),
-                            modifier = Modifier.wrapContentWidth(),
+                        SkyButton(
+                            label = stringResource(Res.string.add_action),
+                            leftIcon = painterResource(Res.drawable.ic_plus),
+                            size = SkyButtonSize.Micro,
+                            variant = SkyButtonVariant.Secondary,
                             onClick = { viewModel.addMember(it.userId) },
-                            leftIconPainter = painterResource(Res.drawable.ic_plus)
                         )
                     }
                 )

@@ -1,21 +1,12 @@
 package com.vurgun.skyfit.settings.facility.trainer
 
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.layout.wrapContentWidth
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -29,34 +20,37 @@ import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.koin.koinScreenModel
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
+import com.vurgun.skyfit.core.data.v1.domain.trainer.model.TrainerPreview
+import com.vurgun.skyfit.core.navigation.SharedScreen
+import com.vurgun.skyfit.core.navigation.push
+import com.vurgun.skyfit.core.ui.components.button.SkyButton
+import com.vurgun.skyfit.core.ui.components.button.SkyButtonSize
 import com.vurgun.skyfit.core.ui.components.image.NetworkImage
-import com.vurgun.skyfit.core.ui.components.special.ButtonSize
-import com.vurgun.skyfit.core.ui.components.special.ButtonState
-import com.vurgun.skyfit.core.ui.components.special.ButtonVariant
-import com.vurgun.skyfit.core.ui.components.special.SkyFitButtonComponent
-import com.vurgun.skyfit.core.ui.components.special.SkyFitMobileScaffold
-import com.vurgun.skyfit.core.ui.components.special.CompactTopBar
 import com.vurgun.skyfit.core.ui.components.special.SkyFitSearchTextInputComponent
+import com.vurgun.skyfit.core.ui.components.topbar.CompactTopBar
 import com.vurgun.skyfit.core.ui.styling.SkyFitColor
 import com.vurgun.skyfit.core.ui.styling.SkyFitTypography
-import com.vurgun.skyfit.core.data.v1.domain.trainer.model.TrainerPreview
+import com.vurgun.skyfit.core.ui.utils.LocalCompactOverlayController
+import com.vurgun.skyfit.core.ui.utils.LocalWindowSize
+import com.vurgun.skyfit.core.ui.utils.WindowSize
 import org.jetbrains.compose.resources.stringResource
-import skyfit.core.ui.generated.resources.Res
-import skyfit.core.ui.generated.resources.add_action
-import skyfit.core.ui.generated.resources.delete_action
-import skyfit.core.ui.generated.resources.search_action
-import skyfit.core.ui.generated.resources.trainers_label
+import skyfit.core.ui.generated.resources.*
 
 class FacilityTrainerSettingsScreen : Screen {
 
     @Composable
     override fun Content() {
         val navigator = LocalNavigator.currentOrThrow
-        val viewModel = koinScreenModel<FacilityManageTrainersViewModel>()
+        val viewModel = koinScreenModel<FacilityTrainerSettingsViewModel>()
+        val compactOverlayController = LocalCompactOverlayController.current
 
         MobileFacilityManageTrainersScreen(
-            goToBack = { navigator.pop() },
+            goToBack = {
+                compactOverlayController?.invoke(null)
+                navigator.pop()
+            },
             goToAddTrainer = { navigator.push(FacilityAddTrainerScreen()) },
+            onSelectTrainer = { navigator.push(SharedScreen.TrainerProfile(it)) },
             viewModel = viewModel
         )
     }
@@ -67,7 +61,8 @@ class FacilityTrainerSettingsScreen : Screen {
 internal fun MobileFacilityManageTrainersScreen(
     goToBack: () -> Unit,
     goToAddTrainer: () -> Unit,
-    viewModel: FacilityManageTrainersViewModel
+    onSelectTrainer: (trainerId: Int) -> Unit,
+    viewModel: FacilityTrainerSettingsViewModel
 ) {
     val uiState by viewModel.uiState.collectAsState()
 
@@ -75,7 +70,7 @@ internal fun MobileFacilityManageTrainersScreen(
         viewModel.refreshGymTrainers()
     }
 
-    SkyFitMobileScaffold(
+    Scaffold(
         topBar = {
             Column(Modifier.fillMaxWidth()) {
                 MobileFacilitySettingsSearchTrainerToolbarComponent(
@@ -103,16 +98,13 @@ internal fun MobileFacilityManageTrainersScreen(
         ) {
             items(uiState.filtered) {
                 MobileFacilityTrainerItemComponent(
-                    item = it,
-                    onClick = {},
+                    trainer = it,
+                    onClick = onSelectTrainer,
                     actionContent = {
-                        SkyFitButtonComponent(
-                            text = stringResource(Res.string.delete_action),
-                            modifier = Modifier.wrapContentWidth(),
+                        SkyButton(
+                            label = stringResource(Res.string.delete_action),
                             onClick = { viewModel.deleteTrainer(it.userId) },
-                            variant = ButtonVariant.Primary,
-                            size = ButtonSize.Micro,
-                            state = ButtonState.Rest
+                            size = SkyButtonSize.Micro,
                         )
                     }
                 )
@@ -127,34 +119,40 @@ fun MobileFacilitySettingsSearchTrainerToolbarComponent(
     onClickBack: () -> Unit,
     onClickAdd: () -> Unit
 ) {
-    Box(Modifier.fillMaxWidth().padding(vertical = 12.dp), contentAlignment = Alignment.CenterEnd) {
-        CompactTopBar(title, onClickBack = onClickBack)
+    val windowSize = LocalWindowSize.current
 
-        SkyFitButtonComponent(
-            modifier = Modifier
-                .padding(end = 24.dp)
-                .wrapContentWidth(),
-            text = stringResource(Res.string.add_action),
-            onClick = onClickAdd,
-            variant = ButtonVariant.Primary,
-            size = ButtonSize.Micro,
-            state = ButtonState.Rest
+    if (windowSize == WindowSize.EXPANDED) { //TODO: Move logic repeating actions
+        CompactTopBar.TopbarWithEndAction(
+            title = title,
+            onClickBack = null,
+            actionLabel = stringResource(Res.string.add_action),
+            onClickAction = onClickAdd
+        )
+    } else {
+        CompactTopBar.TopbarWithEndAction(
+            title = title,
+            onClickBack = onClickBack,
+            actionLabel = stringResource(Res.string.add_action),
+            onClickAction = onClickAdd
         )
     }
 }
 
 @Composable
 fun MobileFacilityTrainerItemComponent(
-    item: TrainerPreview,
-    onClick: () -> Unit,
+    trainer: TrainerPreview,
+    onClick: (trainerId: Int) -> Unit,
     actionContent: @Composable () -> Unit
 ) {
     Row(
-        Modifier.fillMaxWidth().clickable(onClick = onClick),
+        Modifier
+            .clip(RoundedCornerShape(16.dp))
+            .fillMaxWidth()
+            .clickable(onClick = { onClick(trainer.trainerId) }),
         verticalAlignment = Alignment.CenterVertically
     ) {
         NetworkImage(
-            imageUrl = item.profileImageUrl,
+            imageUrl = trainer.profileImageUrl,
             modifier = Modifier
                 .size(60.dp)
                 .clip(CircleShape)
@@ -163,12 +161,12 @@ fun MobileFacilityTrainerItemComponent(
 
         Column(Modifier.weight(1f)) {
             Text(
-                text = item.username,
+                text = trainer.username,
                 style = SkyFitTypography.bodyLargeSemibold
             )
             Spacer(Modifier.height(4.dp))
             Text(
-                text = item.fullName,
+                text = trainer.fullName,
                 style = SkyFitTypography.bodyMediumRegular,
                 color = SkyFitColor.text.secondary
             )

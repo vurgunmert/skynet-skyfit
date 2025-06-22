@@ -41,6 +41,7 @@ import com.vurgun.main.component.ScreenOverlay
 import com.vurgun.skyfit.core.navigation.findRootNavigator
 import com.vurgun.skyfit.core.ui.components.special.FeatureVisible
 import com.vurgun.skyfit.core.ui.utils.LocalExpandedOverlayController
+import com.vurgun.skyfit.core.utils.rememberAccountType
 import org.jetbrains.compose.resources.DrawableResource
 import skyfit.core.ui.generated.resources.*
 
@@ -310,6 +311,8 @@ private object DashboardExpandedComponents {
         selected: Boolean,
         onClick: () -> Unit
     ) {
+        val accountType = rememberAccountType()
+
         val modifier =
             if (selected) Modifier.border(2.dp, SkyFitColor.border.secondaryButton, CircleShape) else Modifier
 
@@ -325,7 +328,7 @@ private object DashboardExpandedComponents {
             contentAlignment = Alignment.Center
         ) {
             NetworkImage(
-                imageUrl = "https://picsum.photos/400/400",
+                imageUrl = accountType?.photoImageUrl,
                 modifier = Modifier.size(48.dp)
             )
         }

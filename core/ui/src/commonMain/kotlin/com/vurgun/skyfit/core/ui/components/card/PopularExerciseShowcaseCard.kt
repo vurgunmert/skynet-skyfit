@@ -13,7 +13,7 @@ import com.vurgun.skyfit.core.ui.components.avatar.AvatarGroup
 import com.vurgun.skyfit.core.ui.components.icon.SkyIcon
 import com.vurgun.skyfit.core.ui.components.icon.SkyIconSize
 import com.vurgun.skyfit.core.ui.components.image.SkyImage
-import com.vurgun.skyfit.core.ui.components.special.RatingStarComponent
+import com.vurgun.skyfit.core.ui.components.special.RatingButton
 import com.vurgun.skyfit.core.ui.components.text.SkyText
 import com.vurgun.skyfit.core.ui.components.text.TextStyleType
 import com.vurgun.skyfit.core.ui.styling.SkyFitColor
@@ -61,7 +61,7 @@ fun PopularExerciseShowcaseCard(
             error = Res.drawable.im_placeholder_dark
         )
 
-        RatingStarComponent(
+        RatingButton(
             rating = data.rating,
             modifier = Modifier.align(Alignment.TopEnd).padding(8.dp)
         )

@@ -44,6 +44,10 @@ sealed interface UserProfileAction {
     data object OnClickNewPost : UserProfileAction
     data object OnClickFollow : UserProfileAction
     data object OnClickUnfollow : UserProfileAction
+    data object OnClickPost : UserProfileAction
+    data object OnClickCommentPost : UserProfileAction
+    data object OnClickLikePost : UserProfileAction
+    data object OnClickSharePost : UserProfileAction
     data class NavigateToVisitFacility(val gymId: Int) : UserProfileAction
     data class OnDestinationChanged(val destination: ProfileDestination) : UserProfileAction
 }
@@ -89,8 +93,24 @@ class UserProfileViewModel(
                 _effect.emitIn(screenModelScope, NavigateToVisitFacility(action.gymId))
 
             is UserProfileAction.OnDestinationChanged -> updateDestination(action.destination)
-            UserProfileAction.OnClickFollow -> TODO()
-            UserProfileAction.OnClickUnfollow -> TODO()
+            UserProfileAction.OnClickFollow -> {
+                TODO()
+            }
+            UserProfileAction.OnClickUnfollow -> {
+                TODO()
+            }
+            UserProfileAction.OnClickCommentPost -> {
+                TODO()
+            }
+            UserProfileAction.OnClickLikePost -> {
+                TODO()
+            }
+            UserProfileAction.OnClickPost -> {
+                TODO()
+            }
+            UserProfileAction.OnClickSharePost -> {
+                TODO()
+            }
         }
     }
 
@@ -101,11 +121,10 @@ class UserProfileViewModel(
 
         screenModelScope.launch {
             _uiState.update(UserProfileUiState.Loading)
-            val profileDeferred = async { userRepository.getUserProfile(loadedUserId).getOrThrow() }
-            val appointmentsDeferred = async { fetchAppointments(loadedUserId) }
 
-            try {
-                val profile = profileDeferred.await()
+            runCatching {
+                val profile = userRepository.getUserProfile(loadedUserId).getOrThrow()
+                val appointmentsDeferred = async { fetchAppointments(profile.normalUserId) }
                 val facilityDeferred = profile.memberGymId?.let { gymId ->
                     async { facilityRepository.getFacilityProfile(gymId).getOrNull() }
                 }
@@ -123,8 +142,8 @@ class UserProfileViewModel(
                         appointments = appointments,
                     )
                 )
-            } catch (e: Exception) {
-                _uiState.update(UserProfileUiState.Error(e.message ?: "Profil yüklenemedi."))
+            }.onFailure { error ->
+                _uiState.update(UserProfileUiState.Error(error.message ?: "Profil yüklenemedi."))
             }
         }
     }

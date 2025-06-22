@@ -20,7 +20,7 @@ import skyfit.core.ui.generated.resources.Res
 import skyfit.core.ui.generated.resources.ic_star_filled
 
 @Composable
-fun RatingStarComponent(rating: Float, modifier: Modifier = Modifier) {
+fun RatingButton(rating: Float, modifier: Modifier = Modifier) {
     Row(
         modifier = modifier
             .background(SkyFitColor.background.fillSemiTransparent, CircleShape)

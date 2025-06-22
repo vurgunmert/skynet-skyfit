@@ -32,7 +32,7 @@ private fun AccountTypeSelectorItem(
         verticalAlignment = Alignment.CenterVertically
     ) {
         SkyImage(
-            url = item.profilePhoto.takeUnless { it.isNullOrEmpty() }
+            url = item.photoImageUrl.takeUnless { it.isNullOrEmpty() }
                 ?: "https://cdn-icons-png.flaticon.com/512/3135/3135715.png",
             size = SkyImageSize.Size40,
             shape = SkyImageShape.Circle

@@ -300,7 +300,8 @@ private object TrainerProfileCompactComponent {
             } else {
                 ProfileCompactComponent.LessonSchedule(
                     lessons = content.lessons,
-                    goToLessons = { onAction(TrainerProfileUiAction.OnClickToAppointments) }
+                    onClickShowAll = { onAction(TrainerProfileUiAction.OnClickToAppointments) },
+                    onClickLesson = { onAction(TrainerProfileUiAction.OnClickToAppointments) }
                 )
             }
         }

@@ -59,7 +59,7 @@ fun UserSettingsExpanded(viewModel: SettingsViewModel) {
             SettingsExpandedComponent.LandingContent(
                 content = content,
                 onAction = viewModel::onAction,
-                screen = screen
+                container = { screen.Content() }
             )
         }
     }

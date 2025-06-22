@@ -4,6 +4,7 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import cafe.adriel.voyager.navigator.LocalNavigator
@@ -13,6 +14,7 @@ import com.vurgun.skyfit.core.navigation.findRootNavigator
 import com.vurgun.skyfit.core.navigation.replace
 import com.vurgun.skyfit.core.navigation.replaceAll
 import com.vurgun.skyfit.core.ui.components.box.TodoBox
+import com.vurgun.skyfit.core.ui.components.button.SkyFitPrimaryCircularBackButton
 import com.vurgun.skyfit.core.ui.components.loader.FullScreenLoaderContent
 import com.vurgun.skyfit.core.ui.components.profile.SocialPostCard
 import com.vurgun.skyfit.core.ui.components.profile.SocialQuickPostInputCard
@@ -36,27 +38,31 @@ fun UserProfileExpanded(
     viewModel: UserProfileViewModel,
     modifier: Modifier = Modifier.fillMaxSize()
 ) {
-    val dashboardNavigator = LocalNavigator.currentOrThrow
-    val appNavigator = dashboardNavigator.findRootNavigator()
+    val localNavigator = LocalNavigator.currentOrThrow
+    val appNavigator = localNavigator.findRootNavigator()
     val overlayController = LocalCompactOverlayController.current
     val uiState by viewModel.uiState.collectAsState()
 
     CollectEffect(viewModel.effect) { effect ->
-        when(effect) {
-             UserProfileEffect.NavigateBack -> {
-                 appNavigator.replaceAll(SharedScreen.Home)
-             }
+        when (effect) {
+            UserProfileEffect.NavigateBack -> {
+                localNavigator.pop()
+            }
+
             UserProfileEffect.NavigateToAppointments -> {
                 overlayController?.invoke(SharedScreen.UserAppointmentListing)
             }
+
             UserProfileEffect.NavigateToCreatePost -> {
                 overlayController?.invoke(SharedScreen.CreatePost)
             }
+
             UserProfileEffect.NavigateToSettings -> {
-                dashboardNavigator.replace(SharedScreen.Settings)
+                localNavigator.replace(SharedScreen.Settings)
             }
+
             is UserProfileEffect.NavigateToVisitFacility -> {
-                dashboardNavigator.replace(SharedScreen.FacilityProfile(effect.gymId))
+                localNavigator.replace(SharedScreen.FacilityProfile(effect.gymId))
             }
         }
     }
@@ -76,8 +82,10 @@ fun UserProfileExpanded(
             ProfileExpandedComponent.Layout(
                 header = {
                     UserProfileExpandedComponent.Header(
-                        content,
-                        viewModel::onAction,
+                        content = content,
+                        onAction = viewModel::onAction,
+                        canNavigateBack = content.isVisiting,
+                        onClickBack = { viewModel.onAction(UserProfileAction.ClickBack) },
                         modifier = Modifier.fillMaxWidth().height(284.dp)
                     )
                 },
@@ -100,7 +108,7 @@ fun UserProfileExpanded(
                         }
 
                         ProfileDestination.Posts -> {
-                            UserProfileExpandedComponent.PostsContent(content,viewModel::onAction)
+                            UserProfileExpandedComponent.PostsContent(content, viewModel::onAction)
                         }
                     }
                 },
@@ -129,57 +137,71 @@ private object UserProfileExpandedComponent {
     fun Header(
         content: UserProfileUiState.Content,
         onAction: (UserProfileAction) -> Unit,
+        canNavigateBack: Boolean = false,
+        onClickBack: (() -> Unit)? = null,
         modifier: Modifier = Modifier
     ) {
         val userProfile = content.profile
 
-        ProfileExpandedComponent.Header(
-            backgroundImageUrl = userProfile.backgroundImageUrl,
-            profileImageUrl = userProfile.profileImageUrl,
-            leftContent = {
-                ProfileCompactComponent.HeaderBodyGroup(
-                    leftItem = {
-                        ProfileCompactComponent.HeaderEditorialDataItem(
-                            iconRes = Res.drawable.ic_height,
-                            title = userProfile.height.toString(),
-                            subtitle = "Boy (${userProfile.heightUnit.shortLabel})",
-                            modifier = Modifier.weight(1f)
-                        )
-                    },
-                    centerItem = {
-                        ProfileCompactComponent.HeaderEditorialDataItem(
-                            iconRes = Res.drawable.ic_dna,
-                            title = userProfile.weight.toString(),
-                            subtitle = "Kilo (${userProfile.weightUnit.shortLabel})",
-                            modifier = Modifier.weight(1f)
-                        )
-                    },
-                    rightItem = {
-                        ProfileCompactComponent.HeaderEditorialDataItem(
-                            iconRes = Res.drawable.ic_overweight,
-                            title = userProfile.bodyType.turkishShort,
-                            subtitle = stringResource(Res.string.body_type_label),
-                            modifier = Modifier.weight(1f)
-                        )
-                    }
-                )
-            },
-            centerContent = {
-                ProfileCompactComponent.HeaderNameGroup(
-                    firstName = userProfile.firstName,
-                    userName = userProfile.username
-                )
-            },
-            rightContent = {
-                ProfileExpandedComponent.HeaderNavigationGroup(
-                    destination = content.destination,
-                    onClickAbout = { onAction(UserProfileAction.OnDestinationChanged(ProfileDestination.About)) },
-                    onClickPosts = { onAction(UserProfileAction.OnDestinationChanged(ProfileDestination.Posts)) },
-                    onClickMeasurements = { onAction(UserProfileAction.OnDestinationChanged(ProfileDestination.Measurements)) },
-                    onClickShare = null
+        Box(modifier.fillMaxWidth()) {
+            ProfileExpandedComponent.Header(
+                backgroundImageUrl = userProfile.backgroundImageUrl,
+                profileImageUrl = userProfile.profileImageUrl,
+                leftContent = {
+                    ProfileCompactComponent.HeaderBodyGroup(
+                        leftItem = {
+                            ProfileCompactComponent.HeaderEditorialDataItem(
+                                iconRes = Res.drawable.ic_height,
+                                title = userProfile.height.toString(),
+                                subtitle = "Boy (${userProfile.heightUnit.shortLabel})",
+                                modifier = Modifier.weight(1f)
+                            )
+                        },
+                        centerItem = {
+                            ProfileCompactComponent.HeaderEditorialDataItem(
+                                iconRes = Res.drawable.ic_dna,
+                                title = userProfile.weight.toString(),
+                                subtitle = "Kilo (${userProfile.weightUnit.shortLabel})",
+                                modifier = Modifier.weight(1f)
+                            )
+                        },
+                        rightItem = {
+                            ProfileCompactComponent.HeaderEditorialDataItem(
+                                iconRes = Res.drawable.ic_overweight,
+                                title = userProfile.bodyType.turkishShort,
+                                subtitle = stringResource(Res.string.body_type_label),
+                                modifier = Modifier.weight(1f)
+                            )
+                        }
+                    )
+                },
+                centerContent = {
+                    ProfileCompactComponent.HeaderNameGroup(
+                        firstName = userProfile.firstName,
+                        userName = userProfile.username
+                    )
+                },
+                rightContent = {
+                    ProfileExpandedComponent.HeaderNavigationGroup(
+                        destination = content.destination,
+                        onClickAbout = { onAction(UserProfileAction.OnDestinationChanged(ProfileDestination.About)) },
+                        onClickPosts = { onAction(UserProfileAction.OnDestinationChanged(ProfileDestination.Posts)) },
+                        onClickMeasurements = { onAction(UserProfileAction.OnDestinationChanged(ProfileDestination.Measurements)) },
+                        onClickShare = null
+                    )
+                }
+            )
+
+            if (canNavigateBack) {
+                SkyFitPrimaryCircularBackButton(
+                    modifier = Modifier
+                        .align(Alignment.TopStart)
+                        .padding(top = 48.dp, start = 24.dp)
+                        .size(48.dp),
+                    onClick = { onClickBack?.invoke() }
                 )
             }
-        )
+        }
     }
 
     @Composable
@@ -218,17 +240,20 @@ private object UserProfileExpandedComponent {
             verticalArrangement = Arrangement.spacedBy(16.dp),
             horizontalAlignment = androidx.compose.ui.Alignment.CenterHorizontally
         ) {
-            SocialQuickPostInputCard(
-                modifier = Modifier.widthIn(max = 680.dp)
-            ) { onAction(UserProfileAction.OnClickNewPost) }
+            if (!content.isVisiting) {
+                SocialQuickPostInputCard(
+                    modifier = Modifier.widthIn(max = 680.dp)
+                ) { onAction(UserProfileAction.OnClickNewPost) }
+            }
 
             content.posts.forEach { post ->
                 SocialPostCard(
-                    post,
-                    onClick = {},
-                    onClickComment = {},
-                    onClickLike = {},
-                    onClickShare = {})
+                    post = post,
+                    onClick = { onAction(UserProfileAction.OnClickPost) },
+                    onClickComment = { onAction(UserProfileAction.OnClickCommentPost) },
+                    onClickLike = { onAction(UserProfileAction.OnClickLikePost) },
+                    onClickShare = { onAction(UserProfileAction.OnClickSharePost) }
+                )
             }
         }
     }

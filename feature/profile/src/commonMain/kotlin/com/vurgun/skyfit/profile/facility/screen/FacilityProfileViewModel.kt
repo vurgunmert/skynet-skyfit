@@ -5,15 +5,18 @@ import cafe.adriel.voyager.core.model.screenModelScope
 import com.vurgun.skyfit.core.data.utility.SingleSharedFlow
 import com.vurgun.skyfit.core.data.utility.UiStateDelegate
 import com.vurgun.skyfit.core.data.utility.emitIn
+import com.vurgun.skyfit.core.data.utility.humanizeAgo
 import com.vurgun.skyfit.core.data.utility.now
 import com.vurgun.skyfit.core.data.v1.data.lesson.mapper.LessonSessionItemViewDataMapper
 import com.vurgun.skyfit.core.data.v1.domain.account.manager.ActiveAccountManager
 import com.vurgun.skyfit.core.data.v1.domain.account.model.FacilityAccount
 import com.vurgun.skyfit.core.data.v1.domain.facility.model.FacilityProfile
 import com.vurgun.skyfit.core.data.v1.domain.facility.repository.FacilityRepository
+import com.vurgun.skyfit.core.data.v1.domain.global.model.AccountRole
 import com.vurgun.skyfit.core.data.v1.domain.lesson.model.LessonSessionItemViewData
 import com.vurgun.skyfit.core.data.v1.domain.profile.PhotoGalleryStackViewData
 import com.vurgun.skyfit.core.data.v1.domain.profile.SocialPostItemViewData
+import com.vurgun.skyfit.core.data.v1.domain.social.repository.SocialMediaRepository
 import com.vurgun.skyfit.core.data.v1.domain.trainer.model.FacilityTrainerProfile
 import com.vurgun.skyfit.profile.facility.screen.FacilityProfileUiEffect.*
 import com.vurgun.skyfit.profile.model.ProfileDestination
@@ -39,6 +42,9 @@ sealed interface FacilityProfileUiState {
 }
 
 sealed interface FacilityProfileUiAction {
+    data class OnSelectTrainer(val trainerId: Int) : FacilityProfileUiAction
+    data object OnClickAddTrainer : FacilityProfileUiAction
+    data object OnClickShare : FacilityProfileUiAction
     data object NavigateToGallery : FacilityProfileUiAction
     data object NavigateToTrainers : FacilityProfileUiAction
     data object OnClickSettings : FacilityProfileUiAction
@@ -49,18 +55,26 @@ sealed interface FacilityProfileUiAction {
     data object OnClickSendMessage : FacilityProfileUiAction
     data object OnClickShowSchedule : FacilityProfileUiAction
     data object OnToggleFollow : FacilityProfileUiAction
+    data object OnClickShowAllTrainers : FacilityProfileUiAction
     data object OnClickAllLessons : FacilityProfileUiAction
+    data object OnClickPost : FacilityProfileUiAction
+    data object OnClickCommentPost : FacilityProfileUiAction
+    data object OnClickLikePost : FacilityProfileUiAction
+    data object OnClickSharePost : FacilityProfileUiAction
     data class ChangeDate(val date: LocalDate) : FacilityProfileUiAction
     data class OnDestinationChanged(val destination: ProfileDestination) : FacilityProfileUiAction
+    data class OnSendQuickPost(val content: String) : FacilityProfileUiAction
 }
 
 sealed interface FacilityProfileUiEffect {
     data object NavigateBack : FacilityProfileUiEffect
     data object NavigateToLessonListing : FacilityProfileUiEffect
     data object NavigateToSettings : FacilityProfileUiEffect
-    data object NavigateToTrainers : FacilityProfileUiEffect
+    data object NavigateToExplore : FacilityProfileUiEffect
     data object NavigateToGallery : FacilityProfileUiEffect
     data object NavigateToCreatePost : FacilityProfileUiEffect
+    data object NavigateToTrainerSettings : FacilityProfileUiEffect
+    data object ShareProfile : FacilityProfileUiEffect
     data class NavigateToVisitTrainer(val trainerId: Int) : FacilityProfileUiEffect
     data class NavigateToFacilitySchedule(val facilityId: Int) : FacilityProfileUiEffect
     data class NavigateToFacilityChat(val facilityId: Int) : FacilityProfileUiEffect
@@ -69,6 +83,7 @@ sealed interface FacilityProfileUiEffect {
 class FacilityProfileViewModel(
     private val userManager: ActiveAccountManager,
     private val facilityRepository: FacilityRepository,
+    private val socialMediaRepository: SocialMediaRepository,
     private val lessonMapper: LessonSessionItemViewDataMapper
 ) : ScreenModel {
 
@@ -86,7 +101,7 @@ class FacilityProfileViewModel(
             FacilityProfileUiAction.NavigateToGallery -> emitEffect(NavigateToGallery)
             FacilityProfileUiAction.NavigateToLessonListing -> emitEffect(NavigateToLessonListing)
             FacilityProfileUiAction.OnClickSettings -> emitEffect(NavigateToSettings)
-            FacilityProfileUiAction.NavigateToTrainers -> emitEffect(NavigateToTrainers)
+            FacilityProfileUiAction.NavigateToTrainers -> emitEffect(NavigateToExplore)
             FacilityProfileUiAction.OnClickNewPost -> emitEffect(NavigateToCreatePost)
             is FacilityProfileUiAction.OnDestinationChanged -> {
                 val currentState = (uiState.value as? FacilityProfileUiState.Content) ?: return
@@ -113,6 +128,45 @@ class FacilityProfileViewModel(
             }
 
             FacilityProfileUiAction.OnToggleFollow -> revertFollowState()
+            FacilityProfileUiAction.OnClickShare -> emitEffect(ShareProfile)
+            FacilityProfileUiAction.OnClickAddTrainer -> emitEffect(NavigateToTrainerSettings)
+            is FacilityProfileUiAction.OnSelectTrainer -> emitEffect(NavigateToVisitTrainer(action.trainerId))
+            FacilityProfileUiAction.OnClickCommentPost -> {
+//                TODO()
+            }
+            FacilityProfileUiAction.OnClickLikePost -> {
+//                TODO()
+            }
+            FacilityProfileUiAction.OnClickPost -> {
+//                TODO()
+            }
+            FacilityProfileUiAction.OnClickSharePost -> {
+//                TODO()
+            }
+
+            is FacilityProfileUiAction.OnSendQuickPost -> {
+               sendPost(action.content)
+            }
+
+            FacilityProfileUiAction.OnClickShowAllTrainers -> {
+                val isVisiting = (uiState.value as? FacilityProfileUiState.Content)?.isVisiting ?: return
+                if (isVisiting) {
+                    emitEffect(NavigateToExplore)
+                } else {
+                    emitEffect(NavigateToTrainerSettings)
+                }
+            }
+        }
+    }
+
+    private fun sendPost(content: String) {
+        screenModelScope.launch {
+            runCatching {
+                socialMediaRepository.createPost(content)
+                refreshPosts()
+            }.onFailure { error ->
+                print(error.message)
+            }
         }
     }
 
@@ -124,23 +178,60 @@ class FacilityProfileViewModel(
 
         screenModelScope.launch {
             runCatching {
-
                 val profileDeferred = async { facilityRepository.getFacilityProfile(activeFacilityId).getOrThrow() }
                 val upcomingLessonsDeferred = async { fetchUpcomingLessons(activeFacilityId) }
                 val trainersDeferred = async { fetchTrainers(activeFacilityId) }
 
-                _uiState.update(
-                    FacilityProfileUiState.Content(
-                        isVisiting = isVisiting,
-                        isMemberVisiting = isVisiting,
-                        profile = profileDeferred.await(),
-                        lessons = upcomingLessonsDeferred.await(),
-                        trainers = trainersDeferred.await()
-                    )
+                val partialState = FacilityProfileUiState.Content(
+                    isVisiting = isVisiting,
+                    isMemberVisiting = isVisiting,
+                    profile = profileDeferred.await(),
+                    lessons = upcomingLessonsDeferred.await(),
+                    trainers = trainersDeferred.await(),
+                    posts = emptyList()
                 )
+                _uiState.update(partialState)
+
+                launch {
+                    refreshPosts()
+                }
 
             }.onFailure { error ->
                 _uiState.update(FacilityProfileUiState.Error(error.message ?: "Error loading profile"))
+            }
+        }
+    }
+
+    private fun refreshPosts() {
+        val content = (uiState.value as? FacilityProfileUiState.Content) ?: return
+        val typeId = 3
+        val userId = content.profile.userId
+
+
+        screenModelScope.launch {
+            runCatching {
+                val posts = socialMediaRepository.getPostsByUser(userId, typeId)
+                    .getOrDefault(emptyList())
+                    .sortedByDescending { it.updateDate ?: it.createdDate } // ✅ newest first
+                    .map {
+                        val showingDate = it.updateDate ?: it.createdDate
+                        SocialPostItemViewData(
+                            postId = it.postId,
+                            creatorUsername = it.username,
+                            creatorName = it.name,
+                            creatorImageUrl = it.profileImageUrl,
+                            timeAgo = showingDate.humanizeAgo(),
+                            content = it.contentText,
+                            imageUrl = null,
+                            likeCount = it.likeCount,
+                            commentCount = it.commentCount,
+                            shareCount = it.shareCount
+                        )
+                    }
+
+                _uiState.update(content.copy(posts = posts))
+            }.onFailure { error ->
+                print(error.message)
             }
         }
     }

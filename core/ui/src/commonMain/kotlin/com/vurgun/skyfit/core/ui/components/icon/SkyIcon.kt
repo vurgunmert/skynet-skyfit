@@ -3,7 +3,9 @@ package com.vurgun.skyfit.core.ui.components.icon
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.size
 import androidx.compose.material.Icon
+import androidx.compose.material.IconButton
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.Dp
@@ -12,6 +14,8 @@ import com.vurgun.skyfit.core.ui.styling.SkyFitAsset
 import com.vurgun.skyfit.core.ui.styling.SkyFitColor
 import org.jetbrains.compose.resources.DrawableResource
 import org.jetbrains.compose.resources.painterResource
+import skyfit.core.ui.generated.resources.Res
+import skyfit.core.ui.generated.resources.ic_chevron_left
 
 enum class SkyIconSize(val dp: Dp) {
     Tiny(12.dp),
@@ -52,6 +56,27 @@ fun SkyIcon(
         tint = tint.color,
         modifier = iconModifier
     )
+}
+@Composable
+fun SkyIconButton(
+    res: DrawableResource,
+    onClick: () -> Unit,
+    size: SkyIconSize = SkyIconSize.Normal,
+    tint: SkyIconTint = SkyIconTint.Default,
+    contentDescription: String? = null,
+    modifier: Modifier = Modifier,
+) {
+    IconButton(
+        onClick = onClick,
+        modifier = modifier
+    ) {
+        Icon(
+            painter = painterResource(res),
+            contentDescription = contentDescription,
+            tint = tint.color,
+            modifier = Modifier.size(size.dp)
+        )
+    }
 }
 
 @Composable

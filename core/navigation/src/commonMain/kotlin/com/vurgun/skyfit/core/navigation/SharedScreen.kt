@@ -98,4 +98,5 @@ sealed class SharedScreen(open val key: String) : ScreenProvider {
 
     // Settings
     data object Settings : SharedScreen("settings")
+    data object FacilityTrainerSettings : SharedScreen("settings:facility:trainer")
 }

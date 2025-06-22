@@ -11,7 +11,7 @@ import com.vurgun.skyfit.settings.facility.payment.FacilityPaymentHistoryViewMod
 import com.vurgun.skyfit.settings.facility.profile.FacilityProfileSettingsViewModel
 import com.vurgun.skyfit.settings.facility.account.FacilityAccountSettingsViewModel
 import com.vurgun.skyfit.settings.facility.trainer.FacilityAddTrainerViewModel
-import com.vurgun.skyfit.settings.facility.trainer.FacilityManageTrainersViewModel
+import com.vurgun.skyfit.settings.facility.trainer.FacilityTrainerSettingsViewModel
 import com.vurgun.skyfit.settings.shared.SettingsViewModel
 import com.vurgun.skyfit.settings.shared.account.AccountRoleSettingsViewModel
 import com.vurgun.skyfit.settings.shared.changepassword.PasswordSettingsViewModel
@@ -41,7 +41,7 @@ val dataPersonaModule = module {
     factory { FacilityProfileSettingsViewModel(get(), get(), get(), get()) }
     factory { FacilityMemberSettingsViewModel(get(), get()) }
     factory { FacilityAddMembersViewModel(get(), get()) }
-    factory { FacilityManageTrainersViewModel(get(), get()) }
+    factory { FacilityTrainerSettingsViewModel(get(), get()) }
     factory { FacilityPaymentHistoryViewModel() }
     factory { FacilityAddTrainerViewModel(get(), get()) }
     factory { FacilityNotificationSettingsViewModel() }

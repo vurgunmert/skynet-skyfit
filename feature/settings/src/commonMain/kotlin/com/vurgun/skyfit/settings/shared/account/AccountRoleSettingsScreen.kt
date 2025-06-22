@@ -118,7 +118,7 @@ private fun SettingsManageAccountTypeItem(
         verticalAlignment = Alignment.CenterVertically
     ) {
         CircleNetworkImage(
-            url = item.profilePhoto.takeUnless { it.isNullOrEmpty() } ?: "https://cdn-icons-png.flaticon.com/512/3135/3135715.png",
+            url = item.photoImageUrl.takeUnless { it.isNullOrEmpty() } ?: "https://cdn-icons-png.flaticon.com/512/3135/3135715.png",
             size = 40.dp,
             modifier = Modifier
         )
