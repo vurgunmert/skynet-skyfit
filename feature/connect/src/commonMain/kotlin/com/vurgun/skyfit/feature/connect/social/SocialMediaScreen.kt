@@ -24,12 +24,12 @@ class SocialMediaScreen : Screen {
 
         if (windowSize == WindowSize.EXPANDED) {
             SocialMediaExpanded(
-                onClickNewPost = { navigator.push(SharedScreen.CreatePost) },
+                onClickNewPost = { navigator.push(SharedScreen.NewPost) },
                 viewModel = viewModel
             )
         } else {
             SocialMediaCompact(
-                onClickNewPost = { navigator.push(SharedScreen.CreatePost) },
+                onClickNewPost = { navigator.push(SharedScreen.NewPost) },
                 viewModel = viewModel
             )
         }

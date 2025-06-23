@@ -9,7 +9,6 @@ import androidx.compose.ui.Modifier
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
 import com.vurgun.skyfit.core.navigation.SharedScreen
-import com.vurgun.skyfit.core.navigation.push
 import com.vurgun.skyfit.core.ui.components.layout.ExpandedLayout
 import com.vurgun.skyfit.core.ui.components.loader.FullScreenLoaderContent
 import com.vurgun.skyfit.core.ui.screen.ErrorScreen

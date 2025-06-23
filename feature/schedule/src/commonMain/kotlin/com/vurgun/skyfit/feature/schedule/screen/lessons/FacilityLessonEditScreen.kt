@@ -29,7 +29,9 @@ import com.vurgun.skyfit.core.ui.components.dialog.DestructiveDialog
 import com.vurgun.skyfit.core.ui.components.dialog.ErrorDialog
 import com.vurgun.skyfit.core.ui.components.dialog.rememberBasicDialogState
 import com.vurgun.skyfit.core.ui.components.icon.ActionIcon
-import com.vurgun.skyfit.core.ui.components.image.CircleNetworkImage
+import com.vurgun.skyfit.core.ui.components.image.SkyImage
+import com.vurgun.skyfit.core.ui.components.image.SkyImageShape
+import com.vurgun.skyfit.core.ui.components.image.SkyImageSize
 import com.vurgun.skyfit.core.ui.components.picker.SelectStartEndDateRow
 import com.vurgun.skyfit.core.ui.components.schedule.*
 import com.vurgun.skyfit.core.ui.components.special.*
@@ -416,8 +418,17 @@ private fun EditLessonTrainerRow(
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.spacedBy(16.dp)
             ) {
-                CircleNetworkImage(selectedTrainer?.imageUrl)
-                BodyMediumRegularText(selectedTrainer?.name.orEmpty(), modifier = Modifier.weight(1f))
+                SkyImage(
+                    url = selectedTrainer?.imageUrl,
+                    size = SkyImageSize.Size32,
+                    shape = SkyImageShape.Circle,
+                    error = Res.drawable.ic_high_intensity_training
+                )
+                SkyText(
+                    text = selectedTrainer?.name.toString(),
+                    styleType = TextStyleType.BodyMediumRegular,
+                    modifier = Modifier.weight(1f)
+                )
                 ActionIcon(res = Res.drawable.ic_chevron_down) { isDialogOpen = true }
             }
         }

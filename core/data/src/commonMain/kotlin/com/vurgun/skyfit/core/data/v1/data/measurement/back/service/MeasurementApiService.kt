@@ -1,4 +1,4 @@
-package com.vurgun.skyfit.core.data.v1.measurement.back.service
+package com.vurgun.skyfit.core.data.v1.data.measurement.back.service
 
 import com.vurgun.skyfit.core.data.v1.measurement.back.model.CreateMeasurementRequestDTO
 import com.vurgun.skyfit.core.data.v1.measurement.back.model.MeasurementDTO

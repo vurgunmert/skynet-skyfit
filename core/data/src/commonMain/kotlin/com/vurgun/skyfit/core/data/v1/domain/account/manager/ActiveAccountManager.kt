@@ -15,4 +15,5 @@ interface ActiveAccountManager {
     val account: StateFlow<Account?>
     val accountRole: StateFlow<AccountRole>
     suspend fun getAccountTypes(): List<AccountType>
+    val accountType: StateFlow<AccountType?>
 }

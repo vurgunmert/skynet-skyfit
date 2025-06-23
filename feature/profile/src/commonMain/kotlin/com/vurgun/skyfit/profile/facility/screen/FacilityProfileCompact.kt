@@ -59,7 +59,7 @@ internal fun FacilityProfileCompact(
             }
 
             FacilityProfileUiEffect.NavigateToCreatePost -> {
-                appNavigator.push(CreatePost)
+                appNavigator.push(NewPost)
             }
 
             FacilityProfileUiEffect.NavigateToGallery -> {}
@@ -203,28 +203,20 @@ internal object FacilityProfileCompactComponent {
     }
 
     @Composable
-    fun FacilityProfileTrainerCards(
-        trainers: List<FacilityTrainerProfile>,
-        onAction: (FacilityProfileUiAction) -> Unit,
+    fun FacilityNoTrainerGroup(
+        onClickAdd: () -> Unit,
+        modifier: Modifier = Modifier
     ) {
-        if (trainers.isEmpty()) {
-            MobileFacilityProfileOwner_NoTrainerCard(
-                onClickAdd = { onAction(FacilityProfileUiAction.OnClickAddTrainer) }
+        Column(modifier
+            .padding(horizontal = 16.dp)
+            .fillMaxWidth()) {
+            SkyText(
+                text = stringResource(Res.string.our_trainers_label),
+                styleType = TextStyleType.BodyLargeSemibold,
             )
-        } else {
-            OurTrainerList(
-                trainers = trainers,
-                onClickShowAll = { onAction(FacilityProfileUiAction.OnClickShowAllTrainers) },
-                onClick = { onAction(FacilityProfileUiAction.OnSelectTrainer(it.trainerId)) }
-            )
-        }
-    }
 
-    @Composable
-    fun MobileFacilityProfileOwner_NoTrainerCard(onClickAdd: () -> Unit) {
-        Column(Modifier.fillMaxWidth()) {
-            Text(stringResource(Res.string.our_trainers_label), style = SkyFitTypography.bodyLargeSemibold)
             Spacer(Modifier.height(16.dp))
+
             Box(
                 Modifier
                     .fillMaxWidth()
@@ -536,9 +528,10 @@ internal object FacilityProfileCompactComponent {
                     .background(SkyFitColor.background.fillTransparent)
             )
 
-            FacilityProfileTrainerCards(
+            OurTrainerList(
                 trainers = content.trainers,
-                onAction = onAction
+                onClickShowAll = { onAction(FacilityProfileUiAction.OnClickShowAllTrainers) },
+                onClick = { onAction(FacilityProfileUiAction.OnSelectTrainer(it.trainerId)) }
             )
         } else {
             if (content.lessons.isEmpty()) {
@@ -551,6 +544,13 @@ internal object FacilityProfileCompactComponent {
                     lessons = content.lessons,
                     onClickShowAll = { onAction(FacilityProfileUiAction.OnClickAllLessons) },
                     onClickLesson = { onAction(FacilityProfileUiAction.OnClickAllLessons) }
+                )
+            }
+
+            if (content.trainers.isEmpty()) {
+                FacilityNoTrainerGroup(
+                    onClickAdd = { onAction(FacilityProfileUiAction.OnClickAddTrainer) },
+                    modifier = Modifier.fillMaxWidth()
                 )
             }
         }

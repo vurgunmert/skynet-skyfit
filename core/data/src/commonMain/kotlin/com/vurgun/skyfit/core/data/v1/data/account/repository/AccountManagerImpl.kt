@@ -12,6 +12,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
@@ -33,6 +34,13 @@ class AccountManagerImpl(
 
     private val _accountTypes = MutableStateFlow<List<AccountType>>(emptyList())
     override val accountTypes: StateFlow<List<AccountType>> = _accountTypes
+
+    override val accountType: StateFlow<AccountType?> = combine(
+        accountRole,
+        accountTypes
+    ) { role, types ->
+        types.firstOrNull { it.typeId == role.typeId }
+    }.stateIn(appScope, SharingStarted.Eagerly, null)
 
     init {
         appScope.launch {

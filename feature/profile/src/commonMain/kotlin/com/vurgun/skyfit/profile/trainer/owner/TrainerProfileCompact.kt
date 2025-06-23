@@ -9,10 +9,12 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.unit.dp
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
 import com.vurgun.skyfit.core.navigation.SharedScreen
+import com.vurgun.skyfit.core.navigation.SharedScreen.TrainerAppointmentDetail
 import com.vurgun.skyfit.core.navigation.findRootNavigator
 import com.vurgun.skyfit.core.navigation.push
 import com.vurgun.skyfit.core.ui.components.button.SecondaryIconButton
@@ -23,6 +25,7 @@ import com.vurgun.skyfit.core.ui.components.icon.SkyIconSize
 import com.vurgun.skyfit.core.ui.components.loader.FullScreenLoaderContent
 import com.vurgun.skyfit.core.ui.components.profile.LifestyleActionRow
 import com.vurgun.skyfit.core.ui.components.profile.SocialPostCard
+import com.vurgun.skyfit.core.ui.components.profile.SocialQuickPostInputCard
 import com.vurgun.skyfit.core.ui.components.profile.VerticalProfileStatisticItem
 import com.vurgun.skyfit.core.ui.components.schedule.weekly.rememberCalendarWeekDaySelectorController
 import com.vurgun.skyfit.core.ui.components.schedule.weekly.rememberWeekDaySelectorState
@@ -56,7 +59,7 @@ fun TrainerProfileCompact(
             }
 
             TrainerProfileUiEffect.NavigateToCreatePost -> {
-                appNavigator.push(SharedScreen.CreatePost)
+                appNavigator.push(SharedScreen.NewPost)
             }
 
             TrainerProfileUiEffect.NavigateToSettings -> {
@@ -65,6 +68,10 @@ fun TrainerProfileCompact(
 
             TrainerProfileUiEffect.NavigateToAppointments -> {
                 appNavigator.push(SharedScreen.TrainerAppointmentListing)
+            }
+
+            is TrainerProfileUiEffect.NavigateToLessonDetail -> {
+                appNavigator.push(TrainerAppointmentDetail(effect.lessonId))
             }
 
             is TrainerProfileUiEffect.NavigateToChatWithTrainer -> {
@@ -237,7 +244,6 @@ private object TrainerProfileCompactComponent {
         content: TrainerProfileUiState.Content,
         onAction: (TrainerProfileUiAction) -> Unit
     ) {
-
         ProfileCompactComponent.Layout(
             header = { Header(content, onAction) },
             content = {
@@ -252,7 +258,7 @@ private object TrainerProfileCompactComponent {
                     NavigationGroup(content, onAction)
 
                     if (content.destination == ProfileDestination.Posts) {
-                        PostsGroup(content, onAction)
+                        PostsContent(content, onAction)
                     } else {
                         AboutGroup(content, onAction)
                     }
@@ -300,26 +306,46 @@ private object TrainerProfileCompactComponent {
             } else {
                 ProfileCompactComponent.LessonSchedule(
                     lessons = content.lessons,
-                    onClickShowAll = { onAction(TrainerProfileUiAction.OnClickToAppointments) },
-                    onClickLesson = { onAction(TrainerProfileUiAction.OnClickToAppointments) }
+                    onClickShowAll = { onAction(TrainerProfileUiAction.OnClickShowAllLessons) },
+                    onClickLesson = { onAction(TrainerProfileUiAction.OnClickToUpcomingLesson(it.lessonId)) }
                 )
             }
         }
     }
 
     @Composable
-    fun ColumnScope.PostsGroup(
+    fun PostsContent(
         content: TrainerProfileUiState.Content,
         onAction: (TrainerProfileUiAction) -> Unit,
         modifier: Modifier = Modifier
     ) {
-        content.posts.forEach { post ->
-            SocialPostCard(
-                post,
-                onClick = {},
-                onClickComment = {},
-                onClickLike = {},
-                onClickShare = {})
+        Column(
+            modifier = modifier.fillMaxSize(),
+            verticalArrangement = Arrangement.spacedBy(16.dp),
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            FeatureVisible(!content.isVisiting) {
+                SocialQuickPostInputCard(
+                    creatorImageUrl = content.profile.backgroundImageUrl,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .background(SkyFitColor.background.fillTransparentSecondary, RoundedCornerShape(16.dp))
+                ) { onAction(TrainerProfileUiAction.OnSendQuickPost(it)) }
+            }
+
+            content.posts.forEach { post ->
+                SocialPostCard(
+                    post = post,
+                    onClick = { onAction(TrainerProfileUiAction.OnClickPost) },
+                    onClickComment = { onAction(TrainerProfileUiAction.OnClickCommentPost) },
+                    onClickLike = { onAction(TrainerProfileUiAction.OnClickLikePost) },
+                    onClickShare = { onAction(TrainerProfileUiAction.OnClickSharePost) },
+                    modifier = Modifier
+                        .clip(RoundedCornerShape(12.dp))
+                        .background(SkyFitColor.background.fillTransparentSecondary)
+                        .fillMaxWidth()
+                )
+            }
         }
     }
 

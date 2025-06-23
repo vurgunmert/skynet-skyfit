@@ -124,7 +124,7 @@ class FacilityPackageEditViewModel(
                         packageId = lessonPackage.packageId,
                         title = lessonPackage.title,
                         lessonCount = lessonPackage.lessonCount.toString(),
-                        categories = categories.filter { it.name in lessonPackage.title },
+                        categories = categories.filter { it.name in lessonPackage.packageContents },
                         description = lessonPackage.description,
                         monthCount = lessonPackage.duration.toString(),
                         branch = "",

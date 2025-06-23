@@ -1,6 +1,8 @@
 package com.vurgun.skyfit.profile.user.screen
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -12,13 +14,13 @@ import cafe.adriel.voyager.navigator.currentOrThrow
 import com.vurgun.skyfit.core.navigation.SharedScreen
 import com.vurgun.skyfit.core.navigation.findRootNavigator
 import com.vurgun.skyfit.core.navigation.replace
-import com.vurgun.skyfit.core.navigation.replaceAll
 import com.vurgun.skyfit.core.ui.components.box.TodoBox
 import com.vurgun.skyfit.core.ui.components.button.SkyFitPrimaryCircularBackButton
 import com.vurgun.skyfit.core.ui.components.loader.FullScreenLoaderContent
 import com.vurgun.skyfit.core.ui.components.profile.SocialPostCard
 import com.vurgun.skyfit.core.ui.components.profile.SocialQuickPostInputCard
 import com.vurgun.skyfit.core.ui.screen.ErrorScreen
+import com.vurgun.skyfit.core.ui.styling.SkyFitColor
 import com.vurgun.skyfit.core.ui.utils.CollectEffect
 import com.vurgun.skyfit.core.ui.utils.LocalCompactOverlayController
 import com.vurgun.skyfit.profile.component.ProfileCompactComponent
@@ -54,7 +56,7 @@ fun UserProfileExpanded(
             }
 
             UserProfileEffect.NavigateToCreatePost -> {
-                overlayController?.invoke(SharedScreen.CreatePost)
+                overlayController?.invoke(SharedScreen.NewPost)
             }
 
             UserProfileEffect.NavigateToSettings -> {
@@ -233,17 +235,20 @@ private object UserProfileExpandedComponent {
     fun PostsContent(
         content: UserProfileUiState.Content,
         onAction: (UserProfileAction) -> Unit,
-        modifier: Modifier = Modifier.fillMaxSize()
+        modifier: Modifier = Modifier
     ) {
         Column(
-            modifier = modifier.fillMaxSize().widthIn(max = 680.dp),
+            modifier = modifier.fillMaxSize(),
             verticalArrangement = Arrangement.spacedBy(16.dp),
-            horizontalAlignment = androidx.compose.ui.Alignment.CenterHorizontally
+            horizontalAlignment = Alignment.CenterHorizontally
         ) {
             if (!content.isVisiting) {
                 SocialQuickPostInputCard(
-                    modifier = Modifier.widthIn(max = 680.dp)
-                ) { onAction(UserProfileAction.OnClickNewPost) }
+                    creatorImageUrl = content.profile.backgroundImageUrl,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .background(SkyFitColor.background.default, RoundedCornerShape(16.dp))
+                ) { onAction(UserProfileAction.OnSendQuickPost(it)) }
             }
 
             content.posts.forEach { post ->

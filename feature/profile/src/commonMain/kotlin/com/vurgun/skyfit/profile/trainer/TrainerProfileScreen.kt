@@ -13,7 +13,7 @@ import com.vurgun.skyfit.profile.trainer.owner.TrainerProfileViewModel
 class TrainerProfileScreen(private val trainerId: Int? = null) : Screen {
 
     override val key: ScreenKey
-        get() = "profile:user:screen:$trainerId"
+        get() = "profile:trainer:screen:$trainerId"
 
     @Composable
     override fun Content() {

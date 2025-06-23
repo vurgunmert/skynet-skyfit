@@ -20,6 +20,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.Divider
 import androidx.compose.material.Icon
+import androidx.compose.material.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -87,7 +88,7 @@ class TrainerAppointmentListingScreen : Screen {
             }
         }
 
-        SkyFitMobileScaffold(
+        Scaffold(
             topBar = {
                 Column {
                     if (windowSize == WindowSize.EXPANDED) {

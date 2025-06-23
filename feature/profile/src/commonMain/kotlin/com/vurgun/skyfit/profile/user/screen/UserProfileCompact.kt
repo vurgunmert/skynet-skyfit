@@ -35,7 +35,6 @@ import com.vurgun.skyfit.core.ui.styling.SkyFitTypography
 import com.vurgun.skyfit.core.ui.utils.CollectEffect
 import com.vurgun.skyfit.profile.component.ProfileCompactComponent
 import com.vurgun.skyfit.profile.model.ProfileDestination
-import com.vurgun.skyfit.profile.trainer.owner.TrainerProfileUiAction
 import com.vurgun.skyfit.profile.user.model.UserProfileAction
 import com.vurgun.skyfit.profile.user.model.UserProfileEffect
 import com.vurgun.skyfit.profile.user.model.UserProfileUiState
@@ -63,7 +62,7 @@ fun UserProfileCompact(
             }
 
             UserProfileEffect.NavigateToCreatePost -> {
-                appNavigator.push(SharedScreen.CreatePost)
+                appNavigator.push(SharedScreen.NewPost)
             }
 
             UserProfileEffect.NavigateToSettings -> {
@@ -332,7 +331,7 @@ internal object UserProfileCompactComponent {
             modifier.fillMaxWidth()
                 .clip(RoundedCornerShape(20.dp))
                 .background(SkyFitColor.background.fillTransparent)
-                .clickable(onClick = { onAction(UserProfileAction.ClickAppointments) })
+                .clickable(enabled = !content.isVisiting, onClick = { onAction(UserProfileAction.ClickAppointments) })
                 .padding(16.dp),
             verticalArrangement = Arrangement.spacedBy(16.dp)
         ) {

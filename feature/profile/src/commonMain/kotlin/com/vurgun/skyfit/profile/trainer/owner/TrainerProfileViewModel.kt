@@ -2,18 +2,17 @@ package com.vurgun.skyfit.profile.trainer.owner
 
 import cafe.adriel.voyager.core.model.ScreenModel
 import cafe.adriel.voyager.core.model.screenModelScope
-import com.vurgun.skyfit.core.data.utility.SingleSharedFlow
-import com.vurgun.skyfit.core.data.utility.UiStateDelegate
-import com.vurgun.skyfit.core.data.utility.emitOrNull
-import com.vurgun.skyfit.core.data.utility.now
+import com.vurgun.skyfit.core.data.utility.*
 import com.vurgun.skyfit.core.data.v1.data.lesson.mapper.LessonSessionItemViewDataMapper
 import com.vurgun.skyfit.core.data.v1.domain.account.manager.ActiveAccountManager
 import com.vurgun.skyfit.core.data.v1.domain.account.model.TrainerAccount
+import com.vurgun.skyfit.core.data.v1.domain.global.model.AccountRole
 import com.vurgun.skyfit.core.data.v1.domain.lesson.model.LessonSessionItemViewData
 import com.vurgun.skyfit.core.data.v1.domain.profile.LifestyleActionItemViewData
 import com.vurgun.skyfit.core.data.v1.domain.profile.LifestyleActionRowViewData
 import com.vurgun.skyfit.core.data.v1.domain.profile.PhotoGalleryStackViewData
 import com.vurgun.skyfit.core.data.v1.domain.profile.SocialPostItemViewData
+import com.vurgun.skyfit.core.data.v1.domain.social.repository.SocialMediaRepository
 import com.vurgun.skyfit.core.data.v1.domain.trainer.model.TrainerProfile
 import com.vurgun.skyfit.core.data.v1.domain.trainer.repository.TrainerRepository
 import com.vurgun.skyfit.core.ui.styling.SkyFitAsset
@@ -30,7 +29,7 @@ sealed interface TrainerProfileUiState {
     data class Error(val message: String) : TrainerProfileUiState
     data class Content(
         val profile: TrainerProfile,
-        val destination: ProfileDestination = ProfileDestination.About,
+        val destination: ProfileDestination,
         val isVisiting: Boolean = false,
         val isFollowing: Boolean = false,
         val lessons: List<LessonSessionItemViewData> = emptyList(),
@@ -46,11 +45,17 @@ sealed interface TrainerProfileUiAction {
     data object OnClickSettings : TrainerProfileUiAction
     data object OnClickNewPost : TrainerProfileUiAction
     data object OnClickToCreatePost : TrainerProfileUiAction
-    data object OnClickToAppointments : TrainerProfileUiAction
+    data object OnClickShowAllLessons : TrainerProfileUiAction
+    data class OnClickToUpcomingLesson(val lessonId: Int) : TrainerProfileUiAction
     data object OnClickBookAppointment : TrainerProfileUiAction
     data object OnClickSendMessage : TrainerProfileUiAction
     data class ChangeDate(val date: LocalDate) : TrainerProfileUiAction
     data object OnClickShowSchedule : TrainerProfileUiAction
+    data object OnClickPost : TrainerProfileUiAction
+    data object OnClickCommentPost : TrainerProfileUiAction
+    data object OnClickLikePost : TrainerProfileUiAction
+    data object OnClickSharePost : TrainerProfileUiAction
+    data class OnSendQuickPost(val content: String) : TrainerProfileUiAction
 }
 
 sealed interface TrainerProfileUiEffect {
@@ -60,12 +65,14 @@ sealed interface TrainerProfileUiEffect {
     data object NavigateToAppointments : TrainerProfileUiEffect
     data class NavigateToTrainerSchedule(val trainerId: Int) : TrainerProfileUiEffect
     data class NavigateToChatWithTrainer(val trainerId: Int) : TrainerProfileUiEffect
+    data class NavigateToLessonDetail(val lessonId: Int) : TrainerProfileUiEffect
 }
 
 class TrainerProfileViewModel(
     private val userManager: ActiveAccountManager,
     private val lessonMapper: LessonSessionItemViewDataMapper,
-    private val trainerRepository: TrainerRepository
+    private val trainerRepository: TrainerRepository,
+    private val socialMediaRepository: SocialMediaRepository,
 ) : ScreenModel {
 
     private val _uiState = UiStateDelegate<TrainerProfileUiState>(TrainerProfileUiState.Loading)
@@ -81,13 +88,29 @@ class TrainerProfileViewModel(
             is TrainerProfileUiAction.OnDestinationChanged -> updateDestination(action.destination)
             is TrainerProfileUiAction.OnClickToCreatePost -> emitEffect(TrainerProfileUiEffect.NavigateToCreatePost)
             is TrainerProfileUiAction.OnClickSettings -> emitEffect(TrainerProfileUiEffect.NavigateToSettings)
-            is TrainerProfileUiAction.OnClickToAppointments -> emitEffect(TrainerProfileUiEffect.NavigateToAppointments)
+            is TrainerProfileUiAction.OnClickShowAllLessons -> emitEffect(TrainerProfileUiEffect.NavigateToAppointments)
+            is TrainerProfileUiAction.OnClickToUpcomingLesson -> emitEffect(TrainerProfileUiEffect.NavigateToLessonDetail(action.lessonId))
             TrainerProfileUiAction.OnClickBack -> emitEffect(TrainerProfileUiEffect.NavigateBack)
             TrainerProfileUiAction.OnClickNewPost -> emitEffect(TrainerProfileUiEffect.NavigateToCreatePost)
             TrainerProfileUiAction.OnClickBookAppointment -> emitEffect(NavigateToTrainerSchedule(activeTrainerId!!))
             TrainerProfileUiAction.OnClickSendMessage -> emitEffect(NavigateToChatWithTrainer(activeTrainerId!!))
             is TrainerProfileUiAction.ChangeDate -> updateLessons(action.date)
             TrainerProfileUiAction.OnClickShowSchedule -> emitEffect(NavigateToTrainerSchedule(activeTrainerId!!))
+            TrainerProfileUiAction.OnClickCommentPost -> {
+//                TODO()
+            }
+            TrainerProfileUiAction.OnClickLikePost -> {
+//                TODO()
+            }
+            TrainerProfileUiAction.OnClickPost -> {
+//                TODO()
+            }
+            TrainerProfileUiAction.OnClickSharePost -> {
+//                TODO()
+            }
+            is TrainerProfileUiAction.OnSendQuickPost -> {
+//                TODO()
+            }
         }
     }
 
@@ -112,6 +135,10 @@ class TrainerProfileViewModel(
                         lessons = lessons
                     )
                 )
+
+                launch {
+                    refreshPosts()
+                }
             }.onFailure { error ->
                 _uiState.update(TrainerProfileUiState.Error(error.message ?: "Error loading profile"))
             }
@@ -177,6 +204,39 @@ class TrainerProfileViewModel(
                 _uiState.update(currentState.copy(lessons = newLessons))
             }.onFailure { error ->
                 _uiState.update(TrainerProfileUiState.Error("Failed to update lessons: ${error.message}"))
+            }
+        }
+    }
+
+    private fun refreshPosts() {
+        val content = (uiState.value as? TrainerProfileUiState.Content) ?: return
+        val typeId = AccountRole.Trainer.typeId
+        val userId = content.profile.userId
+
+        screenModelScope.launch {
+            runCatching {
+                val posts = socialMediaRepository.getPostsByUser(userId, typeId)
+                    .getOrDefault(emptyList())
+                    .sortedByDescending { it.updateDate ?: it.createdDate }
+                    .map {
+                        val showingDate = it.updateDate ?: it.createdDate
+                        SocialPostItemViewData(
+                            postId = it.postId,
+                            creatorUsername = it.username,
+                            creatorName = it.name,
+                            creatorImageUrl = it.profileImageUrl,
+                            timeAgo = showingDate.humanizeAgo(),
+                            content = it.contentText,
+                            imageUrl = null,
+                            likeCount = it.likeCount,
+                            commentCount = it.commentCount,
+                            shareCount = it.shareCount
+                        )
+                    }
+
+                _uiState.update(content.copy(posts = posts))
+            }.onFailure { error ->
+                print(error.message)
             }
         }
     }

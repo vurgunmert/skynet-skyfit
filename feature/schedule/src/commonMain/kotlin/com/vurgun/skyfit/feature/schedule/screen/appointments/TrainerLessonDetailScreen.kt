@@ -37,7 +37,8 @@ import com.vurgun.skyfit.core.ui.utils.LocalCompactOverlayController
 import com.vurgun.skyfit.core.ui.utils.LocalWindowSize
 import com.vurgun.skyfit.core.ui.utils.WindowSize
 
-class TrainerAppointmentDetailScreen(private val lessonId: Int) : Screen {
+// Mostly copy of appointment detail
+class TrainerLessonDetailScreen(private val lessonId: Int) : Screen {
 
     @Composable
     override fun Content() {

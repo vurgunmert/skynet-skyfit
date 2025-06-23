@@ -11,6 +11,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.vurgun.skyfit.core.data.v1.domain.account.model.AccountType
+import com.vurgun.skyfit.core.data.v1.domain.global.model.AccountRole
 import com.vurgun.skyfit.core.ui.components.image.SkyImage
 import com.vurgun.skyfit.core.ui.components.image.SkyImageShape
 import com.vurgun.skyfit.core.ui.components.image.SkyImageSize
@@ -19,7 +20,11 @@ import com.vurgun.skyfit.core.ui.components.text.TextStyleType
 import com.vurgun.skyfit.core.ui.styling.SkyFitColor
 import org.jetbrains.compose.resources.painterResource
 import skyfit.core.ui.generated.resources.Res
+import skyfit.core.ui.generated.resources.ic_building
 import skyfit.core.ui.generated.resources.ic_checkbox_fill
+import skyfit.core.ui.generated.resources.ic_high_intensity_training
+import skyfit.core.ui.generated.resources.ic_posture_fill
+import skyfit.core.ui.generated.resources.ic_profile
 
 @Composable
 private fun AccountTypeSelectorItem(
@@ -31,11 +36,17 @@ private fun AccountTypeSelectorItem(
         modifier = modifier.fillMaxWidth(),
         verticalAlignment = Alignment.CenterVertically
     ) {
+        val errorPlaceholderRes = when(AccountRole.fromId(item.typeId)) {
+            AccountRole.Facility -> Res.drawable.ic_building
+            AccountRole.Trainer -> Res.drawable.ic_high_intensity_training
+            AccountRole.User -> Res.drawable.ic_posture_fill
+            AccountRole.Guest -> null
+        }
         SkyImage(
-            url = item.photoImageUrl.takeUnless { it.isNullOrEmpty() }
-                ?: "https://cdn-icons-png.flaticon.com/512/3135/3135715.png",
+            url = item.photoImageUrl,
             size = SkyImageSize.Size40,
-            shape = SkyImageShape.Circle
+            shape = SkyImageShape.Circle,
+            error = errorPlaceholderRes
         )
         Spacer(Modifier.width(16.dp))
         SkyText(

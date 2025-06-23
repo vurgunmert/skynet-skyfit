@@ -5,14 +5,17 @@ import cafe.adriel.voyager.core.model.screenModelScope
 import com.vurgun.skyfit.core.data.utility.SingleSharedFlow
 import com.vurgun.skyfit.core.data.utility.UiStateDelegate
 import com.vurgun.skyfit.core.data.utility.emitIn
+import com.vurgun.skyfit.core.data.utility.humanizeAgo
 import com.vurgun.skyfit.core.data.v1.data.lesson.mapper.LessonSessionItemViewDataMapper
 import com.vurgun.skyfit.core.data.v1.domain.account.manager.ActiveAccountManager
 import com.vurgun.skyfit.core.data.v1.domain.account.model.UserAccount
 import com.vurgun.skyfit.core.data.v1.domain.facility.model.FacilityProfile
 import com.vurgun.skyfit.core.data.v1.domain.facility.repository.FacilityRepository
+import com.vurgun.skyfit.core.data.v1.domain.global.model.AccountRole
 import com.vurgun.skyfit.core.data.v1.domain.lesson.model.LessonSessionItemViewData
 import com.vurgun.skyfit.core.data.v1.domain.profile.LifestyleActionItemViewData
 import com.vurgun.skyfit.core.data.v1.domain.profile.SocialPostItemViewData
+import com.vurgun.skyfit.core.data.v1.domain.social.repository.SocialMediaRepository
 import com.vurgun.skyfit.core.data.v1.domain.user.model.UserProfile
 import com.vurgun.skyfit.core.data.v1.domain.user.repository.UserRepository
 import com.vurgun.skyfit.profile.model.ProfileDestination
@@ -48,6 +51,7 @@ sealed interface UserProfileAction {
     data object OnClickCommentPost : UserProfileAction
     data object OnClickLikePost : UserProfileAction
     data object OnClickSharePost : UserProfileAction
+    data class OnSendQuickPost(val content: String) : UserProfileAction
     data class NavigateToVisitFacility(val gymId: Int) : UserProfileAction
     data class OnDestinationChanged(val destination: ProfileDestination) : UserProfileAction
 }
@@ -65,6 +69,7 @@ class UserProfileViewModel(
     private val userRepository: UserRepository,
     private val facilityRepository: FacilityRepository,
     private val lessonMapper: LessonSessionItemViewDataMapper,
+    private val socialMediaRepository: SocialMediaRepository
 ) : ScreenModel {
 
     private val _uiState = UiStateDelegate<UserProfileUiState>(UserProfileUiState.Loading)
@@ -92,24 +97,29 @@ class UserProfileViewModel(
             is UserProfileAction.NavigateToVisitFacility ->
                 _effect.emitIn(screenModelScope, NavigateToVisitFacility(action.gymId))
 
-            is UserProfileAction.OnDestinationChanged -> updateDestination(action.destination)
+            is UserProfileAction.OnDestinationChanged -> {
+                updateDestination(action.destination)
+            }
             UserProfileAction.OnClickFollow -> {
-                TODO()
+//                TODO()
             }
             UserProfileAction.OnClickUnfollow -> {
-                TODO()
+//                TODO()
             }
             UserProfileAction.OnClickCommentPost -> {
-                TODO()
+//                TODO()
             }
             UserProfileAction.OnClickLikePost -> {
-                TODO()
+//                TODO()
             }
             UserProfileAction.OnClickPost -> {
-                TODO()
+//                TODO()
             }
             UserProfileAction.OnClickSharePost -> {
-                TODO()
+//                TODO()
+            }
+            is UserProfileAction.OnSendQuickPost -> {
+//                TODO()
             }
         }
     }
@@ -142,6 +152,10 @@ class UserProfileViewModel(
                         appointments = appointments,
                     )
                 )
+
+                launch {
+                    refreshPosts()
+                }
             }.onFailure { error ->
                 _uiState.update(UserProfileUiState.Error(error.message ?: "Profil yüklenemedi."))
             }
@@ -198,5 +212,39 @@ class UserProfileViewModel(
 //            title = "Alışkanlıklar",
 //            items = habitsViewData
 //        )
+    }
+
+    private fun refreshPosts() {
+        val content = (uiState.value as? UserProfileUiState.Content) ?: return
+        val typeId = AccountRole.User.typeId
+        val userId = content.profile.userId
+
+
+        screenModelScope.launch {
+            runCatching {
+                val posts = socialMediaRepository.getPostsByUser(userId, typeId)
+                    .getOrDefault(emptyList())
+                    .sortedByDescending { it.updateDate ?: it.createdDate }
+                    .map {
+                        val showingDate = it.updateDate ?: it.createdDate
+                        SocialPostItemViewData(
+                            postId = it.postId,
+                            creatorUsername = it.username,
+                            creatorName = it.name,
+                            creatorImageUrl = it.profileImageUrl,
+                            timeAgo = showingDate.humanizeAgo(),
+                            content = it.contentText,
+                            imageUrl = null,
+                            likeCount = it.likeCount,
+                            commentCount = it.commentCount,
+                            shareCount = it.shareCount
+                        )
+                    }
+
+                _uiState.update(content.copy(posts = posts))
+            }.onFailure { error ->
+                print(error.message)
+            }
+        }
     }
 }

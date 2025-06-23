@@ -15,7 +15,7 @@ import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
 import com.vurgun.skyfit.core.navigation.SharedScreen
 import com.vurgun.skyfit.core.navigation.SharedScreen.ChatWithFacility
-import com.vurgun.skyfit.core.navigation.SharedScreen.CreatePost
+import com.vurgun.skyfit.core.navigation.SharedScreen.NewPost
 import com.vurgun.skyfit.core.navigation.SharedScreen.FacilityManageLessons
 import com.vurgun.skyfit.core.navigation.SharedScreen.FacilitySchedule
 import com.vurgun.skyfit.core.navigation.SharedScreen.FacilityTrainerSettings
@@ -39,7 +39,8 @@ import com.vurgun.skyfit.core.ui.utils.CollectEffect
 import com.vurgun.skyfit.core.ui.utils.LocalCompactOverlayController
 import com.vurgun.skyfit.profile.component.ProfileCompactComponent
 import com.vurgun.skyfit.profile.component.ProfileExpandedComponent
-import com.vurgun.skyfit.profile.facility.screen.FacilityProfileCompactComponent.FacilityProfileTrainerCards
+import com.vurgun.skyfit.profile.facility.screen.FacilityProfileCompactComponent.FacilityNoTrainerGroup
+import com.vurgun.skyfit.profile.facility.screen.FacilityProfileCompactComponent.OurTrainerList
 import org.jetbrains.compose.resources.stringResource
 import skyfit.core.ui.generated.resources.Res
 import skyfit.core.ui.generated.resources.ic_location_pin
@@ -62,7 +63,7 @@ fun FacilityProfileExpanded(
             }
 
             FacilityProfileUiEffect.NavigateToCreatePost -> {
-                compactOverlayController?.invoke(CreatePost)
+                compactOverlayController?.invoke(NewPost)
             }
 
             FacilityProfileUiEffect.NavigateToGallery -> {}
@@ -307,10 +308,17 @@ private object FacilityProfileExpandedComponent {
                 modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp)
             )
 
-            FacilityProfileTrainerCards(
-                trainers = content.trainers,
-                onAction = onAction
-            )
+            if (!content.isVisiting && content.trainers.isEmpty()) {
+                FacilityNoTrainerGroup(
+                    onClickAdd = { onAction(FacilityProfileUiAction.OnClickAddTrainer) }
+                )
+            } else {
+                OurTrainerList(
+                    trainers = content.trainers,
+                    onClickShowAll = { onAction(FacilityProfileUiAction.OnClickShowAllTrainers) },
+                    onClick = { onAction(FacilityProfileUiAction.OnSelectTrainer(it.trainerId)) }
+                )
+            }
         }
     }
 

@@ -21,6 +21,8 @@ import skyfit.core.ui.generated.resources.im_placeholder_dark
 
 enum class SkyImageSize(val dp: Dp) {
     Size24(24.dp),
+    Size32(32.dp),
+    Size36(36.dp),
     Size40(40.dp),
     Size48(48.dp),
     Size50(50.dp),

@@ -9,6 +9,7 @@ import com.vurgun.skyfit.core.data.utility.humanizeAgo
 import com.vurgun.skyfit.core.data.utility.now
 import com.vurgun.skyfit.core.data.v1.data.lesson.mapper.LessonSessionItemViewDataMapper
 import com.vurgun.skyfit.core.data.v1.domain.account.manager.ActiveAccountManager
+import com.vurgun.skyfit.core.data.v1.domain.account.model.AccountType
 import com.vurgun.skyfit.core.data.v1.domain.account.model.FacilityAccount
 import com.vurgun.skyfit.core.data.v1.domain.facility.model.FacilityProfile
 import com.vurgun.skyfit.core.data.v1.domain.facility.repository.FacilityRepository
@@ -187,8 +188,7 @@ class FacilityProfileViewModel(
                     isMemberVisiting = isVisiting,
                     profile = profileDeferred.await(),
                     lessons = upcomingLessonsDeferred.await(),
-                    trainers = trainersDeferred.await(),
-                    posts = emptyList()
+                    trainers = trainersDeferred.await()
                 )
                 _uiState.update(partialState)
 
@@ -204,15 +204,14 @@ class FacilityProfileViewModel(
 
     private fun refreshPosts() {
         val content = (uiState.value as? FacilityProfileUiState.Content) ?: return
-        val typeId = 3
+        val typeId = AccountRole.Facility.typeId
         val userId = content.profile.userId
-
 
         screenModelScope.launch {
             runCatching {
                 val posts = socialMediaRepository.getPostsByUser(userId, typeId)
                     .getOrDefault(emptyList())
-                    .sortedByDescending { it.updateDate ?: it.createdDate } // ✅ newest first
+                    .sortedByDescending { it.updateDate ?: it.createdDate }
                     .map {
                         val showingDate = it.updateDate ?: it.createdDate
                         SocialPostItemViewData(

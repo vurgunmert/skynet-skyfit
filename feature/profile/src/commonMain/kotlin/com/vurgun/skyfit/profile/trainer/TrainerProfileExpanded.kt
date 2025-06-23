@@ -67,7 +67,7 @@ private object TrainerProfileExpandedComponent {
         onAction: (TrainerProfileUiAction) -> Unit,
         modifier: Modifier = Modifier
     ) {
-        TodoBox("Header", modifier)
+        TodoBox("HEMEN BUNU YAP!", modifier)
     }
 
     @Composable

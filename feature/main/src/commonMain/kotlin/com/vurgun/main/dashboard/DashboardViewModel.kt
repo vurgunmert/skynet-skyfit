@@ -3,15 +3,14 @@ package com.vurgun.main.dashboard
 import cafe.adriel.voyager.core.model.ScreenModel
 import cafe.adriel.voyager.core.model.screenModelScope
 import cafe.adriel.voyager.core.registry.ScreenProvider
-import cafe.adriel.voyager.core.screen.Screen
 import com.vurgun.skyfit.core.data.utility.SingleSharedFlow
 import com.vurgun.skyfit.core.data.utility.emitIn
 import com.vurgun.skyfit.core.data.v1.domain.account.manager.ActiveAccountManager
-import com.vurgun.skyfit.core.data.v1.domain.global.model.AccountRole
+import com.vurgun.skyfit.core.navigation.SharedScreen
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.map
 
 sealed interface DashboardNavigationRoute {
     data object Home : DashboardNavigationRoute
@@ -21,12 +20,6 @@ sealed interface DashboardNavigationRoute {
     data object Profile : DashboardNavigationRoute
     data object Settings : DashboardNavigationRoute
 }
-
-data class OverlayState(val screen: Screen? = null)
-
-data class DashboardUiState(
-    val overlayState: OverlayState? = null,
-)
 
 sealed interface DashboardUiAction {
     data object OnClickNotifications : DashboardUiAction
@@ -63,8 +56,8 @@ class DashboardViewModel(userManager: ActiveAccountManager) : ScreenModel {
     private val _effect = SingleSharedFlow<DashboardUiEffect>()
     val effect = _effect.asSharedFlow()
 
-    val account = userManager.account
-    val accountRole = userManager.accountRole.map { AccountRole.fromId(it.typeId) }
+    private val _lastCompactScreen = MutableStateFlow<ScreenProvider>(SharedScreen.Home)
+    val lastCompactScreen: StateFlow<ScreenProvider> = _lastCompactScreen
 
     fun onAction(action: DashboardUiAction) {
         when (action) {
@@ -80,23 +73,36 @@ class DashboardViewModel(userManager: ActiveAccountManager) : ScreenModel {
                 _effect.emitIn(screenModelScope, DashboardUiEffect.ShowChatBot)
             }
 
-            DashboardUiAction.OnClickExplore ->
+            DashboardUiAction.OnClickExplore -> {
+                _lastCompactScreen.value = SharedScreen.Explore
                 _effect.emitIn(screenModelScope, DashboardUiEffect.NavigateToExplore)
+            }
 
-            DashboardUiAction.OnClickHome ->
+            DashboardUiAction.OnClickHome -> {
+                _lastCompactScreen.value = SharedScreen.Home
                 _effect.emitIn(screenModelScope, DashboardUiEffect.NavigateToHome)
+            }
 
-            DashboardUiAction.OnClickNutrition ->
+            DashboardUiAction.OnClickNutrition -> {
+                _lastCompactScreen.value = SharedScreen.Nutrition
                 _effect.emitIn(screenModelScope, DashboardUiEffect.NavigateToNutrition)
+            }
 
-            DashboardUiAction.OnClickProfile ->
+            DashboardUiAction.OnClickProfile -> {
+                _lastCompactScreen.value = SharedScreen.Profile
                 _effect.emitIn(screenModelScope, DashboardUiEffect.NavigateToProfile)
+            }
 
-            DashboardUiAction.OnClickSocial ->
+            DashboardUiAction.OnClickSocial -> {
+                _lastCompactScreen.value = SharedScreen.Social
                 _effect.emitIn(screenModelScope, DashboardUiEffect.NavigateToSocial)
+            }
 
-            DashboardUiAction.OnClickSettings ->
+            DashboardUiAction.OnClickSettings -> {
+                _lastCompactScreen.value = SharedScreen.Settings
                 _effect.emitIn(screenModelScope, DashboardUiEffect.NavigateToSettings)
+            }
+
         }
     }
 

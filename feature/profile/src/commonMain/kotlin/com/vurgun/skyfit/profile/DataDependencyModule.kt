@@ -13,9 +13,9 @@ import org.koin.dsl.module
 val dataProfileModule = module {
     includes(dataCoreModule)
 
-    factory { UserProfileViewModel(get(), get(), get(), get()) }
+    factory { UserProfileViewModel(get(), get(), get(), get(),get()) }
 
-    factory { TrainerProfileViewModel(get(), get(), get()) }
+    factory { TrainerProfileViewModel(get(), get(), get(),get()) }
     factory { TrainerProfileVisitorViewModel(get(), get(), get()) }
     factory { TrainerProfileScheduleViewModel(get(), get(), get()) }
 

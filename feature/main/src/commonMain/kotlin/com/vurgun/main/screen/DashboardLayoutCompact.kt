@@ -45,9 +45,11 @@ import skyfit.core.ui.generated.resources.*
 fun DashboardCompact(viewModel: DashboardViewModel) {
     val mainNavigator = LocalNavigator.currentOrThrow.findRootNavigator()
     val overlayNavigation by viewModel.compactOverlayNavigation.collectAsState()
-    val homeScreen = rememberScreen(SharedScreen.Home)
 
-    Navigator(homeScreen) { dashboardNavigator ->
+    val currentScreen by viewModel.lastCompactScreen.collectAsState()
+    val startScreen = rememberScreen(currentScreen)
+
+    Navigator(startScreen) { dashboardNavigator ->
 
         CollectEffect(viewModel.effect) { effect ->
             when (effect) {

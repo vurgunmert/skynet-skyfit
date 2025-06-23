@@ -3,6 +3,7 @@ package com.vurgun.explore.model
 
 import cafe.adriel.voyager.core.model.ScreenModel
 import cafe.adriel.voyager.core.model.screenModelScope
+import com.vurgun.explore.model.ExploreUiEffect.*
 import com.vurgun.skyfit.core.data.utility.SingleSharedFlow
 import com.vurgun.skyfit.core.data.utility.UiStateDelegate
 import com.vurgun.skyfit.core.data.utility.emitIn
@@ -16,29 +17,37 @@ sealed class ExploreUiState {
     object Loading : ExploreUiState()
     data class Error(val message: String?) : ExploreUiState()
     data class Content(
-        val exercises: List<Any> = emptyList(),
+        val exercises: List<Int> = emptyList(),
         val trainers: List<TrainerProfileCardItemViewData>,
         val facilities: List<FacilityProfileCardItemViewData>,
-        val communities: List<Any> = emptyList(),
-        val challenges: List<Any> = emptyList(),
+        val communities: List<Int> = emptyList(),
+        val challenges: List<Int> = emptyList(),
     ) : ExploreUiState()
 }
 
-sealed class ExploreAction {
-    data object OnClickBack : ExploreAction()
-    data object OnClickExercise : ExploreAction()
-    data class OnClickTrainer(val trainerId: Int) : ExploreAction()
-    data class OnClickFacility(val facilityId: Int) : ExploreAction()
-    data object OnClickCommunities : ExploreAction()
-    data object OnClickChallenges : ExploreAction()
-    // TODO: add other actions
+sealed class ExploreUiAction {
+    data object OnClickBack : ExploreUiAction()
+    data object OnClickExercises : ExploreUiAction()
+    data object OnClickTrainers : ExploreUiAction()
+    data object OnClickFacilities : ExploreUiAction()
+    data object OnClickCommunities : ExploreUiAction()
+    data object OnClickChallenges : ExploreUiAction()
+    data class OnSelectCommunity(val communityId: Int) : ExploreUiAction()
+    data class OnSelectChallenge(val challengeId: Int) : ExploreUiAction()
+    data class OnSelectExercise(val exerciseId: Int) : ExploreUiAction()
+    data class OnSelectTrainer(val trainerId: Int) : ExploreUiAction()
+    data class OnSelectFacility(val facilityId: Int) : ExploreUiAction()
 }
 
-sealed class ExploreEffect {
-    object NavigateToBack : ExploreEffect()
-    data class NavigateToVisitTrainer(val trainerId: Int) : ExploreEffect()
-    data class NavigateToVisitFacility(val facilityId: Int) : ExploreEffect()
-    // TODO: add other effects
+sealed class ExploreUiEffect {
+    object NavigateToBack : ExploreUiEffect()
+    data class NavigateToVisitTrainer(val trainerId: Int) : ExploreUiEffect()
+    data class NavigateToVisitFacility(val facilityId: Int) : ExploreUiEffect()
+    data object NavigateToExploreTrainers : ExploreUiEffect()
+    data object NavigateToExploreFacilities : ExploreUiEffect()
+    data object NavigateToExploreChallenges : ExploreUiEffect()
+    data object NavigateToExploreCommunities : ExploreUiEffect()
+    data class NavigateToExerciseDetail(val exerciseId: Int) : ExploreUiEffect()
 }
 
 class ExploreViewModel(
@@ -48,22 +57,52 @@ class ExploreViewModel(
     private val _uiState = UiStateDelegate<ExploreUiState>(ExploreUiState.Loading)
     val uiState = _uiState.asStateFlow()
 
-    private val _effect = SingleSharedFlow<ExploreEffect>()
-    val effect = _effect as SharedFlow<ExploreEffect>
+    private val _effect = SingleSharedFlow<ExploreUiEffect>()
+    val effect = _effect as SharedFlow<ExploreUiEffect>
 
-    fun onAction(action: ExploreAction) {
+    fun onAction(action: ExploreUiAction) {
         when (action) {
-            ExploreAction.OnClickBack ->
-                _effect.emitIn(screenModelScope, ExploreEffect.NavigateToBack)
+            ExploreUiAction.OnClickBack ->
+                _effect.emitIn(screenModelScope, NavigateToBack)
 
-            is ExploreAction.OnClickTrainer ->
-                _effect.emitIn(screenModelScope, ExploreEffect.NavigateToVisitTrainer(action.trainerId))
+            ExploreUiAction.OnClickChallenges -> {
+//                TODO()
+            }
 
-            is ExploreAction.OnClickFacility ->
-                _effect.emitIn(screenModelScope, ExploreEffect.NavigateToVisitFacility(action.facilityId))
+            ExploreUiAction.OnClickCommunities -> {
+//                TODO()
+            }
 
-            else -> {
+            ExploreUiAction.OnClickExercises -> {
+//                TODO()
+            }
 
+            ExploreUiAction.OnClickFacilities -> {
+//                TODO()
+            }
+
+            ExploreUiAction.OnClickTrainers -> {
+//                TODO()
+            }
+
+            is ExploreUiAction.OnSelectExercise -> {
+//                TODO()
+            }
+
+            is ExploreUiAction.OnSelectFacility -> {
+                _effect.emitIn(screenModelScope, NavigateToVisitFacility(action.facilityId))
+            }
+
+            is ExploreUiAction.OnSelectTrainer -> {
+                _effect.emitIn(screenModelScope, NavigateToVisitTrainer(action.trainerId))
+            }
+
+            is ExploreUiAction.OnSelectChallenge -> {
+//                TODO()
+            }
+
+            is ExploreUiAction.OnSelectCommunity -> {
+//                TODO()
             }
         }
     }
@@ -103,8 +142,11 @@ class ExploreViewModel(
 
             _uiState.update(
                 ExploreUiState.Content(
+                    exercises = emptyList(),
                     trainers = trainers,
                     facilities = facilities,
+                    challenges = emptyList(),
+                    communities = emptyList()
                 )
             )
         }
