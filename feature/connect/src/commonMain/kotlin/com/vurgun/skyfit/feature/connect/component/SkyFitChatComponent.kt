@@ -11,6 +11,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
+import com.vurgun.skyfit.core.data.v1.domain.chatbot.ChatbotMessage
 import com.vurgun.skyfit.core.ui.components.button.PrimaryIconButton
 import com.vurgun.skyfit.core.ui.components.button.SecondaryIconButton
 import com.vurgun.skyfit.core.ui.components.text.SkyText
@@ -23,14 +24,10 @@ import skyfit.core.ui.generated.resources.Res
 import skyfit.core.ui.generated.resources.chat_bot_input_hint
 import skyfit.core.ui.generated.resources.ic_send
 
-data class ChatMessageItem(
-    val content: String,
-    val time: String,
-    val isUser: Boolean
-)
-
 @Composable
-fun SkyFitChatMessageBubble(chatMessage: ChatMessageItem, modifier: Modifier = Modifier) {
+fun SkyChatMessageItem(chatMessage: ChatbotMessage,
+                       showDate: Boolean = false,
+                       modifier: Modifier = Modifier) {
 
     val textColor = if (chatMessage.isUser) SkyFitColor.text.inverse else SkyFitColor.text.default
     val backgroundColor =
@@ -53,18 +50,16 @@ fun SkyFitChatMessageBubble(chatMessage: ChatMessageItem, modifier: Modifier = M
                 ).padding(vertical = 12.dp, horizontal = 22.dp)
 
             ) {
+                SkyText(chatMessage.content, styleType = TextStyleType.BodySmallMedium, color = textColor)
+            }
+            if (showDate) {
+                Spacer(Modifier.height(4.dp))
                 Text(
-                    text = chatMessage.content,
+                    text = chatMessage.createdAt.toString(),
                     style = SkyFitTypography.bodySmall,
-                    color = textColor
+                    color = SkyFitColor.text.secondary
                 )
             }
-            Spacer(Modifier.height(4.dp))
-            Text(
-                text = chatMessage.time,
-                style = SkyFitTypography.bodySmall,
-                color = SkyFitColor.text.secondary
-            )
         }
     }
 }

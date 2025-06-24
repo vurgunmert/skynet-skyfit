@@ -3,7 +3,7 @@ package com.vurgun.skyfit.core.data.storage
 import android.content.Context
 import android.content.SharedPreferences
 
-class LocalSettingsImpl(context: Context) : LocalSettingsStore {
+class LocalSettingsImpl(context: Context) : LocalSessionStorage {
 
     private val sharedPreferences: SharedPreferences =
         context.getSharedPreferences("skyfit_prefs", Context.MODE_PRIVATE)

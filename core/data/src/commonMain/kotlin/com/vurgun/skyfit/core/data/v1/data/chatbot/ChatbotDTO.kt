@@ -1,32 +1,24 @@
 package com.vurgun.skyfit.core.data.v1.data.chatbot
 
-import kotlinx.datetime.LocalDateTime
+import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
-//@Serializable
-//data class ChatbotRequest(val question: String)
-
 @Serializable
-data class ChatbotResponseDTO(
-    val text: String? = null,
-    val question: String? = null,
-    val chatId: String? = null,
-    val chatMessageId: String? = null,
-    val isStreamValid: Boolean? = null,
-    val sessionId: String? = null,
-    val memoryType: String? = null,
-    val startTime: LocalDateTime? = null,
-    val endTime: LocalDateTime? = null,
-)
-
-
-@Serializable
-data class ChatbotRequestDTO(
+data class ChatbotQueryRequestDTO(
     val question: String,
-    val overrideConfig: OverrideConfigDTO? = null
+    val sessionId: String
 )
 
 @Serializable
-data class OverrideConfigDTO(
-    val sessionId: String
+data class ChatbotQueryResponseDTO(
+    val answer: String,
+    val sessionId: String,
+)
+
+
+@Serializable
+data class ChatbotHistoryItemDTO(
+    val role: String,
+    val content: String,
+    @SerialName("created_at") val createdAt: String
 )

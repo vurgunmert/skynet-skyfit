@@ -2,7 +2,7 @@ package com.vurgun.skyfit.core.data.storage
 
 import platform.Foundation.NSUserDefaults
 
-class LocalSettingsImpl : LocalSettingsStore {
+class LocalSettingsImpl : LocalSessionStorage {
 
     private val userDefaults = NSUserDefaults.standardUserDefaults
 

@@ -38,7 +38,7 @@ class UiEffectDelegate<T> {
         _effect.emitOrNull(effect)
     }
 
-    fun emit(viewModelScope: CoroutineScope, effect: T) {
+    fun emitIn(viewModelScope: CoroutineScope, effect: T) {
         _effect.emitIn(viewModelScope, effect)
     }
 

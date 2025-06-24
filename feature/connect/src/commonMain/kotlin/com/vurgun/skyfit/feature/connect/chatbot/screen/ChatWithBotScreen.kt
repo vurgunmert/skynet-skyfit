@@ -18,14 +18,13 @@ import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.koin.koinScreenModel
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
-import com.vurgun.skyfit.core.ui.components.special.SkyFitMobileScaffold
 import com.vurgun.skyfit.core.ui.components.special.CompactTopBar
 import com.vurgun.skyfit.core.ui.styling.SkyFitColor
 import com.vurgun.skyfit.core.ui.utils.CollectEffect
 import com.vurgun.skyfit.feature.connect.chatbot.model.ChatWithBotAction
 import com.vurgun.skyfit.feature.connect.chatbot.model.ChatWithBotEffect
 import com.vurgun.skyfit.feature.connect.chatbot.model.ChatWithBotViewModel
-import com.vurgun.skyfit.feature.connect.component.SkyFitChatMessageBubble
+import com.vurgun.skyfit.feature.connect.component.SkyChatMessageItem
 import com.vurgun.skyfit.feature.connect.component.SkyFitChatMessageBubbleShimmer
 import com.vurgun.skyfit.feature.connect.component.SkyFitChatMessageInputComponent
 import org.jetbrains.compose.resources.stringResource
@@ -33,8 +32,8 @@ import skyfit.core.ui.generated.resources.Res
 import skyfit.core.ui.generated.resources.chatbot_label
 
 class ChatWithBotScreen(
-    val chatHistoryId: String? = null,
-    val presetQuery: String? = null,
+    val query: String? = null,
+    val sessionId: String? = null,
 ) : Screen {
 
     @Composable
@@ -51,7 +50,7 @@ class ChatWithBotScreen(
         }
 
         LaunchedEffect(viewModel) {
-            viewModel.loadData(chatHistoryId, presetQuery)
+            viewModel.loadData(query, sessionId)
         }
 
         ChatBotMessageScreenContent(viewModel)
@@ -99,7 +98,7 @@ private fun ChatBotMessageScreenContent(
                 verticalArrangement = Arrangement.spacedBy(48.dp)
             ) {
                 items(messages) { message ->
-                    SkyFitChatMessageBubble(message)
+                    SkyChatMessageItem(message, showDate = false)
                 }
 
                 if (isLoading) {
@@ -112,7 +111,7 @@ private fun ChatBotMessageScreenContent(
             Box(Modifier.padding(24.dp).fillMaxWidth()) {
                 SkyFitChatMessageInputComponent(
                     enabled = !isLoading,
-                    onSend = { viewModel.onAction(ChatWithBotAction.OnSubmitMessage(it)) }
+                    onSend = { viewModel.onAction(ChatWithBotAction.OnSendQuery(it)) }
                 )
             }
         }

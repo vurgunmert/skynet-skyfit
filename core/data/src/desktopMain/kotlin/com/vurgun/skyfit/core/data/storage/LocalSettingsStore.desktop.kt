@@ -2,11 +2,11 @@ package com.vurgun.skyfit.core.data.storage
 
 import java.util.prefs.Preferences
 
-actual fun provideLocalSettings(context: Any?): LocalSettingsStore {
-    return DesktopLocalSettingsStore()
+actual fun provideLocalSettings(context: Any?): LocalSessionStorage {
+    return DesktopLocalSessionStorage()
 }
 
-class DesktopLocalSettingsStore : LocalSettingsStore {
+class DesktopLocalSessionStorage : LocalSessionStorage {
     private val prefs: Preferences = Preferences.userRoot().node(this::class.java.name)
 
     override fun savePhoneNumber(value: String) {

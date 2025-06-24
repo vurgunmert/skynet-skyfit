@@ -1,5 +1,6 @@
 package com.vurgun.skyfit.core.data
 
+import com.vurgun.skyfit.core.data.storage.ChatBotSessionStorage
 import com.vurgun.skyfit.core.data.storage.DataStoreStorage
 import com.vurgun.skyfit.core.data.storage.Storage
 import com.vurgun.skyfit.core.data.storage.TokenManager
@@ -8,6 +9,7 @@ import com.vurgun.skyfit.core.data.v1.data.account.repository.AccountRepositoryI
 import com.vurgun.skyfit.core.data.v1.data.account.service.AccountApiService
 import com.vurgun.skyfit.core.data.v1.data.auth.repository.AuthRepositoryImpl
 import com.vurgun.skyfit.core.data.v1.data.auth.service.AuthApiService
+import com.vurgun.skyfit.core.data.v1.data.chatbot.ChatbotApiService
 import com.vurgun.skyfit.core.data.v1.data.chatbot.ChatbotRepositoryImpl
 import com.vurgun.skyfit.core.data.v1.data.config.repository.AppConfigRepositoryImpl
 import com.vurgun.skyfit.core.data.v1.data.explore.ExploreRepositoryImpl
@@ -34,7 +36,7 @@ import com.vurgun.skyfit.core.data.v1.data.workout.service.WorkoutApiService
 import com.vurgun.skyfit.core.data.v1.domain.account.manager.ActiveAccountManager
 import com.vurgun.skyfit.core.data.v1.domain.account.repository.AccountRepository
 import com.vurgun.skyfit.core.data.v1.domain.auth.repository.AuthRepository
-import com.vurgun.skyfit.core.data.v1.domain.chatbot.ChatbotApiUseCase
+import com.vurgun.skyfit.core.data.v1.domain.chatbot.ChatbotRepository
 import com.vurgun.skyfit.core.data.v1.domain.config.AppConfigRepository
 import com.vurgun.skyfit.core.data.v1.domain.explore.ExploreRepository
 import com.vurgun.skyfit.core.data.v1.domain.facility.repository.FacilityRepository
@@ -108,7 +110,9 @@ val dataCoreModule = module {
     single { PostureAnalysisRepository() }
 
     //Chatbot
-    single<ChatbotApiUseCase> { ChatbotRepositoryImpl() }
+    single { ChatBotSessionStorage(get()) }
+    single<ChatbotApiService> { ChatbotApiService() }
+    single<ChatbotRepository> { ChatbotRepositoryImpl(get(), get()) }
 
     //Explore
     single<ExploreApiService> { ExploreApiService(get()) }

@@ -11,10 +11,8 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -33,7 +31,6 @@ import com.vurgun.skyfit.core.ui.components.special.UserCircleAvatarItem
 import com.vurgun.skyfit.core.ui.styling.SkyFitColor
 import com.vurgun.skyfit.core.ui.styling.SkyFitTypography
 import com.vurgun.skyfit.core.ui.utils.keyboardAsState
-import com.vurgun.skyfit.feature.connect.component.SkyFitChatMessageBubble
 import com.vurgun.skyfit.feature.connect.component.SkyFitChatMessageInputComponent
 import org.koin.compose.koinInject
 import skyfit.core.ui.generated.resources.Res
@@ -62,7 +59,7 @@ private fun MobileUserToUserChatScreen(
 ) {
 
     val viewModel: ChatViewModel = koinInject()
-    val messages by viewModel.messages.collectAsState()
+//    val messages by viewModel.messages.collectAsState()
     val keyboardState by keyboardAsState()
 
     SkyFitMobileScaffold(
@@ -79,9 +76,9 @@ private fun MobileUserToUserChatScreen(
                 modifier = Modifier
                     .fillMaxSize()
             ) {
-                items(messages) { message ->
-                    SkyFitChatMessageBubble(message)
-                }
+//                items(messages) { message ->
+//                    SkyFitChatMessageBubble(message)
+//                }
             }
 
             SkyFitChatMessageInputComponent(

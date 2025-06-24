@@ -1,8 +1,10 @@
 package com.vurgun.skyfit.core.data.v1.data.chatbot
 
-import com.vurgun.skyfit.core.data.v1.domain.chatbot.ChatbotApiUseCase
-import com.vurgun.skyfit.core.data.utility.appSessionId
+import com.vurgun.skyfit.core.data.storage.ChatBotSessionStorage
 import com.vurgun.skyfit.core.data.utility.now
+import com.vurgun.skyfit.core.data.utility.parseServerToLocalDateTime
+import com.vurgun.skyfit.core.data.v1.domain.chatbot.ChatbotMessage
+import com.vurgun.skyfit.core.data.v1.domain.chatbot.ChatbotRepository
 import com.vurgun.skyfit.core.network.commonHttpClient
 import io.ktor.client.call.*
 import io.ktor.client.plugins.*
@@ -11,48 +13,67 @@ import io.ktor.http.*
 import kotlinx.datetime.LocalDateTime
 import kotlinx.io.IOException
 
-class ChatbotRepositoryImpl : ChatbotApiUseCase {
+class ChatbotRepositoryImpl(
+    private val apiService: ChatbotApiService,
+    private val sessionStorage: ChatBotSessionStorage
+) : ChatbotRepository {
 
-    private val apiUrl = "https://qqzjme1d.rpcl.host/api/v1/prediction/a978b860-b4b6-4013-b80b-e016a04a2f5c"
-    private val apiKey = "vvgrlZKNXJaBe0Y8QsSQXL6fTTur-zxtVoEBwG6IXEo"
-
-    override suspend fun submitChatQuery(question: String): ChatbotResponseDTO {
-        val requestStartTime = LocalDateTime.now()
-        val sessionId = appSessionId
-
-        val request = ChatbotRequestDTO(
-            question = question,
-            overrideConfig = OverrideConfigDTO(
-                sessionId = sessionId
-            )
-        )
-
+    override suspend fun sendQuery(message: ChatbotMessage): ChatbotMessage {
         try {
-            val response = commonHttpClient.post(apiUrl) {
-                contentType(ContentType.Application.Json)
-                header("Authorization", "Bearer $apiKey")
-                setBody(request)
-
-                timeout {
-                    requestTimeoutMillis = 30_000
-                    connectTimeoutMillis = 15_000
-                    socketTimeoutMillis = 30_000
-                }
-            }.body<ChatbotResponseDTO>()
-
-            val requestEndTime = LocalDateTime.now()
-
-            response.copy(
-                startTime = requestStartTime,
-                endTime = requestEndTime
+            val request = ChatbotQueryRequestDTO(message.content, message.sessionId)
+            val response = apiService.sendQuery(request)
+            val message =  ChatbotMessage(
+                role = "ai",
+                content = response.answer,
+                sessionId = response.sessionId,
+                createdAt = LocalDateTime.now()
             )
-            return response
+            sessionStorage.saveSession(message.sessionId)
+            return message
+        } catch (e: IOException) {
+            throw ChatbotException.Network(e.message ?: "Network error")
+        } catch (e: Exception) {
+            throw ChatbotException.Unknown(e.message ?: "Unexpected error")
+        }
+    }
+
+    override suspend fun getSessionHistory(sessionId: String): List<ChatbotMessage> {
+        try {
+            val response = apiService.getSessionHistory(sessionId)
+            return response.map {
+                ChatbotMessage(
+                    role = it.role,
+                    content = it.content,
+                    sessionId = sessionId,
+                    createdAt = it.createdAt.parseServerToLocalDateTime()
+                )
+            }
 
         } catch (e: IOException) {
             throw ChatbotException.Network(e.message ?: "Network error")
         } catch (e: Exception) {
             throw ChatbotException.Unknown(e.message ?: "Unexpected error")
         }
+    }
+    override suspend fun getLastSessions(take: Int): Map<String, List<ChatbotMessage>> {
+        val result = mutableMapOf<String, List<ChatbotMessage>>()
+
+        for (sessionId in sessionStorage.getSessionIds()) {
+            if (result.size >= take) break
+
+            val messages = try {
+                getSessionHistory(sessionId)
+            } catch (e: Exception) {
+                e.printStackTrace()
+                emptyList()
+            }
+
+            if (messages.isNotEmpty()) {
+                result[sessionId] = messages
+            }
+        }
+
+        return result
     }
 
 }

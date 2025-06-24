@@ -8,7 +8,7 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.core.view.WindowCompat
 import androidx.core.view.WindowInsetsControllerCompat
-import com.vurgun.skyfit.core.data.storage.LocalSettingsStore
+import com.vurgun.skyfit.core.data.storage.LocalSessionStorage
 import com.vurgun.skyfit.core.data.storage.provideLocalSettings
 import org.koin.android.ext.koin.androidContext
 import org.koin.dsl.module
@@ -36,7 +36,7 @@ class MainActivity : ComponentActivity() {
             AppRootScreen(
                 platformModule = module {
                     single<Context> { applicationContext }
-                    single<LocalSettingsStore> { provideLocalSettings(androidContext()) }
+                    single<LocalSessionStorage> { provideLocalSettings(androidContext()) }
                 }
             )
         }

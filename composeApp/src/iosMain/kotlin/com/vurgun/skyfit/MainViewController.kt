@@ -3,7 +3,7 @@
 package com.vurgun.skyfit
 
 import androidx.compose.ui.window.ComposeUIViewController
-import com.vurgun.skyfit.core.data.storage.LocalSettingsStore
+import com.vurgun.skyfit.core.data.storage.LocalSessionStorage
 import com.vurgun.skyfit.core.data.storage.provideLocalSettings
 import org.koin.dsl.module
 
@@ -11,7 +11,7 @@ import org.koin.dsl.module
 fun MainViewController() = ComposeUIViewController {
     AppRootScreen(
         platformModule = module {
-            single<LocalSettingsStore> { provideLocalSettings(null) }
+            single<LocalSessionStorage> { provideLocalSettings(null) }
         }
     )
 }

@@ -19,23 +19,26 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.dp
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
+import com.vurgun.skyfit.core.data.v1.domain.chatbot.ChatbotMessage
 import com.vurgun.skyfit.core.navigation.SharedScreen
 import com.vurgun.skyfit.core.navigation.push
 import com.vurgun.skyfit.core.ui.components.button.PrimaryIconButton
 import com.vurgun.skyfit.core.ui.components.button.SkyButton
 import com.vurgun.skyfit.core.ui.components.button.SkyButtonSize
+import com.vurgun.skyfit.core.ui.components.loader.FullScreenLoaderContent
 import com.vurgun.skyfit.core.ui.components.special.CompactTopBar
+import com.vurgun.skyfit.core.ui.components.special.FeatureVisible
+import com.vurgun.skyfit.core.ui.components.special.SkyFitMobileScaffold
+import com.vurgun.skyfit.core.ui.components.special.SkyPageScaffold
 import com.vurgun.skyfit.core.ui.components.text.SkyText
 import com.vurgun.skyfit.core.ui.components.text.TextStyleType
+import com.vurgun.skyfit.core.ui.screen.ErrorScreen
 import com.vurgun.skyfit.core.ui.styling.SkyFitColor
 import com.vurgun.skyfit.core.ui.styling.SkyFitTypography
 import com.vurgun.skyfit.core.ui.utils.CollectEffect
 import com.vurgun.skyfit.feature.connect.chatbot.component.ChatbotAppLogo
 import com.vurgun.skyfit.feature.connect.chatbot.component.ChatbotBackground
-import com.vurgun.skyfit.feature.connect.chatbot.model.ChatBotAction
-import com.vurgun.skyfit.feature.connect.chatbot.model.ChatBotEffect
-import com.vurgun.skyfit.feature.connect.chatbot.model.ChatBotOnboardingViewModel
-import com.vurgun.skyfit.feature.connect.chatbot.model.ChatbotViewModel
+import com.vurgun.skyfit.feature.connect.chatbot.model.*
 import org.jetbrains.compose.resources.DrawableResource
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
@@ -43,65 +46,36 @@ import skyfit.core.ui.generated.resources.*
 
 @Composable
 fun ChatbotCompact(viewModel: ChatbotViewModel) {
-    val onboardingCompleted by viewModel.onboardingCompleted.collectAsState()
 
     val navigator = LocalNavigator.currentOrThrow
+    val uiState by viewModel.uiState.collectAsState()
 
     CollectEffect(viewModel.effect) { effect ->
         when (effect) {
-            ChatBotEffect.Dismiss ->
+            ChatbotUiEffect.Dismiss ->
                 navigator.pop()
 
-            ChatBotEffect.NavigateToPostureAnalysis ->
+            ChatbotUiEffect.NavigateToPostureAnalysis ->
                 navigator.push(SharedScreen.PostureAnalysis)
 
-            is ChatBotEffect.NavigateToChat ->
-                navigator.push(ChatWithBotScreen(presetQuery = effect.presetQuery))
+            is ChatbotUiEffect.NavigateToChat ->
+                navigator.push(ChatWithBotScreen(effect.query, effect.sessionId))
 
-            ChatBotEffect.NavigateToMealReport -> Unit
+            ChatbotUiEffect.NavigateToMealReport -> Unit
         }
     }
 
-    Scaffold(
-        topBar = {
-            CompactTopBar(
-                title = stringResource(Res.string.chatbot_label),
-                onClickBack = { viewModel.onAction(ChatBotAction.OnClickBack) },
-                modifier = Modifier.systemBarsPadding()
-            )
+    when (val state = uiState) {
+        is ChatbotUiState.Content -> {
+            ChatbotCompactComponent.ScreenContent(state, viewModel::onAction)
         }
-    ) {
-        Box(Modifier.fillMaxSize()) {
-            ChatbotBackground()
 
-            ChatbotAppLogo(
-                modifier = Modifier.align(Alignment.TopCenter)
-                    .sizeIn(minWidth = 90.dp, minHeight = 90.dp, maxWidth = 240.dp, maxHeight = 240.dp)
-                    .aspectRatio(1f)
-                    .padding(top = 50.dp)
-            )
+        is ChatbotUiState.Error -> {
+            ErrorScreen(message = state.message) { navigator.pop() }
+        }
 
-            if (onboardingCompleted) {
-                ChatbotCompactComponent.ActionGroup(
-                    modifier = Modifier.align(Alignment.BottomStart),
-                    onClickShortcut = {
-                        viewModel.onAction(ChatBotAction.OnClickPostureAnalysis)
-                    },
-                    onClickChatHistory = {
-                        viewModel.onAction(ChatBotAction.OnClickNewChat)
-                    },
-                    onClickChat = {
-                        viewModel.onAction(ChatBotAction.OnClickNewChat)
-                    }
-                )
-            } else {
-                ChatbotCompactComponent.Onboarding(
-                    modifier = Modifier.align(Alignment.BottomStart),
-                    onComplete = {
-                        viewModel.onAction(ChatBotAction.OnClickOnboardingStart)
-                    }
-                )
-            }
+        ChatbotUiState.Loading -> {
+            FullScreenLoaderContent()
         }
     }
 }
@@ -109,7 +83,56 @@ fun ChatbotCompact(viewModel: ChatbotViewModel) {
 private object ChatbotCompactComponent {
 
     @Composable
-    fun Onboarding(
+    fun ScreenContent(
+        content: ChatbotUiState.Content,
+        onAction: (ChatbotUiAction) -> Unit
+    ) {
+        SkyFitMobileScaffold (
+            topBar = {
+                CompactTopBar(
+                    title = stringResource(Res.string.chatbot_label),
+                    onClickBack = { onAction(ChatbotUiAction.OnClickBack) }
+                )
+            }
+        ) {
+            Box(Modifier.fillMaxSize()) {
+                ChatbotBackground()
+
+                ChatbotAppLogo(
+                    modifier = Modifier.align(Alignment.TopCenter)
+                        .sizeIn(minWidth = 90.dp, minHeight = 90.dp, maxWidth = 240.dp, maxHeight = 240.dp)
+                        .aspectRatio(1f)
+                        .padding(top = 50.dp)
+                )
+
+                if (content.onboardingCompleted) {
+                    ActionGroup(
+                        modifier = Modifier.align(Alignment.BottomStart),
+                        historyItems = content.historyMessages.take(3),
+                        onClickHistoryItem = { sessionId ->
+                            onAction(ChatbotUiAction.OnClickSession(sessionId))
+                        },
+                        onClickShortcut = {
+                            onAction(ChatbotUiAction.OnClickPostureAnalysis)
+                        },
+                        onClickNewChat = {
+                            onAction(ChatbotUiAction.OnClickNewSession())
+                        },
+                    )
+                } else {
+                    Onboarding(
+                        modifier = Modifier.align(Alignment.BottomStart),
+                        onComplete = {
+                            onAction(ChatbotUiAction.OnClickOnboardingStart)
+                        }
+                    )
+                }
+            }
+        }
+    }
+
+    @Composable
+    private fun Onboarding(
         modifier: Modifier = Modifier,
         onComplete: () -> Unit
     ) {
@@ -176,12 +199,12 @@ private object ChatbotCompactComponent {
     }
 
     @Composable
-    fun ActionGroup(
+    private fun ActionGroup(
         modifier: Modifier = Modifier,
         onClickShortcut: () -> Unit,
-        onClickChatHistory: () -> Unit,
-        onClickChat: () -> Unit,
-        historyItems: List<String> = emptyList(),
+        onClickHistoryItem: (sessionId: String) -> Unit,
+        historyItems: List<ChatbotMessage> = emptyList(),
+        onClickNewChat: () -> Unit,
     ) {
         Column(
             modifier
@@ -212,33 +235,34 @@ private object ChatbotCompactComponent {
                     onClick = onClickShortcut
                 )
 
-//                ShortcutCardBox(
-//                    Modifier.weight(1f),
-//                    leftRes = Res.drawable.chatbot_shortcut_meal_report_left,
-//                    rightRes = Res.drawable.carbon_report_semi_left,
-//                    title = "Beslenme Raporu",
-//                    onClick = onClickShortcut
-//                )
+                FeatureVisible(false) {
+                    ShortcutCardBox(
+                        Modifier.weight(1f),
+                        leftRes = Res.drawable.chatbot_shortcut_meal_report_left,
+                        rightRes = Res.drawable.carbon_report_semi_left,
+                        title = "Beslenme Raporu",
+                        onClick = onClickShortcut
+                    )
+                }
             }
-
 
             if (historyItems.isNotEmpty()) {
                 Spacer(Modifier.height(24.dp))
 
-                Text(
+                SkyText(
                     text = "Chat Geçmişi",
-                    style = SkyFitTypography.heading4,
+                    styleType = TextStyleType.Heading4
                 )
 
                 historyItems.forEach {
                     Spacer(Modifier.height(16.dp))
-                    ChatBotComponent.ChatHistoryItem(it, onClick = onClickChatHistory)
+                    ChatBotComponent.ChatHistoryItem(it, onClick = { onClickHistoryItem(it.sessionId) })
                 }
             }
 
             Spacer(Modifier.height(16.dp))
 
-            NewChatAction(onClick = onClickChat)
+            NewChatAction(onClick = onClickNewChat)
 
             Spacer(Modifier.systemBarsPadding())
         }
@@ -265,6 +289,7 @@ private object ChatbotCompactComponent {
         }
     }
 }
+
 @Composable
 fun ShortcutCardBox(
     modifier: Modifier = Modifier,

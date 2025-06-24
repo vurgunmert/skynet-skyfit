@@ -1,6 +1,6 @@
 package com.vurgun.skyfit.core.data.storage
 
-interface LocalSettingsStore {
+interface LocalSessionStorage {
     fun savePhoneNumber(value: String)
     fun getPhoneNumber(): String?
     fun saveToken(value: String)
@@ -12,4 +12,4 @@ interface LocalSettingsStore {
     fun setChatbotOnboardingCompleted(value: Boolean)
 }
 
-expect fun provideLocalSettings(context: Any?): LocalSettingsStore
+expect fun provideLocalSettings(context: Any?): LocalSessionStorage

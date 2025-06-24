@@ -2,84 +2,117 @@ package com.vurgun.skyfit.feature.connect.chatbot.model
 
 import cafe.adriel.voyager.core.model.ScreenModel
 import cafe.adriel.voyager.core.model.screenModelScope
-import com.vurgun.skyfit.core.data.storage.Storage
-import com.vurgun.skyfit.core.data.utility.SingleSharedFlow
-import com.vurgun.skyfit.core.data.utility.emitIn
-import com.vurgun.skyfit.feature.connect.chatbot.model.ChatBotEffect.*
-import kotlinx.coroutines.flow.*
+import com.vurgun.skyfit.core.data.storage.ChatBotSessionStorage
+import com.vurgun.skyfit.core.data.utility.UiEffectDelegate
+import com.vurgun.skyfit.core.data.utility.UiStateDelegate
+import com.vurgun.skyfit.core.data.v1.domain.chatbot.ChatbotMessage
+import com.vurgun.skyfit.core.data.v1.domain.chatbot.ChatbotRepository
+import com.vurgun.skyfit.core.ui.utils.WindowSize
+import com.vurgun.skyfit.feature.connect.chatbot.model.ChatbotUiEffect.NavigateToChat
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 
-sealed class ChatBotAction {
-    data object OnClickBack : ChatBotAction()
-    data object OnClickOnboardingStart : ChatBotAction()
-    data object OnClickNewChat : ChatBotAction()
-    data object OnClickPostureAnalysis : ChatBotAction()
-    data object OnClickMealReport : ChatBotAction()
-    data class OnSubmitNewQuery(val query: String) : ChatBotAction()
-    data class OnClickHistoryItem(val query: String) : ChatBotAction()
-
+sealed class ChatbotUiState {
+    data object Loading : ChatbotUiState()
+    data class Error(val message: String?) : ChatbotUiState()
+    data class Content(
+        val onboardingCompleted: Boolean = false,
+        val historyMessages: List<ChatbotMessage> = emptyList()
+    ) : ChatbotUiState() {
+        val isHistoryEmpty: Boolean = historyMessages.isEmpty()
+    }
 }
 
-sealed class ChatBotEffect {
-    data object Dismiss : ChatBotEffect()
-    data object NavigateToPostureAnalysis : ChatBotEffect()
-    data object NavigateToMealReport : ChatBotEffect()
+sealed class ChatbotUiAction {
+    data object OnClickBack : ChatbotUiAction()
+    data object OnClickOnboardingStart : ChatbotUiAction()
+    data object OnClickPostureAnalysis : ChatbotUiAction()
+    data object OnClickMealReport : ChatbotUiAction()
+    data class OnClickNewSession(val query: String? = null) : ChatbotUiAction()
+    data class OnClickSession(val sessionId: String) : ChatbotUiAction()
+}
+
+sealed class ChatbotUiEffect {
+    data object Dismiss : ChatbotUiEffect()
+    data object NavigateToPostureAnalysis : ChatbotUiEffect()
+    data object NavigateToMealReport : ChatbotUiEffect()
     data class NavigateToChat(
-        val presetQuery: String? = null
-    ) : ChatBotEffect()
+        val query: String? = null,
+        val sessionId: String? = null
+    ) : ChatbotUiEffect()
 }
 
 class ChatbotViewModel(
-    private val storage: Storage
+    private val repository: ChatbotRepository,
+    private val storage: ChatBotSessionStorage
 ) : ScreenModel {
 
-    private val _effect = SingleSharedFlow<ChatBotEffect>()
-    val effect: SharedFlow<ChatBotEffect> get() = _effect
+    private val _uiState = UiStateDelegate<ChatbotUiState>(ChatbotUiState.Loading)
+    val uiState = _uiState.asStateFlow()
 
-    val historyItems = listOf<String>(
-        "Bana uygun kişisel bir antrenman planı oluştur. Hedefim \"kilo vermek.\"",
-        "Günlük beslenme alışkanlıklarımı iyileştirmek için birkaç ipucu verir misin?",
-        "Bana üst vücut kası yapmak için bir antrenman programı hazırla."
-    )
+    private val _effect = UiEffectDelegate<ChatbotUiEffect>()
+    val effect = _effect.asSharedFlow()
 
-    val onboardingCompleted: StateFlow<Boolean>
-        get() = storage.getAsFlow(ChatBotOnboardingCompleted)
-            .mapNotNull { it }
-            .stateIn(screenModelScope, SharingStarted.Lazily, false)
-
-    fun onAction(action: ChatBotAction) {
+    fun onAction(action: ChatbotUiAction) {
         when (action) {
-            ChatBotAction.OnClickBack -> {
-                _effect.emitIn(screenModelScope, ChatBotEffect.Dismiss)
+            ChatbotUiAction.OnClickBack -> {
+                _effect.emitIn(screenModelScope, ChatbotUiEffect.Dismiss)
             }
 
-            ChatBotAction.OnClickNewChat -> {
-                _effect.emitIn(screenModelScope, NavigateToChat())
-            }
-
-            ChatBotAction.OnClickPostureAnalysis -> {
-                _effect.emitIn(screenModelScope, ChatBotEffect.NavigateToPostureAnalysis)
-            }
-
-            ChatBotAction.OnClickOnboardingStart -> finalizeOnboarding()
-            is ChatBotAction.OnClickHistoryItem -> {
+            is ChatbotUiAction.OnClickNewSession -> {
                 _effect.emitIn(screenModelScope, NavigateToChat(action.query))
             }
 
-            ChatBotAction.OnClickMealReport -> {
-                _effect.emitIn(screenModelScope, ChatBotEffect.NavigateToMealReport)
+            ChatbotUiAction.OnClickPostureAnalysis -> {
+                _effect.emitIn(screenModelScope, ChatbotUiEffect.NavigateToPostureAnalysis)
             }
-            is ChatBotAction.OnSubmitNewQuery -> {
-                _effect.emitIn(screenModelScope, NavigateToChat(action.query))
+
+            ChatbotUiAction.OnClickOnboardingStart -> {
+                markOnboardingCompleted()
+            }
+
+            is ChatbotUiAction.OnClickSession -> {
+                _effect.emitIn(screenModelScope, NavigateToChat(sessionId = action.sessionId))
+            }
+
+            ChatbotUiAction.OnClickMealReport -> {
+                _effect.emitIn(screenModelScope, ChatbotUiEffect.NavigateToMealReport)
             }
         }
     }
 
-    private fun finalizeOnboarding() {
+    fun loadData(windowSize: WindowSize) {
+        val takeCount = if (windowSize == WindowSize.COMPACT) 3 else 10
+        _uiState.update(ChatbotUiState.Loading)
+
         screenModelScope.launch {
-            storage.writeValue(ChatBotOnboardingCompleted, true)
+
+            storage.onboardingCompleted.collect { onboardingCompleted ->
+
+                if (onboardingCompleted) {
+                    runCatching {
+                        val historyMessages = repository.getLastSessions(takeCount).values
+                            .mapNotNull { it.firstOrNull() }
+
+                        _uiState.update(
+                            ChatbotUiState.Content(
+                                onboardingCompleted = storage.onboardingCompleted.first(),
+                                historyMessages = historyMessages
+                            )
+                        )
+                    }.onFailure { error ->
+                        _uiState.update(ChatbotUiState.Error(error.message))
+                    }
+                } else {
+                    _uiState.update(ChatbotUiState.Content(onboardingCompleted = false))
+                }
+            }
         }
     }
 
-    data object ChatBotOnboardingCompleted : Storage.Key.BooleanKey("chatbot_onboarding_completed", false)
+    private fun markOnboardingCompleted() {
+        screenModelScope.launch {
+            storage.markOnboardingCompleted()
+        }
+    }
 }

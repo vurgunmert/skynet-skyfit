@@ -45,7 +45,7 @@ class UserMeasurementsViewModel(
     fun onAction(action: UserMeasurementsUiAction) {
         when (action) {
             UserMeasurementsUiAction.OnClickBack ->
-                _uiEffect.emit(screenModelScope, UserMeasurementsUiEffect.NavigateBack)
+                _uiEffect.emitIn(screenModelScope, UserMeasurementsUiEffect.NavigateBack)
             is UserMeasurementsUiAction.OnSaveMeasurement ->
                 saveMeasurement(action.measurement, action.category, action.value, action.unitId)
         }

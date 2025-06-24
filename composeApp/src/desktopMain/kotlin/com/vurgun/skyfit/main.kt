@@ -2,7 +2,7 @@ package com.vurgun.skyfit
 
 import androidx.compose.ui.window.Window
 import androidx.compose.ui.window.application
-import com.vurgun.skyfit.core.data.storage.LocalSettingsStore
+import com.vurgun.skyfit.core.data.storage.LocalSessionStorage
 import com.vurgun.skyfit.core.data.storage.provideLocalSettings
 import com.vurgun.skyfit.core.ui.styling.LocalDimensions
 import org.jetbrains.compose.resources.stringResource
@@ -23,7 +23,7 @@ fun main() = application {
 
         AppRootScreen(
             platformModule = module {
-                single<LocalSettingsStore> { provideLocalSettings(null) }
+                single<LocalSessionStorage> { provideLocalSettings(null) }
             }
         )
     }

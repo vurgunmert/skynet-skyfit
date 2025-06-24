@@ -10,11 +10,7 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Scaffold
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -23,26 +19,21 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.dp
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
+import com.vurgun.skyfit.core.data.v1.domain.chatbot.ChatbotMessage
 import com.vurgun.skyfit.core.navigation.SharedScreen
 import com.vurgun.skyfit.core.ui.components.button.SkyButton
 import com.vurgun.skyfit.core.ui.components.button.SkyButtonSize
+import com.vurgun.skyfit.core.ui.components.loader.FullScreenLoaderContent
 import com.vurgun.skyfit.core.ui.components.special.CompactTopBar
 import com.vurgun.skyfit.core.ui.components.special.FeatureVisible
 import com.vurgun.skyfit.core.ui.components.text.SkyText
 import com.vurgun.skyfit.core.ui.components.text.TextStyleType
+import com.vurgun.skyfit.core.ui.screen.ErrorScreen
 import com.vurgun.skyfit.core.ui.styling.SkyFitColor
 import com.vurgun.skyfit.core.ui.utils.CollectEffect
-import com.vurgun.skyfit.core.ui.utils.LocalCompactOverlayController
 import com.vurgun.skyfit.core.ui.utils.LocalExpandedOverlayController
-import com.vurgun.skyfit.feature.connect.chatbot.model.ChatBotAction
-import com.vurgun.skyfit.feature.connect.chatbot.model.ChatBotEffect
-import com.vurgun.skyfit.feature.connect.chatbot.model.ChatBotOnboardingViewModel
-import com.vurgun.skyfit.feature.connect.chatbot.model.ChatWithBotAction
-import com.vurgun.skyfit.feature.connect.chatbot.model.ChatWithBotViewModel
-import com.vurgun.skyfit.feature.connect.chatbot.model.ChatbotViewModel
-import com.vurgun.skyfit.feature.connect.chatbot.screen.ChatBotExpandedComponent.ActionGroup
-import com.vurgun.skyfit.feature.connect.chatbot.screen.ChatBotExpandedComponent.Onboarding
-import com.vurgun.skyfit.feature.connect.component.SkyFitChatMessageBubble
+import com.vurgun.skyfit.feature.connect.chatbot.model.*
+import com.vurgun.skyfit.feature.connect.component.SkyChatMessageItem
 import com.vurgun.skyfit.feature.connect.component.SkyFitChatMessageBubbleShimmer
 import com.vurgun.skyfit.feature.connect.component.SkyFitChatMessageInputComponent
 import dev.chrisbanes.haze.*
@@ -52,76 +43,94 @@ import skyfit.core.ui.generated.resources.*
 
 @Composable
 internal fun ChatBotExpanded(viewModel: ChatbotViewModel) {
-    val onboardingCompleted by viewModel.onboardingCompleted.collectAsState()
+    val uiState by viewModel.uiState.collectAsState()
 
     val navigator = LocalNavigator.currentOrThrow
     val overlayController = LocalExpandedOverlayController.currentOrThrow
 
     CollectEffect(viewModel.effect) { effect ->
         when (effect) {
-            ChatBotEffect.Dismiss ->
+            ChatbotUiEffect.Dismiss ->
                 navigator.pop()
 
-            ChatBotEffect.NavigateToPostureAnalysis -> {
+            ChatbotUiEffect.NavigateToPostureAnalysis -> {
                 overlayController.invoke(SharedScreen.PostureAnalysis)
             }
 
-            is ChatBotEffect.NavigateToChat ->
-                navigator.push(ChatWithBotScreen(presetQuery = effect.presetQuery))
+            is ChatbotUiEffect.NavigateToChat ->
+                navigator.push(ChatWithBotScreen(effect.query, effect.sessionId))
 
-            ChatBotEffect.NavigateToMealReport -> Unit
+            ChatbotUiEffect.NavigateToMealReport -> Unit
         }
     }
 
-    val hazeState = rememberHazeState()
-    val hazeStyle = HazeStyle(
-        backgroundColor = SkyFitColor.background.surfaceSecondary,
-        tints = listOf(
-            HazeTint(SkyFitColor.background.surfaceSecondary.copy(alpha = 0.5f))
-        ),
-        blurRadius = 20.dp,
-        noiseFactor = 0f
-    )
-
-    Row(modifier = Modifier.fillMaxSize().padding(end = 16.dp, bottom = 16.dp)) {
-
-        Box(
-            modifier = Modifier
-                .weight(1f)
-                .fillMaxHeight()
-                .clip(RoundedCornerShape(30.dp))
-                .background(SkyFitColor.background.surfaceTertiary)
-        ) {
-            if (onboardingCompleted) {
-                ActionGroup(
-                    modifier = Modifier.fillMaxSize(),
-                    onClickPostureAnalysis = { viewModel.onAction(ChatBotAction.OnClickPostureAnalysis) },
-                    onClickMealReport = { viewModel.onAction(ChatBotAction.OnClickMealReport) },
-                    onSubmitNewQuery = { viewModel.onAction(ChatBotAction.OnSubmitNewQuery(it)) }
-                )
-            } else {
-                Onboarding(
-                    hazeState, hazeStyle,
-                    modifier = Modifier.fillMaxSize(),
-                    onComplete = { viewModel.onAction(ChatBotAction.OnClickOnboardingStart) })
-            }
+    when(val state = uiState) {
+        is ChatbotUiState.Content -> {
+            ChatBotExpandedComponent.ScreenContent(state, viewModel::onAction)
         }
-
-        Spacer(Modifier.width(20.dp))
-
-        ChatBotExpandedComponent.Menu(
-            historyItems = viewModel.historyItems,
-            onAction = viewModel::onAction
-        )
+        is ChatbotUiState.Error -> {
+            ErrorScreen(message = state.message) { navigator.pop() }
+        }
+        ChatbotUiState.Loading -> {
+            FullScreenLoaderContent()
+        }
     }
 }
 
 internal object ChatBotExpandedComponent {
 
     @Composable
-    fun Menu(
-        historyItems: List<String>,
-        onAction: (ChatBotAction) -> Unit
+    fun ScreenContent(
+        content: ChatbotUiState.Content,
+        onAction: (ChatbotUiAction) -> Unit
+    ){
+        val hazeState = rememberHazeState()
+        val hazeStyle = HazeStyle(
+            backgroundColor = SkyFitColor.background.surfaceSecondary,
+            tints = listOf(
+                HazeTint(SkyFitColor.background.surfaceSecondary.copy(alpha = 0.5f))
+            ),
+            blurRadius = 20.dp,
+            noiseFactor = 0f
+        )
+
+        Row(modifier = Modifier.fillMaxSize().padding(end = 16.dp, bottom = 16.dp)) {
+
+            Box(
+                modifier = Modifier
+                    .weight(1f)
+                    .fillMaxHeight()
+                    .clip(RoundedCornerShape(30.dp))
+                    .background(SkyFitColor.background.surfaceTertiary)
+            ) {
+                if (content.onboardingCompleted) {
+                    ActionGroup(
+                        modifier = Modifier.fillMaxSize(),
+                        onClickPostureAnalysis = { onAction(ChatbotUiAction.OnClickPostureAnalysis) },
+                        onClickMealReport = { onAction(ChatbotUiAction.OnClickMealReport) },
+                        onSubmitNewQuery = { onAction(ChatbotUiAction.OnClickNewSession(it)) }
+                    )
+                } else {
+                    Onboarding(
+                        hazeState, hazeStyle,
+                        modifier = Modifier.fillMaxSize(),
+                        onComplete = { onAction(ChatbotUiAction.OnClickOnboardingStart) })
+                }
+            }
+
+            Spacer(Modifier.width(20.dp))
+
+            SessionHistoryGroup(
+                messages = content.historyMessages,
+                onAction = onAction
+            )
+        }
+    }
+
+    @Composable
+    private fun SessionHistoryGroup(
+        messages: List<ChatbotMessage>,
+        onAction: (ChatbotUiAction) -> Unit
     ) {
         Column(
             modifier = Modifier
@@ -133,8 +142,8 @@ internal object ChatBotExpandedComponent {
             verticalArrangement = Arrangement.spacedBy(16.dp)
         ) {
 
-            historyItems.forEach {
-                ChatBotComponent.ChatHistoryItem(it, { onAction(ChatBotAction.OnClickHistoryItem(it)) })
+            messages.forEach { message ->
+                ChatBotComponent.ChatHistoryItem(message, { onAction(ChatbotUiAction.OnClickSession(message.sessionId)) })
             }
 
             Spacer(Modifier.weight(1f))
@@ -142,7 +151,7 @@ internal object ChatBotExpandedComponent {
             SkyButton(
                 label = stringResource(Res.string.new_chat_label),
                 leftIcon = painterResource(Res.drawable.ic_chat),
-                onClick = { onAction(ChatBotAction.OnClickNewChat) },
+                onClick = { onAction(ChatbotUiAction.OnClickNewSession(null)) },
                 modifier = Modifier.fillMaxWidth()
             )
         }
@@ -318,7 +327,7 @@ internal object ChatBotExpandedComponent {
                 ) {
                     items(messages) { message ->
 
-                        SkyFitChatMessageBubble(message)
+                        SkyChatMessageItem(message)
                     }
 
                     if (isLoading) {
@@ -331,7 +340,7 @@ internal object ChatBotExpandedComponent {
                 Box(Modifier.padding(24.dp).fillMaxWidth()) {
                     SkyFitChatMessageInputComponent(
                         enabled = !isLoading,
-                        onSend = { viewModel.onAction(ChatWithBotAction.OnSubmitMessage(it)) }
+                        onSend = { viewModel.onAction(ChatWithBotAction.OnSendQuery(it)) }
                     )
                 }
             }
