@@ -1,18 +1,22 @@
 package com.vurgun.skyfit.feature.connect.chatbot.screen
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalFocusManager
+import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.unit.dp
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.koin.koinScreenModel
@@ -62,6 +66,8 @@ class ChatWithBotScreen(
 private fun ChatBotMessageScreenContent(
     viewModel: ChatWithBotViewModel
 ) {
+    val keyboardController = LocalSoftwareKeyboardController.current
+    val focusManager = LocalFocusManager.current
 
     val messages by viewModel.messages.collectAsState()
     val isLoading by viewModel.isLoading.collectAsState()
@@ -86,6 +92,14 @@ private fun ChatBotMessageScreenContent(
             Modifier
                 .fillMaxSize()
                 .background(SkyFitColor.background.default)
+                .clickable(
+                    // Clear focus and hide keyboard when clicking anywhere
+                    indication = null,
+                    interactionSource = remember { MutableInteractionSource() }
+                ) {
+                    focusManager.clearFocus()
+                    keyboardController?.hide()
+                }
                 .verticalScroll(rememberScrollState())
                 .imePadding()
         ) {
@@ -110,7 +124,10 @@ private fun ChatBotMessageScreenContent(
             Box(Modifier.padding(24.dp).fillMaxWidth()) {
                 SkyFitChatMessageInputComponent(
                     enabled = !isLoading,
-                    onSend = { viewModel.onAction(ChatWithBotAction.OnSendQuery(it)) }
+                    onSend = {
+                        viewModel.onAction(ChatWithBotAction.OnSendQuery(it))
+                        keyboardController?.hide()
+                    }
                 )
             }
         }
