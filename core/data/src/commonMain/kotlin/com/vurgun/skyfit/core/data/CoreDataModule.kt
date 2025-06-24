@@ -23,6 +23,7 @@ import com.vurgun.skyfit.core.data.v1.data.lesson.repository.LessonRepositoryImp
 import com.vurgun.skyfit.core.data.v1.data.lesson.service.LessonApiService
 import com.vurgun.skyfit.core.data.v1.data.measurement.repository.MeasurementRepositoryImpl
 import com.vurgun.skyfit.core.data.v1.data.measurement.service.MeasurementApiService
+import com.vurgun.skyfit.core.data.v1.data.posture.service.PostureAnalysisApiService
 import com.vurgun.skyfit.core.data.v1.data.social.repository.SocialMediaRepositoryImpl
 import com.vurgun.skyfit.core.data.v1.data.social.service.SocialMediaApiService
 import com.vurgun.skyfit.core.data.v1.data.support.SupportApiService
@@ -107,7 +108,8 @@ val dataCoreModule = module {
     single<LessonSessionItemViewDataMapper> { LessonSessionItemViewDataMapper() }
 
     //Posture Analysis
-    single { PostureAnalysisRepository() }
+    single { PostureAnalysisApiService() }
+    single { PostureAnalysisRepository(get()) }
 
     //Chatbot
     single { ChatBotSessionStorage(get()) }
