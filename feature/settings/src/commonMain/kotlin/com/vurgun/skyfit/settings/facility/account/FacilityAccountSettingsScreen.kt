@@ -3,7 +3,6 @@ package com.vurgun.skyfit.settings.facility.account
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.Scaffold
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -17,13 +16,13 @@ import com.vurgun.skyfit.core.ui.components.loader.FullScreenLoaderContent
 import com.vurgun.skyfit.core.ui.components.menu.SettingsMenuItem
 import com.vurgun.skyfit.core.ui.components.special.CompactTopBar
 import com.vurgun.skyfit.core.ui.components.special.MobileSettingsDeleteAccountBottomSheet
+import com.vurgun.skyfit.core.ui.components.special.SkyPageScaffold
 import com.vurgun.skyfit.core.ui.screen.ErrorScreen
 import com.vurgun.skyfit.core.ui.utils.CollectEffect
 import com.vurgun.skyfit.core.ui.utils.LocalWindowSize
 import com.vurgun.skyfit.core.ui.utils.WindowSize
 import com.vurgun.skyfit.feature.persona.settings.shared.component.FacilityAccountSettingsProfileCard
 import com.vurgun.skyfit.settings.facility.profile.FacilityProfileSettingsScreen
-import com.vurgun.skyfit.settings.facility.profile.FacilityProfileSettingsUiAction
 import com.vurgun.skyfit.settings.shared.account.AccountRoleSettingsScreen
 import com.vurgun.skyfit.settings.shared.changepassword.PasswordSettingsScreen
 import org.jetbrains.compose.resources.painterResource
@@ -91,11 +90,10 @@ private fun MobileFacilitySettingsAccountScreen(
     onAction: (FacilityAccountSettingsUiAction) -> Unit
 ) {
     val windowSize = LocalWindowSize.current
-    val scrollState = rememberScrollState()
     var showDeleteConfirm by remember { mutableStateOf(false) }
     val accountState = content.form
 
-    Scaffold(
+    SkyPageScaffold(
         topBar = {
             if (windowSize != WindowSize.EXPANDED) {
                 CompactTopBar(

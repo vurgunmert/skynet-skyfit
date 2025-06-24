@@ -1,8 +1,10 @@
 package com.vurgun.skyfit.core.data.utility
 
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.channels.BufferOverflow
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.StateFlow
 
 fun <T> SingleSharedFlow(): MutableSharedFlow<T> =
@@ -26,4 +28,19 @@ class UiStateDelegate<T>(initial: T) {
     }
 
     fun asStateFlow(): StateFlow<T> = state
+}
+
+class UiEffectDelegate<T> {
+    private val _effect = SingleSharedFlow<T>()
+    val effect: SharedFlow<T> = _effect
+
+    suspend fun emit(effect: T) {
+        _effect.emitOrNull(effect)
+    }
+
+    fun emit(viewModelScope: CoroutineScope, effect: T) {
+        _effect.emitIn(viewModelScope, effect)
+    }
+
+    fun asSharedFlow(): SharedFlow<T> = effect
 }

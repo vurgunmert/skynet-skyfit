@@ -11,9 +11,9 @@
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" android:maxSdkVersion="32"
         tools:ignore="ScopedStorage" />
 
-    <queries>
-        <package android:name="com.google.android.apps.healthdata" />
-    </queries>
+<!--    <queries>-->
+<!--        <package android:name="com.google.android.apps.healthdata" />-->
+<!--    </queries>-->
 
     <uses-feature
         android:name="android.hardware.camera"
@@ -23,7 +23,6 @@
         android:name=".MainApplication"
         android:allowBackup="false"
         android:icon="@mipmap/ic_launcher"
-        android:roundIcon="@mipmap/ic_launcher_circle"
         android:label="@string/app_name"
         android:usesCleartextTraffic="true"
         android:networkSecurityConfig="@xml/network_security_config"
@@ -31,11 +30,12 @@
         android:theme="@style/Theme.SkyFitMobile"
         tools:ignore="DataExtractionRules">
 
-        <!--            android:screenOrientation="sensorPortrait"-->
+        <!--            -->
         <activity
             android:name=".MainActivity"
             android:configChanges="orientation|screenSize|screenLayout|keyboardHidden|mnc|colorMode|density|fontScale|fontWeightAdjustment|keyboard|layoutDirection|locale|mcc|navigation|smallestScreenSize|touchscreen|uiMode"
             android:exported="true"
+            android:screenOrientation="sensorPortrait"
             android:theme="@style/Theme.SkyFitMobile.NoSplash"
             android:windowSoftInputMode="adjustResize"
             tools:ignore="LockedOrientationActivity">

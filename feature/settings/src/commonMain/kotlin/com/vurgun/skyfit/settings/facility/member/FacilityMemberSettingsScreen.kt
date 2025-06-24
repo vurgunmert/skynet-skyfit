@@ -5,7 +5,6 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.Scaffold
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -28,6 +27,7 @@ import com.vurgun.skyfit.core.ui.components.special.CompactTopBar
 import com.vurgun.skyfit.core.ui.components.special.EditMemberPackageDialog
 import com.vurgun.skyfit.core.ui.components.special.FacilitySettingMemberItem
 import com.vurgun.skyfit.core.ui.components.special.SkyFitSearchTextInputComponent
+import com.vurgun.skyfit.core.ui.components.special.SkyPageScaffold
 import com.vurgun.skyfit.core.ui.components.text.SkyText
 import com.vurgun.skyfit.core.ui.components.text.TextStyleType
 import com.vurgun.skyfit.core.ui.screen.ErrorScreen
@@ -87,10 +87,10 @@ private fun ManageMembersContent(
 ) {
     var editedMember by remember { mutableStateOf<Member?>(null) }
 
-    Scaffold(
+    SkyPageScaffold(
         topBar = {
             Column(Modifier.fillMaxWidth()) {
-                MobileFacilitySettingsSearchUserToolbarComponent(
+                MemberSettingsTopBar(
                     title = stringResource(Res.string.members_label),
                     onClickBack = goToBack,
                     onClickAdd = goToAddMember
@@ -139,7 +139,7 @@ private fun ManageMembersContent(
 }
 
 @Composable
-fun MobileFacilitySettingsSearchUserToolbarComponent(
+private fun MemberSettingsTopBar(
     title: String,
     onClickBack: () -> Unit,
     onClickAdd: () -> Unit

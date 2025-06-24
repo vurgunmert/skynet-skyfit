@@ -1,4 +1,4 @@
-package com.vurgun.skyfit.profile.trainer.owner
+package com.vurgun.skyfit.profile.trainer
 
 import cafe.adriel.voyager.core.model.ScreenModel
 import cafe.adriel.voyager.core.model.screenModelScope
@@ -17,8 +17,6 @@ import com.vurgun.skyfit.core.data.v1.domain.trainer.model.TrainerProfile
 import com.vurgun.skyfit.core.data.v1.domain.trainer.repository.TrainerRepository
 import com.vurgun.skyfit.core.ui.styling.SkyFitAsset
 import com.vurgun.skyfit.profile.model.ProfileDestination
-import com.vurgun.skyfit.profile.trainer.owner.TrainerProfileUiEffect.NavigateToChatWithTrainer
-import com.vurgun.skyfit.profile.trainer.owner.TrainerProfileUiEffect.NavigateToTrainerSchedule
 import kotlinx.coroutines.async
 import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.launch
@@ -92,10 +90,22 @@ class TrainerProfileViewModel(
             is TrainerProfileUiAction.OnClickToUpcomingLesson -> emitEffect(TrainerProfileUiEffect.NavigateToLessonDetail(action.lessonId))
             TrainerProfileUiAction.OnClickBack -> emitEffect(TrainerProfileUiEffect.NavigateBack)
             TrainerProfileUiAction.OnClickNewPost -> emitEffect(TrainerProfileUiEffect.NavigateToCreatePost)
-            TrainerProfileUiAction.OnClickBookAppointment -> emitEffect(NavigateToTrainerSchedule(activeTrainerId!!))
-            TrainerProfileUiAction.OnClickSendMessage -> emitEffect(NavigateToChatWithTrainer(activeTrainerId!!))
+            TrainerProfileUiAction.OnClickBookAppointment -> emitEffect(
+                TrainerProfileUiEffect.NavigateToTrainerSchedule(
+                    activeTrainerId!!
+                )
+            )
+            TrainerProfileUiAction.OnClickSendMessage -> emitEffect(
+                TrainerProfileUiEffect.NavigateToChatWithTrainer(
+                    activeTrainerId!!
+                )
+            )
             is TrainerProfileUiAction.ChangeDate -> updateLessons(action.date)
-            TrainerProfileUiAction.OnClickShowSchedule -> emitEffect(NavigateToTrainerSchedule(activeTrainerId!!))
+            TrainerProfileUiAction.OnClickShowSchedule -> emitEffect(
+                TrainerProfileUiEffect.NavigateToTrainerSchedule(
+                    activeTrainerId!!
+                )
+            )
             TrainerProfileUiAction.OnClickCommentPost -> {
 //                TODO()
             }

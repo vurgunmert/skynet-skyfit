@@ -27,6 +27,7 @@ import com.vurgun.skyfit.core.ui.components.button.SkyButton
 import com.vurgun.skyfit.core.ui.components.button.SkyButtonSize
 import com.vurgun.skyfit.core.ui.components.image.NetworkImage
 import com.vurgun.skyfit.core.ui.components.special.SkyFitSearchTextInputComponent
+import com.vurgun.skyfit.core.ui.components.special.SkyPageScaffold
 import com.vurgun.skyfit.core.ui.components.topbar.CompactTopBar
 import com.vurgun.skyfit.core.ui.styling.SkyFitColor
 import com.vurgun.skyfit.core.ui.styling.SkyFitTypography
@@ -70,7 +71,7 @@ internal fun MobileFacilityManageTrainersScreen(
         viewModel.refreshGymTrainers()
     }
 
-    Scaffold(
+    SkyPageScaffold(
         topBar = {
             Column(Modifier.fillMaxWidth()) {
                 MobileFacilitySettingsSearchTrainerToolbarComponent(

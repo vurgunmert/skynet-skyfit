@@ -29,6 +29,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.SolidColor
@@ -37,6 +38,8 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
 import com.vurgun.skyfit.core.ui.components.button.SkyFitIconButton
+import com.vurgun.skyfit.core.ui.components.icon.SkyIcon
+import com.vurgun.skyfit.core.ui.components.icon.SkyIconSize
 import com.vurgun.skyfit.core.ui.styling.SkyFitColor
 import com.vurgun.skyfit.core.ui.styling.SkyFitTypography
 import org.jetbrains.compose.resources.painterResource
@@ -57,17 +60,16 @@ fun SkyFitSearchTextInputComponent(
 
     Row(
         modifier = modifier
-            .fillMaxWidth()
-            .background(SkyFitColor.background.surfaceSecondary, shape = RoundedCornerShape(20.dp))
+            .clip(RoundedCornerShape(20.dp))
+            .background(SkyFitColor.background.surfaceSecondary)
             .clickable { focusRequester.requestFocus() }
+            .fillMaxWidth()
             .padding(vertical = 12.dp, horizontal = 16.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
-        Icon(
-            painter = painterResource(Res.drawable.ic_search),
-            contentDescription = "Search",
-            tint = SkyFitColor.icon.default,
-            modifier = Modifier.size(16.dp)
+        SkyIcon(
+            res = Res.drawable.ic_search,
+            size = SkyIconSize.Small
         )
 
         Spacer(Modifier.width(8.dp))
@@ -97,9 +99,8 @@ fun SkyFitSearchTextInputComponent(
             decorationBox = { innerTextField ->
                 if (value.isNullOrBlank()) {
                     Text(text = hint, style = SkyFitTypography.bodyMediumRegular, color = SkyFitColor.text.secondary)
-                } else {
-                    innerTextField()
                 }
+                innerTextField()
             }
         )
     }

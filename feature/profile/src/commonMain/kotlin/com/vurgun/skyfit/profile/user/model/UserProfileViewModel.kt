@@ -46,8 +46,9 @@ sealed class UserProfileUiState {
 }
 
 sealed interface UserProfileAction {
-    data object ClickBack : UserProfileAction
-    data object ClickAppointments : UserProfileAction
+    data object OnClickBack : UserProfileAction
+    data object OnClickAppointments : UserProfileAction
+    data object OnClickMeasurements : UserProfileAction
     data object OnClickSettings : UserProfileAction
     data object OnClickNewPost : UserProfileAction
     data object OnClickFollow : UserProfileAction
@@ -66,6 +67,7 @@ sealed interface UserProfileEffect {
     data object NavigateToAppointments : UserProfileEffect
     data object NavigateToSettings : UserProfileEffect
     data object NavigateToCreatePost : UserProfileEffect
+    data object NavigateToMeasurements : UserProfileEffect
     data class NavigateToVisitFacility(val gymId: Int) : UserProfileEffect
 }
 
@@ -88,10 +90,10 @@ class UserProfileViewModel(
 
     fun onAction(action: UserProfileAction) {
         when (action) {
-            UserProfileAction.ClickBack ->
+            UserProfileAction.OnClickBack ->
                 _effect.emitIn(screenModelScope, NavigateBack)
 
-            UserProfileAction.ClickAppointments ->
+            UserProfileAction.OnClickAppointments ->
                 _effect.emitIn(screenModelScope, NavigateToAppointments)
 
             UserProfileAction.OnClickSettings ->
@@ -133,6 +135,10 @@ class UserProfileViewModel(
 
             is UserProfileAction.OnSendQuickPost -> {
 //                TODO()
+            }
+
+            UserProfileAction.OnClickMeasurements -> {
+                _effect.emitIn(screenModelScope, NavigateToMeasurements)
             }
         }
     }

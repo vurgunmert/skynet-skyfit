@@ -16,6 +16,7 @@ import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
 import com.vurgun.skyfit.core.ui.components.loader.FullScreenLoaderContent
 import com.vurgun.skyfit.core.ui.components.special.SettingsPackageComponent.PackageCard
+import com.vurgun.skyfit.core.ui.components.special.SkyPageScaffold
 import com.vurgun.skyfit.core.ui.components.topbar.CompactTopBar
 import com.vurgun.skyfit.core.ui.screen.ErrorScreen
 import com.vurgun.skyfit.core.ui.screen.UnderDevelopmentScreen
@@ -80,7 +81,7 @@ class FacilityPackageSettingsScreen : Screen {
     ) {
         val windowSize = LocalWindowSize.current
 
-        Scaffold(
+        SkyPageScaffold(
             topBar = {
                 if (windowSize == WindowSize.EXPANDED) { //TODO: Move logic repeating actions
                     CompactTopBar.TopbarWithEndAction(

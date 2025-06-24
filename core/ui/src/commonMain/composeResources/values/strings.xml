@@ -125,6 +125,7 @@
     <string name="free_label">Ücretsiz</string>
     <string name="valid_month_count_label">Geçerli Ay Sayısı</string>
     <string name="messages_label">Mesajlar</string>
+    <string name="my_measurements_label">Ölçümlerim</string>
 
     <!-- 🔷 Lesson Related -->
     <string name="lesson_status_completed">Tamamlandı</string>

@@ -26,13 +26,17 @@ import com.vurgun.skyfit.core.ui.components.loader.FullScreenLoaderContent
 import com.vurgun.skyfit.core.ui.components.popup.BasicPopupMenu
 import com.vurgun.skyfit.core.ui.components.popup.SelectablePopupMenuItem
 import com.vurgun.skyfit.core.ui.components.special.CompactTopBar
+import com.vurgun.skyfit.core.ui.components.special.ExpandedTopBar
 import com.vurgun.skyfit.core.ui.components.special.FeatureVisible
 import com.vurgun.skyfit.core.ui.components.special.SkyFitMobileScaffold
+import com.vurgun.skyfit.core.ui.components.special.SkyPageScaffold
 import com.vurgun.skyfit.core.ui.components.text.*
 import com.vurgun.skyfit.core.ui.screen.ErrorScreen
 import com.vurgun.skyfit.core.ui.styling.SkyFitColor
 import com.vurgun.skyfit.core.ui.styling.SkyFitTypography
 import com.vurgun.skyfit.core.ui.utils.CollectEffect
+import com.vurgun.skyfit.core.ui.utils.LocalWindowSize
+import com.vurgun.skyfit.core.ui.utils.WindowSize
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
 import skyfit.core.ui.generated.resources.*
@@ -83,13 +87,20 @@ fun MobileSettingsSupportHelpScreen(
     content: HelpSupportUiState.Content,
     onAction: (HelpSupportUiAction) -> Unit
 ) {
+    val windowSize = LocalWindowSize.current
     var isSubjectPopupOpened by remember { mutableStateOf(false) }
 
-    SkyFitMobileScaffold(
+    SkyPageScaffold(
         topBar = {
-            CompactTopBar(
-                title = stringResource(Res.string.settings_support_label),
-                onClickBack = { onAction(HelpSupportUiAction.OnClickBack) })
+            if (windowSize == WindowSize.EXPANDED) {
+                ExpandedTopBar(
+                    title = stringResource(Res.string.settings_support_label),
+                    onClickBack = { onAction(HelpSupportUiAction.OnClickBack) })
+            } else {
+                CompactTopBar(
+                    title = stringResource(Res.string.settings_support_label),
+                    onClickBack = { onAction(HelpSupportUiAction.OnClickBack) })
+            }
         }
     ) {
         Column(

@@ -16,6 +16,7 @@ import com.vurgun.skyfit.core.ui.components.button.SkyButton
 import com.vurgun.skyfit.core.ui.components.button.SkyButtonSize
 import com.vurgun.skyfit.core.ui.components.button.SkyButtonVariant
 import com.vurgun.skyfit.core.ui.components.special.CompactTopBar
+import com.vurgun.skyfit.core.ui.components.special.SkyPageScaffold
 import com.vurgun.skyfit.core.ui.styling.SkyFitColor
 import com.vurgun.skyfit.core.ui.styling.SkyFitTypography
 import com.vurgun.skyfit.settings.model.SettingsDestination
@@ -42,7 +43,8 @@ internal object SettingsCompactComponent {
             topbar = {
                 CompactTopBar(
                     title = stringResource(Res.string.settings_title),
-                    onClickBack = { onAction(SettingsUiAction.OnClickBack) }
+                    onClickBack = { onAction(SettingsUiAction.OnClickBack) },
+                    modifier = Modifier.fillMaxWidth()
                 )
             },
             content = {
@@ -174,7 +176,7 @@ internal object SettingsCompactComponent {
         topbar: @Composable () -> Unit,
         content: @Composable () -> Unit
     ) {
-        Scaffold(
+        SkyPageScaffold(
             modifier = Modifier.fillMaxSize(),
             topBar = { topbar() },
             content = { content() }

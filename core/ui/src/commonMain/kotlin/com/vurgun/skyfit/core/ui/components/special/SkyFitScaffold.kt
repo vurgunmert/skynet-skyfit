@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.systemBars
+import androidx.compose.foundation.layout.systemBarsPadding
 import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.material.Scaffold
@@ -58,6 +59,24 @@ fun SkyFitMobileScaffold(
             bottomBar = bottomBar
         )
     }
+}
+@Composable
+fun SkyPageScaffold(
+    modifier: Modifier = Modifier,
+    topBar: @Composable () -> Unit,
+    bottomBar: @Composable () -> Unit = {},
+    content: @Composable (PaddingValues) -> Unit,
+) {
+    Scaffold(
+        content = content,
+        topBar = topBar,
+        bottomBar = bottomBar,
+        backgroundColor = SkyFitColor.background.default,
+        modifier = modifier
+            .fillMaxSize()
+            .background(color = SkyFitColor.background.default)
+            .systemBarsPadding()
+    )
 }
 
 

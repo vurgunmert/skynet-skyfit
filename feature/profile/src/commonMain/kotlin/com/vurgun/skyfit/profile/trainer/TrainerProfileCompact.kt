@@ -1,4 +1,4 @@
-package com.vurgun.skyfit.profile.trainer.owner
+package com.vurgun.skyfit.profile.trainer
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*

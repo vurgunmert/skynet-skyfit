@@ -5,7 +5,10 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.input.ImeAction
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
+import com.vurgun.skyfit.core.ui.components.text.NumberInputFormField
 import com.vurgun.skyfit.core.ui.components.text.SkyDigitInputTextField
 import com.vurgun.skyfit.core.ui.components.text.SkyText
 import com.vurgun.skyfit.core.ui.components.text.TextStyleType
@@ -45,5 +48,44 @@ fun SkyFormInputNumberText(
                 modifier = Modifier.weight(1f)
             )
         }
+    }
+}
+
+@Composable
+fun SkyFormInputNumberText(
+    title: String,
+    hint: String,
+    value: String,
+    onValueChange: (String) -> Unit,
+    modifier: Modifier = Modifier,
+    keyboardType: KeyboardType = KeyboardType.Number,
+    imeAction: ImeAction = ImeAction.Next,
+    onNext: (() -> Unit)? = null,
+    enabled: Boolean = true
+) {
+    Column(modifier = modifier.fillMaxWidth()) {
+        SkyText(
+            text = title,
+            styleType = TextStyleType.BodyMediumSemibold,
+            modifier = Modifier.padding(start = 8.dp)
+        )
+
+        Spacer(Modifier.height(8.dp))
+
+        NumberInputFormField(
+            hint = hint,
+            value = value,
+            onValueChange = onValueChange,
+            keyboardType = keyboardType,
+            imeAction = imeAction,
+            onNext = onNext,
+            enabled = enabled,
+            modifier = Modifier
+                .fillMaxWidth()
+                .background(
+                    color = SkyFitColor.background.surfaceSecondary,
+                    shape = RoundedCornerShape(50)
+                )
+        )
     }
 }

@@ -10,10 +10,9 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import cafe.adriel.voyager.navigator.LocalNavigator
-import cafe.adriel.voyager.navigator.Navigator
 import cafe.adriel.voyager.navigator.currentOrThrow
-import cafe.adriel.voyager.transitions.CrossfadeTransition
 import com.vurgun.skyfit.core.navigation.SharedScreen
+import com.vurgun.skyfit.core.navigation.SharedScreen.*
 import com.vurgun.skyfit.core.navigation.findRootNavigator
 import com.vurgun.skyfit.core.navigation.replace
 import com.vurgun.skyfit.core.ui.components.button.SkyFitPrimaryCircularBackButton
@@ -66,7 +65,11 @@ fun UserProfileExpanded(
             }
 
             is UserProfileEffect.NavigateToVisitFacility -> {
-                localNavigator.replace(SharedScreen.FacilityProfile(effect.gymId))
+                localNavigator.replace(FacilityProfile(effect.gymId))
+            }
+
+            UserProfileEffect.NavigateToMeasurements -> {
+                // Ignored | Handled by compact
             }
         }
     }
@@ -186,7 +189,7 @@ private object UserProfileExpandedComponent {
                         .align(Alignment.TopStart)
                         .padding(top = 48.dp, start = 24.dp)
                         .size(48.dp),
-                    onClick = { onAction(UserProfileAction.ClickBack) }
+                    onClick = { onAction(UserProfileAction.OnClickBack) }
                 )
             }
         }

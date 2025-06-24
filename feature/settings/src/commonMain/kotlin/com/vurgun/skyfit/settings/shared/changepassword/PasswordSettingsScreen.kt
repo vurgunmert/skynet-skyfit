@@ -20,6 +20,7 @@ import com.vurgun.skyfit.core.ui.components.text.PasswordInputText
 import com.vurgun.skyfit.core.ui.components.text.SingleLineInputText
 import com.vurgun.skyfit.core.ui.screen.ErrorScreen
 import com.vurgun.skyfit.core.ui.utils.CollectEffect
+import com.vurgun.skyfit.settings.component.SettingsCompactComponent
 import org.jetbrains.compose.resources.stringResource
 import skyfit.core.ui.generated.resources.*
 
@@ -61,8 +62,8 @@ private fun SettingsChangePasswordScreen(
     val passwordFocusRequester = FocusRequester()
     val againPasswordFocusRequester = FocusRequester()
 
-    Scaffold(
-        topBar = {
+    SettingsCompactComponent.Layout(
+        topbar = {
             CompactTopBar(
                 title = stringResource(Res.string.settings_change_my_password_label),
                 onClickBack = { viewModel.onAction(PasswordSettingsUiAction.OnClickBack) }

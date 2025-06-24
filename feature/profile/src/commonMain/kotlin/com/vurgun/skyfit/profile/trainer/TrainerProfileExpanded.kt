@@ -36,10 +36,6 @@ import com.vurgun.skyfit.core.ui.utils.CollectEffect
 import com.vurgun.skyfit.core.ui.utils.LocalCompactOverlayController
 import com.vurgun.skyfit.profile.component.ProfileCompactComponent
 import com.vurgun.skyfit.profile.component.ProfileExpandedComponent
-import com.vurgun.skyfit.profile.trainer.owner.TrainerProfileUiAction
-import com.vurgun.skyfit.profile.trainer.owner.TrainerProfileUiEffect
-import com.vurgun.skyfit.profile.trainer.owner.TrainerProfileUiState
-import com.vurgun.skyfit.profile.trainer.owner.TrainerProfileViewModel
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
 import skyfit.core.ui.generated.resources.*

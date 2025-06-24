@@ -32,6 +32,7 @@ import com.vurgun.skyfit.core.ui.components.menu.SettingsMenuItem
 import com.vurgun.skyfit.core.ui.components.special.MobileSettingsDeleteAccountBottomSheet
 import com.vurgun.skyfit.core.ui.components.special.SkyFitMobileScaffold
 import com.vurgun.skyfit.core.ui.components.special.CompactTopBar
+import com.vurgun.skyfit.core.ui.components.special.SkyPageScaffold
 import com.vurgun.skyfit.core.ui.screen.ErrorScreen
 import com.vurgun.skyfit.core.ui.utils.CollectEffect
 import com.vurgun.skyfit.settings.shared.account.AccountRoleSettingsScreen
@@ -116,7 +117,7 @@ private fun UserAccountSettingsCompact(
     val account = content.form
     var showDeleteConfirm by remember { mutableStateOf(false) }
 
-    Scaffold(
+    SkyPageScaffold(
         topBar = {
             CompactTopBar(
                 stringResource(Res.string.settings_account_label),

@@ -25,6 +25,8 @@ import com.vurgun.skyfit.core.ui.components.event.AvailableActivityCalendarEvent
 import com.vurgun.skyfit.core.ui.components.icon.SkyIcon
 import com.vurgun.skyfit.core.ui.components.icon.SkyIconSize
 import com.vurgun.skyfit.core.ui.components.loader.FullScreenLoaderContent
+import com.vurgun.skyfit.core.ui.components.profile.SocialPostCard
+import com.vurgun.skyfit.core.ui.components.profile.SocialQuickPostInputCard
 import com.vurgun.skyfit.core.ui.components.special.FeatureVisible
 import com.vurgun.skyfit.core.ui.components.text.SkyText
 import com.vurgun.skyfit.core.ui.components.text.TextStyleType
@@ -35,6 +37,7 @@ import com.vurgun.skyfit.core.ui.styling.SkyFitTypography
 import com.vurgun.skyfit.core.ui.utils.CollectEffect
 import com.vurgun.skyfit.profile.component.ProfileCompactComponent
 import com.vurgun.skyfit.profile.model.ProfileDestination
+import com.vurgun.skyfit.profile.user.measurements.UserMeasurementsScreen
 import com.vurgun.skyfit.profile.user.model.UserProfileAction
 import com.vurgun.skyfit.profile.user.model.UserProfileEffect
 import com.vurgun.skyfit.profile.user.model.UserProfileUiState
@@ -67,6 +70,10 @@ fun UserProfileCompact(
 
             UserProfileEffect.NavigateToSettings -> {
                 appNavigator.push(SharedScreen.Settings)
+            }
+
+            UserProfileEffect.NavigateToMeasurements -> {
+                appNavigator.push(UserMeasurementsScreen())
             }
 
             is UserProfileEffect.NavigateToVisitFacility -> {
@@ -174,7 +181,7 @@ internal object UserProfileCompactComponent {
             },
             cardContentsModifier = Modifier.fillMaxWidth().padding(top = 118.dp),
             canNavigateBack = content.isVisiting,
-            onClickBack = { onAction(UserProfileAction.ClickBack) }
+            onClickBack = { onAction(UserProfileAction.OnClickBack) }
         )
     }
 
@@ -252,12 +259,33 @@ internal object UserProfileCompactComponent {
     fun PostsContent(
         content: UserProfileUiState.Content,
         onAction: (UserProfileAction) -> Unit,
-        modifier: Modifier = Modifier,
+        modifier: Modifier = Modifier
     ) {
-        TodoBox(
-            "Postlarim",
-            modifier = Modifier.fillMaxWidth().height(596.dp)
-        )
+        Column(
+            modifier = modifier
+                .fillMaxWidth(),
+            verticalArrangement = Arrangement.spacedBy(16.dp),
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            if (!content.isVisiting) {
+                SocialQuickPostInputCard(
+                    creatorImageUrl = content.profile.backgroundImageUrl,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .background(SkyFitColor.background.default, RoundedCornerShape(16.dp))
+                ) { onAction(UserProfileAction.OnSendQuickPost(it)) }
+            }
+
+            content.posts.forEach { post ->
+                SocialPostCard(
+                    post = post,
+                    onClick = { onAction(UserProfileAction.OnClickPost) },
+                    onClickComment = { onAction(UserProfileAction.OnClickCommentPost) },
+                    onClickLike = { onAction(UserProfileAction.OnClickLikePost) },
+                    onClickShare = { onAction(UserProfileAction.OnClickSharePost) }
+                )
+            }
+        }
     }
 
     @Composable
@@ -331,7 +359,7 @@ internal object UserProfileCompactComponent {
             modifier.fillMaxWidth()
                 .clip(RoundedCornerShape(20.dp))
                 .background(SkyFitColor.background.fillTransparent)
-                .clickable(enabled = !content.isVisiting, onClick = { onAction(UserProfileAction.ClickAppointments) })
+                .clickable(enabled = !content.isVisiting, onClick = { onAction(UserProfileAction.OnClickAppointments) })
                 .padding(16.dp),
             verticalArrangement = Arrangement.spacedBy(16.dp)
         ) {
@@ -357,7 +385,7 @@ internal object UserProfileCompactComponent {
                         text = stringResource(Res.string.show_all_action),
                         style = SkyFitTypography.bodyXSmall,
                         color = SkyFitColor.border.secondaryButton,
-                        modifier = Modifier.clickable(onClick = { onAction(UserProfileAction.ClickAppointments) })
+                        modifier = Modifier.clickable(onClick = { onAction(UserProfileAction.OnClickAppointments) })
                     )
                 }
             }
@@ -402,10 +430,32 @@ internal object UserProfileCompactComponent {
         onAction: (UserProfileAction) -> Unit,
         modifier: Modifier = Modifier,
     ) {
-        TodoBox(
-            "Olcumlerim",
-            modifier = Modifier.fillMaxWidth().height(96.dp)
-        )
+        Row(
+            modifier = modifier
+                .clip(RoundedCornerShape(20.dp))
+                .background(SkyFitColor.background.fillTransparent)
+                .fillMaxWidth()
+                .clickable { onAction(UserProfileAction.OnClickMeasurements) }
+                .padding(16.dp),
+            verticalAlignment = Alignment.CenterVertically,
+        ) {
+            SkyIcon(
+                res = Res.drawable.ic_chart_pie,
+                size = SkyIconSize.Large,
+                modifier = Modifier
+            )
+            Spacer(Modifier.width(16.dp))
+            SkyText(
+                text = stringResource(Res.string.my_measurements_label),
+                styleType = TextStyleType.BodyMediumSemibold
+            )
+            Spacer(Modifier.weight(1f))
+            SkyIcon(
+                res = Res.drawable.ic_arrow_right,
+                size = SkyIconSize.Large,
+                modifier = Modifier
+            )
+        }
     }
 
     @Composable
