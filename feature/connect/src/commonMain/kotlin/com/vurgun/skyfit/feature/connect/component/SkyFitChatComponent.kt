@@ -96,9 +96,8 @@ fun SkyFitChatMessageInputComponent(
                             styleType = TextStyleType.BodySmall,
                             color = SkyFitColor.text.secondary
                         )
-                    } else {
-                        innerTextField()
                     }
+                    innerTextField()
                 },
                 cursorBrush = SolidColor(SkyFitColor.specialty.buttonBgRest),
             )

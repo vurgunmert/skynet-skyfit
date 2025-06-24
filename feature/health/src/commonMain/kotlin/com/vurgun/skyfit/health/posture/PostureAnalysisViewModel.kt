@@ -70,6 +70,7 @@ sealed class PostureAnalysisAction {
 
     data object Reset : PostureAnalysisAction()
     data object RetakeOption : PostureAnalysisAction()
+    data object OnConfirmComplete : PostureAnalysisAction()
 
     data class SelectOption(val type: PostureTypeDTO) : PostureAnalysisAction()
     data class CaptureFromGallery(
@@ -94,6 +95,9 @@ class PostureAnalysisViewModel(
 
     private val _effect = SingleSharedFlow<PostureAnalysisEffect>()
     val effect: SharedFlow<PostureAnalysisEffect> = _effect
+
+    private val _isLoading = MutableStateFlow(false)
+    val isLoading: StateFlow<Boolean> = _isLoading
 
     private val _headerState = MutableStateFlow(PostureAnalysisHeaderState())
     val headerState: StateFlow<PostureAnalysisHeaderState> = _headerState
@@ -120,9 +124,16 @@ class PostureAnalysisViewModel(
             PostureAnalysisAction.RetakeOption -> resetCurrent()
             PostureAnalysisAction.Reset -> resetAll()
             is PostureAnalysisAction.SelectOption -> selectPostureOption(action.type)
-            is PostureAnalysisAction.CaptureFromCamera -> captureCameraPhoto(action.cameraController, action.imageSaverPlugin)
+            is PostureAnalysisAction.CaptureFromCamera -> captureCameraPhoto(
+                action.cameraController,
+                action.imageSaverPlugin
+            )
+
             is PostureAnalysisAction.CaptureFromGallery -> captureGalleryPhoto(action.byteArray, action.bitmap)
             PostureAnalysisAction.DismissReport -> handleBack()
+            PostureAnalysisAction.OnConfirmComplete -> {
+                saveAndReset()
+            }
         }
     }
 
@@ -243,7 +254,14 @@ class PostureAnalysisViewModel(
 
         screenModelScope.launch {
             try {
-                val findings = postureAnalysisRepository.getPostureFindingList(bytes, postureType)
+                val report = postureAnalysisRepository.analyzeImage(bytes, postureType.orientation)
+                val findings = report.deviations.mapNotNull { deviation ->
+                    PostureFinding(
+                        key = deviation.condition,
+                        detected = report.landmarksDetected,
+                        explanation = deviation.explanation ?: return@mapNotNull null
+                    )
+                }
                 updatePostureState(postureType, currentPosture.copy(findings = findings))
 
                 moveToReportIfReady()
@@ -322,4 +340,38 @@ class PostureAnalysisViewModel(
         }
     }
 
+    private fun saveAndReset() {
+//        resetAll()
+//        showPostureOptions()
+//        return
+//        //TODO: API works but cannot read back report or something
+        val options = (_contentState.value as? PostureAnalysisContentState.Report)?.optionStates ?: return
+
+        screenModelScope.launch {
+            _isLoading.value = true
+            try {
+                val front = options.first { it.type == PostureTypeDTO.Front }
+                val back = options.first { it.type == PostureTypeDTO.Back }
+                val left = options.first { it.type == PostureTypeDTO.Left }
+                val right = options.first { it.type == PostureTypeDTO.Right }
+                postureAnalysisRepository.saveReport(
+                    frontImage = front.byteArray!!,
+                    frontReport = front.findings?.joinToString("\n") { it.explanation } ?: "-",
+                    backImage = back.byteArray!!,
+                    backReport = back.findings?.joinToString("\n") { it.explanation } ?: "-",
+                    leftImage = left.byteArray!!,
+                    leftReport = left.findings?.joinToString("\n") { it.explanation } ?: "-",
+                    rightImage = right.byteArray!!,
+                    rightReport = right.findings?.joinToString("\n") { it.explanation } ?: "-",
+                )
+
+            } catch (e: Exception) {
+                e.printStackTrace()
+            } finally {
+                resetAll()
+                showPostureOptions()
+                _isLoading.value = false
+            }
+        }
+    }
 }

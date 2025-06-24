@@ -1,15 +1,6 @@
 package com.vurgun.skyfit.health.posture
 
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.WindowInsets
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.systemBars
-import androidx.compose.foundation.layout.windowInsetsPadding
+import androidx.compose.foundation.layout.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -17,41 +8,37 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import cafe.adriel.voyager.core.screen.Screen
+import cafe.adriel.voyager.core.screen.ScreenKey
 import cafe.adriel.voyager.koin.koinScreenModel
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
 import com.vurgun.skyfit.core.data.utility.PlatformType
+import com.vurgun.skyfit.core.navigation.SharedScreen
 import com.vurgun.skyfit.core.ui.components.button.PrimaryIconButton
 import com.vurgun.skyfit.core.ui.components.button.SecondaryIconButton
 import com.vurgun.skyfit.core.ui.components.dialog.BasicDialog
 import com.vurgun.skyfit.core.ui.components.dialog.rememberBasicDialogState
 import com.vurgun.skyfit.core.ui.components.icon.BackIcon
+import com.vurgun.skyfit.core.ui.components.loader.FullScreenLoaderContent
 import com.vurgun.skyfit.core.ui.components.special.SkyFitMobileFillScaffold
 import com.vurgun.skyfit.core.ui.components.text.BodyLargeSemiboldText
 import com.vurgun.skyfit.core.ui.utils.CollectEffect
 import com.vurgun.skyfit.core.ui.utils.LocalCompactOverlayController
 import com.vurgun.skyfit.core.ui.utils.LocalExpandedOverlayController
-import com.vurgun.skyfit.health.posture.internal.CameraPreviewContent
-import com.vurgun.skyfit.health.posture.internal.DesktopCameraPreviewContent
-import com.vurgun.skyfit.health.posture.internal.PostureInstructionContent
-import com.vurgun.skyfit.health.posture.internal.PostureOptionsContent
-import com.vurgun.skyfit.health.posture.internal.PostureReportContent
-import com.vurgun.skyfit.health.posture.internal.PostureScannerContent
+import com.vurgun.skyfit.health.posture.internal.*
 import org.jetbrains.compose.resources.painterResource
-import skyfit.core.ui.generated.resources.Res
-import skyfit.core.ui.generated.resources.ic_chevron_left
-import skyfit.core.ui.generated.resources.ic_info_circle
-import skyfit.core.ui.generated.resources.ic_posture_fill
-import skyfit.core.ui.generated.resources.ic_visibility_hide
-import skyfit.core.ui.generated.resources.ic_visibility_show
+import skyfit.core.ui.generated.resources.*
 
 class PostureAnalysisScreen : Screen {
+
+    override val key: ScreenKey = SharedScreen.PostureAnalysis.key
 
     @Composable
     override fun Content() {
         val navigator = LocalNavigator.currentOrThrow
         val viewModel = koinScreenModel<PostureAnalysisViewModel>()
 
+        val isLoading by viewModel.isLoading.collectAsState()
         val headerState by viewModel.headerState.collectAsState()
         val contentState by viewModel.contentState.collectAsState()
 
@@ -79,62 +66,65 @@ class PostureAnalysisScreen : Screen {
             }
         }
 
-        SkyFitMobileFillScaffold(
-            modifier = Modifier.fillMaxSize()
-        ) {
+        if (isLoading) {
+            FullScreenLoaderContent()
+        } else {
+            SkyFitMobileFillScaffold(
+                modifier = Modifier.fillMaxSize()
+            ) {
+                Box(Modifier.fillMaxSize()) {
 
-            Box(Modifier.fillMaxSize()) {
+                    when (contentState) {
+                        PostureAnalysisContentState.Instructions ->
+                            PostureInstructionContent(
+                                onAction = viewModel::onAction,
+                                modifier = Modifier
+                                    .padding(top = 150.dp)
+                                    .align(Alignment.TopCenter)
+                            )
 
-                when (contentState) {
-                    PostureAnalysisContentState.Instructions ->
-                        PostureInstructionContent(
-                            onAction = viewModel::onAction,
-                            modifier = Modifier
-                                .padding(top = 150.dp)
-                                .align(Alignment.TopCenter)
-                        )
+                        is PostureAnalysisContentState.CameraPreview -> {
+                            val content = (contentState as PostureAnalysisContentState.CameraPreview)
 
-                    is PostureAnalysisContentState.CameraPreview -> {
-                        val content = (contentState as PostureAnalysisContentState.CameraPreview)
+                            if (PlatformType.isDesktop) {
+                                DesktopCameraPreviewContent(content, viewModel)
+                            } else {
+                                CameraPreviewContent(content, viewModel)
+                            }
+                        }
 
-                        if (PlatformType.isDesktop) {
-                            DesktopCameraPreviewContent(content, viewModel)
-                        } else {
-                            CameraPreviewContent(content, viewModel)
+                        is PostureAnalysisContentState.ImageScanner -> {
+                            val image = (contentState as PostureAnalysisContentState.ImageScanner).image
+                            PostureScannerContent(image)
+                        }
+
+                        is PostureAnalysisContentState.PostureOptions -> {
+                            PostureOptionsContent(
+                                viewModel = viewModel,
+                                onAction = viewModel::onAction,
+                                modifier = Modifier
+                                    .padding(top = 150.dp)
+                                    .align(Alignment.TopCenter)
+                            )
+                        }
+
+                        is PostureAnalysisContentState.Report -> {
+                            val content = (contentState as PostureAnalysisContentState.Report)
+                            PostureReportContent(
+                                content = content,
+                                onAction = viewModel::onAction
+                            )
                         }
                     }
 
-                    is PostureAnalysisContentState.ImageScanner -> {
-                        val image = (contentState as PostureAnalysisContentState.ImageScanner).image
-                        PostureScannerContent(image)
-                    }
-
-                    is PostureAnalysisContentState.PostureOptions -> {
-                        PostureOptionsContent(
-                            viewModel = viewModel,
-                            onAction = viewModel::onAction,
-                            modifier = Modifier
-                                .padding(top = 150.dp)
-                                .align(Alignment.TopCenter)
-                        )
-                    }
-
-                    is PostureAnalysisContentState.Report -> {
-                        val content = (contentState as PostureAnalysisContentState.Report)
-                        PostureReportContent(
-                            content = content,
-                            onAction = viewModel::onAction
-                        )
-                    }
+                    PostureAnalysisComponent.CompactContentHeader(
+                        state = headerState,
+                        onAction = viewModel::onAction,
+                        modifier = Modifier
+                            .windowInsetsPadding(WindowInsets.systemBars)
+                            .align(Alignment.TopCenter)
+                    )
                 }
-
-                PostureAnalysisComponent.CompactContentHeader(
-                    state = headerState,
-                    onAction = viewModel::onAction,
-                    modifier = Modifier
-                        .windowInsetsPadding(WindowInsets.systemBars)
-                        .align(Alignment.TopCenter)
-                )
             }
         }
 

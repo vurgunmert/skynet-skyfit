@@ -89,7 +89,7 @@ fun PostureReportContent(
                 .align(Alignment.BottomCenter)
                 .windowInsetsPadding(WindowInsets.systemBars),
             onClickReset = { onAction(PostureAnalysisAction.Reset) },
-            onClickComplete = { onAction(PostureAnalysisAction.DismissReport) },
+            onClickComplete = { onAction(PostureAnalysisAction.OnConfirmComplete) },
             onClickReport = { isReportVisible = !isReportVisible }
         )
 
@@ -204,7 +204,7 @@ private fun PostureResultSection(
                 )
                 Spacer(Modifier.height(4.dp))
                 Text(
-                    text = finding.turkishExplanation,
+                    text = finding.explanation,
                     style = SkyFitTypography.bodyMediumRegular,
                     modifier = Modifier.padding(top = 2.dp)
                 )

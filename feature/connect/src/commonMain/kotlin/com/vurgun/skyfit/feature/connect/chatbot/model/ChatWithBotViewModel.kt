@@ -7,7 +7,6 @@ import com.vurgun.skyfit.core.data.utility.emitIn
 import com.vurgun.skyfit.core.data.utility.randomUUID
 import com.vurgun.skyfit.core.data.v1.domain.chatbot.ChatbotMessage
 import com.vurgun.skyfit.core.data.v1.domain.chatbot.ChatbotRepository
-import com.vurgun.skyfit.core.ui.utils.WindowSize
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -66,7 +65,6 @@ class ChatWithBotViewModel(
                 _messages.value = repository.getSessionHistory(sessionId)
             } catch (error: Exception) {
                 print(error.message)
-                _messages.value = listOf(ChatbotMessage.bot("Mesajınızı anlayamadım. Lütfen düzenleyip tekrar göndermeyi deneyin.", sessionId = sessionId, isError = true))
             } finally {
                 _isLoading.value = false
             }
@@ -84,7 +82,14 @@ class ChatWithBotViewModel(
                 val response = repository.sendQuery(message)
                 addMessage(response)
             } catch (e: Exception) {
-                addMessage(ChatbotMessage(content = e.message ?: "Error", sessionId = activeSessionId))
+                e.printStackTrace()
+                addMessage(
+                    ChatbotMessage.bot(
+                        "Mesajınızı anlayamadım. Lütfen düzenleyip tekrar göndermeyi deneyin.",
+                        sessionId = activeSessionId,
+                        isError = true
+                    )
+                )
             } finally {
                 _isLoading.value = false
             }

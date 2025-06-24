@@ -25,6 +25,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.vurgun.skyfit.core.data.v1.data.posture.model.PostureTypeDTO
 import com.vurgun.skyfit.core.ui.components.box.rememberAnimatedBorderBrush
+import com.vurgun.skyfit.core.ui.components.button.SkyButton
 import com.vurgun.skyfit.core.ui.components.text.BodyMediumSemiboldText
 import com.vurgun.skyfit.core.ui.styling.LocalPadding
 import com.vurgun.skyfit.core.ui.styling.SkyFitColor

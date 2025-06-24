@@ -20,6 +20,7 @@ import com.vurgun.skyfit.core.navigation.findRootNavigator
 import com.vurgun.skyfit.core.navigation.push
 import com.vurgun.skyfit.core.ui.components.box.TodoBox
 import com.vurgun.skyfit.core.ui.components.button.SkyButton
+import com.vurgun.skyfit.core.ui.components.button.SkyButtonSize
 import com.vurgun.skyfit.core.ui.components.chip.RectangleChip
 import com.vurgun.skyfit.core.ui.components.event.AvailableActivityCalendarEventItem
 import com.vurgun.skyfit.core.ui.components.icon.SkyIcon
@@ -117,7 +118,6 @@ internal object UserProfileCompactComponent {
                         .padding(horizontal = 16.dp),
                     verticalArrangement = Arrangement.spacedBy(16.dp)
                 ) {
-
                     VisitorActionGroup(content, onAction)
 
                     NavigationGroup(content, onAction)
@@ -190,21 +190,25 @@ internal object UserProfileCompactComponent {
         content: UserProfileUiState.Content,
         onAction: (UserProfileAction) -> Unit
     ) {
-        if (content.isVisiting) {
-            Spacer(Modifier.height(8.dp))
+        FeatureVisible(false) {
+            if (content.isVisiting) {
+                Spacer(Modifier.height(8.dp))
 
-            if (content.isFollowing) {
-                SkyButton(
-                    label = stringResource(Res.string.follow_action),
-                    modifier = Modifier.padding(horizontal = 8.dp).fillMaxWidth(),
-                    onClick = { onAction(UserProfileAction.OnClickFollow) }
-                )
-            } else {
-                SkyButton(
-                    label = stringResource(Res.string.unfollow_action),
-                    modifier = Modifier.padding(horizontal = 8.dp).fillMaxWidth(),
-                    onClick = { onAction(UserProfileAction.OnClickUnfollow) }
-                )
+                if (content.isFollowing) {
+                    SkyButton(
+                        label = stringResource(Res.string.follow_action),
+                        modifier = Modifier.padding(horizontal = 8.dp).fillMaxWidth(),
+                        size = SkyButtonSize.Large,
+                        onClick = { onAction(UserProfileAction.OnClickFollow) }
+                    )
+                } else {
+                    SkyButton(
+                        label = stringResource(Res.string.unfollow_action),
+                        modifier = Modifier.padding(horizontal = 8.dp).fillMaxWidth(),
+                        size = SkyButtonSize.Large,
+                        onClick = { onAction(UserProfileAction.OnClickUnfollow) }
+                    )
+                }
             }
         }
     }

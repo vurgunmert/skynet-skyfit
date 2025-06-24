@@ -23,6 +23,4 @@ data class LessonSessionItemViewData(
     val statusName: String,
     val isActive: Boolean = true,
     val selected: Boolean = false,
-) {
-    fun isBooked(userBookedSessionIds: List<String>) = false //TODO: Remove
-}
+)

@@ -56,7 +56,7 @@ internal object ChatBotComponent {
             SkyIcon(
                 res = Res.drawable.ic_lightning,
                 size = SkyIconSize.Small,
-                modifier = Modifier.padding(2.dp)
+                modifier = Modifier
             )
 
             Spacer(Modifier.width(12.dp))
