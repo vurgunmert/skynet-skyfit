@@ -48,6 +48,8 @@ import com.vurgun.skyfit.core.ui.screen.ErrorScreen
 import com.vurgun.skyfit.core.ui.styling.SkyFitColor
 import com.vurgun.skyfit.core.ui.styling.SkyFitTypography
 import com.vurgun.skyfit.core.ui.utils.CollectEffect
+import com.vurgun.skyfit.core.ui.utils.LocalWindowSize
+import com.vurgun.skyfit.core.ui.utils.WindowSize
 import skyfit.core.ui.generated.resources.Res
 import skyfit.core.ui.generated.resources.ic_arrow_right
 
@@ -61,6 +63,7 @@ class ExploreScreen : Screen {
         val navigator = LocalNavigator.currentOrThrow
         val viewModel = koinScreenModel<ExploreViewModel>()
         val uiState by viewModel.uiState.collectAsState()
+        val windowSize = LocalWindowSize.current
 
         CollectEffect(viewModel.effect) { effect ->
             when (effect) {
@@ -73,7 +76,11 @@ class ExploreScreen : Screen {
                 }
 
                 is ExploreUiEffect.NavigateToVisitTrainer -> {
-                    appNavigator.push(TrainerProfile(effect.trainerId))
+                    if (windowSize == WindowSize.EXPANDED) {
+                        navigator.push(TrainerProfile(effect.trainerId))
+                    } else {
+                        appNavigator.push(TrainerProfile(effect.trainerId))
+                    }
                 }
 
                 is ExploreUiEffect.NavigateToExerciseDetail -> {

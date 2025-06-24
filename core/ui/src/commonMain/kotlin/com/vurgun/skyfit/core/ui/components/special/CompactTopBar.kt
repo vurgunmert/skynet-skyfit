@@ -26,7 +26,6 @@ fun CompactTopBar(
         modifier = modifier
             .fillMaxWidth()
             .wrapContentHeight()
-            .padding(horizontal = 24.dp, vertical = 8.dp)
     ) {
         onClickBack?.let {
             SkyIconButton(

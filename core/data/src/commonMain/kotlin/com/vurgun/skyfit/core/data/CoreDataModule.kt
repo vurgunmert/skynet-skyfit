@@ -19,6 +19,8 @@ import com.vurgun.skyfit.core.data.v1.data.global.service.GlobalApiService
 import com.vurgun.skyfit.core.data.v1.data.lesson.mapper.LessonSessionItemViewDataMapper
 import com.vurgun.skyfit.core.data.v1.data.lesson.repository.LessonRepositoryImpl
 import com.vurgun.skyfit.core.data.v1.data.lesson.service.LessonApiService
+import com.vurgun.skyfit.core.data.v1.data.measurement.repository.MeasurementRepositoryImpl
+import com.vurgun.skyfit.core.data.v1.data.measurement.service.MeasurementApiService
 import com.vurgun.skyfit.core.data.v1.data.social.repository.SocialMediaRepositoryImpl
 import com.vurgun.skyfit.core.data.v1.data.social.service.SocialMediaApiService
 import com.vurgun.skyfit.core.data.v1.data.support.SupportApiService
@@ -38,6 +40,7 @@ import com.vurgun.skyfit.core.data.v1.domain.explore.ExploreRepository
 import com.vurgun.skyfit.core.data.v1.domain.facility.repository.FacilityRepository
 import com.vurgun.skyfit.core.data.v1.domain.global.repository.GlobalRepository
 import com.vurgun.skyfit.core.data.v1.domain.lesson.repository.LessonRepository
+import com.vurgun.skyfit.core.data.v1.domain.measurement.repository.MeasurementRepository
 import com.vurgun.skyfit.core.data.v1.domain.posture.repository.PostureAnalysisRepository
 import com.vurgun.skyfit.core.data.v1.domain.social.repository.SocialMediaRepository
 import com.vurgun.skyfit.core.data.v1.domain.support.repository.SupportRepository
@@ -118,6 +121,10 @@ val dataCoreModule = module {
     //Social
     single<SocialMediaApiService> { SocialMediaApiService(get()) }
     single<SocialMediaRepository> { SocialMediaRepositoryImpl(get(), get(), get()) }
+
+    //Measurement
+    single<MeasurementApiService> { MeasurementApiService(get()) }
+    single<MeasurementRepository> { MeasurementRepositoryImpl(get(), get(), get()) }
 }
 
 internal expect val platformModule: Module

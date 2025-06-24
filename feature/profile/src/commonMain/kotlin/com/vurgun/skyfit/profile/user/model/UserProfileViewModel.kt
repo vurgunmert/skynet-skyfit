@@ -13,6 +13,8 @@ import com.vurgun.skyfit.core.data.v1.domain.facility.model.FacilityProfile
 import com.vurgun.skyfit.core.data.v1.domain.facility.repository.FacilityRepository
 import com.vurgun.skyfit.core.data.v1.domain.global.model.AccountRole
 import com.vurgun.skyfit.core.data.v1.domain.lesson.model.LessonSessionItemViewData
+import com.vurgun.skyfit.core.data.v1.domain.measurement.model.Measurement
+import com.vurgun.skyfit.core.data.v1.domain.measurement.repository.MeasurementRepository
 import com.vurgun.skyfit.core.data.v1.domain.profile.LifestyleActionItemViewData
 import com.vurgun.skyfit.core.data.v1.domain.profile.SocialPostItemViewData
 import com.vurgun.skyfit.core.data.v1.domain.social.repository.SocialMediaRepository
@@ -37,7 +39,10 @@ sealed class UserProfileUiState {
         val posts: List<SocialPostItemViewData> = emptyList(),
         val exercises: List<LifestyleActionItemViewData> = emptyList(),
         val habits: List<LifestyleActionItemViewData> = emptyList(),
-    ) : UserProfileUiState()
+        val measurements: List<Measurement> = emptyList(),
+    ) : UserProfileUiState() {
+        val canNavigateBack: Boolean = isVisiting
+    }
 }
 
 sealed interface UserProfileAction {
@@ -69,7 +74,8 @@ class UserProfileViewModel(
     private val userRepository: UserRepository,
     private val facilityRepository: FacilityRepository,
     private val lessonMapper: LessonSessionItemViewDataMapper,
-    private val socialMediaRepository: SocialMediaRepository
+    private val socialMediaRepository: SocialMediaRepository,
+    private val measurementRepository: MeasurementRepository
 ) : ScreenModel {
 
     private val _uiState = UiStateDelegate<UserProfileUiState>(UserProfileUiState.Loading)
@@ -100,24 +106,31 @@ class UserProfileViewModel(
             is UserProfileAction.OnDestinationChanged -> {
                 updateDestination(action.destination)
             }
+
             UserProfileAction.OnClickFollow -> {
 //                TODO()
             }
+
             UserProfileAction.OnClickUnfollow -> {
 //                TODO()
             }
+
             UserProfileAction.OnClickCommentPost -> {
 //                TODO()
             }
+
             UserProfileAction.OnClickLikePost -> {
 //                TODO()
             }
+
             UserProfileAction.OnClickPost -> {
 //                TODO()
             }
+
             UserProfileAction.OnClickSharePost -> {
 //                TODO()
             }
+
             is UserProfileAction.OnSendQuickPost -> {
 //                TODO()
             }
@@ -244,6 +257,7 @@ class UserProfileViewModel(
                 _uiState.update(content.copy(posts = posts))
             }.onFailure { error ->
                 print(error.message)
+//                _uiState.update(content.copy(posts = emptyList()))
             }
         }
     }

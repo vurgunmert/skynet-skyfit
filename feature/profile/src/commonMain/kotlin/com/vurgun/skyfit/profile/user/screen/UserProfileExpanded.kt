@@ -10,11 +10,12 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import cafe.adriel.voyager.navigator.LocalNavigator
+import cafe.adriel.voyager.navigator.Navigator
 import cafe.adriel.voyager.navigator.currentOrThrow
+import cafe.adriel.voyager.transitions.CrossfadeTransition
 import com.vurgun.skyfit.core.navigation.SharedScreen
 import com.vurgun.skyfit.core.navigation.findRootNavigator
 import com.vurgun.skyfit.core.navigation.replace
-import com.vurgun.skyfit.core.ui.components.box.TodoBox
 import com.vurgun.skyfit.core.ui.components.button.SkyFitPrimaryCircularBackButton
 import com.vurgun.skyfit.core.ui.components.loader.FullScreenLoaderContent
 import com.vurgun.skyfit.core.ui.components.profile.SocialPostCard
@@ -26,6 +27,7 @@ import com.vurgun.skyfit.core.ui.utils.LocalCompactOverlayController
 import com.vurgun.skyfit.profile.component.ProfileCompactComponent
 import com.vurgun.skyfit.profile.component.ProfileExpandedComponent
 import com.vurgun.skyfit.profile.model.ProfileDestination
+import com.vurgun.skyfit.profile.user.measurements.UserMeasurementsScreen
 import com.vurgun.skyfit.profile.user.model.UserProfileAction
 import com.vurgun.skyfit.profile.user.model.UserProfileEffect
 import com.vurgun.skyfit.profile.user.model.UserProfileUiState
@@ -86,8 +88,6 @@ fun UserProfileExpanded(
                     UserProfileExpandedComponent.Header(
                         content = content,
                         onAction = viewModel::onAction,
-                        canNavigateBack = content.isVisiting,
-                        onClickBack = { viewModel.onAction(UserProfileAction.ClickBack) },
                         modifier = Modifier.fillMaxWidth().height(284.dp)
                     )
                 },
@@ -102,9 +102,9 @@ fun UserProfileExpanded(
                         }
 
                         ProfileDestination.Measurements -> {
-                            UserProfileMeasurementContent(
-                                content,
-                                viewModel::onAction,
+                            UserProfileExpandedComponent.MeasurementsContent(
+                                content = content,
+                                onAction = viewModel::onAction,
                                 modifier = Modifier.fillMaxWidth().weight(1f)
                             )
                         }
@@ -120,18 +120,6 @@ fun UserProfileExpanded(
     }
 }
 
-@Composable
-fun UserProfileMeasurementContent(
-    content: UserProfileUiState.Content,
-    onAction: (UserProfileAction) -> Unit,
-    modifier: Modifier
-) {
-    TodoBox(
-        "OLCUMLER",
-        modifier = modifier.widthIn(max = 680.dp)
-    )
-}
-
 private object UserProfileExpandedComponent {
 
 
@@ -139,8 +127,6 @@ private object UserProfileExpandedComponent {
     fun Header(
         content: UserProfileUiState.Content,
         onAction: (UserProfileAction) -> Unit,
-        canNavigateBack: Boolean = false,
-        onClickBack: (() -> Unit)? = null,
         modifier: Modifier = Modifier
     ) {
         val userProfile = content.profile
@@ -194,13 +180,13 @@ private object UserProfileExpandedComponent {
                 }
             )
 
-            if (canNavigateBack) {
+            if (content.canNavigateBack) {
                 SkyFitPrimaryCircularBackButton(
                     modifier = Modifier
                         .align(Alignment.TopStart)
                         .padding(top = 48.dp, start = 24.dp)
                         .size(48.dp),
-                    onClick = { onClickBack?.invoke() }
+                    onClick = { onAction(UserProfileAction.ClickBack) }
                 )
             }
         }
@@ -237,29 +223,42 @@ private object UserProfileExpandedComponent {
         onAction: (UserProfileAction) -> Unit,
         modifier: Modifier = Modifier
     ) {
-        Column(
-            modifier = modifier.fillMaxSize(),
-            verticalArrangement = Arrangement.spacedBy(16.dp),
-            horizontalAlignment = Alignment.CenterHorizontally
-        ) {
-            if (!content.isVisiting) {
-                SocialQuickPostInputCard(
-                    creatorImageUrl = content.profile.backgroundImageUrl,
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .background(SkyFitColor.background.default, RoundedCornerShape(16.dp))
-                ) { onAction(UserProfileAction.OnSendQuickPost(it)) }
-            }
+        Box(modifier.fillMaxSize()) {
+            Column(
+                modifier = modifier
+                    .align(Alignment.TopCenter)
+                    .width(680.dp),
+                verticalArrangement = Arrangement.spacedBy(16.dp),
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+                if (!content.isVisiting) {
+                    SocialQuickPostInputCard(
+                        creatorImageUrl = content.profile.backgroundImageUrl,
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .background(SkyFitColor.background.default, RoundedCornerShape(16.dp))
+                    ) { onAction(UserProfileAction.OnSendQuickPost(it)) }
+                }
 
-            content.posts.forEach { post ->
-                SocialPostCard(
-                    post = post,
-                    onClick = { onAction(UserProfileAction.OnClickPost) },
-                    onClickComment = { onAction(UserProfileAction.OnClickCommentPost) },
-                    onClickLike = { onAction(UserProfileAction.OnClickLikePost) },
-                    onClickShare = { onAction(UserProfileAction.OnClickSharePost) }
-                )
+                content.posts.forEach { post ->
+                    SocialPostCard(
+                        post = post,
+                        onClick = { onAction(UserProfileAction.OnClickPost) },
+                        onClickComment = { onAction(UserProfileAction.OnClickCommentPost) },
+                        onClickLike = { onAction(UserProfileAction.OnClickLikePost) },
+                        onClickShare = { onAction(UserProfileAction.OnClickSharePost) }
+                    )
+                }
             }
         }
+    }
+
+    @Composable
+    fun MeasurementsContent(
+        content: UserProfileUiState.Content,
+        onAction: (UserProfileAction) -> Unit,
+        modifier: Modifier = Modifier
+    ) {
+        UserMeasurementsScreen().Content()
     }
 }
