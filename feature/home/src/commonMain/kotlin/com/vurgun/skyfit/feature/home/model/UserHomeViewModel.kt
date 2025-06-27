@@ -19,7 +19,7 @@ import com.vurgun.skyfit.core.data.v1.domain.workout.model.ExerciseProfile
 import com.vurgun.skyfit.feature.home.model.UserHomeEffect.*
 import com.vurgun.skyfit.feature.home.screen.user.UserAppointmentUiData
 import kotlinx.coroutines.async
-import kotlinx.coroutines.flow.*
+import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.launch
 import kotlinx.datetime.LocalDate
 import kotlinx.datetime.daysUntil
@@ -101,24 +101,7 @@ class UserHomeViewModel(
     private val _effect = SingleSharedFlow<UserHomeEffect>()
     val effect: SharedFlow<UserHomeEffect> = _effect
 
-    private val _debouncedActions = MutableSharedFlow<UserHomeAction>(extraBufferCapacity = 1)
-
-    init {
-        screenModelScope.launch {
-            _debouncedActions
-                .debounce(500L) // Wait for last stable action
-                .distinctUntilChanged() // Prevent back-to-back same actions
-                .collectLatest { action ->
-                    domainHandleAction(action)
-                }
-        }
-    }
-
     fun onAction(action: UserHomeAction) {
-        _debouncedActions.tryEmit(action)
-    }
-
-    private fun domainHandleAction(action: UserHomeAction) {
         when (action) {
             is UserHomeAction.OnClickFacility ->
                 emitEffect(NavigateToVisitFacility(facilityId = action.id))

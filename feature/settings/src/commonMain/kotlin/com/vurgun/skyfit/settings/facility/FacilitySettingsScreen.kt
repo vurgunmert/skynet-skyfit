@@ -20,7 +20,7 @@ class FacilitySettingsScreen : Screen {
     override fun Content() {
         val windowSize = LocalWindowSize.current
         val navigator = LocalNavigator.currentOrThrow
-        val viewModel = navigator.koinNavigatorScreenModel<SettingsViewModel>()
+        val viewModel = koinScreenModel<SettingsViewModel>()
 
         LaunchedEffect(Unit) {
             viewModel.loadData()

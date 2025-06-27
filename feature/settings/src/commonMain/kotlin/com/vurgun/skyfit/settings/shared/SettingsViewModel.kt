@@ -11,11 +11,7 @@ import com.vurgun.skyfit.core.data.v1.domain.account.model.AccountType
 import com.vurgun.skyfit.core.data.v1.domain.global.model.AccountRole
 import com.vurgun.skyfit.settings.model.SettingsDestination
 import com.vurgun.skyfit.settings.model.SettingsMenuItem
-import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.SharedFlow
-import kotlinx.coroutines.flow.collectLatest
-import kotlinx.coroutines.flow.debounce
-import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.launch
 
 sealed class SettingsUiState {
@@ -62,23 +58,7 @@ class SettingsViewModel(
     private val _effect = SingleSharedFlow<SettingsUiEffect>()
     val effect: SharedFlow<SettingsUiEffect> = _effect
 
-    private val _debouncedActions = MutableSharedFlow<SettingsUiAction>(extraBufferCapacity = 1)
-
-    init {
-        screenModelScope.launch {
-            _debouncedActions
-                .distinctUntilChanged()
-                .collectLatest { action ->
-                    domainHandleAction(action)
-                }
-        }
-    }
-
     fun onAction(action: SettingsUiAction) {
-        _debouncedActions.tryEmit(action)
-    }
-
-    fun domainHandleAction(action: SettingsUiAction) {
         when (action) {
             SettingsUiAction.OnClickBack -> emitEffect(SettingsUiEffect.NavigateToBack)
             SettingsUiAction.OnClickLogout -> logoutAccount()

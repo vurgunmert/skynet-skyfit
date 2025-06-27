@@ -32,22 +32,22 @@ internal class SplashScreen : Screen {
 
     @Composable
     override fun Content() {
-        val appNavigator = LocalNavigator.currentOrThrow
+        val navigator = LocalNavigator.currentOrThrow
         val viewModel = koinScreenModel<SplashViewModel>()
         val uiState by viewModel.uiState.collectAsState()
 
         CollectEffect(viewModel.effect) { effect ->
             when (effect) {
                 SplashEffect.NavigateToDashboard -> {
-                    appNavigator.replaceAll(SharedScreen.Main)
+                    navigator.replaceAll(SharedScreen.Main)
                 }
 
                 SplashEffect.NavigateToAuth -> {
-                    appNavigator.replace(SharedScreen.Authorization)
+                    navigator.replace(SharedScreen.Authorization)
                 }
 
                 SplashEffect.NavigateToMaintenance -> {
-                    appNavigator.replace(SharedScreen.Maintenance)
+                    navigator.replace(SharedScreen.Maintenance)
                 }
             }
         }
@@ -59,7 +59,7 @@ internal class SplashScreen : Screen {
         when (uiState) {
             is SplashUiState.Error -> {
                 val message = (uiState as SplashUiState.Error).message
-                ErrorScreen(message = message) { appNavigator.pop() }
+                ErrorScreen(message = message) { navigator.pop() }
             }
 
             SplashUiState.Loading -> {

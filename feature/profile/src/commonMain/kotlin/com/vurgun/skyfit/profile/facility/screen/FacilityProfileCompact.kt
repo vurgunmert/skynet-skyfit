@@ -19,6 +19,7 @@ import cafe.adriel.voyager.navigator.currentOrThrow
 import com.vurgun.skyfit.core.data.v1.domain.facility.model.FacilityProfile
 import com.vurgun.skyfit.core.data.v1.domain.profile.PhotoGalleryStackViewData
 import com.vurgun.skyfit.core.data.v1.domain.trainer.model.FacilityTrainerProfile
+import com.vurgun.skyfit.core.navigation.SharedScreen
 import com.vurgun.skyfit.core.navigation.SharedScreen.*
 import com.vurgun.skyfit.core.navigation.findRootNavigator
 import com.vurgun.skyfit.core.navigation.push
@@ -68,7 +69,7 @@ internal fun FacilityProfileCompact(
             }
 
             FacilityProfileUiEffect.NavigateToSettings -> {
-                appNavigator.push(Settings)
+                appNavigator.push(SharedScreen.Settings)
             }
 
             FacilityProfileUiEffect.NavigateToExplore -> {

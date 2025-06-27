@@ -66,12 +66,13 @@ class AccountManagerImpl(
             return Result.success(account.value!!)
         }
 
-        val result = repository.getAccountDetails()
+        val result = repository.getAccountDetails().onSuccess {
+            userFlow.value = it
+        }
         getAccountTypes()
 
+        println("getActiveUser $result")
         return result
-            .onSuccess { userFlow.value = it }
-            .onFailure { println("❌ Failed to get user securely: $it") }
     }
 
     override suspend fun updateUserType(userTypeId: Int): Result<Unit> {

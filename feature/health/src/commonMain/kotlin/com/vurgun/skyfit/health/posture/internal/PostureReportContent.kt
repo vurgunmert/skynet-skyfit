@@ -35,11 +35,14 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.text.capitalize
+import androidx.compose.ui.text.intl.Locale
 import androidx.compose.ui.unit.dp
 import com.vurgun.skyfit.core.data.v1.data.posture.model.PostureTypeDTO
 import com.vurgun.skyfit.core.data.v1.domain.posture.model.PostureFinding
 import com.vurgun.skyfit.core.ui.components.button.PrimaryIconButton
 import com.vurgun.skyfit.core.ui.components.button.SecondaryIconButton
+import com.vurgun.skyfit.core.ui.components.chip.RectangleChip
 import com.vurgun.skyfit.core.ui.components.chip.SecondaryPillChip
 import com.vurgun.skyfit.core.ui.components.icon.CloseIconRow
 import com.vurgun.skyfit.core.ui.styling.SkyFitColor
@@ -193,22 +196,19 @@ private fun PostureResultSection(
     Column(
         modifier = Modifier.fillMaxWidth()
     ) {
-
         findings.forEach { finding ->
-            if (finding.detected) {
-                Spacer(Modifier.height(24.dp))
-                Text(
-                    text = finding.key,
-                    style = SkyFitTypography.bodyMediumMediumBold,
-                    modifier = Modifier.padding(bottom = 8.dp)
-                )
-                Spacer(Modifier.height(4.dp))
-                Text(
-                    text = finding.explanation,
-                    style = SkyFitTypography.bodyMediumRegular,
-                    modifier = Modifier.padding(top = 2.dp)
-                )
-            }
+            Spacer(Modifier.height(24.dp))
+            Text(
+                text = finding.key.capitalize(Locale.current),
+                style = SkyFitTypography.bodyMediumMediumBold,
+                modifier = Modifier.padding(bottom = 8.dp)
+            )
+            Spacer(Modifier.height(4.dp))
+            Text(
+                text = finding.explanation,
+                style = SkyFitTypography.bodyMediumRegular,
+                modifier = Modifier.padding(top = 2.dp)
+            )
         }
     }
 }

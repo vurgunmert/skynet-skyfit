@@ -58,10 +58,10 @@ androidx-activity-compose = { module = "androidx.activity:activity-compose", ver
 rive = { module = "'app.rive:rive-android", version.ref = "android-rive" }
 
 # Navigation
-voyager-navigator = { group = "cafe.adriel.voyager", name = "voyager-navigator", version.ref = "voyager"}
-voyager-screenmodel = { group = "cafe.adriel.voyager", name = "voyager-screenmodel", version.ref = "voyager"}
-voyager-transitions = { group = "cafe.adriel.voyager", name = "voyager-transitions", version.ref = "voyager"}
-voyager-koin = { group = "cafe.adriel.voyager", name = "voyager-koin", version.ref = "voyager"}
+voyager-navigator = { group = "cafe.adriel.voyager", name = "voyager-navigator", version.ref = "voyager" }
+voyager-screenmodel = { group = "cafe.adriel.voyager", name = "voyager-screenmodel", version.ref = "voyager" }
+voyager-transitions = { group = "cafe.adriel.voyager", name = "voyager-transitions", version.ref = "voyager" }
+voyager-koin = { group = "cafe.adriel.voyager", name = "voyager-koin", version.ref = "voyager" }
 
 # Coil (Image Loading)
 coil-compose = { module = "io.coil-kt.coil3:coil-compose", version.ref = "coil" }

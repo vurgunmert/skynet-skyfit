@@ -11,4 +11,4 @@ fun createDataStore(
     produceFile = { producePath().toPath() }
 )
 
-const val dataStoreFileName = "skyfit.preferences_pb"
+const val dataStoreFileName = "fiwe.preferences_pb"

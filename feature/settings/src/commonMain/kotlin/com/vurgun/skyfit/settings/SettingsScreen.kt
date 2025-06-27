@@ -2,7 +2,6 @@ package com.vurgun.skyfit.settings
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.remember
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.core.screen.ScreenKey
 import cafe.adriel.voyager.navigator.Navigator
@@ -24,26 +23,18 @@ class SettingsScreen : Screen {
     override fun Content() {
         val userRole = rememberUserRole()
 
-        val targetScreen = remember(userRole) {
-            when (userRole) {
-                AccountRole.Facility -> FacilitySettingsScreen()
-                AccountRole.Trainer -> TrainerSettingsScreen()
-                AccountRole.User -> UserSettingsScreen()
-                AccountRole.Guest -> UnauthorizedAccessScreen()
-            }
+        val targetScreen = when (userRole) {
+            AccountRole.Facility -> FacilitySettingsScreen()
+            AccountRole.Trainer -> TrainerSettingsScreen()
+            AccountRole.User -> UserSettingsScreen()
+            AccountRole.Guest -> UnauthorizedAccessScreen()
         }
 
         Navigator(EmptyScreen()) { navigator ->
-            val currentScreenKey = navigator.lastItem.key
-
             LaunchedEffect(userRole) {
-                if (currentScreenKey != targetScreen.key) {
-                    navigator.replaceAll(targetScreen)
-                }
+                navigator.replaceAll(targetScreen)
             }
-
             CrossfadeTransition(navigator)
         }
     }
-
 }

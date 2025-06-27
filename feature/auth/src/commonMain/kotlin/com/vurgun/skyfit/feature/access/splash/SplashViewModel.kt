@@ -36,9 +36,12 @@ internal class SplashViewModel(
 
         screenModelScope.launch {
             try {
+                println("Splash use case one")
                 val result = splashUseCase.execute()
+                println("Splash $result")
                 _effect.emitOrNull(result.toEffect())
             } catch (e: Exception) {
+                println("Splash Errorr ${e.message}")
                 _uiState.update(SplashUiState.Error(e.message))
             }
         }

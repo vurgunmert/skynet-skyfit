@@ -10,12 +10,7 @@ import com.vurgun.skyfit.core.data.utility.emitIn
 import com.vurgun.skyfit.core.data.v1.domain.explore.ExploreRepository
 import com.vurgun.skyfit.core.data.v1.domain.profile.FacilityProfileCardItemViewData
 import com.vurgun.skyfit.core.data.v1.domain.profile.TrainerProfileCardItemViewData
-import com.vurgun.skyfit.profile.facility.screen.FacilityProfileUiAction
-import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.SharedFlow
-import kotlinx.coroutines.flow.collectLatest
-import kotlinx.coroutines.flow.debounce
-import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.launch
 
 sealed class ExploreUiState {
@@ -65,24 +60,7 @@ class ExploreViewModel(
     private val _effect = SingleSharedFlow<ExploreUiEffect>()
     val effect = _effect as SharedFlow<ExploreUiEffect>
 
-    private val _debouncedActions = MutableSharedFlow<ExploreUiAction>(extraBufferCapacity = 1)
-
-    init {
-        screenModelScope.launch {
-            _debouncedActions
-                .debounce(500L)
-                .distinctUntilChanged()
-                .collectLatest { action ->
-                    domainHandleAction(action)
-                }
-        }
-    }
-
     fun onAction(action: ExploreUiAction) {
-        _debouncedActions.tryEmit(action)
-    }
-
-    fun domainHandleAction(action: ExploreUiAction) {
         when (action) {
             ExploreUiAction.OnClickBack ->
                 _effect.emitIn(screenModelScope, NavigateToBack)

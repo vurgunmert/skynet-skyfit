@@ -21,6 +21,7 @@ import com.vurgun.skyfit.core.navigation.SharedScreen.FacilitySchedule
 import com.vurgun.skyfit.core.navigation.SharedScreen.FacilityTrainerSettings
 import com.vurgun.skyfit.core.navigation.SharedScreen.Settings
 import com.vurgun.skyfit.core.navigation.SharedScreen.TrainerProfile
+import com.vurgun.skyfit.core.navigation.findRootNavigator
 import com.vurgun.skyfit.core.navigation.replace
 import com.vurgun.skyfit.core.ui.components.icon.SkyIcon
 import com.vurgun.skyfit.core.ui.components.icon.SkyIconSize
