@@ -13,9 +13,11 @@ import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
 import cafe.adriel.voyager.core.screen.Screen
+import cafe.adriel.voyager.core.screen.ScreenKey
 import cafe.adriel.voyager.koin.koinScreenModel
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
+import com.vurgun.skyfit.core.navigation.SharedScreen
 import com.vurgun.skyfit.core.ui.components.button.SkyButton
 import com.vurgun.skyfit.core.ui.components.button.SkyButtonSize
 import com.vurgun.skyfit.core.ui.components.icon.SkyIconButton
@@ -35,6 +37,8 @@ import skyfit.core.ui.generated.resources.ic_close_circle
 import skyfit.core.ui.generated.resources.share_action
 
 class NewPostScreen : Screen {
+
+    override val key: ScreenKey = SharedScreen.NewPost.key
 
     @Composable
     override fun Content() {

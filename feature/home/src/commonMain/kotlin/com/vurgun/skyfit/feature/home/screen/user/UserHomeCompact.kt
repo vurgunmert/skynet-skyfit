@@ -64,8 +64,9 @@ internal fun UserHomeCompact(viewModel: UserHomeViewModel) {
             NavigateToAppointments -> SharedScreen.UserAppointmentListing
             NavigateToNotifications -> SharedScreen.Notifications
             NavigateToChatbot -> SharedScreen.ChatBot
-            is NavigateToActivityCalendar -> SharedScreen.UserActivityCalendar(null)
+            is NavigateToActivityCalendar -> SharedScreen.UserActivityCalendar(effect.date)
         }
+        if (appNavigator.lastItem == screen) return@CollectEffect
         appNavigator.push(screen)
     }
 
@@ -199,8 +200,8 @@ private object UserHomeCompactComponent {
             content.calendarState?.let {
                 HomeEventCalendarSelector(
                     controller = eventCalendarController,
-                    onDateSelected = { onAction(UserHomeAction.OnClickShowCalendar) },
-                    onClickShowAll = { onAction(UserHomeAction.OnClickShowCalendar) },
+                    onDateSelected = { onAction(UserHomeAction.OnClickShowCalendar(it)) },
+                    onClickShowAll = { onAction(UserHomeAction.OnClickShowCalendar(null)) },
                     modifier = Modifier.fillMaxWidth().padding(16.dp)
                 )
             }

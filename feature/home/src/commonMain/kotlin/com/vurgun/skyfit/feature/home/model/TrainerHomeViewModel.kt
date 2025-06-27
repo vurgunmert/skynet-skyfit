@@ -18,7 +18,11 @@ import com.vurgun.skyfit.core.data.v1.domain.trainer.repository.TrainerRepositor
 import com.vurgun.skyfit.core.navigation.SharedScreen
 import com.vurgun.skyfit.feature.home.component.LessonFilterData
 import com.vurgun.skyfit.feature.home.model.FacilityHomeEffect.ShowOverlay
+import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.SharedFlow
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.debounce
+import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.launch
 import kotlinx.datetime.LocalDate
 
@@ -72,7 +76,24 @@ class TrainerHomeViewModel(
     private val _effect = SingleSharedFlow<TrainerHomeEffect>()
     val effect: SharedFlow<TrainerHomeEffect> = _effect
 
+    private val _debouncedActions = MutableSharedFlow<TrainerHomeAction>(extraBufferCapacity = 1)
+
+    init {
+        screenModelScope.launch {
+            _debouncedActions
+                .debounce(500L)
+                .distinctUntilChanged()
+                .collectLatest { action ->
+                    domainHandleAction(action)
+                }
+        }
+    }
+
     fun onAction(action: TrainerHomeAction) {
+        _debouncedActions.tryEmit(action)
+    }
+
+    private fun domainHandleAction(action: TrainerHomeAction) {
         when (action) {
             TrainerHomeAction.OnClickAppointments ->
                 emitEffect(TrainerHomeEffect.NavigateToAppointments)

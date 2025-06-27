@@ -19,7 +19,7 @@ import com.vurgun.skyfit.core.data.v1.domain.workout.model.ExerciseProfile
 import com.vurgun.skyfit.feature.home.model.UserHomeEffect.*
 import com.vurgun.skyfit.feature.home.screen.user.UserAppointmentUiData
 import kotlinx.coroutines.async
-import kotlinx.coroutines.flow.SharedFlow
+import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import kotlinx.datetime.LocalDate
 import kotlinx.datetime.daysUntil
@@ -76,7 +76,7 @@ sealed class UserHomeAction {
     data object OnClickConversations : UserHomeAction()
     data object OnClickChatBot : UserHomeAction()
     data object OnClickAppointments : UserHomeAction()
-    data object OnClickShowCalendar : UserHomeAction()
+    data class OnClickShowCalendar(val date: LocalDate? = null) : UserHomeAction()
 }
 
 sealed class UserHomeEffect {
@@ -85,7 +85,7 @@ sealed class UserHomeEffect {
     data object NavigateToChatbot : UserHomeEffect()
     data object NavigateToConversations : UserHomeEffect()
     data object NavigateToAppointments : UserHomeEffect()
-    data object NavigateToActivityCalendar : UserHomeEffect()
+    data class NavigateToActivityCalendar(val date: LocalDate? = null) : UserHomeEffect()
 }
 
 class UserHomeViewModel(
@@ -101,7 +101,24 @@ class UserHomeViewModel(
     private val _effect = SingleSharedFlow<UserHomeEffect>()
     val effect: SharedFlow<UserHomeEffect> = _effect
 
+    private val _debouncedActions = MutableSharedFlow<UserHomeAction>(extraBufferCapacity = 1)
+
+    init {
+        screenModelScope.launch {
+            _debouncedActions
+                .debounce(500L) // Wait for last stable action
+                .distinctUntilChanged() // Prevent back-to-back same actions
+                .collectLatest { action ->
+                    domainHandleAction(action)
+                }
+        }
+    }
+
     fun onAction(action: UserHomeAction) {
+        _debouncedActions.tryEmit(action)
+    }
+
+    private fun domainHandleAction(action: UserHomeAction) {
         when (action) {
             is UserHomeAction.OnClickFacility ->
                 emitEffect(NavigateToVisitFacility(facilityId = action.id))
@@ -118,8 +135,8 @@ class UserHomeViewModel(
             UserHomeAction.OnClickChatBot ->
                 emitEffect(NavigateToChatbot)
 
-            UserHomeAction.OnClickShowCalendar ->
-                emitEffect(NavigateToActivityCalendar)
+            is UserHomeAction.OnClickShowCalendar ->
+                emitEffect(NavigateToActivityCalendar(action.date))
         }
     }
 

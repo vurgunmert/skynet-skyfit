@@ -17,6 +17,7 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import cafe.adriel.voyager.core.registry.rememberScreen
 import cafe.adriel.voyager.core.screen.Screen
+import cafe.adriel.voyager.navigator.CurrentScreen
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.Navigator
 import cafe.adriel.voyager.navigator.currentOrThrow
@@ -99,7 +100,7 @@ fun DashboardCompact(viewModel: DashboardViewModel) {
             }
         ) {
             Box(Modifier.fillMaxSize()) {
-                CrossfadeTransition(navigator = dashboardNavigator)
+                CurrentScreen()
 
                 overlayNavigation?.let {
                     ScreenOverlay(it, onDismiss = viewModel::dismissCompactOverlay)
@@ -151,14 +152,22 @@ private object DashboardCompactComponent {
                         selected = activeScreen.key == SharedScreen.Home.key,
                         selectedIcon = Res.drawable.ic_home_fill,
                         unselectedIcon = Res.drawable.ic_home,
-                        onClick = onClickHome
+                        onClick = {
+                            if (activeScreen.key != SharedScreen.Home.key) {
+                                onClickHome()
+                            }
+                        }
                     )
 
                     BottomBarItem(
                         selected = activeScreen.key == SharedScreen.Explore.key,
                         selectedIcon = Res.drawable.ic_barbell_fill,
                         unselectedIcon = Res.drawable.ic_barbell,
-                        onClick = onClickExplore
+                        onClick = {
+                            if (activeScreen.key != SharedScreen.Explore.key) {
+                                onClickExplore()
+                            }
+                        }
                     )
 
                     FeatureVisible(false) {
@@ -166,7 +175,11 @@ private object DashboardCompactComponent {
                             selected = activeScreen.key == SharedScreen.Social.key,
                             selectedIcon = Res.drawable.ic_plus,
                             unselectedIcon = Res.drawable.ic_search,
-                            onClick = onClickSocial
+                            onClick = {
+                                if (activeScreen.key != SharedScreen.Social.key) {
+                                    onClickSocial()
+                                }
+                            }
                         )
                     }
 
@@ -174,7 +187,11 @@ private object DashboardCompactComponent {
                         selected = activeScreen.key == SharedScreen.Profile.key,
                         selectedIcon = Res.drawable.ic_profile_fill,
                         unselectedIcon = Res.drawable.ic_profile,
-                        onClick = onClickProfile
+                        onClick = {
+                            if (activeScreen.key != SharedScreen.Profile.key) {
+                                onClickProfile()
+                            }
+                        }
                     )
 
                     BlockTouchSpacer(width = 16.dp)

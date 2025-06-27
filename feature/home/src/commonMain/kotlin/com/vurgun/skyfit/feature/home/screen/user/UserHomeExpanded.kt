@@ -154,8 +154,8 @@ private object UserHomeExpandedComponent {
             content.calendarState?.let {
                 HomeEventCalendarSelector(
                     controller = eventCalendarController,
-                    onDateSelected = { onAction(UserHomeAction.OnClickShowCalendar) },
-                    onClickShowAll = { onAction(UserHomeAction.OnClickShowCalendar) },
+                    onDateSelected = { onAction(UserHomeAction.OnClickShowCalendar(it)) },
+                    onClickShowAll = { onAction(UserHomeAction.OnClickShowCalendar(null)) },
                     modifier = Modifier.padding(16.dp)
                 )
             }

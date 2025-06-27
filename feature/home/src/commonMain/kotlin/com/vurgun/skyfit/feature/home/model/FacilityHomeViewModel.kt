@@ -19,7 +19,11 @@ import com.vurgun.skyfit.core.navigation.SharedScreen
 import com.vurgun.skyfit.feature.home.component.LessonFilterData
 import com.vurgun.skyfit.feature.home.model.FacilityHomeEffect.NavigateToManageLessons
 import com.vurgun.skyfit.feature.home.model.FacilityHomeEffect.ShowOverlay
+import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.SharedFlow
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.debounce
+import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.launch
 import kotlinx.datetime.LocalDate
 
@@ -78,8 +82,25 @@ class FacilityHomeViewModel(
     private val _effect = SingleSharedFlow<FacilityHomeEffect>()
     val effect: SharedFlow<FacilityHomeEffect> = _effect
 
+    private val _debouncedActions = MutableSharedFlow<FacilityHomeAction>(extraBufferCapacity = 1)
+
+    init {
+        screenModelScope.launch {
+            _debouncedActions
+                .distinctUntilChanged() // Prevent back-to-back same actions
+                .collectLatest { action ->
+                    domainHandleAction(action)
+                }
+        }
+    }
+
     fun onAction(action: FacilityHomeAction) {
+        _debouncedActions.tryEmit(action)
+    }
+
+    private fun domainHandleAction(action: FacilityHomeAction) {
         when (action) {
+
             is FacilityHomeAction.OnOverlayRequest ->
                 emitEffect(ShowOverlay(action.screen))
 

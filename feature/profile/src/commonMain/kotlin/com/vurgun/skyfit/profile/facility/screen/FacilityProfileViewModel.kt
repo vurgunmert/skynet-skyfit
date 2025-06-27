@@ -2,14 +2,9 @@ package com.vurgun.skyfit.profile.facility.screen
 
 import cafe.adriel.voyager.core.model.ScreenModel
 import cafe.adriel.voyager.core.model.screenModelScope
-import com.vurgun.skyfit.core.data.utility.SingleSharedFlow
-import com.vurgun.skyfit.core.data.utility.UiStateDelegate
-import com.vurgun.skyfit.core.data.utility.emitIn
-import com.vurgun.skyfit.core.data.utility.humanizeAgo
-import com.vurgun.skyfit.core.data.utility.now
+import com.vurgun.skyfit.core.data.utility.*
 import com.vurgun.skyfit.core.data.v1.data.lesson.mapper.LessonSessionItemViewDataMapper
 import com.vurgun.skyfit.core.data.v1.domain.account.manager.ActiveAccountManager
-import com.vurgun.skyfit.core.data.v1.domain.account.model.AccountType
 import com.vurgun.skyfit.core.data.v1.domain.account.model.FacilityAccount
 import com.vurgun.skyfit.core.data.v1.domain.facility.model.FacilityProfile
 import com.vurgun.skyfit.core.data.v1.domain.facility.repository.FacilityRepository
@@ -22,7 +17,11 @@ import com.vurgun.skyfit.core.data.v1.domain.trainer.model.FacilityTrainerProfil
 import com.vurgun.skyfit.profile.facility.screen.FacilityProfileUiEffect.*
 import com.vurgun.skyfit.profile.model.ProfileDestination
 import kotlinx.coroutines.async
+import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.SharedFlow
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.debounce
+import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.launch
 import kotlinx.datetime.LocalDate
 
@@ -96,7 +95,24 @@ class FacilityProfileViewModel(
 
     private var activeFacilityId: Int = 0
 
+    private val _debouncedActions = MutableSharedFlow<FacilityProfileUiAction>(extraBufferCapacity = 1)
+
+    init {
+        screenModelScope.launch {
+            _debouncedActions
+                .debounce(500L)
+                .distinctUntilChanged()
+                .collectLatest { action ->
+                    domainHandleAction(action)
+                }
+        }
+    }
+
     fun onAction(action: FacilityProfileUiAction) {
+        _debouncedActions.tryEmit(action)
+    }
+
+    private fun domainHandleAction(action: FacilityProfileUiAction) {
         when (action) {
             FacilityProfileUiAction.NavigateBack -> emitEffect(NavigateBack)
             FacilityProfileUiAction.NavigateToGallery -> emitEffect(NavigateToGallery)
@@ -105,8 +121,9 @@ class FacilityProfileViewModel(
             FacilityProfileUiAction.NavigateToTrainers -> emitEffect(NavigateToExplore)
             FacilityProfileUiAction.OnClickNewPost -> emitEffect(NavigateToCreatePost)
             is FacilityProfileUiAction.OnDestinationChanged -> {
-                val currentState = (uiState.value as? FacilityProfileUiState.Content) ?: return
-                _uiState.update(currentState.copy(destination = action.destination))
+                (uiState.value as? FacilityProfileUiState.Content)?.let { currentState ->
+                    _uiState.update(currentState.copy(destination = action.destination))
+                }
             }
 
             is FacilityProfileUiAction.ChangeDate -> updateLessons(action.date)
@@ -116,14 +133,16 @@ class FacilityProfileViewModel(
             FacilityProfileUiAction.OnClickSendMessage ->
                 emitEffect(NavigateToFacilityChat(activeFacilityId))
 
-            FacilityProfileUiAction.OnClickAllLessons ->{
-                val isVisiting = (uiState.value as? FacilityProfileUiState.Content)?.isVisiting ?: return
-                if (isVisiting) {
-                    emitEffect(NavigateToFacilitySchedule(activeFacilityId))
-                } else {
-                    emitEffect(NavigateToLessonListing)
+            FacilityProfileUiAction.OnClickAllLessons -> {
+                (uiState.value as? FacilityProfileUiState.Content)?.let { currentState ->
+                    if (currentState.isVisiting) {
+                        emitEffect(NavigateToFacilitySchedule(activeFacilityId))
+                    } else {
+                        emitEffect(NavigateToLessonListing)
+                    }
                 }
             }
+
             FacilityProfileUiAction.OnClickShowSchedule -> {
                 emitEffect(NavigateToFacilitySchedule(activeFacilityId))
             }
@@ -135,28 +154,33 @@ class FacilityProfileViewModel(
             FacilityProfileUiAction.OnClickCommentPost -> {
 //                TODO()
             }
+
             FacilityProfileUiAction.OnClickLikePost -> {
 //                TODO()
             }
+
             FacilityProfileUiAction.OnClickPost -> {
 //                TODO()
             }
+
             FacilityProfileUiAction.OnClickSharePost -> {
 //                TODO()
             }
 
             is FacilityProfileUiAction.OnSendQuickPost -> {
-               sendPost(action.content)
+                sendPost(action.content)
             }
 
             FacilityProfileUiAction.OnClickShowAllTrainers -> {
-                val isVisiting = (uiState.value as? FacilityProfileUiState.Content)?.isVisiting ?: return
-                if (isVisiting) {
-                    emitEffect(NavigateToExplore)
-                } else {
-                    emitEffect(NavigateToTrainerSettings)
+                (uiState.value as? FacilityProfileUiState.Content)?.let { currentState ->
+                    if (currentState.isVisiting) {
+                        emitEffect(NavigateToExplore)
+                    } else {
+                        emitEffect(NavigateToTrainerSettings)
+                    }
                 }
             }
+
         }
     }
 
@@ -246,7 +270,8 @@ class FacilityProfileViewModel(
             val newIsFollowing = !isFollowing
             val newContent = currentState.copy(isVisitorFollowing = newIsFollowing)
             _uiState.update(newContent)
-            if (newIsFollowing) {}
+            if (newIsFollowing) {
+            }
         }
     }
 

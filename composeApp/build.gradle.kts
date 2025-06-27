@@ -126,8 +126,20 @@ compose.desktop {
 
         nativeDistributions {
             targetFormats(TargetFormat.Dmg, TargetFormat.Msi, TargetFormat.Deb)
-            packageName = "com.vurgun.skyfit"
+            packageName = "FIWE"
             packageVersion = "1.0.0"
+
+            macOS {
+                iconFile.set(project.file("src/desktopMain/resources/icons/fiwe.icns"))
+            }
+            windows {
+                iconFile.set(project.file("src/desktopMain/resources/icons/fiwe.ico"))
+            }
+            linux {
+                iconFile.set(project.file("src/desktopMain/resources/icons/fiwe.png"))
+            }
+
+            modules("jdk.unsupported")
         }
     }
 }
