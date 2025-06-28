@@ -19,7 +19,7 @@ fun main() {
     onWasmReady {
         CanvasBasedWindow(
             canvasElementId = "ComposeTarget",
-            title = "SkyFit Web",
+            title = "FIWE Web",
             content = {
 //                MobileApp()
                 Box(Modifier.fillMaxSize().background(Color.Black)) {

@@ -15,6 +15,7 @@ val dataAuthModule = module {
     includes(dataCoreModule)
 
     factory { SplashUseCase(get(), get()) }
+
     factory { SplashViewModel(get()) }
 
     factory { LoginViewModel(get(), get()) }

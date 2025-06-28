@@ -5,18 +5,18 @@ import cafe.adriel.voyager.core.registry.ScreenProvider
 import cafe.adriel.voyager.core.registry.ScreenRegistry
 import cafe.adriel.voyager.navigator.Navigator
 
-inline fun Navigator.push(provider: ScreenProvider) {
+fun Navigator.push(provider: ScreenProvider) {
     push(ScreenRegistry.get(provider))
 }
 
-inline fun Navigator.replace(provider: ScreenProvider) {
+fun Navigator.replace(provider: ScreenProvider) {
     replace(ScreenRegistry.get(provider))
 }
 
-inline fun Navigator.replaceAll(provider: ScreenProvider) {
+fun Navigator.replaceAll(provider: ScreenProvider) {
     replaceAll(ScreenRegistry.get(provider))
 }
-inline fun Navigator.popUntil(provider: ScreenProvider) {
+fun Navigator.popUntil(provider: ScreenProvider) {
     val target = ScreenRegistry.get(provider)
     popUntil { it == target }
 }
@@ -27,15 +27,4 @@ fun Navigator.findRootNavigator(): Navigator {
         root = root.parent!!
     }
     return root
-}
-
-
-@OptIn(InternalVoyagerApi::class)
-fun Navigator?.findParentByKey(key: String): Navigator? {
-    var current = this
-    while (current != null) {
-        if (current.key == key) return current
-        current = current.parent
-    }
-    return null
 }

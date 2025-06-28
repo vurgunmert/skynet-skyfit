@@ -8,8 +8,6 @@ class SplashUseCase(
     private val appConfigRepository: AppConfigRepository,
     private val userManager: ActiveAccountManager,
 ) {
-
-
     suspend fun execute(): SplashResult = when {
         appConfigRepository.isAppInMaintenance() -> SplashResult.Maintenance
         userManager.getActiveUser(forceRefresh = true).getOrNull() != null -> SplashResult.UserAvailable

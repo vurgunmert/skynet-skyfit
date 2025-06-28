@@ -2,12 +2,15 @@ package com.vurgun.skyfit
 
 import android.annotation.SuppressLint
 import android.content.Context
+import android.content.Intent
 import android.content.pm.ActivityInfo
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.core.view.WindowCompat
 import androidx.core.view.WindowInsetsControllerCompat
+import com.mmk.kmpnotifier.extensions.onCreateOrOnNewIntent
+import com.mmk.kmpnotifier.notification.NotifierManager
 import com.vurgun.skyfit.core.data.storage.LocalSessionStorage
 import com.vurgun.skyfit.core.data.storage.provideLocalSettings
 import org.koin.android.ext.koin.androidContext
@@ -18,6 +21,7 @@ class MainActivity : ComponentActivity() {
     @SuppressLint("SourceLockedOrientationActivity")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        NotifierManager.onCreateOrOnNewIntent(intent)
 
         requestedOrientation = when {
             isPhone() -> ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
@@ -40,6 +44,11 @@ class MainActivity : ComponentActivity() {
                 }
             )
         }
+    }
+
+    override fun onNewIntent(intent: Intent) {
+        super.onNewIntent(intent)
+        NotifierManager.onCreateOrOnNewIntent(intent)
     }
 
     private fun isPhone(): Boolean {

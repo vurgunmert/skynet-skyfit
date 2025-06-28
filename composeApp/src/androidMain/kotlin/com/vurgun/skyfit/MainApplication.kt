@@ -1,6 +1,7 @@
 package com.vurgun.skyfit
 
 import android.app.Application
+import com.vurgun.skyfit.AndroidNotifier
 
 class MainApplication : Application() {
 
@@ -11,5 +12,8 @@ class MainApplication : Application() {
 //        System.setProperty("https.protocols", "TLSv1.3");
 //        System.setProperty("javax.net.debug", "ssl,handshake,record")
 //        Log.d("MV->", "TLS")
+
+        AndroidNotifier.initialize()
+
     }
 }

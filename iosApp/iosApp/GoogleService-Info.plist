@@ -3,17 +3,17 @@
 <plist version="1.0">
 <dict>
 	<key>API_KEY</key>
-	<string>AIzaSyDHF4uCBrjM0bR6gb_-hzXOf96xVB-uI0Y</string>
+	<string>AIzaSyCFWlundFeAAgNr4JFeCUM3t4FxdxWUJWg</string>
 	<key>GCM_SENDER_ID</key>
-	<string>991652829842</string>
+	<string>1088723631756</string>
 	<key>PLIST_VERSION</key>
 	<string>1</string>
 	<key>BUNDLE_ID</key>
-	<string>com.vurgun.skyfit</string>
+	<string>com.vurgun.fiwe</string>
 	<key>PROJECT_ID</key>
-	<string>vurgun-skynet</string>
+	<string>fiwe-26dbf</string>
 	<key>STORAGE_BUCKET</key>
-	<string>vurgun-skynet.firebasestorage.app</string>
+	<string>fiwe-26dbf.firebasestorage.app</string>
 	<key>IS_ADS_ENABLED</key>
 	<false></false>
 	<key>IS_ANALYTICS_ENABLED</key>
@@ -25,6 +25,6 @@
 	<key>IS_SIGNIN_ENABLED</key>
 	<true></true>
 	<key>GOOGLE_APP_ID</key>
-	<string>1:991652829842:ios:1340ad8b364ee83949244b</string>
+	<string>1:1088723631756:ios:198a4463411b76f9db45a9</string>
 </dict>
 </plist>

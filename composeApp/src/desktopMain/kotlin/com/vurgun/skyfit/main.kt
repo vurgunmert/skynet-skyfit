@@ -4,6 +4,7 @@ import androidx.compose.ui.window.Window
 import androidx.compose.ui.window.application
 import com.vurgun.skyfit.core.data.storage.LocalSessionStorage
 import com.vurgun.skyfit.core.data.storage.provideLocalSettings
+import com.vurgun.skyfit.DesktopNotifier
 import com.vurgun.skyfit.core.ui.styling.LocalDimensions
 import org.jetbrains.compose.resources.stringResource
 import org.koin.dsl.module
@@ -14,12 +15,14 @@ import java.awt.Dimension
 // Desktop Entry Point
 fun main() = application {
 
+    DesktopNotifier.initialize()
+
     Window(
         onCloseRequest = ::exitApplication,
         title = stringResource(Res.string.app_name),
     ) {
         val localDimens = LocalDimensions.current
-        window.minimumSize = Dimension(localDimens.desktopMinWidthPx, localDimens.desktopMinHeightPx)
+        window.minimumSize = Dimension(localDimens.mobileMinWidthPx, localDimens.mobileMinHeightPx)
 
         AppRootScreen(
             platformModule = module {

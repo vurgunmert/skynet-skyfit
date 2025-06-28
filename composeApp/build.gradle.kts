@@ -8,6 +8,7 @@ plugins {
     alias(libs.plugins.composeMultiplatform)
     alias(libs.plugins.composeCompiler)
     alias(libs.plugins.composeHotReload)
+    id("com.google.gms.google-services")
 }
 
 kotlin {
@@ -24,6 +25,7 @@ kotlin {
         iosSimulatorArm64()
     ).forEach { iosTarget ->
         iosTarget.binaries.framework {
+            export("io.github.mirzemehdi:kmpnotifier:1.5.1")
             baseName = "composeApp"
             freeCompilerArgs += listOf("-Xbinary=bundleId=com.vurgun.fiwe.composeApp")
             isStatic = true
@@ -62,6 +64,8 @@ kotlin {
             implementation(projects.feature.settings)
             implementation(projects.feature.health)
             implementation(projects.feature.connect)
+
+            implementation("io.github.mirzemehdi:kmpnotifier:1.5.1")
         }
 
         androidMain.dependencies {
@@ -96,8 +100,8 @@ android {
         applicationId = "com.vurgun.fiwe"
         minSdk = libs.versions.android.minSdk.get().toInt()
         targetSdk = libs.versions.android.targetSdk.get().toInt()
-        versionCode = 10
-        versionName = "1.0.2"
+        versionCode = 1
+        versionName = "1.0.0"
     }
     packaging {
         resources {
@@ -125,7 +129,7 @@ compose.desktop {
         mainClass = "com.vurgun.fiwe.MainKt"
 
         nativeDistributions {
-            targetFormats(TargetFormat.Dmg, TargetFormat.Msi, TargetFormat.Deb)
+            targetFormats(TargetFormat.Dmg, TargetFormat.Exe, TargetFormat.Msi, TargetFormat.Deb)
             packageName = "FIWE"
             packageVersion = "1.0.0"
 
@@ -134,6 +138,7 @@ compose.desktop {
             }
             windows {
                 iconFile.set(project.file("src/desktopMain/resources/icons/fiwe.ico"))
+                menuGroup = "Vurgun Teknoloji"
             }
             linux {
                 iconFile.set(project.file("src/desktopMain/resources/icons/fiwe.png"))

@@ -16,7 +16,6 @@ import androidx.compose.ui.unit.dp
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
 import com.vurgun.skyfit.core.navigation.SharedScreen
-import com.vurgun.skyfit.core.navigation.findParentByKey
 import com.vurgun.skyfit.core.navigation.push
 import com.vurgun.skyfit.core.navigation.replace
 import com.vurgun.skyfit.core.ui.components.button.SkyButton

@@ -24,6 +24,7 @@ import com.vurgun.skyfit.core.ui.components.button.SkyButtonSize
 import com.vurgun.skyfit.core.ui.components.button.SkyButtonVariant
 import com.vurgun.skyfit.core.ui.components.icon.SkyIcon
 import com.vurgun.skyfit.core.ui.components.icon.SkyIconSize
+import com.vurgun.skyfit.core.ui.components.icon.SkyIconTint
 import com.vurgun.skyfit.core.ui.components.special.CompactTopBar
 import com.vurgun.skyfit.core.ui.components.special.SkyPageScaffold
 import com.vurgun.skyfit.core.ui.components.text.SkyText
@@ -148,9 +149,15 @@ internal object SettingsCompactComponent {
         val isHovered by interactionSource.collectIsHoveredAsState()
 
         val backgroundColor = when {
-            isPressed -> Color(0xFFDDDDDD)
-            isHovered -> Color(0xFFF5F5F5)
+            isPressed -> SkyFitColor.background.surfaceActive
+            isHovered -> SkyFitColor.background.surfaceHover
             else -> Color.Transparent
+        }
+
+        val textColor = when {
+            isPressed -> SkyFitColor.specialty.buttonBgRest
+            isHovered -> SkyFitColor.specialty.buttonBgHover
+            else -> SkyFitColor.text.default
         }
 
         Row(
@@ -166,20 +173,25 @@ internal object SettingsCompactComponent {
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.spacedBy(16.dp)
         ) {
-            SkyIcon(
-                res = iconRes,
-                size = SkyIconSize.Medium
+            Icon(
+                painter = painterResource(iconRes),
+                contentDescription = null,
+                tint = textColor,
+                modifier = Modifier.size(24.dp)
             )
 
             SkyText(
                 text = stringResource(titleRes),
                 modifier = Modifier.weight(1f),
                 styleType = TextStyleType.BodyMediumMedium,
+                color = textColor
             )
 
-            SkyIcon(
-                res = Res.drawable.ic_chevron_right,
-                size = SkyIconSize.Medium
+            Icon(
+                painter = painterResource(Res.drawable.ic_chevron_right),
+                contentDescription = null,
+                tint = textColor,
+                modifier = Modifier.size(24.dp)
             )
         }
     }
