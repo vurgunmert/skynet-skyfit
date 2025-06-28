@@ -20,9 +20,9 @@ import com.vurgun.skyfit.onboarding.component.OnboardingStepProgressComponent
 import com.vurgun.skyfit.onboarding.component.OnboardingTitleGroupComponent
 import com.vurgun.skyfit.onboarding.model.OnboardingViewModel
 import org.jetbrains.compose.resources.stringResource
-import skyfit.core.ui.generated.resources.Res
-import skyfit.core.ui.generated.resources.onboarding_height_message
-import skyfit.core.ui.generated.resources.onboarding_height_title
+import fiwe.core.ui.generated.resources.Res
+import fiwe.core.ui.generated.resources.onboarding_height_message
+import fiwe.core.ui.generated.resources.onboarding_height_title
 
 internal class SelectHeightScreen(private val viewModel: OnboardingViewModel) : Screen {
 

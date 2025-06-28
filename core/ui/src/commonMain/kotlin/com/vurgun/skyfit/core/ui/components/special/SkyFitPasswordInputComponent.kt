@@ -30,10 +30,10 @@ import androidx.compose.ui.unit.dp
 import com.vurgun.skyfit.core.ui.styling.SkyFitColor
 import com.vurgun.skyfit.core.ui.styling.SkyFitTypography
 import org.jetbrains.compose.resources.painterResource
-import skyfit.core.ui.generated.resources.Res
-import skyfit.core.ui.generated.resources.ic_lock
-import skyfit.core.ui.generated.resources.ic_visibility_hide
-import skyfit.core.ui.generated.resources.ic_visibility_show
+import fiwe.core.ui.generated.resources.Res
+import fiwe.core.ui.generated.resources.ic_lock
+import fiwe.core.ui.generated.resources.ic_visibility_hide
+import fiwe.core.ui.generated.resources.ic_visibility_show
 
 //TODO: use from designsystem
 @Composable

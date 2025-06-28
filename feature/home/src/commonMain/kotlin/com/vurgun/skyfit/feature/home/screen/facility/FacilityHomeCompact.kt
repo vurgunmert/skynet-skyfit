@@ -19,16 +19,17 @@ import com.vurgun.skyfit.core.navigation.push
 import com.vurgun.skyfit.core.ui.components.loader.FullScreenLoaderContent
 import com.vurgun.skyfit.core.ui.screen.ErrorScreen
 import com.vurgun.skyfit.core.ui.utils.CollectEffect
+import com.vurgun.skyfit.core.ui.utils.CollectEvent
 import com.vurgun.skyfit.feature.home.component.HomeCompactComponent
 import com.vurgun.skyfit.feature.home.component.HomeNoUpcomingAppointmentCard
 import com.vurgun.skyfit.feature.home.component.HomeStatisticComponents.StatCardComponent
 import com.vurgun.skyfit.feature.home.model.FacilityHomeAction
-import com.vurgun.skyfit.feature.home.model.FacilityHomeEffect
+import com.vurgun.skyfit.feature.home.model.FacilityHomeUiEvent
 import com.vurgun.skyfit.feature.home.model.FacilityHomeUiState
 import com.vurgun.skyfit.feature.home.model.FacilityHomeViewModel
 import org.jetbrains.compose.resources.stringResource
-import skyfit.core.ui.generated.resources.Res
-import skyfit.core.ui.generated.resources.refresh_action
+import fiwe.core.ui.generated.resources.Res
+import fiwe.core.ui.generated.resources.refresh_action
 
 @Composable
 internal fun FacilityHomeCompact(viewModel: FacilityHomeViewModel) {
@@ -36,20 +37,18 @@ internal fun FacilityHomeCompact(viewModel: FacilityHomeViewModel) {
     val appNavigator = LocalNavigator.currentOrThrow.findRootNavigator()
     val uiState by viewModel.uiState.collectAsState()
 
-    CollectEffect(viewModel.effect) { effect ->
-        when (effect) {
-
-            is FacilityHomeEffect.ShowOverlay -> {
-                appNavigator.push(effect.screen)
+    CollectEvent(viewModel.eventFlow) { event ->
+        when (event) {
+            is FacilityHomeUiEvent.ShowOverlay -> {
+                appNavigator.push(event.screen)
             }
 
-            FacilityHomeEffect.NavigateToManageLessons -> {
+            FacilityHomeUiEvent.NavigateToManageLessons -> {
                 appNavigator.push(SharedScreen.FacilityManageLessons)
             }
 
-            FacilityHomeEffect.DismissOverlay ->
+            FacilityHomeUiEvent.DismissOverlay ->
                 appNavigator.pop()
-
         }
     }
 

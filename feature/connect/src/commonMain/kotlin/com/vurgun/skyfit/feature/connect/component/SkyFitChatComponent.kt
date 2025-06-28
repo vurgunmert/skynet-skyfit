@@ -20,9 +20,9 @@ import com.vurgun.skyfit.core.ui.styling.SkyFitColor
 import com.vurgun.skyfit.core.ui.styling.SkyFitTypography
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
-import skyfit.core.ui.generated.resources.Res
-import skyfit.core.ui.generated.resources.chat_bot_input_hint
-import skyfit.core.ui.generated.resources.ic_send
+import fiwe.core.ui.generated.resources.Res
+import fiwe.core.ui.generated.resources.chat_bot_input_hint
+import fiwe.core.ui.generated.resources.ic_send
 
 @Composable
 fun SkyChatMessageItem(chatMessage: ChatbotMessage,

@@ -44,7 +44,7 @@ import com.vurgun.skyfit.profile.user.model.UserProfileEffect
 import com.vurgun.skyfit.profile.user.model.UserProfileUiState
 import com.vurgun.skyfit.profile.user.model.UserProfileViewModel
 import org.jetbrains.compose.resources.stringResource
-import skyfit.core.ui.generated.resources.*
+import fiwe.core.ui.generated.resources.*
 
 @Composable
 fun UserProfileCompact(

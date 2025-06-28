@@ -30,10 +30,10 @@ import com.vurgun.skyfit.core.ui.styling.SkyFitAsset
 import com.vurgun.skyfit.core.ui.styling.SkyFitColor
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
-import skyfit.core.ui.generated.resources.Res
-import skyfit.core.ui.generated.resources.ic_chevron_right
-import skyfit.core.ui.generated.resources.ic_dots_vertical
-import skyfit.core.ui.generated.resources.lesson_notify_me_action
+import fiwe.core.ui.generated.resources.Res
+import fiwe.core.ui.generated.resources.ic_chevron_right
+import fiwe.core.ui.generated.resources.ic_dots_vertical
+import fiwe.core.ui.generated.resources.lesson_notify_me_action
 
 @Composable
 private fun EventItemColumn(

@@ -19,8 +19,8 @@ import com.vurgun.skyfit.core.ui.components.text.TextStyleType
 import com.vurgun.skyfit.core.ui.styling.SkyFitColor
 import com.vurgun.skyfit.core.ui.styling.SkyFitTypography
 import org.jetbrains.compose.resources.painterResource
-import skyfit.core.ui.generated.resources.Res
-import skyfit.core.ui.generated.resources.ic_chevron_left
+import fiwe.core.ui.generated.resources.Res
+import fiwe.core.ui.generated.resources.ic_chevron_left
 
 object CompactTopBar {
 

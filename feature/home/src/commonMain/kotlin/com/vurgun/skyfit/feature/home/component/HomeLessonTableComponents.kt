@@ -24,7 +24,7 @@ import com.vurgun.skyfit.core.ui.components.text.SkyInputTextField
 import com.vurgun.skyfit.core.ui.components.text.SkyText
 import com.vurgun.skyfit.core.ui.components.text.TextStyleType
 import com.vurgun.skyfit.core.ui.styling.SkyFitColor
-import skyfit.core.ui.generated.resources.*
+import fiwe.core.ui.generated.resources.*
 
 internal object HomeLessonTableComponents {
 

@@ -43,7 +43,7 @@ import com.vurgun.skyfit.core.ui.components.special.FeatureVisible
 import com.vurgun.skyfit.core.ui.utils.LocalExpandedOverlayController
 import com.vurgun.skyfit.core.utils.rememberAccountType
 import org.jetbrains.compose.resources.DrawableResource
-import skyfit.core.ui.generated.resources.*
+import fiwe.core.ui.generated.resources.*
 
 @Composable
 fun DashboardExpanded(viewModel: DashboardViewModel) {

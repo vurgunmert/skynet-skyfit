@@ -43,10 +43,10 @@ import com.vurgun.skyfit.profile.component.ProfileExpandedComponent
 import com.vurgun.skyfit.profile.facility.screen.FacilityProfileCompactComponent.FacilityNoTrainerGroup
 import com.vurgun.skyfit.profile.facility.screen.FacilityProfileCompactComponent.OurTrainerList
 import org.jetbrains.compose.resources.stringResource
-import skyfit.core.ui.generated.resources.Res
-import skyfit.core.ui.generated.resources.ic_location_pin
-import skyfit.core.ui.generated.resources.member_label
-import skyfit.core.ui.generated.resources.trainer_label
+import fiwe.core.ui.generated.resources.Res
+import fiwe.core.ui.generated.resources.ic_location_pin
+import fiwe.core.ui.generated.resources.member_label
+import fiwe.core.ui.generated.resources.trainer_label
 
 @Composable
 fun FacilityProfileExpanded(

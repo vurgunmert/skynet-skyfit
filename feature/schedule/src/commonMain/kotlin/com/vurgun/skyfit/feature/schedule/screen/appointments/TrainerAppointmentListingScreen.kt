@@ -54,12 +54,12 @@ import com.vurgun.skyfit.core.ui.utils.LocalWindowSize
 import com.vurgun.skyfit.core.ui.utils.WindowSize
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
-import skyfit.core.ui.generated.resources.Res
-import skyfit.core.ui.generated.resources.appointments_title
-import skyfit.core.ui.generated.resources.ic_filter
-import skyfit.core.ui.generated.resources.lesson_status_active
-import skyfit.core.ui.generated.resources.lesson_status_cancelled
-import skyfit.core.ui.generated.resources.lesson_status_completed
+import fiwe.core.ui.generated.resources.Res
+import fiwe.core.ui.generated.resources.appointments_title
+import fiwe.core.ui.generated.resources.ic_filter
+import fiwe.core.ui.generated.resources.lesson_status_active
+import fiwe.core.ui.generated.resources.lesson_status_cancelled
+import fiwe.core.ui.generated.resources.lesson_status_completed
 
 class TrainerAppointmentListingScreen : Screen {
 

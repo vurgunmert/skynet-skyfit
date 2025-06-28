@@ -27,8 +27,8 @@ import com.vurgun.skyfit.feature.home.model.TrainerHomeEffect.*
 import com.vurgun.skyfit.feature.home.model.TrainerHomeUiState
 import com.vurgun.skyfit.feature.home.model.TrainerHomeViewModel
 import org.jetbrains.compose.resources.stringResource
-import skyfit.core.ui.generated.resources.Res
-import skyfit.core.ui.generated.resources.refresh_action
+import fiwe.core.ui.generated.resources.Res
+import fiwe.core.ui.generated.resources.refresh_action
 
 @Composable
 internal fun TrainerHomeExpanded(viewModel: TrainerHomeViewModel) {

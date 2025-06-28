@@ -11,10 +11,10 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.min
 import com.vurgun.skyfit.core.ui.components.special.FiweLogoDark
 import org.jetbrains.compose.resources.painterResource
-import skyfit.core.ui.generated.resources.Res
-import skyfit.core.ui.generated.resources.background_chatbot
-import skyfit.core.ui.generated.resources.ic_app_logo
-import skyfit.core.ui.generated.resources.ic_fiwe_logo_dark
+import fiwe.core.ui.generated.resources.Res
+import fiwe.core.ui.generated.resources.background_chatbot
+import fiwe.core.ui.generated.resources.ic_app_logo
+import fiwe.core.ui.generated.resources.ic_fiwe_logo_dark
 
 @Composable
 internal fun ChatbotBackground() {

@@ -24,10 +24,10 @@ import com.vurgun.skyfit.core.ui.components.special.CompactTopBar
 import com.vurgun.skyfit.core.ui.components.special.SkyFitSearchTextInputComponent
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
-import skyfit.core.ui.generated.resources.Res
-import skyfit.core.ui.generated.resources.add_action
-import skyfit.core.ui.generated.resources.ic_plus
-import skyfit.core.ui.generated.resources.search_action
+import fiwe.core.ui.generated.resources.Res
+import fiwe.core.ui.generated.resources.add_action
+import fiwe.core.ui.generated.resources.ic_plus
+import fiwe.core.ui.generated.resources.search_action
 
 internal class FacilityAddTrainerScreen : Screen {
 

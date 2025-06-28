@@ -2,21 +2,32 @@ package com.vurgun.skyfit.settings.component
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
+import androidx.compose.foundation.interaction.collectIsHoveredAsState
+import androidx.compose.foundation.interaction.collectIsPressedAsState
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Icon
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import com.vurgun.skyfit.core.ui.components.button.SkyButton
 import com.vurgun.skyfit.core.ui.components.button.SkyButtonSize
 import com.vurgun.skyfit.core.ui.components.button.SkyButtonVariant
+import com.vurgun.skyfit.core.ui.components.icon.SkyIcon
+import com.vurgun.skyfit.core.ui.components.icon.SkyIconSize
 import com.vurgun.skyfit.core.ui.components.special.CompactTopBar
 import com.vurgun.skyfit.core.ui.components.special.SkyPageScaffold
+import com.vurgun.skyfit.core.ui.components.text.SkyText
+import com.vurgun.skyfit.core.ui.components.text.TextStyleType
 import com.vurgun.skyfit.core.ui.styling.SkyFitColor
 import com.vurgun.skyfit.core.ui.styling.SkyFitTypography
 import com.vurgun.skyfit.settings.model.SettingsDestination
@@ -27,10 +38,10 @@ import org.jetbrains.compose.resources.DrawableResource
 import org.jetbrains.compose.resources.StringResource
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
-import skyfit.core.ui.generated.resources.Res
-import skyfit.core.ui.generated.resources.ic_chevron_right
-import skyfit.core.ui.generated.resources.logout_action
-import skyfit.core.ui.generated.resources.settings_title
+import fiwe.core.ui.generated.resources.Res
+import fiwe.core.ui.generated.resources.ic_chevron_right
+import fiwe.core.ui.generated.resources.logout_action
+import fiwe.core.ui.generated.resources.settings_title
 
 internal object SettingsCompactComponent {
 
@@ -132,34 +143,47 @@ internal object SettingsCompactComponent {
         iconRes: DrawableResource,
         onClick: () -> Unit
     ) {
+        val interactionSource = remember { MutableInteractionSource() }
+        val isPressed by interactionSource.collectIsPressedAsState()
+        val isHovered by interactionSource.collectIsHoveredAsState()
+
+        val backgroundColor = when {
+            isPressed -> Color(0xFFDDDDDD)
+            isHovered -> Color(0xFFF5F5F5)
+            else -> Color.Transparent
+        }
+
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .clickable(onClick = onClick),
+                .background(backgroundColor, shape = RoundedCornerShape(8.dp))
+                .padding(horizontal = 16.dp, vertical = 12.dp)
+                .clickable(
+                    interactionSource = interactionSource,
+                    indication = null, // disables ripple
+                    onClick = onClick
+                ),
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.spacedBy(16.dp)
         ) {
-            Icon(
-                painter = painterResource(iconRes),
-                contentDescription = null,
-                modifier = Modifier.size(24.dp),
-                tint = SkyFitColor.icon.default
+            SkyIcon(
+                res = iconRes,
+                size = SkyIconSize.Medium
             )
 
-            Text(
+            SkyText(
                 text = stringResource(titleRes),
                 modifier = Modifier.weight(1f),
-                style = SkyFitTypography.bodyMediumMedium
+                styleType = TextStyleType.BodyMediumMedium,
             )
 
-            Icon(
-                painter = painterResource(Res.drawable.ic_chevron_right),
-                contentDescription = null,
-                modifier = Modifier.size(24.dp),
-                tint = SkyFitColor.icon.default
+            SkyIcon(
+                res = Res.drawable.ic_chevron_right,
+                size = SkyIconSize.Medium
             )
         }
     }
+
 
     @Composable
     private fun NavigationMenuItemGroupDivider() {

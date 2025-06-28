@@ -26,8 +26,8 @@ import com.vurgun.skyfit.feature.connect.conversation.ConversationsAction
 import com.vurgun.skyfit.feature.connect.conversation.ConversationsUiState
 import com.vurgun.skyfit.feature.connect.conversation.UserConversationItem
 import org.jetbrains.compose.resources.painterResource
-import skyfit.core.ui.generated.resources.Res
-import skyfit.core.ui.generated.resources.ic_app_logo
+import fiwe.core.ui.generated.resources.Res
+import fiwe.core.ui.generated.resources.ic_app_logo
 
 internal object ConversationsComponent {
 

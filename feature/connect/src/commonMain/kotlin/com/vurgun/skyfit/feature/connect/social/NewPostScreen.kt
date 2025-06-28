@@ -32,9 +32,9 @@ import com.vurgun.skyfit.core.ui.styling.SkyFitTypography
 import com.vurgun.skyfit.core.ui.utils.CollectEffect
 import com.vurgun.skyfit.core.ui.utils.LocalCompactOverlayController
 import org.jetbrains.compose.resources.stringResource
-import skyfit.core.ui.generated.resources.Res
-import skyfit.core.ui.generated.resources.ic_close_circle
-import skyfit.core.ui.generated.resources.share_action
+import fiwe.core.ui.generated.resources.Res
+import fiwe.core.ui.generated.resources.ic_close_circle
+import fiwe.core.ui.generated.resources.share_action
 
 class NewPostScreen : Screen {
 

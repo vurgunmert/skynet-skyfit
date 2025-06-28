@@ -38,16 +38,16 @@ import com.vurgun.skyfit.settings.shared.changepassword.PasswordSettingsScreen
 import com.vurgun.skyfit.feature.persona.settings.shared.component.TrainerAccountSettingsProfileCard
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
-import skyfit.core.ui.generated.resources.Res
-import skyfit.core.ui.generated.resources.accounts_title
-import skyfit.core.ui.generated.resources.add_account_action
-import skyfit.core.ui.generated.resources.delete_account_action
-import skyfit.core.ui.generated.resources.ic_delete
-import skyfit.core.ui.generated.resources.ic_lock
-import skyfit.core.ui.generated.resources.ic_plus
-import skyfit.core.ui.generated.resources.ic_profile
-import skyfit.core.ui.generated.resources.settings_account_label
-import skyfit.core.ui.generated.resources.settings_change_my_password_label
+import fiwe.core.ui.generated.resources.Res
+import fiwe.core.ui.generated.resources.accounts_title
+import fiwe.core.ui.generated.resources.add_account_action
+import fiwe.core.ui.generated.resources.delete_account_action
+import fiwe.core.ui.generated.resources.ic_delete
+import fiwe.core.ui.generated.resources.ic_lock
+import fiwe.core.ui.generated.resources.ic_plus
+import fiwe.core.ui.generated.resources.ic_profile
+import fiwe.core.ui.generated.resources.settings_account_label
+import fiwe.core.ui.generated.resources.settings_change_my_password_label
 
 class TrainerAccountSettingsScreen : Screen {
 

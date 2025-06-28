@@ -46,7 +46,7 @@ import com.vurgun.skyfit.core.ui.utils.WindowSize
 import kotlinx.datetime.DayOfWeek
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
-import skyfit.core.ui.generated.resources.*
+import fiwe.core.ui.generated.resources.*
 
 class FacilityLessonEditScreen(private val lesson: Lesson? = null) : Screen {
 

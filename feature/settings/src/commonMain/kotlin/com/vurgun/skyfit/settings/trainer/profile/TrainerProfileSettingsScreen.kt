@@ -36,19 +36,19 @@ import com.vurgun.skyfit.core.ui.utils.CollectEffect
 import com.vurgun.skyfit.feature.persona.settings.shared.component.AccountSettingsEditableProfileImage
 import com.vurgun.skyfit.feature.persona.settings.shared.component.SettingsEditProfileHeader
 import org.jetbrains.compose.resources.stringResource
-import skyfit.core.ui.generated.resources.Res
-import skyfit.core.ui.generated.resources.background_image_label
-import skyfit.core.ui.generated.resources.error_save_profile_title
-import skyfit.core.ui.generated.resources.ic_pencil
-import skyfit.core.ui.generated.resources.profile_image_label
-import skyfit.core.ui.generated.resources.settings_edit_profile_biography_hint
-import skyfit.core.ui.generated.resources.settings_edit_profile_biography_label
-import skyfit.core.ui.generated.resources.settings_edit_profile_username_hint
-import skyfit.core.ui.generated.resources.settings_edit_profile_username_label
-import skyfit.core.ui.generated.resources.user_first_name_hint
-import skyfit.core.ui.generated.resources.user_first_name_mandatory_label
-import skyfit.core.ui.generated.resources.user_last_name_hint
-import skyfit.core.ui.generated.resources.user_last_name_mandatory_label
+import fiwe.core.ui.generated.resources.Res
+import fiwe.core.ui.generated.resources.background_image_label
+import fiwe.core.ui.generated.resources.error_save_profile_title
+import fiwe.core.ui.generated.resources.ic_pencil
+import fiwe.core.ui.generated.resources.profile_image_label
+import fiwe.core.ui.generated.resources.settings_edit_profile_biography_hint
+import fiwe.core.ui.generated.resources.settings_edit_profile_biography_label
+import fiwe.core.ui.generated.resources.settings_edit_profile_username_hint
+import fiwe.core.ui.generated.resources.settings_edit_profile_username_label
+import fiwe.core.ui.generated.resources.user_first_name_hint
+import fiwe.core.ui.generated.resources.user_first_name_mandatory_label
+import fiwe.core.ui.generated.resources.user_last_name_hint
+import fiwe.core.ui.generated.resources.user_last_name_mandatory_label
 
 class TrainerProfileSettingsScreen : Screen {
 

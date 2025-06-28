@@ -28,10 +28,10 @@ import com.vurgun.skyfit.core.ui.components.special.RatingButton
 import com.vurgun.skyfit.core.ui.styling.SkyFitColor
 import com.vurgun.skyfit.core.ui.styling.SkyFitTypography
 import org.jetbrains.compose.resources.stringResource
-import skyfit.core.ui.generated.resources.Res
-import skyfit.core.ui.generated.resources.follower_label
-import skyfit.core.ui.generated.resources.lessons_label
-import skyfit.core.ui.generated.resources.videos_label
+import fiwe.core.ui.generated.resources.Res
+import fiwe.core.ui.generated.resources.follower_label
+import fiwe.core.ui.generated.resources.lessons_label
+import fiwe.core.ui.generated.resources.videos_label
 
 @Composable
 fun VerticalTrainerProfileCard(

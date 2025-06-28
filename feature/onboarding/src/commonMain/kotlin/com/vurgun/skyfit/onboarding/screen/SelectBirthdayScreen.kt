@@ -22,9 +22,9 @@ import com.vurgun.skyfit.onboarding.component.OnboardingTitleGroupComponent
 import com.vurgun.skyfit.onboarding.model.OnboardingViewModel
 import kotlinx.datetime.LocalDate
 import org.jetbrains.compose.resources.stringResource
-import skyfit.core.ui.generated.resources.Res
-import skyfit.core.ui.generated.resources.onboarding_birth_date_message
-import skyfit.core.ui.generated.resources.onboarding_birth_date_title
+import fiwe.core.ui.generated.resources.Res
+import fiwe.core.ui.generated.resources.onboarding_birth_date_message
+import fiwe.core.ui.generated.resources.onboarding_birth_date_title
 
 internal class SelectBirthdayScreen(private val viewModel: OnboardingViewModel) : Screen {
 

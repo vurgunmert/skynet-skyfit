@@ -24,9 +24,9 @@ import com.vurgun.skyfit.core.ui.utils.CollectEffect
 import com.vurgun.skyfit.core.ui.utils.LocalWindowSize
 import com.vurgun.skyfit.core.ui.utils.WindowSize
 import org.jetbrains.compose.resources.stringResource
-import skyfit.core.ui.generated.resources.Res
-import skyfit.core.ui.generated.resources.add_action
-import skyfit.core.ui.generated.resources.packages_label
+import fiwe.core.ui.generated.resources.Res
+import fiwe.core.ui.generated.resources.add_action
+import fiwe.core.ui.generated.resources.packages_label
 
 class FacilityPackageSettingsScreen : Screen {
 

@@ -28,9 +28,9 @@ import com.vurgun.skyfit.core.ui.components.text.BodyMediumRegularText
 import com.vurgun.skyfit.core.ui.components.text.BodyMediumSemiboldText
 import com.vurgun.skyfit.core.ui.styling.SkyFitColor
 import org.jetbrains.compose.resources.stringResource
-import skyfit.core.ui.generated.resources.Res
-import skyfit.core.ui.generated.resources.cancel_action
-import skyfit.core.ui.generated.resources.confirm_action
+import fiwe.core.ui.generated.resources.Res
+import fiwe.core.ui.generated.resources.cancel_action
+import fiwe.core.ui.generated.resources.confirm_action
 
 @Composable
 fun HeightAndUnitPickerDialog(

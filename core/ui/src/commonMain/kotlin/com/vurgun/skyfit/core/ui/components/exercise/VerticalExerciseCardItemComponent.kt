@@ -20,9 +20,9 @@ import com.vurgun.skyfit.core.ui.styling.SkyFitTypography
 import dev.chrisbanes.haze.*
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
-import skyfit.core.ui.generated.resources.Res
-import skyfit.core.ui.generated.resources.ic_image
-import skyfit.core.ui.generated.resources.ic_app_logo
+import fiwe.core.ui.generated.resources.Res
+import fiwe.core.ui.generated.resources.ic_image
+import fiwe.core.ui.generated.resources.ic_app_logo
 
 @Composable
 fun VerticalExerciseCardItemComponent(

@@ -36,17 +36,17 @@ import kotlinx.coroutines.flow.map
 import org.jetbrains.compose.resources.DrawableResource
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
-import skyfit.core.ui.generated.resources.Res
-import skyfit.core.ui.generated.resources.ic_check_circle
-import skyfit.core.ui.generated.resources.ic_close
-import skyfit.core.ui.generated.resources.posture_option_view_back
-import skyfit.core.ui.generated.resources.posture_option_view_front
-import skyfit.core.ui.generated.resources.posture_option_view_left
-import skyfit.core.ui.generated.resources.posture_option_view_right
-import skyfit.core.ui.generated.resources.posture_view_back
-import skyfit.core.ui.generated.resources.posture_view_front
-import skyfit.core.ui.generated.resources.posture_view_left
-import skyfit.core.ui.generated.resources.posture_view_right
+import fiwe.core.ui.generated.resources.Res
+import fiwe.core.ui.generated.resources.ic_check_circle
+import fiwe.core.ui.generated.resources.ic_close
+import fiwe.core.ui.generated.resources.posture_option_view_back
+import fiwe.core.ui.generated.resources.posture_option_view_front
+import fiwe.core.ui.generated.resources.posture_option_view_left
+import fiwe.core.ui.generated.resources.posture_option_view_right
+import fiwe.core.ui.generated.resources.posture_view_back
+import fiwe.core.ui.generated.resources.posture_view_front
+import fiwe.core.ui.generated.resources.posture_view_left
+import fiwe.core.ui.generated.resources.posture_view_right
 
 @Composable
 fun PostureOptionsContent(

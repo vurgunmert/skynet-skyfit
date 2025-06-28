@@ -27,8 +27,8 @@ import com.vurgun.skyfit.core.ui.components.icon.CloseIconRow
 import com.vurgun.skyfit.core.ui.styling.SkyFitColor
 import com.vurgun.skyfit.core.ui.styling.SkyFitTypography
 import org.jetbrains.compose.resources.stringResource
-import skyfit.core.ui.generated.resources.Res
-import skyfit.core.ui.generated.resources.ok_action
+import fiwe.core.ui.generated.resources.Res
+import fiwe.core.ui.generated.resources.ok_action
 
 class BasicDialogState {
     var title by mutableStateOf<String?>(null)

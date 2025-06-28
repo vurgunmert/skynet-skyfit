@@ -26,10 +26,10 @@ import com.vurgun.skyfit.core.ui.components.text.BodyMediumRegularText
 import com.vurgun.skyfit.core.ui.styling.SkyFitColor
 import kotlinx.datetime.LocalDate
 import org.jetbrains.compose.resources.stringResource
-import skyfit.core.ui.generated.resources.Res
-import skyfit.core.ui.generated.resources.calendar_select_date
-import skyfit.core.ui.generated.resources.cancel_action
-import skyfit.core.ui.generated.resources.confirm_action
+import fiwe.core.ui.generated.resources.Res
+import fiwe.core.ui.generated.resources.calendar_select_date
+import fiwe.core.ui.generated.resources.cancel_action
+import fiwe.core.ui.generated.resources.confirm_action
 
 @Composable
 fun DatePickerDialog(

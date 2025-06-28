@@ -32,9 +32,9 @@ import com.vurgun.skyfit.core.ui.styling.SkyFitTypography
 import com.vurgun.skyfit.core.ui.utils.CollectEffect
 import kotlinx.datetime.LocalDate
 import org.jetbrains.compose.resources.painterResource
-import skyfit.core.ui.generated.resources.Res
-import skyfit.core.ui.generated.resources.ic_chevron_left
-import skyfit.core.ui.generated.resources.ic_plus
+import fiwe.core.ui.generated.resources.Res
+import fiwe.core.ui.generated.resources.ic_chevron_left
+import fiwe.core.ui.generated.resources.ic_plus
 
 class UserActivityCalendarSearchScreen(private val initialDate: LocalDate? = null) : Screen {
 

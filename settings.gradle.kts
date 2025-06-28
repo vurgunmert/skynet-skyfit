@@ -1,4 +1,4 @@
-rootProject.name = "SkyFit"
+rootProject.name = "FIWE"
 enableFeaturePreview("TYPESAFE_PROJECT_ACCESSORS")
 
 pluginManagement {

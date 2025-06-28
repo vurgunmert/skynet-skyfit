@@ -17,9 +17,9 @@ import com.vurgun.skyfit.core.ui.utils.LocalWindowSize
 import com.vurgun.skyfit.core.ui.utils.WindowSize
 import com.vurgun.skyfit.feature.connect.conversation.component.ConversationsComponent
 import org.jetbrains.compose.resources.stringResource
-import skyfit.core.ui.generated.resources.Res
-import skyfit.core.ui.generated.resources.messages_label
-import skyfit.core.ui.generated.resources.refresh_action
+import fiwe.core.ui.generated.resources.Res
+import fiwe.core.ui.generated.resources.messages_label
+import fiwe.core.ui.generated.resources.refresh_action
 
 class ConversationsScreen : Screen {
 

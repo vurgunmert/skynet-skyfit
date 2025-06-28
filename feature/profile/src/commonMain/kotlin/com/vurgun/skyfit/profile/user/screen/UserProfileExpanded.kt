@@ -34,7 +34,7 @@ import com.vurgun.skyfit.profile.user.model.UserProfileViewModel
 import com.vurgun.skyfit.profile.user.screen.UserProfileCompactComponent.Appointments
 import com.vurgun.skyfit.profile.user.screen.UserProfileCompactComponent.MyDiet
 import org.jetbrains.compose.resources.stringResource
-import skyfit.core.ui.generated.resources.*
+import fiwe.core.ui.generated.resources.*
 
 @Composable
 fun UserProfileExpanded(

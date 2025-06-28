@@ -27,7 +27,7 @@ import com.vurgun.skyfit.core.ui.utils.LocalCompactOverlayController
 import com.vurgun.skyfit.core.ui.utils.LocalExpandedOverlayController
 import com.vurgun.skyfit.health.posture.internal.*
 import org.jetbrains.compose.resources.painterResource
-import skyfit.core.ui.generated.resources.*
+import fiwe.core.ui.generated.resources.*
 
 class PostureAnalysisScreen : Screen {
 

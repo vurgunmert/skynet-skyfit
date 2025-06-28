@@ -30,13 +30,13 @@ import com.vurgun.skyfit.core.ui.components.special.SkyFitMobileScaffold
 import com.vurgun.skyfit.core.ui.styling.SkyFitTypography
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
-import skyfit.core.ui.generated.resources.Res
-import skyfit.core.ui.generated.resources.back_to_lessons_action
-import skyfit.core.ui.generated.resources.go_to_home_action
-import skyfit.core.ui.generated.resources.img_check_mark_blue_box
-import skyfit.core.ui.generated.resources.lesson_create_action
-import skyfit.core.ui.generated.resources.lesson_created_message
-import skyfit.core.ui.generated.resources.lesson_updated_message
+import fiwe.core.ui.generated.resources.Res
+import fiwe.core.ui.generated.resources.back_to_lessons_action
+import fiwe.core.ui.generated.resources.go_to_home_action
+import fiwe.core.ui.generated.resources.img_check_mark_blue_box
+import fiwe.core.ui.generated.resources.lesson_create_action
+import fiwe.core.ui.generated.resources.lesson_created_message
+import fiwe.core.ui.generated.resources.lesson_updated_message
 
 class FacilityLessonCreatedScreen(
     private val isUpdate: Boolean,

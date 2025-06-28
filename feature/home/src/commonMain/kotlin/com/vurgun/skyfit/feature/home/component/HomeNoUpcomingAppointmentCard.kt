@@ -12,10 +12,10 @@ import com.vurgun.skyfit.core.ui.components.text.SkyText
 import com.vurgun.skyfit.core.ui.components.text.TextStyleType
 import com.vurgun.skyfit.core.ui.styling.SkyFitColor
 import org.jetbrains.compose.resources.stringResource
-import skyfit.core.ui.generated.resources.Res
-import skyfit.core.ui.generated.resources.error_trainer_no_facility
-import skyfit.core.ui.generated.resources.lesson_add_action
-import skyfit.core.ui.generated.resources.upcoming_appointments_label
+import fiwe.core.ui.generated.resources.Res
+import fiwe.core.ui.generated.resources.error_trainer_no_facility
+import fiwe.core.ui.generated.resources.lesson_add_action
+import fiwe.core.ui.generated.resources.upcoming_appointments_label
 
 @Composable
 internal fun HomeNoUpcomingAppointmentCard(

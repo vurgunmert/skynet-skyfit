@@ -33,10 +33,10 @@ import com.vurgun.skyfit.core.ui.styling.SkyFitColor
 import com.vurgun.skyfit.core.ui.utils.CollectEffect
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
-import skyfit.core.ui.generated.resources.Res
-import skyfit.core.ui.generated.resources.accounts_title
-import skyfit.core.ui.generated.resources.add_account_action
-import skyfit.core.ui.generated.resources.ic_minus
+import fiwe.core.ui.generated.resources.Res
+import fiwe.core.ui.generated.resources.accounts_title
+import fiwe.core.ui.generated.resources.add_account_action
+import fiwe.core.ui.generated.resources.ic_minus
 
 class AccountRoleSettingsScreen : Screen {
 

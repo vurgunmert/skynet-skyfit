@@ -16,9 +16,9 @@ import com.vurgun.skyfit.core.ui.components.text.BodySmallRegularText
 import com.vurgun.skyfit.core.ui.styling.SkyFitAsset
 import com.vurgun.skyfit.core.ui.styling.SkyFitColor
 import org.jetbrains.compose.resources.stringResource
-import skyfit.core.ui.generated.resources.Res
-import skyfit.core.ui.generated.resources.lesson_status_completed
-import skyfit.core.ui.generated.resources.lesson_status_missing
+import fiwe.core.ui.generated.resources.Res
+import fiwe.core.ui.generated.resources.lesson_status_completed
+import fiwe.core.ui.generated.resources.lesson_status_missing
 
 @Composable
 fun EventTitleRow(

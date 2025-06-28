@@ -26,9 +26,9 @@ import com.vurgun.skyfit.core.ui.styling.LocalPadding
 import com.vurgun.skyfit.core.ui.styling.SkyFitColor
 import com.vurgun.skyfit.health.posture.PostureAnalysisAction
 import org.jetbrains.compose.resources.painterResource
-import skyfit.core.ui.generated.resources.Res
-import skyfit.core.ui.generated.resources.ic_close_circle
-import skyfit.core.ui.generated.resources.ic_info_circle
+import fiwe.core.ui.generated.resources.Res
+import fiwe.core.ui.generated.resources.ic_close_circle
+import fiwe.core.ui.generated.resources.ic_info_circle
 
 @Composable
 internal fun PostureInstructionContent(

@@ -25,9 +25,9 @@ import com.vurgun.skyfit.core.ui.components.text.SkyText
 import com.vurgun.skyfit.core.ui.components.text.TextStyleType
 import com.vurgun.skyfit.core.ui.styling.SkyFitColor
 import org.jetbrains.compose.ui.tooling.preview.Preview
-import skyfit.core.ui.generated.resources.Res
-import skyfit.core.ui.generated.resources.ic_star
-import skyfit.core.ui.generated.resources.ic_star_filled
+import fiwe.core.ui.generated.resources.Res
+import fiwe.core.ui.generated.resources.ic_star
+import fiwe.core.ui.generated.resources.ic_star_filled
 
 @Composable
 fun BasicRatingDialog(

@@ -33,8 +33,8 @@ import com.vurgun.skyfit.core.ui.styling.SkyFitTypography
 import com.vurgun.skyfit.core.ui.utils.keyboardAsState
 import com.vurgun.skyfit.feature.connect.component.SkyFitChatMessageInputComponent
 import org.koin.compose.koinInject
-import skyfit.core.ui.generated.resources.Res
-import skyfit.core.ui.generated.resources.ic_chevron_left
+import fiwe.core.ui.generated.resources.Res
+import fiwe.core.ui.generated.resources.ic_chevron_left
 
 class ChatScreen : Screen {
 

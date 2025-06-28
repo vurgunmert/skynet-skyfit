@@ -33,8 +33,8 @@ import com.vurgun.skyfit.feature.connect.component.SkyChatMessageItem
 import com.vurgun.skyfit.feature.connect.component.SkyFitChatMessageBubbleShimmer
 import com.vurgun.skyfit.feature.connect.component.SkyFitChatMessageInputComponent
 import org.jetbrains.compose.resources.stringResource
-import skyfit.core.ui.generated.resources.Res
-import skyfit.core.ui.generated.resources.chatbot_label
+import fiwe.core.ui.generated.resources.Res
+import fiwe.core.ui.generated.resources.chatbot_label
 
 class ChatWithBotScreen(
     val query: String? = null,

@@ -1,142 +1,103 @@
 package com.vurgun.skyfit.feature.home.model
 
-import androidx.compose.ui.util.fastFilter
 import cafe.adriel.voyager.core.model.ScreenModel
 import cafe.adriel.voyager.core.model.screenModelScope
-import cafe.adriel.voyager.core.registry.ScreenProvider
-import com.vurgun.skyfit.core.data.utility.SingleSharedFlow
+import com.vurgun.skyfit.core.data.utility.UiEventDelegate
 import com.vurgun.skyfit.core.data.utility.UiStateDelegate
-import com.vurgun.skyfit.core.data.utility.emitIn
-import com.vurgun.skyfit.core.data.utility.emitOrNull
 import com.vurgun.skyfit.core.data.v1.data.lesson.mapper.LessonSessionItemViewDataMapper
 import com.vurgun.skyfit.core.data.v1.domain.account.manager.ActiveAccountManager
 import com.vurgun.skyfit.core.data.v1.domain.account.model.FacilityAccount
-import com.vurgun.skyfit.core.data.v1.domain.facility.model.FacilityProfile
 import com.vurgun.skyfit.core.data.v1.domain.facility.repository.FacilityRepository
-import com.vurgun.skyfit.core.data.v1.domain.lesson.model.LessonSessionItemViewData
 import com.vurgun.skyfit.core.data.v1.domain.statistics.front.StatisticCardUiData
 import com.vurgun.skyfit.core.navigation.SharedScreen
 import com.vurgun.skyfit.feature.home.component.LessonFilterData
-import com.vurgun.skyfit.feature.home.model.FacilityHomeEffect.NavigateToManageLessons
-import com.vurgun.skyfit.feature.home.model.FacilityHomeEffect.ShowOverlay
-import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.launch
 import kotlinx.datetime.LocalDate
 
-data class DashboardStatCardModel(
-    val primaryMetrics: List<StatisticCardUiData>,
-    val chartData: List<Any> = emptyList(),
-    val timeRange: TimeRange = TimeRange.H
-) {
-    enum class TimeRange {
-        Y, M6, M3, M1, H
-    }
-}
-
-sealed interface FacilityHomeUiState {
-    data object Loading : FacilityHomeUiState
-    data class Error(val message: String?) : FacilityHomeUiState
-    data class Content(
-        val facility: FacilityAccount,
-        val profile: FacilityProfile,
-        val upcomingLessons: List<LessonSessionItemViewData> = emptyList(),
-        val allLessons: List<LessonSessionItemViewData> = emptyList(),
-        val filteredLessons: List<LessonSessionItemViewData> = emptyList(),
-        val statistics: DashboardStatCardModel,
-        val notificationsEnabled: Boolean = true,
-        val conversationsEnabled: Boolean = true,
-        val appliedFilter: LessonFilterData = LessonFilterData(),
-    ) : FacilityHomeUiState
-}
-
-sealed interface FacilityHomeAction {
-    data class OnOverlayRequest(val screen: ScreenProvider) : FacilityHomeAction
-    data class ApplyLessonFilter(val filter: LessonFilterData) : FacilityHomeAction
-    data class SearchLesson(val query: String? = null) : FacilityHomeAction
-    data object OnClickLessons : FacilityHomeAction
-    data object OnClickNotifications : FacilityHomeAction
-    data object OnClickConversations : FacilityHomeAction
-    data object OnClickChatBot : FacilityHomeAction
-    data object OnClickFilter : FacilityHomeAction
-}
-
-sealed interface FacilityHomeEffect {
-    data class ShowOverlay(val screen: ScreenProvider) : FacilityHomeEffect
-    data object DismissOverlay : FacilityHomeEffect
-    data object NavigateToManageLessons : FacilityHomeEffect
-}
-
+/**
+ * ViewModel for the Facility Home screen.
+ * Handles user actions, manages UI state, and coordinates data operations.
+ */
 class FacilityHomeViewModel(
     private val userManager: ActiveAccountManager,
     private val facilityRepository: FacilityRepository,
-    private val mapper: LessonSessionItemViewDataMapper
+    private val mapper: LessonSessionItemViewDataMapper,
+    private val filterProcessor: LessonFilterProcessor = LessonFilterProcessor()
 ) : ScreenModel {
 
     private val _uiState = UiStateDelegate<FacilityHomeUiState>(FacilityHomeUiState.Loading)
     val uiState = _uiState.asStateFlow()
 
-    private val _effect = SingleSharedFlow<FacilityHomeEffect>()
-    val effect: SharedFlow<FacilityHomeEffect> = _effect
+    private val _eventDelegate = UiEventDelegate<FacilityHomeUiEvent>()
+    val eventFlow = _eventDelegate.eventFlow
 
+    /**
+     * Handles user actions and updates the UI state or emits events accordingly.
+     */
     fun onAction(action: FacilityHomeAction) {
         when (action) {
+            is FacilityHomeAction.OnOverlayRequest -> 
+                _eventDelegate.sendIn(screenModelScope, FacilityHomeUiEvent.ShowOverlay(action.screen))
 
-            is FacilityHomeAction.OnOverlayRequest ->
-                emitEffect(ShowOverlay(action.screen))
+            FacilityHomeAction.OnClickLessons -> 
+                _eventDelegate.sendIn(screenModelScope, FacilityHomeUiEvent.NavigateToManageLessons)
 
-            FacilityHomeAction.OnClickLessons -> {
-                emitEffect(NavigateToManageLessons)
-            }
+            FacilityHomeAction.OnClickChatBot -> 
+                _eventDelegate.sendIn(screenModelScope, FacilityHomeUiEvent.ShowOverlay(SharedScreen.ChatBot))
 
-            FacilityHomeAction.OnClickChatBot ->
-                emitEffect(ShowOverlay(SharedScreen.ChatBot))
+            FacilityHomeAction.OnClickConversations -> 
+                _eventDelegate.sendIn(screenModelScope, FacilityHomeUiEvent.ShowOverlay(SharedScreen.Conversations))
 
-            FacilityHomeAction.OnClickConversations ->
-                emitEffect(ShowOverlay(SharedScreen.Conversations))
+            FacilityHomeAction.OnClickNotifications -> 
+                _eventDelegate.sendIn(screenModelScope, FacilityHomeUiEvent.ShowOverlay(SharedScreen.Notifications))
 
-            FacilityHomeAction.OnClickNotifications ->
-                emitEffect(ShowOverlay(SharedScreen.Notifications))
-
-            is FacilityHomeAction.ApplyLessonFilter ->
+            is FacilityHomeAction.ApplyLessonFilter -> 
                 applyLessonFilter(action.filter)
 
-            is FacilityHomeAction.SearchLesson ->
+            is FacilityHomeAction.SearchLesson -> 
                 applyLessonFilter(LessonFilterData(query = action.query))
 
-            FacilityHomeAction.OnClickFilter ->
-                emitEffect(
-                    ShowOverlay(
+            FacilityHomeAction.OnClickFilter -> {
+                val content = uiState.value as? FacilityHomeUiState.Content ?: return
+                _eventDelegate.sendIn(
+                    screenModelScope,
+                    FacilityHomeUiEvent.ShowOverlay(
                         SharedScreen.LessonFilter(
-                            lessons = (uiState.value as? FacilityHomeUiState.Content)?.allLessons ?: emptyList(),
+                            lessons = content.allLessons,
                             onApply = { applyLessonFilter(it as LessonFilterData) }
-                        )))
+                        )
+                    )
+                )
+            }
         }
     }
 
-
+    /**
+     * Loads facility data, including profile, lessons, and statistics.
+     */
     fun loadData() {
         _uiState.update(FacilityHomeUiState.Loading)
 
         screenModelScope.launch {
             runCatching {
-                val facility = userManager.account.value as FacilityAccount
-                val profile = facilityRepository.getFacilityProfile(facility.gymId).getOrThrow()
+                // Get facility account and profile
+                val facility = userManager.account.value as? FacilityAccount 
+                    ?: throw IllegalStateException("Current account is not a facility account")
 
-                val statistics = DashboardStatCardModel(
-                    primaryMetrics = listOf(
-                        StatisticCardUiData("Aktif Üye", "${profile.memberCount}"),
-                        StatisticCardUiData("Aktif Egitmen", "${profile.trainerCount}"),
-                        StatisticCardUiData("FIWE Kazancın", "-"),
-                        StatisticCardUiData("Puan", "${profile.point}")
-                    )
-                )
+                val profileResult = facilityRepository.getFacilityProfile(facility.gymId)
+                val profile = profileResult.getOrThrow()
 
+                // Create statistics model
+                val statistics = createStatisticsModel(profile)
+
+                // Get lessons data
                 val activeLessons = facilityRepository.getUpcomingLessonsByFacility(facility.gymId, 5)
                     .getOrNull()?.map(mapper::map).orEmpty()
 
                 val allLessons = facilityRepository.getAllLessonsByFacility(facility.gymId, LocalDate(2025, 1, 1), null)
                     .getOrNull()?.map(mapper::map).orEmpty()
 
+                // Update UI state with loaded data
                 _uiState.update(
                     FacilityHomeUiState.Content(
                         facility = facility,
@@ -153,47 +114,26 @@ class FacilityHomeViewModel(
         }
     }
 
-    private fun emitEffect(effect: FacilityHomeEffect) {
-        screenModelScope.launch {
-            _effect.emitOrNull(effect)
-        }
-    }
-
+    /**
+     * Resets the applied filter and shows all lessons.
+     */
     private fun resetFilter() {
-        val content = (uiState.value as? FacilityHomeUiState.Content) ?: return
-        _uiState.update(content.copy(filteredLessons = content.allLessons, appliedFilter = LessonFilterData()))
+        val content = uiState.value as? FacilityHomeUiState.Content ?: return
+        _uiState.update(
+            content.copy(
+                filteredLessons = content.allLessons, 
+                appliedFilter = LessonFilterData()
+            )
+        )
     }
 
+    /**
+     * Applies filter to lessons and updates the UI state.
+     */
     private fun applyLessonFilter(filter: LessonFilterData) {
-        val content = (uiState.value as? FacilityHomeUiState.Content) ?: return
+        val content = uiState.value as? FacilityHomeUiState.Content ?: return
 
-        val filteredLessons = content.allLessons
-            .let { lessons ->
-                var result = lessons
-
-                filter.query
-                    ?.takeIf { it.isNotBlank() }
-                    ?.let { query ->
-                        result = result.fastFilter { it.title.contains(query, ignoreCase = true) }
-                    }
-
-                if (filter.selectedTitles.isNotEmpty()) {
-                    result = result.filter { it.title in filter.selectedTitles }
-                }
-
-                if (filter.selectedTrainers.isNotEmpty()) {
-                    result = result.filter { it.trainer in filter.selectedTrainers }
-                }
-
-                if (filter.selectedHours.isNotEmpty()) {
-                    result = result.filter { it.hours in filter.selectedHours }
-                }
-
-                if (filter.selectedStatuses.isNotEmpty()) {
-                    result = result.filter { it.statusName in filter.selectedStatuses }
-                }
-                result
-            }
+        val filteredLessons = filterProcessor.applyFilter(content.allLessons, filter)
 
         _uiState.update(
             content.copy(
@@ -201,6 +141,20 @@ class FacilityHomeViewModel(
                 appliedFilter = filter
             )
         )
-        _effect.emitIn(screenModelScope, FacilityHomeEffect.DismissOverlay)
+        _eventDelegate.sendIn(screenModelScope, FacilityHomeUiEvent.DismissOverlay)
+    }
+
+    /**
+     * Creates a statistics model from facility profile data.
+     */
+    private fun createStatisticsModel(profile: com.vurgun.skyfit.core.data.v1.domain.facility.model.FacilityProfile): DashboardStatCardModel {
+        return DashboardStatCardModel(
+            primaryMetrics = listOf(
+                StatisticCardUiData("Aktif Üye", "${profile.memberCount}"),
+                StatisticCardUiData("Aktif Egitmen", "${profile.trainerCount}"),
+                StatisticCardUiData("FIWE Kazancın", "-"),
+                StatisticCardUiData("Puan", "${profile.point}")
+            )
+        )
     }
 }

@@ -7,21 +7,19 @@ import com.vurgun.skyfit.core.data.v1.domain.auth.model.SendOTPResult
 import com.vurgun.skyfit.core.data.v1.domain.auth.repository.AuthRepository
 import com.vurgun.skyfit.core.data.v1.domain.account.manager.ActiveAccountManager
 import com.vurgun.skyfit.core.data.storage.Storage
-import com.vurgun.skyfit.core.data.utility.SingleSharedFlow
-import com.vurgun.skyfit.core.data.utility.emitOrNull
+import com.vurgun.skyfit.core.data.utility.UiEventDelegate
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
-sealed interface LoginOTPVerificationEffect {
-    data object GoToRegister : LoginOTPVerificationEffect
-    data object GoToDashboard : LoginOTPVerificationEffect
-    data object GoToOnboarding : LoginOTPVerificationEffect
-    data class ShowError(val message: String?) : LoginOTPVerificationEffect
+sealed interface LoginOTPVerificationEvent {
+    data object GoToRegister : LoginOTPVerificationEvent
+    data object GoToDashboard : LoginOTPVerificationEvent
+    data object GoToOnboarding : LoginOTPVerificationEvent
+    data class ShowError(val message: String?) : LoginOTPVerificationEvent
 }
 
 class LoginOTPVerificationViewModel(
@@ -46,8 +44,8 @@ class LoginOTPVerificationViewModel(
     private val _countdownTime = MutableStateFlow(30)
     val countdownTime: StateFlow<Int> = _countdownTime
 
-    private val _effect = SingleSharedFlow<LoginOTPVerificationEffect>()
-    val effect: SharedFlow<LoginOTPVerificationEffect> = _effect
+    private val _eventDelegate = UiEventDelegate<LoginOTPVerificationEvent>()
+    val eventFlow = _eventDelegate.eventFlow
 
     fun onOtpChanged(otp: String) {
         _enteredOtp.value = otp
@@ -61,19 +59,19 @@ class LoginOTPVerificationViewModel(
             _isLoading.value = true
 
             runCatching {
-                val effect =  when (val result = authRepository.verifyLoginOTP(_enteredOtp.value)) {
-                    is AuthorizationOTPResult.Error -> LoginOTPVerificationEffect.ShowError(result.message)
-                    AuthorizationOTPResult.RegistrationRequired -> LoginOTPVerificationEffect.GoToRegister
-                    AuthorizationOTPResult.OnboardingRequired -> LoginOTPVerificationEffect.GoToOnboarding
+                val event = when (val result = authRepository.verifyLoginOTP(_enteredOtp.value)) {
+                    is AuthorizationOTPResult.Error -> LoginOTPVerificationEvent.ShowError(result.message)
+                    AuthorizationOTPResult.RegistrationRequired -> LoginOTPVerificationEvent.GoToRegister
+                    AuthorizationOTPResult.OnboardingRequired -> LoginOTPVerificationEvent.GoToOnboarding
                     AuthorizationOTPResult.LoginSuccess -> {
                         userManager.getActiveUser(true).getOrThrow()
-                        LoginOTPVerificationEffect.GoToDashboard
+                        LoginOTPVerificationEvent.GoToDashboard
                     }
                 }
-                _effect.emitOrNull(effect)
+                _eventDelegate.send(event)
                 _isLoading.value = false
             }.onFailure { error ->
-                LoginOTPVerificationEffect.ShowError(error.message)
+                _eventDelegate.send(LoginOTPVerificationEvent.ShowError(error.message))
                 _isLoading.value = false
             }
         }
@@ -87,7 +85,7 @@ class LoginOTPVerificationViewModel(
             _isLoading.value = true
             try {
                 when (val result = authRepository.sendOTP()) {
-                    is SendOTPResult.Error -> _effect.emitOrNull(LoginOTPVerificationEffect.ShowError(result.message))
+                    is SendOTPResult.Error -> _eventDelegate.send(LoginOTPVerificationEvent.ShowError(result.message))
                     SendOTPResult.Success -> startResendCooldown()
                 }
             } finally {

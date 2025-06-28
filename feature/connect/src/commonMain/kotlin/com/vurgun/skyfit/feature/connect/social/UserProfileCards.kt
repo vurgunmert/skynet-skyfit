@@ -13,8 +13,8 @@ import com.vurgun.skyfit.core.ui.components.special.SkyFitCircularImageComponent
 import com.vurgun.skyfit.core.ui.components.special.UserCircleAvatarItem
 import com.vurgun.skyfit.core.ui.styling.SkyFitTypography
 import org.jetbrains.compose.resources.painterResource
-import skyfit.core.ui.generated.resources.Res
-import skyfit.core.ui.generated.resources.ic_app_logo
+import fiwe.core.ui.generated.resources.Res
+import fiwe.core.ui.generated.resources.ic_app_logo
 
 @Composable
 fun UserProfileCards(

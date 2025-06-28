@@ -40,15 +40,15 @@ import com.vurgun.skyfit.core.ui.styling.SkyFitTypography
 import com.vurgun.skyfit.core.ui.components.schedule.monthly.CalendarDateSelector
 import com.vurgun.skyfit.core.ui.components.schedule.monthly.rememberEmptySelectCalendarSelectorController
 import org.jetbrains.compose.resources.stringResource
-import skyfit.core.ui.generated.resources.Res
-import skyfit.core.ui.generated.resources.date_label
-import skyfit.core.ui.generated.resources.event_name_label
-import skyfit.core.ui.generated.resources.filter_action
-import skyfit.core.ui.generated.resources.ic_minus
-import skyfit.core.ui.generated.resources.ic_plus
-import skyfit.core.ui.generated.resources.reset_action
-import skyfit.core.ui.generated.resources.settings_account_label
-import skyfit.core.ui.generated.resources.time_label
+import fiwe.core.ui.generated.resources.Res
+import fiwe.core.ui.generated.resources.date_label
+import fiwe.core.ui.generated.resources.event_name_label
+import fiwe.core.ui.generated.resources.filter_action
+import fiwe.core.ui.generated.resources.ic_minus
+import fiwe.core.ui.generated.resources.ic_plus
+import fiwe.core.ui.generated.resources.reset_action
+import fiwe.core.ui.generated.resources.settings_account_label
+import fiwe.core.ui.generated.resources.time_label
 
 class UserAppointmentListingFilterScreen(
     private val viewModel: UserAppointmentListingViewModel

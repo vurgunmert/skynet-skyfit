@@ -20,8 +20,8 @@ import com.vurgun.skyfit.core.ui.styling.SkyFitColor
 import com.vurgun.skyfit.core.ui.utils.LocalWindowSize
 import com.vurgun.skyfit.core.ui.utils.WindowSize
 import com.vurgun.skyfit.feature.connect.chatbot.model.ChatbotViewModel
-import skyfit.core.ui.generated.resources.Res
-import skyfit.core.ui.generated.resources.ic_lightning
+import fiwe.core.ui.generated.resources.Res
+import fiwe.core.ui.generated.resources.ic_lightning
 
 class ChatBotScreen : Screen {
 

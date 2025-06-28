@@ -15,9 +15,9 @@ import com.vurgun.skyfit.core.ui.components.image.SkyImageShape
 import com.vurgun.skyfit.core.ui.components.text.SkyText
 import com.vurgun.skyfit.core.ui.components.text.TextStyleType
 import com.vurgun.skyfit.core.ui.styling.SkyFitColor
+import fiwe.core.ui.generated.resources.Res
+import fiwe.core.ui.generated.resources.chatbot_shortcut_body_analysis_left
 import org.jetbrains.compose.ui.tooling.preview.Preview
-import skyfit.core.ui.generated.resources.Res
-import skyfit.core.ui.generated.resources.chatbot_shortcut_body_analysis_left
 
 @Composable
 fun AvatarGroup(

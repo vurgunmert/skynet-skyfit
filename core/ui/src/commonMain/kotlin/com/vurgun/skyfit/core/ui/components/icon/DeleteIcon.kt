@@ -14,9 +14,9 @@ import androidx.compose.ui.unit.dp
 import com.vurgun.skyfit.core.ui.styling.SkyFitColor
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
-import skyfit.core.ui.generated.resources.Res
-import skyfit.core.ui.generated.resources.delete_action
-import skyfit.core.ui.generated.resources.ic_delete
+import fiwe.core.ui.generated.resources.Res
+import fiwe.core.ui.generated.resources.delete_action
+import fiwe.core.ui.generated.resources.ic_delete
 
 @Composable
 fun DeleteIcon() {

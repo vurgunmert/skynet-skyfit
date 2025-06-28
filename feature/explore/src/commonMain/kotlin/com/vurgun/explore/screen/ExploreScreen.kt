@@ -50,8 +50,8 @@ import com.vurgun.skyfit.core.ui.styling.SkyFitTypography
 import com.vurgun.skyfit.core.ui.utils.CollectEffect
 import com.vurgun.skyfit.core.ui.utils.LocalWindowSize
 import com.vurgun.skyfit.core.ui.utils.WindowSize
-import skyfit.core.ui.generated.resources.Res
-import skyfit.core.ui.generated.resources.ic_arrow_right
+import fiwe.core.ui.generated.resources.Res
+import fiwe.core.ui.generated.resources.ic_arrow_right
 
 class ExploreScreen : Screen {
 

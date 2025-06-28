@@ -49,7 +49,7 @@ import com.vurgun.skyfit.feature.home.model.UserHomeUiState
 import com.vurgun.skyfit.feature.home.model.UserHomeViewModel
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
-import skyfit.core.ui.generated.resources.*
+import fiwe.core.ui.generated.resources.*
 
 @Composable
 internal fun UserHomeCompact(viewModel: UserHomeViewModel) {

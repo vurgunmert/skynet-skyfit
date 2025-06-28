@@ -26,7 +26,7 @@ import com.vurgun.skyfit.onboarding.component.OnboardingTitleGroupComponent
 import com.vurgun.skyfit.onboarding.model.OnboardingViewEvent
 import com.vurgun.skyfit.onboarding.model.OnboardingViewModel
 import org.jetbrains.compose.resources.stringResource
-import skyfit.core.ui.generated.resources.*
+import fiwe.core.ui.generated.resources.*
 
 internal class EnterProfileScreen(private val viewModel: OnboardingViewModel) : Screen {
 

@@ -19,8 +19,8 @@ import com.vurgun.skyfit.core.ui.components.menu.NotificationSettingsItem
 import com.vurgun.skyfit.core.ui.components.special.SkyFitMobileScaffold
 import com.vurgun.skyfit.core.ui.components.special.CompactTopBar
 import org.jetbrains.compose.resources.stringResource
-import skyfit.core.ui.generated.resources.Res
-import skyfit.core.ui.generated.resources.notifications_label
+import fiwe.core.ui.generated.resources.Res
+import fiwe.core.ui.generated.resources.notifications_label
 
 class TrainerNotificationSettingsScreen : Screen {
 

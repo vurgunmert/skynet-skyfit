@@ -12,8 +12,8 @@ import com.vurgun.skyfit.core.ui.components.special.FiweLogoDark
 import com.vurgun.skyfit.core.ui.components.text.SkyText
 import com.vurgun.skyfit.core.ui.components.text.TextStyleType
 import org.jetbrains.compose.resources.stringResource
-import skyfit.core.ui.generated.resources.Res
-import skyfit.core.ui.generated.resources.auth_welcome_message
+import fiwe.core.ui.generated.resources.Res
+import fiwe.core.ui.generated.resources.auth_welcome_message
 
 @Composable
 fun LoginWelcomeGroup() {

@@ -20,7 +20,7 @@ import com.vurgun.skyfit.core.ui.components.text.CardFieldIconText
 import com.vurgun.skyfit.core.ui.styling.SkyFitColor
 import com.vurgun.skyfit.core.ui.styling.SkyFitTypography
 import org.jetbrains.compose.resources.painterResource
-import skyfit.core.ui.generated.resources.*
+import fiwe.core.ui.generated.resources.*
 
 @Composable
 private fun ProfileCardChip(text: String) {

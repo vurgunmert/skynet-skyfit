@@ -35,12 +35,12 @@ import com.vurgun.skyfit.core.ui.components.text.PillText
 import com.vurgun.skyfit.core.ui.styling.SkyFitColor
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
-import skyfit.core.ui.generated.resources.Res
-import skyfit.core.ui.generated.resources.add_action
-import skyfit.core.ui.generated.resources.change_action
-import skyfit.core.ui.generated.resources.delete_action
-import skyfit.core.ui.generated.resources.ic_arrow_replay
-import skyfit.core.ui.generated.resources.ic_image
+import fiwe.core.ui.generated.resources.Res
+import fiwe.core.ui.generated.resources.add_action
+import fiwe.core.ui.generated.resources.change_action
+import fiwe.core.ui.generated.resources.delete_action
+import fiwe.core.ui.generated.resources.ic_arrow_replay
+import fiwe.core.ui.generated.resources.ic_image
 
 @Composable
 fun AccountSettingsEditableProfileImage(

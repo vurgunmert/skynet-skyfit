@@ -39,10 +39,10 @@ import com.vurgun.skyfit.core.ui.components.special.CompactTopBar
 import com.vurgun.skyfit.core.ui.components.special.SkyFitSearchFilterBarComponent
 import com.vurgun.skyfit.core.ui.components.special.SkyFitSearchTextInputComponent
 import org.jetbrains.compose.resources.painterResource
-import skyfit.core.ui.generated.resources.Res
-import skyfit.core.ui.generated.resources.ic_chevron_right
-import skyfit.core.ui.generated.resources.ic_posture_fill
-import skyfit.core.ui.generated.resources.ic_app_logo
+import fiwe.core.ui.generated.resources.Res
+import fiwe.core.ui.generated.resources.ic_chevron_right
+import fiwe.core.ui.generated.resources.ic_posture_fill
+import fiwe.core.ui.generated.resources.ic_app_logo
 
 @Composable
 fun MobileExploreCommunitiesScreen(

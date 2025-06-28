@@ -24,8 +24,8 @@ import com.vurgun.skyfit.core.ui.components.special.SkyFitMobileScaffold
 import com.vurgun.skyfit.core.ui.components.special.CompactTopBar
 import com.vurgun.skyfit.core.ui.styling.SkyFitTypography
 import org.jetbrains.compose.resources.painterResource
-import skyfit.core.ui.generated.resources.Res
-import skyfit.core.ui.generated.resources.ic_medal
+import fiwe.core.ui.generated.resources.Res
+import fiwe.core.ui.generated.resources.ic_medal
 
 @Composable
 fun MobileUserTrophiesScreen(goToBack: () -> Unit) {

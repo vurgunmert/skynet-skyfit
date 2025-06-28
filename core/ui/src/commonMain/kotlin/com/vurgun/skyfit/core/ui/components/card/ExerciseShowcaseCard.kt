@@ -15,9 +15,9 @@ import com.vurgun.skyfit.core.ui.components.text.TextStyleType
 import com.vurgun.skyfit.core.ui.styling.SkyFitColor
 import dev.chrisbanes.haze.*
 import org.jetbrains.compose.ui.tooling.preview.Preview
-import skyfit.core.ui.generated.resources.Res
-import skyfit.core.ui.generated.resources.chatbot_shortcut_body_analysis_left
-import skyfit.core.ui.generated.resources.ic_image
+import fiwe.core.ui.generated.resources.Res
+import fiwe.core.ui.generated.resources.chatbot_shortcut_body_analysis_left
+import fiwe.core.ui.generated.resources.ic_image
 
 @Composable
 fun ExerciseShowcaseCard(

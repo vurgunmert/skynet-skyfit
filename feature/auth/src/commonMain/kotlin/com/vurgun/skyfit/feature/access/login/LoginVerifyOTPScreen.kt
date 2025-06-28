@@ -28,14 +28,14 @@ import com.vurgun.skyfit.core.ui.components.text.TextStyleType
 import com.vurgun.skyfit.core.ui.styling.LocalDimensions
 import com.vurgun.skyfit.core.ui.styling.LocalPadding
 import com.vurgun.skyfit.core.ui.styling.SkyFitColor
-import com.vurgun.skyfit.core.ui.utils.CollectEffect
+import com.vurgun.skyfit.core.ui.utils.CollectEvent
 import com.vurgun.skyfit.core.ui.utils.LocalWindowSize
 import com.vurgun.skyfit.core.ui.utils.WindowSize
 import com.vurgun.skyfit.core.ui.utils.formatPhoneNumber
 import com.vurgun.skyfit.feature.access.component.OTPInputTextField
 import com.vurgun.skyfit.feature.access.register.CreatePasswordScreen
 import org.jetbrains.compose.resources.stringResource
-import skyfit.core.ui.generated.resources.*
+import fiwe.core.ui.generated.resources.*
 
 class LoginVerifyOTPScreen : Screen {
 
@@ -91,12 +91,12 @@ private fun ExpandedLoginVerifyOTPScreen(
 
     var errorMessage by remember { mutableStateOf<String?>(null) }
 
-    CollectEffect(viewModel.effect) { event ->
+    CollectEvent(viewModel.eventFlow) { event ->
         when (event) {
-            is LoginOTPVerificationEffect.GoToRegister -> goToCreatePassword()
-            is LoginOTPVerificationEffect.GoToDashboard -> goToDashboard()
-            is LoginOTPVerificationEffect.GoToOnboarding -> goToOnboarding()
-            is LoginOTPVerificationEffect.ShowError -> errorMessage = event.message
+            is LoginOTPVerificationEvent.GoToRegister -> goToCreatePassword()
+            is LoginOTPVerificationEvent.GoToDashboard -> goToDashboard()
+            is LoginOTPVerificationEvent.GoToOnboarding -> goToOnboarding()
+            is LoginOTPVerificationEvent.ShowError -> errorMessage = event.message
         }
     }
 
@@ -148,21 +148,21 @@ private fun MobileLoginVerifyOTPScreen(
 
     var errorMessage by remember { mutableStateOf<String?>(null) }
 
-    CollectEffect(viewModel.effect) { event ->
+    CollectEvent(viewModel.eventFlow) { event ->
         when (event) {
-            is LoginOTPVerificationEffect.GoToRegister -> {
+            is LoginOTPVerificationEvent.GoToRegister -> {
                 goToCreatePassword()
             }
 
-            is LoginOTPVerificationEffect.GoToDashboard -> {
+            is LoginOTPVerificationEvent.GoToDashboard -> {
                 goToDashboard()
             }
 
-            is LoginOTPVerificationEffect.GoToOnboarding -> {
+            is LoginOTPVerificationEvent.GoToOnboarding -> {
                 goToOnboarding()
             }
 
-            is LoginOTPVerificationEffect.ShowError -> {
+            is LoginOTPVerificationEvent.ShowError -> {
                 errorMessage = event.message
             }
         }

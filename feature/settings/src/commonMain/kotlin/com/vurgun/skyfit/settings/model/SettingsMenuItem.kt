@@ -2,7 +2,7 @@ package com.vurgun.skyfit.settings.model
 
 import org.jetbrains.compose.resources.DrawableResource
 import org.jetbrains.compose.resources.StringResource
-import skyfit.core.ui.generated.resources.*
+import fiwe.core.ui.generated.resources.*
 
 sealed class SettingsMenuItem(
     val iconRes: DrawableResource,

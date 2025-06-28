@@ -20,7 +20,7 @@ import com.vurgun.skyfit.core.ui.components.special.CompactTopBar
 import com.vurgun.skyfit.core.ui.components.special.MobileSettingsDeleteAccountBottomSheet
 import com.vurgun.skyfit.core.ui.components.special.SkyPageScaffold
 import com.vurgun.skyfit.core.ui.screen.ErrorScreen
-import com.vurgun.skyfit.core.ui.utils.CollectEffect
+import com.vurgun.skyfit.core.ui.utils.CollectEvent
 import com.vurgun.skyfit.core.ui.utils.LocalWindowSize
 import com.vurgun.skyfit.core.ui.utils.WindowSize
 import com.vurgun.skyfit.feature.persona.settings.shared.component.FacilityAccountSettingsProfileCard
@@ -29,7 +29,7 @@ import com.vurgun.skyfit.settings.shared.account.AccountRoleSettingsScreen
 import com.vurgun.skyfit.settings.shared.changepassword.PasswordSettingsScreen
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
-import skyfit.core.ui.generated.resources.*
+import fiwe.core.ui.generated.resources.*
 
 class FacilityAccountSettingsScreen : Screen {
 
@@ -41,25 +41,25 @@ class FacilityAccountSettingsScreen : Screen {
         val viewModel = koinScreenModel<FacilityAccountSettingsViewModel>()
         val uiState by viewModel.uiState.collectAsState()
 
-        CollectEffect(viewModel.effect) { effect ->
-            when (effect) {
-                FacilityAccountSettingsEffect.NavigateToBack -> {
+        CollectEvent(viewModel.eventFlow) { event ->
+            when (event) {
+                FacilityAccountSettingsEvent.NavigateToBack -> {
                     navigator.pop()
                 }
 
-                FacilityAccountSettingsEffect.NavigateToAccounts -> {
+                FacilityAccountSettingsEvent.NavigateToAccounts -> {
                     navigator.push(AccountRoleSettingsScreen())
                 }
 
-                FacilityAccountSettingsEffect.NavigateToChangePassword -> {
+                FacilityAccountSettingsEvent.NavigateToChangePassword -> {
                     navigator.push(PasswordSettingsScreen())
                 }
 
-                FacilityAccountSettingsEffect.NavigateToEditProfile -> {
+                FacilityAccountSettingsEvent.NavigateToEditProfile -> {
                     navigator.push(FacilityProfileSettingsScreen())
                 }
 
-                is FacilityAccountSettingsEffect.ShowDeleteError -> {
+                is FacilityAccountSettingsEvent.ShowDeleteError -> {
                     // TODO()
                 }
             }
@@ -162,4 +162,3 @@ private fun MobileFacilitySettingsAccountScreen(
         }
     }
 }
-

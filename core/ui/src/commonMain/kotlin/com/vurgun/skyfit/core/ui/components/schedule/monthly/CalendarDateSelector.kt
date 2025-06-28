@@ -25,9 +25,9 @@ import com.vurgun.skyfit.core.ui.styling.SkyFitColor
 import com.vurgun.skyfit.core.ui.styling.SkyFitTypography
 import kotlinx.datetime.LocalDate
 import org.jetbrains.compose.resources.stringResource
-import skyfit.core.ui.generated.resources.Res
-import skyfit.core.ui.generated.resources.calendar_label
-import skyfit.core.ui.generated.resources.show_all_action
+import fiwe.core.ui.generated.resources.Res
+import fiwe.core.ui.generated.resources.calendar_label
+import fiwe.core.ui.generated.resources.show_all_action
 
 @Composable
 fun CalendarDateSelector(

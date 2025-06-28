@@ -24,10 +24,10 @@ import com.vurgun.skyfit.core.ui.components.button.PrimaryDialogButton
 import com.vurgun.skyfit.core.ui.styling.SkyFitColor
 import com.vurgun.skyfit.core.ui.styling.SkyFitTypography
 import org.jetbrains.compose.resources.stringResource
-import skyfit.core.ui.generated.resources.Res
-import skyfit.core.ui.generated.resources.error_generic_message
-import skyfit.core.ui.generated.resources.error_generic_title
-import skyfit.core.ui.generated.resources.ok_action
+import fiwe.core.ui.generated.resources.Res
+import fiwe.core.ui.generated.resources.error_generic_message
+import fiwe.core.ui.generated.resources.error_generic_title
+import fiwe.core.ui.generated.resources.ok_action
 
 class ErrorDialogState {
     var message by mutableStateOf<String?>(null)

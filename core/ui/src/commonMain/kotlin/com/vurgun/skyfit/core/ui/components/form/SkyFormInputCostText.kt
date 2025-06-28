@@ -30,9 +30,9 @@ import com.vurgun.skyfit.core.ui.components.special.SkyFitCheckBoxComponent
 import com.vurgun.skyfit.core.ui.styling.SkyFitColor
 import com.vurgun.skyfit.core.ui.styling.SkyFitTypography
 import org.jetbrains.compose.resources.stringResource
-import skyfit.core.ui.generated.resources.Res
-import skyfit.core.ui.generated.resources.apply_action
-import skyfit.core.ui.generated.resources.lesson_cost_label
+import fiwe.core.ui.generated.resources.Res
+import fiwe.core.ui.generated.resources.apply_action
+import fiwe.core.ui.generated.resources.lesson_cost_label
 
 @Composable
 fun SkyFormInputCostText(

@@ -15,9 +15,9 @@ import coil3.compose.rememberAsyncImagePainter
 import org.jetbrains.compose.resources.DrawableResource
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
-import skyfit.core.ui.generated.resources.Res
-import skyfit.core.ui.generated.resources.ic_image
-import skyfit.core.ui.generated.resources.im_placeholder_dark
+import fiwe.core.ui.generated.resources.Res
+import fiwe.core.ui.generated.resources.ic_image
+import fiwe.core.ui.generated.resources.im_placeholder_dark
 
 enum class SkyImageSize(val dp: Dp) {
     Size24(24.dp),

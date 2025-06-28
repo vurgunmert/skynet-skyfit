@@ -24,9 +24,9 @@ import com.vurgun.skyfit.onboarding.component.OnboardingTitleGroupComponent
 import com.vurgun.skyfit.onboarding.model.OnboardingViewEvent
 import com.vurgun.skyfit.onboarding.model.OnboardingViewModel
 import org.jetbrains.compose.resources.stringResource
-import skyfit.core.ui.generated.resources.Res
-import skyfit.core.ui.generated.resources.onboarding_facility_profile_message
-import skyfit.core.ui.generated.resources.onboarding_facility_profile_title
+import fiwe.core.ui.generated.resources.Res
+import fiwe.core.ui.generated.resources.onboarding_facility_profile_message
+import fiwe.core.ui.generated.resources.onboarding_facility_profile_title
 
 internal class SelectProfileTagsScreen(private val viewModel: OnboardingViewModel) : Screen {
 

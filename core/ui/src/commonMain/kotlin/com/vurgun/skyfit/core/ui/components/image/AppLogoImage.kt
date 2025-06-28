@@ -10,8 +10,8 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.dp
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
-import skyfit.core.ui.generated.resources.Res
-import skyfit.core.ui.generated.resources.ic_app_logo
+import fiwe.core.ui.generated.resources.Res
+import fiwe.core.ui.generated.resources.ic_app_logo
 
 @Composable
 fun AppLogoImage(

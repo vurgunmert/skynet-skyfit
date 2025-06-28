@@ -28,8 +28,8 @@ import com.vurgun.skyfit.core.ui.components.special.SkyFitButtonComponent
 import com.vurgun.skyfit.core.ui.components.special.SkyFitScaffold
 import com.vurgun.skyfit.core.ui.styling.SkyFitTypography
 import org.jetbrains.compose.resources.painterResource
-import skyfit.core.ui.generated.resources.Res
-import skyfit.core.ui.generated.resources.ic_app_logo
+import fiwe.core.ui.generated.resources.Res
+import fiwe.core.ui.generated.resources.ic_app_logo
 
 class UserActivityCalendarPaymentRequiredScreen : Screen {
 

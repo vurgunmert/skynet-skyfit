@@ -53,10 +53,10 @@ import kotlinx.datetime.LocalDate
 import kotlinx.datetime.minus
 import kotlinx.datetime.plus
 import org.jetbrains.compose.resources.painterResource
-import skyfit.core.ui.generated.resources.Res
-import skyfit.core.ui.generated.resources.ic_chevron_left
-import skyfit.core.ui.generated.resources.ic_chevron_right
-import skyfit.core.ui.generated.resources.ic_plus
+import fiwe.core.ui.generated.resources.Res
+import fiwe.core.ui.generated.resources.ic_chevron_left
+import fiwe.core.ui.generated.resources.ic_chevron_right
+import fiwe.core.ui.generated.resources.ic_plus
 
 class UserNutritionScreen: Screen {
 

@@ -45,7 +45,7 @@ import com.vurgun.skyfit.feature.access.authScreenFlowModule
 import com.vurgun.skyfit.feature.access.component.LoginWelcomeGroup
 import kotlinx.coroutines.flow.collectLatest
 import org.jetbrains.compose.resources.stringResource
-import skyfit.core.ui.generated.resources.*
+import fiwe.core.ui.generated.resources.*
 
 class AuthorizationScreen : Screen {
 

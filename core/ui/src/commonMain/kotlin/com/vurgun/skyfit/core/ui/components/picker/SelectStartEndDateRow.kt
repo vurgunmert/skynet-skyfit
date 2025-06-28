@@ -15,7 +15,7 @@ import com.vurgun.skyfit.core.ui.components.schedule.dialog.SingleDatePickerDial
 import com.vurgun.skyfit.core.ui.components.text.TitledMediumRegularText
 import kotlinx.datetime.LocalDate
 import org.jetbrains.compose.resources.stringResource
-import skyfit.core.ui.generated.resources.*
+import fiwe.core.ui.generated.resources.*
 
 @Composable
 fun SelectStartEndDateRow(

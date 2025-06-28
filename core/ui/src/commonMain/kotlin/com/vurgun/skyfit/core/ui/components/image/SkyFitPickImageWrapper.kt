@@ -18,10 +18,10 @@ import com.vurgun.skyfit.core.ui.components.button.SkyButtonSize
 import com.vurgun.skyfit.core.ui.components.text.SkyText
 import com.vurgun.skyfit.core.ui.components.text.TextStyleType
 import org.jetbrains.compose.resources.stringResource
-import skyfit.core.ui.generated.resources.Res
-import skyfit.core.ui.generated.resources.dialog_image_too_large_text
-import skyfit.core.ui.generated.resources.dialog_image_too_large_title
-import skyfit.core.ui.generated.resources.ok_action
+import fiwe.core.ui.generated.resources.Res
+import fiwe.core.ui.generated.resources.dialog_image_too_large_text
+import fiwe.core.ui.generated.resources.dialog_image_too_large_title
+import fiwe.core.ui.generated.resources.ok_action
 
 sealed class ImagePickerType(val mode: FilePickerSelectionMode) {
     data object Single : ImagePickerType(FilePickerSelectionMode.Single)

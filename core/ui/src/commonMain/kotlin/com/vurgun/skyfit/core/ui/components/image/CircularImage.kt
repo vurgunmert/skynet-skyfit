@@ -30,8 +30,8 @@ import coil3.compose.AsyncImagePainter
 import coil3.compose.rememberAsyncImagePainter
 import com.vurgun.skyfit.core.ui.styling.SkyFitColor
 import org.jetbrains.compose.resources.painterResource
-import skyfit.core.ui.generated.resources.Res
-import skyfit.core.ui.generated.resources.ic_image
+import fiwe.core.ui.generated.resources.Res
+import fiwe.core.ui.generated.resources.ic_image
 
 @Deprecated("Use SkyImage")
 @Composable

@@ -32,9 +32,9 @@ import com.vurgun.skyfit.core.ui.components.text.SkyText
 import com.vurgun.skyfit.core.ui.components.text.TextStyleType
 import com.vurgun.skyfit.core.ui.styling.SkyFitColor
 import org.jetbrains.compose.resources.DrawableResource
-import skyfit.core.ui.generated.resources.Res
-import skyfit.core.ui.generated.resources.ic_bell
-import skyfit.core.ui.generated.resources.ic_chat
+import fiwe.core.ui.generated.resources.Res
+import fiwe.core.ui.generated.resources.ic_bell
+import fiwe.core.ui.generated.resources.ic_chat
 
 object ExpandedTopBar {
 

@@ -16,7 +16,7 @@ import com.vurgun.skyfit.core.ui.components.image.NetworkImage
 import com.vurgun.skyfit.core.ui.styling.SkyFitColor
 import com.vurgun.skyfit.profile.model.ProfileDestination
 import dev.chrisbanes.haze.*
-import skyfit.core.ui.generated.resources.*
+import fiwe.core.ui.generated.resources.*
 
 internal object ProfileExpandedComponent {
 

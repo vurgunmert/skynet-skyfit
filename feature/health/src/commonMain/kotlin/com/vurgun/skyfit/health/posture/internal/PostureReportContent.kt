@@ -52,14 +52,14 @@ import com.vurgun.skyfit.health.posture.PostureAnalysisContentState
 import com.vurgun.skyfit.health.posture.PostureOptionState
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
-import skyfit.core.ui.generated.resources.Res
-import skyfit.core.ui.generated.resources.ic_arrow_replay
-import skyfit.core.ui.generated.resources.ic_chart_pie
-import skyfit.core.ui.generated.resources.ic_check
-import skyfit.core.ui.generated.resources.posture_view_back
-import skyfit.core.ui.generated.resources.posture_view_front
-import skyfit.core.ui.generated.resources.posture_view_left
-import skyfit.core.ui.generated.resources.posture_view_right
+import fiwe.core.ui.generated.resources.Res
+import fiwe.core.ui.generated.resources.ic_arrow_replay
+import fiwe.core.ui.generated.resources.ic_chart_pie
+import fiwe.core.ui.generated.resources.ic_check
+import fiwe.core.ui.generated.resources.posture_view_back
+import fiwe.core.ui.generated.resources.posture_view_front
+import fiwe.core.ui.generated.resources.posture_view_left
+import fiwe.core.ui.generated.resources.posture_view_right
 
 @Composable
 fun PostureReportContent(

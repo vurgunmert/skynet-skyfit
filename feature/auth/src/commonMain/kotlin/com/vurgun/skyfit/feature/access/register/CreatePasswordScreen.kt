@@ -48,11 +48,11 @@ import com.vurgun.skyfit.feature.access.legal.PrivacyPolicyScreen
 import com.vurgun.skyfit.feature.access.legal.TermsAndConditionsScreen
 import kotlinx.coroutines.flow.collectLatest
 import org.jetbrains.compose.resources.stringResource
-import skyfit.core.ui.generated.resources.Res
-import skyfit.core.ui.generated.resources.auth_password_input_hint
-import skyfit.core.ui.generated.resources.auth_password_repeat_input_hint
-import skyfit.core.ui.generated.resources.auth_register_action
-import skyfit.core.ui.generated.resources.user_username_label
+import fiwe.core.ui.generated.resources.Res
+import fiwe.core.ui.generated.resources.auth_password_input_hint
+import fiwe.core.ui.generated.resources.auth_password_repeat_input_hint
+import fiwe.core.ui.generated.resources.auth_register_action
+import fiwe.core.ui.generated.resources.user_username_label
 
 class CreatePasswordScreen : Screen {
 

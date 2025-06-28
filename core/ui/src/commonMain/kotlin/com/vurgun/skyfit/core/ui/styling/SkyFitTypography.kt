@@ -8,11 +8,11 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.sp
 import org.jetbrains.compose.resources.Font
-import skyfit.core.ui.generated.resources.Inter_Bold
-import skyfit.core.ui.generated.resources.Inter_Medium
-import skyfit.core.ui.generated.resources.Inter_Regular
-import skyfit.core.ui.generated.resources.Inter_SemiBold
-import skyfit.core.ui.generated.resources.Res
+import fiwe.core.ui.generated.resources.Inter_Bold
+import fiwe.core.ui.generated.resources.Inter_Medium
+import fiwe.core.ui.generated.resources.Inter_Regular
+import fiwe.core.ui.generated.resources.Inter_SemiBold
+import fiwe.core.ui.generated.resources.Res
 
 object SkyFitTypography {
 

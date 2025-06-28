@@ -39,11 +39,11 @@ import com.vurgun.skyfit.core.ui.styling.SkyFitTypography
 import com.vurgun.skyfit.core.ui.utils.CollectEffect
 import com.vurgun.skyfit.core.ui.utils.LocalWindowSize
 import org.jetbrains.compose.resources.stringResource
-import skyfit.core.ui.generated.resources.Res
-import skyfit.core.ui.generated.resources.auth_forgot_password_action
-import skyfit.core.ui.generated.resources.auth_forgot_password_prompt
-import skyfit.core.ui.generated.resources.cancel_action
-import skyfit.core.ui.generated.resources.continue_action
+import fiwe.core.ui.generated.resources.Res
+import fiwe.core.ui.generated.resources.auth_forgot_password_action
+import fiwe.core.ui.generated.resources.auth_forgot_password_prompt
+import fiwe.core.ui.generated.resources.cancel_action
+import fiwe.core.ui.generated.resources.continue_action
 
 class ForgotPasswordScreen : Screen {
 

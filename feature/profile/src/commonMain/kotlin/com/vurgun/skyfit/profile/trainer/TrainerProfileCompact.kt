@@ -42,7 +42,7 @@ import com.vurgun.skyfit.profile.component.ProfileCompactComponent
 import com.vurgun.skyfit.profile.model.ProfileDestination
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
-import skyfit.core.ui.generated.resources.*
+import fiwe.core.ui.generated.resources.*
 
 @Composable
 fun TrainerProfileCompact(

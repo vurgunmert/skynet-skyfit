@@ -1,0 +1,7 @@
+# Update lines 333 and 369 to use com.vurgun.fiwe instead of com.vurgun.skyfit
+
+# Line 333: Change from com.vurgun.skyfit.debug to com.vurgun.fiwe.debug
+PRODUCT_BUNDLE_IDENTIFIER = com.vurgun.fiwe.debug;
+
+# Line 369: Change from com.vurgun.skyfit to com.vurgun.fiwe
+PRODUCT_BUNDLE_IDENTIFIER = com.vurgun.fiwe;

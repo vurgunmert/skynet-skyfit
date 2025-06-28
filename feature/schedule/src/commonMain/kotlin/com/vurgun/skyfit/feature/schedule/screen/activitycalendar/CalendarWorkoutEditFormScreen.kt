@@ -31,7 +31,7 @@ import com.vurgun.skyfit.core.ui.utils.CollectEffect
 import kotlinx.datetime.LocalDate
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
-import skyfit.core.ui.generated.resources.*
+import fiwe.core.ui.generated.resources.*
 
 class CalendarWorkoutEditFormScreen(
     val date: LocalDate,

@@ -24,9 +24,9 @@ import com.vurgun.skyfit.core.ui.styling.SkyFitTypography
 import kotlinx.datetime.LocalDate
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
-import skyfit.core.ui.generated.resources.Res
-import skyfit.core.ui.generated.resources.calendar_select_date_range
-import skyfit.core.ui.generated.resources.ic_calendar_dots
+import fiwe.core.ui.generated.resources.Res
+import fiwe.core.ui.generated.resources.calendar_select_date_range
+import fiwe.core.ui.generated.resources.ic_calendar_dots
 
 @Composable
 fun CalendarRangeDateSelectorCard(

@@ -19,12 +19,12 @@ import com.vurgun.skyfit.core.ui.components.text.SkyText
 import com.vurgun.skyfit.core.ui.components.text.TextStyleType
 import com.vurgun.skyfit.core.ui.styling.SkyFitColor
 import org.jetbrains.compose.resources.painterResource
-import skyfit.core.ui.generated.resources.Res
-import skyfit.core.ui.generated.resources.ic_building
-import skyfit.core.ui.generated.resources.ic_checkbox_fill
-import skyfit.core.ui.generated.resources.ic_high_intensity_training
-import skyfit.core.ui.generated.resources.ic_posture_fill
-import skyfit.core.ui.generated.resources.ic_profile
+import fiwe.core.ui.generated.resources.Res
+import fiwe.core.ui.generated.resources.ic_building
+import fiwe.core.ui.generated.resources.ic_checkbox_fill
+import fiwe.core.ui.generated.resources.ic_high_intensity_training
+import fiwe.core.ui.generated.resources.ic_posture_fill
+import fiwe.core.ui.generated.resources.ic_profile
 
 @Composable
 private fun AccountTypeSelectorItem(

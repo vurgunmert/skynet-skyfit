@@ -2,14 +2,12 @@ package com.vurgun.skyfit.settings.facility.account
 
 import cafe.adriel.voyager.core.model.ScreenModel
 import cafe.adriel.voyager.core.model.screenModelScope
-import com.vurgun.skyfit.core.data.utility.SingleSharedFlow
-import com.vurgun.skyfit.core.data.utility.emitIn
+import com.vurgun.skyfit.core.data.utility.UiEventDelegate
 import com.vurgun.skyfit.core.data.v1.domain.account.manager.ActiveAccountManager
 import com.vurgun.skyfit.core.data.v1.domain.account.model.FacilityAccount
 import com.vurgun.skyfit.core.data.v1.domain.facility.repository.FacilityRepository
 import com.vurgun.skyfit.core.data.v1.domain.global.model.ProfileTag
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 
@@ -39,12 +37,12 @@ sealed class FacilityAccountSettingsUiAction {
     data object DeleteProfile : FacilityAccountSettingsUiAction()
 }
 
-sealed interface FacilityAccountSettingsEffect {
-    data object NavigateToBack : FacilityAccountSettingsEffect
-    data object NavigateToChangePassword : FacilityAccountSettingsEffect
-    data object NavigateToAccounts : FacilityAccountSettingsEffect
-    data object NavigateToEditProfile : FacilityAccountSettingsEffect
-    data class ShowDeleteError(val message: String) : FacilityAccountSettingsEffect
+sealed interface FacilityAccountSettingsEvent {
+    data object NavigateToBack : FacilityAccountSettingsEvent
+    data object NavigateToChangePassword : FacilityAccountSettingsEvent
+    data object NavigateToAccounts : FacilityAccountSettingsEvent
+    data object NavigateToEditProfile : FacilityAccountSettingsEvent
+    data class ShowDeleteError(val message: String) : FacilityAccountSettingsEvent
 }
 
 class FacilityAccountSettingsViewModel(
@@ -55,8 +53,8 @@ class FacilityAccountSettingsViewModel(
     private val _uiState = MutableStateFlow<FacilityAccountSettingsUiState>(FacilityAccountSettingsUiState.Loading)
     val uiState: StateFlow<FacilityAccountSettingsUiState> = _uiState
 
-    private val _effect = SingleSharedFlow<FacilityAccountSettingsEffect>()
-    val effect: SharedFlow<FacilityAccountSettingsEffect> = _effect
+    private val _eventDelegate = UiEventDelegate<FacilityAccountSettingsEvent>()
+    val eventFlow = _eventDelegate.eventFlow
 
     private val facilityUser: FacilityAccount
         get() = userManager.account.value as? FacilityAccount
@@ -66,16 +64,16 @@ class FacilityAccountSettingsViewModel(
         when (action) {
             FacilityAccountSettingsUiAction.DeleteProfile -> deleteAccount()
             FacilityAccountSettingsUiAction.NavigateToAccounts ->
-                _effect.emitIn(screenModelScope, FacilityAccountSettingsEffect.NavigateToAccounts)
+                _eventDelegate.sendIn(screenModelScope, FacilityAccountSettingsEvent.NavigateToAccounts)
 
             FacilityAccountSettingsUiAction.NavigateToBack ->
-                _effect.emitIn(screenModelScope, FacilityAccountSettingsEffect.NavigateToBack)
+                _eventDelegate.sendIn(screenModelScope, FacilityAccountSettingsEvent.NavigateToBack)
 
             FacilityAccountSettingsUiAction.NavigateToChangePassword ->
-                _effect.emitIn(screenModelScope, FacilityAccountSettingsEffect.NavigateToChangePassword)
+                _eventDelegate.sendIn(screenModelScope, FacilityAccountSettingsEvent.NavigateToChangePassword)
 
             FacilityAccountSettingsUiAction.NavigateToEditProfile ->
-                _effect.emitIn(screenModelScope, FacilityAccountSettingsEffect.NavigateToEditProfile)
+                _eventDelegate.sendIn(screenModelScope, FacilityAccountSettingsEvent.NavigateToEditProfile)
         }
     }
 

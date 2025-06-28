@@ -7,8 +7,8 @@ import com.vurgun.skyfit.core.data.storage.provideLocalSettings
 import com.vurgun.skyfit.core.ui.styling.LocalDimensions
 import org.jetbrains.compose.resources.stringResource
 import org.koin.dsl.module
-import skyfit.core.ui.generated.resources.Res
-import skyfit.core.ui.generated.resources.app_name
+import fiwe.core.ui.generated.resources.Res
+import fiwe.core.ui.generated.resources.app_name
 import java.awt.Dimension
 
 // Desktop Entry Point

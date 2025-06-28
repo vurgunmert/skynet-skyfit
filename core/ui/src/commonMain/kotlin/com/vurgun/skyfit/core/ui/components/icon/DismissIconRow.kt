@@ -11,8 +11,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.vurgun.skyfit.core.ui.styling.SkyFitColor
 import org.jetbrains.compose.resources.painterResource
-import skyfit.core.ui.generated.resources.Res
-import skyfit.core.ui.generated.resources.ic_close_circle
+import fiwe.core.ui.generated.resources.Res
+import fiwe.core.ui.generated.resources.ic_close_circle
 
 @Composable
 fun CloseIconRow(

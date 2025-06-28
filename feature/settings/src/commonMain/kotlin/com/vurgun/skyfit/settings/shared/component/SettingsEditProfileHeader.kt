@@ -12,9 +12,9 @@ import com.vurgun.skyfit.core.ui.components.button.PrimaryMediumButton
 import com.vurgun.skyfit.core.ui.components.icon.BackIcon
 import com.vurgun.skyfit.core.ui.styling.SkyFitTypography
 import org.jetbrains.compose.resources.stringResource
-import skyfit.core.ui.generated.resources.Res
-import skyfit.core.ui.generated.resources.save_action
-import skyfit.core.ui.generated.resources.settings_account_label
+import fiwe.core.ui.generated.resources.Res
+import fiwe.core.ui.generated.resources.save_action
+import fiwe.core.ui.generated.resources.settings_account_label
 
 @Composable
 fun SettingsEditProfileHeader(

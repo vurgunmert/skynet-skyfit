@@ -25,7 +25,7 @@ kotlin {
     ).forEach { iosTarget ->
         iosTarget.binaries.framework {
             baseName = "composeApp"
-            freeCompilerArgs += listOf("-Xbinary=bundleId=com.vurgun.skyfit.composeApp")
+            freeCompilerArgs += listOf("-Xbinary=bundleId=com.vurgun.fiwe.composeApp")
             isStatic = true
         }
     }
@@ -89,11 +89,11 @@ kotlin {
 
 //region Project: Android
 android {
-    namespace = "com.vurgun.skyfit"
+    namespace = "com.vurgun.fiwe"
     compileSdk = libs.versions.android.compileSdk.get().toInt()
 
     defaultConfig {
-        applicationId = "com.vurgun.skyfit"
+        applicationId = "com.vurgun.fiwe"
         minSdk = libs.versions.android.minSdk.get().toInt()
         targetSdk = libs.versions.android.targetSdk.get().toInt()
         versionCode = 10
@@ -122,7 +122,7 @@ android {
 
 compose.desktop {
     application {
-        mainClass = "com.vurgun.skyfit.MainKt"
+        mainClass = "com.vurgun.fiwe.MainKt"
 
         nativeDistributions {
             targetFormats(TargetFormat.Dmg, TargetFormat.Msi, TargetFormat.Deb)

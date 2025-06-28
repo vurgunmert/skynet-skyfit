@@ -21,8 +21,8 @@ import com.vurgun.skyfit.core.ui.utils.LocalWindowSize
 import com.vurgun.skyfit.core.ui.utils.WindowSize
 import com.vurgun.skyfit.settings.component.SettingsCompactComponent
 import org.jetbrains.compose.resources.stringResource
-import skyfit.core.ui.generated.resources.Res
-import skyfit.core.ui.generated.resources.settings_notifications
+import fiwe.core.ui.generated.resources.Res
+import fiwe.core.ui.generated.resources.settings_notifications
 
 class UserNotificationSettingsScreen : Screen {
 

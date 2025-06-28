@@ -38,9 +38,9 @@ import com.vurgun.skyfit.feature.access.component.OTPInputTextField
 import com.vurgun.skyfit.feature.access.login.MobileOTPVerificationActionGroup
 import kotlinx.coroutines.flow.collectLatest
 import org.jetbrains.compose.resources.stringResource
-import skyfit.core.ui.generated.resources.Res
-import skyfit.core.ui.generated.resources.auth_code_sent_message
-import skyfit.core.ui.generated.resources.auth_forgot_password_action
+import fiwe.core.ui.generated.resources.Res
+import fiwe.core.ui.generated.resources.auth_code_sent_message
+import fiwe.core.ui.generated.resources.auth_forgot_password_action
 
 class ForgotPasswordVerifyOTPScreen : Screen {
 

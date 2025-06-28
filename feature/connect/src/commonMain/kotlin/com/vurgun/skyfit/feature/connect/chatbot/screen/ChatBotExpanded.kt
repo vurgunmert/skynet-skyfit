@@ -39,7 +39,7 @@ import com.vurgun.skyfit.feature.connect.component.SkyFitChatMessageInputCompone
 import dev.chrisbanes.haze.*
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
-import skyfit.core.ui.generated.resources.*
+import fiwe.core.ui.generated.resources.*
 
 @Composable
 internal fun ChatBotExpanded(viewModel: ChatbotViewModel) {

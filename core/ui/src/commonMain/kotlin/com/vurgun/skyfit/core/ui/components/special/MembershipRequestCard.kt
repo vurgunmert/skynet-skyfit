@@ -19,12 +19,12 @@ import com.vurgun.skyfit.core.ui.components.text.SkyText
 import com.vurgun.skyfit.core.ui.components.text.TextStyleType
 import com.vurgun.skyfit.core.ui.styling.SkyFitColor
 import org.jetbrains.compose.resources.stringResource
-import skyfit.core.ui.generated.resources.Res
-import skyfit.core.ui.generated.resources.confirm_action
-import skyfit.core.ui.generated.resources.decline_action
-import skyfit.core.ui.generated.resources.ic_info_circle
-import skyfit.core.ui.generated.resources.membership_request_approval_message
-import skyfit.core.ui.generated.resources.new_membership_request_label
+import fiwe.core.ui.generated.resources.Res
+import fiwe.core.ui.generated.resources.confirm_action
+import fiwe.core.ui.generated.resources.decline_action
+import fiwe.core.ui.generated.resources.ic_info_circle
+import fiwe.core.ui.generated.resources.membership_request_approval_message
+import fiwe.core.ui.generated.resources.new_membership_request_label
 
 @Composable
 fun MembershipRequestCard(

@@ -25,9 +25,9 @@ import com.vurgun.skyfit.core.ui.styling.SkyFitColor
 import com.vurgun.skyfit.core.ui.styling.SkyFitTypography
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
-import skyfit.core.ui.generated.resources.Res
-import skyfit.core.ui.generated.resources.ic_image
-import skyfit.core.ui.generated.resources.send_action
+import fiwe.core.ui.generated.resources.Res
+import fiwe.core.ui.generated.resources.ic_image
+import fiwe.core.ui.generated.resources.send_action
 
 @Composable
 fun SocialQuickPostInputCard(

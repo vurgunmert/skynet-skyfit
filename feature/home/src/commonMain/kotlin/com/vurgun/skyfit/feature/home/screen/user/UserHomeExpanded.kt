@@ -41,9 +41,9 @@ import com.vurgun.skyfit.feature.home.model.UserHomeUiState
 import com.vurgun.skyfit.feature.home.model.UserHomeViewModel
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
-import skyfit.core.ui.generated.resources.Res
-import skyfit.core.ui.generated.resources.background_chatbot
-import skyfit.core.ui.generated.resources.refresh_action
+import fiwe.core.ui.generated.resources.Res
+import fiwe.core.ui.generated.resources.background_chatbot
+import fiwe.core.ui.generated.resources.refresh_action
 
 @Composable
 internal fun UserHomeExpanded(viewModel: UserHomeViewModel) {

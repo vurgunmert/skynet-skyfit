@@ -28,7 +28,7 @@ import com.vurgun.skyfit.core.ui.utils.CollectEffect
 import com.vurgun.skyfit.feature.connect.component.NotificationItemSwipeDismissBackground
 import com.vurgun.skyfit.feature.connect.component.SkyFitNotificationItem
 import org.jetbrains.compose.resources.stringResource
-import skyfit.core.ui.generated.resources.*
+import fiwe.core.ui.generated.resources.*
 
 class CompactNotificationsScreen : Screen {
 

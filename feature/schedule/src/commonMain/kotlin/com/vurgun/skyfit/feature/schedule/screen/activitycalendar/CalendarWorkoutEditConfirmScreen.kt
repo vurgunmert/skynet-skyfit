@@ -25,9 +25,9 @@ import com.vurgun.skyfit.core.ui.utils.CollectEffect
 import kotlinx.datetime.LocalDateTime
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
-import skyfit.core.ui.generated.resources.Res
-import skyfit.core.ui.generated.resources.add_selected_activity_label
-import skyfit.core.ui.generated.resources.ic_check
+import fiwe.core.ui.generated.resources.Res
+import fiwe.core.ui.generated.resources.add_selected_activity_label
+import fiwe.core.ui.generated.resources.ic_check
 
 class CalendarWorkoutEditConfirmScreen(
     private val startDateTime: LocalDateTime,

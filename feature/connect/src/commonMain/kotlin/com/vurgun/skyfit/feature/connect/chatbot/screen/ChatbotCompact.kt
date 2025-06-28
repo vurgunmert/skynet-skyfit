@@ -42,7 +42,7 @@ import com.vurgun.skyfit.feature.connect.chatbot.model.*
 import org.jetbrains.compose.resources.DrawableResource
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
-import skyfit.core.ui.generated.resources.*
+import fiwe.core.ui.generated.resources.*
 
 @Composable
 fun ChatbotCompact(viewModel: ChatbotViewModel) {

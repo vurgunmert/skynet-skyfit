@@ -31,11 +31,11 @@ import com.vurgun.skyfit.core.ui.styling.SkyFitColor
 import com.vurgun.skyfit.core.ui.styling.SkyFitTypography
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
-import skyfit.core.ui.generated.resources.Res
-import skyfit.core.ui.generated.resources.close_action
-import skyfit.core.ui.generated.resources.ic_close_circle
-import skyfit.core.ui.generated.resources.no_not_yet_action
-import skyfit.core.ui.generated.resources.ok_action
+import fiwe.core.ui.generated.resources.Res
+import fiwe.core.ui.generated.resources.close_action
+import fiwe.core.ui.generated.resources.ic_close_circle
+import fiwe.core.ui.generated.resources.no_not_yet_action
+import fiwe.core.ui.generated.resources.ok_action
 
 @Composable
 fun DestructiveDialog(

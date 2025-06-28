@@ -19,9 +19,9 @@ import com.vurgun.skyfit.onboarding.component.OnboardingStepProgressComponent
 import com.vurgun.skyfit.onboarding.component.OnboardingTitleGroupComponent
 import com.vurgun.skyfit.onboarding.model.OnboardingViewModel
 import org.jetbrains.compose.resources.stringResource
-import skyfit.core.ui.generated.resources.Res
-import skyfit.core.ui.generated.resources.onboarding_goal_message
-import skyfit.core.ui.generated.resources.onboarding_goal_title
+import fiwe.core.ui.generated.resources.Res
+import fiwe.core.ui.generated.resources.onboarding_goal_message
+import fiwe.core.ui.generated.resources.onboarding_goal_title
 
 internal class SelectGoalsScreen(private val viewModel: OnboardingViewModel) : Screen {
 

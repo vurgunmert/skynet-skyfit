@@ -13,18 +13,19 @@ import com.vurgun.skyfit.core.ui.components.layout.ExpandedLayout
 import com.vurgun.skyfit.core.ui.components.loader.FullScreenLoaderContent
 import com.vurgun.skyfit.core.ui.screen.ErrorScreen
 import com.vurgun.skyfit.core.ui.utils.CollectEffect
+import com.vurgun.skyfit.core.ui.utils.CollectEvent
 import com.vurgun.skyfit.core.ui.utils.LocalCompactOverlayController
 import com.vurgun.skyfit.feature.home.component.HomeCompactComponent
 import com.vurgun.skyfit.feature.home.component.HomeLessonTableComponents
 import com.vurgun.skyfit.feature.home.component.HomeNoUpcomingAppointmentCard
 import com.vurgun.skyfit.feature.home.component.HomeStatisticComponents
 import com.vurgun.skyfit.feature.home.model.FacilityHomeAction
-import com.vurgun.skyfit.feature.home.model.FacilityHomeEffect
+import com.vurgun.skyfit.feature.home.model.FacilityHomeUiEvent
 import com.vurgun.skyfit.feature.home.model.FacilityHomeUiState
 import com.vurgun.skyfit.feature.home.model.FacilityHomeViewModel
 import org.jetbrains.compose.resources.stringResource
-import skyfit.core.ui.generated.resources.Res
-import skyfit.core.ui.generated.resources.refresh_action
+import fiwe.core.ui.generated.resources.Res
+import fiwe.core.ui.generated.resources.refresh_action
 
 @Composable
 fun FacilityHomeExpanded(viewModel: FacilityHomeViewModel) {
@@ -33,16 +34,15 @@ fun FacilityHomeExpanded(viewModel: FacilityHomeViewModel) {
     val overlayController = LocalCompactOverlayController.current
     val uiState by viewModel.uiState.collectAsState()
 
-    CollectEffect(viewModel.effect) { effect ->
-        when (effect) {
+    CollectEvent(viewModel.eventFlow) { event ->
+        when (event) {
+            is FacilityHomeUiEvent.ShowOverlay ->
+                overlayController?.invoke(event.screen)
 
-            is FacilityHomeEffect.ShowOverlay ->
-                overlayController?.invoke(effect.screen)
-
-            FacilityHomeEffect.NavigateToManageLessons ->
+            FacilityHomeUiEvent.NavigateToManageLessons ->
                 overlayController?.invoke(SharedScreen.FacilityManageLessons)
 
-            FacilityHomeEffect.DismissOverlay ->
+            FacilityHomeUiEvent.DismissOverlay ->
                 overlayController?.invoke(null)
         }
     }

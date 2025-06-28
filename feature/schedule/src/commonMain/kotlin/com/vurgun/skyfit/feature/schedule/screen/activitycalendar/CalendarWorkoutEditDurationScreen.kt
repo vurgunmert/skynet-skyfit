@@ -31,10 +31,10 @@ import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.datetime.LocalDateTime
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
-import skyfit.core.ui.generated.resources.Res
-import skyfit.core.ui.generated.resources.cancel_action
-import skyfit.core.ui.generated.resources.continue_action
-import skyfit.core.ui.generated.resources.ic_clock
+import fiwe.core.ui.generated.resources.Res
+import fiwe.core.ui.generated.resources.cancel_action
+import fiwe.core.ui.generated.resources.continue_action
+import fiwe.core.ui.generated.resources.ic_clock
 
 class CalendarWorkoutEditDurationScreen(
     val name: String,

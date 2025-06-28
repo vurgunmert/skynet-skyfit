@@ -19,10 +19,10 @@ import com.vurgun.skyfit.core.ui.components.text.TextStyleType
 import com.vurgun.skyfit.core.ui.styling.SkyFitColor
 import dev.chrisbanes.haze.*
 import org.jetbrains.compose.ui.tooling.preview.Preview
-import skyfit.core.ui.generated.resources.Res
-import skyfit.core.ui.generated.resources.ic_arrow_right
-import skyfit.core.ui.generated.resources.ic_image
-import skyfit.core.ui.generated.resources.im_placeholder_dark
+import fiwe.core.ui.generated.resources.Res
+import fiwe.core.ui.generated.resources.ic_arrow_right
+import fiwe.core.ui.generated.resources.ic_image
+import fiwe.core.ui.generated.resources.im_placeholder_dark
 
 data class PopularExerciseShowcaseUiData(
     val title: String,

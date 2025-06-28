@@ -27,8 +27,8 @@ import com.vurgun.skyfit.core.ui.components.icon.ActionIcon
 import com.vurgun.skyfit.core.ui.styling.SkyFitColor
 import com.vurgun.skyfit.core.ui.styling.SkyFitTypography
 import org.jetbrains.compose.resources.DrawableResource
-import skyfit.core.ui.generated.resources.Res
-import skyfit.core.ui.generated.resources.ic_pencil
+import fiwe.core.ui.generated.resources.Res
+import fiwe.core.ui.generated.resources.ic_pencil
 
 @Composable
 fun MultiLineInputText(

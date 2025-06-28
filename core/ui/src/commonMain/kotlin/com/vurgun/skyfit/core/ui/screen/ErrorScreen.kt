@@ -18,10 +18,10 @@ import com.vurgun.skyfit.core.ui.components.special.SkyFitScaffold
 import com.vurgun.skyfit.core.ui.components.text.BodyLargeMediumText
 import com.vurgun.skyfit.core.ui.components.text.BodyMediumRegularText
 import org.jetbrains.compose.resources.stringResource
-import skyfit.core.ui.generated.resources.Res
-import skyfit.core.ui.generated.resources.error_generic_message
-import skyfit.core.ui.generated.resources.error_generic_title
-import skyfit.core.ui.generated.resources.ok_action
+import fiwe.core.ui.generated.resources.Res
+import fiwe.core.ui.generated.resources.error_generic_message
+import fiwe.core.ui.generated.resources.error_generic_title
+import fiwe.core.ui.generated.resources.ok_action
 
 @Composable
 fun ErrorScreen(

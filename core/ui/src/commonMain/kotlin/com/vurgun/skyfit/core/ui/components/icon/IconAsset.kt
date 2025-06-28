@@ -1,13 +1,13 @@
 package com.vurgun.skyfit.core.ui.components.icon
 
 import org.jetbrains.compose.resources.DrawableResource
-import skyfit.core.ui.generated.resources.Res
-import skyfit.core.ui.generated.resources.ic_calendar_dots
-import skyfit.core.ui.generated.resources.ic_chevron_down
-import skyfit.core.ui.generated.resources.ic_chevron_left
-import skyfit.core.ui.generated.resources.ic_chevron_right
-import skyfit.core.ui.generated.resources.ic_minus
-import skyfit.core.ui.generated.resources.ic_plus
+import fiwe.core.ui.generated.resources.Res
+import fiwe.core.ui.generated.resources.ic_calendar_dots
+import fiwe.core.ui.generated.resources.ic_chevron_down
+import fiwe.core.ui.generated.resources.ic_chevron_left
+import fiwe.core.ui.generated.resources.ic_chevron_right
+import fiwe.core.ui.generated.resources.ic_minus
+import fiwe.core.ui.generated.resources.ic_plus
 
 //TODO: May or maynot - better to remove?
 sealed class IconAsset(val id: Int, val resource: DrawableResource) {

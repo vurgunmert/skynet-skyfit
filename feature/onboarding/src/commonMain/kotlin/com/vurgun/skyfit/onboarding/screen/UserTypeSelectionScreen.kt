@@ -20,7 +20,7 @@ import com.vurgun.skyfit.onboarding.component.OnboardingTitleGroupComponent
 import com.vurgun.skyfit.onboarding.model.OnboardingViewModel
 import com.vurgun.skyfit.onboarding.model.SelectableUserRole
 import org.jetbrains.compose.resources.stringResource
-import skyfit.core.ui.generated.resources.*
+import fiwe.core.ui.generated.resources.*
 
 internal class UserTypeSelectionScreen(private val viewModel: OnboardingViewModel): Screen {
 

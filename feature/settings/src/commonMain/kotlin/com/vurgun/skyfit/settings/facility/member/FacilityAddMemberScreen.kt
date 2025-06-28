@@ -26,10 +26,10 @@ import com.vurgun.skyfit.core.ui.utils.LocalWindowSize
 import com.vurgun.skyfit.core.ui.utils.WindowSize
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
-import skyfit.core.ui.generated.resources.Res
-import skyfit.core.ui.generated.resources.add_action
-import skyfit.core.ui.generated.resources.ic_plus
-import skyfit.core.ui.generated.resources.search_action
+import fiwe.core.ui.generated.resources.Res
+import fiwe.core.ui.generated.resources.add_action
+import fiwe.core.ui.generated.resources.ic_plus
+import fiwe.core.ui.generated.resources.search_action
 
 class FacilityAddMemberScreen : Screen {
 

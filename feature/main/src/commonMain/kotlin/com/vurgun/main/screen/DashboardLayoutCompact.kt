@@ -40,7 +40,7 @@ import com.vurgun.main.component.ScreenOverlay
 import com.vurgun.main.screen.DashboardCompactComponent.BottomBar
 import com.vurgun.skyfit.core.ui.components.special.FeatureVisible
 import org.jetbrains.compose.resources.DrawableResource
-import skyfit.core.ui.generated.resources.*
+import fiwe.core.ui.generated.resources.*
 
 @Composable
 fun DashboardCompact(viewModel: DashboardViewModel) {

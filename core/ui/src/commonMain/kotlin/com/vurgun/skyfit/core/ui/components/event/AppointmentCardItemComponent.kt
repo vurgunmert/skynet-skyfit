@@ -27,16 +27,16 @@ import com.vurgun.skyfit.core.ui.styling.SkyFitColor
 import com.vurgun.skyfit.core.ui.styling.SkyFitTypography
 import org.jetbrains.compose.resources.DrawableResource
 import org.jetbrains.compose.resources.painterResource
-import skyfit.core.ui.generated.resources.Res
-import skyfit.core.ui.generated.resources.ic_clock
-import skyfit.core.ui.generated.resources.ic_dashboard
-import skyfit.core.ui.generated.resources.ic_exercises
-import skyfit.core.ui.generated.resources.ic_lira
-import skyfit.core.ui.generated.resources.ic_location_pin
-import skyfit.core.ui.generated.resources.ic_note
-import skyfit.core.ui.generated.resources.ic_posture
-import skyfit.core.ui.generated.resources.ic_profile
-import skyfit.core.ui.generated.resources.ic_app_logo
+import fiwe.core.ui.generated.resources.Res
+import fiwe.core.ui.generated.resources.ic_clock
+import fiwe.core.ui.generated.resources.ic_dashboard
+import fiwe.core.ui.generated.resources.ic_exercises
+import fiwe.core.ui.generated.resources.ic_lira
+import fiwe.core.ui.generated.resources.ic_location_pin
+import fiwe.core.ui.generated.resources.ic_note
+import fiwe.core.ui.generated.resources.ic_posture
+import fiwe.core.ui.generated.resources.ic_profile
+import fiwe.core.ui.generated.resources.ic_app_logo
 
 data class AppointmentCardViewData(
     val iconId: Int,

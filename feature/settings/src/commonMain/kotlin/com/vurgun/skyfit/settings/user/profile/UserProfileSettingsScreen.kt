@@ -41,18 +41,18 @@ import com.vurgun.skyfit.feature.persona.settings.shared.component.AccountSettin
 import com.vurgun.skyfit.feature.persona.settings.shared.component.SettingsEditProfileHeader
 import com.vurgun.skyfit.feature.persona.settings.shared.component.SettingsSelectBodyTypePopupMenu
 import org.jetbrains.compose.resources.stringResource
-import skyfit.core.ui.generated.resources.Res
-import skyfit.core.ui.generated.resources.ic_chevron_down
-import skyfit.core.ui.generated.resources.ic_pencil
-import skyfit.core.ui.generated.resources.body_type_label
-import skyfit.core.ui.generated.resources.settings_edit_profile_height_label
-import skyfit.core.ui.generated.resources.settings_edit_profile_username_hint
-import skyfit.core.ui.generated.resources.settings_edit_profile_username_label
-import skyfit.core.ui.generated.resources.settings_edit_profile_weight_label
-import skyfit.core.ui.generated.resources.user_first_name_hint
-import skyfit.core.ui.generated.resources.user_first_name_mandatory_label
-import skyfit.core.ui.generated.resources.user_last_name_hint
-import skyfit.core.ui.generated.resources.user_last_name_mandatory_label
+import fiwe.core.ui.generated.resources.Res
+import fiwe.core.ui.generated.resources.ic_chevron_down
+import fiwe.core.ui.generated.resources.ic_pencil
+import fiwe.core.ui.generated.resources.body_type_label
+import fiwe.core.ui.generated.resources.settings_edit_profile_height_label
+import fiwe.core.ui.generated.resources.settings_edit_profile_username_hint
+import fiwe.core.ui.generated.resources.settings_edit_profile_username_label
+import fiwe.core.ui.generated.resources.settings_edit_profile_weight_label
+import fiwe.core.ui.generated.resources.user_first_name_hint
+import fiwe.core.ui.generated.resources.user_first_name_mandatory_label
+import fiwe.core.ui.generated.resources.user_last_name_hint
+import fiwe.core.ui.generated.resources.user_last_name_mandatory_label
 
 class UserProfileSettingsScreen : Screen {
 

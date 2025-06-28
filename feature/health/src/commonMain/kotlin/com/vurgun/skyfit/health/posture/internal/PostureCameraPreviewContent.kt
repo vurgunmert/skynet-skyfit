@@ -56,19 +56,19 @@ import com.vurgun.skyfit.health.posture.PostureAnalysisContentState
 import com.vurgun.skyfit.health.posture.PostureAnalysisViewModel
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
-import skyfit.core.ui.generated.resources.Res
-import skyfit.core.ui.generated.resources.body_analysis_grid
-import skyfit.core.ui.generated.resources.ic_camera
-import skyfit.core.ui.generated.resources.ic_flip_camera
-import skyfit.core.ui.generated.resources.ic_image
-import skyfit.core.ui.generated.resources.posture_guide_view_back
-import skyfit.core.ui.generated.resources.posture_guide_view_front
-import skyfit.core.ui.generated.resources.posture_guide_view_left
-import skyfit.core.ui.generated.resources.posture_guide_view_right
-import skyfit.core.ui.generated.resources.posture_view_back
-import skyfit.core.ui.generated.resources.posture_view_front
-import skyfit.core.ui.generated.resources.posture_view_left
-import skyfit.core.ui.generated.resources.posture_view_right
+import fiwe.core.ui.generated.resources.Res
+import fiwe.core.ui.generated.resources.body_analysis_grid
+import fiwe.core.ui.generated.resources.ic_camera
+import fiwe.core.ui.generated.resources.ic_flip_camera
+import fiwe.core.ui.generated.resources.ic_image
+import fiwe.core.ui.generated.resources.posture_guide_view_back
+import fiwe.core.ui.generated.resources.posture_guide_view_front
+import fiwe.core.ui.generated.resources.posture_guide_view_left
+import fiwe.core.ui.generated.resources.posture_guide_view_right
+import fiwe.core.ui.generated.resources.posture_view_back
+import fiwe.core.ui.generated.resources.posture_view_front
+import fiwe.core.ui.generated.resources.posture_view_left
+import fiwe.core.ui.generated.resources.posture_view_right
 
 @Composable
 internal fun DesktopCameraPreviewContent(

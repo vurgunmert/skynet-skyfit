@@ -22,7 +22,7 @@ import com.vurgun.skyfit.core.ui.screen.ErrorScreen
 import com.vurgun.skyfit.core.ui.utils.CollectEffect
 import com.vurgun.skyfit.settings.component.SettingsCompactComponent
 import org.jetbrains.compose.resources.stringResource
-import skyfit.core.ui.generated.resources.*
+import fiwe.core.ui.generated.resources.*
 
 class PasswordSettingsScreen : Screen {
     @Composable

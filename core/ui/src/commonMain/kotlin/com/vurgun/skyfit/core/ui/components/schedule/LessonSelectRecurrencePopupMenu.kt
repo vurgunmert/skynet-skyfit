@@ -12,10 +12,10 @@ import com.vurgun.skyfit.core.ui.components.popup.SelectablePopupMenuItem
 import com.vurgun.skyfit.core.ui.components.text.BodyMediumRegularText
 import com.vurgun.skyfit.core.ui.styling.SkyFitColor
 import org.jetbrains.compose.resources.stringResource
-import skyfit.core.ui.generated.resources.Res
-import skyfit.core.ui.generated.resources.recurrence_daily_label
-import skyfit.core.ui.generated.resources.recurrence_none_label
-import skyfit.core.ui.generated.resources.recurrence_weekly_label
+import fiwe.core.ui.generated.resources.Res
+import fiwe.core.ui.generated.resources.recurrence_daily_label
+import fiwe.core.ui.generated.resources.recurrence_none_label
+import fiwe.core.ui.generated.resources.recurrence_weekly_label
 
 @Composable
 fun LessonSelectRecurrenceTypePopupMenu(

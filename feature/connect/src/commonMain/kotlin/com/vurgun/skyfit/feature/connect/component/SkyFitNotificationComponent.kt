@@ -36,12 +36,12 @@ import com.vurgun.skyfit.core.ui.components.image.CircleNetworkImage
 import com.vurgun.skyfit.core.ui.styling.SkyFitColor
 import com.vurgun.skyfit.core.ui.styling.SkyFitTypography
 import org.jetbrains.compose.resources.painterResource
-import skyfit.core.ui.generated.resources.Res
-import skyfit.core.ui.generated.resources.ic_check_circle
-import skyfit.core.ui.generated.resources.ic_info_circle
-import skyfit.core.ui.generated.resources.ic_warning
-import skyfit.core.ui.generated.resources.ic_warning_diamond
-import skyfit.core.ui.generated.resources.ic_app_logo
+import fiwe.core.ui.generated.resources.Res
+import fiwe.core.ui.generated.resources.ic_check_circle
+import fiwe.core.ui.generated.resources.ic_info_circle
+import fiwe.core.ui.generated.resources.ic_warning
+import fiwe.core.ui.generated.resources.ic_warning_diamond
+import fiwe.core.ui.generated.resources.ic_app_logo
 
 @OptIn(ExperimentalMaterialApi::class)
 @Composable

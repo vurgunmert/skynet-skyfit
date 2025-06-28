@@ -33,11 +33,11 @@ import com.vurgun.skyfit.core.ui.screen.ErrorScreen
 import com.vurgun.skyfit.core.ui.styling.LocalPadding
 import kotlinx.coroutines.launch
 import org.jetbrains.compose.resources.stringResource
-import skyfit.core.ui.generated.resources.Res
-import skyfit.core.ui.generated.resources.add_action
-import skyfit.core.ui.generated.resources.delete_action
-import skyfit.core.ui.generated.resources.ic_delete
-import skyfit.core.ui.generated.resources.save_action
+import fiwe.core.ui.generated.resources.Res
+import fiwe.core.ui.generated.resources.add_action
+import fiwe.core.ui.generated.resources.delete_action
+import fiwe.core.ui.generated.resources.ic_delete
+import fiwe.core.ui.generated.resources.save_action
 
 sealed class FacilityLessonCategoryListingUiState {
     data class Content(

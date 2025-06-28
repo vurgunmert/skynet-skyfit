@@ -30,7 +30,7 @@ import com.vurgun.skyfit.core.ui.utils.KeyboardState
 import com.vurgun.skyfit.core.ui.utils.keyboardAsState
 import kotlinx.coroutines.flow.collectLatest
 import org.jetbrains.compose.resources.stringResource
-import skyfit.core.ui.generated.resources.*
+import fiwe.core.ui.generated.resources.*
 
 class ForgotPasswordResetScreen : Screen {
 

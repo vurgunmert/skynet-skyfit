@@ -19,8 +19,8 @@ import com.vurgun.skyfit.core.ui.components.text.TextStyleType
 import com.vurgun.skyfit.core.ui.styling.SkyFitColor
 import org.jetbrains.compose.resources.DrawableResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
-import skyfit.core.ui.generated.resources.Res
-import skyfit.core.ui.generated.resources.ic_pencil
+import fiwe.core.ui.generated.resources.Res
+import fiwe.core.ui.generated.resources.ic_pencil
 
 @Composable
 fun SkyFormTextField(

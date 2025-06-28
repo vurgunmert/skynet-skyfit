@@ -15,10 +15,10 @@ import com.vurgun.skyfit.core.ui.components.text.SkyText
 import com.vurgun.skyfit.core.ui.components.text.TextStyleType
 import com.vurgun.skyfit.core.ui.styling.SkyFitColor
 import org.jetbrains.compose.resources.painterResource
-import skyfit.core.ui.generated.resources.Res
-import skyfit.core.ui.generated.resources.ic_app_logo
-import skyfit.core.ui.generated.resources.ic_fiwe_logo_dark
-import skyfit.core.ui.generated.resources.ic_fiwe_logo_light
+import fiwe.core.ui.generated.resources.Res
+import fiwe.core.ui.generated.resources.ic_app_logo
+import fiwe.core.ui.generated.resources.ic_fiwe_logo_dark
+import fiwe.core.ui.generated.resources.ic_fiwe_logo_light
 
 @Composable
 fun FiweLogoDark(modifier: Modifier = Modifier) {
