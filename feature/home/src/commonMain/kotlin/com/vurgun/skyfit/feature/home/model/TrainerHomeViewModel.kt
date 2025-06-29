@@ -159,7 +159,7 @@ class TrainerHomeViewModel(
                 changeDirection = StatisticCardUiData.ChangeDirection.UP
             ),
             StatisticCardUiData(
-                title = "SkyFit Kazancı",
+                title = "FIWE Kazancı",
                 value = "$1327",
                 changePercent = 53,
                 changeDirection = StatisticCardUiData.ChangeDirection.UP

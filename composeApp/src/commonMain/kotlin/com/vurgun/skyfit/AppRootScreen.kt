@@ -3,7 +3,7 @@ package com.vurgun.skyfit
 import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.LaunchedEffect
 import cafe.adriel.voyager.core.registry.rememberScreen
 import cafe.adriel.voyager.navigator.Navigator
 import cafe.adriel.voyager.transitions.CrossfadeTransition
@@ -13,6 +13,7 @@ import com.vurgun.skyfit.core.ui.utils.LocalWindowSize
 import com.vurgun.skyfit.core.ui.utils.WindowSizeHelper
 import com.vurgun.skyfit.module.AppScreenRegistry
 import com.vurgun.skyfit.module.appDataModule
+import kotlinx.coroutines.delay
 import org.koin.compose.KoinApplication
 import org.koin.core.module.Module
 
@@ -43,5 +44,11 @@ private fun AppContent() {
 
     Navigator(splashScreen) { navigator ->
         CrossfadeTransition(navigator)
+    }
+
+    LaunchedEffect(Unit) {
+        delay(5000L)
+        CoreNotifier.subscribeTopic()
+        CoreNotifier.sendGreetingsNotification()
     }
 }

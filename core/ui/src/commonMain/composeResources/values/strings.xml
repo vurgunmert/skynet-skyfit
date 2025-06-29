@@ -1,6 +1,6 @@
 <resources>
     <!-- 🔷 App -->
-    <string name="app_name">SkyFit</string>
+    <string name="app_name">FIWE</string>
 
     <!-- 🔹 User Fields -->
     <string name="user_username_label">Kullanıcı Adı</string>

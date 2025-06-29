@@ -5,7 +5,7 @@ Pod::Spec.new do |spec|
     spec.source                   = { :http=> ''}
     spec.authors                  = ''
     spec.license                  = ''
-    spec.summary                  = 'Core UI Module for SkyFit App'
+    spec.summary                  = 'Core UI Module for FIWE App'
     spec.vendored_frameworks      = 'build/cocoapods/framework/CoreUi.framework'
     spec.libraries                = 'c++'
     spec.ios.deployment_target    = '17.0'

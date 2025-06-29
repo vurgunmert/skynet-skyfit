@@ -8,6 +8,7 @@ import com.vurgun.skyfit.core.data.v1.data.global.model.EmptyDTO
 import com.vurgun.skyfit.core.data.v1.domain.account.model.AccountOnboardingFormData
 import com.vurgun.skyfit.core.network.ApiClient
 import com.vurgun.skyfit.core.network.ApiResult
+import io.ktor.client.plugins.timeout
 import io.ktor.client.request.*
 import io.ktor.client.request.forms.*
 import io.ktor.http.*
@@ -29,6 +30,11 @@ class AccountApiService(private val apiClient: ApiClient) {
             method = HttpMethod.Companion.Post
             bearerAuth(token)
             url(GET_ACCOUNT_DETAILS)
+            timeout {
+                requestTimeoutMillis = 30_000
+                connectTimeoutMillis = 15_000
+                socketTimeoutMillis = 30_000
+            }
         }
     }
 

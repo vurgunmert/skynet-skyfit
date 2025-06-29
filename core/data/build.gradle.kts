@@ -36,6 +36,10 @@ kotlin {
             implementation(libs.datastore.preferences)
 //            implementation(libs.khealth)
         }
+
+        androidMain.dependencies {
+//            implementation("com.google.firebase:firebase-messaging:24.1.2")
+        }
     }
 }
 

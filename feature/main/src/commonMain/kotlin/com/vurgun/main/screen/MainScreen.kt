@@ -9,7 +9,7 @@ class MainScreen : Screen {
 
     @Composable
     override fun Content() {
-        Navigator(DashboardScreen(), key = "main") { navigator ->
+        Navigator(DashboardScreen(), key = "main") {
             CurrentScreen()
         }
     }

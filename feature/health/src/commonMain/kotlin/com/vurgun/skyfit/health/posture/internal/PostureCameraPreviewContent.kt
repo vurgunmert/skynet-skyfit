@@ -239,7 +239,7 @@ private fun rememberImageSaver(): ImageSaverPlugin {
     return rememberImageSaverPlugin(
         config = ImageSaverConfig(
             isAutoSave = false,
-            prefix = "SkyFit",
+            prefix = "FIWE",
             directory = Directory.PICTURES,
             customFolderName = "Posture"
         )

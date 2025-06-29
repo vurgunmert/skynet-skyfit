@@ -11,6 +11,7 @@ import androidx.core.view.WindowCompat
 import androidx.core.view.WindowInsetsControllerCompat
 import com.mmk.kmpnotifier.extensions.onCreateOrOnNewIntent
 import com.mmk.kmpnotifier.notification.NotifierManager
+import com.mmk.kmpnotifier.permission.permissionUtil
 import com.vurgun.skyfit.core.data.storage.LocalSessionStorage
 import com.vurgun.skyfit.core.data.storage.provideLocalSettings
 import org.koin.android.ext.koin.androidContext
@@ -18,10 +19,14 @@ import org.koin.dsl.module
 
 class MainActivity : ComponentActivity() {
 
+    val permissionUtil by permissionUtil()
+
     @SuppressLint("SourceLockedOrientationActivity")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         NotifierManager.onCreateOrOnNewIntent(intent)
+
+        permissionUtil.askNotificationPermission()
 
         requestedOrientation = when {
             isPhone() -> ActivityInfo.SCREEN_ORIENTATION_PORTRAIT

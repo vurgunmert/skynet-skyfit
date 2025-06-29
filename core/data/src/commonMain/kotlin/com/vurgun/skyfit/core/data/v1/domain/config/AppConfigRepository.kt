@@ -1,6 +1,6 @@
 package com.vurgun.skyfit.core.data.v1.domain.config
 
-@Deprecated("RemoteCOnfig")
+@Deprecated("RemoteConfig")
 interface AppConfigRepository {
     suspend fun isAppInMaintenance(): Boolean
 }

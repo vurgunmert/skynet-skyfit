@@ -48,7 +48,7 @@ val commonHttpClient = HttpClient(httpClientEngine()) {
     // Logging Plugin
     install(Logging) {
         logger = Logger.DEFAULT
-        level = LogLevel.ALL
+        level = LogLevel.NONE
         logger = object : Logger {
             override fun log(message: String) {
                 println("🔍 Ktor Log: $message") // Replace with Timber or other logger if needed

@@ -38,7 +38,7 @@ private fun MobileTermsAndConditionsScreen(
 ) {
 
     val termsAndConditionsSections = listOf(
-        "1. Giriş" to "Bu hizmet şartları, SkyFit.ai uygulamasını kullanırken uyulması gereken kuralları ve koşulları belirler.",
+        "1. Giriş" to "Bu hizmet şartları, FIWE.ai uygulamasını kullanırken uyulması gereken kuralları ve koşulları belirler.",
         "2. Kullanım Koşulları" to "Kullanıcılar, uygulamayı yalnızca yasal ve etik amaçlarla kullanmalıdır.",
         "3. Hesap Güvenliği" to "Kullanıcılar, hesap bilgilerini gizli tutmalıdır. Başkalarının hesaplarına izinsiz erişmek yasaktır.",
         "4. Ücretlendirme ve Abonelik" to "Bazı hizmetler ücretli olabilir. Abonelikler otomatik olarak yenilenebilir ve kullanıcılar aboneliklerini istedikleri zaman iptal edebilir.",

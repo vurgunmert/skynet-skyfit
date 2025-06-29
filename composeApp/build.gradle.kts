@@ -25,10 +25,10 @@ kotlin {
         iosSimulatorArm64()
     ).forEach { iosTarget ->
         iosTarget.binaries.framework {
-            export("io.github.mirzemehdi:kmpnotifier:1.5.1")
             baseName = "composeApp"
             freeCompilerArgs += listOf("-Xbinary=bundleId=com.vurgun.fiwe.composeApp")
             isStatic = true
+            export(libs.notifier)
         }
     }
 
@@ -65,11 +65,12 @@ kotlin {
             implementation(projects.feature.health)
             implementation(projects.feature.connect)
 
-            implementation("io.github.mirzemehdi:kmpnotifier:1.5.1")
+            api(libs.notifier)
         }
 
         androidMain.dependencies {
             implementation("androidx.startup:startup-runtime:1.2.0")
+            implementation("com.google.firebase:firebase-messaging:24.1.2")
         }
 
         iosMain.dependencies {

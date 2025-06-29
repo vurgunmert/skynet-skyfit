@@ -100,7 +100,6 @@ class FacilityProfileViewModel(
     init {
         screenModelScope.launch {
             _debouncedActions
-                .debounce(500L)
                 .distinctUntilChanged()
                 .collectLatest { action ->
                     domainHandleAction(action)

@@ -1,7 +1,7 @@
 <resources>
 
     <!-- 🔹 Onboarding – General -->
-    <string name="onboarding_welcome_title">SkyFit’e Hoş Geldin!</string>
+    <string name="onboarding_welcome_title">FIWE’a Hoş Geldin!</string>
     <string name="onboarding_welcome_message">Uygulamaya nasıl devam etmek istersin</string>
     <string name="onboarding_get_started_action">Haydi Başla</string>
 

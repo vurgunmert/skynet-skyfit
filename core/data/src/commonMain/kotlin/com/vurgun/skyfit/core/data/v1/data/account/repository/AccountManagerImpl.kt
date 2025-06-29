@@ -53,6 +53,8 @@ class AccountManagerImpl(
     override suspend fun getAccountTypes(): List<AccountType> {
         if (_accountTypes.value.isNotEmpty()) return _accountTypes.value
 
+        tokenManager.waitUntilTokenReady()
+
         return repository.getRegisteredAccountTypes()
             .onSuccess { _accountTypes.value = it }
             .getOrElse {
@@ -68,10 +70,8 @@ class AccountManagerImpl(
 
         val result = repository.getAccountDetails().onSuccess {
             userFlow.value = it
+            getAccountTypes()
         }
-        getAccountTypes()
-
-        println("getActiveUser $result")
         return result
     }
 
