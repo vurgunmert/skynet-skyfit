@@ -54,31 +54,31 @@ fun TrainerProfileCompact(
 
     CollectEffect(viewModel.effect) { effect ->
         when (effect) {
-            TrainerProfileUiEffect.NavigateBack -> {
+            TrainerProfileUiEvent.NavigateBack -> {
                 localNavigator.pop()
             }
 
-            TrainerProfileUiEffect.NavigateToCreatePost -> {
+            TrainerProfileUiEvent.NavigateToCreatePost -> {
                 appNavigator.push(SharedScreen.NewPost)
             }
 
-            TrainerProfileUiEffect.NavigateToSettings -> {
+            TrainerProfileUiEvent.NavigateToSettings -> {
                 appNavigator.push(SharedScreen.Settings)
             }
 
-            TrainerProfileUiEffect.NavigateToAppointments -> {
+            TrainerProfileUiEvent.NavigateToAppointments -> {
                 appNavigator.push(SharedScreen.TrainerAppointmentListing)
             }
 
-            is TrainerProfileUiEffect.NavigateToLessonDetail -> {
+            is TrainerProfileUiEvent.NavigateToLessonDetail -> {
                 appNavigator.push(TrainerAppointmentDetail(effect.lessonId))
             }
 
-            is TrainerProfileUiEffect.NavigateToChatWithTrainer -> {
+            is TrainerProfileUiEvent.NavigateToChatWithTrainer -> {
                 appNavigator.push(SharedScreen.ChatWithTrainer(effect.trainerId))
             }
 
-            is TrainerProfileUiEffect.NavigateToTrainerSchedule -> {
+            is TrainerProfileUiEvent.NavigateToTrainerSchedule -> {
                 appNavigator.push(SharedScreen.TrainerSchedule(effect.trainerId))
             }
         }

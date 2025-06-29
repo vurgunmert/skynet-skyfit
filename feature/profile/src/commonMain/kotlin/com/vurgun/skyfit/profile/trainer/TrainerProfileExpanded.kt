@@ -52,31 +52,31 @@ fun TrainerProfileExpanded(
 
     CollectEffect(viewModel.effect) { effect ->
         when (effect) {
-            TrainerProfileUiEffect.NavigateBack -> {
+            TrainerProfileUiEvent.NavigateBack -> {
                 localNavigator.pop()
             }
 
-            TrainerProfileUiEffect.NavigateToAppointments -> {
+            TrainerProfileUiEvent.NavigateToAppointments -> {
                 overlayController?.invoke(SharedScreen.TrainerAppointmentListing)
             }
 
-            is TrainerProfileUiEffect.NavigateToChatWithTrainer -> {
+            is TrainerProfileUiEvent.NavigateToChatWithTrainer -> {
                 localNavigator.pop()
             }
 
-            TrainerProfileUiEffect.NavigateToCreatePost -> {
+            TrainerProfileUiEvent.NavigateToCreatePost -> {
                 overlayController?.invoke(SharedScreen.NewPost)
             }
 
-            is TrainerProfileUiEffect.NavigateToLessonDetail -> {
+            is TrainerProfileUiEvent.NavigateToLessonDetail -> {
                 overlayController?.invoke(SharedScreen.TrainerAppointmentDetail(effect.lessonId))
             }
 
-            TrainerProfileUiEffect.NavigateToSettings -> {
+            TrainerProfileUiEvent.NavigateToSettings -> {
                 localNavigator.replace(SharedScreen.Settings)
             }
 
-            is TrainerProfileUiEffect.NavigateToTrainerSchedule -> {
+            is TrainerProfileUiEvent.NavigateToTrainerSchedule -> {
                 overlayController?.invoke(SharedScreen.TrainerSchedule(effect.trainerId))
             }
         }

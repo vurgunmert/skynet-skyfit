@@ -22,7 +22,6 @@
 	<string>1</string>
 	<key>INIntentsSupported</key>
 	<array>
-		<string>s</string>
 	</array>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>

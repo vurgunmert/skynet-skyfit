@@ -6,6 +6,7 @@ plugins {
     alias(libs.plugins.composeMultiplatform)
     alias(libs.plugins.composeCompiler)
     alias(libs.plugins.kotlinSerialization)
+    id("com.google.gms.google-services")
 }
 
 kotlin {
@@ -23,6 +24,7 @@ kotlin {
         iosTarget.binaries.framework {
             baseName = "FeatureHome"
             isStatic = true
+            export(libs.notifier)
         }
     }
 
@@ -39,6 +41,7 @@ kotlin {
             implementation(projects.feature.health)
 
             implementation(libs.bundles.feature.core)
+            api(libs.notifier)
         }
     }
 }

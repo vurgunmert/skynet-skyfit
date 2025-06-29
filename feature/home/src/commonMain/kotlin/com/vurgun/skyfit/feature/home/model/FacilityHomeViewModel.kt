@@ -2,6 +2,7 @@ package com.vurgun.skyfit.feature.home.model
 
 import cafe.adriel.voyager.core.model.ScreenModel
 import cafe.adriel.voyager.core.model.screenModelScope
+import com.mmk.kmpnotifier.notification.NotifierManager
 import com.vurgun.skyfit.core.data.utility.UiEventDelegate
 import com.vurgun.skyfit.core.data.utility.UiStateDelegate
 import com.vurgun.skyfit.core.data.v1.data.lesson.mapper.LessonSessionItemViewDataMapper
@@ -30,6 +31,19 @@ class FacilityHomeViewModel(
 
     private val _eventDelegate = UiEventDelegate<FacilityHomeUiEvent>()
     val eventFlow = _eventDelegate.eventFlow
+
+
+    init {
+        NotifierManager.getPushNotifier().let { notifier ->
+            screenModelScope.launch {
+                println("\uD83D\uDEA8\uD83D\uDEA8\uD83D\uDEA8\uD83D\uDEA8\uD83D\uDEA8")
+                println("FCM TOKEN: ${notifier.getToken()}")
+
+                notifier.subscribeToTopic("all_users")
+                println("\uD83D\uDEA8\uD83D\uDEA8\uD83D\uDEA8\uD83D\uDEA8\uD83D\uDEA8")
+            }
+        }
+    }
 
     /**
      * Handles user actions and updates the UI state or emits events accordingly.

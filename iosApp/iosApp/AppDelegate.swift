@@ -20,17 +20,35 @@ class AppDelegate: NSObject, UIApplicationDelegate,
         print("[AppDelegate] didFinishLaunchingWithOptions")
         
         FirebaseApp.configure()
+        FirebaseConfiguration.shared.setLoggerLevel(.debug)
+        
         print("[AppDelegate] Firebase configured")
+
+        Analytics.logEvent(AnalyticsEventAppOpen, parameters: nil)
 
         application.registerForRemoteNotifications()
         print("[AppDelegate] Registered for remote notifications")
 
         UNUserNotificationCenter.current().requestAuthorization(options: [.alert, .sound, .badge]) { granted, error in
             print("[AppDelegate] Notification permission granted: \(granted), error: \(String(describing: error))")
+            Analytics.logEvent("notification_permission_result", parameters: [
+                "granted": granted.description
+            ])
         }
 
         UNUserNotificationCenter.current().delegate = self
         print("[AppDelegate] Notification center delegate set")
+
+        Messaging.messaging().token { token, error in
+            if let error = error {
+                print("Error fetching FCM token: \(error)")
+            } else if let token = token {
+                print("FCM token manually fetched: \(token)")
+                Analytics.logEvent("fcm_token_manual_fetch", parameters: [
+                    "token": token
+                ])
+            }
+        }
 
         Messaging.messaging().delegate = self
         print("[AppDelegate] Messaging delegate set")
@@ -44,16 +62,39 @@ class AppDelegate: NSObject, UIApplicationDelegate,
         return true
     }
 
+    func applicationWillEnterForeground(_ application: UIApplication) {
+        print("[AppDelegate] applicationWillEnterForeground")
+        Analytics.logEvent("app_foreground", parameters: nil)
+    }
+
+    func applicationDidEnterBackground(_ application: UIApplication) {
+        print("[AppDelegate] applicationDidEnterBackground")
+        Analytics.logEvent("app_background", parameters: nil)
+    }
+
+    func applicationWillTerminate(_ application: UIApplication) {
+        print("[AppDelegate] applicationWillTerminate")
+        Analytics.logEvent("app_terminate", parameters: nil)
+    }
+
     func application(
         _ application: UIApplication,
         didRegisterForRemoteNotificationsWithDeviceToken deviceToken: Data
     ) {
+        let tokenString = deviceToken.map { String(format: "%02.2hhx", $0) }.joined()
         Messaging.messaging().apnsToken = deviceToken
-        print("[AppDelegate] APNs device token registered: \(deviceToken.map { String(format: "%02.2hhx", $0) }.joined())")
+        print("[AppDelegate] APNs device token registered: \(tokenString)")
+
+        Analytics.logEvent("apns_token_registered", parameters: [
+            "token_length": tokenString.count
+        ])
     }
 
     func messaging(_ messaging: Messaging, didReceiveRegistrationToken fcmToken: String?) {
         print("[AppDelegate] FCM token received: \(String(describing: fcmToken))")
+        Analytics.logEvent("fcm_token_received", parameters: [
+            "token_exists": (fcmToken != nil).description
+        ])
     }
 
     func userNotificationCenter(
@@ -61,7 +102,10 @@ class AppDelegate: NSObject, UIApplicationDelegate,
         willPresent notification: UNNotification,
         withCompletionHandler completionHandler: @escaping (UNNotificationPresentationOptions) -> Void
     ) {
-        print("[AppDelegate] Will present notification: \(notification.request.content.userInfo)")
+        let userInfo = notification.request.content.userInfo
+        print("[AppDelegate] Will present notification: \(userInfo)")
+        Analytics.logEvent("notification_will_present", parameters: nil)
+
         completionHandler([.banner, .list, .sound, .badge])
     }
 
@@ -70,24 +114,23 @@ class AppDelegate: NSObject, UIApplicationDelegate,
         didReceive response: UNNotificationResponse,
         withCompletionHandler completionHandler: @escaping () -> Void
     ) {
-        print("[AppDelegate] Did receive notification response: \(response.notification.request.content.userInfo)")
+        let userInfo = response.notification.request.content.userInfo
+        print("[AppDelegate] Did receive notification response: \(userInfo)")
+        Analytics.logEvent("notification_opened", parameters: nil)
+
         NotificationCenter.default.post(name: Notification.Name("didReceiveRemoteNotification"),
                                         object: nil,
-                                        userInfo: response.notification.request.content.userInfo)
+                                        userInfo: userInfo)
         completionHandler()
     }
-    
-    // Called when a remote notification is received (iOS 13+ async API)
+
     func application(
         _ application: UIApplication,
         didReceiveRemoteNotification userInfo: [AnyHashable: Any]
     ) async -> UIBackgroundFetchResult {
-        await withCheckedContinuation { continuation in
-            Task.detached {
-                NotifierManager.shared.onApplicationDidReceiveRemoteNotification(userInfo: userInfo)
-                continuation.resume(returning: .newData)
-                print("[AppDelegate] NotifierManager handled remote notification")
-            }
-        }
+        print("[AppDelegate] NotifierManager handled remote notification: \(userInfo)")
+        Analytics.logEvent("remote_notification_received", parameters: nil)
+        NotifierManager.shared.onApplicationDidReceiveRemoteNotification(userInfo: userInfo)
+        return .newData
     }
 }

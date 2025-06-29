@@ -19,6 +19,8 @@ import com.vurgun.skyfit.core.ui.styling.SkyFitAsset
 import com.vurgun.skyfit.profile.model.ProfileDestination
 import kotlinx.coroutines.async
 import kotlinx.coroutines.flow.SharedFlow
+import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import kotlinx.datetime.LocalDate
 
@@ -56,14 +58,14 @@ sealed interface TrainerProfileUiAction {
     data class OnSendQuickPost(val content: String) : TrainerProfileUiAction
 }
 
-sealed interface TrainerProfileUiEffect {
-    data object NavigateBack : TrainerProfileUiEffect
-    data object NavigateToSettings : TrainerProfileUiEffect
-    data object NavigateToCreatePost : TrainerProfileUiEffect
-    data object NavigateToAppointments : TrainerProfileUiEffect
-    data class NavigateToTrainerSchedule(val trainerId: Int) : TrainerProfileUiEffect
-    data class NavigateToChatWithTrainer(val trainerId: Int) : TrainerProfileUiEffect
-    data class NavigateToLessonDetail(val lessonId: Int) : TrainerProfileUiEffect
+sealed interface TrainerProfileUiEvent {
+    data object NavigateBack : TrainerProfileUiEvent
+    data object NavigateToSettings : TrainerProfileUiEvent
+    data object NavigateToCreatePost : TrainerProfileUiEvent
+    data object NavigateToAppointments : TrainerProfileUiEvent
+    data class NavigateToTrainerSchedule(val trainerId: Int) : TrainerProfileUiEvent
+    data class NavigateToChatWithTrainer(val trainerId: Int) : TrainerProfileUiEvent
+    data class NavigateToLessonDetail(val lessonId: Int) : TrainerProfileUiEvent
 }
 
 class TrainerProfileViewModel(
@@ -76,33 +78,36 @@ class TrainerProfileViewModel(
     private val _uiState = UiStateDelegate<TrainerProfileUiState>(TrainerProfileUiState.Loading)
     val uiState = _uiState.asStateFlow()
 
-    private val _effect = SingleSharedFlow<TrainerProfileUiEffect>()
-    val effect: SharedFlow<TrainerProfileUiEffect> = _effect
+    private val _effect = SingleSharedFlow<TrainerProfileUiEvent>()
+    val effect: SharedFlow<TrainerProfileUiEvent> = _effect
+
+    private val _event = UiEventDelegate<TrainerProfileUiEvent>()
+    val event = _event.eventFlow.stateIn(screenModelScope, SharingStarted.Lazily, null)
 
     private var activeTrainerId: Int? = null
 
     fun onAction(action: TrainerProfileUiAction) {
         when (action) {
             is TrainerProfileUiAction.OnDestinationChanged -> updateDestination(action.destination)
-            is TrainerProfileUiAction.OnClickToCreatePost -> emitEffect(TrainerProfileUiEffect.NavigateToCreatePost)
-            is TrainerProfileUiAction.OnClickSettings -> emitEffect(TrainerProfileUiEffect.NavigateToSettings)
-            is TrainerProfileUiAction.OnClickShowAllLessons -> emitEffect(TrainerProfileUiEffect.NavigateToAppointments)
-            is TrainerProfileUiAction.OnClickToUpcomingLesson -> emitEffect(TrainerProfileUiEffect.NavigateToLessonDetail(action.lessonId))
-            TrainerProfileUiAction.OnClickBack -> emitEffect(TrainerProfileUiEffect.NavigateBack)
-            TrainerProfileUiAction.OnClickNewPost -> emitEffect(TrainerProfileUiEffect.NavigateToCreatePost)
+            is TrainerProfileUiAction.OnClickToCreatePost -> emitEffect(TrainerProfileUiEvent.NavigateToCreatePost)
+            is TrainerProfileUiAction.OnClickSettings -> emitEffect(TrainerProfileUiEvent.NavigateToSettings)
+            is TrainerProfileUiAction.OnClickShowAllLessons -> emitEffect(TrainerProfileUiEvent.NavigateToAppointments)
+            is TrainerProfileUiAction.OnClickToUpcomingLesson -> emitEffect(TrainerProfileUiEvent.NavigateToLessonDetail(action.lessonId))
+            TrainerProfileUiAction.OnClickBack -> emitEffect(TrainerProfileUiEvent.NavigateBack)
+            TrainerProfileUiAction.OnClickNewPost -> emitEffect(TrainerProfileUiEvent.NavigateToCreatePost)
             TrainerProfileUiAction.OnClickBookAppointment -> emitEffect(
-                TrainerProfileUiEffect.NavigateToTrainerSchedule(
+                TrainerProfileUiEvent.NavigateToTrainerSchedule(
                     activeTrainerId!!
                 )
             )
             TrainerProfileUiAction.OnClickSendMessage -> emitEffect(
-                TrainerProfileUiEffect.NavigateToChatWithTrainer(
+                TrainerProfileUiEvent.NavigateToChatWithTrainer(
                     activeTrainerId!!
                 )
             )
             is TrainerProfileUiAction.ChangeDate -> updateLessons(action.date)
             TrainerProfileUiAction.OnClickShowSchedule -> emitEffect(
-                TrainerProfileUiEffect.NavigateToTrainerSchedule(
+                TrainerProfileUiEvent.NavigateToTrainerSchedule(
                     activeTrainerId!!
                 )
             )
@@ -199,7 +204,7 @@ class TrainerProfileViewModel(
         }
     }
 
-    private fun emitEffect(effect: TrainerProfileUiEffect) {
+    private fun emitEffect(effect: TrainerProfileUiEvent) {
         screenModelScope.launch {
             _effect.emitOrNull(effect)
         }
