@@ -24,7 +24,6 @@ sealed class FacilityMemberSettingsUiState {
     data class Error(val message: String) : FacilityMemberSettingsUiState()
 }
 
-
 internal class FacilityMemberSettingsViewModel(
     private val userManager: ActiveAccountManager,
     private val facilityRepository: FacilityRepository
@@ -54,28 +53,32 @@ internal class FacilityMemberSettingsViewModel(
     }
 
     fun refreshGymMembers() {
+        _uiState.update(FacilityMemberSettingsUiState.Loading)
+
         screenModelScope.launch {
-            _uiState.update(FacilityMemberSettingsUiState.Loading)
+            val packages = facilityRepository.getFacilityLessonPackages(gymId = activeFacilityId)
+                .getOrDefault(emptyList())
 
-            screenModelScope.launch {
-                val packages = facilityRepository.getFacilityLessonPackages(gymId = activeFacilityId)
-                    .getOrDefault(emptyList())
-
-                facilityRepository.getFacilityMembers(gymId = activeFacilityId).fold(
-                    onSuccess = { members ->
-                        cached = members
-                        _uiState.update(
-                            FacilityMemberSettingsUiState.Content(
-                                members = members,
-                                packages = packages
-                            )
+            facilityRepository.getFacilityMembers(gymId = activeFacilityId).fold(
+                onSuccess = { members ->
+                    cached = members
+                    _uiState.update(
+                        FacilityMemberSettingsUiState.Content(
+                            members = members,
+                            packages = packages
                         )
-                    },
-                    onFailure = { error ->
-                        _uiState.update(FacilityMemberSettingsUiState.Error(error.message ?: "Failed to get members"))
-                    }
-                )
-            }
+                    )
+                },
+                onFailure = { error ->
+                    error.printStackTrace()
+                    _uiState.update(
+                        FacilityMemberSettingsUiState.Content(
+                            members = emptyList(),
+                            packages = packages
+                        )
+                    )
+                }
+            )
         }
     }
 

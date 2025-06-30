@@ -1,7 +1,9 @@
 package com.vurgun.skyfit.core.data.v1.data.account.service
 
+import com.mmk.kmpnotifier.notification.NotifierManager
 import com.vurgun.skyfit.core.data.v1.data.account.model.AccountDTO
 import com.vurgun.skyfit.core.data.v1.data.account.model.AccountTypeDTO
+import com.vurgun.skyfit.core.data.v1.data.account.model.RequestAccountDetailDTO
 import com.vurgun.skyfit.core.data.v1.data.account.model.SelectActiveAccountTypeRequestDTO
 import com.vurgun.skyfit.core.data.v1.data.account.model.SelectActiveAccountTypeResponseDTO
 import com.vurgun.skyfit.core.data.v1.data.global.model.EmptyDTO
@@ -25,7 +27,7 @@ class AccountApiService(private val apiClient: ApiClient) {
         const val GET_USER_TYPES = "global/user-types" //TODO: Chane to account user types
     }
 
-    suspend fun getDetails(token: String): ApiResult<AccountDTO> {
+    suspend fun getDetails(request: RequestAccountDetailDTO, token: String): ApiResult<AccountDTO> {
         return apiClient.safeApiCall<AccountDTO> {
             method = HttpMethod.Companion.Post
             bearerAuth(token)
@@ -35,6 +37,7 @@ class AccountApiService(private val apiClient: ApiClient) {
                 connectTimeoutMillis = 15_000
                 socketTimeoutMillis = 30_000
             }
+            setBody(request)
         }
     }
 

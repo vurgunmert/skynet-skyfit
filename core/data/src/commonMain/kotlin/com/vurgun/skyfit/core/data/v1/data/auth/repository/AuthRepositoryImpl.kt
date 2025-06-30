@@ -8,7 +8,13 @@ import com.vurgun.skyfit.core.data.v1.data.auth.model.CreatePasswordRequestDTO
 import com.vurgun.skyfit.core.data.v1.data.auth.model.ResetPasswordRequestDTO
 import com.vurgun.skyfit.core.data.v1.data.auth.model.VerifyAuthRequestDTO
 import com.vurgun.skyfit.core.data.v1.data.auth.service.AuthApiService
-import com.vurgun.skyfit.core.data.v1.domain.auth.model.*
+import com.vurgun.skyfit.core.data.v1.domain.auth.model.AuthLoginResult
+import com.vurgun.skyfit.core.data.v1.domain.auth.model.AuthorizationOTPResult
+import com.vurgun.skyfit.core.data.v1.domain.auth.model.CreatePasswordResult
+import com.vurgun.skyfit.core.data.v1.domain.auth.model.ForgotPasswordOTPResult
+import com.vurgun.skyfit.core.data.v1.domain.auth.model.ForgotPasswordResult
+import com.vurgun.skyfit.core.data.v1.domain.auth.model.ResetPasswordResult
+import com.vurgun.skyfit.core.data.v1.domain.auth.model.SendOTPResult
 import com.vurgun.skyfit.core.data.v1.domain.auth.repository.AuthRepository
 import com.vurgun.skyfit.core.data.v1.domain.global.model.MissingTokenException
 import com.vurgun.skyfit.core.network.ApiResult
@@ -26,7 +32,11 @@ class AuthRepositoryImpl(
 
     override suspend fun login(phoneNumber: String, password: String?): AuthLoginResult =
         withContext(dispatchers.io) {
-            val request = AuthRequestDTO(phoneNumber, password.takeUnless { it.isNullOrEmpty() })
+
+            val request = AuthRequestDTO(
+                phone = phoneNumber,
+                password = password.takeUnless { it.isNullOrEmpty() }
+            )
 
             when (val response = apiService.login(request)) {
                 is ApiResult.Error -> AuthLoginResult.Error(response.message)

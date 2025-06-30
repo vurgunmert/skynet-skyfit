@@ -43,3 +43,7 @@ data class SelectActiveAccountTypeRequestDTO(val usertypeId: Int)
 @Serializable
 data class SelectActiveAccountTypeResponseDTO(val token: String)
 
+@Serializable
+data class RequestAccountDetailDTO(
+    @SerialName("fcm") val fcmToken: String?
+)

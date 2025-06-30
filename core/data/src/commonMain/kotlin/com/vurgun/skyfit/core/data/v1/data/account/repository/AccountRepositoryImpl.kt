@@ -1,8 +1,10 @@
 package com.vurgun.skyfit.core.data.v1.data.account.repository
 
+import com.mmk.kmpnotifier.notification.NotifierManager
 import com.vurgun.skyfit.core.data.storage.Storage
 import com.vurgun.skyfit.core.data.storage.TokenManager
 import com.vurgun.skyfit.core.data.v1.data.account.mapper.AccountDataMapper.toDomain
+import com.vurgun.skyfit.core.data.v1.data.account.model.RequestAccountDetailDTO
 import com.vurgun.skyfit.core.data.v1.data.account.model.SelectActiveAccountTypeResponseDTO
 import com.vurgun.skyfit.core.data.v1.data.account.service.AccountApiService
 import com.vurgun.skyfit.core.data.v1.domain.account.model.Account
@@ -29,13 +31,19 @@ class AccountRepositoryImpl(
     private suspend fun fetchDetails(): Result<Account> = ioResult(dispatchers) {
         tokenManager.waitUntilTokenReady()
         val token = tokenManager.getTokenOrThrow()
-        apiService.getDetails(token).mapOrThrow { it.toDomain() }
+        val request = RequestAccountDetailDTO(
+            fcmToken = NotifierManager.getPushNotifier().getToken()
+        )
+        apiService.getDetails(request, token).mapOrThrow { it.toDomain() }
     }
 
     override suspend fun getAccountDetails(): Result<Account> = withContext(dispatchers.io) {
         try {
+            val request = RequestAccountDetailDTO(
+                fcmToken = NotifierManager.getPushNotifier().getToken()
+            )
             val token = tokenManager.getTokenOrThrow()
-            when (val response = apiService.getDetails(token)) {
+            when (val response = apiService.getDetails(request, token)) {
                 is ApiResult.Success -> return@withContext Result.success(response.data.toDomain())
 
                 is ApiResult.Error -> {
