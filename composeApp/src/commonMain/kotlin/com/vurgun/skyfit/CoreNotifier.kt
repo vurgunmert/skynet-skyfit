@@ -29,7 +29,7 @@ object CoreNotifier {
             title = "D: Güzel Bir Gün Başlasın!"
             body = "FIWE ile bugünün de dolu dolu geçsin. Hazırsan başlayalım! 🚀"
             payloadData = mapOf(
-                Notifier.KEY_URL to "https://fiwe.app/welcome",
+                Notifier.KEY_URL to "https://fiwe.io/welcome",
                 "deeplink" to "fiwe::profile",
                 "type" to "greeting"
             )

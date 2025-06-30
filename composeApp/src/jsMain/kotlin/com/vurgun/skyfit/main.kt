@@ -10,7 +10,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.CanvasBasedWindow
 import com.vurgun.skyfit.core.di.initKoin
-import org.jetbrains.skiko.wasm.onWasmReady
+//import org.jetbrains.skiko.wasm.onWasmReady
 
 @OptIn(ExperimentalComposeUiApi::class)
 fun main() {
